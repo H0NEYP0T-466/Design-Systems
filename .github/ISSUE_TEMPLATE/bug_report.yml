@@ -1,0 +1,93 @@
+name: "Bug report"
+description: "Report a reproducible problem"
+title: "[Bug]: "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thank you for reporting a bug! Please ensure you have checked existing issues to avoid duplicates.
+  - type: input
+    id: summary
+    attributes:
+      label: Summary
+      description: A clear and concise description of the bug.
+      placeholder: "e.g. Button focus outline clipped in kraken showcase"
+    validations:
+      required: true
+  - type: input
+    id: affected_system
+    attributes:
+      label: Affected Design System(s)
+      description: Specify which design system folder or HTML showcase is affected.
+      placeholder: "e.g. kraken/kraken.html, bento/DESIGN.md"
+    validations:
+      required: true
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: Steps to Reproduce
+      description: Detail the steps required to reproduce the behavior.
+      placeholder: |
+        1. Open '<system-name>/<system-name>.html' in browser
+        2. Resize viewport to <width>
+        3. Click on '<component>'
+        4. See visual glitch or error
+    validations:
+      required: true
+  - type: textarea
+    id: expected_behavior
+    attributes:
+      label: Expected Behavior
+      description: A concise description of what you expected to happen.
+      placeholder: "The component should align properly according to design tokens..."
+    validations:
+      required: true
+  - type: textarea
+    id: actual_behavior
+    attributes:
+      label: Actual Behavior
+      description: A concise description of what actually happened.
+      placeholder: "The container overflows horizontally causing a scrollbar..."
+    validations:
+      required: true
+  - type: dropdown
+    id: severity
+    attributes:
+      label: Severity
+      description: How severely does this issue impact the design system?
+      options:
+        - "Low - Cosmetic or minor spacing discrepancy"
+        - "Medium - Noticeable visual defect or broken responsive layout"
+        - "High - Broken interactivity or script error"
+        - "Critical - Showcase fails to render or crashes page"
+    validations:
+      required: true
+  - type: textarea
+    id: environment
+    attributes:
+      label: Environment & Runtime
+      description: Operating system, browser, and device details.
+      placeholder: |
+        - OS: [e.g. Linux Ubuntu 24.04, macOS Sonoma, Windows 11]
+        - Browser: [e.g. Chrome 128, Firefox 130, Safari 18]
+        - Device / Resolution: [e.g. 1920x1080 Desktop, 390x844 Mobile]
+    validations:
+      required: true
+  - type: textarea
+    id: logs
+    attributes:
+      label: Console Logs / Shell Output
+      description: Paste any browser console errors or terminal output.
+      render: shell
+      placeholder: "Console errors or stack traces..."
+  - type: textarea
+    id: screenshots
+    attributes:
+      label: Screenshots / Visual Evidence
+      description: Drag and drop screenshots or screen recordings showing the defect.
+  - type: textarea
+    id: context
+    attributes:
+      label: Additional Context
+      description: Any other context, references, or suggested fixes.

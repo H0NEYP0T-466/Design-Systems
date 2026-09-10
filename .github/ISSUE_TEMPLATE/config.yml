@@ -1,0 +1,11 @@
+blank_issues_enabled: false
+contact_links:
+  - name: "💬 Community Discussions"
+    url: "https://github.com/H0NEYP0T-466/Design-Systems/discussions"
+    about: "Ask questions, share showcase previews, brainstorm design systems, and connect with fellow designers & developers."
+  - name: "🛡 Security Vulnerability Reporting"
+    url: "https://github.com/H0NEYP0T-466/Design-Systems/blob/master/SECURITY.md"
+    about: "Read our security policy and responsibly report vulnerabilities."
+  - name: "❓ Questions & Help"
+    url: "https://github.com/H0NEYP0T-466/Design-Systems/discussions/categories/q-a"
+    about: "Need assistance implementing tokens or integrating a design system into your stack?"

@@ -1,0 +1,60 @@
+name: "Feature request"
+description: "Propose an enhancement"
+title: "[Feature]: "
+labels: ["enhancement"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thank you for suggesting an enhancement for **Design-Systems**! Whether it's a new brand design system, improved tokens, or better interactive components, please provide as much context as possible.
+  - type: input
+    id: summary
+    attributes:
+      label: Feature Summary
+      description: A concise summary of the requested feature or design system.
+      placeholder: "e.g. Add Supabase v2 dark theme design system"
+    validations:
+      required: true
+  - type: textarea
+    id: problem_statement
+    attributes:
+      label: Problem Statement
+      description: Is your feature request related to a problem or gap in the current collection?
+      placeholder: "A clear and concise description of what the problem or missing capability is."
+    validations:
+      required: true
+  - type: textarea
+    id: proposed_solution
+    attributes:
+      label: Proposed Solution
+      description: Describe the solution or new design system you'd like to see.
+      placeholder: "Detailed explanation of the new tokens, layout, or showcase components..."
+    validations:
+      required: true
+  - type: textarea
+    id: alternatives_considered
+    attributes:
+      label: Alternatives Considered
+      description: Any alternative solutions, styles, or patterns you've considered.
+      placeholder: "Describe any alternative approaches or existing design systems evaluated."
+  - type: textarea
+    id: scope
+    attributes:
+      label: Scope & Out-of-Scope
+      description: What should this change specifically include and exclude?
+      placeholder: |
+        - In-scope: [e.g. DESIGN.md token spec, responsive HTML showcase, color swatches]
+        - Out-of-scope: [e.g. external npm package, framework-specific components]
+    validations:
+      required: true
+  - type: textarea
+    id: risks
+    attributes:
+      label: Risks & Considerations
+      description: Are there any potential trade-offs, accessibility risks, or maintenance concerns?
+      placeholder: "e.g. Contrast ratios, font licensing considerations, legacy browser compatibility."
+  - type: textarea
+    id: additional_context
+    attributes:
+      label: Additional Context & References
+      description: Add any design references, Figma links, brand guidelines, or inspiration images.
