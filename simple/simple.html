@@ -1,0 +1,1042 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Simple — Straightforward, No-Frills Design System</title>
+  <meta name="description" content="Official website implementing the Simple design system. Clean typography, neutral colors, and intuitive layouts that stay out of the way.">
+
+  <!-- Google Fonts: Inter (primary & display), JetBrains Mono (mono) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    /* ─────────────────────────────────────────────────────────────
+       1. EXACT TOKENS FROM simple/DESIGN.md
+       ───────────────────────────────────────────────────────────── */
+    :root {
+      /* Colors */
+      --color-primary: #3B82F6;     /* Primary CTA emphasis */
+      --color-secondary: #8B5CF6;   /* Secondary accent */
+      --color-success: #16A34A;     /* Success token */
+      --color-warning: #D97706;     /* Warning token */
+      --color-danger: #DC2626;      /* Danger token */
+      --color-surface: #FFFFFF;     /* Large backgrounds and cards */
+      --color-text: #111827;        /* Body copy for legibility */
+      --color-neutral: #FFFFFF;     /* Derived neutral token */
+
+      /* Minimal Neutrals */
+      --color-border: #E5E7EB;
+      --color-border-subtle: #F3F4F6;
+      --color-bg-subtle: #F9FAFB;
+      --color-text-muted: #6B7280;
+
+      /* Typography Families */
+      --font-primary: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      --font-display: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+
+      /* Typographic Scale (12/14/16/20/24/32) */
+      --text-12: 12px;
+      --text-14: 14px;
+      --text-16: 16px;
+      --text-20: 20px;
+      --text-24: 24px;
+      --text-32: 32px;
+
+      /* Spacing Scale (4/8/12/16/24/32) */
+      --space-4: 4px;
+      --space-8: 8px;
+      --space-12: 12px;
+      --space-16: 16px;
+      --space-24: 24px;
+      --space-32: 32px;
+      --space-48: 48px;
+      --space-64: 64px;
+
+      /* Radii */
+      --radius-sm: 6px;
+      --radius-md: 8px;
+      --radius-lg: 12px;
+      --radius-pill: 9999px;
+
+      /* Shadows (clean & restrained) */
+      --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+      --shadow-card: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px -1px rgba(0, 0, 0, 0.1);
+      --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.08), 0 4px 6px -4px rgba(0, 0, 0, 0.05);
+
+      /* Focus Ring */
+      --focus-ring: 0 0 0 3px rgba(59, 130, 246, 0.25);
+
+      /* Motion (150-250ms with stable easing) */
+      --transition-fast: 160ms cubic-bezier(0.16, 1, 0.3, 1);
+      --transition-base: 220ms cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    /* Reset */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      font-size: 16px;
+      background-color: var(--color-surface);
+      color: var(--color-text);
+      font-family: var(--font-primary);
+      scroll-behavior: smooth;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    body {
+      background-color: var(--color-surface);
+      color: var(--color-text);
+      line-height: 1.5;
+      overflow-x: hidden;
+    }
+
+    ::selection {
+      background: rgba(59, 130, 246, 0.15);
+      color: var(--color-primary);
+    }
+
+    .container {
+      max-width: 1140px;
+      margin-left: auto;
+      margin-right: auto;
+      padding-left: var(--space-24);
+      padding-right: var(--space-24);
+    }
+
+    /* ─────────────────────────────────────────────────────────────
+       2. TYPOGRAPHIC HIERARCHY (Exact 12/14/16/20/24/32 Scale)
+       ───────────────────────────────────────────────────────────── */
+    h1 {
+      font-family: var(--font-display);
+      font-size: var(--text-32);
+      font-weight: 700;
+      line-height: 1.2;
+      letter-spacing: -0.02em;
+      color: var(--color-text);
+    }
+
+    @media (min-width: 768px) {
+      h1 {
+        font-size: 44px;
+        line-height: 1.15;
+      }
+    }
+
+    h2 {
+      font-family: var(--font-display);
+      font-size: var(--text-24);
+      font-weight: 700;
+      line-height: 1.25;
+      letter-spacing: -0.015em;
+      color: var(--color-text);
+    }
+
+    @media (min-width: 768px) {
+      h2 {
+        font-size: var(--text-32);
+      }
+    }
+
+    h3 {
+      font-family: var(--font-display);
+      font-size: var(--text-20);
+      font-weight: 600;
+      line-height: 1.3;
+      color: var(--color-text);
+    }
+
+    p {
+      font-family: var(--font-primary);
+      font-size: var(--text-16);
+      color: var(--color-text-muted);
+      line-height: 1.6;
+    }
+
+    .mono {
+      font-family: var(--font-mono);
+    }
+
+    /* ─────────────────────────────────────────────────────────────
+       3. NAVIGATION BAR
+       ───────────────────────────────────────────────────────────── */
+    .nav-header {
+      background: var(--color-surface);
+      border-bottom: 1px solid var(--color-border);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .nav-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 64px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: var(--space-8);
+      text-decoration: none;
+      color: var(--color-text);
+      font-weight: 700;
+      font-size: var(--text-16);
+    }
+
+    .brand-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--color-primary);
+    }
+
+    .nav-menu {
+      display: none;
+      align-items: center;
+      gap: var(--space-24);
+      list-style: none;
+    }
+
+    @media (min-width: 768px) {
+      .nav-menu {
+        display: flex;
+      }
+    }
+
+    .nav-link {
+      font-size: var(--text-14);
+      font-weight: 500;
+      color: var(--color-text-muted);
+      text-decoration: none;
+      transition: color var(--transition-fast);
+    }
+
+    .nav-link:hover {
+      color: var(--color-text);
+      text-decoration: none;
+    }
+
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: var(--space-12);
+    }
+
+    /* ─────────────────────────────────────────────────────────────
+       4. BUTTONS & CONTROLS
+       Primary action uses #3B82F6; secondary actions stay neutral.
+       ───────────────────────────────────────────────────────────── */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--space-8);
+      font-family: var(--font-primary);
+      font-size: var(--text-14);
+      font-weight: 600;
+      padding: var(--space-8) var(--space-16);
+      border-radius: var(--radius-md);
+      border: 1px solid transparent;
+      cursor: pointer;
+      text-decoration: none;
+      transition: all var(--transition-fast);
+      line-height: 1.25;
+      user-select: none;
+    }
+
+    .btn:focus-visible {
+      outline: none;
+      box-shadow: var(--focus-ring);
+    }
+
+    .btn-primary {
+      background-color: var(--color-primary);
+      color: #FFFFFF;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .btn-primary:hover {
+      background-color: #2563EB;
+      text-decoration: none;
+    }
+
+    .btn-primary:active {
+      transform: translateY(1px);
+    }
+
+    .btn-secondary {
+      background-color: var(--color-surface);
+      color: var(--color-text);
+      border-color: var(--color-border);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .btn-secondary:hover {
+      background-color: var(--color-bg-subtle);
+      text-decoration: none;
+    }
+
+    .btn-secondary:active {
+      transform: translateY(1px);
+    }
+
+    .btn-sm {
+      padding: var(--space-4) var(--space-12);
+      font-size: var(--text-12);
+    }
+
+    .btn-lg {
+      padding: var(--space-12) var(--space-24);
+      font-size: var(--text-16);
+    }
+
+    /* Badge Pills */
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-4);
+      padding: 2px var(--space-8);
+      border-radius: var(--radius-pill);
+      font-size: var(--text-12);
+      font-weight: 500;
+    }
+
+    .badge-primary {
+      background: #EFF6FF;
+      color: var(--color-primary);
+    }
+
+    .badge-secondary {
+      background: #F5F3FF;
+      color: var(--color-secondary);
+    }
+
+    .badge-neutral {
+      background: #F3F4F6;
+      color: #4B5563;
+    }
+
+    /* ─────────────────────────────────────────────────────────────
+       5. HERO SECTION
+       Headline → support text → primary action
+       ───────────────────────────────────────────────────────────── */
+    .hero-section {
+      padding-top: var(--space-64);
+      padding-bottom: var(--space-64);
+      border-bottom: 1px solid var(--color-border);
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: var(--space-48);
+      align-items: center;
+    }
+
+    @media (min-width: 900px) {
+      .hero-grid {
+        grid-template-columns: 1.1fr 0.9fr;
+      }
+    }
+
+    .hero-ctas {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-12);
+      margin-top: var(--space-24);
+    }
+
+    /* Clean Card Specimen */
+    .clean-card {
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-card);
+      padding: var(--space-24);
+    }
+
+    /* ─────────────────────────────────────────────────────────────
+       6. INTERACTIVE DASHBOARD & INPUT SPECIMENS
+       Strong focus-visible states, clear labels, predictable messaging
+       ───────────────────────────────────────────────────────────── */
+    .section {
+      padding-top: var(--space-64);
+      padding-bottom: var(--space-64);
+      border-bottom: 1px solid var(--color-border);
+    }
+
+    .section-head {
+      margin-bottom: var(--space-32);
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-8);
+    }
+
+    .controls-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: var(--space-24);
+    }
+
+    @media (min-width: 860px) {
+      .controls-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-8);
+      margin-bottom: var(--space-16);
+    }
+
+    .form-label {
+      font-size: var(--text-14);
+      font-weight: 600;
+      color: var(--color-text);
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .clean-input {
+      width: 100%;
+      height: 42px;
+      padding: 0 var(--space-12);
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-md);
+      font-family: var(--font-primary);
+      font-size: var(--text-14);
+      color: var(--color-text);
+      outline: none;
+      transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+    }
+
+    /* Strong focus-visible state per DESIGN.md */
+    .clean-input:focus, .clean-input:focus-visible {
+      border-color: var(--color-primary);
+      box-shadow: var(--focus-ring);
+    }
+
+    .clean-input.has-error {
+      border-color: var(--color-danger);
+      box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.15);
+    }
+
+    .input-helper {
+      font-size: var(--text-12);
+      color: var(--color-text-muted);
+    }
+
+    .input-helper.error-text {
+      color: var(--color-danger);
+      font-weight: 500;
+    }
+
+    /* Clean Checkbox Checklist */
+    .task-item {
+      display: flex;
+      align-items: center;
+      gap: var(--space-12);
+      padding: var(--space-8) 0;
+      border-bottom: 1px solid var(--color-border-subtle);
+      font-size: var(--text-14);
+      cursor: pointer;
+    }
+
+    .task-checkbox {
+      width: 18px;
+      height: 18px;
+      border: 1px solid var(--color-border);
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all var(--transition-fast);
+    }
+
+    .task-item.done .task-checkbox {
+      background: var(--color-primary);
+      border-color: var(--color-primary);
+      color: white;
+    }
+
+    .task-item.done span.task-name {
+      text-decoration: line-through;
+      color: var(--color-text-muted);
+    }
+
+    /* ─────────────────────────────────────────────────────────────
+       7. DESIGN SYSTEM TOKENS FOUNDATION SHOWCASE
+       ───────────────────────────────────────────────────────────── */
+    .token-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: var(--space-16);
+    }
+
+    .token-box {
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-md);
+      padding: var(--space-16);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .token-preview {
+      height: 48px;
+      border-radius: var(--radius-sm);
+      margin-bottom: var(--space-12);
+      border: 1px solid var(--color-border);
+    }
+
+    /* ─────────────────────────────────────────────────────────────
+       8. FEATURE BLOCKS
+       ───────────────────────────────────────────────────────────── */
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: var(--space-24);
+    }
+
+    .feature-item-card {
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-lg);
+      padding: var(--space-24);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: var(--space-16);
+      box-shadow: var(--shadow-sm);
+      transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+    }
+
+    .feature-item-card:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-card);
+    }
+
+    /* ─────────────────────────────────────────────────────────────
+       9. PRICING TIERS
+       ───────────────────────────────────────────────────────────── */
+    .pricing-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: var(--space-24);
+      margin-top: var(--space-32);
+    }
+
+    .price-box {
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-lg);
+      padding: var(--space-32);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .price-box.featured {
+      border-color: var(--color-primary);
+      box-shadow: 0 4px 14px rgba(59, 130, 246, 0.15);
+      position: relative;
+    }
+
+    .price-num {
+      font-size: var(--text-32);
+      font-weight: 700;
+      color: var(--color-text);
+      display: flex;
+      align-items: baseline;
+      gap: 4px;
+      margin-top: var(--space-12);
+    }
+
+    /* ─────────────────────────────────────────────────────────────
+       10. FOOTER
+       ───────────────────────────────────────────────────────────── */
+    .footer {
+      background: var(--color-surface);
+      padding-top: var(--space-48);
+      padding-bottom: var(--space-32);
+    }
+
+    .footer-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: var(--space-32);
+      margin-bottom: var(--space-32);
+    }
+
+    .footer-bottom {
+      border-top: 1px solid var(--color-border);
+      padding-top: var(--space-20);
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-12);
+      align-items: center;
+      justify-content: space-between;
+      font-size: var(--text-14);
+      color: var(--color-text-muted);
+    }
+
+    @media (min-width: 640px) {
+      .footer-bottom {
+        flex-direction: row;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ==================== HEADER ==================== -->
+  <header class="nav-header">
+    <div class="container nav-inner">
+      <a href="#hero" class="brand">
+        <span class="brand-dot"></span>
+        <span>Simple</span>
+      </a>
+
+      <ul class="nav-menu">
+        <li><a href="#tokens" class="nav-link">Tokens</a></li>
+        <li><a href="#components" class="nav-link">Components</a></li>
+        <li><a href="#features" class="nav-link">Principles</a></li>
+        <li><a href="#pricing" class="nav-link">Pricing</a></li>
+      </ul>
+
+      <div class="nav-actions">
+        <a href="#components" class="btn btn-secondary btn-sm">Log in</a>
+        <a href="#components" class="btn btn-primary btn-sm">Get Started</a>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <!-- ==================== HERO SECTION ==================== -->
+    <section id="hero" class="hero-section">
+      <div class="container hero-grid">
+        <div>
+          <span class="badge badge-primary" style="margin-bottom: var(--space-12);">Modern &amp; Minimal</span>
+          <h1>Clean layouts that stay out of the way.</h1>
+          <p style="margin-top: var(--space-16); font-size: var(--text-16);">
+            Straightforward, no-frills design system built with clean typography, neutral surfaces, crisp <code class="mono" style="color: var(--color-primary);">#3B82F6</code> primary actions, and an intuitive 12/14/16/20/24/32 typographic hierarchy.
+          </p>
+
+          <div class="hero-ctas">
+            <a href="#components" class="btn btn-primary btn-lg">
+              <span>Explore Components</span>
+              <span>→</span>
+            </a>
+            <a href="#tokens" class="btn btn-secondary btn-lg">
+              <span>Token Registry</span>
+            </a>
+          </div>
+
+          <div style="display: flex; gap: var(--space-16); margin-top: var(--space-24); font-size: var(--text-12); color: var(--color-text-muted);">
+            <span>✓ Primary: #3B82F6</span>
+            <span>✓ Surface: #FFFFFF</span>
+            <span>✓ Text: #111827</span>
+          </div>
+        </div>
+
+        <!-- Clean Interactive Card Specimen -->
+        <div class="clean-card">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--space-16);">
+            <div style="display: flex; align-items: center; gap: 8px;">
+              <span class="brand-dot"></span>
+              <strong style="font-size: var(--text-14);">Interactive Note Workspace</strong>
+            </div>
+            <span class="badge badge-neutral">ACTIVE</span>
+          </div>
+
+          <p style="font-size: var(--text-14); margin-bottom: var(--space-16);">
+            Consistent internal padding, obvious hierarchy, and zero off-palette decorations.
+          </p>
+
+          <!-- Interactive Checklist -->
+          <div style="display: flex; flex-direction: column;">
+            <div class="task-item done" onclick="toggleTask(this)">
+              <div class="task-checkbox">✓</div>
+              <span class="task-name">Set primary CTA token to #3B82F6</span>
+            </div>
+            <div class="task-item done" onclick="toggleTask(this)">
+              <div class="task-checkbox">✓</div>
+              <span class="task-name">Enforce 12/14/16/20/24/32 type scale</span>
+            </div>
+            <div class="task-item" onclick="toggleTask(this)">
+              <div class="task-checkbox"></div>
+              <span class="task-name">Configure focus-visible outline states</span>
+            </div>
+          </div>
+
+          <div style="display: flex; gap: var(--space-8); margin-top: var(--space-16);">
+            <button class="btn btn-primary btn-sm" onclick="alert('Primary action confirmed')">Primary Action</button>
+            <button class="btn btn-secondary btn-sm">Neutral Action</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== TOKENS FOUNDATION SHOWCASE ==================== -->
+    <section id="tokens" class="section">
+      <div class="container">
+        <div class="section-head">
+          <span class="badge badge-neutral" style="width: fit-content;">Color Architecture</span>
+          <h2>Design System Foundations</h2>
+          <p>The exact tokens declared in <code class="mono">simple/DESIGN.md</code>.</p>
+        </div>
+
+        <div class="token-grid">
+          <!-- Primary -->
+          <div class="token-box">
+            <div class="token-preview" style="background: var(--color-primary);"></div>
+            <strong style="font-size: var(--text-14);">Primary (#3B82F6)</strong>
+            <p style="font-size: var(--text-12); margin-top: 4px;">Primary CTA emphasis &amp; interaction signal.</p>
+          </div>
+
+          <!-- Secondary -->
+          <div class="token-box">
+            <div class="token-preview" style="background: var(--color-secondary);"></div>
+            <strong style="font-size: var(--text-14);">Secondary (#8B5CF6)</strong>
+            <p style="font-size: var(--text-12); margin-top: 4px;">Secondary highlights and badges.</p>
+          </div>
+
+          <!-- Surface -->
+          <div class="token-box">
+            <div class="token-preview" style="background: var(--color-surface); border: 1px solid #D1D5DB;"></div>
+            <strong style="font-size: var(--text-14);">Surface (#FFFFFF)</strong>
+            <p style="font-size: var(--text-12); margin-top: 4px;">Large backgrounds and card planes.</p>
+          </div>
+
+          <!-- Text -->
+          <div class="token-box">
+            <div class="token-preview" style="background: var(--color-text);"></div>
+            <strong style="font-size: var(--text-14);">Text (#111827)</strong>
+            <p style="font-size: var(--text-12); margin-top: 4px;">Near-black body copy maximizing legibility.</p>
+          </div>
+
+          <!-- Success -->
+          <div class="token-box">
+            <div class="token-preview" style="background: var(--color-success);"></div>
+            <strong style="font-size: var(--text-14);">Success (#16A34A)</strong>
+            <p style="font-size: var(--text-12); margin-top: 4px;">Confirmation and resolved states.</p>
+          </div>
+
+          <!-- Warning -->
+          <div class="token-box">
+            <div class="token-preview" style="background: var(--color-warning);"></div>
+            <strong style="font-size: var(--text-14);">Warning (#D97706)</strong>
+            <p style="font-size: var(--text-12); margin-top: 4px;">Alerts and threshold warnings.</p>
+          </div>
+
+          <!-- Danger -->
+          <div class="token-box">
+            <div class="token-preview" style="background: var(--color-danger);"></div>
+            <strong style="font-size: var(--text-14);">Danger (#DC2626)</strong>
+            <p style="font-size: var(--text-12); margin-top: 4px;">Errors and critical actions.</p>
+          </div>
+
+          <!-- Neutral -->
+          <div class="token-box">
+            <div class="token-preview" style="background: var(--color-neutral); border: 1px dashed #D1D5DB;"></div>
+            <strong style="font-size: var(--text-14);">Neutral (#FFFFFF)</strong>
+            <p style="font-size: var(--text-12); margin-top: 4px;">Derived from surface token.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== COMPONENT LABORATORY & INPUTS ==================== -->
+    <section id="components" class="section">
+      <div class="container">
+        <div class="section-head">
+          <span class="badge badge-primary" style="width: fit-content;">Rule-Compliant Controls</span>
+          <h2>Component Laboratory</h2>
+          <p>Tested for strong focus-visible states, clear labels, and predictable errors.</p>
+        </div>
+
+        <div class="controls-grid">
+          <!-- Form Validation Panel -->
+          <div class="clean-card">
+            <h3>Input Controls &amp; Validation</h3>
+            <p style="font-size: var(--text-14); margin-bottom: var(--space-16);">
+              Focus fields to observe the crisp <code class="mono" style="color: var(--color-primary);">#3B82F6</code> focus ring.
+            </p>
+
+            <form onsubmit="event.preventDefault(); validateForm();">
+              <div class="form-group">
+                <label class="form-label" for="project-name">Project Identifier</label>
+                <input type="text" id="project-name" class="clean-input" value="simple-core-v1">
+                <span class="input-helper">A distinct alphanumeric identifier for this workspace.</span>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label" for="security-key">
+                  <span>Secret Key</span>
+                  <span class="badge badge-neutral" id="status-badge" style="display:none;">CHECK</span>
+                </label>
+                <input type="password" id="security-key" class="clean-input" placeholder="Min 6 characters...">
+                <span class="input-helper" id="key-helper">Must be at least 6 characters long.</span>
+              </div>
+
+              <div style="display: flex; gap: var(--space-8); margin-top: var(--space-8);">
+                <button type="submit" class="btn btn-primary btn-sm">Validate Field</button>
+                <button type="button" class="btn btn-secondary btn-sm" onclick="resetForm()">Reset</button>
+              </div>
+            </form>
+          </div>
+
+          <!-- Buttons & Badges Panel -->
+          <div class="clean-card">
+            <h3>Buttons &amp; Badges</h3>
+            <p style="font-size: var(--text-14); margin-bottom: var(--space-16);">
+              Primary action uses <code class="mono">#3B82F6</code>; secondary actions stay neutral.
+            </p>
+
+            <div style="display: flex; flex-direction: column; gap: var(--space-12);">
+              <div style="display: flex; flex-wrap: wrap; gap: var(--space-8);">
+                <button class="btn btn-primary">Primary (#3B82F6)</button>
+                <button class="btn btn-secondary">Secondary Neutral</button>
+                <button class="btn btn-primary" disabled>Disabled</button>
+              </div>
+
+              <div style="display: flex; flex-wrap: wrap; gap: var(--space-8); margin-top: var(--space-8);">
+                <span class="badge badge-primary">PRIMARY BADGE</span>
+                <span class="badge badge-secondary">SECONDARY BADGE</span>
+                <span class="badge badge-neutral">NEUTRAL BADGE</span>
+              </div>
+            </div>
+
+            <div style="margin-top: var(--space-24); padding-top: var(--space-16); border-top: 1px solid var(--color-border);">
+              <strong style="font-size: var(--text-14);">Spacing Scale Check:</strong>
+              <div style="display: flex; gap: 4px; margin-top: 8px; font-family: monospace; font-size: 12px; color: var(--color-text-muted);">
+                <span>4px</span> • <span>8px</span> • <span>12px</span> • <span>16px</span> • <span>24px</span> • <span>32px</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== FEATURES SECTION ==================== -->
+    <section id="features" class="section">
+      <div class="container">
+        <div class="section-head">
+          <span class="badge badge-neutral" style="width: fit-content;">Clear Architecture</span>
+          <h2>Design Principles in Action</h2>
+          <p>Separation of concerns through generous whitespace and clean typography.</p>
+        </div>
+
+        <div class="features-grid">
+          <div class="feature-item-card">
+            <div>
+              <h3>Predictable Grids</h3>
+              <p style="margin-top: 8px;">
+                Align modules to standard columns; avoid ad-hoc offsets and chaotic offsets.
+              </p>
+            </div>
+            <span class="badge badge-primary" style="width: fit-content;">GRID RHYTHM</span>
+          </div>
+
+          <div class="feature-item-card">
+            <div>
+              <h3>Single Primary Action</h3>
+              <p style="margin-top: 8px;">
+                Strict hierarchy ensures exactly one primary CTA (<code class="mono">#3B82F6</code>) per section viewport.
+              </p>
+            </div>
+            <span class="badge badge-primary" style="width: fit-content;">CTA DISCIPLINE</span>
+          </div>
+
+          <div class="feature-item-card">
+            <div>
+              <h3>Uncompromised Contrast</h3>
+              <p style="margin-top: 8px;">
+                Body text on <code class="mono">#111827</code> ensures effortless scannability and WCAG AAA compliance.
+              </p>
+            </div>
+            <span class="badge badge-neutral" style="width: fit-content;">ACCESSIBILITY</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== PRICING MATRIX ==================== -->
+    <section id="pricing" class="section">
+      <div class="container">
+        <div class="section-head" style="text-align: center; align-items: center;">
+          <span class="badge badge-primary">Straightforward Plans</span>
+          <h2>Simple, Honest Pricing</h2>
+          <p>No hidden fees, no complicated calculators.</p>
+        </div>
+
+        <div class="pricing-grid">
+          <div class="price-box">
+            <div>
+              <h3>Personal</h3>
+              <p style="font-size: var(--text-14); margin-top: 4px;">For individual work and side projects.</p>
+              <div class="price-num">$0 <span style="font-size: var(--text-14); color: var(--color-text-muted);">/ forever</span></div>
+
+              <ul style="list-style: none; margin-top: var(--space-24); display: flex; flex-direction: column; gap: var(--space-8); font-size: var(--text-14);">
+                <li>✓ Unlimited personal notes</li>
+                <li>✓ Inter typography stack</li>
+                <li>✓ Community forum support</li>
+              </ul>
+            </div>
+            <a href="#hero" class="btn btn-secondary" style="width: 100%; margin-top: var(--space-24);">Get Started</a>
+          </div>
+
+          <div class="price-box featured">
+            <div>
+              <div style="display: flex; justify-content: space-between; align-items: center;">
+                <span class="badge badge-primary">MOST POPULAR</span>
+              </div>
+              <h3 style="margin-top: 8px;">Team</h3>
+              <p style="font-size: var(--text-14); margin-top: 4px;">Collaborative workspaces for small teams.</p>
+              <div class="price-num">$12 <span style="font-size: var(--text-14); color: var(--color-text-muted);">/ user / mo</span></div>
+
+              <ul style="list-style: none; margin-top: var(--space-24); display: flex; flex-direction: column; gap: var(--space-8); font-size: var(--text-14);">
+                <li>✓ Shared team spaces</li>
+                <li>✓ Priority #3B82F6 CTA workflows</li>
+                <li>✓ Standard 99.9% uptime SLA</li>
+                <li>✓ Fast response email support</li>
+              </ul>
+            </div>
+            <a href="#hero" class="btn btn-primary" style="width: 100%; margin-top: var(--space-24);">Start Team Trial</a>
+          </div>
+
+          <div class="price-box">
+            <div>
+              <h3>Enterprise</h3>
+              <p style="font-size: var(--text-14); margin-top: 4px;">Advanced governance and custom contracts.</p>
+              <div class="price-num">Custom</div>
+
+              <ul style="list-style: none; margin-top: var(--space-24); display: flex; flex-direction: column; gap: var(--space-8); font-size: var(--text-14);">
+                <li>✓ Dedicated account manager</li>
+                <li>✓ Custom SAML SSO integration</li>
+                <li>✓ Audit logs &amp; enterprise security</li>
+              </ul>
+            </div>
+            <a href="#hero" class="btn btn-secondary" style="width: 100%; margin-top: var(--space-24);">Contact Sales</a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ==================== FOOTER ==================== -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div>
+          <div class="brand" style="margin-bottom: var(--space-12);">
+            <span class="brand-dot"></span>
+            <span>Simple</span>
+          </div>
+          <p style="font-size: var(--text-14); color: var(--color-text-muted); line-height: 1.6;">
+            Straightforward, no-frills design system built with clean typography and neutral colors.
+          </p>
+        </div>
+
+        <div>
+          <strong style="font-size: var(--text-14);">Foundations</strong>
+          <ul style="list-style: none; display: flex; flex-direction: column; gap: 8px; margin-top: 12px; font-size: var(--text-14);">
+            <li><a href="#tokens" class="nav-link">Primary (#3B82F6)</a></li>
+            <li><a href="#tokens" class="nav-link">Secondary (#8B5CF6)</a></li>
+            <li><a href="#tokens" class="nav-link">Surface (#FFFFFF)</a></li>
+            <li><a href="#tokens" class="nav-link">Text (#111827)</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <strong style="font-size: var(--text-14);">Components</strong>
+          <ul style="list-style: none; display: flex; flex-direction: column; gap: 8px; margin-top: 12px; font-size: var(--text-14);">
+            <li><a href="#components" class="nav-link">Primary Action</a></li>
+            <li><a href="#components" class="nav-link">Focus-Visible Inputs</a></li>
+            <li><a href="#features" class="nav-link">Clean Cards</a></li>
+            <li><a href="#pricing" class="nav-link">Pricing Plans</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <strong style="font-size: var(--text-14);">Guidelines</strong>
+          <ul style="list-style: none; display: flex; flex-direction: column; gap: 8px; margin-top: 12px; font-size: var(--text-14);">
+            <li><a href="#hero" class="nav-link">Typography (12-32)</a></li>
+            <li><a href="#hero" class="nav-link">Spacing Scale (4-32)</a></li>
+            <li><a href="#hero" class="nav-link">Section 9 Rules</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <div>Simple Design System • Complies with open-design/simple/DESIGN.md</div>
+        <div style="display: flex; gap: var(--space-16);">
+          <span>Privacy Policy</span>
+          <span>Terms</span>
+          <span style="color: var(--color-primary); font-weight: 600;">ALL TOKENS VALIDATED</span>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Interactive JavaScript -->
+  <script>
+    function toggleTask(item) {
+      item.classList.toggle('done');
+      const box = item.querySelector('.task-checkbox');
+      if (item.classList.contains('done')) {
+        box.textContent = '✓';
+      } else {
+        box.textContent = '';
+      }
+    }
+
+    function validateForm() {
+      const input = document.getElementById('security-key');
+      const helper = document.getElementById('key-helper');
+      const badge = document.getElementById('status-badge');
+
+      if (!input.value || input.value.length < 6) {
+        input.classList.add('has-error');
+        helper.classList.add('error-text');
+        helper.textContent = 'Error: Secret key must contain at least 6 characters.';
+        badge.style.display = 'inline-flex';
+        badge.className = 'badge badge-neutral';
+        badge.style.color = 'var(--color-danger)';
+        badge.textContent = 'INVALID';
+      } else {
+        input.classList.remove('has-error');
+        helper.classList.remove('error-text');
+        helper.textContent = '✓ Key authenticated successfully.';
+        helper.style.color = 'var(--color-success)';
+        badge.style.display = 'inline-flex';
+        badge.className = 'badge badge-primary';
+        badge.textContent = 'VALID';
+      }
+    }
+
+    function resetForm() {
+      const input = document.getElementById('security-key');
+      const helper = document.getElementById('key-helper');
+      const badge = document.getElementById('status-badge');
+      input.value = '';
+      input.classList.remove('has-error');
+      helper.classList.remove('error-text');
+      helper.style.color = 'var(--color-text-muted)';
+      helper.textContent = 'Must be at least 6 characters long.';
+      badge.style.display = 'none';
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,933 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>NOCTURNE // Theatrical Immersive Visual Systems &amp; Stage Production</title>
+  <meta name="description" content="High-contrast, theatrical design with bold layouts, immersive visuals, and unconventional compositions that command attention. Built with Outfit, JetBrains Mono, Primary #8B5CF6, and Surface #09090B." />
+
+  <!-- Google Fonts: Outfit and JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+  <style>
+    /* ─────────────────────────────────────────────────────────────────
+       DRAMATIC DESIGN SYSTEM SPECIFICATION & DESIGN TOKENS
+       Directly sourced from /open-design/design-systems/dramatic/DESIGN.md
+       ───────────────────────────────────────────────────────────────── */
+    :root {
+      /* Colors (DESIGN.md §2) */
+      --color-primary: #8B5CF6;
+      --color-primary-hover: #7c3aed;
+      --color-secondary: #F43F5E;
+      --color-secondary-hover: #e11d48;
+      --color-success: #16A34A;
+      --color-warning: #D97706;
+      --color-danger: #DC2626;
+      --color-surface: #09090B;
+      --color-text: #FAFAFA;
+      --color-neutral: #09090B;
+
+      /* Theatrical Elevation & Glows */
+      --color-surface-card: #141418;
+      --color-surface-elevated: #1F1F24;
+      --color-border-dark: #27272A;
+      --color-text-muted: #A1A1AA;
+      --glow-violet: 0 0 50px rgba(139, 92, 246, 0.35);
+      --glow-crimson: 0 0 50px rgba(244, 63, 94, 0.35);
+
+      /* Typography Families (DESIGN.md §3) */
+      --font-display: "Outfit", system-ui, sans-serif;
+      --font-primary: "Outfit", system-ui, sans-serif;
+      --font-body: "Outfit", system-ui, sans-serif;
+      --font-mono: "JetBrains Mono", monospace;
+
+      /* Typography Scale (DESIGN.md §3: 12/14/16/20/24/32/48/72/96) */
+      --text-xs: 12px;
+      --text-sm: 14px;
+      --text-base: 16px;
+      --text-lg: 20px;
+      --text-xl: 24px;
+      --text-2xl: 32px;
+      --text-3xl: 48px;
+      --text-4xl: 72px;
+      --text-mammoth: 96px;
+
+      /* Spacing Scale (DESIGN.md §4: 4/8/12/16/24/32) */
+      --space-1: 4px;
+      --space-2: 8px;
+      --space-3: 12px;
+      --space-4: 16px;
+      --space-6: 24px;
+      --space-8: 32px;
+      --space-12: 48px;
+      --space-16: 64px;
+      --space-20: 80px;
+      --space-24: 96px;
+
+      /* Radii */
+      --radius-sm: 4px;
+      --radius-md: 8px;
+      --radius-lg: 16px;
+      --radius-pill: 9999px;
+
+      /* Motion (150–250ms per DESIGN.md §7) */
+      --motion-fast: 150ms;
+      --motion-base: 240ms;
+      --ease-standard: cubic-bezier(0.16, 1, 0.3, 1);
+
+      --focus-ring: 0 0 0 3px rgba(139, 92, 246, 0.55);
+      --container-max: 1240px;
+    }
+
+    /* ─── Global Reset & Theatrical Dark Base ───────────────────────── */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      background-color: var(--color-surface);
+      color: var(--color-text);
+    }
+
+    body {
+      background-color: var(--color-surface);
+      color: var(--color-text);
+      font-family: var(--font-body);
+      font-size: var(--text-base);
+      font-weight: 400;
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      overflow-x: hidden;
+    }
+
+    /* Theatrical Typography: Extreme Contrast (400 vs 900) */
+    h1, .hero-dramatic-h1 {
+      font-family: var(--font-display);
+      font-size: var(--text-mammoth);
+      font-weight: 900;
+      line-height: 0.95;
+      letter-spacing: -0.04em;
+      text-transform: uppercase;
+      color: var(--color-text);
+    }
+
+    h2, .section-heading {
+      font-family: var(--font-display);
+      font-size: var(--text-3xl);
+      font-weight: 900;
+      line-height: 1.05;
+      letter-spacing: -0.03em;
+      text-transform: uppercase;
+      color: var(--color-text);
+    }
+
+    h3, .card-title {
+      font-family: var(--font-display);
+      font-size: var(--text-xl);
+      font-weight: 900;
+      line-height: 1.2;
+      text-transform: uppercase;
+      color: var(--color-text);
+    }
+
+    p {
+      color: #D4D4D8;
+      line-height: 1.6;
+      font-weight: 400;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    :focus-visible {
+      outline: none;
+      box-shadow: var(--focus-ring);
+    }
+
+    /* ─── Buttons (DESIGN.md §6) ───────────────────────────────────── */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--space-2);
+      padding: 14px 32px;
+      font-family: var(--font-display);
+      font-size: var(--text-sm);
+      font-weight: 900;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      border-radius: var(--radius-sm);
+      border: 1px solid transparent;
+      cursor: pointer;
+      text-decoration: none;
+      white-space: nowrap;
+      transition: background-color var(--motion-fast) var(--ease-standard),
+                  transform var(--motion-fast) var(--ease-standard),
+                  box-shadow var(--motion-fast) var(--ease-standard);
+    }
+
+    /* Primary Action uses #8B5CF6 per DESIGN.md §6 */
+    .btn-primary {
+      background-color: var(--color-primary);
+      color: #FFFFFF;
+      box-shadow: 0 4px 20px rgba(139, 92, 246, 0.4);
+    }
+
+    .btn-primary:hover {
+      background-color: var(--color-primary-hover);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 30px rgba(139, 92, 246, 0.6);
+    }
+
+    .btn-primary:active {
+      transform: translateY(0);
+    }
+
+    /* Secondary Action stays neutral (#09090B / border) per DESIGN.md §6 */
+    .btn-neutral {
+      background-color: transparent;
+      color: var(--color-text);
+      border-color: #3F3F46;
+    }
+
+    .btn-neutral:hover {
+      background-color: #27272A;
+      border-color: #71717A;
+      transform: translateY(-2px);
+    }
+
+    .btn-crimson {
+      background-color: var(--color-secondary);
+      color: #FFFFFF;
+      box-shadow: 0 4px 20px rgba(244, 63, 94, 0.4);
+    }
+
+    .btn-crimson:hover {
+      background-color: var(--color-secondary-hover);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 30px rgba(244, 63, 94, 0.6);
+    }
+
+    /* ─── Layout Primitives ────────────────────────────────────────── */
+    .container {
+      max-width: var(--container-max);
+      margin: 0 auto;
+      padding: 0 var(--space-6);
+    }
+
+    .theatrical-section {
+      padding-block: var(--space-20);
+      border-bottom: 1px solid var(--color-border-dark);
+      position: relative;
+    }
+
+    /* ─── Theatrical Header ────────────────────────────────────────── */
+    .stage-header {
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      height: 76px;
+      background-color: rgba(9, 9, 11, 0.94);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--color-border-dark);
+      display: flex;
+      align-items: center;
+    }
+
+    .header-inner {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      width: 100%;
+    }
+
+    .brand-mark {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .spotlight-glyph {
+      width: 34px;
+      height: 34px;
+      border-radius: var(--radius-sm);
+      background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-secondary) 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      font-weight: 900;
+      box-shadow: 0 0 16px rgba(139, 92, 246, 0.6);
+    }
+
+    .brand-title {
+      font-family: var(--font-display);
+      font-size: 24px;
+      font-weight: 900;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+
+    .stage-nav {
+      display: flex;
+      align-items: center;
+      list-style: none;
+      gap: var(--space-8);
+    }
+
+    .stage-nav a {
+      font-family: var(--font-display);
+      font-size: var(--text-sm);
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: #A1A1AA;
+      transition: color var(--motion-fast);
+    }
+
+    .stage-nav a:hover {
+      color: var(--color-primary);
+      text-shadow: 0 0 12px rgba(139, 92, 246, 0.5);
+    }
+
+    /* ─── Hero Section: Theatrical High-Contrast ───────────────────── */
+    .hero-theatrical {
+      padding: var(--space-24) 0;
+      background: radial-gradient(circle at 75% 25%, rgba(139, 92, 246, 0.22) 0%, rgba(244, 63, 94, 0.12) 40%, transparent 70%);
+      border-bottom: 1px solid var(--color-border-dark);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-theatrical::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--color-primary), var(--color-secondary), transparent);
+    }
+
+    .hero-layout-grid {
+      display: grid;
+      grid-template-columns: 1.25fr 0.75fr;
+      gap: var(--space-12);
+      align-items: center;
+    }
+
+    .theatrical-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 4px 14px;
+      background-color: rgba(139, 92, 246, 0.15);
+      border: 1px solid rgba(139, 92, 246, 0.35);
+      border-radius: var(--radius-sm);
+      font-family: var(--font-mono);
+      font-size: var(--text-xs);
+      font-weight: 700;
+      color: #C4B5FD;
+      margin-bottom: var(--space-6);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+    }
+
+    .hero-dramatic-h1 {
+      margin-bottom: var(--space-6);
+    }
+
+    .hero-dramatic-h1 span.crimson-glow {
+      color: var(--color-secondary);
+      text-shadow: 0 0 30px rgba(244, 63, 94, 0.5);
+    }
+
+    .hero-subtext {
+      font-size: var(--text-lg);
+      line-height: 1.6;
+      color: #A1A1AA;
+      margin-bottom: var(--space-8);
+      max-width: 580px;
+    }
+
+    .hero-btn-group {
+      display: flex;
+      align-items: center;
+      gap: var(--space-4);
+      margin-bottom: var(--space-8);
+      flex-wrap: wrap;
+    }
+
+    /* Theatrical Right Visual: Stage Controller */
+    .stage-controller-card {
+      background-color: var(--color-surface-card);
+      border: 1px solid var(--color-border-dark);
+      border-radius: var(--radius-lg);
+      padding: var(--space-8);
+      box-shadow: 0 24px 60px rgba(0, 0, 0, 0.7), var(--glow-violet);
+    }
+
+    .card-meta-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid var(--color-border-dark);
+      padding-bottom: var(--space-4);
+      margin-bottom: var(--space-6);
+      font-family: var(--font-mono);
+      font-size: 13px;
+    }
+
+    .stage-mode-btn-row {
+      display: flex;
+      gap: var(--space-2);
+      margin-bottom: var(--space-6);
+    }
+
+    .stage-mode-btn {
+      flex: 1;
+      padding: 8px 4px;
+      background-color: var(--color-surface);
+      border: 1px solid var(--color-border-dark);
+      color: #A1A1AA;
+      font-family: var(--font-display);
+      font-size: 13px;
+      font-weight: 700;
+      text-transform: uppercase;
+      cursor: pointer;
+      border-radius: var(--radius-sm);
+      transition: all var(--motion-fast);
+    }
+
+    .stage-mode-btn.active {
+      background-color: var(--color-primary);
+      color: #FFFFFF;
+      border-color: var(--color-primary);
+      box-shadow: 0 0 16px rgba(139, 92, 246, 0.4);
+    }
+
+    /* Live Audio Visualizer Canvas */
+    #visualizerCanvas {
+      width: 100%;
+      height: 140px;
+      background-color: #050507;
+      border: 1px solid var(--color-border-dark);
+      border-radius: var(--radius-sm);
+      display: block;
+    }
+
+    /* ─── Clear Content Feature Blocks (DESIGN.md §5) ──────────────── */
+    .features-theatrical {
+      padding: var(--space-20) 0;
+      background-color: var(--color-surface);
+      border-bottom: 1px solid var(--color-border-dark);
+    }
+
+    .section-head {
+      max-width: 680px;
+      margin-bottom: var(--space-16);
+    }
+
+    .theatrical-label {
+      font-family: var(--font-mono);
+      font-size: var(--text-xs);
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--color-primary);
+      margin-bottom: var(--space-2);
+      display: block;
+    }
+
+    .features-grid-3up {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: var(--space-8);
+    }
+
+    .theatrical-card {
+      background-color: var(--color-surface-card);
+      border: 1px solid var(--color-border-dark);
+      border-radius: var(--radius-md);
+      padding: var(--space-8);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: border-color var(--motion-fast), transform var(--motion-fast), box-shadow var(--motion-fast);
+      position: relative;
+    }
+
+    .theatrical-card:hover {
+      border-color: var(--color-primary);
+      transform: translateY(-4px);
+      box-shadow: 0 16px 40px rgba(139, 92, 246, 0.15);
+    }
+
+    .theatrical-card.crimson-accent:hover {
+      border-color: var(--color-secondary);
+      box-shadow: 0 16px 40px rgba(244, 63, 94, 0.15);
+    }
+
+    .card-num-badge {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--color-primary);
+      margin-bottom: var(--space-4);
+    }
+
+    .theatrical-card h4 {
+      font-size: var(--text-xl);
+      margin-bottom: var(--space-3);
+    }
+
+    .theatrical-card p {
+      font-size: var(--text-sm);
+      color: #A1A1AA;
+      margin-bottom: var(--space-6);
+      flex: 1;
+    }
+
+    .theatrical-card-footer {
+      border-top: 1px solid var(--color-border-dark);
+      padding-top: var(--space-4);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    /* ─── Theatrical Scene Showcase ────────────────────────────────── */
+    .scene-showcase-section {
+      padding: var(--space-20) 0;
+      background: radial-gradient(circle at 30% 50%, rgba(244, 63, 94, 0.12) 0%, transparent 60%);
+      border-bottom: 1px solid var(--color-border-dark);
+    }
+
+    .scene-grid-2up {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--space-8);
+    }
+
+    .scene-frame-card {
+      background-color: var(--color-surface-card);
+      border: 1px solid var(--color-border-dark);
+      border-radius: var(--radius-lg);
+      padding: var(--space-6);
+    }
+
+    .scene-media-box {
+      width: 100%;
+      height: 240px;
+      background-color: #050507;
+      border: 1px solid var(--color-border-dark);
+      border-radius: var(--radius-md);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: var(--space-4);
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* ─── Commission Intake ────────────────────────────────────────── */
+    .intake-band {
+      padding: var(--space-20) 0;
+      background-color: var(--color-surface);
+      text-align: center;
+    }
+
+    .intake-container {
+      max-width: 640px;
+      margin: 0 auto;
+    }
+
+    .intake-form {
+      display: flex;
+      gap: var(--space-3);
+      margin-top: var(--space-8);
+    }
+
+    .theatrical-input {
+      flex: 1;
+      height: 52px;
+      background-color: var(--color-surface-card);
+      border: 1px solid var(--color-border-dark);
+      border-radius: var(--radius-sm);
+      padding: 0 var(--space-4);
+      font-family: var(--font-body);
+      font-size: var(--text-base);
+      color: #FFFFFF;
+    }
+
+    .theatrical-input:focus {
+      outline: none;
+      border-color: var(--color-primary);
+      box-shadow: var(--focus-ring);
+    }
+
+    /* ─── Footer ───────────────────────────────────────────────────── */
+    .theatrical-footer {
+      background-color: #050507;
+      color: #71717A;
+      padding: var(--space-16) 0 var(--space-8);
+      border-top: 1px solid var(--color-border-dark);
+    }
+
+    .footer-grid-4up {
+      display: grid;
+      grid-template-columns: 1.5fr repeat(3, 1fr);
+      gap: var(--space-8);
+      margin-bottom: var(--space-12);
+    }
+
+    .footer-title {
+      font-family: var(--font-display);
+      font-size: var(--text-sm);
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: #FFFFFF;
+      margin-bottom: var(--space-4);
+    }
+
+    .footer-nav-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-2);
+    }
+
+    .footer-nav-list a {
+      font-size: var(--text-sm);
+      color: #71717A;
+      transition: color var(--motion-fast);
+    }
+
+    .footer-nav-list a:hover {
+      color: var(--color-primary);
+    }
+
+    /* ─── Responsive Breakpoints ───────────────────────────────────── */
+    @media (max-width: 1024px) {
+      .hero-layout-grid { grid-template-columns: 1fr; }
+      .features-grid-3up { grid-template-columns: 1fr; }
+      .scene-grid-2up { grid-template-columns: 1fr; }
+      .footer-grid-4up { grid-template-columns: repeat(2, 1fr); }
+      h1, .hero-dramatic-h1 { font-size: 64px; }
+    }
+
+    @media (max-width: 640px) {
+      .stage-nav { display: none; }
+      .intake-form { flex-direction: column; }
+      .footer-grid-4up { grid-template-columns: 1fr; }
+      h1, .hero-dramatic-h1 { font-size: 44px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Stage Header -->
+  <header class="stage-header">
+    <div class="container header-inner">
+      <a href="#hero" class="brand-mark" aria-label="Nocturne Home">
+        <div class="spotlight-glyph">N</div>
+        <span class="brand-title">NOCTURNE</span>
+      </a>
+
+      <nav aria-label="Theatrical Navigation">
+        <ul class="stage-nav">
+          <li><a href="#scenes">Scenes</a></li>
+          <li><a href="#production">Production</a></li>
+          <li><a href="#visualizer">Stage Control</a></li>
+          <li><a href="#commission">Commission</a></li>
+        </ul>
+      </nav>
+
+      <div>
+        <a href="#commission" class="btn btn-primary" style="padding: 10px 22px; font-size: 13px;">
+          ENTER STAGE
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <!-- HERO SECTION: High-Contrast, Theatrical, Mammoth Typography -->
+    <section class="hero-theatrical" id="hero">
+      <div class="container hero-layout-grid">
+        <div>
+          <div class="theatrical-badge">
+            <span>IMMERSIVE AUDIO-VISUAL THEATRE</span>
+          </div>
+
+          <h1 class="hero-dramatic-h1">
+            UNAPOLOGETIC <span class="crimson-glow">DRAMA</span>. PURE INTENSITY.
+          </h1>
+
+          <p class="hero-subtext">
+            Nocturne orchestrates high-contrast stage lighting, sub-bass resonant audio, and monumental visual compositions that command visceral audience attention.
+          </p>
+
+          <div class="hero-btn-group">
+            <a href="#visualizer" class="btn btn-primary" id="startStageBtn">ACTIVATE SPOTLIGHT</a>
+            <a href="#scenes" class="btn btn-neutral">EXPLORE SCENES</a>
+            <button class="btn btn-crimson" id="audioTriggerBtn">TRIGGER CUE</button>
+          </div>
+
+          <div style="font-family: var(--font-mono); font-size: 12px; color: #71717A;">
+            <span>SURFACE: #09090B · PRIMARY: #8B5CF6 · SECONDARY: #F43F5E</span>
+          </div>
+        </div>
+
+        <!-- Theatrical Stage Controller Card -->
+        <div class="stage-controller-card" id="visualizer">
+          <div class="card-meta-header">
+            <span>LIGHTING RIG // CUE 08</span>
+            <span style="color: var(--color-primary);">ARMED &amp; LIVE</span>
+          </div>
+
+          <div class="stage-mode-btn-row">
+            <button class="stage-mode-btn active" data-mode="violet">VIOLET VOID</button>
+            <button class="stage-mode-btn" data-mode="crimson">CRIMSON FLAME</button>
+            <button class="stage-mode-btn" data-mode="eclipse">ECLIPSE STROBE</button>
+          </div>
+
+          <!-- Real-Time Waveform Canvas -->
+          <canvas id="visualizerCanvas" width="400" height="140"></canvas>
+
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 14px; font-family: var(--font-mono); font-size: 12px;">
+            <span style="color: #71717A;">WAVEFORM: 44.1kHz SPATIAL</span>
+            <span style="color: var(--color-secondary);">DECIBELS: -3.2 dBFS</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- THEATRICAL FEATURE BLOCKS (DESIGN.md §5: Clear Content Blocks) -->
+    <section class="features-theatrical" id="production">
+      <div class="container">
+        <div class="section-head">
+          <span class="theatrical-label">COMMANDING ARCHITECTURE</span>
+          <h2>UNCONVENTIONAL SCENIC COMPOSITIONS</h2>
+          <p style="font-size: var(--text-base); color: #A1A1AA; margin-top: 8px;">
+            Engineered with extreme weight contrast, razor-sharp outlines, and calculated negative space.
+          </p>
+        </div>
+
+        <div class="features-grid-3up">
+          <!-- Card 1 -->
+          <div class="theatrical-card">
+            <div>
+              <div class="card-num-badge">01 // PHOTOMETRICS</div>
+              <h4>COLD VOLUMETRIC HAZE</h4>
+              <p>Sharp beam divergence angles carving physical cones of violet light through suspended atmospheric mist.</p>
+            </div>
+            <div class="theatrical-card-footer">
+              <span style="font-family: var(--font-mono); font-size: 12px; color: var(--color-primary);">55,000 LUMENS</span>
+              <a href="#scenes" class="btn btn-neutral" style="padding: 6px 14px; font-size: 11px;">DETAILS →</a>
+            </div>
+          </div>
+
+          <!-- Card 2 (Crimson Accent #F43F5E) -->
+          <div class="theatrical-card crimson-accent">
+            <div>
+              <div class="card-num-badge" style="color: var(--color-secondary);">02 // SONIC PRESSURE</div>
+              <h4>SUB-BASS HARMONICS</h4>
+              <p>Dual 21-inch isobaric subwoofers tuned down to 18Hz to physically resonate through concrete seating structures.</p>
+            </div>
+            <div class="theatrical-card-footer">
+              <span style="font-family: var(--font-mono); font-size: 12px; color: var(--color-secondary);">18 HZ INFRA-LOW</span>
+              <a href="#scenes" class="btn btn-neutral" style="padding: 6px 14px; font-size: 11px;">DETAILS →</a>
+            </div>
+          </div>
+
+          <!-- Card 3 -->
+          <div class="theatrical-card">
+            <div>
+              <div class="card-num-badge">03 // KINETIC RIGGING</div>
+              <h4>SERVO WINCH ARRAYS</h4>
+              <p>Synchronized high-speed kinetic LED trusses moving in three-dimensional choreographies overhead.</p>
+            </div>
+            <div class="theatrical-card-footer">
+              <span style="font-family: var(--font-mono); font-size: 12px; color: var(--color-primary);">2.4 M/S VELOCITY</span>
+              <a href="#scenes" class="btn btn-neutral" style="padding: 6px 14px; font-size: 11px;">DETAILS →</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SCENE SHOWCASE -->
+    <section class="scene-showcase-section" id="scenes">
+      <div class="container">
+        <div class="section-head">
+          <span class="theatrical-label" style="color: var(--color-secondary);">PERFORMANCE ARCHIVES</span>
+          <h2>IMMERSIVE ACTS &amp; CHOREOGRAPHIES</h2>
+        </div>
+
+        <div class="scene-grid-2up">
+          <div class="scene-frame-card">
+            <div class="scene-media-box" style="background: radial-gradient(circle at center, rgba(139, 92, 246, 0.4) 0%, #050507 80%);">
+              <span style="font-family: var(--font-display); font-size: 28px; font-weight: 900; letter-spacing: 0.1em;">ACT I: OBLIVION</span>
+            </div>
+            <h3>SCENE 01: MONOLITHIC ENTRY</h3>
+            <p style="font-size: 14px; margin-top: 6px;">Opening cue: Total blackout punctuated by a single vertical blade of 6,500K strobe illumination.</p>
+          </div>
+
+          <div class="scene-frame-card">
+            <div class="scene-media-box" style="background: radial-gradient(circle at center, rgba(244, 63, 94, 0.4) 0%, #050507 80%);">
+              <span style="font-family: var(--font-display); font-size: 28px; font-weight: 900; letter-spacing: 0.1em; color: var(--color-secondary);">ACT II: ECLIPSE</span>
+            </div>
+            <h3>SCENE 02: CRIMSON CHORUS</h3>
+            <p style="font-size: 14px; margin-top: 6px;">Climax cue: 360-degree crimson rim lighting washes across the amphitheater as sub-bass drops.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- INTAKE & COMMISSION -->
+    <section class="intake-band" id="commission">
+      <div class="container intake-container">
+        <span class="theatrical-label">RESERVE STAGE CAPACITY</span>
+        <h2>COMMISSION A THEATRICAL PRODUCTION</h2>
+        <p style="font-size: var(--text-base); margin-top: 8px;">
+          Direct communication for festival directors, world-tour producers, and avant-garde architectural commissioners.
+        </p>
+
+        <form class="intake-form" id="intakeForm">
+          <input type="email" class="theatrical-input" placeholder="producer@worldtour.live" required />
+          <button type="submit" class="btn btn-primary">TRANSMIT INQUIRY</button>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <!-- THEATRICAL FOOTER -->
+  <footer class="theatrical-footer">
+    <div class="container">
+      <div class="footer-grid-4up">
+        <div>
+          <div class="brand-mark" style="margin-bottom: 16px;">
+            <div class="spotlight-glyph">N</div>
+            <span class="brand-title" style="color: #FFFFFF;">NOCTURNE</span>
+          </div>
+          <p style="font-size: 13px; line-height: 1.6; color: #71717A;">
+            High-contrast theatrical design and immersive stage architectures engineered to command attention.
+          </p>
+        </div>
+
+        <div>
+          <h4 class="footer-title">STAGES</h4>
+          <ul class="footer-nav-list">
+            <li><a href="#scenes">The Amphitheater</a></li>
+            <li><a href="#scenes">The Black Box</a></li>
+            <li><a href="#scenes">Void Proscenium</a></li>
+            <li><a href="#scenes">Arena Spatial Rig</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h4 class="footer-title">PRODUCTION</h4>
+          <ul class="footer-nav-list">
+            <li><a href="#production">Volumetric Haze</a></li>
+            <li><a href="#production">Sub-Bass Tuning</a></li>
+            <li><a href="#production">Kinetic Trusses</a></li>
+            <li><a href="#production">DMX Telemetry</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h4 class="footer-title">ATELIER</h4>
+          <ul class="footer-nav-list">
+            <li><a href="#hero">About Nocturne</a></li>
+            <li><a href="#hero">Lighting Riders</a></li>
+            <li><a href="#hero">Safety Protocols</a></li>
+            <li><a href="#commission">Press Inquiries</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div style="border-top: 1px solid var(--color-border-dark); padding-top: 24px; display: flex; justify-content: space-between; font-family: var(--font-mono); font-size: 12px;">
+        <span>© 2026 NOCTURNE THEATRICAL SYSTEMS. ALL CUES LOCKED.</span>
+        <span>STATUS: 120 FPS / ZERO FRAME DROP</span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Interactive Visualizer Script -->
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const canvas = document.getElementById('visualizerCanvas');
+      const ctx = canvas.getContext('2d');
+      const modeBtns = document.querySelectorAll('.stage-mode-btn');
+      const audioTriggerBtn = document.getElementById('audioTriggerBtn');
+
+      let currentMode = 'violet';
+      let animFrame;
+
+      function renderWaveform() {
+        const w = canvas.width;
+        const h = canvas.height;
+        ctx.fillStyle = '#050507';
+        ctx.fillRect(0, 0, w, h);
+
+        const time = Date.now() * 0.003;
+        const bars = 48;
+        const barWidth = w / bars;
+
+        for (let i = 0; i < bars; i++) {
+          const freq = Math.sin(time + i * 0.2) * 0.5 + 0.5;
+          const noise = Math.random() * 0.2;
+          const height = (freq + noise) * (h * 0.75);
+
+          if (currentMode === 'violet') {
+            ctx.fillStyle = i % 2 === 0 ? '#8B5CF6' : '#A78BFA';
+          } else if (currentMode === 'crimson') {
+            ctx.fillStyle = i % 2 === 0 ? '#F43F5E' : '#FB7185';
+          } else {
+            ctx.fillStyle = Math.random() > 0.5 ? '#FAFAFA' : '#52525B';
+          }
+
+          ctx.fillRect(i * barWidth, h - height, barWidth - 2, height);
+        }
+
+        animFrame = requestAnimationFrame(renderWaveform);
+      }
+
+      renderWaveform();
+
+      modeBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+          modeBtns.forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+          currentMode = btn.getAttribute('data-mode');
+        });
+      });
+
+      if (audioTriggerBtn) {
+        audioTriggerBtn.addEventListener('click', () => {
+          alert('Cue 08 triggered: Sub-bass resonance ramp activated.');
+        });
+      }
+
+      const form = document.getElementById('intakeForm');
+      if (form) {
+        form.addEventListener('submit', (e) => {
+          e.preventDefault();
+          alert('Production brief received. Stage managers will respond within 4 hours.');
+          form.reset();
+        });
+      }
+    });
+  </script>
+</body>
+</html>

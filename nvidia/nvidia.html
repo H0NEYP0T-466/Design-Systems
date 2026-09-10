@@ -1,0 +1,1302 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NVIDIA — World Leader in Accelerated Computing & Artificial Intelligence</title>
+  <style>
+    /* ==========================================================================
+       NVIDIA DESIGN SYSTEM TOKENS & FOUNDATIONS
+       Extracted strictly from open-design/design-systems/nvidia/DESIGN.md
+       ========================================================================== */
+    :root {
+      /* Primary Brand */
+      --nv-green: #76b900;             /* Pure signature accent - borders, underlines, CTA outlines */
+      --nv-black: #000000;             /* True Black primary background & text on light surfaces */
+      --nv-white: #ffffff;             /* Pure White text on dark bg, light section backgrounds */
+
+      /* Extended Brand Palette */
+      --nv-green-light: #bff230;       /* Lime accent for highlights and hover states */
+      --nv-orange-400: #df6500;        /* Alert, featured badges, energy contexts */
+      --nv-yellow-300: #ef9100;        /* Secondary warm accent, product category */
+      --nv-yellow-050: #feeeb2;        /* Light warm surface callout background */
+
+      /* Status & Semantic */
+      --nv-red-500: #e52020;           /* Error states, destructive actions */
+      --nv-red-800: #650b0b;           /* Deep red severe warning backgrounds */
+      --nv-green-500: #3f8500;         /* Success states, positive indicators */
+      --nv-blue-700: #0046a4;          /* Informational accents, link hover alt */
+
+      /* Decorative */
+      --nv-purple-800: #4d1368;        /* Deep purple for gradient ends, premium/AI */
+      --nv-purple-100: #f9d4ff;        /* Light purple surface tint */
+      --nv-fuchsia-700: #8c1c55;       /* Special promotions, featured content */
+
+      /* Neutral Scale */
+      --nv-gray-300: #a7a7a7;          /* Muted text, disabled labels */
+      --nv-gray-400: #898989;          /* Secondary text, metadata */
+      --nv-gray-500: #757575;          /* Tertiary text, placeholders, footers */
+      --nv-gray-border: #5e5e5e;       /* Subtle borders, divider lines */
+      --nv-near-black: #1a1a1a;        /* Dark surfaces, card backgrounds on black */
+
+      /* Interactive States */
+      --nv-link-hover: #3860be;        /* Blue shift on hover across all link variants */
+      --nv-btn-hover: #1eaedb;         /* Teal highlight for button hover */
+      --nv-btn-active: #007fff;        /* Bright blue for active/pressed button */
+      --nv-btn-active-border: #003eff; /* Border for active pressed button */
+      --nv-focus-ring: #000000;
+
+      /* Depth & Geometry */
+      --nv-shadow-card: rgba(0, 0, 0, 0.3) 0px 0px 5px 0px;
+      --nv-radius-std: 2px;            /* Sharp, engineered corners throughout */
+      --nv-radius-micro: 1px;
+      --nv-radius-circle: 50%;
+
+      /* Typography Stack */
+      --nv-font-family: "NVIDIA-EMEA", -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, Helvetica, sans-serif;
+    }
+
+    /* Universal Reset & Base Rules */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      font-size: 16px;
+      scroll-behavior: smooth;
+      background-color: var(--nv-black);
+      color: var(--nv-white);
+    }
+
+    body {
+      font-family: var(--nv-font-family);
+      font-weight: 400;
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      background-color: var(--nv-black);
+      color: var(--nv-white);
+      overflow-x: hidden;
+    }
+
+    /* Typography Hierarchy from Table in Section 3 */
+    .display-hero {
+      font-size: 36px;
+      font-weight: 700;
+      line-height: 1.25;
+      letter-spacing: normal;
+    }
+
+    .section-heading {
+      font-size: 24px;
+      font-weight: 700;
+      line-height: 1.25;
+      letter-spacing: normal;
+    }
+
+    .sub-heading {
+      font-size: 22px;
+      font-weight: 400;
+      line-height: 1.75;
+      letter-spacing: normal;
+    }
+
+    .card-title {
+      font-size: 20px;
+      font-weight: 700;
+      line-height: 1.25;
+      letter-spacing: normal;
+    }
+
+    .body-large {
+      font-size: 18px;
+      font-weight: 700;
+      line-height: 1.67;
+      letter-spacing: normal;
+    }
+
+    .body-standard {
+      font-size: 16px;
+      font-weight: 400;
+      line-height: 1.50;
+    }
+
+    .body-bold {
+      font-size: 16px;
+      font-weight: 700;
+      line-height: 1.50;
+    }
+
+    .body-small {
+      font-size: 15px;
+      font-weight: 400;
+      line-height: 1.67;
+    }
+
+    .body-small-bold {
+      font-size: 15px;
+      font-weight: 700;
+      line-height: 1.50;
+    }
+
+    .caption {
+      font-size: 14px;
+      font-weight: 600;
+      line-height: 1.50;
+    }
+
+    .caption-small {
+      font-size: 12px;
+      font-weight: 400;
+      line-height: 1.25;
+    }
+
+    .micro-label {
+      font-size: 10px;
+      font-weight: 700;
+      line-height: 1.50;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .micro {
+      font-size: 11px;
+      font-weight: 700;
+      line-height: 1.00;
+    }
+
+    /* Container */
+    .nv-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    /* ==========================================================================
+       BUTTONS & INTERACTIVE COMPONENTS (Section 4)
+       ========================================================================== */
+    .nv-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--nv-font-family);
+      font-size: 16px;
+      font-weight: 700;
+      line-height: 1.25;
+      text-decoration: none;
+      border-radius: var(--nv-radius-std);
+      cursor: pointer;
+      transition: background-color 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+      white-space: nowrap;
+    }
+
+    /* Primary Button: transparent bg, 2px solid #76b900 border, 11px 13px padding */
+    .nv-btn-primary {
+      background: transparent;
+      color: var(--nv-white);
+      padding: 11px 13px;
+      border: 2px solid var(--nv-green);
+    }
+    .nv-btn-primary:hover {
+      background-color: var(--nv-btn-hover);
+      color: var(--nv-white);
+      border-color: var(--nv-btn-hover);
+    }
+    .nv-btn-primary:active {
+      background-color: var(--nv-btn-active);
+      color: var(--nv-white);
+      border: 1px solid var(--nv-btn-active-border);
+      transform: scale(1);
+    }
+    .nv-btn-primary:focus-visible {
+      background-color: var(--nv-btn-hover);
+      color: var(--nv-white);
+      outline: var(--nv-black) solid 2px;
+      opacity: 0.9;
+    }
+
+    /* Primary on Light Section */
+    .nv-section-light .nv-btn-primary {
+      color: var(--nv-black);
+    }
+    .nv-section-light .nv-btn-primary:hover {
+      color: var(--nv-white);
+    }
+
+    /* Secondary Button: transparent bg, 1px solid #76b900 */
+    .nv-btn-secondary {
+      background: transparent;
+      color: var(--nv-white);
+      padding: 11px 13px;
+      border: 1px solid var(--nv-green);
+    }
+    .nv-btn-secondary:hover {
+      background-color: var(--nv-btn-hover);
+      color: var(--nv-white);
+      border-color: var(--nv-btn-hover);
+    }
+    .nv-btn-secondary:active {
+      background-color: var(--nv-btn-active);
+      color: var(--nv-white);
+    }
+
+    /* Button Large: 18px 700 line-height 1.25 */
+    .nv-btn-large {
+      font-size: 18px;
+      padding: 13px 18px;
+    }
+
+    /* Button Compact: 14.4px weight 700, line-height 1.00, letter-spacing 0.144px */
+    .nv-btn-compact {
+      font-size: 14.4px;
+      font-weight: 700;
+      line-height: 1.00;
+      letter-spacing: 0.144px;
+      padding: 8px 12px;
+      border: 2px solid var(--nv-green);
+      background: transparent;
+      color: var(--nv-white);
+    }
+    .nv-btn-compact:hover {
+      background-color: var(--nv-btn-hover);
+      color: var(--nv-white);
+      border-color: var(--nv-btn-hover);
+    }
+
+    /* Link Styles */
+    a.nv-link-dark {
+      color: var(--nv-white);
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 700;
+      transition: color 0.15s ease;
+    }
+    a.nv-link-dark:hover {
+      color: var(--nv-link-hover);
+    }
+
+    a.nv-link-light {
+      color: var(--nv-black);
+      font-size: 14px;
+      font-weight: 700;
+      text-decoration: none;
+      border-bottom: 2px solid var(--nv-green);
+      padding-bottom: 2px;
+      transition: color 0.15s ease, border-color 0.15s ease;
+    }
+    a.nv-link-light:hover {
+      color: var(--nv-link-hover);
+      border-bottom-color: transparent;
+    }
+
+    a.nv-link-green {
+      color: var(--nv-green);
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 700;
+      transition: color 0.15s ease;
+    }
+    a.nv-link-green:hover {
+      color: var(--nv-link-hover);
+    }
+
+    a.nv-link-muted {
+      color: #666666;
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 700;
+      transition: color 0.15s ease;
+    }
+    a.nv-link-muted:hover {
+      color: var(--nv-link-hover);
+    }
+
+    /* ==========================================================================
+       NAVIGATION BAR (Section 4)
+       ========================================================================== */
+    .nv-navbar {
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      background-color: var(--nv-black);
+      border-bottom: 1px solid var(--nv-gray-border);
+      height: 68px;
+      display: flex;
+      align-items: center;
+    }
+    .nv-navbar-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+    }
+    .nv-brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+    }
+    .nv-brand-logo {
+      display: flex;
+      align-items: center;
+    }
+    .nv-brand-logo svg {
+      height: 28px;
+      fill: var(--nv-green);
+    }
+    .nv-brand-name {
+      font-size: 20px;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      color: var(--nv-white);
+      text-transform: uppercase;
+    }
+    .nv-nav-menu {
+      display: flex;
+      align-items: center;
+      list-style: none;
+      gap: 24px;
+    }
+    .nv-nav-item a {
+      font-size: 14px;
+      font-weight: 700;
+      line-height: 1.43;
+      text-transform: uppercase;
+      color: var(--nv-white);
+      text-decoration: none;
+      transition: color 0.15s ease;
+    }
+    .nv-nav-item a:hover {
+      color: var(--nv-link-hover);
+    }
+    .nv-nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    /* ==========================================================================
+       HERO SECTION (Section 1, 3, 5, 6)
+       Stark black with subtle green gradient wash behind content
+       ========================================================================== */
+    .nv-hero-section {
+      background: radial-gradient(circle at 75% 30%, rgba(118, 185, 0, 0.15) 0%, rgba(0, 0, 0, 0.95) 60%), #000000;
+      padding: 80px 0 72px 0;
+      border-bottom: 1px solid var(--nv-gray-border);
+      position: relative;
+    }
+    .nv-hero-grid {
+      display: grid;
+      grid-template-columns: 1.2fr 0.8fr;
+      gap: 48px;
+      align-items: center;
+    }
+    .nv-hero-badge {
+      display: inline-block;
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      color: var(--nv-green-light);
+      border: 1px solid var(--nv-green);
+      padding: 4px 8px;
+      border-radius: var(--nv-radius-micro);
+      margin-bottom: 20px;
+      letter-spacing: 1px;
+    }
+    .nv-hero-title {
+      font-size: 36px;
+      font-weight: 700;
+      line-height: 1.25;
+      color: var(--nv-white);
+      margin-bottom: 16px;
+    }
+    .nv-hero-subtitle {
+      font-size: 22px;
+      font-weight: 400;
+      line-height: 1.75;
+      color: var(--nv-gray-300);
+      margin-bottom: 16px;
+    }
+    .nv-hero-lead {
+      font-size: 18px;
+      font-weight: 700;
+      line-height: 1.67;
+      color: var(--nv-white);
+      margin-bottom: 32px;
+    }
+    .nv-hero-cta-group {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+    .nv-hero-chip-panel {
+      background-color: var(--nv-near-black);
+      border: 1px solid var(--nv-gray-border);
+      border-radius: var(--nv-radius-std);
+      padding: 24px;
+      box-shadow: var(--nv-shadow-card);
+      position: relative;
+    }
+    .nv-chip-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid var(--nv-gray-border);
+      padding-bottom: 12px;
+      margin-bottom: 16px;
+    }
+    .nv-chip-title {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--nv-green);
+      text-transform: uppercase;
+    }
+    .nv-chip-status {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--nv-green-light);
+      background-color: rgba(118, 185, 0, 0.1);
+      padding: 2px 6px;
+      border: 1px solid var(--nv-green);
+      border-radius: var(--nv-radius-micro);
+    }
+    .nv-spec-metrics {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
+    }
+    .nv-metric-box {
+      background: var(--nv-black);
+      border: 1px solid var(--nv-gray-border);
+      border-radius: var(--nv-radius-std);
+      padding: 12px;
+    }
+    .nv-metric-val {
+      font-size: 24px;
+      font-weight: 700;
+      line-height: 1.25;
+      color: var(--nv-green);
+    }
+    .nv-metric-label {
+      font-size: 12px;
+      font-weight: 400;
+      line-height: 1.25;
+      color: var(--nv-gray-400);
+      margin-top: 4px;
+    }
+
+    /* ==========================================================================
+       SECTION 1: DARK SECTION (DGX & ACCELERATED INFRASTRUCTURE)
+       ========================================================================== */
+    .nv-section-dark {
+      background-color: var(--nv-black);
+      padding: 64px 0;
+      border-bottom: 1px solid var(--nv-gray-border);
+    }
+    .nv-section-header {
+      margin-bottom: 40px;
+    }
+    .nv-section-label {
+      font-size: 14px;
+      font-weight: 700;
+      text-transform: uppercase;
+      color: var(--nv-green);
+      margin-bottom: 8px;
+      display: block;
+    }
+    .nv-section-title-dark {
+      font-size: 24px;
+      font-weight: 700;
+      line-height: 1.25;
+      color: var(--nv-white);
+      margin-bottom: 12px;
+    }
+    .nv-section-desc-dark {
+      font-size: 16px;
+      font-weight: 400;
+      line-height: 1.50;
+      color: var(--nv-gray-300);
+      max-width: 800px;
+    }
+
+    /* Card Grid on Dark */
+    .nv-cards-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+    .nv-card-dark {
+      background-color: var(--nv-near-black);
+      border: 1px solid var(--nv-gray-border);
+      border-radius: var(--nv-radius-std);
+      padding: 24px;
+      box-shadow: var(--nv-shadow-card);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+    .nv-card-dark:hover {
+      border-color: var(--nv-green);
+      box-shadow: rgba(0, 0, 0, 0.5) 0px 0px 10px 0px;
+    }
+    .nv-card-dark .card-title {
+      color: var(--nv-white);
+      margin-bottom: 12px;
+      border-bottom: 2px solid var(--nv-green);
+      padding-bottom: 8px;
+      display: inline-block;
+    }
+    .nv-card-dark p {
+      font-size: 15px;
+      font-weight: 400;
+      line-height: 1.67;
+      color: var(--nv-gray-300);
+      margin-bottom: 20px;
+    }
+    .nv-card-dark .card-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: auto;
+      padding-top: 16px;
+      border-top: 1px solid var(--nv-gray-border);
+    }
+
+    /* ==========================================================================
+       SECTION 2: LIGHT SECTION (ALTERNATING RHYTHM, Section 8)
+       Background: Pure White (#ffffff), Text: Black (#000000)
+       ========================================================================== */
+    .nv-section-light {
+      background-color: var(--nv-white);
+      color: var(--nv-black);
+      padding: 72px 0;
+      border-bottom: 1px solid #d1d5db;
+    }
+    .nv-section-title-light {
+      font-size: 24px;
+      font-weight: 700;
+      line-height: 1.25;
+      color: var(--nv-black);
+      margin-bottom: 12px;
+    }
+    .nv-section-desc-light {
+      font-size: 16px;
+      font-weight: 400;
+      line-height: 1.50;
+      color: var(--nv-near-black);
+      max-width: 800px;
+    }
+
+    /* Callout Box using Yellow 050 (#feeeb2) from Palette */
+    .nv-callout-box {
+      background-color: var(--nv-yellow-050);
+      border-left: 4px solid var(--nv-yellow-300);
+      padding: 16px 20px;
+      border-radius: var(--nv-radius-std);
+      margin-bottom: 32px;
+      display: flex;
+      align-items: flex-start;
+      gap: 16px;
+    }
+    .nv-callout-badge {
+      background-color: var(--nv-orange-400);
+      color: var(--nv-white);
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      padding: 3px 6px;
+      border-radius: var(--nv-radius-micro);
+    }
+    .nv-callout-text {
+      font-size: 15px;
+      font-weight: 700;
+      color: #5c3a00;
+      line-height: 1.5;
+    }
+
+    /* Cards on Light Section */
+    .nv-card-light {
+      background-color: var(--nv-white);
+      border: 1px solid #e5e7eb;
+      border-radius: var(--nv-radius-std);
+      padding: 24px;
+      box-shadow: var(--nv-shadow-card);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    .nv-card-light .card-title {
+      color: var(--nv-black);
+      margin-bottom: 12px;
+      border-bottom: 2px solid var(--nv-green);
+      padding-bottom: 8px;
+    }
+    .nv-card-light p {
+      font-size: 15px;
+      font-weight: 400;
+      line-height: 1.67;
+      color: var(--nv-gray-500);
+      margin-bottom: 20px;
+    }
+    .nv-card-light .card-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: auto;
+      padding-top: 16px;
+      border-top: 1px solid #f3f4f6;
+    }
+
+    /* Industrial Tech Spec Table (Section 4) */
+    .nv-spec-table-wrap {
+      margin-top: 40px;
+      border: 1px solid #e5e7eb;
+      border-radius: var(--nv-radius-std);
+      overflow: hidden;
+    }
+    .nv-spec-table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+      font-size: 14px;
+    }
+    .nv-spec-table th {
+      background-color: var(--nv-black);
+      color: var(--nv-white);
+      padding: 12px 16px;
+      font-size: 14px;
+      font-weight: 700;
+      text-transform: uppercase;
+      border-bottom: 2px solid var(--nv-green);
+    }
+    .nv-spec-table td {
+      padding: 14px 16px;
+      border-bottom: 1px solid #f0f0f0;
+      color: var(--nv-near-black);
+    }
+    .nv-spec-table tr:nth-child(even) {
+      background-color: #f9fafb;
+    }
+    .nv-spec-table tr:hover {
+      background-color: #f3f4f6;
+    }
+    .nv-spec-table .spec-label {
+      font-weight: 700;
+      color: var(--nv-black);
+    }
+    .nv-spec-table .spec-highlight {
+      font-weight: 700;
+      color: var(--nv-green-500);
+    }
+    .nv-spec-badge {
+      display: inline-block;
+      font-size: 11px;
+      font-weight: 700;
+      background-color: #e5f4cf;
+      color: #2e6600;
+      padding: 2px 6px;
+      border-radius: var(--nv-radius-micro);
+    }
+
+    /* ==========================================================================
+       SECTION 3: DEVELOPER & AI ECOSYSTEM (DARK)
+       ========================================================================== */
+    .nv-ecosystem-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 32px;
+      margin-top: 32px;
+    }
+    .nv-console-card {
+      background-color: var(--nv-near-black);
+      border: 1px solid var(--nv-gray-border);
+      border-radius: var(--nv-radius-std);
+      padding: 20px;
+      font-family: ui-monospace, SFMono-Regular, "Courier New", monospace;
+    }
+    .nv-console-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid var(--nv-gray-border);
+      padding-bottom: 8px;
+      margin-bottom: 12px;
+      font-size: 12px;
+      color: var(--nv-gray-400);
+    }
+    .nv-code-line {
+      font-size: 13px;
+      line-height: 1.6;
+      color: var(--nv-gray-300);
+    }
+    .nv-code-kw {
+      color: var(--nv-btn-hover);
+      font-weight: 700;
+    }
+    .nv-code-str {
+      color: var(--nv-green-light);
+    }
+    .nv-code-num {
+      color: var(--nv-yellow-300);
+    }
+
+    /* Status Badges Matrix Showcase (Section 2) */
+    .nv-status-showcase {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 24px;
+    }
+    .nv-tag {
+      font-size: 11px;
+      font-weight: 700;
+      padding: 4px 8px;
+      border-radius: var(--nv-radius-micro);
+      text-transform: uppercase;
+    }
+    .nv-tag-green { background: rgba(118, 185, 0, 0.15); color: var(--nv-green); border: 1px solid var(--nv-green); }
+    .nv-tag-red { background: rgba(229, 32, 32, 0.15); color: var(--nv-red-500); border: 1px solid var(--nv-red-500); }
+    .nv-tag-blue { background: rgba(0, 70, 164, 0.15); color: #5ea4ff; border: 1px solid var(--nv-blue-700); }
+    .nv-tag-purple { background: rgba(77, 19, 104, 0.25); color: #d57eff; border: 1px solid var(--nv-purple-800); }
+    .nv-tag-orange { background: rgba(223, 101, 0, 0.15); color: var(--nv-orange-400); border: 1px solid var(--nv-orange-400); }
+
+    /* ==========================================================================
+       FOOTER (Section 4 & 9)
+       #000000 background, multi-column layout, links 14px weight 400 #a7a7a7, hover #76b900
+       ========================================================================== */
+    .nv-footer {
+      background-color: var(--nv-black);
+      border-top: 2px solid var(--nv-green);
+      padding: 64px 0 32px 0;
+    }
+    .nv-footer-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 32px;
+      margin-bottom: 48px;
+    }
+    .nv-footer-col h4 {
+      font-size: 14px;
+      font-weight: 700;
+      text-transform: uppercase;
+      color: var(--nv-white);
+      margin-bottom: 16px;
+      border-bottom: 1px solid var(--nv-gray-border);
+      padding-bottom: 8px;
+    }
+    .nv-footer-col ul {
+      list-style: none;
+    }
+    .nv-footer-col li {
+      margin-bottom: 10px;
+    }
+    .nv-footer-col a {
+      font-size: 14px;
+      font-weight: 400;
+      color: var(--nv-gray-300);
+      text-decoration: none;
+      transition: color 0.15s ease;
+    }
+    .nv-footer-col a:hover {
+      color: var(--nv-green);
+    }
+    .nv-footer-bottom {
+      border-top: 1px solid var(--nv-gray-border);
+      padding-top: 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+    .nv-legal-text {
+      font-size: 12px;
+      font-weight: 400;
+      color: var(--nv-gray-500);
+      line-height: 1.25;
+    }
+    .nv-legal-links {
+      display: flex;
+      gap: 16px;
+    }
+    .nv-legal-links a {
+      font-size: 12px;
+      font-weight: 400;
+      color: var(--nv-gray-500);
+      text-decoration: none;
+    }
+    .nv-legal-links a:hover {
+      color: var(--nv-green);
+    }
+
+    /* ==========================================================================
+       COOKIE / CONSENT BANNER (Section 4)
+       Fixed bottom, 2px radius buttons, gray border treatments
+       ========================================================================== */
+    .nv-cookie-banner {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background-color: var(--nv-near-black);
+      border-top: 1px solid var(--nv-gray-border);
+      padding: 16px 24px;
+      z-index: 9999;
+      box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.4);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+    .nv-cookie-text {
+      font-size: 14px;
+      color: var(--nv-gray-300);
+      max-width: 800px;
+    }
+    .nv-cookie-text a {
+      color: var(--nv-white);
+      text-decoration: underline;
+    }
+    .nv-cookie-actions {
+      display: flex;
+      gap: 12px;
+    }
+
+    /* Responsive Adjustments */
+    @media (max-width: 1024px) {
+      .nv-hero-grid {
+        grid-template-columns: 1fr;
+      }
+      .nv-cards-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      .nv-footer-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      .nv-ecosystem-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+    @media (max-width: 640px) {
+      .nv-cards-grid {
+        grid-template-columns: 1fr;
+      }
+      .nv-footer-grid {
+        grid-template-columns: 1fr;
+      }
+      .nv-nav-menu {
+        display: none;
+      }
+      .nv-hero-title {
+        font-size: 26px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ==========================================================================
+       TOP NAVIGATION BAR
+       ========================================================================== -->
+  <header class="nv-navbar">
+    <div class="nv-container nv-navbar-inner">
+      <a href="#" class="nv-brand">
+        <div class="nv-brand-logo">
+          <!-- NVIDIA Claw SVG Icon -->
+          <svg viewBox="0 0 100 80" xmlns="http://www.w3.org/2000/svg">
+            <path d="M47.7,2.1 C33.1,3.4 19.3,10.7 10.4,21.8 C1.8,32.6 -1.8,46.7 0.9,60.2 C3.5,73.1 12.5,84.1 24.8,89.5 C34.8,93.9 46.5,94.3 56.7,90.6 C66.8,87 75.2,79.5 80.4,70 C83.7,63.9 85.5,56.9 85.7,49.9 L72.8,49.9 C72.6,54.7 71.2,59.5 68.7,63.7 C64.9,70.1 58.7,74.9 51.5,76.9 C44.2,78.9 36.3,77.9 29.8,74.1 C21.8,69.5 16.3,61.4 15,52.3 C13.7,43.2 16.8,33.9 23.3,27.4 C30.6,20.1 41.2,16.4 51.5,17.9 C59.1,19 65.9,23.3 70.3,29.4 L81.3,21.2 C74.6,12.3 64.6,5.9 53.6,3 C51.6,2.4 49.7,2.1 47.7,2.1 Z"/>
+            <path d="M48.8,25 C39.5,25.9 31.2,32.3 27.9,41 C24.6,49.8 26.9,59.8 33.7,66.2 C38.6,70.8 45.4,73 52,72 C57.8,71.2 63,67.7 66.2,62.8 C68.1,59.8 69.3,56.3 69.5,52.7 L57.8,52.7 C57.6,54.6 56.8,56.4 55.4,57.8 C53.2,60 49.9,60.8 47,59.9 C44.1,59 41.9,56.7 41,53.8 C40.4,51.8 40.5,49.6 41.3,47.7 C42.7,44.4 46,42.2 49.7,42.3 C52.2,42.4 54.6,43.6 56.1,45.5 L65.9,39.4 C62.3,34.2 56.7,30.5 50.4,29.4 C49.9,29.3 49.3,25 48.8,25 Z"/>
+          </svg>
+        </div>
+        <span class="nv-brand-name">NVIDIA</span>
+      </a>
+
+      <nav>
+        <ul class="nv-nav-menu">
+          <li class="nv-nav-item"><a href="#products">Products</a></li>
+          <li class="nv-nav-item"><a href="#solutions">Solutions</a></li>
+          <li class="nv-nav-item"><a href="#enterprise">Enterprise</a></li>
+          <li class="nv-nav-item"><a href="#specs">Specifications</a></li>
+          <li class="nv-nav-item"><a href="#developers">Developers</a></li>
+        </ul>
+      </nav>
+
+      <div class="nv-nav-actions">
+        <a href="#demo" class="nv-btn nv-btn-primary nv-btn-compact">EXPLORE SOLUTIONS</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- ==========================================================================
+       HERO SECTION (High Contrast Hardware Aesthetic)
+       ========================================================================== -->
+  <section class="nv-hero-section">
+    <div class="nv-container">
+      <div class="nv-hero-grid">
+        <div class="nv-hero-copy">
+          <div class="nv-hero-badge">ACCELERATED COMPUTING PLATFORM</div>
+          <h1 class="nv-hero-title">NVIDIA BLACKWELL: THE ENGINE OF THE NEW INDUSTRIAL REVOLUTION</h1>
+          <p class="nv-hero-subtitle">
+            Unifying generative AI, simulation, and high-performance computing on a singular wafer-scale architecture.
+          </p>
+          <p class="nv-hero-lead">
+            Delivering up to 30X real-time inference speedups with 25X lower cost and energy consumption across global superclusters.
+          </p>
+          <div class="nv-hero-cta-group">
+            <a href="#specs" class="nv-btn nv-btn-primary nv-btn-large">EXPLORE ARCHITECTURE</a>
+            <a href="#datasheet" class="nv-btn nv-btn-secondary nv-btn-large">DOWNLOAD DATASHEET</a>
+          </div>
+        </div>
+
+        <!-- Hero Spec Panel -->
+        <div class="nv-hero-chip-panel">
+          <div class="nv-chip-header">
+            <span class="nv-chip-title">B200 TENSOR CORE GPU</span>
+            <span class="nv-chip-status">PRODUCTION READY</span>
+          </div>
+          <div class="nv-spec-metrics">
+            <div class="nv-metric-box">
+              <div class="nv-metric-val">20 PFLOPS</div>
+              <div class="nv-metric-label">FP4 Generative AI Compute</div>
+            </div>
+            <div class="nv-metric-box">
+              <div class="nv-metric-val">192 GB</div>
+              <div class="nv-metric-label">HBM3e Memory Capacity</div>
+            </div>
+            <div class="nv-metric-box">
+              <div class="nv-metric-val">8.0 TB/s</div>
+              <div class="nv-metric-label">Memory Bandwidth</div>
+            </div>
+            <div class="nv-metric-box">
+              <div class="nv-metric-val">1.8 TB/s</div>
+              <div class="nv-metric-label">5th-Gen NVLink Bidirectional</div>
+            </div>
+          </div>
+          <div style="margin-top: 20px; text-align: right;">
+            <a href="#specs" class="nv-link-green">VIEW FULL SILICON SPECS &rarr;</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==========================================================================
+       DARK SECTION: HARDWARE & ENTERPRISE COMPUTING
+       ========================================================================== -->
+  <section class="nv-section-dark" id="products">
+    <div class="nv-container">
+      <div class="nv-section-header">
+        <span class="nv-section-label">INFRASTRUCTURE</span>
+        <h2 class="nv-section-title-dark">Enterprise Systems Engineered for Trillion-Parameter Scale</h2>
+        <p class="nv-section-desc-dark">
+          From individual workstation accelerators to liquid-cooled racks containing 72 interconnected GPUs, NVIDIA compute infrastructure establishes uncompromising reliability.
+        </p>
+      </div>
+
+      <div class="nv-cards-grid">
+        <!-- Card 1 -->
+        <div class="nv-card-dark">
+          <div>
+            <h3 class="card-title">NVIDIA GB200 NVL72</h3>
+            <p>
+              A liquid-cooled, rack-scale solution connecting 36 Grace CPUs and 72 Blackwell GPUs into a single massive unified GPU memory space of 30TB.
+            </p>
+            <div class="nv-status-showcase">
+              <span class="nv-tag nv-tag-green">LIQUID-COOLED</span>
+              <span class="nv-tag nv-tag-blue">NVLINK FABRIC</span>
+            </div>
+          </div>
+          <div class="card-footer">
+            <span class="micro-label" style="color: var(--nv-gray-400);">SYSTEM ARCHITECTURE</span>
+            <a href="#" class="nv-btn-compact nv-btn">LEARN MORE</a>
+          </div>
+        </div>
+
+        <!-- Card 2 -->
+        <div class="nv-card-dark">
+          <div>
+            <h3 class="card-title">NVIDIA HGX B200</h3>
+            <p>
+              The premier modular building block for accelerated server OEM partners, offering 8 interconnected Blackwell GPUs with 1.4TB of aggregated memory.
+            </p>
+            <div class="nv-status-showcase">
+              <span class="nv-tag nv-tag-green">AIR / LIQUID</span>
+              <span class="nv-tag nv-tag-orange">OEM PARTNERS</span>
+            </div>
+          </div>
+          <div class="card-footer">
+            <span class="micro-label" style="color: var(--nv-gray-400);">SERVER NODES</span>
+            <a href="#" class="nv-btn-compact nv-btn">LEARN MORE</a>
+          </div>
+        </div>
+
+        <!-- Card 3 -->
+        <div class="nv-card-dark">
+          <div>
+            <h3 class="card-title">NVIDIA DGX SuperPOD</h3>
+            <p>
+              Turnkey AI supercomputer delivering exascale performance with full-stack NVIDIA Mission Control, Quantum-X800 InfiniBand networking, and BlueField DPU isolation.
+            </p>
+            <div class="nv-status-showcase">
+              <span class="nv-tag nv-tag-purple">EXASCALE</span>
+              <span class="nv-tag nv-tag-green">QUANTUM-X800</span>
+            </div>
+          </div>
+          <div class="card-footer">
+            <span class="micro-label" style="color: var(--nv-gray-400);">SUPERCOMPUTING</span>
+            <a href="#" class="nv-btn-compact nv-btn">LEARN MORE</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==========================================================================
+       LIGHT SECTION: ARCHITECTURE & TECHNICAL BENCHMARKS (Alternating Rhythm)
+       ========================================================================== -->
+  <section class="nv-section-light" id="specs">
+    <div class="nv-container">
+      <div class="nv-section-header">
+        <span class="nv-section-label">TECHNICAL SPECIFICATIONS</span>
+        <h2 class="nv-section-title-light">Precision Silicon Metrics & Comparative Throughput</h2>
+        <p class="nv-section-desc-light">
+          Compare microarchitectures across generational deployments. All measurements reflect measured hardware ceilings running optimized CUDA-X software stacks.
+        </p>
+      </div>
+
+      <!-- Callout Box Using Warm Palette (#feeeb2 + #df6500) -->
+      <div class="nv-callout-box">
+        <span class="nv-callout-badge">ENERGY CRITICAL</span>
+        <div class="nv-callout-text">
+          NVIDIA GB200 reduces data center power consumption by up to 25X compared to H100 air-cooled clusters while sustaining higher inference throughput per megawatt.
+        </div>
+      </div>
+
+      <div class="nv-cards-grid">
+        <!-- Light Card 1 -->
+        <div class="nv-card-light">
+          <div>
+            <h3 class="card-title">2nd Gen Transformer Engine</h3>
+            <p>
+              Custom 4-bit floating point precision (FP4) algorithms deliver twice the compute density without sacrificing accuracy for frontier mixture-of-experts (MoE) LLMs.
+            </p>
+          </div>
+          <div class="card-footer">
+            <a href="#" class="nv-link-light">EXPLORE PRECISION PAPERS &rarr;</a>
+          </div>
+        </div>
+
+        <!-- Light Card 2 -->
+        <div class="nv-card-light">
+          <div>
+            <h3 class="card-title">5th Gen NVLink Switch</h3>
+            <p>
+              130TB/s bidirectional rack bandwidth connects all 72 GPUs at full crossbar throughput, eliminating host CPU serialization bottlenecks in cluster training.
+            </p>
+          </div>
+          <div class="card-footer">
+            <a href="#" class="nv-link-light">VIEW SWITCH SPECS &rarr;</a>
+          </div>
+        </div>
+
+        <!-- Light Card 3 -->
+        <div class="nv-card-light">
+          <div>
+            <h3 class="card-title">Decompression Engine</h3>
+            <p>
+              Integrated hardware acceleration for LZ4, Snappy, and Gstandard algorithms accelerates database analytics and data ingestion queries directly to GPU RAM.
+            </p>
+          </div>
+          <div class="card-footer">
+            <a href="#" class="nv-link-light">READ RAPIDS DOCS &rarr;</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Industrial Tech Spec Table (Alternating Row Backgrounds, Bold Labels, Green Accents) -->
+      <div class="nv-spec-table-wrap">
+        <table class="nv-spec-table">
+          <thead>
+            <tr>
+              <th>SILICON PARAMETER</th>
+              <th>NVIDIA H100 TENSOR CORE</th>
+              <th>NVIDIA H200 TENSOR CORE</th>
+              <th>NVIDIA B200 TENSOR CORE</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="spec-label">FP4 Tensor Core Compute</td>
+              <td>—</td>
+              <td>—</td>
+              <td class="spec-highlight">20 PFLOPS <span class="nv-spec-badge">NEW</span></td>
+            </tr>
+            <tr>
+              <td class="spec-label">FP8 Tensor Core Compute</td>
+              <td>4,000 TFLOPS</td>
+              <td>4,000 TFLOPS</td>
+              <td class="spec-highlight">9,000 TFLOPS</td>
+            </tr>
+            <tr>
+              <td class="spec-label">FP16 Tensor Core Compute</td>
+              <td>2,000 TFLOPS</td>
+              <td>2,000 TFLOPS</td>
+              <td class="spec-highlight">4,500 TFLOPS</td>
+            </tr>
+            <tr>
+              <td class="spec-label">Memory Capacity</td>
+              <td>80 GB HBM3</td>
+              <td>141 GB HBM3e</td>
+              <td class="spec-highlight">192 GB HBM3e</td>
+            </tr>
+            <tr>
+              <td class="spec-label">Memory Bandwidth</td>
+              <td>3.35 TB/s</td>
+              <td>4.8 TB/s</td>
+              <td class="spec-highlight">8.0 TB/s</td>
+            </tr>
+            <tr>
+              <td class="spec-label">NVLink Interconnect</td>
+              <td>900 GB/s (4th Gen)</td>
+              <td>900 GB/s (4th Gen)</td>
+              <td class="spec-highlight">1,800 GB/s (5th Gen)</td>
+            </tr>
+            <tr>
+              <td class="spec-label">Process Node</td>
+              <td>TSMC 4N Custom</td>
+              <td>TSMC 4N Custom</td>
+              <td class="spec-highlight">TSMC 4NP Dual-Die Reticle</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==========================================================================
+       DARK SECTION: DEVELOPER ECOSYSTEM & CUDA INTEGRATION
+       ========================================================================== -->
+  <section class="nv-section-dark" id="developers">
+    <div class="nv-container">
+      <div class="nv-section-header">
+        <span class="nv-section-label">DEVELOPER STACK</span>
+        <h2 class="nv-section-title-dark">CUDA-X Accelerated Software & Microservices</h2>
+        <p class="nv-section-desc-dark">
+          A full-stack catalog of GPU-accelerated libraries, NIM inference microservices, and neural rendering SDKs ready for deployment across cloud, edge, and on-premises workstations.
+        </p>
+      </div>
+
+      <div class="nv-ecosystem-grid">
+        <!-- Developer Command Card -->
+        <div class="nv-console-card">
+          <div class="nv-console-header">
+            <span>TERMINAL &mdash; NVIDIA NIM DEPLOYMENT</span>
+            <span>v24.08</span>
+          </div>
+          <div class="nv-code-line"><span class="nv-code-kw">export</span> NGC_API_KEY=<span class="nv-code-str">"nvapi-alpha-098x"</span></div>
+          <div class="nv-code-line"><span class="nv-code-kw">docker</span> run -d --gpus all \</div>
+          <div class="nv-code-line">&nbsp;&nbsp;-e <span class="nv-code-kw">NGC_API_KEY</span>=$NGC_API_KEY \</div>
+          <div class="nv-code-line">&nbsp;&nbsp;-p <span class="nv-code-num">8000</span>:<span class="nv-code-num">8000</span> \</div>
+          <div class="nv-code-line">&nbsp;&nbsp;nvcr.io/nim/meta/llama-3.1-405b-instruct:<span class="nv-code-str">latest</span></div>
+          <br>
+          <div class="nv-code-line" style="color: var(--nv-green);"># NVIDIA TensorRT-LLM initialized: 8x Blackwell B200 detected.</div>
+          <div class="nv-code-line" style="color: var(--nv-gray-400);"># Unified KV-cache active. Ready for inference requests on port 8000.</div>
+        </div>
+
+        <!-- Software Ecosystem Details -->
+        <div>
+          <h3 class="card-title" style="color: var(--nv-white); margin-bottom: 12px;">Full-Stack Software Advantage</h3>
+          <p class="body-standard" style="color: var(--nv-gray-300); margin-bottom: 16px;">
+            Over 5 million developers globally build on NVIDIA CUDA. With specialized domain libraries including cuDNN, TensorRT, cuQuantum, and Isaac Robotics, your algorithms scale instantly across all modern GPUs.
+          </p>
+          <div style="display: flex; gap: 16px; margin-top: 24px;">
+            <a href="#" class="nv-btn nv-btn-primary">GET STARTED FREE</a>
+            <a href="#" class="nv-btn nv-btn-secondary">DOCUMENTATION</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==========================================================================
+       MULTI-COLUMN FOOTER
+       ========================================================================== -->
+  <footer class="nv-footer">
+    <div class="nv-container">
+      <div class="nv-footer-grid">
+        <div class="nv-footer-col">
+          <h4>Accelerated Computing</h4>
+          <ul>
+            <li><a href="#">Blackwell Architecture</a></li>
+            <li><a href="#">DGX SuperPOD Systems</a></li>
+            <li><a href="#">Grace CPU Superchip</a></li>
+            <li><a href="#">Quantum-X InfiniBand</a></li>
+            <li><a href="#">BlueField-3 DPUs</a></li>
+          </ul>
+        </div>
+        <div class="nv-footer-col">
+          <h4>AI & Software</h4>
+          <ul>
+            <li><a href="#">NVIDIA NIM Microservices</a></li>
+            <li><a href="#">TensorRT-LLM Engine</a></li>
+            <li><a href="#">CUDA Toolkit 12</a></li>
+            <li><a href="#">Omniverse Platform</a></li>
+            <li><a href="#">NGC Registry Catalog</a></li>
+          </ul>
+        </div>
+        <div class="nv-footer-col">
+          <h4>Industries</h4>
+          <ul>
+            <li><a href="#">Healthcare & Life Sciences</a></li>
+            <li><a href="#">Automotive & Autonomous Drive</a></li>
+            <li><a href="#">Financial Services</a></li>
+            <li><a href="#">Telecommunications & 5G</a></li>
+            <li><a href="#">Manufacturing & Robotics</a></li>
+          </ul>
+        </div>
+        <div class="nv-footer-col">
+          <h4>Corporate & Legal</h4>
+          <ul>
+            <li><a href="#">About NVIDIA Corporation</a></li>
+            <li><a href="#">Investor Relations</a></li>
+            <li><a href="#">Security Bulletins</a></li>
+            <li><a href="#">Supply Chain Responsibility</a></li>
+            <li><a href="#">Contact Technical Sales</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="nv-footer-bottom">
+        <div class="nv-legal-text">
+          &copy; 2026 NVIDIA Corporation. All rights reserved. NVIDIA, the NVIDIA logo, CUDA, DGX, and TensorRT are trademarks of NVIDIA Corporation.
+        </div>
+        <div class="nv-legal-links">
+          <a href="#">Privacy Policy</a>
+          <a href="#">Terms of Use</a>
+          <a href="#">Cookie Settings</a>
+          <a href="#">Legal Info</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ==========================================================================
+       COOKIE & CONSENT BANNER (2px radius, gray borders, dismissible)
+       ========================================================================== -->
+  <aside class="nv-cookie-banner" id="nvCookieNotice">
+    <div class="nv-cookie-text">
+      NVIDIA uses cookies and similar technologies to deliver, analyze, and optimize our services and tailor content according to our <a href="#">Cookie Policy</a>.
+    </div>
+    <div class="nv-cookie-actions">
+      <button class="nv-btn nv-btn-secondary nv-btn-compact" onclick="document.getElementById('nvCookieNotice').style.display='none'">COOKIE SETTINGS</button>
+      <button class="nv-btn nv-btn-primary nv-btn-compact" onclick="document.getElementById('nvCookieNotice').style.display='none'">ACCEPT ALL</button>
+    </div>
+  </aside>
+
+</body>
+</html>

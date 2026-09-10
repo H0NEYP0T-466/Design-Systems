@@ -1,0 +1,1581 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>WIRED — Tomorrow Realized</title>
+  
+  <!-- Typography Imports: High fidelity fallbacks matching WiredDisplay, BreveText, Apercu, WiredMono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600;700&family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400;1,700&family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,900;1,400&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+
+  <style>
+    /* ==========================================================================
+       WIRED DESIGN SYSTEM TOKENS & FOUNDATIONS (from DESIGN.md)
+       ========================================================================== */
+    :root {
+      /* Primary (Editorial Ink) */
+      --color-wired-black: #000000;
+      --color-page-ink: #1a1a1a;
+      --color-paper-white: #ffffff;
+
+      /* Secondary (Editorial Voice) */
+      --color-link-blue: #057dbc;
+      --color-brand-hover-blue: #057dbc;
+
+      /* Surface & Background */
+      --color-newsprint: #ffffff;
+      --color-footer-ink: #1a1a1a;
+      --color-hairline-tint: #e2e8f0;
+      --color-hairline-border: #e2e8f0;
+      --color-pica-rule: #000000;
+      --color-column-rule: #4a5568;
+
+      /* Neutrals & Text */
+      --color-headline-black: #1a1a1a;
+      --color-body-gray: #1a1a1a;
+      --color-caption-gray: #757575;
+      --color-disabled-gray: #999999;
+      --color-breaking-red: #e53e3e;
+
+      /* Typography Font Families */
+      --font-wired-display: "WiredDisplay", "Playfair Display", "DM Serif Display", Georgia, serif;
+      --font-breve-text: "BreveText", "Lora", "Source Serif 4", Georgia, serif;
+      --font-apercu: "Apercu", "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      --font-wired-mono: "WiredMono", "Space Mono", "JetBrains Mono", Monaco, "Courier New", Courier, monospace;
+      --font-inter: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
+      --font-proxima-nova: "ProximaNova", "Apercu", "Inter", sans-serif;
+
+      /* Border Radii: Strictly 3 rules (0, 1920px, 50%) */
+      --radius-default: 0px;
+      --radius-pill: 1920px;
+      --radius-circle: 50%;
+
+      /* Spacing Scale (8px base unit) */
+      --space-hairline: 1px;
+      --space-4: 4px;
+      --space-8: 8px;
+      --space-12: 12px;
+      --space-14: 14.11px;
+      --space-16: 16px;
+      --space-24: 24px;
+      --space-25: 25.46px;
+      --space-30: 29.66px;
+      --space-32: 32px;
+      --space-40: 40px;
+      --space-48: 48px;
+      --space-64: 64px;
+
+      /* Elevation / Depth: Flat by religion, zero shadows */
+      --box-shadow-none: none;
+      --rule-hairline: 1px solid var(--color-hairline-tint);
+      --rule-editorial: 1px solid var(--color-wired-black);
+      --border-button-hard: 2px solid var(--color-wired-black);
+      --border-button-inverted: 2px solid var(--color-paper-white);
+    }
+
+    /* CSS Reset */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      border-radius: 0; /* Strict square corners on everything by default */
+      box-shadow: none !important; /* WIRED's depth philosophy is flat by religion */
+    }
+
+    body {
+      background-color: var(--color-paper-white);
+      color: var(--color-page-ink);
+      font-family: var(--font-breve-text);
+      font-size: 16px;
+      line-height: 1.50;
+      letter-spacing: 0.09px;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      text-rendering: optimizeLegibility;
+      overflow-x: hidden;
+    }
+
+    /* Links: Inline text links with ink-blue hover state */
+    a {
+      color: var(--color-page-ink);
+      text-decoration: none;
+      transition: color 120ms ease;
+    }
+
+    a:hover {
+      color: var(--color-link-blue);
+      text-decoration: underline;
+    }
+
+    img {
+      display: block;
+      width: 100%;
+      height: auto;
+      border-radius: 0 !important;
+      object-fit: cover;
+    }
+
+    /* Outer Container */
+    .container {
+      max-width: 1440px;
+      margin: 0 auto;
+      padding: 0 32px;
+    }
+
+    @media (max-width: 768px) {
+      .container {
+        padding: 0 16px;
+      }
+    }
+
+    /* ==========================================================================
+       UTILITY HEADER & PRIMARY NAVIGATION
+       ========================================================================== */
+    .utility-bar {
+      background-color: var(--color-wired-black);
+      color: var(--color-paper-white);
+      font-family: var(--font-wired-mono);
+      font-size: 12px;
+      font-weight: 400;
+      line-height: 1.33;
+      letter-spacing: 1.1px;
+      text-transform: uppercase;
+      border-bottom: 1px solid #333333;
+    }
+
+    .utility-inner {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      height: 38px;
+    }
+
+    .utility-left, .utility-right {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .utility-bar a {
+      color: var(--color-paper-white);
+      text-decoration: none;
+      padding: 6px 4px;
+      display: inline-flex;
+      align-items: center;
+      transition: color 120ms ease;
+    }
+
+    .utility-bar a:hover {
+      color: var(--color-link-blue);
+      text-decoration: none;
+    }
+
+    .utility-divider {
+      color: #555555;
+      font-size: 10px;
+    }
+
+    /* Main Branding Header */
+    .main-header {
+      background-color: var(--color-paper-white);
+      border-bottom: 2px solid var(--color-wired-black);
+      padding: 16px 0 0 0;
+    }
+
+    .header-top-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-bottom: 16px;
+      border-bottom: 1px solid var(--color-wired-black);
+    }
+
+    .header-edition {
+      font-family: var(--font-wired-mono);
+      font-size: 12px;
+      letter-spacing: 1.1px;
+      text-transform: uppercase;
+      color: var(--color-caption-gray);
+    }
+
+    /* The Iconic WIRED Logo Bug */
+    .wired-logo-link {
+      display: inline-flex;
+      align-items: center;
+      text-decoration: none !important;
+    }
+
+    .wired-logo {
+      font-family: var(--font-apercu);
+      font-weight: 900;
+      font-size: 42px;
+      line-height: 0.9;
+      letter-spacing: -2px;
+      color: var(--color-wired-black);
+      text-transform: uppercase;
+      display: flex;
+      align-items: center;
+      gap: 1px;
+    }
+
+    .wired-logo span.wire-letter {
+      display: inline-block;
+      border: 3px solid var(--color-wired-black);
+      padding: 2px 5px;
+      margin-right: 2px;
+      background: var(--color-wired-black);
+      color: var(--color-paper-white);
+      font-family: var(--font-wired-mono);
+      font-size: 26px;
+      font-weight: 700;
+      line-height: 1;
+      letter-spacing: 0;
+    }
+
+    .wired-logo span.wire-black {
+      background: var(--color-paper-white);
+      color: var(--color-wired-black);
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    /* Icon Buttons: Exactly 50% radius */
+    .btn-icon-round {
+      width: 36px;
+      height: 36px;
+      border-radius: var(--radius-circle) !important;
+      border: 1px solid var(--color-caption-gray);
+      background: var(--color-paper-white);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      color: var(--color-wired-black);
+      transition: border-color 150ms ease, color 150ms ease;
+    }
+
+    .btn-icon-round:hover {
+      border-color: var(--color-wired-black);
+      color: var(--color-link-blue);
+    }
+
+    /* Primary CTA Button: 2px solid black, square, inversion on hover */
+    .btn-subscribe {
+      font-family: var(--font-apercu);
+      font-size: 14px;
+      font-weight: 700;
+      line-height: 1.25;
+      letter-spacing: 0.3px;
+      text-transform: uppercase;
+      background-color: var(--color-paper-white);
+      color: var(--color-wired-black);
+      border: var(--border-button-hard);
+      border-radius: 0 !important;
+      padding: 10px 20px;
+      cursor: pointer;
+      text-decoration: none !important;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      transition: background-color 150ms ease, color 150ms ease;
+    }
+
+    .btn-subscribe:hover {
+      background-color: var(--color-wired-black);
+      color: var(--color-paper-white);
+      text-decoration: none !important;
+    }
+
+    /* Inverted Button for Dark Surfaces */
+    .btn-inverted {
+      font-family: var(--font-apercu);
+      font-size: 14px;
+      font-weight: 700;
+      letter-spacing: 0.3px;
+      text-transform: uppercase;
+      background-color: var(--color-wired-black);
+      color: var(--color-paper-white);
+      border: var(--border-button-inverted);
+      padding: 10px 20px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      transition: background-color 150ms ease, color 150ms ease;
+    }
+
+    .btn-inverted:hover {
+      background-color: var(--color-paper-white);
+      color: var(--color-wired-black);
+    }
+
+    /* Main Navigation Bar */
+    .main-nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      overflow-x: auto;
+      padding: 10px 0;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 24px;
+      list-style: none;
+    }
+
+    .nav-links a {
+      font-family: var(--font-apercu);
+      font-size: 15px;
+      font-weight: 700;
+      line-height: 1.29;
+      letter-spacing: 0.4px;
+      text-transform: uppercase;
+      color: var(--color-page-ink);
+      white-space: nowrap;
+      padding: 4px 0;
+      position: relative;
+    }
+
+    .nav-links a:hover {
+      color: var(--color-link-blue);
+      text-decoration: none;
+    }
+
+    .nav-links a.active {
+      border-bottom: 2px solid var(--color-wired-black);
+    }
+
+    /* ==========================================================================
+       BREAKING / TICKER BAR
+       ========================================================================== */
+    .ticker-bar {
+      border-bottom: 1px solid var(--color-wired-black);
+      padding: 8px 0;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      font-family: var(--font-apercu);
+      font-size: 13px;
+    }
+
+    .ticker-badge {
+      background-color: var(--color-wired-black);
+      color: var(--color-paper-white);
+      font-family: var(--font-wired-mono);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 1.1px;
+      text-transform: uppercase;
+      padding: 2px 10px;
+      border-radius: var(--radius-pill) !important; /* 1920px text pill */
+      display: inline-block;
+      white-space: nowrap;
+    }
+
+    .ticker-badge.live {
+      background-color: var(--color-breaking-red);
+    }
+
+    .ticker-headline {
+      font-family: var(--font-breve-text);
+      font-size: 14px;
+      color: var(--color-page-ink);
+      font-weight: 600;
+    }
+
+    .ticker-time {
+      font-family: var(--font-wired-mono);
+      font-size: 11px;
+      color: var(--color-caption-gray);
+      text-transform: uppercase;
+      letter-spacing: 0.92px;
+    }
+
+    /* ==========================================================================
+       EDITORIAL RIBBONS & SECTION LABELS
+       ========================================================================== */
+    .section-ribbon {
+      background-color: var(--color-wired-black);
+      color: var(--color-paper-white);
+      height: 38px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 16px;
+      margin: 36px 0 24px 0;
+      border-radius: 0 !important;
+    }
+
+    .section-ribbon-title {
+      font-family: var(--font-wired-mono);
+      font-size: 12px;
+      font-weight: 700;
+      line-height: 1.00;
+      letter-spacing: 1.2px;
+      text-transform: uppercase;
+      color: var(--color-paper-white);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .section-ribbon-link {
+      font-family: var(--font-wired-mono);
+      font-size: 11px;
+      font-weight: 400;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: #cccccc;
+    }
+
+    .section-ribbon-link:hover {
+      color: var(--color-paper-white);
+      text-decoration: underline;
+    }
+
+    /* Mono Kicker / Eyebrow */
+    .kicker {
+      font-family: var(--font-wired-mono);
+      font-size: 13px;
+      font-weight: 700;
+      line-height: 1.23;
+      letter-spacing: 0.92px;
+      text-transform: uppercase;
+      color: var(--color-wired-black);
+      margin-bottom: 8px;
+      display: block;
+    }
+
+    .kicker.bold {
+      letter-spacing: 1.1px;
+    }
+
+    /* Metadata / Byline */
+    .story-meta {
+      font-family: var(--font-wired-mono);
+      font-size: 12px;
+      line-height: 1.33;
+      letter-spacing: 1.1px;
+      text-transform: uppercase;
+      color: var(--color-caption-gray);
+      margin-top: 12px;
+    }
+
+    .story-meta a {
+      color: var(--color-page-ink);
+      font-weight: 600;
+    }
+
+    /* Photo Caption */
+    .photo-caption {
+      font-family: var(--font-breve-text);
+      font-size: 12.73px;
+      font-weight: 700;
+      line-height: 2.20;
+      letter-spacing: 0.108px;
+      color: var(--color-caption-gray);
+      padding-top: 6px;
+      border-bottom: 1px solid var(--color-hairline-tint);
+      margin-bottom: 16px;
+    }
+
+    /* ==========================================================================
+       BROADSHEET HERO GRID: 12-COLUMN EDITORIAL SPREAD
+       ========================================================================== */
+    .broadsheet-hero {
+      display: grid;
+      grid-template-columns: 5.5fr 3.5fr 3fr;
+      gap: 0;
+      margin-top: 24px;
+      border-bottom: 2px solid var(--color-wired-black);
+    }
+
+    .column-lead {
+      padding-right: 28px;
+      border-right: 1px solid var(--color-wired-black);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .column-mid {
+      padding: 0 24px;
+      border-right: 1px solid var(--color-wired-black);
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+
+    .column-sidebar {
+      padding-left: 24px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Display Headline (Hero: 64px) */
+    .display-hero-headline {
+      font-family: var(--font-wired-display);
+      font-size: 58px;
+      font-weight: 400;
+      line-height: 1.02; /* Adjusted for OpenSource serif as noted in DESIGN.md */
+      letter-spacing: -0.5px;
+      color: var(--color-headline-black);
+      margin: 8px 0 16px 0;
+    }
+
+    .display-hero-headline a {
+      color: var(--color-headline-black);
+      text-decoration: none;
+    }
+
+    .display-hero-headline a:hover {
+      color: var(--color-link-blue);
+      text-decoration: underline;
+    }
+
+    /* Article Deck (Serif 19px) */
+    .article-deck {
+      font-family: var(--font-breve-text);
+      font-size: 19px;
+      font-weight: 400;
+      line-height: 1.47;
+      letter-spacing: 0.108px;
+      color: var(--color-page-ink);
+      margin-bottom: 16px;
+    }
+
+    /* Secondary Headline (26px) */
+    .display-mid-headline {
+      font-family: var(--font-wired-display);
+      font-size: 26px;
+      font-weight: 400;
+      line-height: 1.15;
+      color: var(--color-headline-black);
+      margin: 6px 0 10px 0;
+    }
+
+    .display-mid-headline a {
+      color: var(--color-headline-black);
+    }
+
+    .display-mid-headline a:hover {
+      color: var(--color-link-blue);
+      text-decoration: underline;
+    }
+
+    /* Subheading in Apercu */
+    .subheading-apercu {
+      font-family: var(--font-apercu);
+      font-size: 17px;
+      font-weight: 700;
+      line-height: 1.29;
+      letter-spacing: -0.144px;
+      color: var(--color-page-ink);
+      margin-bottom: 8px;
+    }
+
+    .subheading-apercu a:hover {
+      color: var(--color-link-blue);
+    }
+
+    .article-body-summary {
+      font-family: var(--font-breve-text);
+      font-size: 15px;
+      line-height: 1.50;
+      color: #333333;
+    }
+
+    .story-tile-mid {
+      padding-bottom: 20px;
+      border-bottom: 1px solid var(--color-hairline-tint);
+    }
+
+    .story-tile-mid:last-child {
+      border-bottom: none;
+      padding-bottom: 0;
+    }
+
+    /* ==========================================================================
+       NUMBERED LIST: MOST POPULAR MODULE
+       ========================================================================== */
+    .popular-ribbon {
+      background-color: var(--color-wired-black);
+      color: var(--color-paper-white);
+      padding: 10px 14px;
+      font-family: var(--font-wired-mono);
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 1.2px;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+
+    .popular-list {
+      list-style: none;
+    }
+
+    .popular-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 16px;
+      padding: 14px 0;
+      border-bottom: 1px solid var(--color-wired-black);
+    }
+
+    .popular-item:last-child {
+      border-bottom: none;
+    }
+
+    .popular-numeral {
+      font-family: var(--font-wired-display);
+      font-size: 44px;
+      font-weight: 400;
+      line-height: 0.9;
+      color: var(--color-wired-black);
+      min-width: 44px;
+      user-select: none;
+    }
+
+    .popular-content {
+      flex: 1;
+    }
+
+    .popular-headline {
+      font-family: var(--font-apercu);
+      font-size: 16px;
+      font-weight: 700;
+      line-height: 1.25;
+      letter-spacing: -0.2px;
+      color: var(--color-page-ink);
+      margin-top: 2px;
+    }
+
+    .popular-headline a:hover {
+      color: var(--color-link-blue);
+      text-decoration: underline;
+    }
+
+    /* ==========================================================================
+       EDITORIAL FEATURE TRIO (3-COLUMN SECTION)
+       ========================================================================== */
+    .editorial-grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 28px;
+      margin: 28px 0;
+    }
+
+    .editorial-column-card {
+      display: flex;
+      flex-direction: column;
+      border-right: 1px solid var(--color-hairline-tint);
+      padding-right: 28px;
+    }
+
+    .editorial-column-card:last-child {
+      border-right: none;
+      padding-right: 0;
+    }
+
+    .image-frame-16-9 {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      background-color: #f0f0f0;
+      overflow: hidden;
+      margin-bottom: 12px;
+    }
+
+    .image-frame-4-3 {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 4 / 3;
+      background-color: #f0f0f0;
+      overflow: hidden;
+      margin-bottom: 12px;
+    }
+
+    /* Simulated editorial graphics with SVG */
+    .editorial-svg-cover {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* Review score badge */
+    .score-badge {
+      display: inline-flex;
+      align-items: baseline;
+      gap: 4px;
+      background-color: var(--color-wired-black);
+      color: var(--color-paper-white);
+      padding: 4px 10px;
+      font-family: var(--font-wired-mono);
+      font-size: 13px;
+      font-weight: 700;
+      margin-top: 8px;
+      align-self: flex-start;
+    }
+
+    /* ==========================================================================
+       INTERACTIVE NEWSLETTER SIGNUP MODULE
+       ========================================================================== */
+    .newsletter-box {
+      border: 2px solid var(--color-wired-black);
+      padding: 36px;
+      margin: 48px 0;
+      background: var(--color-paper-white);
+      display: grid;
+      grid-template-columns: 1.2fr 1fr;
+      gap: 32px;
+      align-items: center;
+    }
+
+    .newsletter-intro h3 {
+      font-family: var(--font-wired-display);
+      font-size: 36px;
+      font-weight: 400;
+      line-height: 1.1;
+      margin: 8px 0;
+    }
+
+    .newsletter-intro p {
+      font-family: var(--font-breve-text);
+      font-size: 16px;
+      line-height: 1.5;
+      color: var(--color-caption-gray);
+    }
+
+    .newsletter-form {
+      display: flex;
+      gap: 0;
+    }
+
+    .newsletter-input {
+      flex: 1;
+      font-family: var(--font-apercu);
+      font-size: 16px;
+      border: 2px solid var(--color-wired-black);
+      border-right: none;
+      border-radius: 0 !important;
+      padding: 12px 18px;
+      outline: none;
+      color: var(--color-wired-black);
+      background-color: var(--color-paper-white);
+    }
+
+    .newsletter-input::placeholder {
+      color: var(--color-caption-gray);
+    }
+
+    .newsletter-btn {
+      font-family: var(--font-apercu);
+      font-size: 14px;
+      font-weight: 700;
+      letter-spacing: 0.3px;
+      text-transform: uppercase;
+      background-color: var(--color-wired-black);
+      color: var(--color-paper-white);
+      border: 2px solid var(--color-wired-black);
+      border-radius: 0 !important;
+      padding: 0 24px;
+      cursor: pointer;
+      transition: background-color 150ms ease, color 150ms ease;
+      white-space: nowrap;
+    }
+
+    .newsletter-btn:hover {
+      background-color: var(--color-paper-white);
+      color: var(--color-wired-black);
+    }
+
+    .newsletter-message {
+      font-family: var(--font-wired-mono);
+      font-size: 12px;
+      margin-top: 8px;
+      display: none;
+      color: var(--color-page-ink);
+    }
+
+    /* ==========================================================================
+       FILTER / TOPIC SELECTOR TABS
+       ========================================================================== */
+    .filter-tabs {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      border-bottom: 2px solid var(--color-wired-black);
+      padding-bottom: 12px;
+      margin-bottom: 24px;
+    }
+
+    .filter-btn {
+      font-family: var(--font-wired-mono);
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.92px;
+      text-transform: uppercase;
+      padding: 6px 14px;
+      border: 1px solid transparent;
+      background: transparent;
+      cursor: pointer;
+      color: var(--color-caption-gray);
+      transition: all 120ms ease;
+    }
+
+    .filter-btn:hover {
+      color: var(--color-wired-black);
+    }
+
+    .filter-btn.active {
+      background: var(--color-wired-black);
+      color: var(--color-paper-white);
+      border-color: var(--color-wired-black);
+    }
+
+    /* ==========================================================================
+       LONGFORM ESSAY / BACKCHANNEL SECTION
+       ========================================================================== */
+    .backchannel-feature {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 36px;
+      padding-bottom: 40px;
+      border-bottom: 2px solid var(--color-wired-black);
+      margin-bottom: 40px;
+    }
+
+    .essay-content h2 {
+      font-family: var(--font-wired-display);
+      font-size: 40px;
+      line-height: 1.08;
+      margin: 12px 0 16px 0;
+    }
+
+    .essay-content p {
+      font-family: var(--font-breve-text);
+      font-size: 17px;
+      line-height: 1.55;
+      margin-bottom: 16px;
+      color: var(--color-page-ink);
+    }
+
+    .quote-callout {
+      border-left: 3px solid var(--color-wired-black);
+      padding-left: 20px;
+      margin: 24px 0;
+      font-family: var(--font-breve-text);
+      font-style: italic;
+      font-size: 20px;
+      line-height: 1.4;
+      color: var(--color-page-ink);
+    }
+
+    /* ==========================================================================
+       INVERTED FOOTER: THE ONLY INVERTED SURFACE
+       ========================================================================== */
+    .site-footer {
+      background-color: var(--color-footer-ink);
+      color: var(--color-paper-white);
+      padding: 64px 0 40px 0;
+      margin-top: 48px;
+    }
+
+    .footer-logo-center {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+
+    .footer-logo {
+      font-family: var(--font-apercu);
+      font-size: 36px;
+      font-weight: 900;
+      letter-spacing: -1px;
+      color: var(--color-paper-white);
+      text-transform: uppercase;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 2fr repeat(4, 1fr);
+      gap: 32px;
+      padding-bottom: 48px;
+      border-bottom: 1px solid #333333;
+    }
+
+    .footer-column h4 {
+      font-family: var(--font-wired-mono);
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 1.2px;
+      text-transform: uppercase;
+      color: var(--color-paper-white);
+      margin-bottom: 16px;
+    }
+
+    .footer-links-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .footer-links-list a {
+      font-family: var(--font-apercu);
+      font-size: 14px;
+      font-weight: 400;
+      line-height: 1.29;
+      letter-spacing: 0.4px;
+      color: #bbbbbb;
+      text-decoration: none;
+    }
+
+    .footer-links-list a:hover {
+      color: var(--color-link-blue);
+      text-decoration: underline;
+    }
+
+    .footer-legal-bar {
+      padding-top: 28px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 16px;
+      font-family: var(--font-proxima-nova);
+      font-size: 11px;
+      color: var(--color-disabled-gray);
+      line-height: 1.45;
+    }
+
+    .footer-legal-links {
+      display: flex;
+      gap: 20px;
+    }
+
+    .footer-legal-links a {
+      color: var(--color-disabled-gray);
+      font-size: 11px;
+    }
+
+    .footer-legal-links a:hover {
+      color: var(--color-link-blue);
+    }
+
+    /* ==========================================================================
+       RESPONSIVE BEHAVIOR (BREAKPOINTS)
+       ========================================================================== */
+    @media (max-width: 1024px) {
+      .broadsheet-hero {
+        grid-template-columns: 1fr 1fr;
+      }
+      .column-sidebar {
+        grid-column: span 2;
+        padding-left: 0;
+        margin-top: 24px;
+        border-top: 1px solid var(--color-wired-black);
+        padding-top: 24px;
+      }
+      .column-mid {
+        border-right: none;
+      }
+      .editorial-grid-3 {
+        grid-template-columns: 1fr 1fr;
+      }
+      .editorial-column-card:nth-child(2) {
+        border-right: none;
+      }
+      .editorial-column-card:nth-child(3) {
+        grid-column: span 2;
+        border-right: none;
+        border-top: 1px solid var(--color-hairline-tint);
+        padding-top: 24px;
+      }
+      .footer-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 768px) {
+      .utility-inner {
+        flex-direction: column;
+        height: auto;
+        padding: 8px 0;
+        gap: 6px;
+      }
+      .broadsheet-hero {
+        grid-template-columns: 1fr;
+      }
+      .column-lead {
+        padding-right: 0;
+        border-right: none;
+        border-bottom: 1px solid var(--color-wired-black);
+        padding-bottom: 24px;
+      }
+      .column-mid {
+        padding: 24px 0;
+        border-right: none;
+        border-bottom: 1px solid var(--color-wired-black);
+      }
+      .column-sidebar {
+        grid-column: span 1;
+        padding: 24px 0 0 0;
+        border-top: none;
+      }
+      .display-hero-headline {
+        font-size: 38px;
+        line-height: 1.1;
+      }
+      .editorial-grid-3 {
+        grid-template-columns: 1fr;
+      }
+      .editorial-column-card {
+        border-right: none;
+        padding-right: 0;
+        border-bottom: 1px solid var(--color-hairline-tint);
+        padding-bottom: 20px;
+      }
+      .newsletter-box {
+        grid-template-columns: 1fr;
+        padding: 24px 16px;
+      }
+      .newsletter-form {
+        flex-direction: column;
+        gap: 8px;
+      }
+      .newsletter-input {
+        border-right: 2px solid var(--color-wired-black);
+      }
+      .newsletter-btn {
+        padding: 12px;
+      }
+      .backchannel-feature {
+        grid-template-columns: 1fr;
+      }
+      .footer-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- UTILITY BAR (Black strip, uppercase mono links, hairline dividers) -->
+  <aside class="utility-bar">
+    <div class="container utility-inner">
+      <div class="utility-left">
+        <span>THURSDAY, SEPTEMBER 10, 2026</span>
+        <span class="utility-divider">|</span>
+        <a href="#edition">EDITION: US (GLOBAL)</a>
+        <span class="utility-divider">|</span>
+        <a href="#podcasts">WIRED PODCASTS</a>
+      </div>
+      <div class="utility-right">
+        <a href="#newsletters">GET THE NEWSLETTER</a>
+        <span class="utility-divider">|</span>
+        <a href="#subscribe">SUBSCRIBE FOR $5</a>
+        <span class="utility-divider">|</span>
+        <a href="#signin">SIGN IN</a>
+      </div>
+    </div>
+  </aside>
+
+  <!-- MAIN HEADER -->
+  <header class="main-header">
+    <div class="container">
+      <div class="header-top-row">
+        <div class="header-edition">
+          <span>THE TECH CONDÉ NAST JOURNAL</span>
+        </div>
+
+        <!-- The Iconic WIRED Wordmark -->
+        <a href="#" class="wired-logo-link" aria-label="WIRED Homepage">
+          <div class="wired-logo">
+            <span class="wire-letter">W</span>
+            <span class="wire-letter wire-black">I</span>
+            <span class="wire-letter">R</span>
+            <span class="wire-letter wire-black">E</span>
+            <span class="wire-letter">D</span>
+          </div>
+        </a>
+
+        <div class="header-actions">
+          <button class="btn-icon-round" aria-label="Search articles" title="Search">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="square"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+          </button>
+          <a href="#subscribe" class="btn-subscribe">SUBSCRIBE</a>
+        </div>
+      </div>
+
+      <!-- PRIMARY NAVIGATION -->
+      <nav class="main-nav" aria-label="Main Editorial Sections">
+        <ul class="nav-links">
+          <li><a href="#latest" class="active">LATEST</a></li>
+          <li><a href="#artificial-intelligence">AI & LABS</a></li>
+          <li><a href="#business">BUSINESS</a></li>
+          <li><a href="#culture">CULTURE</a></li>
+          <li><a href="#gear">GEAR</a></li>
+          <li><a href="#ideas">IDEAS</a></li>
+          <li><a href="#science">SCIENCE</a></li>
+          <li><a href="#security">SECURITY</a></li>
+          <li><a href="#backchannel">BACKCHANNEL</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <!-- TICKER BAR: Breaking News / Live Pulse -->
+  <div class="container">
+    <div class="ticker-bar">
+      <span class="ticker-badge live">BREAKING</span>
+      <a href="#breaking-article" class="ticker-headline">Quantum Annealing Cluster Achieves Room-Temperature Coherence in Livermore Run</a>
+      <span class="ticker-time">14 MIN AGO</span>
+    </div>
+  </div>
+
+  <main class="container">
+    
+    <!-- BROADSHEET 12-COLUMN HERO SPREAD -->
+    <section class="broadsheet-hero">
+      
+      <!-- COLUMN 1: LEAD COVER STORY -->
+      <article class="column-lead">
+        <span class="kicker bold">ARTIFICIAL INTELLIGENCE // INVESTIGATION</span>
+        <h1 class="display-hero-headline">
+          <a href="#hero-story">The Silicon Monks Who Taught the Neural Web to Stop Hallucinating</a>
+        </h1>
+        <p class="article-deck">
+          Inside the hermetic research cluster in the Swiss Alps where a splinter group of ex-OpenAI physicists replaced probability matrices with deterministic proof verifiers — and stumbled into synthetic intuition.
+        </p>
+
+        <!-- Edge-to-edge square photo (no radius, no card, no shadow) -->
+        <div class="image-frame-16-9">
+          <svg class="editorial-svg-cover" viewBox="0 0 800 450" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
+            <rect width="800" height="450" fill="#111827"/>
+            <path d="M0 0L800 450M800 0L0 450" stroke="#1f2937" stroke-width="1.5"/>
+            <circle cx="400" cy="225" r="140" fill="#0b0f19" stroke="#374151" stroke-width="2"/>
+            <circle cx="400" cy="225" r="90" stroke="#057dbc" stroke-width="3" stroke-dasharray="8 6"/>
+            <circle cx="400" cy="225" r="40" fill="#057dbc" fill-opacity="0.3" stroke="#057dbc" stroke-width="2"/>
+            <text x="400" y="232" font-family="'JetBrains Mono', monospace" font-size="14" fill="#ffffff" text-anchor="middle" letter-spacing="2">NEURAL SYNAPSE MATRIX</text>
+            <line x1="160" y1="225" x2="640" y2="225" stroke="#4b5563" stroke-width="1"/>
+            <rect x="385" y="60" width="30" height="30" fill="#000000" stroke="#9ca3af" stroke-width="2"/>
+            <text x="400" y="80" font-family="'JetBrains Mono', monospace" font-size="12" fill="#ffffff" text-anchor="middle">01</text>
+          </svg>
+        </div>
+        <div class="photo-caption">
+          PHOTOGRAPH: HANS-ULRICH OBRIST / WIRED ARCHIVE // ALPS VERIFICATION FACILITY, CANTON OF VALAIS.
+        </div>
+
+        <p class="article-body-summary">
+          For eighteen months, the four-story underground laboratory kept zero wireless transmitters on site. Every parameter audit was physically recorded to tungsten tape. What emerged is the first verifiable autonomous agent capable of solving Navier-Stokes fluid turbulence proofs without mathematical drift.
+        </p>
+
+        <div class="story-meta">
+          BY <a href="#author">GIDEON LEWIS-KRAUS</a> • <span>3 HOURS AGO</span> • 18 MIN READ
+        </div>
+      </article>
+
+      <!-- COLUMN 2: SECONDARY STORIES -->
+      <div class="column-mid">
+        
+        <article class="story-tile-mid">
+          <span class="kicker">HARDWARE // GEOPOLITICS</span>
+          <div class="image-frame-4-3">
+            <svg class="editorial-svg-cover" viewBox="0 0 600 450" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <rect width="600" height="450" fill="#0f172a"/>
+              <line x1="50" y1="50" x2="550" y2="50" stroke="#334155" stroke-width="2"/>
+              <line x1="50" y1="150" x2="550" y2="150" stroke="#334155" stroke-width="2"/>
+              <line x1="50" y1="250" x2="550" y2="250" stroke="#334155" stroke-width="2"/>
+              <line x1="50" y1="350" x2="550" y2="350" stroke="#334155" stroke-width="2"/>
+              <rect x="180" y="100" width="240" height="240" fill="#1e293b" stroke="#057dbc" stroke-width="3"/>
+              <text x="300" y="210" font-family="'JetBrains Mono', monospace" font-size="18" fill="#ffffff" text-anchor="middle" font-weight="bold">ASML HIGH-NA</text>
+              <text x="300" y="240" font-family="'JetBrains Mono', monospace" font-size="12" fill="#94a3b8" text-anchor="middle">0.55 APERTURE LITHO</text>
+            </svg>
+          </div>
+          <h2 class="display-mid-headline">
+            <a href="#litho-story">The Secret Race to Build the First 1-Angstrom Lithography Cannon</a>
+          </h2>
+          <p class="article-body-summary">
+            Beyond extreme ultraviolet light lies the x-ray regime. Inside Carl Zeiss and ASML’s skunkworks, mirrors ground down to the precision of a single atomic layer are now bending 13.5nm pulses.
+          </p>
+          <div class="story-meta">
+            BY <a href="#author-2">VIRGINIA HEFFERNAN</a> • <span>5 HOURS AGO</span>
+          </div>
+        </article>
+
+        <article class="story-tile-mid">
+          <span class="kicker">SECURITY // ZERO-DAY REPORT</span>
+          <h3 class="subheading-apercu">
+            <a href="#sat-hack">Chinese Hackers Breached Low-Earth Orbital Comm Links via Dormant Starlink Transponders</a>
+          </h3>
+          <p class="article-body-summary">
+            A previously undisclosed buffer overflow in heritage telemetry modems allowed unauthorized orbital route injection across three commercial constellations.
+          </p>
+          <div class="story-meta">
+            BY <a href="#author-3">ANDY GREENBERG</a> • <span>7 HOURS AGO</span>
+          </div>
+        </article>
+
+      </div>
+
+      <!-- COLUMN 3: MOST POPULAR NUMBERED MODULE -->
+      <aside class="column-sidebar">
+        <div class="popular-ribbon">
+          <span>MOST POPULAR</span>
+        </div>
+
+        <ol class="popular-list">
+          <li class="popular-item">
+            <span class="popular-numeral">01</span>
+            <div class="popular-content">
+              <span class="kicker" style="font-size: 11px; margin-bottom: 2px;">GEAR</span>
+              <h4 class="popular-headline">
+                <a href="#pop-1">The Best Mechanical Keyboards for Writers Who Still Care About Tactile Feedback</a>
+              </h4>
+              <div class="story-meta" style="margin-top: 4px;">BY JULIAN CHOKKATTU</div>
+            </div>
+          </li>
+
+          <li class="popular-item">
+            <span class="popular-numeral">02</span>
+            <div class="popular-content">
+              <span class="kicker" style="font-size: 11px; margin-bottom: 2px;">BUSINESS</span>
+              <h4 class="popular-headline">
+                <a href="#pop-2">Nvidia’s Next GPU Won’t Fit in a Server Rack. It Is the Server Rack.</a>
+              </h4>
+              <div class="story-meta" style="margin-top: 4px;">BY LAUREN GOODE</div>
+            </div>
+          </li>
+
+          <li class="popular-item">
+            <span class="popular-numeral">03</span>
+            <div class="popular-content">
+              <span class="kicker" style="font-size: 11px; margin-bottom: 2px;">SECURITY</span>
+              <h4 class="popular-headline">
+                <a href="#pop-3">The Dark Web Market Selling Stolen Genomic DNA Profiles for $1,200</a>
+              </h4>
+              <div class="story-meta" style="margin-top: 4px;">BY MATT BURGESS</div>
+            </div>
+          </li>
+
+          <li class="popular-item">
+            <span class="popular-numeral">04</span>
+            <div class="popular-content">
+              <span class="kicker" style="font-size: 11px; margin-bottom: 2px;">SCIENCE</span>
+              <h4 class="popular-headline">
+                <a href="#pop-4">Fusion Power Just Passed the 100-Second Lawson Ignition Criterion in Cadarache</a>
+              </h4>
+              <div class="story-meta" style="margin-top: 4px;">BY AMIT KATWALA</div>
+            </div>
+          </li>
+
+          <li class="popular-item">
+            <span class="popular-numeral">05</span>
+            <div class="popular-content">
+              <span class="kicker" style="font-size: 11px; margin-bottom: 2px;">CULTURE</span>
+              <h4 class="popular-headline">
+                <a href="#pop-5">The Last Hand-Coded Indie Web Forums Defying the Algorithmic Feed</a>
+              </h4>
+              <div class="story-meta" style="margin-top: 4px;">BY KATE KNAIBLY</div>
+            </div>
+          </li>
+        </ol>
+      </aside>
+
+    </section>
+
+    <!-- SECTION RIBBON: GEAR & REVIEWS -->
+    <div class="section-ribbon">
+      <div class="section-ribbon-title">
+        <span>GEAR // TESTED &amp; RECOMMENDED</span>
+      </div>
+      <a href="#gear-all" class="section-ribbon-link">SEE ALL 148 REVIEWS →</a>
+    </div>
+
+    <!-- FILTER / TOPIC TABS -->
+    <div class="filter-tabs">
+      <button class="filter-btn active" onclick="setTopic(this, 'all')">ALL REVIEWS</button>
+      <button class="filter-btn" onclick="setTopic(this, 'audio')">AUDIO &amp; SOUND</button>
+      <button class="filter-btn" onclick="setTopic(this, 'laptops')">COMPUTING</button>
+      <button class="filter-btn" onclick="setTopic(this, 'cameras')">PHOTOGRAPHY</button>
+      <button class="filter-btn" onclick="setTopic(this, 'smarthome')">SMART HOME</button>
+    </div>
+
+    <!-- 3-COLUMN EDITORIAL GEAR GRID -->
+    <section class="editorial-grid-3">
+      
+      <article class="editorial-column-card">
+        <div class="image-frame-16-9">
+          <svg class="editorial-svg-cover" viewBox="0 0 640 360" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect width="640" height="360" fill="#18181b"/>
+            <circle cx="320" cy="180" r="100" stroke="#3f3f46" stroke-width="4"/>
+            <circle cx="320" cy="180" r="70" fill="#27272a" stroke="#057dbc" stroke-width="2"/>
+            <rect x="305" y="110" width="30" height="140" rx="15" fill="#52525b"/>
+            <text x="320" y="320" font-family="'JetBrains Mono', monospace" font-size="14" fill="#a1a1aa" text-anchor="middle">PLANAR MAGNETIC TRANSDUCER</text>
+          </svg>
+        </div>
+        <span class="kicker">WIRED REVIEW // HEADPHONES</span>
+        <h3 class="display-mid-headline">
+          <a href="#review-1">Audeze LCD-X (2026 Edition): Open-Back Royalty for Mastering Audio</a>
+        </h3>
+        <p class="article-body-summary">
+          Weighty, uncompromising, and ruthlessly analytical. If a mix has a 0.5dB spike in the high mids, these headphones will drag it into the daylight.
+        </p>
+        <div class="score-badge">WIRED RATING: 9 / 10</div>
+        <div class="story-meta">
+          BY <a href="#author-gear">PARKER HALL</a> • <span>YESTERDAY</span>
+        </div>
+      </article>
+
+      <article class="editorial-column-card">
+        <div class="image-frame-16-9">
+          <svg class="editorial-svg-cover" viewBox="0 0 640 360" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect width="640" height="360" fill="#1e1b4b"/>
+            <rect x="180" y="80" width="280" height="180" stroke="#818cf8" stroke-width="2" fill="#312e81"/>
+            <polygon points="320,130 360,190 280,190" fill="#a5b4fc"/>
+            <text x="320" y="310" font-family="'JetBrains Mono', monospace" font-size="14" fill="#c7d2fe" text-anchor="middle">E-INK COLD SCREEN 300PPI</text>
+          </svg>
+        </div>
+        <span class="kicker">WIRED REVIEW // HARDWARE</span>
+        <h3 class="display-mid-headline">
+          <a href="#review-2">reMarkable Paper Pro: Color E-Ink That Finally Replaces the Moleskine</a>
+        </h3>
+        <p class="article-body-summary">
+          The Canvas Color display introduces subtle pastels without sacrificing the 12-millisecond latency that makes sketching feel like pen on pulp.
+        </p>
+        <div class="score-badge">WIRED RATING: 8 / 10</div>
+        <div class="story-meta">
+          BY <a href="#author-gear2">SCOTT GILBERTSON</a> • <span>2 DAYS AGO</span>
+        </div>
+      </article>
+
+      <article class="editorial-column-card">
+        <div class="image-frame-16-9">
+          <svg class="editorial-svg-cover" viewBox="0 0 640 360" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect width="640" height="360" fill="#042f2e"/>
+            <circle cx="320" cy="180" r="110" stroke="#14b8a6" stroke-width="1.5" stroke-dasharray="4 4"/>
+            <circle cx="320" cy="180" r="80" stroke="#2dd4bf" stroke-width="2"/>
+            <circle cx="320" cy="180" r="30" fill="#14b8a6"/>
+            <text x="320" y="320" font-family="'JetBrains Mono', monospace" font-size="14" fill="#5eead4" text-anchor="middle">SOLID STATE EV BATTERY</text>
+          </svg>
+        </div>
+        <span class="kicker">AUTOMOTIVE // SPECIAL REPORT</span>
+        <h3 class="display-mid-headline">
+          <a href="#review-3">Toyota’s 745-Mile Solid-State Battery Just Hit Commercial Tooling</a>
+        </h3>
+        <p class="article-body-summary">
+          Ten-minute fast charges from 10% to 80% without thermal runaway risk. Here is how sulfur-doped solid electrolytes beat liquid lithium packs.
+        </p>
+        <div class="score-badge">DEEP DIVE REPORT</div>
+        <div class="story-meta">
+          BY <a href="#author-gear3">ALEX DAVIES</a> • <span>3 DAYS AGO</span>
+        </div>
+      </article>
+
+    </section>
+
+    <!-- LONGFORM ESSAY: BACKCHANNEL -->
+    <div class="section-ribbon">
+      <div class="section-ribbon-title">
+        <span>BACKCHANNEL // LONGFORM ESSAY</span>
+      </div>
+      <span class="section-ribbon-link">ISSUE 34.09</span>
+    </div>
+
+    <section class="backchannel-feature">
+      <div class="essay-content">
+        <span class="kicker bold">THE ESSAY</span>
+        <h2>The Cathedral of Code: Why the Next Era of Computation Belongs to the Monks, Not the Megacorps</h2>
+        <p class="article-deck" style="font-size: 21px; line-height: 1.45;">
+          When an entire civilization delegates its intellectual reasoning to closed-weights transformer clusters in northern Virginia, the ultimate act of dissent is writing tiny, auditable, local software that refuses to scale.
+        </p>
+        <p>
+          In the spring of 2024, when venture capital firms were pouring billions into thousand-megawatt datacenter leases across the Columbia River basin, a quiet movement started taking root among senior distributed-systems engineers. They did not want larger parameter counts. They wanted comprehension. They wanted software where every function could be held simultaneously in human short-term memory.
+        </p>
+        <blockquote class="quote-callout">
+          "The moment an algorithm becomes too large for any single human brain to formally verify, it ceases to be engineering. It becomes ecology — and you cannot debug an ecosystem."
+        </blockquote>
+        <p>
+          Today, that rebellion has grown into an archipelago of autonomous tooling collectives. From local offline language parsers operating on 15-watt single-board ARM chips to peer-to-peer cryptographic consensus networks operating over amateur packet radio, the new computing frontier looks less like a hyper-scaler server farm and more like an 18th-century print shop.
+        </p>
+        <div class="story-meta">
+          BY <a href="#author-essay">STEVEN LEVY</a> • WIRED EDITOR-AT-LARGE • <span>PUBLISHED IN PRINT // OCTOBER 2026</span>
+        </div>
+      </div>
+
+      <div class="column-mid" style="border-right: none; padding: 0 0 0 16px;">
+        <span class="kicker">CURATED ARCHIVE</span>
+        <h4 class="subheading-apercu" style="font-size: 19px; line-height: 1.3;">
+          <a href="#archive-1">Steven Levy’s 1984 Landmark 'Hackers': An Annotated Oral History</a>
+        </h4>
+        <p class="article-body-summary" style="margin-bottom: 20px;">
+          Revisiting the original MIT Tech Model Railroad Club hackers who framed the moral imperative of open source computing forty years ago.
+        </p>
+
+        <h4 class="subheading-apercu" style="font-size: 19px; line-height: 1.3;">
+          <a href="#archive-2">Kevin Kelly on the Unforgiving Physics of Datacenter Thermal Ceilings</a>
+        </h4>
+        <p class="article-body-summary" style="margin-bottom: 20px;">
+          Why the limit of machine intelligence is not algorithmic compute, but the number of BTUs you can pull out of copper heatsinks before water boils.
+        </p>
+
+        <div style="border: 2px solid var(--color-wired-black); padding: 20px; background: #fafafa;">
+          <span class="kicker" style="color: var(--color-wired-black);">PRINT EDITION</span>
+          <div style="font-family: var(--font-wired-display); font-size: 22px; line-height: 1.1; margin: 6px 0 12px 0;">WIRED Issue 34.09</div>
+          <p style="font-family: var(--font-breve-text); font-size: 14px; line-height: 1.4; color: var(--color-caption-gray); margin-bottom: 16px;">
+            Delivered in museum-grade paper stock with foil-stamped covers. 12 issues for $29.99/year.
+          </p>
+          <a href="#subscribe-print" class="btn-subscribe" style="width: 100%; text-align: center;">GET PRINT + DIGITAL</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- NEWSLETTER SIGNUP MODULE (Printerly 2px solid black, 0 radius, Apercu placeholder) -->
+    <section class="newsletter-box">
+      <div class="newsletter-intro">
+        <span class="kicker">THE DAILY DISPATCH</span>
+        <h3>Get Tomorrow’s Tech Briefing in Your Inbox Before Breakfast</h3>
+        <p>The essential stories in AI, cybersecurity, climate innovation, and digital culture, curated by WIRED editors every morning.</p>
+      </div>
+      <div>
+        <form class="newsletter-form" onsubmit="handleSubscribe(event)">
+          <input type="email" class="newsletter-input" placeholder="Enter your email address..." required aria-label="Email address for WIRED newsletter">
+          <button type="submit" class="newsletter-btn">SIGN UP</button>
+        </form>
+        <div id="newsletterSuccess" class="newsletter-message">
+          ✓ CONFIRMED: You have been subscribed to the WIRED Morning Dispatch. Check your inbox.
+        </div>
+        <p style="font-family: var(--font-proxima-nova); font-size: 11px; color: var(--color-caption-gray); margin-top: 10px;">
+          By submitting your email, you agree to Condé Nast’s <a href="#privacy" style="color: var(--color-page-ink); text-decoration: underline;">User Agreement</a> and <a href="#privacy" style="color: var(--color-page-ink); text-decoration: underline;">Privacy Policy</a>.
+        </p>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- INVERTED FOOTER (The ONLY inverted surface on the site) -->
+  <footer class="site-footer">
+    <div class="container">
+      
+      <div class="footer-logo-center">
+        <div class="footer-logo">
+          <span style="border: 2px solid #ffffff; padding: 2px 6px; font-family: var(--font-wired-mono); font-size: 24px;">W</span>
+          <span style="border: 2px solid #ffffff; padding: 2px 6px; font-family: var(--font-wired-mono); font-size: 24px; background: #ffffff; color: #1a1a1a;">I</span>
+          <span style="border: 2px solid #ffffff; padding: 2px 6px; font-family: var(--font-wired-mono); font-size: 24px;">R</span>
+          <span style="border: 2px solid #ffffff; padding: 2px 6px; font-family: var(--font-wired-mono); font-size: 24px; background: #ffffff; color: #1a1a1a;">E</span>
+          <span style="border: 2px solid #ffffff; padding: 2px 6px; font-family: var(--font-wired-mono); font-size: 24px;">D</span>
+        </div>
+        <p style="font-family: var(--font-wired-mono); font-size: 12px; letter-spacing: 1.1px; text-transform: uppercase; color: #888888; margin-top: 12px;">
+          THE TECH JOURNAL OF RECORD SINCE 1993 • SAN FRANCISCO // NEW YORK // LONDON
+        </p>
+      </div>
+
+      <div class="footer-grid">
+        <div class="footer-column">
+          <h4>MORE FROM WIRED</h4>
+          <p style="font-family: var(--font-breve-text); font-size: 14px; line-height: 1.6; color: #aaaaaa; margin-bottom: 20px;">
+            WIRED is where tomorrow is realized. It is the essential source of information and ideas that make sense of a world in constant transformation.
+          </p>
+          <a href="#subscribe" class="btn-inverted">SUBSCRIBE TO WIRED</a>
+        </div>
+
+        <div class="footer-column">
+          <h4>SECTIONS</h4>
+          <ul class="footer-links-list">
+            <li><a href="#artificial-intelligence">Artificial Intelligence</a></li>
+            <li><a href="#business">Business &amp; Finance</a></li>
+            <li><a href="#culture">Digital Culture</a></li>
+            <li><a href="#gear">Gear &amp; Gadgets</a></li>
+            <li><a href="#ideas">Ideas &amp; Essays</a></li>
+            <li><a href="#science">Science &amp; Space</a></li>
+            <li><a href="#security">Cybersecurity</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-column">
+          <h4>INITIATIVES</h4>
+          <ul class="footer-links-list">
+            <li><a href="#backchannel">Backchannel</a></li>
+            <li><a href="#wired-consulting">WIRED Consulting</a></li>
+            <li><a href="#wired-live">WIRED Live Events</a></li>
+            <li><a href="#wired-insider">WIRED Insider</a></li>
+            <li><a href="#wired-store">WIRED Store</a></li>
+            <li><a href="#wired-video">WIRED Video</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-column">
+          <h4>CONNECT</h4>
+          <ul class="footer-links-list">
+            <li><a href="#newsletters">Newsletters</a></li>
+            <li><a href="#podcasts">Podcasts</a></li>
+            <li><a href="#rss">RSS Feeds</a></li>
+            <li><a href="#mastodon">Mastodon</a></li>
+            <li><a href="#x">X (Twitter)</a></li>
+            <li><a href="#youtube">YouTube</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-column">
+          <h4>SUBSCRIPTION</h4>
+          <ul class="footer-links-list">
+            <li><a href="#customer-service">Customer Service</a></li>
+            <li><a href="#renew">Renew Subscription</a></li>
+            <li><a href="#give-gift">Give a Gift</a></li>
+            <li><a href="#change-address">Change Address</a></li>
+            <li><a href="#archive">WIRED Archive (1993-)</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="footer-legal-bar">
+        <div>
+          © 2026 CONDÉ NAST. ALL RIGHTS RESERVED. WIRED® IS A REGISTERED TRADEMARK OF ADVANCE MAGAZINE PUBLISHERS INC.
+        </div>
+        <div class="footer-legal-links">
+          <a href="#user-agreement">User Agreement</a>
+          <a href="#privacy-policy">Privacy Policy &amp; Cookie Statement</a>
+          <a href="#california-privacy">California Privacy Rights</a>
+          <a href="#accessibility">Accessibility Help</a>
+          <a href="#ad-choices">Ad Choices</a>
+        </div>
+      </div>
+
+    </div>
+  </footer>
+
+  <!-- Interactive JavaScript for WIRED UI behavior -->
+  <script>
+    function setTopic(button, topic) {
+      document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+      button.classList.add('active');
+    }
+
+    function handleSubscribe(event) {
+      event.preventDefault();
+      const input = event.target.querySelector('input');
+      const message = document.getElementById('newsletterSuccess');
+      if (input.value) {
+        message.style.display = 'block';
+        input.value = '';
+        setTimeout(() => {
+          message.style.display = 'none';
+        }, 5000);
+      }
+    }
+  </script>
+
+</body>
+</html>

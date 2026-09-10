@@ -1,0 +1,2013 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Premium — Apple-Inspired Design System</title>
+  <!-- Modern Fonts: Inter & JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
+  <style>
+    /* ==========================================================================
+       DESIGN SYSTEM FOUNDATIONS: PREVIEW & PRODUCTION TOKENS
+       Category: Professional & Corporate | Style: Apple-inspired modern premium
+       ========================================================================== */
+    :root {
+      /* Official Color Tokens from DESIGN.md */
+      --color-primary: #3B82F6;       /* CTA Emphasis & Interaction Signal */
+      --color-primary-hover: #2563EB;
+      --color-primary-active: #1D4ED8;
+      --color-primary-subtle: rgba(59, 130, 246, 0.08);
+      --color-primary-ring: rgba(59, 130, 246, 0.25);
+
+      --color-secondary: #8B5CF6;     /* Vibrant Secondary Token */
+      --color-secondary-subtle: rgba(139, 92, 246, 0.08);
+
+      --color-success: #16A34A;       /* Status: Success */
+      --color-success-subtle: rgba(22, 163, 74, 0.1);
+
+      --color-warning: #D97706;       /* Status: Warning */
+      --color-warning-subtle: rgba(217, 119, 6, 0.1);
+
+      --color-danger: #DC2626;        /* Status: Danger / Error */
+      --color-danger-subtle: rgba(220, 38, 38, 0.1);
+
+      --color-surface: #FFFFFF;       /* Large backgrounds & cards */
+      --color-surface-subtle: #F9FAFB;/* Section backdrop / neutral canvas */
+      --color-surface-elevated: #FFFFFF;
+      --color-neutral: #FFFFFF;       /* Official neutral token */
+
+      --color-text: #111827;          /* Body copy & titles for sharp contrast */
+      --color-text-secondary: #4B5563;/* Supporting copy */
+      --color-text-muted: #6B7280;    /* Captions & metadata */
+      --color-text-inverted: #FFFFFF;
+
+      --color-border: #E5E7EB;        /* Refined 1px hairline border */
+      --color-border-hover: #D1D5DB;
+
+      /* Official Typography Scale: 12 / 14 / 16 / 18 / 24 / 30 / 36 */
+      --font-scale-12: 12px;
+      --font-scale-14: 14px;
+      --font-scale-16: 16px;
+      --font-scale-18: 18px;
+      --font-scale-24: 24px;
+      --font-scale-30: 30px;
+      --font-scale-36: 36px;
+
+      /* Font Families */
+      --font-primary: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      --font-display: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      --font-mono: 'JetBrains Mono', SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+
+      /* Official Spacing Scale: 4 / 8 / 12 / 16 / 24 / 32 */
+      --space-4: 4px;
+      --space-8: 8px;
+      --space-12: 12px;
+      --space-16: 16px;
+      --space-24: 24px;
+      --space-32: 32px;
+
+      /* Layout Spacing Multiples */
+      --space-48: 48px;
+      --space-64: 64px;
+      --space-80: 80px;
+
+      /* Apple-inspired Radii */
+      --radius-sm: 6px;
+      --radius-md: 10px;
+      --radius-lg: 16px;
+      --radius-xl: 24px;
+      --radius-full: 9999px;
+
+      /* Elevations: Soft, Translucent, Multi-layered */
+      --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+      --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.06), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
+      --shadow-lg: 0 12px 24px -4px rgba(0, 0, 0, 0.06), 0 4px 8px -2px rgba(0, 0, 0, 0.04);
+      --shadow-xl: 0 24px 48px -8px rgba(0, 0, 0, 0.08);
+
+      /* Motion & Transitions: 150–250ms with stable easing */
+      --transition-fast: 150ms cubic-bezier(0.16, 1, 0.3, 1);
+      --transition-normal: 220ms cubic-bezier(0.16, 1, 0.3, 1);
+      --transition-transform: transform 200ms cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    /* Baseline Reset */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      background-color: var(--color-surface);
+      color: var(--color-text);
+      font-family: var(--font-primary);
+      font-size: var(--font-scale-16);
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    body {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      background-color: var(--color-surface);
+    }
+
+    /* Typography Hierarchy & Scales */
+    h1, .h1-text {
+      font-family: var(--font-display);
+      font-size: var(--font-scale-36);
+      font-weight: 700;
+      line-height: 1.15;
+      letter-spacing: -0.03em;
+      color: var(--color-text);
+    }
+
+    h2, .h2-text {
+      font-family: var(--font-display);
+      font-size: var(--font-scale-30);
+      font-weight: 700;
+      line-height: 1.2;
+      letter-spacing: -0.025em;
+      color: var(--color-text);
+    }
+
+    h3, .h3-text {
+      font-family: var(--font-display);
+      font-size: var(--font-scale-24);
+      font-weight: 600;
+      line-height: 1.25;
+      letter-spacing: -0.02em;
+      color: var(--color-text);
+    }
+
+    h4, .h4-text {
+      font-family: var(--font-display);
+      font-size: var(--font-scale-18);
+      font-weight: 600;
+      line-height: 1.35;
+      letter-spacing: -0.01em;
+      color: var(--color-text);
+    }
+
+    p, .body-text {
+      font-size: var(--font-scale-16);
+      color: var(--color-text);
+      line-height: 1.6;
+    }
+
+    .sub-text {
+      font-size: var(--font-scale-14);
+      color: var(--color-text-secondary);
+      line-height: 1.5;
+    }
+
+    .caption-text {
+      font-size: var(--font-scale-12);
+      color: var(--color-text-muted);
+      line-height: 1.4;
+    }
+
+    .mono-code {
+      font-family: var(--font-mono);
+      font-size: var(--font-scale-12);
+    }
+
+    /* Container & Layout */
+    .container {
+      width: 100%;
+      max-width: 1160px;
+      margin-inline: auto;
+      padding-inline: var(--space-24);
+    }
+
+    /* Top Navigation: Apple Frosted Glass Aesthetic */
+    .header-nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(255, 255, 255, 0.85);
+      backdrop-filter: saturate(180%) blur(20px);
+      -webkit-backdrop-filter: saturate(180%) blur(20px);
+      border-bottom: 1px solid var(--color-border);
+      transition: border-color var(--transition-normal);
+    }
+
+    .nav-inner {
+      height: 56px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--space-16);
+    }
+
+    .brand-group {
+      display: flex;
+      align-items: center;
+      gap: var(--space-8);
+      text-decoration: none;
+      color: var(--color-text);
+    }
+
+    .brand-mark {
+      width: 24px;
+      height: 24px;
+      border-radius: var(--radius-sm);
+      background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--color-neutral);
+      font-weight: 800;
+      font-size: var(--font-scale-14);
+      box-shadow: 0 2px 6px rgba(59, 130, 246, 0.3);
+    }
+
+    .brand-title {
+      font-weight: 700;
+      font-size: var(--font-scale-16);
+      letter-spacing: -0.02em;
+    }
+
+    .brand-badge {
+      font-family: var(--font-mono);
+      font-size: var(--font-scale-12);
+      font-weight: 600;
+      padding: 2px var(--space-8);
+      border-radius: var(--radius-full);
+      background: var(--color-primary-subtle);
+      color: var(--color-primary);
+      border: 1px solid rgba(59, 130, 246, 0.2);
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: var(--space-24);
+      list-style: none;
+    }
+
+    .nav-link {
+      text-decoration: none;
+      font-size: var(--font-scale-14);
+      font-weight: 500;
+      color: var(--color-text-secondary);
+      transition: color var(--transition-fast);
+    }
+
+    .nav-link:hover {
+      color: var(--color-primary);
+    }
+
+    .nav-link.active {
+      color: var(--color-text);
+      font-weight: 600;
+    }
+
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: var(--space-12);
+    }
+
+    /* Buttons: Primary #3B82F6, Secondary Neutral */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--space-8);
+      height: 40px;
+      padding: 0 var(--space-16);
+      border-radius: var(--radius-md);
+      font-family: var(--font-primary);
+      font-size: var(--font-scale-14);
+      font-weight: 600;
+      line-height: 1;
+      text-decoration: none;
+      cursor: pointer;
+      border: 1px solid transparent;
+      transition: background-color var(--transition-fast), 
+                  color var(--transition-fast), 
+                  border-color var(--transition-fast), 
+                  box-shadow var(--transition-fast), 
+                  transform var(--transition-fast);
+      user-select: none;
+      white-space: nowrap;
+    }
+
+    .btn:active:not(:disabled) {
+      transform: scale(0.98);
+    }
+
+    .btn:focus-visible {
+      outline: none;
+      box-shadow: 0 0 0 3px var(--color-primary-ring);
+    }
+
+    /* Primary action uses #3B82F6 */
+    .btn-primary {
+      background-color: var(--color-primary);
+      color: var(--color-neutral);
+      border-color: transparent;
+      box-shadow: 0 2px 4px rgba(59, 130, 246, 0.25);
+    }
+
+    .btn-primary:hover:not(:disabled) {
+      background-color: var(--color-primary-hover);
+      box-shadow: 0 4px 12px rgba(59, 130, 246, 0.35);
+    }
+
+    .btn-primary:active:not(:disabled) {
+      background-color: var(--color-primary-active);
+    }
+
+    /* Secondary actions stay neutral */
+    .btn-secondary {
+      background-color: var(--color-neutral);
+      color: var(--color-text);
+      border-color: var(--color-border);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .btn-secondary:hover:not(:disabled) {
+      background-color: var(--color-surface-subtle);
+      border-color: var(--color-border-hover);
+      color: var(--color-primary);
+    }
+
+    .btn-ghost {
+      background-color: transparent;
+      color: var(--color-text-secondary);
+      border-color: transparent;
+    }
+
+    .btn-ghost:hover:not(:disabled) {
+      background-color: var(--color-surface-subtle);
+      color: var(--color-text);
+    }
+
+    .btn-sm {
+      height: 32px;
+      padding: 0 var(--space-12);
+      font-size: var(--font-scale-12);
+      border-radius: var(--radius-sm);
+    }
+
+    .btn-lg {
+      height: 48px;
+      padding: 0 var(--space-24);
+      font-size: var(--font-scale-16);
+      border-radius: var(--radius-lg);
+    }
+
+    .btn:disabled, .btn[disabled] {
+      opacity: 0.5;
+      cursor: not-allowed;
+      box-shadow: none;
+      pointer-events: none;
+    }
+
+    /* Hero Section with Apple Precision */
+    .hero-section {
+      padding-top: var(--space-80);
+      padding-bottom: var(--space-64);
+      text-align: center;
+      background: radial-gradient(circle at 50% 0%, rgba(59, 130, 246, 0.05) 0%, transparent 70%);
+      border-bottom: 1px solid var(--color-border);
+    }
+
+    .hero-eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-8);
+      font-family: var(--font-mono);
+      font-size: var(--font-scale-12);
+      font-weight: 600;
+      color: var(--color-primary);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      margin-bottom: var(--space-16);
+      padding: var(--space-4) var(--space-12);
+      background: var(--color-primary-subtle);
+      border-radius: var(--radius-full);
+      border: 1px solid rgba(59, 130, 246, 0.15);
+    }
+
+    .hero-title {
+      font-size: var(--font-scale-36);
+      max-width: 840px;
+      margin-inline: auto;
+      margin-bottom: var(--space-16);
+      font-weight: 800;
+      letter-spacing: -0.035em;
+    }
+
+    .hero-lead {
+      font-size: var(--font-scale-18);
+      color: var(--color-text-secondary);
+      max-width: 620px;
+      margin-inline: auto;
+      margin-bottom: var(--space-32);
+      line-height: 1.6;
+    }
+
+    .hero-actions {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--space-16);
+      flex-wrap: wrap;
+    }
+
+    /* Specimen Hero Interactive Card */
+    .hero-device-wrapper {
+      margin-top: var(--space-48);
+      max-width: 980px;
+      margin-inline: auto;
+      border-radius: var(--radius-xl);
+      border: 1px solid var(--color-border);
+      background: var(--color-surface);
+      box-shadow: var(--shadow-xl);
+      overflow: hidden;
+      text-align: left;
+    }
+
+    .device-toolbar {
+      height: 48px;
+      padding: 0 var(--space-16);
+      background: var(--color-surface-subtle);
+      border-bottom: 1px solid var(--color-border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .traffic-lights {
+      display: flex;
+      gap: var(--space-8);
+    }
+
+    .traffic-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: var(--radius-full);
+      background: #D1D5DB;
+    }
+
+    .traffic-dot.close { background: var(--color-danger); }
+    .traffic-dot.min { background: var(--color-warning); }
+    .traffic-dot.max { background: var(--color-success); }
+
+    .device-title {
+      font-family: var(--font-mono);
+      font-size: var(--font-scale-12);
+      color: var(--color-text-secondary);
+    }
+
+    .device-body {
+      padding: var(--space-32);
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: var(--space-32);
+      background: linear-gradient(180deg, #FFFFFF 0%, #FAFAFC 100%);
+    }
+
+    @media (max-width: 860px) {
+      .device-body {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* Live Telemetry Module Inside Hero */
+    .telemetry-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: var(--space-24);
+    }
+
+    .telemetry-status {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-8);
+      font-family: var(--font-mono);
+      font-size: var(--font-scale-12);
+      color: var(--color-success);
+      background: var(--color-success-subtle);
+      padding: var(--space-4) var(--space-8);
+      border-radius: var(--radius-full);
+      border: 1px solid rgba(22, 163, 74, 0.2);
+    }
+
+    .telemetry-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--color-success);
+      animation: pulseDot 2s infinite ease-in-out;
+    }
+
+    @keyframes pulseDot {
+      0%, 100% { transform: scale(1); opacity: 1; }
+      50% { transform: scale(1.4); opacity: 0.6; }
+    }
+
+    .kpi-row {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: var(--space-12);
+      margin-bottom: var(--space-24);
+    }
+
+    .kpi-card {
+      padding: var(--space-12) var(--space-16);
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-md);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .kpi-label {
+      font-size: var(--font-scale-12);
+      color: var(--color-text-muted);
+      margin-bottom: var(--space-4);
+    }
+
+    .kpi-val {
+      font-size: var(--font-scale-24);
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      color: var(--color-text);
+    }
+
+    .kpi-sub {
+      font-size: var(--font-scale-12);
+      font-weight: 500;
+      color: var(--color-success);
+      display: flex;
+      align-items: center;
+      gap: 2px;
+      margin-top: 2px;
+    }
+
+    /* Interactive Graph Simulation */
+    .chart-container {
+      height: 120px;
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-md);
+      padding: var(--space-16);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .svg-chart {
+      width: 100%;
+      height: 80px;
+      overflow: visible;
+    }
+
+    /* Section Styling */
+    section {
+      padding-block: var(--space-80);
+      border-bottom: 1px solid var(--color-border);
+    }
+
+    .section-header {
+      margin-bottom: var(--space-48);
+      max-width: 680px;
+    }
+
+    .section-tag {
+      font-family: var(--font-mono);
+      font-size: var(--font-scale-12);
+      font-weight: 600;
+      color: var(--color-primary);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      margin-bottom: var(--space-8);
+      display: block;
+    }
+
+    .section-title {
+      font-size: var(--font-scale-30);
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      margin-bottom: var(--space-8);
+    }
+
+    .section-desc {
+      font-size: var(--font-scale-16);
+      color: var(--color-text-secondary);
+      line-height: 1.6;
+    }
+
+    /* Grid & Cards */
+    .grid-2 {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: var(--space-24);
+    }
+
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: var(--space-24);
+    }
+
+    .grid-4 {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: var(--space-16);
+    }
+
+    @media (max-width: 900px) {
+      .grid-3, .grid-4 {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 600px) {
+      .grid-2, .grid-3, .grid-4 {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .card {
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-lg);
+      padding: var(--space-24);
+      box-shadow: var(--shadow-sm);
+      transition: transform var(--transition-normal), box-shadow var(--transition-normal), border-color var(--transition-normal);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .card:hover {
+      box-shadow: var(--shadow-lg);
+      border-color: var(--color-border-hover);
+      transform: translateY(-2px);
+    }
+
+    /* 1. PALETTE & TOKEN SPECIMEN */
+    .swatch-group {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+      gap: var(--space-16);
+    }
+
+    .swatch-card {
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      cursor: pointer;
+      transition: border-color var(--transition-fast), transform var(--transition-fast);
+    }
+
+    .swatch-card:hover {
+      border-color: var(--color-primary);
+      transform: translateY(-1px);
+    }
+
+    .swatch-preview {
+      height: 80px;
+      display: flex;
+      align-items: flex-end;
+      padding: var(--space-8);
+    }
+
+    .swatch-info {
+      padding: var(--space-12);
+      border-top: 1px solid var(--color-border);
+      background: var(--color-surface);
+    }
+
+    .swatch-name {
+      font-size: var(--font-scale-14);
+      font-weight: 600;
+      color: var(--color-text);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .swatch-hex {
+      font-family: var(--font-mono);
+      font-size: var(--font-scale-12);
+      color: var(--color-text-secondary);
+      margin-top: 2px;
+    }
+
+    .swatch-role {
+      font-size: var(--font-scale-12);
+      color: var(--color-text-muted);
+      margin-top: 4px;
+    }
+
+    /* 2. TYPOGRAPHY SPECIMEN */
+    .type-specimen-table {
+      width: 100%;
+      border-collapse: collapse;
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .type-specimen-table th {
+      text-align: left;
+      padding: var(--space-12) var(--space-16);
+      background: var(--color-surface-subtle);
+      font-size: var(--font-scale-12);
+      font-family: var(--font-mono);
+      color: var(--color-text-secondary);
+      border-bottom: 1px solid var(--color-border);
+    }
+
+    .type-specimen-table td {
+      padding: var(--space-16);
+      border-bottom: 1px solid var(--color-border);
+      vertical-align: middle;
+    }
+
+    .type-specimen-table tr:last-child td {
+      border-bottom: none;
+    }
+
+    .type-token-badge {
+      font-family: var(--font-mono);
+      font-size: var(--font-scale-12);
+      background: var(--color-surface-subtle);
+      padding: 2px var(--space-8);
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--color-border);
+      color: var(--color-text);
+    }
+
+    /* 3. SPACING & GRID EXPLORER */
+    .spacing-visualizer {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-12);
+    }
+
+    .spacing-row {
+      display: flex;
+      align-items: center;
+      gap: var(--space-16);
+      padding: var(--space-12) var(--space-16);
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-md);
+    }
+
+    .spacing-meta {
+      width: 130px;
+      flex-shrink: 0;
+    }
+
+    .spacing-bar-wrap {
+      flex: 1;
+      height: 28px;
+      background: var(--color-surface-subtle);
+      border-radius: var(--radius-sm);
+      display: flex;
+      align-items: center;
+      padding: 0 var(--space-4);
+    }
+
+    .spacing-bar {
+      height: 18px;
+      background: linear-gradient(90deg, var(--color-primary), var(--color-secondary));
+      border-radius: 4px;
+      min-width: 4px;
+    }
+
+    /* 4. COMPONENT BENCHMARK (INPUTS, FORMS, BUTTONS, TOGGLES) */
+    .interactive-demo-panel {
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-lg);
+      padding: var(--space-32);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-8);
+      margin-bottom: var(--space-24);
+    }
+
+    .form-label {
+      font-size: var(--font-scale-14);
+      font-weight: 600;
+      color: var(--color-text);
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .form-label-meta {
+      font-family: var(--font-mono);
+      font-size: var(--font-scale-12);
+      font-weight: 400;
+      color: var(--color-text-muted);
+    }
+
+    .input-control {
+      height: 42px;
+      padding: 0 var(--space-16);
+      border-radius: var(--radius-md);
+      border: 1px solid var(--color-border);
+      background: var(--color-surface);
+      color: var(--color-text);
+      font-family: var(--font-primary);
+      font-size: var(--font-scale-14);
+      line-height: 1;
+      transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+      width: 100%;
+    }
+
+    /* Inputs: Strong focus-visible states */
+    .input-control:focus-visible, .input-control:focus {
+      outline: none;
+      border-color: var(--color-primary);
+      box-shadow: 0 0 0 3px var(--color-primary-ring);
+    }
+
+    .input-control::placeholder {
+      color: var(--color-text-muted);
+    }
+
+    .input-control.error {
+      border-color: var(--color-danger);
+    }
+
+    .input-control.error:focus-visible {
+      box-shadow: 0 0 0 3px var(--color-danger-subtle);
+    }
+
+    .error-feedback {
+      font-size: var(--font-scale-12);
+      color: var(--color-danger);
+      display: flex;
+      align-items: center;
+      gap: var(--space-4);
+      margin-top: 2px;
+    }
+
+    /* Segmented Control / Tabs */
+    .segmented-control {
+      display: inline-flex;
+      background: var(--color-surface-subtle);
+      border: 1px solid var(--color-border);
+      padding: 3px;
+      border-radius: var(--radius-md);
+      gap: 2px;
+    }
+
+    .segment-tab {
+      padding: var(--space-8) var(--space-16);
+      border: none;
+      background: transparent;
+      font-size: var(--font-scale-14);
+      font-weight: 500;
+      color: var(--color-text-secondary);
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      transition: background-color var(--transition-fast), color var(--transition-fast), box-shadow var(--transition-fast);
+    }
+
+    .segment-tab.active {
+      background: var(--color-surface);
+      color: var(--color-text);
+      font-weight: 600;
+      box-shadow: var(--shadow-sm);
+    }
+
+    /* Live Interactive Filter & Data Table */
+    .table-container {
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      margin-top: var(--space-16);
+    }
+
+    .data-table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+    }
+
+    .data-table th {
+      padding: var(--space-12) var(--space-16);
+      background: var(--color-surface-subtle);
+      border-bottom: 1px solid var(--color-border);
+      font-size: var(--font-scale-12);
+      font-weight: 600;
+      color: var(--color-text-secondary);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .data-table td {
+      padding: var(--space-16);
+      border-bottom: 1px solid var(--color-border);
+      font-size: var(--font-scale-14);
+      color: var(--color-text);
+      vertical-align: middle;
+    }
+
+    .data-table tr:last-child td {
+      border-bottom: none;
+    }
+
+    .data-table tr:hover td {
+      background: #FAFAFC;
+    }
+
+    .status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-8);
+      padding: 2px var(--space-8);
+      border-radius: var(--radius-full);
+      font-size: var(--font-scale-12);
+      font-weight: 600;
+    }
+
+    .badge-success {
+      background: var(--color-success-subtle);
+      color: var(--color-success);
+      border: 1px solid rgba(22, 163, 74, 0.2);
+    }
+
+    .badge-warning {
+      background: var(--color-warning-subtle);
+      color: var(--color-warning);
+      border: 1px solid rgba(217, 119, 6, 0.2);
+    }
+
+    .badge-danger {
+      background: var(--color-danger-subtle);
+      color: var(--color-danger);
+      border: 1px solid rgba(220, 38, 38, 0.2);
+    }
+
+    /* 5. ANTI-PATTERNS MATRIX */
+    .matrix-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--space-24);
+    }
+
+    @media (max-width: 768px) {
+      .matrix-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .matrix-card {
+      border-radius: var(--radius-lg);
+      padding: var(--space-24);
+      border: 1px solid var(--color-border);
+    }
+
+    .matrix-do {
+      background: rgba(22, 163, 74, 0.03);
+      border-color: rgba(22, 163, 74, 0.25);
+    }
+
+    .matrix-dont {
+      background: rgba(220, 38, 38, 0.03);
+      border-color: rgba(220, 38, 38, 0.25);
+    }
+
+    .matrix-header {
+      display: flex;
+      align-items: center;
+      gap: var(--space-8);
+      font-weight: 700;
+      font-size: var(--font-scale-18);
+      margin-bottom: var(--space-16);
+    }
+
+    .matrix-do .matrix-header { color: var(--color-success); }
+    .matrix-dont .matrix-header { color: var(--color-danger); }
+
+    .matrix-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-12);
+    }
+
+    .matrix-list li {
+      font-size: var(--font-scale-14);
+      line-height: 1.5;
+      display: flex;
+      align-items: flex-start;
+      gap: var(--space-8);
+      color: var(--color-text);
+    }
+
+    /* Footer */
+    .site-footer {
+      background: var(--color-surface-subtle);
+      border-top: 1px solid var(--color-border);
+      padding-block: var(--space-48);
+      margin-top: auto;
+    }
+
+    .footer-inner {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: var(--space-24);
+    }
+
+    .footer-meta {
+      font-size: var(--font-scale-14);
+      color: var(--color-text-secondary);
+    }
+
+    .footer-tokens-strip {
+      display: flex;
+      align-items: center;
+      gap: var(--space-8);
+    }
+
+    .color-pill {
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      border: 1px solid rgba(0, 0, 0, 0.1);
+    }
+
+    /* Toast Notification for Interactivity */
+    .toast-container {
+      position: fixed;
+      bottom: var(--space-24);
+      right: var(--space-24);
+      z-index: 200;
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-8);
+      pointer-events: none;
+    }
+
+    .toast {
+      background: var(--color-text);
+      color: var(--color-neutral);
+      padding: var(--space-12) var(--space-16);
+      border-radius: var(--radius-md);
+      font-size: var(--font-scale-14);
+      box-shadow: var(--shadow-lg);
+      display: flex;
+      align-items: center;
+      gap: var(--space-12);
+      transform: translateY(20px);
+      opacity: 0;
+      transition: all 200ms cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .toast.show {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Sticky Frosted Header -->
+  <header class="header-nav">
+    <div class="container nav-inner">
+      <a href="#" class="brand-group" aria-label="Premium Design System Home">
+        <div class="brand-mark">P</div>
+        <span class="brand-title">Premium</span>
+        <span class="brand-badge">Apple-Grade System</span>
+      </a>
+      
+      <nav aria-label="Primary Navigation">
+        <ul class="nav-links">
+          <li><a href="#foundations" class="nav-link">Foundations</a></li>
+          <li><a href="#typography" class="nav-link">Typography</a></li>
+          <li><a href="#components" class="nav-link">Components</a></li>
+          <li><a href="#application" class="nav-link">Production UI</a></li>
+          <li><a href="#guidelines" class="nav-link">Guidelines</a></li>
+        </ul>
+      </nav>
+
+      <div class="nav-actions">
+        <button class="btn btn-secondary btn-sm" id="btn-copy-tokens">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect x="8" y="2" width="8" height="4" rx="1" ry="1"/></svg>
+          Export Tokens
+        </button>
+        <a href="#components" class="btn btn-primary btn-sm">Interactive Lab</a>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <!-- Hero Section -->
+    <section class="hero-section">
+      <div class="container">
+        <div class="hero-eyebrow">
+          <span>●</span> Visual Stance: Modern Apple Aesthetic
+        </div>
+        <h1 class="hero-title">Refined precision. Uncompromising digital clarity.</h1>
+        <p class="hero-lead">
+          An authentic Apple-inspired design system with calibrated spacing, Inter typography hierarchy, Primary <code>#3B82F6</code> interaction signals, and pristine contrast.
+        </p>
+        <div class="hero-actions">
+          <a href="#application" class="btn btn-primary btn-lg">Explore Live Application</a>
+          <a href="#foundations" class="btn btn-secondary btn-lg">Inspect Design Tokens</a>
+        </div>
+
+        <!-- Interactive Specimen Device Panel -->
+        <div class="hero-device-wrapper">
+          <div class="device-toolbar">
+            <div class="traffic-lights">
+              <span class="traffic-dot close"></span>
+              <span class="traffic-dot min"></span>
+              <span class="traffic-dot max"></span>
+            </div>
+            <span class="device-title">aether-os // telemetry.interface.v4</span>
+            <span class="caption-text mono-code">SCALE 12/14/16/18/24/30/36</span>
+          </div>
+
+          <div class="device-body">
+            <!-- Left Column: Metrics & Real-time Graph -->
+            <div>
+              <div class="telemetry-header">
+                <div>
+                  <h4 class="h4-text">System Throughput</h4>
+                  <p class="sub-text">Autonomous workload orchestration</p>
+                </div>
+                <div class="telemetry-status">
+                  <span class="telemetry-dot"></span>
+                  <span>99.98% OPTIMAL</span>
+                </div>
+              </div>
+
+              <div class="kpi-row">
+                <div class="kpi-card">
+                  <div class="kpi-label">Primary Signal</div>
+                  <div class="kpi-val" style="color: var(--color-primary);">4.8ms</div>
+                  <div class="kpi-sub">#3B82F6 CTA</div>
+                </div>
+                <div class="kpi-card">
+                  <div class="kpi-label">Secondary Token</div>
+                  <div class="kpi-val" style="color: var(--color-secondary);">98.4%</div>
+                  <div class="kpi-sub" style="color: var(--color-secondary);">#8B5CF6</div>
+                </div>
+                <div class="kpi-card">
+                  <div class="kpi-label">Latency Drift</div>
+                  <div class="kpi-val" style="color: var(--color-success);">&plusmn;0.02</div>
+                  <div class="kpi-sub">Stable Easing</div>
+                </div>
+              </div>
+
+              <div class="chart-container">
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                  <span class="caption-text mono-code">BURST VELOCITY (150ms–250ms)</span>
+                  <span class="caption-text mono-code" id="live-tick">TICK: 0.18s</span>
+                </div>
+                <!-- Precision SVG Curve -->
+                <svg class="svg-chart" viewBox="0 0 400 80" preserveAspectRatio="none">
+                  <defs>
+                    <linearGradient id="chartGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                      <stop offset="0%" stop-color="#3B82F6" stop-opacity="0.35"/>
+                      <stop offset="100%" stop-color="#3B82F6" stop-opacity="0.0"/>
+                    </linearGradient>
+                  </defs>
+                  <path d="M0,60 C40,55 70,30 110,35 C150,40 180,15 220,20 C260,25 300,5 340,10 C370,14 390,3 400,2 L400,80 L0,80 Z" fill="url(#chartGrad)"/>
+                  <path d="M0,60 C40,55 70,30 110,35 C150,40 180,15 220,20 C260,25 300,5 340,10 C370,14 390,3 400,2" fill="none" stroke="#3B82F6" stroke-width="2.5" stroke-linecap="round"/>
+                </svg>
+              </div>
+            </div>
+
+            <!-- Right Column: Interactive Quick Controls -->
+            <div style="display: flex; flex-direction: column; justify-content: space-between; border-left: 1px solid var(--color-border); padding-left: var(--space-32);">
+              <div>
+                <span class="hero-eyebrow" style="margin-bottom: var(--space-8);">Interactive Controller</span>
+                <h4 class="h4-text" style="margin-bottom: var(--space-12);">System Command Mode</h4>
+                <p class="sub-text" style="margin-bottom: var(--space-16);">
+                  Primary buttons enforce <code>#3B82F6</code>. Secondary actions remain neutral with clean <code>#FFFFFF</code> surfaces.
+                </p>
+
+                <div class="segmented-control" style="width: 100%; margin-bottom: var(--space-16);">
+                  <button class="segment-tab active" style="flex: 1;" onclick="setPreviewMode(this, 'Standard')">Standard</button>
+                  <button class="segment-tab" style="flex: 1;" onclick="setPreviewMode(this, 'High-Throughput')">Throughput</button>
+                  <button class="segment-tab" style="flex: 1;" onclick="setPreviewMode(this, 'Strict Audit')">Audit</button>
+                </div>
+
+                <div class="form-group" style="margin-bottom: var(--space-16);">
+                  <label class="form-label" for="quick-token-input">
+                    Active Environment Token
+                    <span class="form-label-meta">#111827 / text</span>
+                  </label>
+                  <input id="quick-token-input" class="input-control" type="text" value="PRD-CLUSTER-PRIMARY-3B82F6" spellcheck="false">
+                </div>
+              </div>
+
+              <div style="display: flex; gap: var(--space-12);">
+                <button class="btn btn-primary" style="flex: 1;" onclick="triggerToast('Deployment pipeline initiated on #3B82F6 cluster')">
+                  Deploy Cluster
+                </button>
+                <button class="btn btn-secondary" onclick="triggerToast('Re-calibrating metrics...')">
+                  Sync
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 1: FOUNDATIONS (COLORS, PALETTE, SPECIFICATION) -->
+    <section id="foundations">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-tag">Section 01 // Foundation Tokens</span>
+          <h2 class="section-title">Calibrated Color Architecture</h2>
+          <p class="section-desc">
+            Primary <code>#3B82F6</code> reserved strictly for CTA and interaction signals. Secondary <code>#8B5CF6</code> provides balanced elegance. Surface stays pristine <code>#FFFFFF</code> while typography anchors on deep graphite <code>#111827</code>.
+          </p>
+        </div>
+
+        <div class="swatch-group">
+          <!-- Primary -->
+          <div class="swatch-card" onclick="copyColorToken('#3B82F6', 'Primary')">
+            <div class="swatch-preview" style="background-color: #3B82F6; color: #FFFFFF;">
+              <span class="mono-code" style="font-weight: 600;">PRIMARY</span>
+            </div>
+            <div class="swatch-info">
+              <div class="swatch-name">
+                <span>Primary</span>
+                <span class="badge-tag" style="font-size: 10px; padding: 1px 4px; background: rgba(59,130,246,0.1); color: #3B82F6; border-radius: 4px;">CTA</span>
+              </div>
+              <div class="swatch-hex">#3B82F6</div>
+              <div class="swatch-role">CTA emphasis, interaction signal</div>
+            </div>
+          </div>
+
+          <!-- Secondary -->
+          <div class="swatch-card" onclick="copyColorToken('#8B5CF6', 'Secondary')">
+            <div class="swatch-preview" style="background-color: #8B5CF6; color: #FFFFFF;">
+              <span class="mono-code" style="font-weight: 600;">SECONDARY</span>
+            </div>
+            <div class="swatch-info">
+              <div class="swatch-name">
+                <span>Secondary</span>
+                <span class="badge-tag" style="font-size: 10px; padding: 1px 4px; background: rgba(139,92,246,0.1); color: #8B5CF6; border-radius: 4px;">Accent</span>
+              </div>
+              <div class="swatch-hex">#8B5CF6</div>
+              <div class="swatch-role">Style foundation complement</div>
+            </div>
+          </div>
+
+          <!-- Surface -->
+          <div class="swatch-card" onclick="copyColorToken('#FFFFFF', 'Surface')">
+            <div class="swatch-preview" style="background-color: #FFFFFF; color: #111827; border-bottom: 1px solid #E5E7EB;">
+              <span class="mono-code" style="font-weight: 600;">SURFACE</span>
+            </div>
+            <div class="swatch-info">
+              <div class="swatch-name">
+                <span>Surface</span>
+                <span class="badge-tag" style="font-size: 10px; padding: 1px 4px; background: #F3F4F6; color: #4B5563; border-radius: 4px;">Canvas</span>
+              </div>
+              <div class="swatch-hex">#FFFFFF</div>
+              <div class="swatch-role">Large backgrounds & cards</div>
+            </div>
+          </div>
+
+          <!-- Text -->
+          <div class="swatch-card" onclick="copyColorToken('#111827', 'Text')">
+            <div class="swatch-preview" style="background-color: #111827; color: #FFFFFF;">
+              <span class="mono-code" style="font-weight: 600;">TEXT</span>
+            </div>
+            <div class="swatch-info">
+              <div class="swatch-name">
+                <span>Text</span>
+                <span class="badge-tag" style="font-size: 10px; padding: 1px 4px; background: #111827; color: #FFF; border-radius: 4px;">Legibility</span>
+              </div>
+              <div class="swatch-hex">#111827</div>
+              <div class="swatch-role">Body copy & titles contrast</div>
+            </div>
+          </div>
+
+          <!-- Success -->
+          <div class="swatch-card" onclick="copyColorToken('#16A34A', 'Success')">
+            <div class="swatch-preview" style="background-color: #16A34A; color: #FFFFFF;">
+              <span class="mono-code" style="font-weight: 600;">SUCCESS</span>
+            </div>
+            <div class="swatch-info">
+              <div class="swatch-name">
+                <span>Success</span>
+                <span class="badge-tag" style="font-size: 10px; padding: 1px 4px; background: rgba(22,163,74,0.1); color: #16A34A; border-radius: 4px;">Status</span>
+              </div>
+              <div class="swatch-hex">#16A34A</div>
+              <div class="swatch-role">Positive validation & metrics</div>
+            </div>
+          </div>
+
+          <!-- Warning -->
+          <div class="swatch-card" onclick="copyColorToken('#D97706', 'Warning')">
+            <div class="swatch-preview" style="background-color: #D97706; color: #FFFFFF;">
+              <span class="mono-code" style="font-weight: 600;">WARNING</span>
+            </div>
+            <div class="swatch-info">
+              <div class="swatch-name">
+                <span>Warning</span>
+                <span class="badge-tag" style="font-size: 10px; padding: 1px 4px; background: rgba(217,119,6,0.1); color: #D97706; border-radius: 4px;">Alert</span>
+              </div>
+              <div class="swatch-hex">#D97706</div>
+              <div class="swatch-role">Precautionary notifications</div>
+            </div>
+          </div>
+
+          <!-- Danger -->
+          <div class="swatch-card" onclick="copyColorToken('#DC2626', 'Danger')">
+            <div class="swatch-preview" style="background-color: #DC2626; color: #FFFFFF;">
+              <span class="mono-code" style="font-weight: 600;">DANGER</span>
+            </div>
+            <div class="swatch-info">
+              <div class="swatch-name">
+                <span>Danger</span>
+                <span class="badge-tag" style="font-size: 10px; padding: 1px 4px; background: rgba(220,38,38,0.1); color: #DC2626; border-radius: 4px;">Error</span>
+              </div>
+              <div class="swatch-hex">#DC2626</div>
+              <div class="swatch-role">Destructive actions & alerts</div>
+            </div>
+          </div>
+
+          <!-- Neutral -->
+          <div class="swatch-card" onclick="copyColorToken('#FFFFFF', 'Neutral')">
+            <div class="swatch-preview" style="background-color: #FFFFFF; color: #111827; border-bottom: 1px solid #E5E7EB;">
+              <span class="mono-code" style="font-weight: 600;">NEUTRAL</span>
+            </div>
+            <div class="swatch-info">
+              <div class="swatch-name">
+                <span>Neutral</span>
+                <span class="badge-tag" style="font-size: 10px; padding: 1px 4px; background: #F3F4F6; color: #4B5563; border-radius: 4px;">Surface Deriv</span>
+              </div>
+              <div class="swatch-hex">#FFFFFF</div>
+              <div class="swatch-role">Official format compatibility</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 2: TYPOGRAPHY (SCALE: 12/14/16/18/24/30/36) -->
+    <section id="typography">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-tag">Section 02 // Typography Architecture</span>
+          <h2 class="section-title">Strict Inter Scale: 12 / 14 / 16 / 18 / 24 / 30 / 36</h2>
+          <p class="section-desc">
+            Display and primary text powered by <code>Inter</code> across weights 100 through 900. Monospace elements powered by <code>JetBrains Mono</code>.
+          </p>
+        </div>
+
+        <table class="type-specimen-table">
+          <thead>
+            <tr>
+              <th style="width: 140px;">TOKEN</th>
+              <th style="width: 110px;">SIZE / LINE</th>
+              <th style="width: 130px;">ROLE</th>
+              <th>SAMPLE SPECIMEN (CLICK TO EDIT)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><span class="type-token-badge">--font-scale-36</span></td>
+              <td class="mono-code">36px / 1.15</td>
+              <td class="sub-text">H1 / Hero Display</td>
+              <td><div class="h1-text" contenteditable="true" spellcheck="false">Architectural Superiority</div></td>
+            </tr>
+            <tr>
+              <td><span class="type-token-badge">--font-scale-30</span></td>
+              <td class="mono-code">30px / 1.20</td>
+              <td class="sub-text">H2 / Major Section</td>
+              <td><div class="h2-text" contenteditable="true" spellcheck="false">Engineered for absolute clarity and focus</div></td>
+            </tr>
+            <tr>
+              <td><span class="type-token-badge">--font-scale-24</span></td>
+              <td class="mono-code">24px / 1.25</td>
+              <td class="sub-text">H3 / Module Header</td>
+              <td><div class="h3-text" contenteditable="true" spellcheck="false">Modular Component Hierarchy and State Flow</div></td>
+            </tr>
+            <tr>
+              <td><span class="type-token-badge">--font-scale-18</span></td>
+              <td class="mono-code">18px / 1.35</td>
+              <td class="sub-text">H4 / Lead Copy</td>
+              <td><div class="h4-text" contenteditable="true" spellcheck="false">Fast, deterministic transitions running within 150ms to 250ms</div></td>
+            </tr>
+            <tr>
+              <td><span class="type-token-badge">--font-scale-16</span></td>
+              <td class="mono-code">16px / 1.60</td>
+              <td class="sub-text">Body / Default</td>
+              <td><div class="body-text" contenteditable="true" spellcheck="false">Apple-inspired typography provides generous leading, optimal letter spacing, and crisp contrast against light backgrounds.</div></td>
+            </tr>
+            <tr>
+              <td><span class="type-token-badge">--font-scale-14</span></td>
+              <td class="mono-code">14px / 1.50</td>
+              <td class="sub-text">UI Controls / Labels</td>
+              <td><div class="sub-text" contenteditable="true" spellcheck="false">Action buttons, contextual dialogs, data table cells, and form field descriptions.</div></td>
+            </tr>
+            <tr>
+              <td><span class="type-token-badge">--font-scale-12</span></td>
+              <td class="mono-code">12px / 1.40</td>
+              <td class="sub-text">Captions / Mono</td>
+              <td><div class="caption-text mono-code" contenteditable="true" spellcheck="false">TOKEN: var(--color-primary) // RESOLVED: #3B82F6 // STATUS: VERIFIED</div></td>
+            </tr>
+          </tbody>
+        </table>
+
+        <!-- SPACING SCALE VISUALIZER -->
+        <div style="margin-top: var(--space-48);">
+          <div class="section-header" style="margin-bottom: var(--space-24);">
+            <span class="section-tag">Grid Foundation</span>
+            <h3 class="h3-text">Spacing Scale: 4 / 8 / 12 / 16 / 24 / 32</h3>
+            <p class="sub-text">Disciplined vertical rhythm preserving spatial balance without ad-hoc offsets.</p>
+          </div>
+
+          <div class="spacing-visualizer">
+            <div class="spacing-row">
+              <div class="spacing-meta">
+                <strong class="body-text">4px</strong>
+                <span class="caption-text mono-code">--space-4</span>
+              </div>
+              <div class="spacing-bar-wrap"><div class="spacing-bar" style="width: 4px;"></div></div>
+              <span class="caption-text">Micro gaps, icon offsets</span>
+            </div>
+
+            <div class="spacing-row">
+              <div class="spacing-meta">
+                <strong class="body-text">8px</strong>
+                <span class="caption-text mono-code">--space-8</span>
+              </div>
+              <div class="spacing-bar-wrap"><div class="spacing-bar" style="width: 8px;"></div></div>
+              <span class="caption-text">Tight spacing, button padding Y</span>
+            </div>
+
+            <div class="spacing-row">
+              <div class="spacing-meta">
+                <strong class="body-text">12px</strong>
+                <span class="caption-text mono-code">--space-12</span>
+              </div>
+              <div class="spacing-bar-wrap"><div class="spacing-bar" style="width: 12px;"></div></div>
+              <span class="caption-text">Card inner spacing, badge gaps</span>
+            </div>
+
+            <div class="spacing-row">
+              <div class="spacing-meta">
+                <strong class="body-text">16px</strong>
+                <span class="caption-text mono-code">--space-16</span>
+              </div>
+              <div class="spacing-bar-wrap"><div class="spacing-bar" style="width: 16px;"></div></div>
+              <span class="caption-text">Standard padding, button padding X</span>
+            </div>
+
+            <div class="spacing-row">
+              <div class="spacing-meta">
+                <strong class="body-text">24px</strong>
+                <span class="caption-text mono-code">--space-24</span>
+              </div>
+              <div class="spacing-bar-wrap"><div class="spacing-bar" style="width: 24px;"></div></div>
+              <span class="caption-text">Container gutter, card margins</span>
+            </div>
+
+            <div class="spacing-row">
+              <div class="spacing-meta">
+                <strong class="body-text">32px</strong>
+                <span class="caption-text mono-code">--space-32</span>
+              </div>
+              <div class="spacing-bar-wrap"><div class="spacing-bar" style="width: 32px;"></div></div>
+              <span class="caption-text">Major component spacing</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 3: COMPONENT LAB (BUTTONS, INPUTS, CARDS, MODALS) -->
+    <section id="components">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-tag">Section 03 // Interactive Component Lab</span>
+          <h2 class="section-title">Tested Controls & Surface Elements</h2>
+          <p class="section-desc">
+            Fully explicit states (hover, focus-visible, active, disabled) with 150–250ms stable transitions.
+          </p>
+        </div>
+
+        <div class="grid-2">
+          <!-- Button Suite -->
+          <div class="interactive-demo-panel">
+            <h3 class="h3-text" style="margin-bottom: var(--space-8);">Button Hierarchy</h3>
+            <p class="sub-text" style="margin-bottom: var(--space-24);">Primary action uses #3B82F6; secondary actions stay neutral.</p>
+
+            <div style="display: flex; flex-direction: column; gap: var(--space-16);">
+              <div style="display: flex; align-items: center; gap: var(--space-12); flex-wrap: wrap;">
+                <button class="btn btn-primary" onclick="triggerToast('Primary Button #3B82F6 clicked')">Primary Action</button>
+                <button class="btn btn-secondary" onclick="triggerToast('Secondary Neutral Button clicked')">Secondary Action</button>
+                <button class="btn btn-ghost" onclick="triggerToast('Ghost Action clicked')">Ghost Action</button>
+              </div>
+
+              <div style="display: flex; align-items: center; gap: var(--space-12); flex-wrap: wrap;">
+                <button class="btn btn-primary btn-sm">Small Button</button>
+                <button class="btn btn-primary">Default 40px</button>
+                <button class="btn btn-primary btn-lg">Large 48px</button>
+              </div>
+
+              <div style="display: flex; align-items: center; gap: var(--space-12); flex-wrap: wrap; padding-top: var(--space-12); border-top: 1px solid var(--color-border);">
+                <button class="btn btn-primary" disabled>Disabled Primary</button>
+                <button class="btn btn-secondary" disabled>Disabled Secondary</button>
+                <button class="btn btn-primary" id="btn-interactive-toggle" onclick="toggleButtonState(this)">
+                  <span>Toggle Loading</span>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Input Suite -->
+          <div class="interactive-demo-panel">
+            <h3 class="h3-text" style="margin-bottom: var(--space-8);">Input States & Feedback</h3>
+            <p class="sub-text" style="margin-bottom: var(--space-24);">Strong focus-visible states, clear labels, and predictable error messaging.</p>
+
+            <form onsubmit="event.preventDefault(); validateFormDemo();">
+              <div class="form-group">
+                <label class="form-label" for="demo-input-valid">
+                  Workspace Domain
+                  <span class="form-label-meta">Focus-visible signal</span>
+                </label>
+                <input id="demo-input-valid" class="input-control" type="text" value="studio.apple-premium.internal">
+              </div>
+
+              <div class="form-group">
+                <label class="form-label" for="demo-input-error">
+                  Verification Key
+                  <span class="form-label-meta" style="color: var(--color-danger);">Validation rule</span>
+                </label>
+                <input id="demo-input-error" class="input-control error" type="text" value="INVALID-KEY-403">
+                <div class="error-feedback">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                  <span>Token must match cryptographic format (starts with PRD-)</span>
+                </div>
+              </div>
+
+              <div style="display: flex; justify-content: flex-end; gap: var(--space-12);">
+                <button type="button" class="btn btn-secondary" onclick="document.getElementById('demo-input-error').classList.toggle('error');">Toggle Error</button>
+                <button type="submit" class="btn btn-primary">Validate Inputs</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 4: REAL-WORLD PRODUCTION APPLICATION -->
+    <section id="application" style="background: var(--color-surface-subtle);">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-tag">Section 04 // Authentic Product Application</span>
+          <h2 class="section-title">Aether Global Cluster Controller</h2>
+          <p class="section-desc">
+            A comprehensive, high-density production interface showcasing cards, filters, interactive state transitions, and tabular data adhering to all design rules.
+          </p>
+        </div>
+
+        <!-- Filter and Search Toolbar -->
+        <div class="card" style="margin-bottom: var(--space-24);">
+          <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: var(--space-16);">
+            <div style="display: flex; align-items: center; gap: var(--space-12);">
+              <div class="segmented-control" id="cluster-filter">
+                <button class="segment-tab active" onclick="filterTable('all', this)">All Clusters</button>
+                <button class="segment-tab" onclick="filterTable('healthy', this)">Healthy</button>
+                <button class="segment-tab" onclick="filterTable('warning', this)">Warning</button>
+              </div>
+              <span class="caption-text mono-code">FILTERED: 4 NODES</span>
+            </div>
+
+            <div style="display: flex; align-items: center; gap: var(--space-12);">
+              <input type="text" id="node-search" class="input-control" placeholder="Search node or region..." style="height: 36px; width: 220px;" onkeyup="searchNodes(this.value)">
+              <button class="btn btn-primary btn-sm" onclick="addNewNodeModal()">
+                <span>+ Deploy Node</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Data Table -->
+          <div class="table-container">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>CLUSTER / NODE</th>
+                  <th>REGION</th>
+                  <th>STATUS</th>
+                  <th>TELEMETRY</th>
+                  <th>LATENCY</th>
+                  <th style="text-align: right;">ACTION</th>
+                </tr>
+              </thead>
+              <tbody id="node-table-body">
+                <tr data-status="healthy">
+                  <td>
+                    <div style="font-weight: 600;">aether-core-us-east</div>
+                    <div class="caption-text mono-code">ID: 850b-611e-01</div>
+                  </td>
+                  <td class="sub-text">Virginia (us-east-1)</td>
+                  <td>
+                    <span class="status-badge badge-success">
+                      <span style="width:6px;height:6px;border-radius:50%;background:#16A34A;"></span>
+                      Healthy
+                    </span>
+                  </td>
+                  <td>
+                    <div style="font-weight: 600; font-size: 13px;">99.99%</div>
+                    <div class="caption-text">24,190 req/sec</div>
+                  </td>
+                  <td class="mono-code" style="color: var(--color-primary); font-weight: 600;">1.2ms</td>
+                  <td style="text-align: right;">
+                    <button class="btn btn-secondary btn-sm" onclick="triggerToast('Node aether-core-us-east inspected')">Inspect</button>
+                  </td>
+                </tr>
+
+                <tr data-status="healthy">
+                  <td>
+                    <div style="font-weight: 600;">aether-core-eu-central</div>
+                    <div class="caption-text mono-code">ID: 850b-611e-02</div>
+                  </td>
+                  <td class="sub-text">Frankfurt (eu-central-1)</td>
+                  <td>
+                    <span class="status-badge badge-success">
+                      <span style="width:6px;height:6px;border-radius:50%;background:#16A34A;"></span>
+                      Healthy
+                    </span>
+                  </td>
+                  <td>
+                    <div style="font-weight: 600; font-size: 13px;">99.95%</div>
+                    <div class="caption-text">18,400 req/sec</div>
+                  </td>
+                  <td class="mono-code" style="color: var(--color-primary); font-weight: 600;">3.8ms</td>
+                  <td style="text-align: right;">
+                    <button class="btn btn-secondary btn-sm" onclick="triggerToast('Node aether-core-eu-central inspected')">Inspect</button>
+                  </td>
+                </tr>
+
+                <tr data-status="warning">
+                  <td>
+                    <div style="font-weight: 600;">aether-edge-ap-southeast</div>
+                    <div class="caption-text mono-code">ID: 850b-611e-03</div>
+                  </td>
+                  <td class="sub-text">Singapore (ap-southeast-1)</td>
+                  <td>
+                    <span class="status-badge badge-warning">
+                      <span style="width:6px;height:6px;border-radius:50%;background:#D97706;"></span>
+                      High Memory
+                    </span>
+                  </td>
+                  <td>
+                    <div style="font-weight: 600; font-size: 13px;">94.20%</div>
+                    <div class="caption-text">11,200 req/sec</div>
+                  </td>
+                  <td class="mono-code" style="color: var(--color-warning); font-weight: 600;">18.4ms</td>
+                  <td style="text-align: right;">
+                    <button class="btn btn-secondary btn-sm" onclick="triggerToast('Re-balancing memory on Singapore cluster...')">Rebalance</button>
+                  </td>
+                </tr>
+
+                <tr data-status="healthy">
+                  <td>
+                    <div style="font-weight: 600;">aether-edge-tokyo</div>
+                    <div class="caption-text mono-code">ID: 850b-611e-04</div>
+                  </td>
+                  <td class="sub-text">Tokyo (ap-northeast-1)</td>
+                  <td>
+                    <span class="status-badge badge-success">
+                      <span style="width:6px;height:6px;border-radius:50%;background:#16A34A;"></span>
+                      Healthy
+                    </span>
+                  </td>
+                  <td>
+                    <div style="font-weight: 600; font-size: 13px;">99.98%</div>
+                    <div class="caption-text">16,100 req/sec</div>
+                  </td>
+                  <td class="mono-code" style="color: var(--color-primary); font-weight: 600;">2.1ms</td>
+                  <td style="text-align: right;">
+                    <button class="btn btn-secondary btn-sm" onclick="triggerToast('Node aether-edge-tokyo inspected')">Inspect</button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Metric Highlight Cards Grid -->
+        <div class="grid-3">
+          <div class="card">
+            <span class="section-tag">PRIMARY TOKEN FOCUS</span>
+            <h4 class="h4-text" style="margin-bottom: var(--space-8);">Direct Action Rate</h4>
+            <p class="sub-text" style="margin-bottom: var(--space-16);">
+              Using #3B82F6 exclusively as the primary interaction signal yields consistent cognitive ergonomics.
+            </p>
+            <div style="margin-top: auto; display: flex; align-items: baseline; gap: var(--space-8);">
+              <span class="h2-text" style="color: var(--color-primary);">94.8%</span>
+              <span class="sub-text" style="color: var(--color-success); font-weight: 600;">&uarr; 4.2%</span>
+            </div>
+          </div>
+
+          <div class="card">
+            <span class="section-tag" style="color: var(--color-secondary);">SECONDARY ACCENT</span>
+            <h4 class="h4-text" style="margin-bottom: var(--space-8);">Feature Distinction</h4>
+            <p class="sub-text" style="margin-bottom: var(--space-16);">
+              Secondary #8B5CF6 enhances visual depth without clashing with the dominant primary CTA.
+            </p>
+            <div style="margin-top: auto; display: flex; align-items: baseline; gap: var(--space-8);">
+              <span class="h2-text" style="color: var(--color-secondary);">62 ms</span>
+              <span class="sub-text">Processing tick</span>
+            </div>
+          </div>
+
+          <div class="card">
+            <span class="section-tag" style="color: var(--color-text);">SURFACE PURITY</span>
+            <h4 class="h4-text" style="margin-bottom: var(--space-8);">Contrast Integrity</h4>
+            <p class="sub-text" style="margin-bottom: var(--space-16);">
+              Text (#111827) on Surface (#FFFFFF) achieves an optimal 15.3:1 contrast ratio exceeding WCAG AAA.
+            </p>
+            <div style="margin-top: auto; display: flex; align-items: baseline; gap: var(--space-8);">
+              <span class="h2-text">15.3 : 1</span>
+              <span class="status-badge badge-success" style="margin-left: var(--space-8);">AAA Pass</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 5: GUIDELINES & ANTI-PATTERNS -->
+    <section id="guidelines">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-tag">Section 05 // Specification Compliance</span>
+          <h2 class="section-title">Design System Anti-Patterns & Principles</h2>
+          <p class="section-desc">
+            Directly derived from Section 9 of the official <code>DESIGN.md</code> specification.
+          </p>
+        </div>
+
+        <div class="matrix-grid">
+          <!-- What to Do -->
+          <div class="matrix-card matrix-do">
+            <div class="matrix-header">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>
+              <span>Authentic Principles (Do)</span>
+            </div>
+            <ul class="matrix-list">
+              <li>
+                <strong>Favor Primary #3B82F6:</strong>
+                <span>Keep CTA emphasis distinct and singular per viewport hierarchy.</span>
+              </li>
+              <li>
+                <strong>Preserve Surface #FFFFFF:</strong>
+                <span>Rely on whitespace and subtle hairline borders before adding heavy dropshadows.</span>
+              </li>
+              <li>
+                <strong>Strict Typography Scale:</strong>
+                <span>Adhere strictly to 12 / 14 / 16 / 18 / 24 / 30 / 36px font sizing.</span>
+              </li>
+              <li>
+                <strong>Predictable Spacing Grid:</strong>
+                <span>Align modules exclusively using 4 / 8 / 12 / 16 / 24 / 32px increments.</span>
+              </li>
+              <li>
+                <strong>Purposeful 150–250ms Motion:</strong>
+                <span>Transitions must be fast and stable using calibrated easing curves.</span>
+              </li>
+            </ul>
+          </div>
+
+          <!-- Anti-patterns to avoid -->
+          <div class="matrix-card matrix-dont">
+            <div class="matrix-header">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+              <span>Explicit Anti-Patterns (Do Not)</span>
+            </div>
+            <ul class="matrix-list">
+              <li>
+                <strong>No Off-Palette Colors:</strong>
+                <span>Do not introduce random blues, purples, or greys when an existing token can solve the requirement.</span>
+              </li>
+              <li>
+                <strong>No Flattened Typography:</strong>
+                <span>Do not flatten hierarchy by using identical type size or weight across disparate levels.</span>
+              </li>
+              <li>
+                <strong>No Decorative Clutter:</strong>
+                <span>Avoid ornate drop shadows, busy skeuomorphic textures, or low-contrast gradients.</span>
+              </li>
+              <li>
+                <strong>No Metaphor Mixing:</strong>
+                <span>Do not combine unrelated visual metaphors or inconsistent border radii in the same interface.</span>
+              </li>
+              <li>
+                <strong>No Missing Interaction States:</strong>
+                <span>Hover, focus-visible, active, and disabled states must never be omitted.</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Clean Minimalist Footer -->
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <div class="footer-meta">
+        <div style="font-weight: 700; color: var(--color-text); margin-bottom: var(--space-4);">
+          Premium Design System — Apple-Inspired Foundation
+        </div>
+        <div>
+          Category: Professional & Corporate &bull; Tokens: <code>#3B82F6</code>, <code>#8B5CF6</code>, <code>#FFFFFF</code>, <code>#111827</code>
+        </div>
+      </div>
+
+      <div class="footer-tokens-strip">
+        <span class="color-pill" style="background: #3B82F6;" title="Primary #3B82F6"></span>
+        <span class="color-pill" style="background: #8B5CF6;" title="Secondary #8B5CF6"></span>
+        <span class="color-pill" style="background: #16A34A;" title="Success #16A34A"></span>
+        <span class="color-pill" style="background: #D97706;" title="Warning #D97706"></span>
+        <span class="color-pill" style="background: #DC2626;" title="Danger #DC2626"></span>
+        <span class="color-pill" style="background: #111827;" title="Text #111827"></span>
+        <span class="color-pill" style="background: #FFFFFF;" title="Surface #FFFFFF"></span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Floating Toast Notification -->
+  <div class="toast-container" id="toast-shelf"></div>
+
+  <!-- Interactive JavaScript Engine -->
+  <script>
+    // Toast Notification Dispatcher
+    function triggerToast(message) {
+      const shelf = document.getElementById('toast-shelf');
+      const toast = document.createElement('div');
+      toast.className = 'toast';
+      toast.innerHTML = `
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#3B82F6" stroke-width="2.5"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+        <span>${message}</span>
+      `;
+      shelf.appendChild(toast);
+      
+      // Animate in
+      requestAnimationFrame(() => {
+        toast.classList.add('show');
+      });
+
+      // Dismiss after 2800ms
+      setTimeout(() => {
+        toast.classList.remove('show');
+        setTimeout(() => toast.remove(), 250);
+      }, 2800);
+    }
+
+    // Copy Color Tokens with Toast Feedback
+    function copyColorToken(hex, name) {
+      navigator.clipboard.writeText(hex).then(() => {
+        triggerToast(`Copied ${name} (${hex}) to clipboard`);
+      }).catch(() => {
+        triggerToast(`Selected ${name}: ${hex}`);
+      });
+    }
+
+    // Export Tokens Button
+    document.getElementById('btn-copy-tokens').addEventListener('click', () => {
+      const tokens = {
+        primary: "#3B82F6",
+        secondary: "#8B5CF6",
+        success: "#16A34A",
+        warning: "#D97706",
+        danger: "#DC2626",
+        surface: "#FFFFFF",
+        text: "#111827",
+        typography: "Inter",
+        typographyScale: [12, 14, 16, 18, 24, 30, 36],
+        spacingScale: [4, 8, 12, 16, 24, 32]
+      };
+      navigator.clipboard.writeText(JSON.stringify(tokens, null, 2)).then(() => {
+        triggerToast("Full tokens JSON copied to clipboard");
+      });
+    });
+
+    // Preview Mode Switcher
+    function setPreviewMode(btn, modeName) {
+      const tabs = btn.parentElement.querySelectorAll('.segment-tab');
+      tabs.forEach(t => t.classList.remove('active'));
+      btn.classList.add('active');
+      triggerToast(`Command mode switched to ${modeName}`);
+    }
+
+    // Toggle Button Loading State Demo
+    function toggleButtonState(btn) {
+      if (btn.dataset.loading === "true") {
+        btn.dataset.loading = "false";
+        btn.innerHTML = `<span>Toggle Loading</span>`;
+        btn.disabled = false;
+        triggerToast("Button state restored to active");
+      } else {
+        btn.dataset.loading = "true";
+        btn.innerHTML = `
+          <svg style="animation: spin 1s linear infinite;" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="2" x2="12" y2="6"/><line x1="12" y1="18" x2="12" y2="22"/><line x1="4.93" y1="4.93" x2="7.76" y2="7.76"/><line x1="16.24" y1="16.24" x2="19.07" y2="19.07"/><line x1="2" y1="12" x2="6" y2="12"/><line x1="18" y1="12" x2="22" y2="12"/><line x1="4.93" y1="19.07" x2="7.76" y2="16.24"/><line x1="16.24" y1="7.76" x2="19.07" y2="4.93"/></svg>
+          <span>Loading...</span>
+        `;
+        btn.disabled = true;
+        setTimeout(() => {
+          if (btn.dataset.loading === "true") {
+            toggleButtonState(btn);
+          }
+        }, 2200);
+      }
+    }
+
+    // Filter Production Data Table
+    function filterTable(status, btn) {
+      const parent = btn.parentElement;
+      parent.querySelectorAll('.segment-tab').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+
+      const rows = document.querySelectorAll('#node-table-body tr');
+      rows.forEach(row => {
+        if (status === 'all' || row.dataset.status === status) {
+          row.style.display = '';
+        } else {
+          row.style.display = 'none';
+        }
+      });
+      triggerToast(`Filtering nodes: ${status.toUpperCase()}`);
+    }
+
+    // Real-time Search in Data Table
+    function searchNodes(query) {
+      const q = query.toLowerCase().trim();
+      const rows = document.querySelectorAll('#node-table-body tr');
+      rows.forEach(row => {
+        const text = row.innerText.toLowerCase();
+        if (text.includes(q)) {
+          row.style.display = '';
+        } else {
+          row.style.display = 'none';
+        }
+      });
+    }
+
+    // Form Demo Validation
+    function validateFormDemo() {
+      const keyInput = document.getElementById('demo-input-error');
+      if (keyInput.value.startsWith('PRD-')) {
+        keyInput.classList.remove('error');
+        const feedback = keyInput.parentElement.querySelector('.error-feedback');
+        if (feedback) feedback.style.display = 'none';
+        triggerToast("Input validation passed: Format verified");
+      } else {
+        keyInput.classList.add('error');
+        const feedback = keyInput.parentElement.querySelector('.error-feedback');
+        if (feedback) feedback.style.display = 'flex';
+        triggerToast("Validation error: Key must start with PRD-");
+      }
+    }
+
+    // Dynamic Telemetry Tick
+    let tickCount = 0;
+    setInterval(() => {
+      tickCount++;
+      const tickElem = document.getElementById('live-tick');
+      if (tickElem) {
+        tickElem.textContent = `TICK: 0.${(18 + (tickCount % 7)).toFixed(0)}s`;
+      }
+    }, 1800);
+
+    // Deploy Node Simulation
+    function addNewNodeModal() {
+      const clusterNames = ['aether-core-ap-east', 'aether-edge-sa-east', 'aether-edge-london'];
+      const randomName = clusterNames[Math.floor(Math.random() * clusterNames.length)];
+      triggerToast(`Provisioning node ${randomName}...`);
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,799 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Loom — Async Video Communication Design System</title>
+  
+  <!-- Inter Font -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    /* Loom Design System Tokens (from DESIGN.md & tokens.css) */
+    :root {
+      /* Surface Palette */
+      --color-bg: #FFFFFF;
+      --color-surface: #F7F7F8;        /* Snow — sidebars, cards, lifted panels */
+      --color-border: #E4E4E7;
+
+      /* Data & Brand Palette */
+      --color-primary: #625DF5;        /* Loom Purple — CTAs, active states, progress */
+      --color-primary-hover: #5048E5;  /* Button hover */
+      --color-text: #1F1F23;           /* Primary text — ink */
+      --color-text-secondary: #6B6D76; /* Slate — timestamps, captions (4.5:1 on white) */
+      --color-text-tertiary: #9B9CA3;  /* Mist — placeholders, disabled only */
+      --color-error: #D64770;          /* Loom Error */
+      --color-recording: #EF440C;      /* Active recording indicator */
+
+      /* Typography */
+      --font-sans: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+      --font-mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+
+      /* Type Scale */
+      --text-micro: 11px;
+      --text-caption: 12px;
+      --text-body-sm: 13px;
+      --text-body: 14px;
+      --text-h2: 18px;
+      --text-h1: 22px;
+      --text-display: 28px;
+
+      /* Shadows (Shadow-only depth on cards, no borders per DESIGN.md §6) */
+      --shadow-card: 0 1px 3px rgba(31, 31, 35, 0.08), 0 4px 12px rgba(31, 31, 35, 0.04);
+      --shadow-card-hover: 0 4px 12px rgba(31, 31, 35, 0.12), 0 8px 24px rgba(31, 31, 35, 0.08);
+      --shadow-overlay: 0 8px 32px rgba(31, 31, 35, 0.16), 0 2px 8px rgba(31, 31, 35, 0.08);
+
+      /* The 4 / 6 / 8 px Radius Ladder */
+      --radius-sm: 4px;                /* Inputs */
+      --radius-md: 6px;                /* Buttons */
+      --radius-lg: 8px;                /* Cards / Video Thumbnails */
+      --radius-pill: 9999px;
+
+      /* Transitions */
+      --transition-base: 200ms ease-out;
+      --transition-fast: 100ms ease-out;
+    }
+
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--color-bg);
+      color: var(--color-text);
+      font-family: var(--font-sans);
+      font-size: var(--text-body);
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Global Navigation Header */
+    .loom-nav {
+      background: var(--color-bg);
+      border-bottom: 1px solid var(--color-border);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      padding: 0 24px;
+    }
+
+    .nav-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      height: 64px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    .brand-cluster {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+      color: var(--color-text);
+    }
+
+    .loom-logo {
+      width: 28px;
+      height: 28px;
+      fill: var(--color-primary);
+    }
+
+    .brand-wordmark {
+      font-size: 20px;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+    }
+
+    /* Search Bar */
+    .search-wrap {
+      display: flex;
+      align-items: center;
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-sm);
+      padding: 6px 12px;
+      width: 320px;
+      gap: 8px;
+      transition: all var(--transition-fast);
+    }
+
+    .search-wrap:focus-within {
+      border-color: var(--color-primary);
+      box-shadow: 0 0 0 3px rgba(98, 93, 245, 0.15);
+      background: var(--color-bg);
+    }
+
+    .search-wrap input {
+      border: none;
+      background: transparent;
+      outline: none;
+      font-family: var(--font-sans);
+      font-size: 14px;
+      width: 100%;
+      color: var(--color-text);
+    }
+
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    /* Buttons */
+    .btn {
+      font-family: var(--font-sans);
+      font-size: 14px;
+      font-weight: 500;
+      line-height: 1.2;
+      padding: 9px 16px;
+      border-radius: var(--radius-md);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      border: 1px solid transparent;
+      text-decoration: none;
+      transition: background var(--transition-fast), transform var(--transition-fast);
+      user-select: none;
+    }
+
+    .btn:focus-visible {
+      outline: 2px solid var(--color-primary);
+      outline-offset: 2px;
+    }
+
+    .btn-primary {
+      background: var(--color-primary);
+      color: #FFFFFF;
+    }
+
+    .btn-primary:hover {
+      background: var(--color-primary-hover);
+    }
+
+    .btn-secondary {
+      background: var(--color-surface);
+      color: var(--color-text);
+      border-color: var(--color-border);
+    }
+
+    .btn-secondary:hover {
+      background: #EFEFF1;
+    }
+
+    .avatar-circle {
+      width: 32px;
+      height: 32px;
+      border-radius: var(--radius-pill);
+      background: #E0E7FF;
+      color: var(--color-primary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 600;
+      font-size: 13px;
+    }
+
+    /* Main Content Container */
+    .main-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 32px 24px 64px 24px;
+      width: 100%;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 40px;
+    }
+
+    /* Featured Video Canvas Section */
+    .featured-video-section {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .video-title-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .video-title {
+      font-size: var(--text-h1);
+      font-weight: 600;
+      letter-spacing: -0.01em;
+      color: var(--color-text);
+    }
+
+    .video-meta-strip {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      font-size: var(--text-caption);
+      color: var(--color-text-secondary);
+    }
+
+    /* Recording Indicator */
+    @keyframes recording-pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.4; transform: scale(0.85); }
+    }
+
+    .recording-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: var(--text-caption);
+      font-weight: 600;
+      color: var(--color-recording);
+      background: #FFF2EE;
+      padding: 3px 8px;
+      border-radius: var(--radius-pill);
+    }
+
+    .recording-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--color-recording);
+      animation: recording-pulse 1.5s ease-in-out infinite;
+    }
+
+    /* Video Player Mockup Container (8px radius, shadow-only) */
+    .video-player-canvas {
+      background: #0F1015;
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-card);
+      overflow: hidden;
+      aspect-ratio: 16 / 9;
+      max-height: 520px;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      color: #FFFFFF;
+    }
+
+    /* Video Inside Scene */
+    .video-mockup-scene {
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at 60% 40%, #1e1b4b 0%, #090a10 70%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .camera-bubble-overlay {
+      position: absolute;
+      bottom: 60px;
+      left: 24px;
+      width: 96px;
+      height: 96px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #4f46e5, #625DF5);
+      border: 3px solid #FFFFFF;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 32px;
+      user-select: none;
+    }
+
+    .play-center-btn {
+      width: 64px;
+      height: 64px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.9);
+      color: var(--color-primary);
+      border: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      transition: transform var(--transition-fast), background var(--transition-fast);
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    }
+
+    .play-center-btn:hover {
+      transform: scale(1.08);
+      background: #FFFFFF;
+    }
+
+    /* Video Controls Bar */
+    .video-controls-bar {
+      position: relative;
+      z-index: 10;
+      background: linear-gradient(0deg, rgba(0, 0, 0, 0.85) 0%, transparent 100%);
+      padding: 16px 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .progress-bar-wrap {
+      width: 100%;
+      height: 5px;
+      background: rgba(255, 255, 255, 0.25);
+      border-radius: 3px;
+      cursor: pointer;
+      position: relative;
+    }
+
+    .progress-bar-fill {
+      width: 48%;
+      height: 100%;
+      background: var(--color-primary);
+      border-radius: 3px;
+    }
+
+    .controls-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 13px;
+    }
+
+    .controls-left, .controls-right {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .control-btn {
+      background: none;
+      border: none;
+      color: #FFFFFF;
+      cursor: pointer;
+      font-size: 14px;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    /* Floating Reactions Bar */
+    .reactions-bar {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--color-surface);
+      border-radius: var(--radius-pill);
+      padding: 6px 14px;
+      width: fit-content;
+      margin-top: 8px;
+    }
+
+    .reaction-pill {
+      background: var(--color-bg);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-pill);
+      padding: 4px 10px;
+      font-size: 13px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      user-select: none;
+      transition: all var(--transition-fast);
+    }
+
+    .reaction-pill:hover {
+      border-color: var(--color-primary);
+      transform: translateY(-2px);
+    }
+
+    /* Video Library Grid */
+    .section-heading {
+      font-size: var(--text-h2);
+      font-weight: 600;
+      color: var(--color-text);
+      margin-bottom: 16px;
+    }
+
+    .video-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 24px;
+    }
+
+    /* Video Thumbnail Card (Shadow-only, no borders!) */
+    .thumbnail-card {
+      background: var(--color-bg);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-card);
+      overflow: hidden;
+      cursor: pointer;
+      transition: transform var(--transition-base), box-shadow var(--transition-base);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .thumbnail-card:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-card-hover);
+    }
+
+    .thumb-preview-box {
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      background: #1e1b4b;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #FFFFFF;
+    }
+
+    .thumb-duration {
+      position: absolute;
+      bottom: 8px;
+      right: 8px;
+      background: rgba(0, 0, 0, 0.75);
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 11px;
+      font-weight: 500;
+    }
+
+    .thumb-info {
+      padding: 14px 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .thumb-title {
+      font-weight: 600;
+      font-size: 14px;
+      color: var(--color-text);
+      line-height: 1.3;
+    }
+
+    .thumb-meta {
+      font-size: var(--text-caption);
+      color: var(--color-text-secondary);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    /* Design Tokens Foundations Drawer */
+    .token-showcase-card {
+      background: var(--color-surface);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-card);
+      padding: 28px;
+    }
+
+    .token-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 16px;
+      margin-top: 16px;
+    }
+
+    .token-box {
+      background: var(--color-bg);
+      border-radius: var(--radius-md);
+      box-shadow: var(--shadow-card);
+      overflow: hidden;
+    }
+
+    .token-swatch {
+      height: 54px;
+      display: flex;
+      align-items: flex-end;
+      padding: 8px;
+      font-family: var(--font-mono);
+      font-size: 11px;
+      font-weight: 600;
+    }
+
+    .token-meta {
+      padding: 10px 12px;
+      font-size: 12px;
+    }
+
+    .token-var {
+      font-family: var(--font-mono);
+      font-weight: 600;
+      color: var(--color-primary);
+    }
+
+    /* Footer */
+    .loom-footer {
+      border-top: 1px solid var(--color-border);
+      padding: 24px;
+      font-size: var(--text-caption);
+      color: var(--color-text-secondary);
+      margin-top: 32px;
+    }
+
+    .footer-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navigation Header -->
+  <header class="loom-nav">
+    <div class="nav-inner">
+      <div style="display: flex; align-items: center; gap: 24px;">
+        <a href="#" class="brand-cluster">
+          <svg class="loom-logo" viewBox="0 0 24 24">
+            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2Zm-1 14.5v-9l6 4.5-6 4.5Z"/>
+          </svg>
+          <span class="brand-wordmark">Loom</span>
+        </a>
+
+        <!-- Search with 4px radius -->
+        <div class="search-wrap">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color: var(--color-text-secondary);"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+          <input type="text" placeholder="Search Loom videos &amp; tags...">
+        </div>
+      </div>
+
+      <div class="nav-actions">
+        <button class="btn btn-primary" onclick="alert('Record popup activated!')">
+          <span style="font-size: 16px;">⏺</span>
+          <span>Record a Loom</span>
+        </button>
+        <div class="avatar-circle">SC</div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main View -->
+  <main class="main-container">
+
+    <!-- Featured Video-First Experience -->
+    <section class="featured-video-section">
+      <div class="video-title-row">
+        <div>
+          <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 4px;">
+            <div class="recording-badge">
+              <span class="recording-dot"></span>
+              <span>LIVE RECORDING</span>
+            </div>
+            <span style="font-size: var(--text-caption); color: var(--color-text-secondary);">4 mins ago</span>
+          </div>
+          <h1 class="video-title">Q3 Design System Architecture Walkthrough &amp; Vector Ingress</h1>
+        </div>
+
+        <div style="display: flex; gap: 8px;">
+          <button class="btn btn-secondary" onclick="copyLink()">Copy link</button>
+          <button class="btn btn-secondary" onclick="alert('Share modal opened.')">Share</button>
+        </div>
+      </div>
+
+      <!-- Video Player Canvas -->
+      <div class="video-player-canvas">
+        <div class="video-mockup-scene">
+          <button class="play-center-btn" onclick="togglePlayback(this)">▶</button>
+          <div class="camera-bubble-overlay">👩‍💻</div>
+        </div>
+
+        <!-- Player Controls -->
+        <div class="video-controls-bar">
+          <div class="progress-bar-wrap" onclick="seekVideo(event)">
+            <div class="progress-bar-fill" id="videoProgress"></div>
+          </div>
+          <div class="controls-row">
+            <div class="controls-left">
+              <button class="control-btn" onclick="togglePlayback()">Play</button>
+              <span>02:14 / 04:18</span>
+            </div>
+            <div class="controls-right">
+              <button class="control-btn" onclick="cycleSpeed(this)">1.2x</button>
+              <button class="control-btn">1080p</button>
+              <button class="control-btn">⛶</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Floating Reactions Strip -->
+      <div class="reactions-bar">
+        <span style="font-size: 12px; color: var(--color-text-secondary); font-weight: 500; margin-right: 4px;">Add reaction:</span>
+        <button class="reaction-pill" onclick="addReaction('❤️')"><span>❤️</span> <span id="r1">14</span></button>
+        <button class="reaction-pill" onclick="addReaction('👏')"><span>👏</span> <span id="r2">28</span></button>
+        <button class="reaction-pill" onclick="addReaction('🚀')"><span>🚀</span> <span id="r3">9</span></button>
+        <button class="reaction-pill" onclick="addReaction('💡')"><span>💡</span> <span id="r4">6</span></button>
+      </div>
+    </section>
+
+    <!-- Video Library Grid -->
+    <section>
+      <h2 class="section-heading">Recent Async Recordings</h2>
+      <div class="video-grid">
+
+        <!-- Card 1 -->
+        <div class="thumbnail-card" onclick="playVideo('Sprint Review')">
+          <div class="thumb-preview-box" style="background: linear-gradient(135deg, #1e1b4b, #312e81);">
+            <div style="font-size: 32px;">📊</div>
+            <span class="thumb-duration">03:12</span>
+          </div>
+          <div class="thumb-info">
+            <div class="thumb-title">Sprint Review: Component Library Tokens</div>
+            <div class="thumb-meta">
+              <span>Sarah Chen</span>
+              <span>·</span>
+              <span>184 views</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 2 -->
+        <div class="thumbnail-card" onclick="playVideo('Customer Feedback')">
+          <div class="thumb-preview-box" style="background: linear-gradient(135deg, #431407, #7c2d12);">
+            <div style="font-size: 32px;">🎯</div>
+            <span class="thumb-duration">05:40</span>
+          </div>
+          <div class="thumb-info">
+            <div class="thumb-title">Customer Feedback: Onboarding Friction</div>
+            <div class="thumb-meta">
+              <span>Alex Rivera</span>
+              <span>·</span>
+              <span>92 views</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 3 -->
+        <div class="thumbnail-card" onclick="playVideo('Quick Sync')">
+          <div class="thumb-preview-box" style="background: linear-gradient(135deg, #022c22, #065f46);">
+            <div style="font-size: 32px;">⚡</div>
+            <span class="thumb-duration">01:15</span>
+          </div>
+          <div class="thumb-info">
+            <div class="thumb-title">Quick Sync: API Schema Changes</div>
+            <div class="thumb-meta">
+              <span>Marcus Vance</span>
+              <span>·</span>
+              <span>45 views</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Loom Design Tokens Foundation Audit -->
+    <section class="token-showcase-card" id="tokens">
+      <h2 class="section-heading" style="margin-bottom: 4px;">Loom Design Tokens &amp; Geometry Ladder</h2>
+      <p style="font-size: var(--text-caption); color: var(--color-text-secondary); margin-bottom: 16px;">
+        Strict adherence to DESIGN.md: 4/6/8 px radius ladder and shadow-only card elevation.
+      </p>
+
+      <div class="token-grid">
+        <!-- Token 1 -->
+        <div class="token-box">
+          <div class="token-swatch" style="background-color: #625DF5; color: #FFFFFF;">
+            #625DF5
+          </div>
+          <div class="token-meta">
+            <div class="token-var">--color-primary</div>
+            <div style="color: var(--color-text-secondary);">Loom Purple CTA</div>
+          </div>
+        </div>
+
+        <!-- Token 2 -->
+        <div class="token-box">
+          <div class="token-swatch" style="background-color: #F7F7F8; color: #1F1F23; border-bottom: 1px solid #E4E4E7;">
+            #F7F7F8
+          </div>
+          <div class="token-meta">
+            <div class="token-var">--color-surface</div>
+            <div style="color: var(--color-text-secondary);">Snow Surface Neutral</div>
+          </div>
+        </div>
+
+        <!-- Token 3 -->
+        <div class="token-box">
+          <div class="token-swatch" style="background-color: #EF440C; color: #FFFFFF;">
+            #EF440C
+          </div>
+          <div class="token-meta">
+            <div class="token-var">--color-recording</div>
+            <div style="color: var(--color-text-secondary);">Pulsing Recording Dot</div>
+          </div>
+        </div>
+
+        <!-- Token 4 -->
+        <div class="token-box">
+          <div class="token-swatch" style="background-color: #1F1F23; color: #FFFFFF;">
+            #1F1F23
+          </div>
+          <div class="token-meta">
+            <div class="token-var">--color-text</div>
+            <div style="color: var(--color-text-secondary);">Ink Primary Text</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Global Footer -->
+  <footer class="loom-footer">
+    <div class="footer-inner">
+      <div>&copy; 2026 Loom Design System · Rebuilt for Open Design Systems.</div>
+      <div>Video-first async communication architecture.</div>
+    </div>
+  </footer>
+
+  <script>
+    function togglePlayback(btn) {
+      alert('Video playback toggled.');
+    }
+
+    function seekVideo(e) {
+      const bar = e.currentTarget;
+      const rect = bar.getBoundingClientRect();
+      const pct = Math.max(0, Math.min(100, ((e.clientX - rect.left) / rect.width) * 100));
+      document.getElementById('videoProgress').style.width = pct + '%';
+    }
+
+    function cycleSpeed(btn) {
+      const speeds = ['1.0x', '1.2x', '1.5x', '2.0x'];
+      const current = speeds.indexOf(btn.textContent);
+      btn.textContent = speeds[(current + 1) % speeds.length];
+    }
+
+    function addReaction(emoji) {
+      alert(`Added reaction: ${emoji}`);
+    }
+
+    function copyLink() {
+      navigator.clipboard.writeText(window.location.href).then(() => {
+        alert('Loom video link copied to clipboard!');
+      });
+    }
+
+    function playVideo(title) {
+      alert(`Opening async recording: ${title}`);
+    }
+  </script>
+</body>
+</html>

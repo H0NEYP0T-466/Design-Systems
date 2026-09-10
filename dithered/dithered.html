@@ -1,0 +1,1095 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>DITHER LAB // Retro Dot-Pattern &amp; Halftone Graphics Engine</title>
+  <meta name="description" content="Dot-pattern rendering technique simulating shades with limited palettes for nostalgic, retro, high-contrast visuals. Built with Space Grotesk, Open Sans, IBM Plex Mono, and Primary #3B82F6." />
+
+  <!-- Google Fonts: Space Grotesk, Open Sans, IBM Plex Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&family=Open+Sans:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    /* ─────────────────────────────────────────────────────────────────
+       DITHERED DESIGN SYSTEM SPECIFICATION & DESIGN TOKENS
+       Directly sourced from /open-design/design-systems/dithered/DESIGN.md
+       ───────────────────────────────────────────────────────────────── */
+    :root {
+      /* Colors (DESIGN.md §2) */
+      --color-primary: #3B82F6;
+      --color-primary-hover: #2563eb;
+      --color-secondary: #8B5CF6;
+      --color-secondary-hover: #7c3aed;
+      --color-success: #16A34A;
+      --color-warning: #D97706;
+      --color-danger: #DC2626;
+      --color-surface: #FFFFFF;
+      --color-text: #111827;
+      --color-neutral: #FFFFFF;
+
+      /* Dither Pattern Assets & Accents */
+      --color-border-subtle: #E5E7EB;
+      --color-border-hard: #111827;
+      --color-dither-dot: rgba(17, 24, 39, 0.15);
+      --color-slate-bg: #F8FAFC;
+
+      /* Typography Families (DESIGN.md §3) */
+      --font-display: "Space Grotesk", system-ui, sans-serif;
+      --font-primary: "Open Sans", system-ui, sans-serif;
+      --font-body: "Open Sans", system-ui, sans-serif;
+      --font-mono: "IBM Plex Mono", monospace;
+
+      /* Typography Scale (DESIGN.md §3: 14/16/18/24/32/40) */
+      --text-xs: 12px;
+      --text-sm: 14px;
+      --text-base: 16px;
+      --text-lg: 18px;
+      --text-xl: 24px;
+      --text-2xl: 32px;
+      --text-3xl: 40px;
+      --text-4xl: 56px;
+
+      /* Spacing Scale (DESIGN.md §4: 4/8/12/16/24/32) */
+      --space-1: 4px;
+      --space-2: 8px;
+      --space-3: 12px;
+      --space-4: 16px;
+      --space-6: 24px;
+      --space-8: 32px;
+      --space-12: 48px;
+      --space-16: 64px;
+      --space-20: 80px;
+
+      /* Motion (150–250ms stable easing per DESIGN.md §7) */
+      --motion-fast: 150ms;
+      --motion-base: 220ms;
+      --ease-standard: cubic-bezier(0.16, 1, 0.3, 1);
+
+      /* Radii & Focus */
+      --radius-sm: 4px;
+      --radius-md: 8px;
+      --radius-lg: 12px;
+      --focus-ring: 0 0 0 3px rgba(59, 130, 246, 0.45);
+      --container-max: 1220px;
+    }
+
+    /* ─── Global Reset & Clean Base ────────────────────────────────── */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      background-color: var(--color-surface);
+      color: var(--color-text);
+    }
+
+    body {
+      background-color: var(--color-surface);
+      color: var(--color-text);
+      font-family: var(--font-body);
+      font-size: var(--text-base);
+      line-height: 1.55;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      overflow-x: hidden;
+    }
+
+    /* Dither Dot-Pattern Mesh Background */
+    .dither-mesh-bg {
+      background-image: 
+        radial-gradient(var(--color-dither-dot) 1px, transparent 1px);
+      background-size: 6px 6px;
+    }
+
+    .dither-dense-bg {
+      background-image: 
+        radial-gradient(rgba(59, 130, 246, 0.25) 1px, transparent 1px);
+      background-size: 4px 4px;
+    }
+
+    /* Headings carry Space Grotesk retro personality */
+    h1, h2, h3, h4 {
+      font-family: var(--font-display);
+      line-height: 1.15;
+      color: var(--color-text);
+      letter-spacing: -0.02em;
+    }
+
+    h1 {
+      font-size: var(--text-4xl);
+      font-weight: 700;
+    }
+
+    h2 {
+      font-size: var(--text-3xl);
+      font-weight: 700;
+    }
+
+    h3 {
+      font-size: var(--text-2xl);
+      font-weight: 600;
+    }
+
+    p {
+      color: var(--color-text);
+      line-height: 1.55;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    :focus-visible {
+      outline: none;
+      box-shadow: var(--focus-ring);
+    }
+
+    /* ─── Button Components (DESIGN.md §6) ─────────────────────────── */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--space-2);
+      padding: 10px 24px;
+      font-family: var(--font-display);
+      font-size: var(--text-sm);
+      font-weight: 600;
+      border-radius: var(--radius-sm);
+      border: 1px solid transparent;
+      cursor: pointer;
+      text-decoration: none;
+      white-space: nowrap;
+      transition: background-color var(--motion-fast) var(--ease-standard),
+                  transform var(--motion-fast) var(--ease-standard),
+                  border-color var(--motion-fast) var(--ease-standard);
+    }
+
+    /* Primary Action uses #3B82F6 per DESIGN.md §6 */
+    .btn-primary {
+      background-color: var(--color-primary);
+      color: #FFFFFF;
+      border-color: var(--color-primary);
+    }
+
+    .btn-primary:hover {
+      background-color: var(--color-primary-hover);
+      border-color: var(--color-primary-hover);
+      transform: translateY(-1px);
+    }
+
+    .btn-primary:active {
+      transform: translateY(0);
+    }
+
+    /* Secondary Actions Stay Neutral per DESIGN.md §6 */
+    .btn-neutral {
+      background-color: var(--color-surface);
+      color: var(--color-text);
+      border: 1px solid var(--color-border-hard);
+    }
+
+    .btn-neutral:hover {
+      background-color: var(--color-slate-bg);
+      border-color: var(--color-primary);
+      color: var(--color-primary);
+      transform: translateY(-1px);
+    }
+
+    /* ─── Layout Primitives ────────────────────────────────────────── */
+    .container {
+      max-width: var(--container-max);
+      margin: 0 auto;
+      padding: 0 var(--space-6);
+    }
+
+    .section-spacing {
+      padding-block: var(--space-16);
+      border-bottom: 1px solid var(--color-border-subtle);
+    }
+
+    /* ─── Top Telemetry & Header ───────────────────────────────────── */
+    .dither-top-bar {
+      background-color: #0F172A;
+      color: #94A3B8;
+      font-family: var(--font-mono);
+      font-size: 12px;
+      padding: 6px var(--space-6);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid #1E293B;
+    }
+
+    .top-header {
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      height: 70px;
+      background-color: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(8px);
+      border-bottom: 1px solid var(--color-border-subtle);
+      display: flex;
+      align-items: center;
+    }
+
+    .nav-inner {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      width: 100%;
+    }
+
+    .brand-logo-box {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .dither-icon {
+      width: 30px;
+      height: 30px;
+      background: #111827;
+      background-image: radial-gradient(#FFFFFF 1px, transparent 1px);
+      background-size: 3px 3px;
+      border: 1px solid #111827;
+      border-radius: var(--radius-sm);
+    }
+
+    .brand-text {
+      font-family: var(--font-display);
+      font-size: 20px;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      list-style: none;
+      gap: var(--space-6);
+    }
+
+    .nav-links a {
+      font-family: var(--font-display);
+      font-size: var(--text-sm);
+      font-weight: 500;
+      color: #4B5563;
+      transition: color var(--motion-fast);
+    }
+
+    .nav-links a:hover {
+      color: var(--color-primary);
+    }
+
+    /* ─── Hero Section ─────────────────────────────────────────────── */
+    .hero-section {
+      padding: var(--space-16) 0;
+      border-bottom: 1px solid var(--color-border-subtle);
+      position: relative;
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1.15fr 0.85fr;
+      gap: var(--space-12);
+      align-items: center;
+    }
+
+    .hero-tagline-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 4px 12px;
+      background-color: #EFF6FF;
+      border: 1px solid #DBEAFE;
+      border-radius: var(--radius-sm);
+      font-family: var(--font-mono);
+      font-size: var(--text-xs);
+      font-weight: 600;
+      color: var(--color-primary);
+      margin-bottom: var(--space-4);
+    }
+
+    .hero-title {
+      margin-bottom: var(--space-4);
+    }
+
+    .hero-lead-text {
+      font-size: var(--text-lg);
+      line-height: 1.5;
+      color: #4B5563;
+      margin-bottom: var(--space-6);
+      max-width: 540px;
+    }
+
+    .hero-actions-row {
+      display: flex;
+      align-items: center;
+      gap: var(--space-3);
+      margin-bottom: var(--space-8);
+      flex-wrap: wrap;
+    }
+
+    /* Interactive Dither Preview Card */
+    .dither-card-preview {
+      background-color: var(--color-surface);
+      border: 2px solid var(--color-border-hard);
+      border-radius: var(--radius-md);
+      padding: var(--space-6);
+      box-shadow: 4px 4px 0 #111827;
+    }
+
+    .preview-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid var(--color-border-subtle);
+      padding-bottom: var(--space-3);
+      margin-bottom: var(--space-4);
+      font-family: var(--font-mono);
+      font-size: 13px;
+    }
+
+    .bayer-matrix-display {
+      background-color: #0F172A;
+      color: #38BDF8;
+      font-family: var(--font-mono);
+      font-size: 13px;
+      padding: var(--space-4);
+      border-radius: var(--radius-sm);
+      line-height: 1.6;
+      margin-bottom: var(--space-4);
+    }
+
+    /* ─── Interactive Client-Side Dither Engine Section ────────────── */
+    .engine-section {
+      padding: var(--space-16) 0;
+      background-color: var(--color-slate-bg);
+      border-bottom: 1px solid var(--color-border-subtle);
+    }
+
+    .engine-workspace {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--space-8);
+      background-color: var(--color-surface);
+      border: 1px solid var(--color-border-subtle);
+      border-radius: var(--radius-lg);
+      padding: var(--space-8);
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+    }
+
+    .canvas-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background-color: #F1F5F9;
+      border: 1px solid #CBD5E1;
+      border-radius: var(--radius-md);
+      padding: var(--space-4);
+      min-height: 320px;
+    }
+
+    #ditherCanvas {
+      background-color: #FFFFFF;
+      image-rendering: pixelated;
+      max-width: 100%;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+
+    .engine-controls {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .control-item {
+      margin-bottom: var(--space-4);
+    }
+
+    .control-label-row {
+      display: flex;
+      justify-content: space-between;
+      font-family: var(--font-mono);
+      font-size: 13px;
+      font-weight: 600;
+      margin-bottom: var(--space-1);
+    }
+
+    .slider-range {
+      width: 100%;
+      height: 6px;
+      accent-color: var(--color-primary);
+      cursor: pointer;
+    }
+
+    .algo-btn-group {
+      display: flex;
+      gap: var(--space-2);
+      flex-wrap: wrap;
+      margin-top: var(--space-2);
+    }
+
+    .algo-btn {
+      background-color: var(--color-surface);
+      border: 1px solid var(--color-border-hard);
+      padding: 6px 12px;
+      font-family: var(--font-mono);
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      border-radius: var(--radius-sm);
+      transition: all var(--motion-fast);
+    }
+
+    .algo-btn.active {
+      background-color: var(--color-primary);
+      color: #FFFFFF;
+      border-color: var(--color-primary);
+    }
+
+    /* ─── Clear Content Blocks (DESIGN.md §5) ──────────────────────── */
+    .features-section {
+      padding: var(--space-16) 0;
+      background-color: var(--color-surface);
+      border-bottom: 1px solid var(--color-border-subtle);
+    }
+
+    .section-head {
+      max-width: 640px;
+      margin-bottom: var(--space-12);
+    }
+
+    .section-mono-tag {
+      font-family: var(--font-mono);
+      font-size: var(--text-xs);
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--color-primary);
+      margin-bottom: var(--space-2);
+      display: block;
+    }
+
+    .features-grid-3up {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: var(--space-6);
+    }
+
+    .feature-card {
+      background-color: var(--color-surface);
+      border: 1px solid var(--color-border-subtle);
+      border-radius: var(--radius-md);
+      padding: var(--space-6);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: border-color var(--motion-fast), transform var(--motion-fast);
+    }
+
+    .feature-card:hover {
+      border-color: var(--color-primary);
+      transform: translateY(-2px);
+    }
+
+    .feature-icon-retro {
+      width: 44px;
+      height: 44px;
+      background-color: #EFF6FF;
+      border: 1px solid #DBEAFE;
+      color: var(--color-primary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: var(--radius-sm);
+      margin-bottom: var(--space-4);
+      font-family: var(--font-mono);
+      font-weight: 700;
+    }
+
+    .feature-card h4 {
+      font-size: var(--text-xl);
+      margin-bottom: var(--space-2);
+    }
+
+    .feature-card p {
+      font-size: var(--text-sm);
+      color: #4B5563;
+      margin-bottom: var(--space-6);
+      flex: 1;
+    }
+
+    /* ─── Bayer Matrix & Specification Table ───────────────────────── */
+    .table-section {
+      padding: var(--space-16) 0;
+      background-color: var(--color-slate-bg);
+      border-bottom: 1px solid var(--color-border-subtle);
+    }
+
+    .dither-specs-table {
+      width: 100%;
+      border-collapse: collapse;
+      background-color: var(--color-surface);
+      border: 1px solid var(--color-border-subtle);
+      border-radius: var(--radius-md);
+      overflow: hidden;
+    }
+
+    .dither-specs-table th, .dither-specs-table td {
+      padding: var(--space-4);
+      text-align: left;
+      border-bottom: 1px solid var(--color-border-subtle);
+      font-family: var(--font-mono);
+      font-size: 13px;
+    }
+
+    .dither-specs-table th {
+      background-color: #F1F5F9;
+      font-family: var(--font-display);
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--color-text);
+    }
+
+    /* ─── Newsletter Band ──────────────────────────────────────────── */
+    .cta-band {
+      padding: var(--space-16) 0;
+      background-color: var(--color-surface);
+      text-align: center;
+    }
+
+    .cta-box {
+      max-width: 580px;
+      margin: 0 auto;
+    }
+
+    .input-row {
+      display: flex;
+      gap: var(--space-2);
+      margin-top: var(--space-6);
+    }
+
+    .retro-input {
+      flex: 1;
+      height: 46px;
+      border: 1px solid var(--color-border-hard);
+      border-radius: var(--radius-sm);
+      padding: 0 var(--space-4);
+      font-family: var(--font-mono);
+      font-size: 14px;
+    }
+
+    .retro-input:focus {
+      outline: none;
+      border-color: var(--color-primary);
+      box-shadow: var(--focus-ring);
+    }
+
+    /* ─── Footer ───────────────────────────────────────────────────── */
+    .site-footer {
+      background-color: #0F172A;
+      color: #94A3B8;
+      padding: var(--space-12) 0 var(--space-6);
+      font-family: var(--font-mono);
+      font-size: 13px;
+    }
+
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 1.5fr repeat(3, 1fr);
+      gap: var(--space-8);
+      margin-bottom: var(--space-8);
+    }
+
+    .footer-col-title {
+      color: #FFFFFF;
+      font-family: var(--font-display);
+      font-size: 15px;
+      margin-bottom: var(--space-3);
+    }
+
+    .footer-links {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-2);
+    }
+
+    .footer-links a {
+      color: #94A3B8;
+      transition: color var(--motion-fast);
+    }
+
+    .footer-links a:hover {
+      color: var(--color-primary);
+    }
+
+    /* ─── Responsive Queries ───────────────────────────────────────── */
+    @media (max-width: 1024px) {
+      .hero-grid { grid-template-columns: 1fr; }
+      .engine-workspace { grid-template-columns: 1fr; }
+      .features-grid-3up { grid-template-columns: 1fr; }
+      .footer-grid { grid-template-columns: repeat(2, 1fr); }
+      h1 { font-size: 42px; }
+    }
+
+    @media (max-width: 640px) {
+      .nav-links { display: none; }
+      .input-row { flex-direction: column; }
+      .footer-grid { grid-template-columns: 1fr; }
+      .dither-top-bar { display: none; }
+    }
+  </style>
+</head>
+<body class="dither-mesh-bg">
+
+  <!-- Top Telemetry Ribbon -->
+  <div class="dither-top-bar">
+    <div>
+      <span>RENDER MODE: BAYER 4x4 MATRIX · 1-BIT MONOCHROME / 4-COLOR PALETTE</span>
+    </div>
+    <div>
+      <span>KERNEL CLK: 60 FPS · ALGORITHM: ORDERED SPATIAL DITHER</span>
+    </div>
+  </div>
+
+  <!-- Header -->
+  <header class="top-header">
+    <div class="container nav-inner">
+      <a href="#hero" class="brand-logo-box" aria-label="Dither Lab Home">
+        <div class="dither-icon"></div>
+        <span class="brand-text">DITHER LAB</span>
+      </a>
+
+      <nav aria-label="Main Navigation">
+        <ul class="nav-links">
+          <li><a href="#engine">Engine Studio</a></li>
+          <li><a href="#features">Algorithms</a></li>
+          <li><a href="#specs">Threshold Matrix</a></li>
+          <li><a href="#export">Export</a></li>
+        </ul>
+      </nav>
+
+      <div>
+        <a href="#engine" class="btn btn-primary">LAUNCH STUDIO</a>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <!-- HERO SECTION: Retro-Nostalgic Dot-Pattern Atmosphere -->
+    <section class="hero-section" id="hero">
+      <div class="container hero-grid">
+        <div>
+          <div class="hero-tagline-badge">
+            <span>BIT-DEPTH SIMULATION ENGINE</span>
+          </div>
+
+          <h1 class="hero-title">
+            Art of the quantized pixel. Authentic dithering.
+          </h1>
+
+          <p class="hero-lead-text">
+            Simulate vintage display buffers, 1-bit Macintosh graphics, and nostalgic halftone print screens with mathematical spatial quantization.
+          </p>
+
+          <div class="hero-actions-row">
+            <a href="#engine" class="btn btn-primary" id="openEngineBtn">TEST BITMAP SHADER</a>
+            <a href="#specs" class="btn btn-neutral">VIEW BAYER MATRIX</a>
+          </div>
+
+          <div style="font-family: var(--font-mono); font-size: 12px; color: #64748B;">
+            <span>PALETTE: #3B82F6 · #8B5CF6 · #16A34A · #D97706 · #DC2626</span>
+          </div>
+        </div>
+
+        <!-- Right Preview Card -->
+        <div class="dither-card-preview">
+          <div class="preview-header">
+            <span>BAYER 4x4 THRESHOLD MATRIX</span>
+            <span style="color: var(--color-primary);">QUANTIZED</span>
+          </div>
+
+          <div class="bayer-matrix-display">
+            M4 = 1/16 × [<br>
+            &nbsp;&nbsp;[  0,  8,  2, 10 ],<br>
+            &nbsp;&nbsp;[ 12,  4, 14,  6 ],<br>
+            &nbsp;&nbsp;[  3, 11,  1,  9 ],<br>
+            &nbsp;&nbsp;[ 15,  7, 13,  5 ]<br>
+            ]
+          </div>
+
+          <p style="font-size: 13px; color: #4B5563;">
+            Periodic spatial noise redistribution disperses quantization error across neighboring scanlines without visible banding artifacts.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- INTERACTIVE DITHER ENGINE STUDIO -->
+    <section class="engine-section" id="engine">
+      <div class="container">
+        <div class="section-head">
+          <span class="section-mono-tag">LIVE GRAPHICS SHADER</span>
+          <h2>INTERACTIVE DITHERING CANVAS</h2>
+          <p style="font-size: var(--text-base); color: #4B5563;">
+            Experiment with threshold levels, dot spread, and algorithm models directly in the viewport.
+          </p>
+        </div>
+
+        <div class="engine-workspace">
+          <!-- Canvas Viewport -->
+          <div class="canvas-container">
+            <canvas id="ditherCanvas" width="280" height="200"></canvas>
+            <div style="font-family: var(--font-mono); font-size: 11px; color: #64748B; margin-top: 8px;">
+              CANVAS: 280x200 1-BIT BUFFER
+            </div>
+          </div>
+
+          <!-- Controls -->
+          <div class="engine-controls">
+            <div>
+              <div class="control-item">
+                <div class="control-label-row">
+                  <span>DITHER ALGORITHM:</span>
+                  <span id="algoLabel" style="color: var(--color-primary);">BAYER 4x4</span>
+                </div>
+                <div class="algo-btn-group">
+                  <button class="algo-btn active" data-algo="bayer">Bayer 4x4</button>
+                  <button class="algo-btn" data-algo="halftone">Halftone Dot</button>
+                  <button class="algo-btn" data-algo="random">Random Noise</button>
+                </div>
+              </div>
+
+              <div class="control-item">
+                <div class="control-label-row">
+                  <span>THRESHOLD CONTRAST:</span>
+                  <span id="threshVal">128</span>
+                </div>
+                <input type="range" min="30" max="220" value="128" class="slider-range" id="threshSlider" />
+              </div>
+
+              <div class="control-item">
+                <div class="control-label-row">
+                  <span>DOT PITCH / DENSITY:</span>
+                  <span id="pitchVal">4 px</span>
+                </div>
+                <input type="range" min="2" max="8" value="4" class="slider-range" id="pitchSlider" />
+              </div>
+            </div>
+
+            <div style="display: flex; gap: 8px; margin-top: 16px;">
+              <button class="btn btn-primary" id="invertBtn" style="flex: 1;">INVERT BITMAP</button>
+              <button class="btn btn-neutral" id="renderPatternBtn" style="flex: 1;">NEXT TEST PATTERN</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CLEAR CONTENT FEATURE BLOCKS (DESIGN.md §5) -->
+    <section class="features-section" id="features">
+      <div class="container">
+        <div class="section-head">
+          <span class="section-mono-tag">CORE CAPABILITIES</span>
+          <h2>RETRO-NOSTALGIC VISUAL PIPELINE</h2>
+          <p style="font-size: var(--text-base); color: #4B5563;">
+            Engineered for high-contrast web experiences with tiny asset payloads and distinctive visual character.
+          </p>
+        </div>
+
+        <div class="features-grid-3up">
+          <!-- Feature Card 1 -->
+          <div class="feature-card">
+            <div>
+              <div class="feature-icon-retro">01</div>
+              <h4>Bayer Ordered Dithering</h4>
+              <p>Generates cross-hatch stipple textures through recursive index matrices, perfect for simulating vintage CRT monitors and LCD game consoles.</p>
+            </div>
+            <span style="font-family: var(--font-mono); font-size: 12px; color: var(--color-primary);">M4 &amp; M8 MATRICES</span>
+          </div>
+
+          <!-- Feature Card 2 -->
+          <div class="feature-card">
+            <div>
+              <div class="feature-icon-retro" style="color: var(--color-secondary); background-color: #F3E8FF; border-color: #E9D5FF;">02</div>
+              <h4>Error Diffusion Shaders</h4>
+              <p>Floyd-Steinberg and Atkinson algorithms propagate residual quantization error across diagonal pixels for natural organic shading.</p>
+            </div>
+            <span style="font-family: var(--font-mono); font-size: 12px; color: var(--color-secondary);">NEAREST-NEIGHBOR</span>
+          </div>
+
+          <!-- Feature Card 3 -->
+          <div class="feature-card">
+            <div>
+              <div class="feature-icon-retro" style="color: var(--color-success); background-color: #DCFCE7; border-color: #BBF7D0;">03</div>
+              <h4>Ultra-Low Payload Size</h4>
+              <p>1-bit quantized assets compress down to 10% the size of standard PNGs, delivering lightning-fast page speed without sacrificing aesthetic grit.</p>
+            </div>
+            <span style="font-family: var(--font-mono); font-size: 12px; color: var(--color-success);">&lt; 4 KB BITMAPS</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- MATRIX SPECIFICATIONS TABLE -->
+    <section class="table-section" id="specs">
+      <div class="container">
+        <div class="section-head">
+          <span class="section-mono-tag">TECHNICAL ARCHITECTURE</span>
+          <h2>SPATIAL ERROR BENCHMARK</h2>
+        </div>
+
+        <table class="dither-specs-table">
+          <thead>
+            <tr>
+              <th>ALGORITHM</th>
+              <th>MATRIX ORDER</th>
+              <th>COMPUTATIONAL COMPLEXITY</th>
+              <th>ARTIFACT PROFILE</th>
+              <th>PAYLOAD COMPRESSION</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Bayer 2x2</strong></td>
+              <td>2 × 2 Matrix</td>
+              <td>O(1) Constant Look-up</td>
+              <td>Coarse checkerboard grid</td>
+              <td>94.2% Reduction</td>
+            </tr>
+            <tr>
+              <td><strong>Bayer 4x4 (Canonical)</strong></td>
+              <td>4 × 4 Matrix</td>
+              <td>O(1) Spatial Modulo</td>
+              <td>Uniform halftone texture</td>
+              <td>92.8% Reduction</td>
+            </tr>
+            <tr>
+              <td><strong>Floyd-Steinberg</strong></td>
+              <td>2 × 3 Kernel</td>
+              <td>O(N) Scanline Dependency</td>
+              <td>Snake-like stipple chains</td>
+              <td>88.4% Reduction</td>
+            </tr>
+            <tr>
+              <td><strong>Atkinson (Classic Mac)</strong></td>
+              <td>3 × 3 Kernel (3/4 retention)</td>
+              <td>O(N) Fraction Loss</td>
+              <td>High-contrast sharp edge</td>
+              <td>91.5% Reduction</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- NEWSLETTER / ACTION INTAKE -->
+    <section class="cta-band" id="export">
+      <div class="container cta-box">
+        <span class="section-mono-tag">OPEN SOURCE UTILITY</span>
+        <h2>INTEGRATE DITHERING IN YOUR STACK</h2>
+        <p style="font-size: var(--text-base); color: #4B5563; margin-top: 8px;">
+          Subscribe to receive monthly WebGL shader presets and 1-bit retro icon packs.
+        </p>
+
+        <form class="input-row" id="ctaForm">
+          <input type="email" class="retro-input" placeholder="developer@studio.io" required />
+          <button type="submit" class="btn btn-primary">SUBSCRIBE</button>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div>
+          <div class="footer-col-title">DITHER LAB</div>
+          <p style="font-size: 13px; line-height: 1.6; color: #64748B;">
+            A retro-nostalgic design system celebrating limited-palette dot-pattern rendering and mathematical halftone graphics.
+          </p>
+        </div>
+
+        <div>
+          <div class="footer-col-title">ALGORITHMS</div>
+          <ul class="footer-links">
+            <li><a href="#engine">Bayer Matrix 4x4</a></li>
+            <li><a href="#engine">Floyd-Steinberg</a></li>
+            <li><a href="#engine">Atkinson Shading</a></li>
+            <li><a href="#engine">Halftone Stipple</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <div class="footer-col-title">PALETTES</div>
+          <ul class="footer-links">
+            <li><a href="#hero">1-Bit Monochrome</a></li>
+            <li><a href="#hero">CGA 4-Color</a></li>
+            <li><a href="#hero">Game Boy 4-Shade</a></li>
+            <li><a href="#hero">Solarized Dither</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <div class="footer-col-title">SPECS</div>
+          <ul class="footer-links">
+            <li><a href="#specs">Spatial Error Table</a></li>
+            <li><a href="#specs">WebGL Shader Source</a></li>
+            <li><a href="#specs">MIT License</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div style="border-top: 1px solid #1E293B; padding-top: 24px; display: flex; justify-content: space-between;">
+        <span>© 2026 DITHER LAB. ALL SHADERS OPERATIONAL.</span>
+        <span>LATENCY: ZERO BIT DRIFT</span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Interactive JavaScript Dithering Engine Script -->
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const canvas = document.getElementById('ditherCanvas');
+      const ctx = canvas.getContext('2d');
+      const threshSlider = document.getElementById('threshSlider');
+      const threshVal = document.getElementById('threshVal');
+      const pitchSlider = document.getElementById('pitchSlider');
+      const pitchVal = document.getElementById('pitchVal');
+      const algoBtns = document.querySelectorAll('.algo-btn');
+      const algoLabel = document.getElementById('algoLabel');
+      const invertBtn = document.getElementById('invertBtn');
+      const renderPatternBtn = document.getElementById('renderPatternBtn');
+
+      let currentAlgo = 'bayer';
+      let inverted = false;
+      let patternIndex = 0;
+
+      // Bayer 4x4 threshold matrix normalized
+      const bayer4 = [
+        [  0/16,  8/16,  2/16, 10/16 ],
+        [ 12/16,  4/16, 14/16,  6/16 ],
+        [  3/16, 11/16,  1/16,  9/16 ],
+        [ 15/16,  7/16, 13/16,  5/16 ]
+      ];
+
+      function drawScene() {
+        const w = canvas.width;
+        const h = canvas.height;
+        const threshold = parseInt(threshSlider.value, 10) / 255;
+        const pitch = parseInt(pitchSlider.value, 10);
+
+        ctx.fillStyle = '#FFFFFF';
+        ctx.fillRect(0, 0, w, h);
+
+        const imgData = ctx.createImageData(w, h);
+        const data = imgData.data;
+
+        for (let y = 0; y < h; y++) {
+          for (let x = 0; x < w; x++) {
+            // Generate test gradient / spheres based on patternIndex
+            let gray = 0;
+            if (patternIndex === 0) {
+              // Smooth gradient sphere
+              const dx = x - w / 2;
+              const dy = y - h / 2;
+              const dist = Math.sqrt(dx * dx + dy * dy);
+              gray = Math.max(0, 1 - dist / (w * 0.45));
+            } else if (patternIndex === 1) {
+              // Horizontal linear ramp
+              gray = x / w;
+            } else {
+              // Diagonal wave
+              gray = (Math.sin(x * 0.05) + Math.cos(y * 0.05) + 2) / 4;
+            }
+
+            let ditherThreshold = threshold;
+            if (currentAlgo === 'bayer') {
+              const bx = Math.floor(x / (pitch / 2)) % 4;
+              const by = Math.floor(y / (pitch / 2)) % 4;
+              ditherThreshold = bayer4[by][bx];
+            } else if (currentAlgo === 'halftone') {
+              const hx = (x % pitch) - pitch / 2;
+              const hy = (y % pitch) - pitch / 2;
+              const dist = Math.sqrt(hx * hx + hy * hy) / (pitch * 0.7);
+              ditherThreshold = dist;
+            } else { // random noise
+              ditherThreshold = Math.random();
+            }
+
+            let isDark = gray < ditherThreshold;
+            if (inverted) isDark = !isDark;
+
+            const idx = (y * w + x) * 4;
+            if (isDark) {
+              data[idx] = 17;     // #111827
+              data[idx + 1] = 24;
+              data[idx + 2] = 39;
+              data[idx + 3] = 255;
+            } else {
+              data[idx] = 255;
+              data[idx + 1] = 255;
+              data[idx + 2] = 255;
+              data[idx + 3] = 255;
+            }
+          }
+        }
+
+        ctx.putImageData(imgData, 0, 0);
+      }
+
+      threshSlider.addEventListener('input', (e) => {
+        threshVal.textContent = e.target.value;
+        drawScene();
+      });
+
+      pitchSlider.addEventListener('input', (e) => {
+        pitchVal.textContent = `${e.target.value} px`;
+        drawScene();
+      });
+
+      algoBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+          algoBtns.forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+          currentAlgo = btn.getAttribute('data-algo');
+          algoLabel.textContent = btn.textContent;
+          drawScene();
+        });
+      });
+
+      invertBtn.addEventListener('click', () => {
+        inverted = !inverted;
+        drawScene();
+      });
+
+      renderPatternBtn.addEventListener('click', () => {
+        patternIndex = (patternIndex + 1) % 3;
+        drawScene();
+      });
+
+      drawScene();
+
+      // Form alert
+      const form = document.getElementById('ctaForm');
+      if (form) {
+        form.addEventListener('submit', (e) => {
+          e.preventDefault();
+          alert('Subscribed to Dither Lab shader updates!');
+          form.reset();
+        });
+      }
+    });
+  </script>
+</body>
+</html>

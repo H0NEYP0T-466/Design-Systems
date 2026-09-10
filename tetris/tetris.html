@@ -1,0 +1,813 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>TETRIS &bull; The Official Block-System Hub</title>
+  <meta name="description" content="Classic block-game inspired design with playful colors, bold Bangers display typography, and compact high-energy layouts." />
+
+  <!-- Google Fonts: Bangers (Display & Headings) & JetBrains Mono (Body & Controls) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bangers&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    /* ─────────────────────────────────────────────────────────────────
+       TETRIS DESIGN SYSTEM TOKENS
+       Strictly adhering to /design-systems/tetris/DESIGN.md
+       ───────────────────────────────────────────────────────────────── */
+    :root {
+      /* Style Foundation Colors */
+      --tetris-primary:   #1C202B; /* Primary action button & CTA emphasis */
+      --tetris-secondary: #7107E7; /* Playful purple accent token */
+      --tetris-success:   #16A34A; /* Confirmation status & clear line indicator */
+      --tetris-warning:   #D97706; /* Alert & combo multiplier */
+      --tetris-danger:    #DC2626; /* Game over & danger line threshold */
+      --tetris-surface:   #DFE7FF; /* Large backgrounds and cards */
+      --tetris-text:      #1C398E; /* Primary body copy & labels for legibility */
+      --tetris-neutral:   #DFE7FF; /* Derived from surface token */
+
+      /* Contrasting pure white & border accents */
+      --tetris-white:     #FFFFFF;
+      --tetris-border:    rgba(28, 57, 142, 0.25);
+      --tetris-card-bg:   #FFFFFF;
+
+      /* Typography Families */
+      --font-display: "Bangers", cursive, system-ui;
+      --font-primary: "Bangers", cursive, system-ui;
+      --font-body:    "JetBrains Mono", monospace;
+      --font-mono:    "JetBrains Mono", monospace;
+
+      /* Compact Spacing Scale */
+      --space-4:  4px;
+      --space-8:  8px;
+      --space-12: 12px;
+      --space-16: 16px;
+      --space-20: 20px;
+      --space-24: 24px;
+      --space-32: 32px;
+
+      /* Component Radii */
+      --radius-sm: 6px;
+      --radius-md: 10px;
+      --radius-lg: 16px;
+
+      /* Purposeful short transitions (150-250ms) */
+      --transition-base: 180ms ease-out;
+
+      /* High-energy shadows */
+      --tetris-shadow-press: 0 4px 0 #1C202B;
+      --tetris-shadow-card:  0 6px 0 rgba(28, 57, 142, 0.15);
+    }
+
+    /* Reset & Base Rules */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      background-color: var(--tetris-surface);
+      color: var(--tetris-text);
+      font-family: var(--font-body);
+      -webkit-font-smoothing: antialiased;
+    }
+
+    body {
+      background-color: var(--tetris-surface); /* Surface #DFE7FF */
+      color: var(--tetris-text);               /* Text #1C398E */
+      font-size: 15px;
+      line-height: 1.5;
+    }
+
+    /* Container */
+    .container {
+      max-width: 1140px;
+      margin: 0 auto;
+      padding: 0 var(--space-20);
+    }
+
+    /* ─────────────────────────────────────────────────────────────────
+       HEADER & NAVIGATION
+       ───────────────────────────────────────────────────────────────── */
+    .tetris-nav {
+      background-color: var(--tetris-white);
+      border-bottom: 3px solid var(--tetris-primary);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      padding: var(--space-12) 0;
+    }
+
+    .nav-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .brand-logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+    }
+
+    .tetris-logo-text {
+      font-family: var(--font-display);
+      font-size: 36px;
+      letter-spacing: 2px;
+      color: var(--tetris-primary);
+      line-height: 1;
+      text-shadow: 2px 2px 0 var(--tetris-secondary);
+    }
+
+    .tetromino-pill-group {
+      display: flex;
+      gap: 3px;
+    }
+    .t-block {
+      width: 10px;
+      height: 10px;
+      border: 1px solid var(--tetris-primary);
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: var(--space-24);
+      list-style: none;
+    }
+
+    .nav-link {
+      font-family: var(--font-display);
+      font-size: 20px;
+      letter-spacing: 1px;
+      color: var(--tetris-text);
+      text-decoration: none;
+      transition: color var(--transition-base), transform var(--transition-base);
+    }
+    .nav-link:hover {
+      color: var(--tetris-secondary);
+      transform: translateY(-1px);
+    }
+
+    /* ─────────────────────────────────────────────────────────────────
+       BUTTONS (Section 6: Primary = #1C202B, Secondary = Neutral)
+       ───────────────────────────────────────────────────────────────── */
+    .btn {
+      font-family: var(--font-display);
+      font-size: 20px;
+      letter-spacing: 1px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 8px 20px;
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      border: 2px solid var(--tetris-primary);
+      outline: none;
+      text-decoration: none;
+      user-select: none;
+      transition: transform var(--transition-base), box-shadow var(--transition-base), background-color var(--transition-base);
+    }
+
+    .btn:active {
+      transform: translateY(2px);
+      box-shadow: 0 1px 0 var(--tetris-primary) !important;
+    }
+
+    /* Primary Action: #1C202B */
+    .btn-primary {
+      background-color: var(--tetris-primary);
+      color: var(--tetris-surface);
+      box-shadow: var(--tetris-shadow-press);
+    }
+    .btn-primary:hover {
+      background-color: #2b3242;
+      color: var(--tetris-white);
+    }
+
+    /* Secondary Action: Neutral surface / White */
+    .btn-secondary {
+      background-color: var(--tetris-white);
+      color: var(--tetris-primary);
+      box-shadow: 0 4px 0 var(--tetris-border);
+    }
+    .btn-secondary:hover {
+      background-color: #f1f5ff;
+    }
+
+    /* Accent Action: #7107E7 */
+    .btn-accent {
+      background-color: var(--tetris-secondary);
+      color: var(--tetris-white);
+      border-color: var(--tetris-primary);
+      box-shadow: var(--tetris-shadow-press);
+    }
+
+    /* ─────────────────────────────────────────────────────────────────
+       HERO: COMPACT, HIGH-ENERGY LAYOUT WITH PLAYABLE MINI-BOARD
+       Surface #DFE7FF Background + Bangers Display
+       ───────────────────────────────────────────────────────────────── */
+    .tetris-hero {
+      padding: 48px 0;
+      background-color: var(--tetris-surface);
+    }
+
+    .hero-layout {
+      display: grid;
+      grid-template-columns: 1.2fr 1fr;
+      gap: 40px;
+      align-items: center;
+    }
+
+    .hero-eyebrow {
+      font-family: var(--font-body);
+      font-size: 13px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--tetris-secondary);
+      background: var(--tetris-white);
+      display: inline-block;
+      padding: 4px 10px;
+      border: 2px solid var(--tetris-primary);
+      border-radius: var(--radius-sm);
+      margin-bottom: var(--space-12);
+      box-shadow: 2px 2px 0 var(--tetris-primary);
+    }
+
+    /* Expressive Bangers Display */
+    .hero-headline {
+      font-family: var(--font-display);
+      font-size: 58px;
+      line-height: 0.95;
+      letter-spacing: 1.5px;
+      color: var(--tetris-primary);
+      margin-bottom: var(--space-16);
+      text-shadow: 3px 3px 0 rgba(113, 7, 231, 0.25);
+    }
+
+    .hero-headline span.highlight {
+      color: var(--tetris-secondary);
+    }
+
+    .hero-support-text {
+      font-family: var(--font-body);
+      font-size: 16px;
+      line-height: 1.6;
+      color: var(--tetris-text); /* #1C398E */
+      margin-bottom: var(--space-24);
+      max-width: 520px;
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: var(--space-12);
+    }
+
+    /* Interactive Tetris Matrix Frame */
+    .tetris-arcade-box {
+      background: var(--tetris-white);
+      border: 3px solid var(--tetris-primary);
+      border-radius: var(--radius-md);
+      padding: 20px;
+      box-shadow: 8px 8px 0 var(--tetris-primary);
+      max-width: 420px;
+      margin: 0 auto;
+    }
+
+    .arcade-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 2px solid var(--tetris-surface);
+      padding-bottom: 10px;
+      margin-bottom: 12px;
+    }
+
+    .score-display {
+      font-family: var(--font-display);
+      font-size: 24px;
+      color: var(--tetris-primary);
+    }
+    .score-val {
+      color: var(--tetris-secondary);
+      margin-left: 6px;
+    }
+
+    /* 10x12 Grid Board */
+    .game-grid {
+      display: grid;
+      grid-template-columns: repeat(10, 1fr);
+      grid-template-rows: repeat(12, 22px);
+      gap: 2px;
+      background: #0f131a;
+      padding: 8px;
+      border: 2px solid var(--tetris-primary);
+      border-radius: var(--radius-sm);
+    }
+
+    .grid-cell {
+      background: #1a1e27;
+      border-radius: 2px;
+    }
+    .grid-cell.filled-purple { background: var(--tetris-secondary); border: 1px solid #9d50ff; }
+    .grid-cell.filled-blue   { background: var(--tetris-text); border: 1px solid #3b65d6; }
+    .grid-cell.filled-green  { background: var(--tetris-success); border: 1px solid #34d399; }
+    .grid-cell.filled-yellow { background: var(--tetris-warning); border: 1px solid #fbbf24; }
+    .grid-cell.filled-red    { background: var(--tetris-danger); border: 1px solid #f87171; }
+
+    .arcade-controls {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 14px;
+      font-size: 13px;
+      font-family: var(--font-body);
+    }
+
+    /* ─────────────────────────────────────────────────────────────────
+       CONTENT BLOCKS: GAME MODES & SYSTEM CARDS
+       Consistent radii, predictable grid, Surface #DFE7FF
+       ───────────────────────────────────────────────────────────────── */
+    .section-spacing {
+      padding: 48px 0;
+    }
+
+    .section-title-wrap {
+      margin-bottom: var(--space-24);
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+    }
+
+    .section-title {
+      font-family: var(--font-display);
+      font-size: 38px;
+      letter-spacing: 1px;
+      color: var(--tetris-primary);
+    }
+
+    .cards-grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+
+    .tetris-card {
+      background: var(--tetris-white);
+      border: 2px solid var(--tetris-primary);
+      border-radius: var(--radius-md);
+      padding: 24px;
+      box-shadow: 4px 4px 0 var(--tetris-primary);
+      transition: transform var(--transition-base), box-shadow var(--transition-base);
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+    }
+    .tetris-card:hover {
+      transform: translate(-2px, -2px);
+      box-shadow: 6px 6px 0 var(--tetris-primary);
+    }
+
+    .card-badge {
+      font-family: var(--font-body);
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--tetris-white);
+      background: var(--tetris-primary);
+      padding: 3px 8px;
+      border-radius: 4px;
+      display: inline-block;
+      margin-bottom: 12px;
+      width: fit-content;
+    }
+
+    .card-title {
+      font-family: var(--font-display);
+      font-size: 26px;
+      color: var(--tetris-primary);
+      margin-bottom: 8px;
+    }
+
+    .card-text {
+      font-family: var(--font-body);
+      font-size: 14px;
+      color: var(--tetris-text);
+      line-height: 1.55;
+      margin-bottom: 18px;
+      flex-grow: 1;
+    }
+
+    /* ─────────────────────────────────────────────────────────────────
+       INPUTS & PREDICTABLE VALIDATION
+       (Strong focus-visible, clear labels, predictable error messaging)
+       ───────────────────────────────────────────────────────────────── */
+    .form-block {
+      background: var(--tetris-white);
+      border: 3px solid var(--tetris-primary);
+      border-radius: var(--radius-md);
+      padding: 28px;
+      box-shadow: 6px 6px 0 var(--tetris-primary);
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    .form-group {
+      margin-bottom: var(--space-16);
+    }
+
+    .form-label {
+      font-family: var(--font-display);
+      font-size: 18px;
+      letter-spacing: 0.5px;
+      color: var(--tetris-primary);
+      display: block;
+      margin-bottom: 4px;
+    }
+
+    .form-input {
+      width: 100%;
+      height: 42px;
+      padding: 0 12px;
+      font-family: var(--font-body);
+      font-size: 14px;
+      color: var(--tetris-primary);
+      background: var(--tetris-surface);
+      border: 2px solid var(--tetris-primary);
+      border-radius: var(--radius-sm);
+      outline: none;
+      transition: box-shadow var(--transition-base), border-color var(--transition-base);
+    }
+    .form-input:focus-visible {
+      border-color: var(--tetris-secondary);
+      box-shadow: 0 0 0 3px rgba(113, 7, 231, 0.3);
+    }
+    .form-input.error {
+      border-color: var(--tetris-danger);
+    }
+
+    .form-hint {
+      font-size: 12px;
+      margin-top: 4px;
+      font-weight: 500;
+    }
+    .hint-danger { color: var(--tetris-danger); }
+    .hint-success { color: var(--tetris-success); }
+    .hint-warning { color: var(--tetris-warning); }
+
+    /* ─────────────────────────────────────────────────────────────────
+       TOKEN SPECIFICATION MATRIX TABLE
+       Strictly adhering to style foundations tokens
+       ───────────────────────────────────────────────────────────────── */
+    .token-audit-wrap {
+      background: var(--tetris-white);
+      border: 3px solid var(--tetris-primary);
+      border-radius: var(--radius-md);
+      padding: 28px;
+      box-shadow: 6px 6px 0 var(--tetris-primary);
+      margin-top: 32px;
+    }
+
+    .token-table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+      font-size: 14px;
+    }
+
+    .token-table th {
+      font-family: var(--font-display);
+      font-size: 18px;
+      padding: 10px 14px;
+      border-bottom: 2px solid var(--tetris-primary);
+      color: var(--tetris-primary);
+    }
+
+    .token-table td {
+      padding: 10px 14px;
+      border-bottom: 1px solid var(--tetris-surface);
+      color: var(--tetris-text);
+      font-family: var(--font-body);
+    }
+
+    .swatch {
+      display: inline-block;
+      width: 16px;
+      height: 16px;
+      border-radius: 3px;
+      vertical-align: middle;
+      margin-right: 8px;
+      border: 1px solid var(--tetris-primary);
+    }
+
+    /* Footer */
+    .tetris-footer {
+      background: var(--tetris-white);
+      border-top: 3px solid var(--tetris-primary);
+      padding: 40px 0 20px;
+      margin-top: 60px;
+    }
+
+    .footer-content {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-family: var(--font-body);
+      font-size: 13px;
+    }
+
+    @media (max-width: 800px) {
+      .hero-layout { grid-template-columns: 1fr; }
+      .cards-grid-3 { grid-template-columns: 1fr; }
+      .nav-links { display: none; }
+      .hero-headline { font-size: 42px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Navigation -->
+  <nav class="tetris-nav">
+    <div class="container nav-inner">
+      <a href="#hero" class="brand-logo">
+        <div class="tetromino-pill-group">
+          <div class="t-block" style="background: #DC2626;"></div>
+          <div class="t-block" style="background: #D97706;"></div>
+          <div class="t-block" style="background: #16A34A;"></div>
+          <div class="t-block" style="background: #7107E7;"></div>
+        </div>
+        <span class="tetris-logo-text">TETRIS</span>
+      </a>
+
+      <ul class="nav-links">
+        <li><a href="#modes" class="nav-link">Modes</a></li>
+        <li><a href="#arcade" class="nav-link">Arcade Engine</a></li>
+        <li><a href="#tokens" class="nav-link">Tokens</a></li>
+        <li><a href="#profile" class="nav-link">Ranked Tournaments</a></li>
+      </ul>
+
+      <div>
+        <!-- Primary Action: #1C202B -->
+        <a href="#arcade" class="btn btn-primary">Play Now</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero: Surface #DFE7FF with Bangers Display & Interactive Matrix -->
+  <header id="hero" class="tetris-hero">
+    <div class="container hero-layout">
+      <div>
+        <div class="hero-eyebrow">
+          <span>Official Design System &bull; High Energy</span>
+        </div>
+
+        <h1 class="hero-headline">
+          Drop the blocks.<br>
+          <span class="highlight">Clear the matrix.</span>
+        </h1>
+
+        <p class="hero-support-text">
+          A high-contrast, playful system fusing classic arcade block-geometry with Bangers display typography and compact modular rhythm.
+        </p>
+
+        <div class="hero-actions">
+          <a href="#arcade" class="btn btn-primary">Quick Match</a>
+          <a href="#tokens" class="btn btn-secondary">Inspect Tokens</a>
+          <button class="btn btn-accent" onclick="triggerLineClear()">Clear Line</button>
+        </div>
+      </div>
+
+      <!-- Playable / Interactive Arcade Mini-Board -->
+      <div id="arcade" class="tetris-arcade-box">
+        <div class="arcade-header">
+          <span class="score-display">LINES: <span id="lines-cleared" class="score-val">12</span></span>
+          <span class="score-display">SCORE: <span id="game-score" class="score-val">14,800</span></span>
+        </div>
+
+        <!-- 10x12 Grid Board -->
+        <div class="game-grid" id="game-grid">
+          <!-- Row 1-8 empty -->
+          <div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div>
+          <div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div>
+          <div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div>
+          <div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div>
+          <div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell filled-purple"></div><div class="grid-cell filled-purple"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div>
+          <div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell filled-purple"></div><div class="grid-cell filled-purple"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div>
+          <div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div>
+          <div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div>
+          <!-- Filled Base Rows -->
+          <div class="grid-cell filled-blue"></div><div class="grid-cell filled-blue"></div><div class="grid-cell filled-yellow"></div><div class="grid-cell filled-yellow"></div><div class="grid-cell filled-green"></div><div class="grid-cell filled-green"></div><div class="grid-cell filled-blue"></div><div class="grid-cell filled-blue"></div><div class="grid-cell"></div><div class="grid-cell filled-red"></div>
+          <div class="grid-cell filled-red"></div><div class="grid-cell filled-red"></div><div class="grid-cell filled-green"></div><div class="grid-cell filled-green"></div><div class="grid-cell filled-purple"></div><div class="grid-cell filled-purple"></div><div class="grid-cell filled-yellow"></div><div class="grid-cell filled-yellow"></div><div class="grid-cell filled-blue"></div><div class="grid-cell filled-blue"></div>
+          <div class="grid-cell filled-yellow"></div><div class="grid-cell filled-yellow"></div><div class="grid-cell filled-red"></div><div class="grid-cell filled-red"></div><div class="grid-cell filled-blue"></div><div class="grid-cell filled-blue"></div><div class="grid-cell filled-green"></div><div class="grid-cell filled-green"></div><div class="grid-cell filled-purple"></div><div class="grid-cell filled-purple"></div>
+          <div class="grid-cell filled-green"></div><div class="grid-cell filled-green"></div><div class="grid-cell filled-purple"></div><div class="grid-cell filled-purple"></div><div class="grid-cell filled-yellow"></div><div class="grid-cell filled-yellow"></div><div class="grid-cell filled-red"></div><div class="grid-cell filled-red"></div><div class="grid-cell filled-blue"></div><div class="grid-cell filled-blue"></div>
+        </div>
+
+        <div class="arcade-controls">
+          <span>HOLD: <strong>Z</strong></span>
+          <span>ROTATE: <strong>UP / X</strong></span>
+          <span>HARD DROP: <strong>SPACE</strong></span>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Game Modes Section (Cards on Surface #DFE7FF) -->
+  <section id="modes" class="section-spacing">
+    <div class="container">
+      <div class="section-title-wrap">
+        <h2 class="section-title">Competitive Modes</h2>
+        <span style="font-family: var(--font-body); font-weight: 600; color: var(--tetris-secondary);">COMPACT DENSITY SCALE</span>
+      </div>
+
+      <div class="cards-grid-3">
+        <!-- Card 1 -->
+        <div class="tetris-card">
+          <span class="card-badge" style="background: var(--tetris-secondary);">Ranked &bull; 99</span>
+          <h3 class="card-title">Tetris Royale</h3>
+          <p class="card-text">
+            Battle against 98 concurrent players. Target aggressive opponents with garbage lines and survive sudden-death speed spikes.
+          </p>
+          <button class="btn btn-primary" style="font-size: 16px; padding: 6px 14px;">Queue Match</button>
+        </div>
+
+        <!-- Card 2 -->
+        <div class="tetris-card">
+          <span class="card-badge" style="background: var(--tetris-success);">Classic &bull; 40 Lines</span>
+          <h3 class="card-title">Sprint Mode</h3>
+          <p class="card-text">
+            Clear 40 lines as fast as humanly possible. Perfect for drilling fast finesse rotations and flat matrix stacking.
+          </p>
+          <button class="btn btn-secondary" style="font-size: 16px; padding: 6px 14px;">Start Sprint</button>
+        </div>
+
+        <!-- Card 3 -->
+        <div class="tetris-card">
+          <span class="card-badge" style="background: var(--tetris-warning);">Marathon &bull; Endless</span>
+          <h3 class="card-title">Master Marathon</h3>
+          <p class="card-text">
+            Advance through 15 progressive levels. Lock-delay decreases exponentially until 20G instant gravity is triggered.
+          </p>
+          <button class="btn btn-primary" style="font-size: 16px; padding: 6px 14px;">Play Marathon</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Interactive Form & Validation Suite -->
+  <section id="profile" class="section-spacing" style="background-color: var(--tetris-white); border-top: 3px solid var(--tetris-primary); border-bottom: 3px solid var(--tetris-primary);">
+    <div class="container">
+      <div style="text-align: center; margin-bottom: 24px;">
+        <h2 class="section-title">Tournament Registration</h2>
+        <p style="font-family: var(--font-body); color: var(--tetris-text);">Strong focus-visible states &amp; predictable error messaging</p>
+      </div>
+
+      <div class="form-block">
+        <form onsubmit="event.preventDefault(); validateForm();">
+          <div class="form-group">
+            <label class="form-label" for="gamer-tag">Player Gamertag</label>
+            <input type="text" id="gamer-tag" class="form-input" value="TetrisMaster_99" />
+            <div class="form-hint hint-success">✓ Gamertag available for tournament seeding (#16A34A)</div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="gamer-rank">Regional Bracket</label>
+            <select id="gamer-rank" class="form-input">
+              <option>Challenger Division &bull; Europe</option>
+              <option>Grandmaster League &bull; Americas</option>
+              <option>Speed League &bull; Asia-Pacific</option>
+            </select>
+            <div class="form-hint hint-warning">⚠ Matches in Challenger start promptly at 18:00 UTC (#D97706)</div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="gamer-email">Verification Email</label>
+            <input type="email" id="gamer-email" class="form-input error" value="invalid-email-entry" />
+            <div class="form-hint hint-danger">✗ Enter a valid email format for referee confirmation (#DC2626)</div>
+          </div>
+
+          <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 8px;">
+            Confirm Entry (#1C202B)
+          </button>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- Token Verification Matrix -->
+  <section id="tokens" class="section-spacing">
+    <div class="container">
+      <div class="token-audit-wrap">
+        <h3 class="section-title" style="font-size: 32px; margin-bottom: 16px;">
+          Design System Token Verification &bull; DESIGN.md
+        </h3>
+        <table class="token-table">
+          <thead>
+            <tr>
+              <th>Token Name</th>
+              <th>Hex / Value</th>
+              <th>Rule &amp; Application</th>
+              <th>Visual Sample</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Primary</strong></td>
+              <td><code>#1C202B</code></td>
+              <td>Favored for CTA button emphasis and primary structural borders</td>
+              <td><span class="swatch" style="background: #1C202B;"></span> Primary</td>
+            </tr>
+            <tr>
+              <td><strong>Secondary</strong></td>
+              <td><code>#7107E7</code></td>
+              <td>High-energy block purple accent</td>
+              <td><span class="swatch" style="background: #7107E7;"></span> Secondary</td>
+            </tr>
+            <tr>
+              <td><strong>Surface</strong></td>
+              <td><code>#DFE7FF</code></td>
+              <td>Foundational background for canvas and sections</td>
+              <td><span class="swatch" style="background: #DFE7FF;"></span> Surface</td>
+            </tr>
+            <tr>
+              <td><strong>Text</strong></td>
+              <td><code>#1C398E</code></td>
+              <td>High-contrast body text on surface for legibility</td>
+              <td><span class="swatch" style="background: #1C398E;"></span> Text</td>
+            </tr>
+            <tr>
+              <td><strong>Success / Warning / Danger</strong></td>
+              <td><code>#16A34A</code> / <code>#D97706</code> / <code>#DC2626</code></td>
+              <td>Semantic gameplay alerts, status hints, and tetromino colors</td>
+              <td>
+                <span class="swatch" style="background: #16A34A;"></span>
+                <span class="swatch" style="background: #D97706;"></span>
+                <span class="swatch" style="background: #DC2626;"></span>
+              </td>
+            </tr>
+            <tr>
+              <td><strong>Typography</strong></td>
+              <td><code>Bangers</code> + <code>JetBrains Mono</code></td>
+              <td>Playful display headers with scannable monospace body copy</td>
+              <td>Bangers 58px</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="tetris-footer">
+    <div class="container footer-content">
+      <div style="font-family: var(--font-display); font-size: 24px; color: var(--tetris-primary);">
+        TETRIS DESIGN SYSTEM &bull; HIGH CONTRAST PLAYFUL
+      </div>
+      <div>
+        Surface #DFE7FF &bull; Primary #1C202B &bull; Text #1C398E &bull; Bangers Display
+      </div>
+    </div>
+  </footer>
+
+  <!-- Interactive Scripts -->
+  <script>
+    function triggerLineClear() {
+      const scoreEl = document.getElementById('game-score');
+      const linesEl = document.getElementById('lines-cleared');
+      let score = parseInt(scoreEl.textContent.replace(',', '')) + 1200;
+      let lines = parseInt(linesEl.textContent) + 1;
+      scoreEl.textContent = score.toLocaleString();
+      linesEl.textContent = lines;
+
+      // Animate bottom row flash
+      const grid = document.getElementById('game-grid');
+      const cells = grid.querySelectorAll('.grid-cell');
+      cells.forEach((c, idx) => {
+        if (idx >= 110) {
+          c.style.background = '#FFFFFF';
+          setTimeout(() => {
+            c.style.background = 'var(--tetris-secondary)';
+          }, 150);
+        }
+      });
+    }
+
+    function validateForm() {
+      const email = document.getElementById('gamer-email');
+      if (email.value.includes('@') && email.value.includes('.')) {
+        email.classList.remove('error');
+        email.nextElementSibling.className = 'form-hint hint-success';
+        email.nextElementSibling.textContent = '✓ Registration verified successfully!';
+      } else {
+        email.classList.add('error');
+        email.nextElementSibling.className = 'form-hint hint-danger';
+        email.nextElementSibling.textContent = '✗ Enter a valid email format for referee confirmation (#DC2626)';
+      }
+    }
+  </script>
+</body>
+</html>

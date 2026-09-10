@@ -1,0 +1,701 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Miro — Visual Collaboration &amp; Infinite Whiteboard Design System</title>
+  
+  <!-- Fonts: Noto Sans (Body) and Inter / Formular (Display) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+  <style>
+    /* Miro Design System Tokens (from DESIGN.md & tokens.css) */
+    :root {
+      /* Surface & Canvas */
+      --bg: #ffffff;
+      --canvas-dot: #e0e2e8;
+      --surface: #ffffff;
+      --surface-warm: #fff3a3;      /* Sunny Yellow tinted surface */
+
+      /* Foreground / Text */
+      --fg: #050038;                /* Ink primary text */
+      --fg-2: #1c1c1e;              /* Near black */
+      --muted: #555a6a;             /* Slate secondary text */
+      --meta: #a5a8b5;              /* Input placeholder */
+
+      /* Borders & Rings */
+      --border: #c7cad5;
+      --border-ring: rgb(224, 226, 232);
+      --ring-shadow: 0 0 0 1px var(--border-ring);
+
+      /* Brand Accents */
+      --accent-yellow: #ffd02f;     /* Miro Brand Sunny Yellow */
+      --accent-blue: #5b76fe;       /* Blue 450 — primary interactive */
+      --accent-blue-pressed: #2a41b6;
+      --success: #00b473;
+
+      /* Pastel Accents for Sticky Notes & Visual Collaboration */
+      --pastel-yellow: #fff3a3;
+      --pastel-teal: #c3faf5;
+      --pastel-coral: #ffc6c6;
+      --pastel-rose: #ffd8f4;
+      --pastel-orange: #ffe6cd;
+
+      /* Dark text for pastels */
+      --pastel-text-yellow: #746019;
+      --pastel-text-teal: #187574;
+      --pastel-text-coral: #600000;
+
+      /* Typography */
+      --font-display: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      --font-body: "Noto Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      --font-mono: "Roboto Mono", monospace;
+
+      /* Radii */
+      --radius-sm: 8px;             /* Buttons, inputs */
+      --radius-md: 12px;            /* Cards, sticky notes */
+      --radius-lg: 24px;            /* Panels */
+      --radius-pill: 9999px;        /* Avatars, pills */
+
+      /* Motion */
+      --motion-fast: 150ms;
+      --motion-base: 230ms;
+    }
+
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--bg);
+      color: var(--fg);
+      font-family: var(--font-body);
+      font-size: 16px;
+      line-height: 1.5;
+      min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
+      display: flex;
+      flex-direction: column;
+      overflow-x: hidden;
+    }
+
+    /* Top Collaboration Header */
+    .miro-header {
+      background: #ffffff;
+      border-bottom: 1px solid var(--border-ring);
+      padding: 0 1.5rem;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .header-inner {
+      max-width: 1440px;
+      margin: 0 auto;
+      height: 60px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+    }
+
+    .brand-left {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .miro-logo {
+      width: 32px;
+      height: 32px;
+      background: var(--accent-yellow);
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-display);
+      font-weight: 900;
+      font-size: 20px;
+      color: var(--fg);
+    }
+
+    .board-title-group {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .board-name {
+      font-family: var(--font-display);
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--fg);
+    }
+
+    .board-star {
+      color: #ffd02f;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    /* Multi-user avatars in header */
+    .collab-group {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .avatar-stack {
+      display: flex;
+      align-items: center;
+    }
+
+    .avatar {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      border: 2px solid #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      font-weight: 700;
+      color: #ffffff;
+      margin-left: -8px;
+      cursor: pointer;
+    }
+
+    .avatar:first-child {
+      margin-left: 0;
+    }
+
+    .av-1 { background: #5b76fe; }
+    .av-2 { background: #ea5ec1; }
+    .av-3 { background: #00b473; }
+
+    /* Buttons */
+    .btn {
+      font-family: var(--font-body);
+      font-size: 14px;
+      font-weight: 600;
+      padding: 7px 16px;
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      text-decoration: none;
+      transition: all var(--motion-fast) ease;
+      border: none;
+      user-select: none;
+    }
+
+    .btn-blue {
+      background: var(--accent-blue);
+      color: #ffffff;
+    }
+
+    .btn-blue:hover {
+      background: var(--accent-blue-pressed);
+    }
+
+    .btn-outlined {
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--fg);
+    }
+
+    .btn-outlined:hover {
+      background: #f4f5f7;
+    }
+
+    /* Infinite Whiteboard Canvas */
+    .whiteboard-container {
+      position: relative;
+      flex: 1;
+      min-height: 600px;
+      background-color: #fafbfc;
+      background-image: radial-gradient(var(--canvas-dot) 1.2px, transparent 1.2px);
+      background-size: 24px 24px;
+      overflow: hidden;
+      cursor: grab;
+    }
+
+    .whiteboard-container:active {
+      cursor: grabbing;
+    }
+
+    /* Floating Toolbar (Miro Left/Bottom dock) */
+    .canvas-toolbar {
+      position: absolute;
+      top: 24px;
+      left: 24px;
+      background: #ffffff;
+      border-radius: var(--radius-md);
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08), var(--ring-shadow);
+      padding: 6px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      z-index: 50;
+    }
+
+    .tool-btn {
+      width: 40px;
+      height: 40px;
+      border-radius: 8px;
+      background: transparent;
+      border: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      cursor: pointer;
+      color: var(--fg);
+      transition: background var(--motion-fast) ease;
+    }
+
+    .tool-btn:hover, .tool-btn.active {
+      background: #eef1f6;
+      color: var(--accent-blue);
+    }
+
+    /* Sticky Notes on Canvas */
+    .sticky-note {
+      position: absolute;
+      width: 200px;
+      height: 180px;
+      border-radius: var(--radius-sm);
+      padding: 16px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      cursor: move;
+      user-select: none;
+      transition: transform 150ms ease, box-shadow 150ms ease;
+    }
+
+    .sticky-note:hover {
+      transform: translateY(-2px) scale(1.02);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+      z-index: 40;
+    }
+
+    .sticky-yellow {
+      background: var(--pastel-yellow);
+      color: var(--pastel-text-yellow);
+    }
+
+    .sticky-teal {
+      background: var(--pastel-teal);
+      color: var(--pastel-text-teal);
+    }
+
+    .sticky-coral {
+      background: var(--pastel-coral);
+      color: var(--pastel-text-coral);
+    }
+
+    .sticky-rose {
+      background: var(--pastel-rose);
+      color: #55123d;
+    }
+
+    .sticky-content {
+      font-family: var(--font-body);
+      font-size: 14px;
+      font-weight: 500;
+      line-height: 1.4;
+      outline: none;
+    }
+
+    .sticky-meta {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 11px;
+      opacity: 0.8;
+      border-top: 1px dashed rgba(0, 0, 0, 0.15);
+      padding-top: 6px;
+    }
+
+    /* Simulated Live Multiplayer Cursors */
+    .live-cursor {
+      position: absolute;
+      pointer-events: none;
+      z-index: 60;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      transition: top 300ms ease, left 300ms ease;
+    }
+
+    .cursor-arrow {
+      width: 0;
+      height: 0;
+      border-left: 6px solid transparent;
+      border-right: 6px solid transparent;
+      border-bottom: 12px solid var(--accent-blue);
+      transform: rotate(-35deg);
+    }
+
+    .cursor-name-pill {
+      font-size: 11px;
+      font-weight: 600;
+      color: #ffffff;
+      padding: 2px 8px;
+      border-radius: var(--radius-pill);
+      white-space: nowrap;
+      margin-left: 12px;
+    }
+
+    /* Bottom Sticky Spawner Bar */
+    .spawner-dock {
+      position: absolute;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #ffffff;
+      border-radius: var(--radius-pill);
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12), var(--ring-shadow);
+      padding: 8px 16px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      z-index: 50;
+    }
+
+    .spawner-input {
+      border: 1px solid var(--border);
+      border-radius: var(--radius-pill);
+      padding: 6px 14px;
+      font-size: 13px;
+      outline: none;
+      width: 240px;
+    }
+
+    .spawner-input:focus {
+      border-color: var(--accent-blue);
+    }
+
+    .color-chip {
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      cursor: pointer;
+      border: 2px solid transparent;
+      transition: transform 120ms ease;
+    }
+
+    .color-chip.active {
+      border-color: var(--fg);
+      transform: scale(1.15);
+    }
+
+    /* Token Foundations Showcase */
+    .token-section {
+      max-width: 1200px;
+      margin: 3rem auto;
+      padding: 0 2rem;
+      width: 100%;
+    }
+
+    .token-card-box {
+      background: #ffffff;
+      border-radius: var(--radius-lg);
+      box-shadow: var(--ring-shadow);
+      padding: 2.5rem;
+    }
+
+    .token-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1.5rem;
+      margin-top: 1.5rem;
+    }
+
+    .token-box {
+      border: 1px solid var(--border-ring);
+      border-radius: var(--radius-sm);
+      overflow: hidden;
+      background: #ffffff;
+    }
+
+    .token-color {
+      height: 54px;
+      display: flex;
+      align-items: flex-end;
+      padding: 8px 12px;
+      font-family: var(--font-mono);
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .token-meta-info {
+      padding: 10px 12px;
+      background: #fafbfc;
+      font-size: 12px;
+    }
+
+    /* Footer */
+    .miro-footer {
+      border-top: 1px solid var(--border-ring);
+      padding: 2rem;
+      font-size: 13px;
+      color: var(--muted);
+      background: #ffffff;
+    }
+
+    .footer-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Collaboration Header -->
+  <header class="miro-header">
+    <div class="header-inner">
+      <div class="brand-left">
+        <div class="miro-logo">m</div>
+        <div class="board-title-group">
+          <span class="board-name">Q3 Architecture &amp; System Strategy Board</span>
+          <span class="board-star" onclick="toggleStar(this)">★</span>
+        </div>
+      </div>
+
+      <div class="collab-group">
+        <div class="avatar-stack">
+          <div class="avatar av-1" title="Alex Rivera">AR</div>
+          <div class="avatar av-2" title="Sarah Chen">SC</div>
+          <div class="avatar av-3" title="Devin Vance">DV</div>
+        </div>
+        <button class="btn btn-outlined" onclick="alert('Invited member modal.')">+ Invite</button>
+        <button class="btn btn-blue" onclick="shareBoard()">Share Board</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Interactive Infinite Whiteboard Canvas -->
+  <div class="whiteboard-container" id="boardCanvas">
+
+    <!-- Canvas Floating Tool Dock -->
+    <div class="canvas-toolbar">
+      <button class="tool-btn active" title="Select (V)">↖</button>
+      <button class="tool-btn" title="Sticky Note (N)" onclick="spawnQuickSticky()">📝</button>
+      <button class="tool-btn" title="Shape (S)">⬜</button>
+      <button class="tool-btn" title="Connection Line (L)">↗</button>
+      <button class="tool-btn" title="Reaction (E)" onclick="addBoardEmoji()">💖</button>
+    </div>
+
+    <!-- Live Multiplayer Cursor 1: Sarah Chen -->
+    <div class="live-cursor" id="cursor1" style="top: 140px; left: 620px;">
+      <div class="cursor-arrow" style="border-bottom-color: #5b76fe;"></div>
+      <span class="cursor-name-pill" style="background: #5b76fe;">Sarah Chen [Editing]</span>
+    </div>
+
+    <!-- Live Multiplayer Cursor 2: Devin Vance -->
+    <div class="live-cursor" id="cursor2" style="top: 360px; left: 320px;">
+      <div class="cursor-arrow" style="border-bottom-color: #00b473;"></div>
+      <span class="cursor-name-pill" style="background: #00b473;">Devin Vance [Reviewing]</span>
+    </div>
+
+    <!-- Sticky Note 1 (Yellow) -->
+    <div class="sticky-note sticky-yellow" style="top: 90px; left: 180px;">
+      <div class="sticky-content" contenteditable="true">
+        Design tokens pipeline must serialize directly to tokens.css with zero schema drift.
+      </div>
+      <div class="sticky-meta">
+        <span>#architecture</span>
+        <span>Sarah</span>
+      </div>
+    </div>
+
+    <!-- Sticky Note 2 (Teal) -->
+    <div class="sticky-note sticky-teal" style="top: 120px; left: 440px;">
+      <div class="sticky-content" contenteditable="true">
+        Blue 450 (#5b76fe) serves as the primary interactive anchor for actions &amp; share buttons.
+      </div>
+      <div class="sticky-meta">
+        <span>#tokens</span>
+        <span>Alex</span>
+      </div>
+    </div>
+
+    <!-- Sticky Note 3 (Coral) -->
+    <div class="sticky-note sticky-coral" style="top: 300px; left: 240px;">
+      <div class="sticky-content" contenteditable="true">
+        Ring shadow `rgb(224,226,232) 0 0 0 1px` provides border-as-shadow depth.
+      </div>
+      <div class="sticky-meta">
+        <span>#ui-layer</span>
+        <span>Devin</span>
+      </div>
+    </div>
+
+    <!-- Sticky Note 4 (Rose) -->
+    <div class="sticky-note sticky-rose" style="top: 260px; left: 520px;">
+      <div class="sticky-content" contenteditable="true">
+        Ensure pastel sticky colors never exceed 2 contrasting pairs per board section.
+      </div>
+      <div class="sticky-meta">
+        <span>#guidelines</span>
+        <span>Miro Bot</span>
+      </div>
+    </div>
+
+    <!-- Bottom Sticky Spawner Bar -->
+    <div class="spawner-dock">
+      <input type="text" class="spawner-input" id="newStickyText" placeholder="Write on a new sticky note...">
+      <div style="display: flex; gap: 6px;">
+        <div class="color-chip active" style="background: var(--pastel-yellow);" onclick="setColor('yellow', this)"></div>
+        <div class="color-chip" style="background: var(--pastel-teal);" onclick="setColor('teal', this)"></div>
+        <div class="color-chip" style="background: var(--pastel-coral);" onclick="setColor('coral', this)"></div>
+        <div class="color-chip" style="background: var(--pastel-rose);" onclick="setColor('rose', this)"></div>
+      </div>
+      <button class="btn btn-blue" onclick="addCustomSticky()">+ Add Note</button>
+    </div>
+
+  </div>
+
+  <!-- Token Foundations Showcase Section -->
+  <section class="token-section">
+    <div class="token-card-box">
+      <h2 style="font-family: var(--font-display); font-size: 24px; font-weight: 600; color: var(--fg); margin-bottom: 4px;">
+        Miro Visual Design Tokens
+      </h2>
+      <p style="font-size: 14px; color: var(--muted);">
+        Verified against open-design/design-systems/miro/DESIGN.md
+      </p>
+
+      <div class="token-grid">
+        <!-- Token 1 -->
+        <div class="token-box">
+          <div class="token-color" style="background-color: #ffd02f; color: #050038;">
+            #ffd02f
+          </div>
+          <div class="token-meta-info">
+            <div style="font-family: var(--font-mono); font-weight: 700; color: #050038;">--accent-yellow</div>
+            <div style="color: var(--muted);">Miro Brand Sunny Yellow</div>
+          </div>
+        </div>
+
+        <!-- Token 2 -->
+        <div class="token-box">
+          <div class="token-color" style="background-color: #5b76fe; color: #ffffff;">
+            #5b76fe
+          </div>
+          <div class="token-meta-info">
+            <div style="font-family: var(--font-mono); font-weight: 700; color: #5b76fe;">--accent-blue (Blue 450)</div>
+            <div style="color: var(--muted);">Primary Interactive Button</div>
+          </div>
+        </div>
+
+        <!-- Token 3 -->
+        <div class="token-box">
+          <div class="token-color" style="background-color: #050038; color: #ffffff;">
+            #050038
+          </div>
+          <div class="token-meta-info">
+            <div style="font-family: var(--font-mono); font-weight: 700; color: #050038;">--fg (Ink Black)</div>
+            <div style="color: var(--muted);">Primary High-Contrast Ink</div>
+          </div>
+        </div>
+
+        <!-- Token 4 -->
+        <div class="token-box">
+          <div class="token-color" style="background-color: #c3faf5; color: #187574;">
+            #c3faf5
+          </div>
+          <div class="token-meta-info">
+            <div style="font-family: var(--font-mono); font-weight: 700; color: #187574;">--pastel-teal</div>
+            <div style="color: var(--muted);">Collaboration Pastel Sticky</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Global Footer -->
+  <footer class="miro-footer">
+    <div class="footer-inner">
+      <div>&copy; 2026 Miro Visual Collaboration · Rebuilt for Open Design Systems.</div>
+      <div>Infinite canvas architecture with multi-user real-time telemetry.</div>
+    </div>
+  </footer>
+
+  <script>
+    let activeColor = 'yellow';
+
+    function setColor(color, chip) {
+      activeColor = color;
+      document.querySelectorAll('.color-chip').forEach(c => c.classList.remove('active'));
+      chip.classList.add('active');
+    }
+
+    function addCustomSticky() {
+      const input = document.getElementById('newStickyText');
+      const text = input.value.trim() || 'Collaborative whiteboard idea card';
+      
+      const canvas = document.getElementById('boardCanvas');
+      const note = document.createElement('div');
+      note.className = `sticky-note sticky-${activeColor}`;
+      
+      const randomX = Math.floor(Math.random() * 400 + 200);
+      const randomY = Math.floor(Math.random() * 200 + 100);
+      note.style.left = randomX + 'px';
+      note.style.top = randomY + 'px';
+      
+      note.innerHTML = `
+        <div class="sticky-content" contenteditable="true">${text}</div>
+        <div class="sticky-meta">
+          <span>#user-note</span>
+          <span>You</span>
+        </div>
+      `;
+      
+      canvas.appendChild(note);
+      input.value = '';
+    }
+
+    function spawnQuickSticky() {
+      addCustomSticky();
+    }
+
+    function addBoardEmoji() {
+      alert('Emoji reaction bubble placed on whiteboard canvas!');
+    }
+
+    function toggleStar(star) {
+      star.style.color = star.style.color === 'rgb(255, 208, 47)' ? '#c7cad5' : '#ffd02f';
+    }
+
+    function shareBoard() {
+      alert('Miro board share link copied to clipboard.');
+    }
+
+    // Cursor Movement Simulation
+    setInterval(() => {
+      const c1 = document.getElementById('cursor1');
+      const c2 = document.getElementById('cursor2');
+      if (c1) {
+        c1.style.left = (Math.random() * 200 + 550) + 'px';
+        c1.style.top = (Math.random() * 150 + 100) + 'px';
+      }
+      if (c2) {
+        c2.style.left = (Math.random() * 200 + 250) + 'px';
+        c2.style.top = (Math.random() * 150 + 280) + 'px';
+      }
+    }, 2800);
+  </script>
+</body>
+</html>

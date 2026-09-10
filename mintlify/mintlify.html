@@ -1,0 +1,799 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mintlify — The Modern Standard for Public Developer Documentation</title>
+  
+  <!-- Typography: Inter (Primary) & Geist Mono (Technical/Code) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@400;500;600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+
+  <style>
+    /* Mintlify Design Tokens (from DESIGN.md & tokens.css) */
+    :root {
+      /* Surface: Clean white canvas, no color section backgrounds */
+      --bg: #ffffff;
+      --surface: #ffffff;
+      --surface-warm: #fafafa;          /* Gray 50 — trust card / subtle tint */
+
+      /* Foreground: Near-black for readability comfort */
+      --fg: #0d0d0d;                    /* Gray 900 — headings, primary text */
+      --fg-2: #333333;                  /* Gray 700 — body description */
+      --muted: #666666;                 /* Gray 500 — captions, tertiary */
+      --meta: #888888;                  /* Gray 400 — code annotations, placeholders */
+
+      /* Borders: Signature 5% black opacity hairline */
+      --border: rgba(0, 0, 0, 0.05);    /* Primary separation mechanism */
+      --border-soft: rgba(0, 0, 0, 0.05);
+      --border-interactive: rgba(0, 0, 0, 0.08);
+
+      /* Accent: Mint Green (Used sparingly <=2 times per screen) */
+      --accent: #18E299;                /* Brand Green — signature mint */
+      --accent-on: #0d0d0d;             /* Dark text on high-luminance mint */
+      --accent-hover: #0fa76e;          /* Brand Green Deep */
+      --accent-subtle: #d4fae8;         /* Tinted surface for badges */
+
+      /* Semantic Twoslash Tokens */
+      --success: #16a34a;
+      --warn: #c37d0d;                  /* Warm Amber */
+      --danger: #d45656;                /* Error Red */
+      --info-blue: #3772cf;
+
+      /* Typography */
+      --font-display: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      --font-body: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      --font-mono: "Geist Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+
+      /* Radius: Hard climb to full-pill 9999px signature */
+      --radius-sm: 8px;                 /* Small containers / nav items */
+      --radius-md: 16px;                /* Standard cards */
+      --radius-lg: 24px;                /* Featured cards */
+      --radius-pill: 9999px;            /* SIGNATURE: buttons, inputs, badges */
+
+      /* Elevation: Barely-there ambient whisper */
+      --elev-raised: 0 2px 4px rgba(0, 0, 0, 0.03);
+      --focus-ring: 0 0 0 2px var(--accent);
+
+      /* Motion */
+      --motion-fast: 150ms;
+      --motion-base: 200ms;
+    }
+
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--bg);
+      color: var(--fg-2);
+      font-family: var(--font-body);
+      font-size: 16px;
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Sticky Navigation */
+    .mint-nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(255, 255, 255, 0.85);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border);
+      padding: 0 2rem;
+    }
+
+    .nav-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      height: 68px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1.5rem;
+    }
+
+    .brand-mark {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+      color: var(--fg);
+    }
+
+    .mint-logo-icon {
+      width: 24px;
+      height: 24px;
+      fill: var(--accent);
+    }
+
+    .brand-name {
+      font-weight: 600;
+      font-size: 18px;
+      letter-spacing: -0.02em;
+    }
+
+    .nav-menu {
+      display: flex;
+      align-items: center;
+      gap: 1.75rem;
+      list-style: none;
+    }
+
+    .nav-link {
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--fg);
+      text-decoration: none;
+      transition: color var(--motion-fast) ease;
+    }
+
+    .nav-link:hover {
+      color: var(--accent);
+    }
+
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    /* Full-Pill Signature Buttons */
+    .btn {
+      font-family: var(--font-body);
+      font-size: 15px;
+      font-weight: 500;
+      padding: 8px 24px;
+      border-radius: var(--radius-pill);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      text-decoration: none;
+      transition: all var(--motion-fast) ease;
+      user-select: none;
+      border: none;
+    }
+
+    .btn-dark {
+      background: var(--fg);
+      color: #ffffff;
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.06);
+    }
+
+    .btn-dark:hover {
+      opacity: 0.9;
+      transform: translateY(-1px);
+    }
+
+    .btn-ghost {
+      background: #ffffff;
+      color: var(--fg);
+      border: 1px solid var(--border-interactive);
+      padding: 7px 20px;
+    }
+
+    .btn-ghost:hover {
+      border-color: rgba(0, 0, 0, 0.15);
+      background: #fafafa;
+    }
+
+    .btn-brand-accent {
+      background: var(--accent);
+      color: var(--accent-on);
+      font-weight: 600;
+    }
+
+    .btn-brand-accent:hover {
+      background: var(--accent-hover);
+    }
+
+    /* Atmospheric Hero with Cloud Wash */
+    .hero-container {
+      position: relative;
+      overflow: hidden;
+      padding: 6rem 2rem 4rem 2rem;
+      text-align: center;
+    }
+
+    .atmospheric-wash {
+      position: absolute;
+      top: -100px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 1000px;
+      height: 550px;
+      background: radial-gradient(ellipse at 50% 30%, rgba(24, 226, 153, 0.18) 0%, rgba(24, 226, 153, 0.05) 50%, rgba(255, 255, 255, 0) 75%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .hero-inner {
+      max-width: 900px;
+      margin: 0 auto;
+      position: relative;
+      z-index: 10;
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: #ffffff;
+      border: 1px solid var(--border-interactive);
+      padding: 4px 14px;
+      border-radius: var(--radius-pill);
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--fg);
+      margin-bottom: 2rem;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+    }
+
+    .hero-badge .tag-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--accent);
+    }
+
+    .hero-title {
+      font-family: var(--font-display);
+      font-size: clamp(2.75rem, 5.5vw, 4rem);
+      font-weight: 600;
+      color: var(--fg);
+      line-height: 1.15;
+      letter-spacing: -1.28px;
+      margin-bottom: 1.5rem;
+    }
+
+    .hero-desc {
+      font-size: 18px;
+      color: var(--fg-2);
+      max-width: 680px;
+      margin: 0 auto 2.5rem auto;
+      line-height: 1.6;
+    }
+
+    .hero-actions {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    /* Main Container */
+    .main-wrap {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 2rem 6rem 2rem;
+      width: 100%;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 6rem;
+    }
+
+    /* Interactive Documentation & API Playground */
+    .playground-grid {
+      display: grid;
+      grid-template-columns: 1fr 1.15fr;
+      gap: 2.5rem;
+      align-items: stretch;
+    }
+
+    @media (max-width: 900px) {
+      .playground-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .doc-walkthrough {
+      background: #ffffff;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 2.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    .mono-tag {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+      color: var(--muted);
+    }
+
+    .doc-heading {
+      font-family: var(--font-display);
+      font-size: 24px;
+      font-weight: 600;
+      color: var(--fg);
+      letter-spacing: -0.24px;
+    }
+
+    .callout-box {
+      border: 1px solid rgba(24, 226, 153, 0.3);
+      background: rgba(24, 226, 153, 0.05);
+      border-radius: 12px;
+      padding: 14px 18px;
+      display: flex;
+      gap: 12px;
+      font-size: 14px;
+      color: var(--fg);
+    }
+
+    .callout-icon {
+      color: var(--accent-hover);
+      font-weight: 700;
+    }
+
+    /* Interactive Code Terminal (Geist Mono) */
+    .terminal-card {
+      background: #ffffff;
+      border: 1px solid var(--border-interactive);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      box-shadow: var(--elev-raised);
+    }
+
+    .terminal-header {
+      background: #fafafa;
+      border-bottom: 1px solid var(--border);
+      padding: 12px 18px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .tab-group {
+      display: flex;
+      gap: 6px;
+    }
+
+    .lang-tab {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      font-weight: 500;
+      text-transform: uppercase;
+      padding: 4px 10px;
+      border-radius: 6px;
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      color: var(--muted);
+      transition: all var(--motion-fast) ease;
+    }
+
+    .lang-tab.active, .lang-tab:hover {
+      background: #ffffff;
+      color: var(--fg);
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+    }
+
+    .copy-btn {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      background: #ffffff;
+      border: 1px solid var(--border);
+      padding: 4px 10px;
+      border-radius: 6px;
+      cursor: pointer;
+      color: var(--muted);
+    }
+
+    .copy-btn:hover {
+      color: var(--fg);
+      border-color: rgba(0, 0, 0, 0.15);
+    }
+
+    .terminal-code {
+      padding: 1.5rem;
+      font-family: var(--font-mono);
+      font-size: 13px;
+      line-height: 1.6;
+      color: #0d0d0d;
+      flex: 1;
+      overflow-x: auto;
+      background: #ffffff;
+    }
+
+    .terminal-code .kw { color: #0fa76e; font-weight: 600; }
+    .terminal-code .str { color: #3772cf; }
+    .terminal-code .comment { color: var(--meta); }
+
+    .terminal-footer {
+      background: #fafafa;
+      border-top: 1px solid var(--border);
+      padding: 12px 18px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-family: var(--font-mono);
+      font-size: 12px;
+    }
+
+    /* Cards Grid (16px and 24px radii) */
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2rem;
+    }
+
+    @media (max-width: 900px) {
+      .features-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .feature-card {
+      background: #ffffff;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 28px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      transition: border-color var(--motion-fast) ease;
+    }
+
+    .feature-card:hover {
+      border-color: var(--border-interactive);
+    }
+
+    .feature-card-title {
+      font-family: var(--font-display);
+      font-size: 20px;
+      font-weight: 600;
+      color: var(--fg);
+      letter-spacing: -0.2px;
+    }
+
+    .feature-card-desc {
+      font-size: 15px;
+      color: var(--fg-2);
+      line-height: 1.55;
+    }
+
+    /* Token Foundations Audit */
+    .token-panel {
+      background: #ffffff;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 2.5rem;
+    }
+
+    .token-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1.5rem;
+      margin-top: 1.5rem;
+    }
+
+    .token-card {
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      background: #ffffff;
+    }
+
+    .token-color {
+      height: 60px;
+      display: flex;
+      align-items: flex-end;
+      padding: 8px 12px;
+      font-family: var(--font-mono);
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    .token-info {
+      padding: 12px;
+      background: #fafafa;
+    }
+
+    .token-name {
+      font-family: var(--font-mono);
+      font-weight: 600;
+      font-size: 12px;
+      color: var(--fg);
+    }
+
+    .token-role {
+      font-size: 12px;
+      color: var(--muted);
+      margin-top: 2px;
+    }
+
+    /* Global Footer */
+    .mint-footer {
+      border-top: 1px solid var(--border);
+      padding: 3rem 2rem;
+      font-size: 14px;
+      color: var(--muted);
+    }
+
+    .footer-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 1.5rem;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navigation Header -->
+  <header class="mint-nav">
+    <div class="nav-inner">
+      <a href="#" class="brand-mark">
+        <svg class="mint-logo-icon" viewBox="0 0 24 24">
+          <path d="M12 2L4 7v10l8 5 8-5V7l-8-5zm0 2.24l6 3.75v7.02l-6 3.75-6-3.75V7.99l6-3.75z"/>
+        </svg>
+        <span class="brand-name">mintlify</span>
+      </a>
+
+      <ul class="nav-menu">
+        <li><a href="#quickstart" class="nav-link">Documentation</a></li>
+        <li><a href="#features" class="nav-link">Showcase</a></li>
+        <li><a href="#tokens" class="nav-link">Tokens</a></li>
+        <li><a href="#" class="nav-link">Pricing</a></li>
+      </ul>
+
+      <div class="nav-actions">
+        <button class="btn btn-ghost" onclick="alert('Searching docs...')">Search (⌘K)</button>
+        <button class="btn btn-dark" onclick="alert('Starting Mintlify...')">Get Started</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Atmospheric Gradient Hero -->
+  <section class="hero-container">
+    <div class="atmospheric-wash"></div>
+    <div class="hero-inner">
+      <div class="hero-badge">
+        <span class="tag-dot"></span>
+        <span>Mintlify 3.0 Engine · Documentation as Product</span>
+      </div>
+
+      <h1 class="hero-title">
+        The Documentation Engine for World-Class APIs
+      </h1>
+
+      <p class="hero-desc">
+        Engineered with a luminous pure white canvas (<code>#ffffff</code>), near-black text (<code>#0d0d0d</code>), signature mint green touches (<code>#18E299</code>), and whisper-thin 5% borders.
+      </p>
+
+      <div class="hero-actions">
+        <button class="btn btn-dark" onclick="alert('Redirecting to dashboard...')">Start Building Free</button>
+        <a href="#quickstart" class="btn btn-ghost">Explore API Playground</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Main View Container -->
+  <main class="main-wrap">
+
+    <!-- Interactive Documentation & Terminal Playground -->
+    <section class="playground-grid" id="quickstart">
+      <!-- Left: Walkthrough Guide -->
+      <div class="doc-walkthrough">
+        <span class="mono-tag">DEVELOPER QUICKSTART</span>
+        <h2 class="doc-heading">Initialize Your Knowledge Base</h2>
+        <p style="font-size: 15px; color: var(--fg-2); line-height: 1.6;">
+          Mintlify turns Markdown files and OpenAPI definitions into blazing fast, search-indexed documentation.
+        </p>
+
+        <div class="callout-box">
+          <span class="callout-icon">💡</span>
+          <div>
+            <strong>Interactive Tip:</strong> Use <code>mint.json</code> to configure custom navigation hierarchy, primary colors, and GitHub sync hooks.
+          </div>
+        </div>
+
+        <div style="display: flex; gap: 12px; margin-top: 1rem;">
+          <button class="btn btn-brand-accent" onclick="runRequest()">Test API Call</button>
+          <button class="btn btn-ghost" onclick="alert('Opening schema view...')">View OpenAPI Spec</button>
+        </div>
+      </div>
+
+      <!-- Right: Geist Mono Interactive Terminal -->
+      <div class="terminal-card">
+        <div class="terminal-header">
+          <div class="tab-group">
+            <button class="lang-tab active" onclick="switchLang('curl', this)">cURL</button>
+            <button class="lang-tab" onclick="switchLang('ts', this)">TypeScript</button>
+            <button class="lang-tab" onclick="switchLang('py', this)">Python</button>
+          </div>
+          <button class="copy-btn" onclick="copyCode()">Copy</button>
+        </div>
+
+        <pre class="terminal-code" id="codeContent"><span class="comment"># Fetch verified docs index via Mintlify API</span>
+<span class="kw">curl</span> -X POST https://api.mintlify.com/v1/sync \
+  -H <span class="str">"Authorization: Bearer mint_sec_9918"</span> \
+  -H <span class="str">"Content-Type: application/json"</span> \
+  -d <span class="str">'{"project": "open-design", "version": "v3.0"}'</span></pre>
+
+        <div class="terminal-footer">
+          <span style="color: var(--meta);">Response Status: <strong style="color: #16a34a;" id="respStatus">200 OK</strong></span>
+          <span style="color: var(--meta);">Latency: <strong id="respLatency">24ms</strong></span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Features Bento Grid -->
+    <section id="features">
+      <div style="margin-bottom: 2rem;">
+        <span class="mono-tag">PLATFORM CAPABILITIES</span>
+        <h2 style="font-family: var(--font-display); font-size: 32px; font-weight: 600; color: var(--fg); letter-spacing: -0.8px; margin-top: 4px;">
+          Built for Reading Comfort and Developer Speed
+        </h2>
+      </div>
+
+      <div class="features-grid">
+        <div class="feature-card">
+          <span class="mono-tag">COMPONENTS</span>
+          <h3 class="feature-card-title">Interactive MDX Primitives</h3>
+          <p class="feature-card-desc">
+            Rich callouts, API playgrounds, response tabs, and accordion groups built natively without runtime bloat.
+          </p>
+        </div>
+
+        <div class="feature-card">
+          <span class="mono-tag">TYPOGRAPHY</span>
+          <h3 class="feature-card-title">Disciplined Inter &amp; Geist</h3>
+          <p class="feature-card-desc">
+            Inter handles human-readable prose with 150% line-height while Geist Mono strictly manages code blocks and tags.
+          </p>
+        </div>
+
+        <div class="feature-card">
+          <span class="mono-tag">DESIGN TOKENS</span>
+          <h3 class="feature-card-title">Whisper 5% Borders</h3>
+          <p class="feature-card-desc">
+            Borders at <code>rgba(0,0,0,0.05)</code> separate cards without heavy contrast lines, keeping the visual hierarchy peaceful.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Token Foundations Audit -->
+    <section class="token-panel" id="tokens">
+      <div>
+        <span class="mono-tag">SPECIFICATION AUDIT</span>
+        <h2 style="font-family: var(--font-display); font-size: 24px; font-weight: 600; color: var(--fg); letter-spacing: -0.24px; margin-top: 4px;">
+          Mintlify Design Tokens
+        </h2>
+        <p style="font-size: 14px; color: var(--muted); margin-top: 4px;">Verified against open-design/design-systems/mintlify/DESIGN.md</p>
+      </div>
+
+      <div class="token-grid">
+        <!-- Token 1 -->
+        <div class="token-card">
+          <div class="token-color" style="background-color: #18E299; color: #0d0d0d;">
+            #18E299
+          </div>
+          <div class="token-info">
+            <div class="token-name">--accent</div>
+            <div class="token-role">Brand Mint (Spayed Accent)</div>
+          </div>
+        </div>
+
+        <!-- Token 2 -->
+        <div class="token-card">
+          <div class="token-color" style="background-color: #0d0d0d; color: #ffffff;">
+            #0d0d0d
+          </div>
+          <div class="token-info">
+            <div class="token-name">--fg</div>
+            <div class="token-role">Near-Black Primary Text &amp; CTAs</div>
+          </div>
+        </div>
+
+        <!-- Token 3 -->
+        <div class="token-card">
+          <div class="token-color" style="background: rgba(0, 0, 0, 0.05); color: #0d0d0d; border-bottom: 1px solid #e5e5e5;">
+            rgba(0,0,0,0.05)
+          </div>
+          <div class="token-info">
+            <div class="token-name">--border</div>
+            <div class="token-role">5% Opacity Hairline Separator</div>
+          </div>
+        </div>
+
+        <!-- Token 4 -->
+        <div class="token-card">
+          <div class="token-color" style="background-color: #ffffff; color: #0d0d0d; border-bottom: 1px solid #e5e5e5;">
+            #ffffff
+          </div>
+          <div class="token-info">
+            <div class="token-name">--bg</div>
+            <div class="token-role">Pure White Page Canvas</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Global Footer -->
+  <footer class="mint-footer">
+    <div class="footer-inner">
+      <div>&copy; 2026 Mintlify Inc. Rebuilt for Open Design Systems.</div>
+      <div style="display: flex; gap: 1.5rem;">
+        <a href="#" style="color: var(--muted); text-decoration: none;">Privacy</a>
+        <a href="#" style="color: var(--muted); text-decoration: none;">Security</a>
+        <a href="#" style="color: var(--muted); text-decoration: none;">Status</a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    const codeSnippets = {
+      curl: `<span class="comment"># Fetch verified docs index via Mintlify API</span>
+<span class="kw">curl</span> -X POST https://api.mintlify.com/v1/sync \\
+  -H <span class="str">"Authorization: Bearer mint_sec_9918"</span> \\
+  -H <span class="str">"Content-Type: application/json"</span> \\
+  -d <span class="str">'{"project": "open-design", "version": "v3.0"}'</span>`,
+
+      ts: `<span class="comment">// Mintlify TypeScript SDK Initialization</span>
+<span class="kw">import</span> { MintlifyClient } <span class="kw">from</span> <span class="str">'@mintlify/sdk'</span>;
+
+<span class="kw">const</span> client = <span class="kw">new</span> MintlifyClient({
+  apiKey: process.env.MINTLIFY_API_KEY,
+});
+<span class="kw">const</span> docIndex = <span class="kw">await</span> client.sync({ version: <span class="str">'v3.0'</span> });`,
+
+      py: `<span class="comment"># Mintlify Python Client</span>
+<span class="kw">from</span> mintlify <span class="kw">import</span> Mintlify
+
+client = Mintlify(api_key=<span class="str">"mint_sec_9918"</span>)
+doc_index = client.sync(version=<span class="str">"v3.0"</span>)`
+    };
+
+    function switchLang(lang, btn) {
+      document.querySelectorAll('.lang-tab').forEach(t => t.classList.remove('active'));
+      btn.classList.add('active');
+      document.getElementById('codeContent').innerHTML = codeSnippets[lang];
+    }
+
+    function copyCode() {
+      const code = document.getElementById('codeContent').innerText;
+      navigator.clipboard.writeText(code).then(() => {
+        alert('Code copied to clipboard!');
+      });
+    }
+
+    function runRequest() {
+      const status = document.getElementById('respStatus');
+      const latency = document.getElementById('respLatency');
+      status.textContent = 'Syncing...';
+      status.style.color = '#c37d0d';
+      setTimeout(() => {
+        status.textContent = '200 OK';
+        status.style.color = '#16a34a';
+        latency.textContent = Math.floor(Math.random() * 20 + 15) + 'ms';
+      }, 400);
+    }
+  </script>
+</body>
+</html>

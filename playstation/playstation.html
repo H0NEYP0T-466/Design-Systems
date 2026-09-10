@@ -1,0 +1,1316 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PlayStation® — Design System & Official Experience</title>
+  <meta name="description" content="Authentic implementation of the PlayStation design system featuring the three-surface channel layout, SST weight 300 quiet authority display typography, electric cyan hover scale 1.2x signature, and eleven-tier radius scale.">
+
+  <style>
+    /* ─────────────────────────────────────────────────────────────
+       1. TOKENS & SYSTEM VARIABLES
+       ───────────────────────────────────────────────────────────── */
+    :root {
+      /* Brand Anchors */
+      --ps-blue: #0070cc;
+      --ps-console-black: #000000;
+      
+      /* Interaction Colors (Strictly for hover/active/focus, never at rest) */
+      --ps-cyan: #1eaedb;
+      --ps-link-hover-blue: #1883fd;
+      --ps-dark-link-blue: #0068bd;
+      --ps-dark-surface-link: #53b1ff;
+
+      /* Commerce & Semantic */
+      --ps-commerce-orange: #d53b00;
+      --ps-commerce-orange-active: #aa2f00;
+      --ps-warning-red: #c81b3a;
+
+      /* Surfaces */
+      --ps-paper-white: #ffffff;
+      --ps-ice-mist: #f5f7fa;
+      --ps-divider-tint: #f3f3f3;
+      --ps-shadow-black: #121314;
+      --ps-filter-mist: rgba(245, 247, 250, 0.3);
+
+      /* Neutrals & Text */
+      --ps-display-ink: #000000;
+      --ps-deep-charcoal: #1f1f1f;
+      --ps-body-gray: #6b6b6b;
+      --ps-mute-gray: #cccccc;
+      --ps-placeholder-ink: rgba(0, 0, 0, 0.6);
+      --ps-inverse-white: #ffffff;
+
+      /* Gradients (Exclusively section backgrounds, never in components) */
+      --ps-light-section-gradient: linear-gradient(180deg, #ffffff 0%, #f5f7fa 100%);
+      --ps-dark-section-gradient: linear-gradient(180deg, #121314 0%, #000000 100%);
+
+      /* Eleven Discrete Radius Values */
+      --radius-2: 2px;
+      --radius-3: 3px;    /* Forms & inputs */
+      --radius-6: 6px;
+      --radius-12: 12px;  /* Game covers */
+      --radius-13: 13px;  /* Nested media */
+      --radius-19: 19px;  /* Feature cards */
+      --radius-20: 20px;  /* Inline tags */
+      --radius-24: 24px;  /* Hero cards */
+      --radius-36: 36px;  /* Secondary pill */
+      --radius-48: 48px;  /* Large buttons */
+      --radius-pill: 999px; /* Primary pill & circle */
+
+      /* Strictly Defined Shadow Tiers (No middle ground) */
+      --shadow-tier-0: none;
+      --shadow-tier-1: 0px 5px 9px 0px rgba(0, 0, 0, 0.06); /* Panel lift */
+      --shadow-tier-2: 0px 5px 9px 0px rgba(0, 0, 0, 0.08); /* Grid tiles */
+      --shadow-tier-3: 0px 5px 9px 0px rgba(0, 0, 0, 0.16); /* Emphasized card */
+      --shadow-tier-4: 0px 5px 9px 0px rgba(0, 0, 0, 0.80); /* Dramatic hero drop */
+
+      /* Typography */
+      --font-sst: "SST", "Playstation SST", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+
+      /* Spacing Scale */
+      --space-8: 8px;
+      --space-12: 12px;
+      --space-16: 16px;
+      --space-20: 20px;
+      --space-24: 24px;
+      --space-32: 32px;
+      --space-48: 48px;
+      --space-64: 64px;
+      --space-96: 96px;
+    }
+
+    /* Reset & Base */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      background-color: var(--ps-console-black);
+      color: var(--ps-deep-charcoal);
+      font-family: var(--font-sst);
+      font-size: 18px;
+      line-height: 1.50;
+      letter-spacing: 0.1px;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    /* ─────────────────────────────────────────────────────────────
+       2. SIGNATURE BUTTON INTERACTIONS & POWER-ON HOVER
+       ───────────────────────────────────────────────────────────── */
+    
+    /* Primary PlayStation Blue Pill Button */
+    .ps-btn-primary {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background-color: var(--ps-blue);
+      color: var(--ps-inverse-white);
+      font-family: var(--font-sst);
+      font-size: 18px;
+      font-weight: 500;
+      letter-spacing: 0.4px;
+      padding: 12px 28px;
+      border-radius: var(--radius-pill);
+      border: 2px solid transparent;
+      outline: none;
+      cursor: pointer;
+      text-decoration: none;
+      transform-origin: center;
+      transition: background-color 180ms ease, transform 180ms ease, box-shadow 180ms ease, border-color 180ms ease;
+    }
+
+    /* The Signature Move: Cyan fill, 2px white border, 2px blue ring, scale(1.2) */
+    .ps-btn-primary:hover {
+      background-color: var(--ps-cyan);
+      color: #ffffff;
+      border-color: #ffffff;
+      box-shadow: 0 0 0 2px var(--ps-blue);
+      transform: scale(1.2);
+    }
+
+    .ps-btn-primary:active {
+      opacity: 0.6;
+    }
+
+    .ps-btn-primary:focus-visible {
+      background-color: var(--ps-cyan);
+      border-color: #ffffff;
+      box-shadow: 0 0 0 2px var(--ps-blue);
+      transform: scale(1.2);
+    }
+
+    /* Secondary White Outset Button */
+    .ps-btn-secondary {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background-color: var(--ps-paper-white);
+      color: #0172ce;
+      font-family: var(--font-sst);
+      font-size: 18px;
+      font-weight: 600;
+      letter-spacing: 0.2px;
+      padding: 12px 26px;
+      border-radius: var(--radius-pill);
+      border: 2px outset #000000; /* Authentic PlayStation Outset Border */
+      outline: none;
+      cursor: pointer;
+      text-decoration: none;
+      transform-origin: center;
+      transition: background-color 180ms ease, transform 180ms ease, box-shadow 180ms ease, border-color 180ms ease;
+    }
+
+    .ps-btn-secondary:hover {
+      background-color: var(--ps-cyan);
+      color: #ffffff;
+      border-color: #ffffff;
+      box-shadow: 0 0 0 2px var(--ps-blue);
+      transform: scale(1.2);
+    }
+
+    .ps-btn-secondary:active {
+      opacity: 0.6;
+    }
+
+    /* Commerce Orange Button (PS Store / Buy) */
+    .ps-btn-commerce {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background-color: var(--ps-commerce-orange);
+      color: var(--ps-inverse-white);
+      font-family: var(--font-sst);
+      font-size: 18px;
+      font-weight: 700;
+      letter-spacing: 0.45px;
+      padding: 12px 28px;
+      border-radius: var(--radius-pill);
+      border: 2px solid transparent;
+      outline: none;
+      cursor: pointer;
+      text-decoration: none;
+      transform-origin: center;
+      transition: background-color 180ms ease, transform 180ms ease, box-shadow 180ms ease, border-color 180ms ease;
+    }
+
+    .ps-btn-commerce:hover {
+      background-color: var(--ps-cyan);
+      color: #ffffff;
+      border-color: #ffffff;
+      box-shadow: 0 0 0 2px var(--ps-blue);
+      transform: scale(1.2);
+    }
+
+    .ps-btn-commerce:active {
+      background-color: var(--ps-commerce-orange-active);
+      opacity: 0.8;
+    }
+
+    /* Mini In-Card CTA */
+    .ps-btn-mini {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background-color: var(--ps-blue);
+      color: #ffffff;
+      font-family: var(--font-sst);
+      font-size: 14px;
+      font-weight: 700;
+      letter-spacing: 0.324px;
+      padding: 8px 18px;
+      border-radius: var(--radius-pill);
+      border: 2px solid transparent;
+      cursor: pointer;
+      text-decoration: none;
+      transform-origin: center;
+      transition: background-color 180ms ease, transform 180ms ease, box-shadow 180ms ease;
+    }
+
+    .ps-btn-mini:hover {
+      background-color: var(--ps-cyan);
+      border-color: #ffffff;
+      box-shadow: 0 0 0 2px var(--ps-blue);
+      transform: scale(1.2);
+    }
+
+    /* Game Store Platform Pill */
+    .ps-platform-pill {
+      background-color: var(--ps-paper-white);
+      color: var(--ps-console-black);
+      font-family: var(--font-sst);
+      font-size: 14px;
+      font-weight: 500;
+      padding: 6px 14px;
+      border-radius: 9999px;
+      display: inline-block;
+      letter-spacing: 0.2px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    /* ─────────────────────────────────────────────────────────────
+       3. TOP NAVIGATION (PERSISTENT BLACK FULL-BLEED)
+       ───────────────────────────────────────────────────────────── */
+    .ps-sony-bar {
+      background-color: #000000;
+      border-bottom: 1px solid #1a1a1a;
+      height: 36px;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      padding: 0 24px;
+    }
+
+    .ps-sony-logo-text {
+      font-family: var(--font-sst);
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      color: #ffffff;
+    }
+
+    .ps-navbar {
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      background-color: #000000; /* Stays black on every scroll position */
+      height: 64px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 32px;
+      border-bottom: 1px solid #1f1f1f;
+    }
+
+    .ps-nav-left {
+      display: flex;
+      align-items: center;
+      gap: 36px;
+    }
+
+    .ps-symbol-logo {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: #ffffff;
+      text-decoration: none;
+    }
+
+    .ps-symbol-icon {
+      width: 38px;
+      height: 30px;
+    }
+
+    .ps-nav-links {
+      display: flex;
+      align-items: center;
+      gap: 24px;
+      list-style: none;
+    }
+
+    .ps-nav-link {
+      font-size: 15px;
+      font-weight: 500;
+      color: #ffffff;
+      padding: 8px 4px;
+      position: relative;
+      transition: color 180ms ease;
+    }
+
+    .ps-nav-link:hover {
+      color: var(--ps-link-hover-blue);
+    }
+
+    .ps-nav-link.active::after {
+      content: '';
+      position: absolute;
+      bottom: -18px;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background-color: var(--ps-blue);
+    }
+
+    .ps-nav-right {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .ps-search-icon-btn {
+      color: #ffffff;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 6px;
+    }
+
+    /* ─────────────────────────────────────────────────────────────
+       4. THREE-SURFACE CHANNEL 1: DARK HERO PANEL
+       ───────────────────────────────────────────────────────────── */
+    .ps-channel-dark {
+      background: var(--ps-dark-section-gradient);
+      color: var(--ps-inverse-white);
+      padding: var(--space-96) 32px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .ps-container {
+      max-width: 1440px;
+      margin: 0 auto;
+    }
+
+    .ps-hero-grid {
+      display: grid;
+      grid-template-columns: 1.1fr 1fr;
+      align-items: center;
+      gap: 48px;
+    }
+
+    @media (max-width: 1024px) {
+      .ps-hero-grid {
+        grid-template-columns: 1fr;
+        text-align: center;
+      }
+    }
+
+    /* Quiet Authority Headline: SST 54px Light weight 300 */
+    .ps-hero-headline-xl {
+      font-size: 54px;
+      font-weight: 300; /* SST weight 300 signature */
+      line-height: 1.25;
+      letter-spacing: -0.1px;
+      color: #ffffff;
+      margin-bottom: 16px;
+    }
+
+    .ps-hero-subtext {
+      font-size: 20px;
+      font-weight: 400;
+      line-height: 1.50;
+      color: var(--ps-mute-gray);
+      margin-bottom: 36px;
+      max-width: 580px;
+    }
+
+    @media (max-width: 1024px) {
+      .ps-hero-subtext {
+        margin-left: auto;
+        margin-right: auto;
+      }
+    }
+
+    .ps-btn-group {
+      display: flex;
+      align-items: center;
+      gap: 24px;
+      flex-wrap: wrap;
+    }
+
+    @media (max-width: 1024px) {
+      .ps-btn-group {
+        justify-content: center;
+      }
+    }
+
+    /* Hero Card with Dramatic 0.8 Shadow Drop */
+    .ps-hero-card {
+      background: rgba(18, 19, 20, 0.95);
+      border-radius: var(--radius-24);
+      padding: 40px;
+      box-shadow: var(--shadow-tier-4); /* Dramatic rgba(0,0,0,0.80) 0px 5px 9px 0px */
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      position: relative;
+    }
+
+    .ps-hardware-render-box {
+      width: 100%;
+      height: 380px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+
+    .ps-hardware-render-box img {
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: contain;
+      filter: drop-shadow(0 20px 30px rgba(0, 0, 0, 0.9));
+    }
+
+    /* ─────────────────────────────────────────────────────────────
+       5. THREE-SURFACE CHANNEL 2: PAPER-WHITE EDITORIAL PANEL
+       ───────────────────────────────────────────────────────────── */
+    .ps-channel-white {
+      background: var(--ps-light-section-gradient);
+      color: var(--ps-deep-charcoal);
+      padding: var(--space-96) 32px;
+    }
+
+    .ps-section-header {
+      margin-bottom: 48px;
+    }
+
+    .ps-section-header.center {
+      text-align: center;
+    }
+
+    .ps-headline-display-l {
+      font-size: 44px;
+      font-weight: 300; /* SST weight 300 */
+      line-height: 1.25;
+      letter-spacing: 0.1px;
+      color: var(--ps-display-ink);
+      margin-bottom: 12px;
+    }
+
+    .ps-headline-display-mid {
+      font-size: 28px;
+      font-weight: 300; /* SST weight 300 */
+      line-height: 1.25;
+      letter-spacing: 0.1px;
+      color: var(--ps-display-ink);
+      margin-bottom: 10px;
+    }
+
+    .ps-editorial-deck {
+      font-size: 18px;
+      font-weight: 400;
+      color: var(--ps-body-gray);
+      max-width: 680px;
+      line-height: 1.5;
+    }
+
+    .ps-editorial-deck.center {
+      margin: 0 auto;
+    }
+
+    .ps-features-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 32px;
+      margin-top: 48px;
+    }
+
+    @media (max-width: 900px) {
+      .ps-features-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .ps-feature-panel {
+      background: var(--ps-paper-white);
+      border-radius: var(--radius-24);
+      padding: 36px;
+      box-shadow: var(--shadow-tier-1); /* Feather-light 0.06 */
+      transition: transform 200ms ease, box-shadow 200ms ease;
+    }
+
+    .ps-feature-panel:hover {
+      box-shadow: var(--shadow-tier-3);
+      transform: translateY(-4px);
+    }
+
+    .ps-feature-icon-badge {
+      width: 48px;
+      height: 48px;
+      border-radius: var(--radius-pill);
+      background-color: var(--ps-ice-mist);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 20px;
+      color: var(--ps-blue);
+    }
+
+    /* ─────────────────────────────────────────────────────────────
+       6. THREE-SURFACE CHANNEL 3: WHITE GAME STORE CATALOG
+       ───────────────────────────────────────────────────────────── */
+    .ps-game-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: 28px;
+      margin-top: 40px;
+    }
+
+    .ps-game-card {
+      background: var(--ps-paper-white);
+      border-radius: var(--radius-19);
+      overflow: hidden;
+      box-shadow: var(--shadow-tier-2); /* 0.08 standard tile shadow */
+      display: flex;
+      flex-direction: column;
+      transition: transform 200ms ease, box-shadow 200ms ease;
+      cursor: pointer;
+      position: relative;
+    }
+
+    .ps-game-card:hover {
+      transform: translateY(-4px) scale(1.02);
+      box-shadow: var(--shadow-tier-3);
+    }
+
+    .ps-game-card-art {
+      width: 100%;
+      aspect-ratio: 3 / 4; /* Standard game cover ratio */
+      border-radius: var(--radius-12);
+      overflow: hidden;
+      position: relative;
+      background-color: #000;
+    }
+
+    .ps-game-card-art img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .ps-game-card-tag {
+      position: absolute;
+      top: 12px;
+      left: 12px;
+    }
+
+    .ps-game-card-body {
+      padding: 18px 16px;
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+      justify-content: space-between;
+    }
+
+    .ps-game-title {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--ps-deep-charcoal);
+      line-height: 1.3;
+      margin-bottom: 6px;
+    }
+
+    .ps-game-genre {
+      font-size: 13px;
+      color: var(--ps-body-gray);
+      margin-bottom: 14px;
+    }
+
+    .ps-game-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-top: 1px solid var(--ps-divider-tint);
+      padding-top: 12px;
+      margin-top: auto;
+    }
+
+    .ps-price-tag {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--ps-commerce-orange); /* Commerce orange price callout */
+    }
+
+    /* ─────────────────────────────────────────────────────────────
+       7. INTERACTIVE DESIGN SYSTEM LAB & TEST BENCH
+       ───────────────────────────────────────────────────────────── */
+    .ps-lab-section {
+      background-color: #0b0c0d;
+      color: #ffffff;
+      padding: var(--space-96) 32px;
+      border-top: 1px solid #1f1f1f;
+    }
+
+    .ps-lab-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 32px;
+      margin-top: 40px;
+    }
+
+    .ps-lab-card {
+      background-color: #16171a;
+      border-radius: var(--radius-24);
+      padding: 32px;
+      border: 1px solid #282a30;
+    }
+
+    .ps-lab-title {
+      font-size: 20px;
+      font-weight: 500;
+      color: #ffffff;
+      margin-bottom: 16px;
+      border-bottom: 1px solid #282a30;
+      padding-bottom: 10px;
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .ps-token-line {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 8px 0;
+      font-size: 14px;
+      border-bottom: 1px dashed #24262c;
+    }
+
+    .ps-token-key {
+      font-family: monospace;
+      color: var(--ps-mute-gray);
+    }
+
+    .ps-token-val {
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .ps-swatch {
+      width: 16px;
+      height: 16px;
+      border-radius: 3px;
+      display: inline-block;
+    }
+
+    /* Test Bench Form with Strict 3px Input Radius */
+    .ps-input-group {
+      margin-bottom: 16px;
+    }
+
+    .ps-input-label {
+      display: block;
+      font-size: 14px;
+      font-weight: 500;
+      margin-bottom: 6px;
+      color: var(--ps-mute-gray);
+    }
+
+    .ps-input-field {
+      width: 100%;
+      background-color: var(--ps-paper-white);
+      border: 1px solid var(--ps-mute-gray);
+      border-radius: var(--radius-3); /* Strict 3px radius */
+      padding: 10px 14px;
+      font-family: var(--font-sst);
+      font-size: 16px;
+      color: var(--ps-deep-charcoal);
+      outline: none;
+      transition: box-shadow 180ms ease, border-color 180ms ease;
+    }
+
+    .ps-input-field:focus {
+      box-shadow: 0 0 0 2px var(--ps-blue); /* 2px PlayStation blue ring */
+    }
+
+    /* ─────────────────────────────────────────────────────────────
+       8. THREE-SURFACE CHANNEL 4: DEEP COBALT-BLUE FOOTER
+       ───────────────────────────────────────────────────────────── */
+    .ps-channel-blue-footer {
+      background-color: var(--ps-blue); /* #0070cc Brand Anchor */
+      color: var(--ps-inverse-white);
+      padding: var(--space-64) 32px var(--space-48);
+    }
+
+    .ps-footer-inner {
+      max-width: 1440px;
+      margin: 0 auto;
+    }
+
+    .ps-footer-top {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      padding-bottom: 32px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+      margin-bottom: 40px;
+      gap: 20px;
+    }
+
+    .ps-footer-logo-wrap {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .ps-footer-symbols {
+      display: flex;
+      gap: 12px;
+      font-size: 20px;
+      font-weight: 700;
+      letter-spacing: 4px;
+      color: #ffffff;
+    }
+
+    .ps-footer-columns {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 32px;
+      margin-bottom: 48px;
+    }
+
+    .ps-footer-title {
+      font-size: 16px;
+      font-weight: 700;
+      color: #ffffff;
+      margin-bottom: 16px;
+    }
+
+    .ps-footer-nav {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .ps-footer-nav a {
+      font-size: 14px;
+      color: rgba(255, 255, 255, 0.85);
+      transition: color 150ms ease;
+    }
+
+    .ps-footer-nav a:hover {
+      color: #ffffff;
+      text-decoration: underline;
+    }
+
+    .ps-footer-legal {
+      font-size: 12px; /* Micro Caption: SST 12px weight 500 */
+      font-weight: 500;
+      line-height: 1.50;
+      color: var(--ps-mute-gray);
+      border-top: 1px solid rgba(255, 255, 255, 0.2);
+      padding-top: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    /* Modal / Buy Simulator Overlay */
+    .ps-modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.85);
+      backdrop-filter: blur(8px);
+      z-index: 2000;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+
+    .ps-modal-overlay.active {
+      display: flex;
+    }
+
+    .ps-modal-card {
+      background: #ffffff;
+      color: var(--ps-deep-charcoal);
+      border-radius: var(--radius-24);
+      max-width: 600px;
+      width: 100%;
+      padding: 36px;
+      box-shadow: var(--shadow-tier-4);
+      position: relative;
+    }
+
+    .ps-modal-close {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      background: none;
+      border: none;
+      font-size: 24px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- 1. SONY MASTHEAD & PERSISTENT NAV -->
+  <div class="ps-sony-bar">
+    <span class="ps-sony-logo-text">SONY</span>
+  </div>
+
+  <header class="ps-navbar">
+    <div class="ps-nav-left">
+      <a href="#hero" class="ps-symbol-logo" title="PlayStation Home">
+        <svg class="ps-symbol-icon" viewBox="0 0 50 40" fill="currentColor">
+          <path d="M5.8 30.5c-3.2-.8-5.8-2.6-5.8-5.6 0-4.6 6.3-7.5 15.3-7.5 1.5 0 2.9.1 4.2.3v-5.2c0-2.4-.6-3.8-2.5-3.8-1.5 0-2.3.8-2.3 2.1h-4.3c0-3.6 2.8-5.8 6.7-5.8 4.7 0 6.7 2.6 6.7 6.6v23.2c0 2.2.8 3.5 2.5 3.5 1.5 0 2.4-.8 2.4-2.1h4.3c0 3.7-2.8 5.8-6.8 5.8-4.6 0-6.7-2.6-6.7-6.6v-2.3c-2.4 1.4-5.8 2.2-9.6 2.2-1.4 0-2.8-.1-4-.4zm13.7-8.3c-1.1-.2-2.3-.3-3.6-.3-5.6 0-9.6 1.7-9.6 4.3 0 2 2.2 3.3 5.4 3.7 1.2.2 2.6.2 3.9.2 1.4 0 2.7-.2 3.9-.5v-7.4z"/>
+        </svg>
+      </a>
+
+      <ul class="ps-nav-links">
+        <li><a href="#hero" class="ps-nav-link active">Games</a></li>
+        <li><a href="#hardware" class="ps-nav-link">Hardware</a></li>
+        <li><a href="#services" class="ps-nav-link">Services</a></li>
+        <li><a href="#store" class="ps-nav-link">PS Store</a></li>
+        <li><a href="#lab" class="ps-nav-link">Design Spec</a></li>
+      </ul>
+    </div>
+
+    <div class="ps-nav-right">
+      <button class="ps-search-icon-btn" title="Search PlayStation.com" aria-label="Search">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="11" cy="11" r="8"></circle>
+          <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+        </svg>
+      </button>
+
+      <!-- Primary Blue Pill Button with 1.2x Scale Signature -->
+      <a href="#store" class="ps-btn-primary" style="font-size: 15px; padding: 8px 20px;">
+        Sign In
+      </a>
+    </div>
+  </header>
+
+  <!-- 2. CHANNEL 1: NEAR-BLACK HERO PANEL (#000000 -> #121314) -->
+  <section class="ps-channel-dark" id="hero">
+    <div class="ps-container">
+      <div class="ps-hero-grid">
+        <div>
+          <div style="margin-bottom: 16px;">
+            <span class="ps-platform-pill">PlayStation®5 Pro Console</span>
+          </div>
+
+          <!-- Quiet Authority Display Headline: SST 54px weight 300 -->
+          <h1 class="ps-hero-headline-xl">
+            Play Has No Limits
+          </h1>
+
+          <p class="ps-hero-subtext">
+            Witness unprecedented visual clarity with PlayStation Spectral Super Resolution, advanced ray tracing, and high frame rates up to 120fps.
+          </p>
+
+          <div class="ps-btn-group">
+            <!-- Primary Blue Pill with 1.2x Hover Scale -->
+            <button class="ps-btn-primary" onclick="openBuyModal('PlayStation®5 Pro Console', '$699.99')">
+              Find your console
+            </button>
+
+            <!-- Secondary Outset Button with 1.2x Hover Scale -->
+            <a href="#hardware" class="ps-btn-secondary">
+              Explore PS5 Features
+            </a>
+          </div>
+
+          <div style="margin-top: 36px; display: flex; gap: 24px; font-size: 14px; color: var(--ps-mute-gray);">
+            <span>• 2TB Solid-State Drive</span>
+            <span>• Enhanced AI Upscaling</span>
+            <span>• DualSense® Haptics</span>
+          </div>
+        </div>
+
+        <div>
+          <!-- Hero Card with Dramatic rgba(0,0,0,0.80) drop shadow -->
+          <div class="ps-hero-card">
+            <div class="ps-hardware-render-box">
+              <img src="https://images.unsplash.com/photo-1606813907291-d86efa9b94db?w=800&auto=format&fit=crop&q=80" alt="PS5 Console &amp; DualSense" loading="eager">
+            </div>
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 16px; border-top: 1px solid rgba(255, 255, 255, 0.1); padding-top: 16px;">
+              <div>
+                <div style="font-size: 16px; font-weight: 700; color: #ffffff;">PlayStation®5 Pro</div>
+                <div style="font-size: 13px; color: var(--ps-mute-gray);">Available Now at Direct Store</div>
+              </div>
+              <span style="font-size: 22px; font-weight: 300; color: #ffffff;">$699.99</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3. CHANNEL 2: PAPER-WHITE EDITORIAL PANEL (#ffffff -> #f5f7fa) -->
+  <section class="ps-channel-white" id="hardware">
+    <div class="ps-container">
+      <div class="ps-section-header">
+        <span style="color: var(--ps-blue); font-size: 15px; font-weight: 700; display: block; margin-bottom: 8px;">Hardware Innovation</span>
+        <h2 class="ps-headline-display-l">DualSense Edge™ Wireless Controller</h2>
+        <p class="ps-editorial-deck">
+          Get an edge in gameplay by creating your own custom controls designed to fit your unique playstyle. Built with high performance and personalization in mind.
+        </p>
+      </div>
+
+      <div class="ps-features-grid">
+        <!-- Feature Panel 1 -->
+        <div class="ps-feature-panel">
+          <div class="ps-feature-icon-badge">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14H9V8h2v8zm4 0h-2V8h2v8z"/>
+            </svg>
+          </div>
+          <h3 class="ps-headline-display-mid" style="font-size: 24px;">Changeable Stick Caps</h3>
+          <p style="font-size: 16px; color: var(--ps-body-gray); line-height: 1.5; margin-bottom: 20px;">
+            Three types of swappable stick caps (standard, high dome, and low dome) help you stay comfortable in-game without sacrificing grip.
+          </p>
+          <a href="#lab" class="ps-btn-mini">Learn More</a>
+        </div>
+
+        <!-- Feature Panel 2 -->
+        <div class="ps-feature-panel">
+          <div class="ps-feature-icon-badge">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M21 6H3c-1.1 0-2 .9-2 2v8c0 1.1.9 2 2 2h18c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm-10 7H8v3H6v-3H3v-2h3V8h2v3h3v2zm4.5 2c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm4-3c-.83 0-1.5-.67-1.5-1.5S18.67 9 19.5 9s1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/>
+            </svg>
+          </div>
+          <h3 class="ps-headline-display-mid" style="font-size: 24px;">Mappable Back Buttons</h3>
+          <p style="font-size: 16px; color: var(--ps-body-gray); line-height: 1.5; margin-bottom: 20px;">
+            Two swappable sets of back buttons can be configured to any button input, putting essential controls right at your fingertips.
+          </p>
+          <a href="#lab" class="ps-btn-mini">Custom Mapping</a>
+        </div>
+
+        <!-- Feature Panel 3 -->
+        <div class="ps-feature-panel">
+          <div class="ps-feature-icon-badge">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96zM19 18H6c-2.21 0-4-1.79-4-4 0-2.05 1.53-3.76 3.56-3.97l1.07-.11.5-.95C8.08 7.14 9.94 6 12 6c2.62 0 4.88 1.86 5.39 4.43l.3 1.5 1.53.11c1.56.1 2.78 1.41 2.78 2.96 0 1.65-1.35 3-3 3z"/>
+            </svg>
+          </div>
+          <h3 class="ps-headline-display-mid" style="font-size: 24px;">Adjustable Trigger Stops</h3>
+          <p style="font-size: 16px; color: var(--ps-body-gray); line-height: 1.5; margin-bottom: 20px;">
+            Manually set trigger travel distance for rapid fire in competitive FPS games, or switch back for immersive resistance in racing titles.
+          </p>
+          <a href="#lab" class="ps-btn-mini">View Trigger Specs</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 4. CHANNEL 3: WHITE GAME STORE CATALOG (COMMERCE ORANGE #d53b00) -->
+  <section class="ps-channel-white" id="store" style="border-top: 1px solid var(--ps-divider-tint);">
+    <div class="ps-container">
+      <div class="ps-section-header" style="display: flex; justify-content: space-between; align-items: flex-end; flex-wrap: wrap; gap: 16px;">
+        <div>
+          <span style="color: var(--ps-commerce-orange); font-size: 15px; font-weight: 700; display: block; margin-bottom: 8px;">PlayStation™Store</span>
+          <h2 class="ps-headline-display-l">Latest PS5 Releases &amp; Blockbusters</h2>
+          <p class="ps-editorial-deck">Experience boundary-pushing PlayStation Studios titles optimized for ultra-fast SSD and 3D Audio.</p>
+        </div>
+        <div style="display: flex; gap: 12px;">
+          <!-- Commerce Orange Button -->
+          <button class="ps-btn-commerce" onclick="openBuyModal('PlayStation Plus Subscription', '$79.99 / yr')">
+            Subscribe to PlayStation Plus
+          </button>
+        </div>
+      </div>
+
+      <!-- 3:4 Game Card Grid with 12px Radius -->
+      <div class="ps-game-grid">
+        <!-- Game 1: Astro Bot -->
+        <article class="ps-game-card" onclick="openBuyModal('ASTRO BOT', '$59.99')">
+          <div class="ps-game-card-art">
+            <img src="https://images.unsplash.com/photo-1550745165-9bc0b252726f?w=600&auto=format&fit=crop&q=80" alt="ASTRO BOT Cover" loading="lazy">
+            <span class="ps-game-card-tag ps-platform-pill">PS5</span>
+          </div>
+          <div class="ps-game-card-body">
+            <h3 class="ps-game-title">ASTRO BOT</h3>
+            <div class="ps-game-genre">Platformer • 4K HDR • 60 FPS</div>
+            <div class="ps-game-footer">
+              <span class="ps-price-tag">$59.99</span>
+              <span class="ps-btn-mini">Buy Now</span>
+            </div>
+          </div>
+        </article>
+
+        <!-- Game 2: God of War Ragnarök -->
+        <article class="ps-game-card" onclick="openBuyModal('God of War Ragnarök', '$69.99')">
+          <div class="ps-game-card-art">
+            <img src="https://images.unsplash.com/photo-1542751371-adc38448a05e?w=600&auto=format&fit=crop&q=80" alt="God of War Ragnarok" loading="lazy">
+            <span class="ps-game-card-tag ps-platform-pill">PS5 / PS4</span>
+          </div>
+          <div class="ps-game-card-body">
+            <h3 class="ps-game-title">God of War Ragnarök</h3>
+            <div class="ps-game-genre">Action Adventure • Valhalla Included</div>
+            <div class="ps-game-footer">
+              <span class="ps-price-tag">$69.99</span>
+              <span class="ps-btn-mini">Buy Now</span>
+            </div>
+          </div>
+        </article>
+
+        <!-- Game 3: Horizon Forbidden West -->
+        <article class="ps-game-card" onclick="openBuyModal('Horizon Forbidden West', '$49.99')">
+          <div class="ps-game-card-art">
+            <img src="https://images.unsplash.com/photo-1511512578047-dfb367046420?w=600&auto=format&fit=crop&q=80" alt="Horizon Forbidden West" loading="lazy">
+            <span class="ps-game-card-tag ps-platform-pill">PS5</span>
+          </div>
+          <div class="ps-game-card-body">
+            <h3 class="ps-game-title">Horizon Forbidden West Complete</h3>
+            <div class="ps-game-genre">Open World RPG • Burning Shores</div>
+            <div class="ps-game-footer">
+              <span class="ps-price-tag">$49.99</span>
+              <span class="ps-btn-mini">Buy Now</span>
+            </div>
+          </div>
+        </article>
+
+        <!-- Game 4: Marvel's Spider-Man 2 -->
+        <article class="ps-game-card" onclick="openBuyModal('Marvel\'s Spider-Man 2', '$69.99')">
+          <div class="ps-game-card-art">
+            <img src="https://images.unsplash.com/photo-1538481199705-c710c4e965fc?w=600&auto=format&fit=crop&q=80" alt="Spider-Man 2" loading="lazy">
+            <span class="ps-game-card-tag ps-platform-pill">PS5</span>
+          </div>
+          <div class="ps-game-card-body">
+            <h3 class="ps-game-title">Marvel's Spider-Man 2</h3>
+            <div class="ps-game-genre">Action • Haptic Web Wings</div>
+            <div class="ps-game-footer">
+              <span class="ps-price-tag">$69.99</span>
+              <span class="ps-btn-mini">Buy Now</span>
+            </div>
+          </div>
+        </article>
+
+        <!-- Game 5: Gran Turismo 7 -->
+        <article class="ps-game-card" onclick="openBuyModal('Gran Turismo 7', '$59.99')">
+          <div class="ps-game-card-art">
+            <img src="https://images.unsplash.com/photo-1568605117036-5fe5e7bab0b7?w=600&auto=format&fit=crop&q=80" alt="Gran Turismo 7" loading="lazy">
+            <span class="ps-game-card-tag ps-platform-pill">PS VR2 Ready</span>
+          </div>
+          <div class="ps-game-card-body">
+            <h3 class="ps-game-title">Gran Turismo® 7</h3>
+            <div class="ps-game-genre">The Real Driving Simulator</div>
+            <div class="ps-game-footer">
+              <span class="ps-price-tag">$59.99</span>
+              <span class="ps-btn-mini">Buy Now</span>
+            </div>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- 5. DESIGN SYSTEM SPECIFICATION LAB & TEST BENCH -->
+  <section class="ps-lab-section" id="lab">
+    <div class="ps-container">
+      <div style="text-align: center; margin-bottom: 48px;">
+        <span class="ps-platform-pill" style="background: #1e1f24; color: #ffffff; margin-bottom: 12px;">Engineering Specification</span>
+        <h2 class="ps-headline-display-l" style="color: #ffffff;">PlayStation System Tokens &amp; Interaction Audit</h2>
+        <p class="ps-hero-subtext">
+          Audit the quiet authority typography (SST 300), strict eleven-tier radius scale, and signature 1.2× scale cyan hover physics.
+        </p>
+      </div>
+
+      <div class="ps-lab-grid">
+        <!-- Card 1: Colors & Tokens -->
+        <div class="ps-lab-card">
+          <div class="ps-lab-title">
+            <span>Color Palette</span>
+            <span style="font-size: 12px; color: var(--ps-mute-gray);">Hex Tokens</span>
+          </div>
+          <div class="ps-token-line">
+            <span class="ps-token-key">PlayStation Blue</span>
+            <span class="ps-token-val"><span class="ps-swatch" style="background: #0070cc;"></span> #0070cc</span>
+          </div>
+          <div class="ps-token-line">
+            <span class="ps-token-key">Console Black</span>
+            <span class="ps-token-val"><span class="ps-swatch" style="background: #000000; border: 1px solid #444;"></span> #000000</span>
+          </div>
+          <div class="ps-token-line">
+            <span class="ps-token-key">PlayStation Cyan (Hover only)</span>
+            <span class="ps-token-val"><span class="ps-swatch" style="background: #1eaedb;"></span> #1eaedb</span>
+          </div>
+          <div class="ps-token-line">
+            <span class="ps-token-key">Commerce Orange</span>
+            <span class="ps-token-val"><span class="ps-swatch" style="background: #d53b00;"></span> #d53b00</span>
+          </div>
+          <div class="ps-token-line">
+            <span class="ps-token-key">Paper White</span>
+            <span class="ps-token-val"><span class="ps-swatch" style="background: #ffffff;"></span> #ffffff</span>
+          </div>
+          <div class="ps-token-line">
+            <span class="ps-token-key">Ice Mist</span>
+            <span class="ps-token-val"><span class="ps-swatch" style="background: #f5f7fa;"></span> #f5f7fa</span>
+          </div>
+          <div class="ps-token-line">
+            <span class="ps-token-key">Deep Charcoal</span>
+            <span class="ps-token-val"><span class="ps-swatch" style="background: #1f1f1f;"></span> #1f1f1f</span>
+          </div>
+        </div>
+
+        <!-- Card 2: Radius & Typography Rules -->
+        <div class="ps-lab-card">
+          <div class="ps-lab-title">
+            <span>11-Tier Radius Scale</span>
+            <span style="font-size: 12px; color: var(--ps-mute-gray);">No Square Corners</span>
+          </div>
+          <div class="ps-token-line">
+            <span class="ps-token-key">3px</span>
+            <span>Form inputs, tab panels</span>
+          </div>
+          <div class="ps-token-line">
+            <span class="ps-token-key">6px</span>
+            <span>Compact buttons</span>
+          </div>
+          <div class="ps-token-line">
+            <span class="ps-token-key">12px / 13px</span>
+            <span>Game covers &amp; media figures</span>
+          </div>
+          <div class="ps-token-line">
+            <span class="ps-token-key">19px / 20px</span>
+            <span>Feature cards &amp; inline tags</span>
+          </div>
+          <div class="ps-token-line">
+            <span class="ps-token-key">24px</span>
+            <span>Hero cards &amp; primary frames</span>
+          </div>
+          <div class="ps-token-line">
+            <span class="ps-token-key">36px / 48px</span>
+            <span>Secondary pills &amp; feature buttons</span>
+          </div>
+          <div class="ps-token-line">
+            <span class="ps-token-key">999px</span>
+            <span>Full pill primary CTAs</span>
+          </div>
+          <div style="margin-top: 14px; font-size: 13px; color: var(--ps-mute-gray); line-height: 1.4;">
+            <strong>Rule:</strong> Display headlines 22px–54px must strictly remain SST weight 300. No bold display type.
+          </div>
+        </div>
+
+        <!-- Card 3: Interactive Button Test Bench -->
+        <div class="ps-lab-card">
+          <div class="ps-lab-title">
+            <span>Signature 1.2× Hover Bench</span>
+            <span style="font-size: 12px; color: var(--ps-cyan);">Hover to Test</span>
+          </div>
+          <p style="font-size: 13px; color: var(--ps-mute-gray); margin-bottom: 20px;">
+            Hover over any button below to verify the power-on animation: fill swaps to #1eaedb, white 2px border, blue outer ring, and 20% scale lift.
+          </p>
+
+          <div style="display: flex; flex-direction: column; gap: 20px; align-items: flex-start;">
+            <button class="ps-btn-primary">Primary Pill (#0070cc)</button>
+            <button class="ps-btn-secondary">Secondary Outset (#ffffff)</button>
+            <button class="ps-btn-commerce">Commerce Pill (#d53b00)</button>
+          </div>
+
+          <form style="margin-top: 28px;" onsubmit="event.preventDefault(); alert('PlayStation Network ID Verified!');">
+            <div class="ps-input-group">
+              <label class="ps-input-label" for="psIdInput">Test 3px Radius Input Field</label>
+              <input type="text" id="psIdInput" class="ps-input-field" placeholder="Enter PlayStation Network ID..." required>
+            </div>
+            <button type="submit" class="ps-btn-mini" style="width: 100%;">Validate ID</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 6. THREE-SURFACE CHANNEL 4: DEEP COBALT-BLUE FOOTER (#0070cc) -->
+  <footer class="ps-channel-blue-footer">
+    <div class="ps-footer-inner">
+      <div class="ps-footer-top">
+        <div class="ps-footer-logo-wrap">
+          <svg width="40" height="32" viewBox="0 0 50 40" fill="#ffffff">
+            <path d="M5.8 30.5c-3.2-.8-5.8-2.6-5.8-5.6 0-4.6 6.3-7.5 15.3-7.5 1.5 0 2.9.1 4.2.3v-5.2c0-2.4-.6-3.8-2.5-3.8-1.5 0-2.3.8-2.3 2.1h-4.3c0-3.6 2.8-5.8 6.7-5.8 4.7 0 6.7 2.6 6.7 6.6v23.2c0 2.2.8 3.5 2.5 3.5 1.5 0 2.4-.8 2.4-2.1h4.3c0 3.7-2.8 5.8-6.8 5.8-4.6 0-6.7-2.6-6.7-6.6v-2.3c-2.4 1.4-5.8 2.2-9.6 2.2-1.4 0-2.8-.1-4-.4zm13.7-8.3c-1.1-.2-2.3-.3-3.6-.3-5.6 0-9.6 1.7-9.6 4.3 0 2 2.2 3.3 5.4 3.7 1.2.2 2.6.2 3.9.2 1.4 0 2.7-.2 3.9-.5v-7.4z"/>
+          </svg>
+          <span style="font-size: 20px; font-weight: 300; letter-spacing: 0.5px;">Sony Interactive Entertainment</span>
+        </div>
+
+        <div class="ps-footer-symbols">
+          <span>△</span>
+          <span>◯</span>
+          <span>✕</span>
+          <span>▢</span>
+        </div>
+      </div>
+
+      <div class="ps-footer-columns">
+        <div>
+          <h4 class="ps-footer-title">About</h4>
+          <ul class="ps-footer-nav">
+            <li><a href="#">About SIE</a></li>
+            <li><a href="#">Careers</a></li>
+            <li><a href="#">PlayStation Studios</a></li>
+            <li><a href="#">Corporate Social Responsibility</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="ps-footer-title">Products</h4>
+          <ul class="ps-footer-nav">
+            <li><a href="#">PS5 Consoles</a></li>
+            <li><a href="#">DualSense Wireless</a></li>
+            <li><a href="#">PlayStation VR2</a></li>
+            <li><a href="#">PlayStation Plus</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="ps-footer-title">Values &amp; Tokens</h4>
+          <ul class="ps-footer-nav">
+            <li><a href="#">PlayStation Blue (#0070cc)</a></li>
+            <li><a href="#">PlayStation Cyan (#1eaedb)</a></li>
+            <li><a href="#">Commerce Orange (#d53b00)</a></li>
+            <li><a href="#">SST Weight 300 Display</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="ps-footer-title">Support &amp; Legal</h4>
+          <ul class="ps-footer-nav">
+            <li><a href="#">Support Center</a></li>
+            <li><a href="#">PSN Status</a></li>
+            <li><a href="#">Terms of Service</a></li>
+            <li><a href="#">Privacy Policy</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="ps-footer-legal">
+        <div>© 2026 Sony Interactive Entertainment LLC. All content, games titles, trade names and/or trade dress, trademarks, artwork and associated imagery are trademarks and/or copyright material of their respective owners. All rights reserved.</div>
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 12px; flex-wrap: wrap; gap: 12px;">
+          <span>Country / Region: United States (English)</span>
+          <span>Quiet Authority Architecture • SST Type Engine</span>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- 7. COMMERCE PURCHASE SIMULATOR MODAL -->
+  <div class="ps-modal-overlay" id="psModalOverlay" onclick="closeBuyModal()">
+    <div class="ps-modal-card" onclick="event.stopPropagation()">
+      <button class="ps-modal-close" onclick="closeBuyModal()">✕</button>
+      <span class="ps-platform-pill" style="background: var(--ps-blue); color: #ffffff; margin-bottom: 16px;">PlayStation Store Checkout</span>
+      <h3 id="modalProductName" style="font-size: 28px; font-weight: 300; margin-bottom: 8px; color: var(--ps-display-ink);">Product Name</h3>
+      <p style="font-size: 15px; color: var(--ps-body-gray); margin-bottom: 24px;">Instant digital delivery to your connected PlayStation®5 console.</p>
+      
+      <div style="background: var(--ps-ice-mist); border-radius: var(--radius-12); padding: 20px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
+        <span style="font-weight: 600;">Total Price (Tax incl.)</span>
+        <span id="modalProductPrice" style="font-size: 24px; font-weight: 700; color: var(--ps-commerce-orange);">$69.99</span>
+      </div>
+
+      <div style="display: flex; gap: 16px;">
+        <button class="ps-btn-commerce" style="flex: 1;" onclick="completeOrder()">Complete Purchase</button>
+        <button class="ps-btn-secondary" onclick="closeBuyModal()">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 8. JAVASCRIPT CONTROLLER -->
+  <script>
+    function openBuyModal(product, price) {
+      document.getElementById('modalProductName').textContent = product;
+      document.getElementById('modalProductPrice').textContent = price;
+      document.getElementById('psModalOverlay').classList.add('active');
+    }
+
+    function closeBuyModal() {
+      document.getElementById('psModalOverlay').classList.remove('active');
+    }
+
+    function completeOrder() {
+      alert("Purchase confirmed! Your digital license has been activated on your PlayStation Network account.");
+      closeBuyModal();
+    }
+  </script>
+</body>
+</html>

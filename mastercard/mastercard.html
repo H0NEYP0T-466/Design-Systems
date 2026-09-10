@@ -1,0 +1,742 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mastercard — Global Payments Network</title>
+  <meta name="description" content="Authentic implementation of the Mastercard design system with warm cream canvas (#F3F0EE), orbital pill geometry, circular portraits with satellite CTAs, and MarkForMC typography.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;450;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      /* Brand Logo Colors */
+      --mc-red: #EB001B;
+      --mc-yellow: #F79E1B;
+
+      /* Neutral & Canvas */
+      --canvas-cream: #F3F0EE;
+      --lifted-cream: #FCFBFA;
+      --white: #FFFFFF;
+      --soft-bone: #F4F4F4;
+      --ink-black: #141413;
+      --charcoal: #262627;
+      --slate-gray: #696969;
+      --dust-taupe: #D1CDC7;
+
+      /* Signal Accents */
+      --signal-orange: #CF4500;
+      --light-signal-orange: #F37338;
+      --clay-brown: #9A3A0A;
+      --link-blue: #3860BE;
+
+      /* Typography */
+      --font-mc: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--canvas-cream);
+      color: var(--ink-black);
+      font-family: var(--font-mc);
+      font-weight: 450;
+      font-size: 16px;
+      line-height: 1.4;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+
+    .container {
+      max-width: 1240px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    /* 1. FLOATING PILL NAVIGATION (999px radius) */
+    .nav-wrapper {
+      position: sticky;
+      top: 20px;
+      z-index: 1000;
+      padding: 0 24px;
+      margin-bottom: 24px;
+    }
+
+    .floating-nav {
+      max-width: 1180px;
+      margin: 0 auto;
+      background: rgba(255, 255, 255, 0.94);
+      backdrop-filter: blur(12px);
+      border-radius: 999px;
+      padding: 12px 32px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      box-shadow: rgba(0, 0, 0, 0.05) 0px 4px 24px 0px;
+      border: 1px solid rgba(255, 255, 255, 0.6);
+    }
+
+    .mc-logo-lockup {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+    }
+
+    /* Interlocking Brand Circles */
+    .brand-circles {
+      position: relative;
+      width: 44px;
+      height: 28px;
+    }
+
+    .circle-red {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: var(--mc-red);
+    }
+
+    .circle-yellow {
+      position: absolute;
+      right: 0;
+      top: 0;
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: var(--mc-yellow);
+      mix-blend-mode: multiply;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 36px;
+      list-style: none;
+    }
+
+    .nav-links a {
+      color: var(--ink-black);
+      text-decoration: none;
+      font-size: 15px;
+      font-weight: 500;
+      letter-spacing: -0.48px;
+      transition: opacity 0.15s;
+    }
+
+    .nav-links a:hover {
+      opacity: 0.7;
+    }
+
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .search-circle-btn {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      border: 1px solid rgba(20, 20, 19, 0.2);
+      background: transparent;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 14px;
+      transition: background 0.15s;
+    }
+
+    .search-circle-btn:hover {
+      background: var(--canvas-cream);
+    }
+
+    /* Buttons */
+    .btn-ink-pill {
+      background-color: var(--ink-black);
+      color: var(--canvas-cream);
+      border: 1.5px solid var(--ink-black);
+      border-radius: 20px;
+      padding: 8px 24px;
+      font-family: var(--font-mc);
+      font-size: 15px;
+      font-weight: 500;
+      letter-spacing: -0.32px;
+      cursor: pointer;
+      transition: transform 0.1s ease, opacity 0.15s;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .btn-ink-pill:hover {
+      opacity: 0.9;
+    }
+
+    .btn-ink-pill:active {
+      transform: scale(0.98);
+    }
+
+    .btn-outline-pill {
+      background-color: var(--white);
+      color: var(--ink-black);
+      border: 1.5px solid var(--ink-black);
+      border-radius: 20px;
+      padding: 8px 24px;
+      font-family: var(--font-mc);
+      font-size: 15px;
+      font-weight: 450;
+      cursor: pointer;
+      transition: background 0.15s;
+      text-decoration: none;
+    }
+
+    .btn-outline-pill:hover {
+      background-color: var(--canvas-cream);
+    }
+
+    /* 2. HERO STADIUM (40px Radius) */
+    .hero-container {
+      padding: 24px 0 64px 0;
+    }
+
+    .hero-stadium {
+      background: #18191b;
+      border-radius: 40px;
+      padding: 80px 64px;
+      color: var(--white);
+      position: relative;
+      overflow: hidden;
+      display: grid;
+      grid-template-columns: 1.2fr 0.8fr;
+      gap: 48px;
+      align-items: center;
+      min-height: 520px;
+    }
+
+    .hero-stadium::before {
+      content: '';
+      position: absolute;
+      right: -100px;
+      top: -100px;
+      width: 600px;
+      height: 600px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(207, 69, 0, 0.15) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .eyebrow-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 14px;
+      font-weight: 700;
+      letter-spacing: 0.56px;
+      text-transform: uppercase;
+      color: var(--light-signal-orange);
+      margin-bottom: 20px;
+    }
+
+    .eyebrow-tag::before {
+      content: '•';
+      font-size: 18px;
+    }
+
+    .hero-h1 {
+      font-size: 60px;
+      font-weight: 500;
+      line-height: 1.05;
+      letter-spacing: -1.28px;
+      margin-bottom: 24px;
+    }
+
+    .hero-desc {
+      font-size: 18px;
+      color: #b0b4ba;
+      line-height: 1.5;
+      margin-bottom: 36px;
+      max-width: 520px;
+    }
+
+    .hero-ctas {
+      display: flex;
+      gap: 16px;
+    }
+
+    /* Interactive Contactless Card Simulator */
+    .payment-stage {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+
+    .mc-metal-card {
+      width: 320px;
+      height: 200px;
+      background: linear-gradient(135deg, #2b2b2b 0%, #111111 100%);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 16px;
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
+      cursor: pointer;
+      transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s;
+    }
+
+    .mc-metal-card:hover {
+      transform: translateY(-6px) rotate(1deg);
+      box-shadow: 0 25px 50px rgba(207, 69, 0, 0.25);
+    }
+
+    .card-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .chip-gold {
+      width: 42px;
+      height: 32px;
+      background: #e2a842;
+      border-radius: 6px;
+      border: 1px solid #b88628;
+    }
+
+    .contactless-icon {
+      font-size: 20px;
+      color: #999;
+    }
+
+    .card-number {
+      font-family: var(--font-mono);
+      font-size: 16px;
+      letter-spacing: 2px;
+      color: #e5e5e5;
+    }
+
+    .card-bottom {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+    }
+
+    .card-holder {
+      font-size: 11px;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: #888;
+    }
+
+    /* 3. ORBITAL CONSTELLATION SECTION */
+    .orbital-section {
+      padding: 96px 0;
+      position: relative;
+    }
+
+    .ghost-watermark {
+      position: absolute;
+      top: 40px;
+      left: 5%;
+      font-size: 110px;
+      font-weight: 700;
+      letter-spacing: -2px;
+      color: #e6e2dc;
+      z-index: 0;
+      pointer-events: none;
+      user-select: none;
+    }
+
+    .section-header-centered {
+      text-align: center;
+      margin-bottom: 64px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .section-title {
+      font-size: 38px;
+      font-weight: 500;
+      letter-spacing: -0.72px;
+      margin-bottom: 12px;
+    }
+
+    .orbital-cards-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 40px;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* SVG Orbital Arc */
+    .orbital-line-svg {
+      position: absolute;
+      top: 130px;
+      left: 10%;
+      width: 80%;
+      height: 80px;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    .portrait-card {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+
+    .portrait-circle-wrapper {
+      position: relative;
+      width: 260px;
+      height: 260px;
+      margin-bottom: 24px;
+    }
+
+    .portrait-circle {
+      width: 260px;
+      height: 260px;
+      border-radius: 50%;
+      background: var(--lifted-cream);
+      border: 1px solid rgba(20, 20, 19, 0.1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 54px;
+      box-shadow: rgba(0, 0, 0, 0.06) 0px 16px 32px;
+      transition: transform 0.3s ease;
+      cursor: pointer;
+    }
+
+    .portrait-circle:hover {
+      transform: scale(1.02);
+    }
+
+    /* Satellite Micro-CTA docked on perimeter */
+    .satellite-cta {
+      position: absolute;
+      bottom: 8px;
+      right: 12px;
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      background: var(--white);
+      box-shadow: 0 4px 16px rgba(0,0,0,0.12);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      color: var(--ink-black);
+      cursor: pointer;
+      transition: transform 0.2s ease, background 0.2s;
+    }
+
+    .satellite-cta:hover {
+      transform: scale(1.1);
+      background: var(--canvas-cream);
+    }
+
+    .portrait-eyebrow {
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.56px;
+      text-transform: uppercase;
+      color: var(--slate-gray);
+      margin-bottom: 8px;
+    }
+
+    .portrait-title {
+      font-size: 22px;
+      font-weight: 500;
+      letter-spacing: -0.48px;
+      margin-bottom: 12px;
+      max-width: 280px;
+    }
+
+    .portrait-desc {
+      font-size: 15px;
+      color: var(--slate-gray);
+      line-height: 1.45;
+      max-width: 300px;
+    }
+
+    /* 4. DARK WARM FOOTER */
+    .mc-footer {
+      background-color: var(--ink-black);
+      color: var(--canvas-cream);
+      padding: 80px 0 40px 0;
+      margin-top: 64px;
+    }
+
+    .footer-headline {
+      font-size: 44px;
+      font-weight: 500;
+      letter-spacing: -1px;
+      margin-bottom: 48px;
+      max-width: 680px;
+      line-height: 1.15;
+    }
+
+    .footer-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 32px;
+      border-top: 1px solid rgba(255, 255, 255, 0.15);
+      padding-top: 48px;
+      margin-bottom: 48px;
+    }
+
+    .footer-col h5 {
+      font-size: 13px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.56px;
+      color: var(--dust-taupe);
+      margin-bottom: 16px;
+    }
+
+    .footer-col ul {
+      list-style: none;
+    }
+
+    .footer-col li {
+      margin-bottom: 12px;
+    }
+
+    .footer-col a {
+      color: var(--canvas-cream);
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 450;
+      transition: color 0.15s;
+    }
+
+    .footer-col a:hover {
+      color: var(--light-signal-orange);
+    }
+
+    .footer-bottom {
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      padding-top: 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 13px;
+      color: var(--dust-taupe);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Floating Navigation Pill (999px radius) -->
+  <div class="nav-wrapper">
+    <nav class="floating-nav">
+      <a href="#" class="mc-logo-lockup">
+        <div class="brand-circles">
+          <div class="circle-red"></div>
+          <div class="circle-yellow"></div>
+        </div>
+        <span style="font-weight: 600; font-size: 17px; letter-spacing: -0.5px;">mastercard</span>
+      </a>
+
+      <ul class="nav-links">
+        <li><a href="#solutions">For you</a></li>
+        <li><a href="#stadium">For business</a></li>
+        <li><a href="#">For the world</a></li>
+        <li><a href="#">For innovators</a></li>
+        <li><a href="#">News & trends</a></li>
+      </ul>
+
+      <div class="nav-actions">
+        <button class="search-circle-btn" title="Search">🔍</button>
+        <a href="#stadium" class="btn-ink-pill">Sign In</a>
+      </div>
+    </nav>
+  </div>
+
+  <!-- Hero Section Stadium (40px radius) -->
+  <div class="container hero-container" id="stadium">
+    <div class="hero-stadium">
+      <div>
+        <div class="eyebrow-tag">GLOBAL PAYMENTS NETWORK</div>
+        <h1 class="hero-h1">Priceless possibilities for a connected world.</h1>
+        <p class="hero-desc">
+          Empowering billions of people, merchants, and institutions with trusted, frictionless, and intelligent global payment rails.
+        </p>
+
+        <div class="hero-ctas">
+          <button class="btn-ink-pill" style="background: var(--white); color: var(--ink-black); border-color: var(--white);" onclick="tapCard()">
+            Simulate Tap to Pay 💳
+          </button>
+          <a href="#solutions" class="btn-outline-pill" style="border-color: rgba(255,255,255,0.4); background: transparent; color: var(--white);">
+            Explore Solutions
+          </a>
+        </div>
+      </div>
+
+      <div class="payment-stage">
+        <div class="mc-metal-card" id="metalCard" onclick="tapCard()">
+          <div class="card-top">
+            <div class="chip-gold"></div>
+            <div class="contactless-icon">))))</div>
+          </div>
+          <div class="card-number">5412 •••• •••• 8892</div>
+          <div class="card-bottom">
+            <div>
+              <div class="card-holder">CARDHOLDER</div>
+              <div style="font-size: 13px; font-weight: 600; color: #fff;">ALEXANDER WRIGHT</div>
+            </div>
+            <div class="brand-circles">
+              <div class="circle-red"></div>
+              <div class="circle-yellow"></div>
+            </div>
+          </div>
+        </div>
+        <div style="font-family: var(--font-mono); font-size: 12px; color: #999; margin-top: 16px;" id="tapStatus">
+          Click card to test contactless NFC settlement
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Orbital Constellation Section -->
+  <section class="orbital-section" id="solutions">
+    <div class="ghost-watermark">PRICELESS</div>
+
+    <!-- Traced Orange Trajectory Arc -->
+    <svg class="orbital-line-svg" viewBox="0 0 1000 80">
+      <path d="M 50 60 Q 500 -20 950 60" fill="none" stroke="var(--light-signal-orange)" stroke-width="1.5" stroke-dasharray="6 4" opacity="0.6"/>
+    </svg>
+
+    <div class="container">
+      <div class="section-header-centered">
+        <div class="eyebrow-tag" style="color: var(--signal-orange);">• CORE ARCHITECTURE</div>
+        <h2 class="section-title">An intelligent ecosystem in motion.</h2>
+        <p style="color: var(--slate-gray); max-width: 540px; margin: 0 auto;">
+          Connected circular solutions engineered for seamless security, instant global liquidity, and inclusive digital commerce.
+        </p>
+      </div>
+
+      <div class="orbital-cards-grid">
+        <!-- Circle 1 -->
+        <div class="portrait-card">
+          <div class="portrait-circle-wrapper">
+            <div class="portrait-circle" onclick="alert('Consumer Cardholder Benefits')">🛡️</div>
+            <div class="satellite-cta" onclick="alert('Explore Consumer Protection')">→</div>
+          </div>
+          <div class="portrait-eyebrow">• CONSUMER SOLUTIONS</div>
+          <h3 class="portrait-title">Zero Liability & Tokenization</h3>
+          <p class="portrait-desc">Real-time fraud defense with dynamic cryptograms replacing static card numbers.</p>
+        </div>
+
+        <!-- Circle 2 -->
+        <div class="portrait-card">
+          <div class="portrait-circle-wrapper">
+            <div class="portrait-circle" onclick="alert('Enterprise Merchant Rails')">🌐</div>
+            <div class="satellite-cta" onclick="alert('Explore Merchant Rails')">→</div>
+          </div>
+          <div class="portrait-eyebrow">• COMMERCIAL RAILS</div>
+          <h3 class="portrait-title">Cross-Border Settlement</h3>
+          <p class="portrait-desc">Instant liquidity across 210 countries with automated currency conversion.</p>
+        </div>
+
+        <!-- Circle 3 -->
+        <div class="portrait-card">
+          <div class="portrait-circle-wrapper">
+            <div class="portrait-circle" onclick="alert('Open Banking & Identity')">⚡</div>
+            <div class="satellite-cta" onclick="alert('Explore Open Banking')">→</div>
+          </div>
+          <div class="portrait-eyebrow">• DIGITAL IDENTITY</div>
+          <h3 class="portrait-title">Biometric Authentication</h3>
+          <p class="portrait-desc">Frictionless passkey checkout powered by FIDO standards and neural risk engines.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Dark Footer -->
+  <footer class="mc-footer">
+    <div class="container">
+      <h2 class="footer-headline">Connecting everyone to priceless possibilities.</h2>
+
+      <div class="footer-grid">
+        <div class="footer-col">
+          <h5>Products</h5>
+          <ul>
+            <li><a href="#">Credit & Debit Cards</a></li>
+            <li><a href="#">Prepaid Cards</a></li>
+            <li><a href="#">Virtual Payments</a></li>
+            <li><a href="#">Small Business</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h5>Security</h5>
+          <ul>
+            <li><a href="#">Safety & Security</a></li>
+            <li><a href="#">Identity Theft Protection</a></li>
+            <li><a href="#">Mastercard Identity</a></li>
+            <li><a href="#">Fraud Prevention</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h5>Innovations</h5>
+          <ul>
+            <li><a href="#">Open Banking</a></li>
+            <li><a href="#">Crypto & Blockchain</a></li>
+            <li><a href="#">Mastercard Developers</a></li>
+            <li><a href="#">Fintech Express</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h5>Company</h5>
+          <ul>
+            <li><a href="#">About Mastercard</a></li>
+            <li><a href="#">Careers</a></li>
+            <li><a href="#">Newsroom</a></li>
+            <li><a href="#">Investor Relations</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <div>© 2026 Mastercard. All rights reserved.</div>
+        <div>Adheres strictly to <code>open-design/design-systems/mastercard/DESIGN.md</code> tokens.</div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    function tapCard() {
+      const card = document.getElementById('metalCard');
+      const status = document.getElementById('tapStatus');
+      
+      card.style.transform = 'scale(0.96) translateY(-4px)';
+      status.textContent = 'Authenticating EMV token... Contactless NFC Ping received!';
+      status.style.color = '#F79E1B';
+
+      setTimeout(() => {
+        card.style.transform = 'translateY(0) rotate(0)';
+        status.textContent = 'Payment Authorized: $45.00 via Mastercard Tokenized Rail ✅';
+        status.style.color = '#16A34A';
+      }, 600);
+    }
+  </script>
+</body>
+</html>

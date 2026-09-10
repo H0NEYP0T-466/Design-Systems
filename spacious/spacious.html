@@ -1,0 +1,878 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Spacious — Layout & Structure Design System</title>
+  <meta name="description" content="Authentic implementation of the Spacious design system featuring generous whitespace, 8pt baseline grid rhythm, Montserrat display typography, Open Sans body, and clear hierarchical composition.">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Montserrat:wght@400;500;600;700;800&family=Open+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    /* ─────────────────────────────────────────────────────────────
+       1. SPATIAL & COLOR FOUNDATIONS (SPACIOUS TOKENS)
+       ───────────────────────────────────────────────────────────── */
+    :root {
+      /* Color Stance */
+      --color-primary: #3B82F6;
+      --color-secondary: #8B5CF6;
+      --color-success: #16A34A;
+      --color-warning: #D97706;
+      --color-danger: #DC2626;
+      --color-surface: #FFFFFF;
+      --color-text: #111827;
+      --color-neutral: #FFFFFF;
+      --color-neutral-subtle: #F9FAFB;
+      --color-border: #E5E7EB;
+      --color-border-hover: #D1D5DB;
+
+      /* Typography Families */
+      --font-primary: "Open Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      --font-display: "Montserrat", -apple-system, BlinkMacSystemFont, sans-serif;
+      --font-mono: "IBM Plex Mono", monospace;
+
+      /* Typographic Scale: 12 / 14 / 16 / 18 / 24 / 30 / 36 */
+      --text-12: 12px;
+      --text-14: 14px;
+      --text-16: 16px;
+      --text-18: 18px;
+      --text-24: 24px;
+      --text-30: 30px;
+      --text-36: 36px;
+
+      /* 8pt Baseline Grid Spacing Scale */
+      --space-8: 8px;
+      --space-16: 16px;
+      --space-24: 24px;
+      --space-32: 32px;
+      --space-40: 40px;
+      --space-48: 48px;
+      --space-64: 64px;
+      --space-80: 80px;
+      --space-96: 96px;
+      --space-128: 128px;
+
+      /* Radii */
+      --radius-sm: 4px;
+      --radius-md: 8px;
+      --radius-lg: 12px;
+      --radius-full: 9999px;
+
+      /* Transitions */
+      --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
+      --transition-base: 250ms cubic-bezier(0.4, 0, 0.2, 1);
+
+      /* Clean Elevations */
+      --shadow-subtle: 0 1px 3px rgba(0, 0, 0, 0.05), 0 1px 2px rgba(0, 0, 0, 0.03);
+      --shadow-card: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+      --shadow-hover: 0 10px 15px -3px rgba(0, 0, 0, 0.06), 0 4px 6px -2px rgba(0, 0, 0, 0.03);
+    }
+
+    /* Reset & Generous Canvas Setup */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      background-color: var(--color-surface);
+    }
+
+    body {
+      background-color: var(--color-surface);
+      color: var(--color-text);
+      font-family: var(--font-primary);
+      font-size: var(--text-16);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+
+    /* 8pt Grid Overlay (Interactive Toggle) */
+    .grid-overlay {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 9999;
+      display: none;
+      background-size: 8px 8px;
+      background-image: 
+        linear-gradient(to right, rgba(59, 130, 246, 0.08) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(59, 130, 246, 0.08) 1px, transparent 1px);
+    }
+
+    .grid-overlay.active {
+      display: block;
+    }
+
+    /* Layout Containers */
+    .spacious-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 var(--space-32);
+    }
+
+    /* ─────────────────────────────────────────────────────────────
+       2. CLEAN MINIMAL NAVIGATION
+       ───────────────────────────────────────────────────────────── */
+    .spacious-nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background-color: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(8px);
+      border-bottom: 1px solid var(--color-border);
+      height: 80px;
+      display: flex;
+      align-items: center;
+    }
+
+    .nav-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+    }
+
+    .brand-group {
+      display: flex;
+      align-items: center;
+      gap: var(--space-16);
+      text-decoration: none;
+      color: var(--color-text);
+    }
+
+    .brand-icon {
+      width: 32px;
+      height: 32px;
+      background: var(--color-primary);
+      border-radius: var(--radius-sm);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #ffffff;
+      font-weight: 700;
+      font-family: var(--font-display);
+    }
+
+    .brand-name {
+      font-family: var(--font-display);
+      font-size: var(--text-24);
+      font-weight: 700;
+      letter-spacing: -0.5px;
+      color: var(--color-text);
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: var(--space-32);
+      list-style: none;
+    }
+
+    .nav-link {
+      font-size: var(--text-14);
+      font-weight: 600;
+      color: var(--color-text);
+      text-decoration: none;
+      padding: var(--space-8) 0;
+      transition: color var(--transition-fast);
+      position: relative;
+    }
+
+    .nav-link:hover {
+      color: var(--color-primary);
+    }
+
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: var(--space-16);
+    }
+
+    /* ─────────────────────────────────────────────────────────────
+       3. BUTTONS & INTERACTIVE STATES
+       ───────────────────────────────────────────────────────────── */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--space-8);
+      font-family: var(--font-primary);
+      font-size: var(--text-14);
+      font-weight: 600;
+      padding: var(--space-12) var(--space-24);
+      border-radius: var(--radius-md);
+      cursor: pointer;
+      text-decoration: none;
+      transition: all var(--transition-fast);
+      border: 1px solid transparent;
+      outline: none;
+    }
+
+    .btn:focus-visible {
+      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.4);
+    }
+
+    /* Primary Button: #3B82F6 */
+    .btn-primary {
+      background-color: var(--color-primary);
+      color: #ffffff;
+    }
+
+    .btn-primary:hover {
+      background-color: #2563EB;
+      box-shadow: var(--shadow-subtle);
+    }
+
+    .btn-primary:active {
+      background-color: #1D4ED8;
+      transform: translateY(1px);
+    }
+
+    /* Secondary Button: Neutral surface */
+    .btn-secondary {
+      background-color: var(--color-surface);
+      color: var(--color-text);
+      border-color: var(--color-border);
+    }
+
+    .btn-secondary:hover {
+      background-color: var(--color-neutral-subtle);
+      border-color: var(--color-border-hover);
+    }
+
+    .btn-secondary:active {
+      background-color: #F3F4F6;
+    }
+
+    /* Grid Toggle Control */
+    .btn-grid-toggle {
+      background-color: var(--color-neutral-subtle);
+      color: var(--color-text);
+      border: 1px solid var(--color-border);
+      font-size: var(--text-12);
+      padding: var(--space-8) var(--space-16);
+      font-family: var(--font-mono);
+    }
+
+    .btn-grid-toggle.active {
+      background-color: #DBEAFE;
+      border-color: var(--color-primary);
+      color: var(--color-primary);
+    }
+
+    /* ─────────────────────────────────────────────────────────────
+       4. GENEROUS HERO SECTION (AIR & WHITESPACE)
+       ───────────────────────────────────────────────────────────── */
+    .hero-section {
+      padding: var(--space-96) 0 var(--space-80);
+      text-align: center;
+    }
+
+    .hero-eyebrow {
+      font-family: var(--font-mono);
+      font-size: var(--text-12);
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      color: var(--color-primary);
+      margin-bottom: var(--space-24);
+      display: inline-block;
+      padding: var(--space-4) var(--space-12);
+      background-color: #EFF6FF;
+      border-radius: var(--radius-full);
+    }
+
+    /* Display Headline in Montserrat: 36px scale */
+    .hero-headline {
+      font-family: var(--font-display);
+      font-size: var(--text-36);
+      font-weight: 700;
+      line-height: 1.25;
+      color: var(--color-text);
+      max-width: 840px;
+      margin: 0 auto var(--space-24);
+      letter-spacing: -0.8px;
+    }
+
+    .hero-support-text {
+      font-size: var(--text-18);
+      font-weight: 400;
+      color: #4B5563;
+      max-width: 680px;
+      margin: 0 auto var(--space-40);
+      line-height: 1.6;
+    }
+
+    .hero-actions {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--space-16);
+      margin-bottom: var(--space-64);
+    }
+
+    /* ─────────────────────────────────────────────────────────────
+       5. 8PT RHYTHM METRIC STRIP
+       ───────────────────────────────────────────────────────────── */
+    .metric-strip {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: var(--space-32);
+      padding: var(--space-48) 0;
+      border-top: 1px solid var(--color-border);
+      border-bottom: 1px solid var(--color-border);
+      margin-bottom: var(--space-96);
+    }
+
+    @media (max-width: 768px) {
+      .metric-strip {
+        grid-template-columns: repeat(2, 1fr);
+        gap: var(--space-24);
+      }
+    }
+
+    .metric-cell {
+      text-align: center;
+    }
+
+    .metric-val {
+      font-family: var(--font-display);
+      font-size: var(--text-30);
+      font-weight: 700;
+      color: var(--color-primary);
+      margin-bottom: var(--space-8);
+    }
+
+    .metric-label {
+      font-size: var(--text-14);
+      color: #6B7280;
+      font-weight: 500;
+    }
+
+    /* ─────────────────────────────────────────────────────────────
+       6. CLEAR CONTENT BLOCKS & CARDS
+       ───────────────────────────────────────────────────────────── */
+    .section-block {
+      padding-bottom: var(--space-96);
+    }
+
+    .section-header-wrap {
+      margin-bottom: var(--space-48);
+    }
+
+    .section-title {
+      font-family: var(--font-display);
+      font-size: var(--text-30);
+      font-weight: 700;
+      color: var(--color-text);
+      margin-bottom: var(--space-16);
+      letter-spacing: -0.5px;
+    }
+
+    .section-desc {
+      font-size: var(--text-16);
+      color: #4B5563;
+      max-width: 640px;
+      line-height: 1.6;
+    }
+
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: var(--space-32);
+    }
+
+    @media (max-width: 900px) {
+      .card-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .spacious-card {
+      background-color: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-lg);
+      padding: var(--space-32);
+      box-shadow: var(--shadow-subtle);
+      transition: all var(--transition-base);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .spacious-card:hover {
+      box-shadow: var(--shadow-hover);
+      border-color: var(--color-border-hover);
+      transform: translateY(-2px);
+    }
+
+    .card-tag {
+      font-family: var(--font-mono);
+      font-size: var(--text-12);
+      font-weight: 600;
+      padding: var(--space-4) var(--space-8);
+      border-radius: var(--radius-sm);
+      display: inline-block;
+      margin-bottom: var(--space-16);
+    }
+
+    .tag-primary { background-color: #EFF6FF; color: var(--color-primary); }
+    .tag-secondary { background-color: #F5F3FF; color: var(--color-secondary); }
+    .tag-success { background-color: #F0FDF4; color: var(--color-success); }
+
+    .card-heading {
+      font-family: var(--font-display);
+      font-size: var(--text-24);
+      font-weight: 600;
+      color: var(--color-text);
+      margin-bottom: var(--space-16);
+      line-height: 1.3;
+    }
+
+    .card-body-text {
+      font-size: var(--text-14);
+      color: #4B5563;
+      line-height: 1.6;
+      margin-bottom: var(--space-24);
+    }
+
+    /* ─────────────────────────────────────────────────────────────
+       7. DESIGN SYSTEM SPECIFICATION LAB
+       ───────────────────────────────────────────────────────────── */
+    .lab-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: var(--space-32);
+    }
+
+    .lab-panel {
+      background-color: var(--color-neutral-subtle);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-lg);
+      padding: var(--space-32);
+    }
+
+    .lab-panel-title {
+      font-family: var(--font-display);
+      font-size: var(--text-18);
+      font-weight: 700;
+      color: var(--color-text);
+      margin-bottom: var(--space-24);
+      border-bottom: 1px solid var(--color-border);
+      padding-bottom: var(--space-12);
+    }
+
+    .token-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: var(--space-8) 0;
+      border-bottom: 1px dashed var(--color-border);
+      font-size: var(--text-14);
+    }
+
+    .token-key {
+      font-family: var(--font-mono);
+      color: #6B7280;
+    }
+
+    .token-val {
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: var(--space-8);
+    }
+
+    .swatch {
+      width: 16px;
+      height: 16px;
+      border-radius: var(--radius-sm);
+      display: inline-block;
+    }
+
+    /* Form Controls */
+    .form-group {
+      margin-bottom: var(--space-16);
+    }
+
+    .form-label {
+      display: block;
+      font-size: var(--text-14);
+      font-weight: 600;
+      color: var(--color-text);
+      margin-bottom: var(--space-8);
+    }
+
+    .form-input {
+      width: 100%;
+      background-color: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-md);
+      padding: var(--space-12) var(--space-16);
+      font-family: var(--font-primary);
+      font-size: var(--text-14);
+      color: var(--color-text);
+      outline: none;
+      transition: all var(--transition-fast);
+    }
+
+    .form-input:focus-visible {
+      border-color: var(--color-primary);
+      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.3);
+    }
+
+    /* ─────────────────────────────────────────────────────────────
+       8. FOOTER
+       ───────────────────────────────────────────────────────────── */
+    .spacious-footer {
+      border-top: 1px solid var(--color-border);
+      padding: var(--space-64) 0 var(--space-48);
+      background-color: var(--color-surface);
+    }
+
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 2fr repeat(3, 1fr);
+      gap: var(--space-48);
+      margin-bottom: var(--space-48);
+    }
+
+    @media (max-width: 768px) {
+      .footer-grid {
+        grid-template-columns: 1fr;
+        gap: var(--space-32);
+      }
+    }
+
+    .footer-col-title {
+      font-family: var(--font-display);
+      font-size: var(--text-14);
+      font-weight: 700;
+      color: var(--color-text);
+      margin-bottom: var(--space-16);
+    }
+
+    .footer-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-8);
+    }
+
+    .footer-list a {
+      font-size: var(--text-14);
+      color: #6B7280;
+      text-decoration: none;
+      transition: color var(--transition-fast);
+    }
+
+    .footer-list a:hover {
+      color: var(--color-primary);
+    }
+
+    .footer-bottom {
+      border-top: 1px solid var(--color-border);
+      padding-top: var(--space-32);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: var(--text-14);
+      color: #9CA3AF;
+      flex-wrap: wrap;
+      gap: var(--space-16);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Interactive 8pt Grid Overlay -->
+  <div class="grid-overlay" id="gridOverlay"></div>
+
+  <!-- 1. NAVIGATION -->
+  <header class="spacious-nav">
+    <div class="spacious-container" style="width: 100%;">
+      <div class="nav-inner">
+        <a href="#hero" class="brand-group">
+          <div class="brand-icon">S</div>
+          <span class="brand-name">Spacious</span>
+        </a>
+
+        <ul class="nav-links">
+          <li><a href="#principles" class="nav-link">Principles</a></li>
+          <li><a href="#foundations" class="nav-link">Foundations</a></li>
+          <li><a href="#components" class="nav-link">Components</a></li>
+          <li><a href="#spec" class="nav-link">Token Matrix</a></li>
+        </ul>
+
+        <div class="nav-actions">
+          <button class="btn btn-grid-toggle" id="toggleGridBtn" onclick="toggleGrid()">8pt Grid: OFF</button>
+          <a href="#spec" class="btn btn-secondary">Documentation</a>
+          <a href="#spec" class="btn btn-primary">Get Started</a>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- 2. HERO SECTION -->
+  <section class="hero-section" id="hero">
+    <div class="spacious-container">
+      <span class="hero-eyebrow">Layout &amp; Structure System</span>
+      <h1 class="hero-headline">
+        Interfaces engineered with generous whitespace and mathematical rhythm
+      </h1>
+      <p class="hero-support-text">
+        Consistent 8pt baseline spacing, disciplined Montserrat display headlines, and Open Sans readability. Separating concerns through whitespace before reaching for decorative clutter.
+      </p>
+      <div class="hero-actions">
+        <a href="#principles" class="btn btn-primary">Explore Principles</a>
+        <button class="btn btn-secondary" onclick="toggleGrid()">Inspect 8pt Baseline</button>
+      </div>
+
+      <!-- Metric Strip -->
+      <div class="metric-strip">
+        <div class="metric-cell">
+          <div class="metric-val">8pt</div>
+          <div class="metric-label">Baseline Grid Unit</div>
+        </div>
+        <div class="metric-cell">
+          <div class="metric-val">7 Scales</div>
+          <div class="metric-label">12 to 36 Typographic Hierarchy</div>
+        </div>
+        <div class="metric-cell">
+          <div class="metric-val">#3B82F6</div>
+          <div class="metric-label">Singular Primary CTA</div>
+        </div>
+        <div class="metric-cell">
+          <div class="metric-val">100%</div>
+          <div class="metric-label">Achromatic Canvas Breathing</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3. ARCHITECTURAL PRINCIPLES -->
+  <section class="section-block" id="principles">
+    <div class="spacious-container">
+      <div class="section-header-wrap">
+        <h2 class="section-title">Foundational Design Intent</h2>
+        <p class="section-desc">
+          Spacious prioritizes structure, scanability, and predictable vertical rhythm. No decorative noise, no off-palette distractions.
+        </p>
+      </div>
+
+      <div class="card-grid">
+        <div class="spacious-card">
+          <div>
+            <span class="card-tag tag-primary">Structure</span>
+            <h3 class="card-heading">8pt Baseline Grid</h3>
+            <p class="card-body-text">
+              Every vertical margin, internal card padding, and component gap steps cleanly in multiples of 8: 8, 16, 24, 32, 48, 64, 96px. No ad-hoc offsets.
+            </p>
+          </div>
+          <div style="font-family: var(--font-mono); font-size: var(--text-12); color: var(--color-primary);">
+            margin-bottom: var(--space-32);
+          </div>
+        </div>
+
+        <div class="spacious-card">
+          <div>
+            <span class="card-tag tag-secondary">Whitespace</span>
+            <h3 class="card-heading">Air Before Borders</h3>
+            <p class="card-body-text">
+              Separate distinct concerns through generous spatial intervals rather than thick borders or heavy drop shadows. Let the interface breathe.
+            </p>
+          </div>
+          <div style="font-family: var(--font-mono); font-size: var(--text-12); color: var(--color-secondary);">
+            padding: var(--space-48);
+          </div>
+        </div>
+
+        <div class="spacious-card">
+          <div>
+            <span class="card-tag tag-success">Hierarchy</span>
+            <h3 class="card-heading">Explicit Action Stance</h3>
+            <p class="card-body-text">
+              Primary actions consistently command #3B82F6, while secondary controls remain neutral. Hierarchy is immediate and unmistakable.
+            </p>
+          </div>
+          <div style="font-family: var(--font-mono); font-size: var(--text-12); color: var(--color-success);">
+            background: #3B82F6;
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 4. DESIGN SYSTEM SPECIFICATION & TOKEN LAB -->
+  <section class="section-block" id="spec" style="background-color: var(--color-neutral-subtle); padding-top: var(--space-80);">
+    <div class="spacious-container">
+      <div class="section-header-wrap">
+        <h2 class="section-title">Token Matrix &amp; Component States</h2>
+        <p class="section-desc">
+          Strict foundation tokens verified against Spacious DESIGN.md.
+        </p>
+      </div>
+
+      <div class="lab-grid">
+        <!-- Panel 1: Colors -->
+        <div class="lab-panel" style="background-color: var(--color-surface);">
+          <h3 class="lab-panel-title">Color Palette Foundations</h3>
+          <div class="token-row">
+            <span class="token-key">Primary (#3B82F6)</span>
+            <span class="token-val"><span class="swatch" style="background-color: #3B82F6;"></span> CTA Emphasis</span>
+          </div>
+          <div class="token-row">
+            <span class="token-key">Secondary (#8B5CF6)</span>
+            <span class="token-val"><span class="swatch" style="background-color: #8B5CF6;"></span> Accent</span>
+          </div>
+          <div class="token-row">
+            <span class="token-key">Success (#16A34A)</span>
+            <span class="token-val"><span class="swatch" style="background-color: #16A34A;"></span> Positive State</span>
+          </div>
+          <div class="token-row">
+            <span class="token-key">Warning (#D97706)</span>
+            <span class="token-val"><span class="swatch" style="background-color: #D97706;"></span> Alert</span>
+          </div>
+          <div class="token-row">
+            <span class="token-key">Danger (#DC2626)</span>
+            <span class="token-val"><span class="swatch" style="background-color: #DC2626;"></span> Critical Error</span>
+          </div>
+          <div class="token-row">
+            <span class="token-key">Surface (#FFFFFF)</span>
+            <span class="token-val"><span class="swatch" style="background-color: #FFFFFF; border: 1px solid #ddd;"></span> Background</span>
+          </div>
+          <div class="token-row">
+            <span class="token-key">Text (#111827)</span>
+            <span class="token-val"><span class="swatch" style="background-color: #111827;"></span> High Legibility</span>
+          </div>
+        </div>
+
+        <!-- Panel 2: Typography -->
+        <div class="lab-panel" style="background-color: var(--color-surface);">
+          <h3 class="lab-panel-title">Typography &amp; Scale</h3>
+          <div class="token-row">
+            <span class="token-key">Display Family</span>
+            <span>Montserrat (Weights 600–800)</span>
+          </div>
+          <div class="token-row">
+            <span class="token-key">Primary Family</span>
+            <span>Open Sans (Weights 400–600)</span>
+          </div>
+          <div class="token-row">
+            <span class="token-key">Monospace</span>
+            <span>IBM Plex Mono (Weights 400–500)</span>
+          </div>
+          <div class="token-row">
+            <span class="token-key">Display Size</span>
+            <span style="font-weight: 700;">36px / 30px</span>
+          </div>
+          <div class="token-row">
+            <span class="token-key">Body Standard</span>
+            <span>16px / 1.6 line-height</span>
+          </div>
+          <div class="token-row">
+            <span class="token-key">Small &amp; Micro</span>
+            <span>14px / 12px</span>
+          </div>
+          <div class="token-row">
+            <span class="token-key">Timing Scale</span>
+            <span>150ms – 250ms stable ease</span>
+          </div>
+        </div>
+
+        <!-- Panel 3: Interactive Form -->
+        <div class="lab-panel" style="background-color: var(--color-surface);">
+          <h3 class="lab-panel-title">Predictable Input Controls</h3>
+          <form onsubmit="event.preventDefault(); alert('Form submitted cleanly following Spacious guidelines.');">
+            <div class="form-group">
+              <label class="form-label" for="spaciousName">Full Name</label>
+              <input type="text" id="spaciousName" class="form-input" placeholder="e.g. Alex Morgan" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="spaciousEmail">Work Email</label>
+              <input type="email" id="spaciousEmail" class="form-input" placeholder="alex@company.com" required>
+            </div>
+            <div style="display: flex; gap: var(--space-8); margin-top: var(--space-24);">
+              <button type="submit" class="btn btn-primary" style="flex: 1;">Create Account</button>
+              <button type="reset" class="btn btn-secondary">Reset</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 5. FOOTER -->
+  <footer class="spacious-footer">
+    <div class="spacious-container">
+      <div class="footer-grid">
+        <div>
+          <div class="brand-group" style="margin-bottom: var(--space-16);">
+            <div class="brand-icon">S</div>
+            <span class="brand-name">Spacious</span>
+          </div>
+          <p style="font-size: var(--text-14); color: #6B7280; max-width: 320px; line-height: 1.6;">
+            A structural design system dedicated to clean whitespace, 8pt vertical rhythm, and mathematical interface balance.
+          </p>
+        </div>
+
+        <div>
+          <h4 class="footer-col-title">Foundations</h4>
+          <ul class="footer-list">
+            <li><a href="#principles">8pt Baseline Grid</a></li>
+            <li><a href="#spec">Primary Blue (#3B82F6)</a></li>
+            <li><a href="#spec">Surface White (#FFFFFF)</a></li>
+            <li><a href="#spec">Text Black (#111827)</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h4 class="footer-col-title">Typography</h4>
+          <ul class="footer-list">
+            <li><a href="#">Montserrat Display</a></li>
+            <li><a href="#">Open Sans Body</a></li>
+            <li><a href="#">IBM Plex Mono</a></li>
+            <li><a href="#">12/14/16/18/24/30/36 Scale</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h4 class="footer-col-title">Guidelines</h4>
+          <ul class="footer-list">
+            <li><a href="#">Whitespace Hierarchy</a></li>
+            <li><a href="#">Consistent Padding</a></li>
+            <li><a href="#">Anti-patterns</a></li>
+            <li><a href="#">Accessible Focus</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <span>© 2026 Spacious Design System Specification. Built authentically for open-design review.</span>
+        <span>8pt Baseline Standard • Minimal Clean</span>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    function toggleGrid() {
+      const overlay = document.getElementById('gridOverlay');
+      const btn = document.getElementById('toggleGridBtn');
+      overlay.classList.toggle('active');
+      if (overlay.classList.contains('active')) {
+        btn.textContent = '8pt Grid: ON';
+        btn.classList.add('active');
+      } else {
+        btn.textContent = '8pt Grid: OFF';
+        btn.classList.remove('active');
+      }
+    }
+  </script>
+</body>
+</html>

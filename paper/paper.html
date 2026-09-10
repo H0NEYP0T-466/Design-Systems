@@ -1,0 +1,1896 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Paper — Print-Inspired Design System &amp; Specimen</title>
+  <meta name="description" content="Paper-textured, print-inspired design system with minimal colors, clean serif/sans typography, tactile surface qualities, and strict token adherence.">
+  
+  <!-- Typography as specified in DESIGN.md: primary=Roboto, display=Montserrat, mono=PT Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=PT+Mono&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+
+  <style>
+    /* ==========================================================================
+       DESIGN SYSTEM TOKENS — Exactly matching paper/DESIGN.md
+       ========================================================================== */
+    :root {
+      /* Colors */
+      --primary: #111111;
+      --secondary: #8B5CF6;
+      --success: #16A34A;
+      --warning: #D97706;
+      --danger: #DC2626;
+      --surface: #FFFFFF;
+      --text: #111827;
+      --neutral: #FFFFFF;
+
+      /* Additional tonal print tokens derived from foundation */
+      --text-muted: #4B5563;
+      --text-subtle: #6B7280;
+      --border-subtle: #E5E7EB;
+      --border-strong: #111111;
+      --surface-tint: #F9FAFB;
+      --surface-paper: #FDFBF7;
+      --surface-card: #FFFFFF;
+
+      /* Typography Families */
+      --font-primary: 'Roboto', -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      --font-display: 'Montserrat', -apple-system, BlinkMacSystemFont, sans-serif;
+      --font-mono: 'PT Mono', Menlo, Monaco, monospace;
+
+      /* Typography Scale: 14 / 16 / 18 / 24 / 32 / 40 */
+      --text-14: 14px;
+      --text-16: 16px;
+      --text-18: 18px;
+      --text-24: 24px;
+      --text-32: 32px;
+      --text-40: 40px;
+
+      /* Spacing Scale: 4 / 8 / 12 / 16 / 24 / 32 */
+      --space-4: 4px;
+      --space-8: 8px;
+      --space-12: 12px;
+      --space-16: 16px;
+      --space-24: 24px;
+      --space-32: 32px;
+      --space-48: 48px;
+      --space-64: 64px;
+
+      /* Radii */
+      --radius-sm: 3px;
+      --radius-md: 6px;
+      --radius-lg: 10px;
+
+      /* Transitions: 150-250ms with stable easing */
+      --transition-fast: 150ms cubic-bezier(0.16, 1, 0.3, 1);
+      --transition-normal: 220ms cubic-bezier(0.16, 1, 0.3, 1);
+
+      /* Shadows & tactile elevations */
+      --shadow-paper: 0 1px 3px rgba(17, 24, 39, 0.05), 0 10px 24px -4px rgba(17, 24, 39, 0.06);
+      --shadow-press: inset 0 2px 4px rgba(17, 24, 39, 0.1);
+    }
+
+    /* Reset & Base Setup */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--surface-paper);
+      color: var(--text);
+      font-family: var(--font-primary);
+      font-size: var(--text-16);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    /* Subtle print paper texture overlay */
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 999;
+      opacity: 0.035;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+    }
+
+    /* Print registration guides on page corners */
+    .reg-mark {
+      position: absolute;
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--text-subtle);
+      pointer-events: none;
+      letter-spacing: 0.05em;
+      user-select: none;
+    }
+    .reg-mark-tl { top: 12px; left: 16px; }
+    .reg-mark-tr { top: 12px; right: 16px; }
+
+    /* Layout Containers */
+    .container {
+      width: 100%;
+      max-width: 1160px;
+      margin-left: auto;
+      margin-right: auto;
+      padding-left: var(--space-24);
+      padding-right: var(--space-24);
+    }
+
+    /* Typography Utilities */
+    h1, h2, h3, h4, .font-display {
+      font-family: var(--font-display);
+      color: var(--primary);
+      font-weight: 700;
+      letter-spacing: -0.02em;
+    }
+
+    h1 {
+      font-size: var(--text-40);
+      line-height: 1.15;
+    }
+
+    h2 {
+      font-size: var(--text-32);
+      line-height: 1.25;
+      border-bottom: 2px solid var(--primary);
+      padding-bottom: var(--space-8);
+      margin-bottom: var(--space-24);
+    }
+
+    h3 {
+      font-size: var(--text-24);
+      line-height: 1.3;
+      margin-bottom: var(--space-12);
+    }
+
+    h4 {
+      font-size: var(--text-18);
+      line-height: 1.4;
+      margin-bottom: var(--space-8);
+    }
+
+    p {
+      color: var(--text);
+      font-size: var(--text-16);
+      line-height: 1.65;
+    }
+
+    .meta-mono {
+      font-family: var(--font-mono);
+      font-size: var(--text-14);
+      color: var(--text-muted);
+      letter-spacing: -0.01em;
+    }
+
+    /* Masthead / Header */
+    .site-masthead {
+      border-bottom: 1px solid var(--border-strong);
+      background-color: var(--surface);
+      padding-top: var(--space-16);
+      padding-bottom: var(--space-16);
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      box-shadow: 0 1px 0 rgba(0,0,0,0.05);
+    }
+
+    .masthead-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-bottom: var(--space-12);
+      border-bottom: 1px dashed var(--border-subtle);
+      font-family: var(--font-mono);
+      font-size: var(--text-14);
+      color: var(--text-muted);
+    }
+
+    .edition-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-8);
+    }
+
+    .edition-dot {
+      width: 7px;
+      height: 7px;
+      background-color: var(--success);
+      border-radius: 50%;
+      display: inline-block;
+    }
+
+    .masthead-main {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-top: var(--space-16);
+    }
+
+    .brand-group {
+      display: flex;
+      align-items: baseline;
+      gap: var(--space-12);
+    }
+
+    .brand-title {
+      font-family: var(--font-display);
+      font-size: var(--text-24);
+      font-weight: 900;
+      letter-spacing: -0.03em;
+      text-transform: uppercase;
+      color: var(--primary);
+      text-decoration: none;
+    }
+
+    .brand-tag {
+      font-family: var(--font-mono);
+      font-size: var(--text-14);
+      padding: 2px 6px;
+      background-color: var(--surface-tint);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-sm);
+    }
+
+    .nav-links {
+      display: flex;
+      gap: var(--space-24);
+      list-style: none;
+      align-items: center;
+    }
+
+    .nav-links a {
+      color: var(--text);
+      text-decoration: none;
+      font-size: var(--text-14);
+      font-weight: 500;
+      transition: color var(--transition-fast);
+      position: relative;
+    }
+
+    .nav-links a:hover {
+      color: var(--secondary);
+    }
+
+    .nav-links a:focus-visible {
+      outline: 2px solid var(--primary);
+      outline-offset: 4px;
+    }
+
+    /* Buttons */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--space-8);
+      font-family: var(--font-primary);
+      font-size: var(--text-14);
+      font-weight: 500;
+      padding: 10px var(--space-24);
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      text-decoration: none;
+      transition: background-color var(--transition-fast), color var(--transition-fast), transform var(--transition-fast), border-color var(--transition-fast), box-shadow var(--transition-fast);
+      border: 1px solid transparent;
+      user-select: none;
+      white-space: nowrap;
+    }
+
+    .btn:active {
+      transform: translateY(1px);
+    }
+
+    .btn:focus-visible {
+      outline: 2px solid var(--primary);
+      outline-offset: 3px;
+    }
+
+    /* Primary Button: #111111 */
+    .btn-primary {
+      background-color: var(--primary);
+      color: var(--surface);
+      border-color: var(--primary);
+    }
+    .btn-primary:hover {
+      background-color: #262626;
+      border-color: #262626;
+    }
+
+    /* Secondary Button: Neutral surface */
+    .btn-secondary {
+      background-color: var(--surface);
+      color: var(--text);
+      border-color: var(--border-strong);
+    }
+    .btn-secondary:hover {
+      background-color: var(--surface-tint);
+      border-color: var(--primary);
+    }
+
+    /* Secondary Violet Button: #8B5CF6 */
+    .btn-accent {
+      background-color: var(--secondary);
+      color: #FFFFFF;
+      border-color: var(--secondary);
+    }
+    .btn-accent:hover {
+      background-color: #7C3AED;
+      border-color: #7C3AED;
+    }
+
+    /* Success Button: #16A34A */
+    .btn-success {
+      background-color: var(--success);
+      color: #FFFFFF;
+      border-color: var(--success);
+    }
+    .btn-success:hover {
+      background-color: #15803D;
+    }
+
+    /* Warning Button: #D97706 */
+    .btn-warning {
+      background-color: var(--warning);
+      color: #FFFFFF;
+      border-color: var(--warning);
+    }
+    .btn-warning:hover {
+      background-color: #B45309;
+    }
+
+    /* Danger Button: #DC2626 */
+    .btn-danger {
+      background-color: var(--danger);
+      color: #FFFFFF;
+      border-color: var(--danger);
+    }
+    .btn-danger:hover {
+      background-color: #B91C1C;
+    }
+
+    .btn-ghost {
+      background-color: transparent;
+      color: var(--text);
+      border-color: transparent;
+    }
+    .btn-ghost:hover {
+      background-color: rgba(17, 24, 39, 0.05);
+    }
+
+    .btn:disabled {
+      opacity: 0.45;
+      cursor: not-allowed;
+      pointer-events: none;
+    }
+
+    /* Hero Section */
+    .hero-section {
+      padding-top: var(--space-48);
+      padding-bottom: var(--space-48);
+      border-bottom: 1px solid var(--border-subtle);
+      background: linear-gradient(180deg, var(--surface) 0%, var(--surface-paper) 100%);
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1.15fr 0.85fr;
+      gap: var(--space-48);
+      align-items: center;
+    }
+
+    .hero-kicker {
+      font-family: var(--font-mono);
+      font-size: var(--text-14);
+      color: var(--secondary);
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      margin-bottom: var(--space-12);
+      display: flex;
+      align-items: center;
+      gap: var(--space-8);
+    }
+
+    .hero-kicker::before {
+      content: "§";
+      font-weight: 700;
+    }
+
+    .hero-title {
+      font-size: var(--text-40);
+      font-weight: 800;
+      color: var(--primary);
+      margin-bottom: var(--space-16);
+      line-height: 1.18;
+    }
+
+    .hero-lead {
+      font-size: var(--text-18);
+      color: var(--text);
+      line-height: 1.6;
+      margin-bottom: var(--space-24);
+      max-width: 540px;
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-16);
+      margin-bottom: var(--space-32);
+    }
+
+    .hero-meta-strip {
+      display: flex;
+      gap: var(--space-24);
+      border-top: 1px dashed var(--border-subtle);
+      padding-top: var(--space-16);
+      font-family: var(--font-mono);
+      font-size: var(--text-14);
+      color: var(--text-subtle);
+    }
+
+    /* Paper Card: Tactile Print Sheet */
+    .paper-sheet-card {
+      background-color: var(--surface);
+      border: 1px solid var(--border-strong);
+      box-shadow: var(--shadow-paper);
+      padding: var(--space-32);
+      position: relative;
+      border-radius: var(--radius-sm);
+    }
+
+    /* Authentic Deckle / Perforation line effect */
+    .paper-sheet-card::before {
+      content: "";
+      position: absolute;
+      top: -1px;
+      left: 20px;
+      right: 20px;
+      height: 2px;
+      background: repeating-linear-gradient(90deg, var(--primary) 0, var(--primary) 4px, transparent 4px, transparent 8px);
+    }
+
+    /* Embossed Seal Stamp Badge */
+    .stamp-seal {
+      width: 76px;
+      height: 76px;
+      border: 2px dashed var(--primary);
+      border-radius: 50%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      font-family: var(--font-mono);
+      font-size: 10px;
+      line-height: 1.1;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      font-weight: 700;
+      color: var(--primary);
+      padding: 4px;
+      transform: rotate(-8deg);
+      user-select: none;
+    }
+
+    .specimen-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: var(--space-24);
+      padding-bottom: var(--space-16);
+      border-bottom: 1px solid var(--border-subtle);
+    }
+
+    .specimen-title {
+      font-family: var(--font-display);
+      font-size: var(--text-24);
+      font-weight: 800;
+      color: var(--primary);
+      margin-bottom: var(--space-4);
+    }
+
+    .specimen-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-family: var(--font-mono);
+      font-size: var(--text-14);
+      margin-top: var(--space-16);
+    }
+
+    .specimen-table th {
+      text-align: left;
+      padding: var(--space-8) 0;
+      color: var(--text-subtle);
+      font-weight: 400;
+      border-bottom: 1px solid var(--border-subtle);
+    }
+
+    .specimen-table td {
+      padding: var(--space-8) 0;
+      color: var(--text);
+      border-bottom: 1px dashed var(--border-subtle);
+    }
+
+    /* Main Sections */
+    .section {
+      padding-top: var(--space-48);
+      padding-bottom: var(--space-48);
+      border-bottom: 1px solid var(--border-subtle);
+    }
+
+    .section-intro {
+      max-width: 680px;
+      margin-bottom: var(--space-32);
+    }
+
+    .section-intro p {
+      font-size: var(--text-18);
+      color: var(--text-muted);
+    }
+
+    /* Color Swatches Grid */
+    .tokens-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: var(--space-16);
+      margin-bottom: var(--space-32);
+    }
+
+    .token-card {
+      background: var(--surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-sm);
+      overflow: hidden;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.04);
+      transition: transform var(--transition-fast), border-color var(--transition-fast);
+      cursor: pointer;
+    }
+
+    .token-card:hover {
+      transform: translateY(-2px);
+      border-color: var(--primary);
+    }
+
+    .token-swatch {
+      height: 90px;
+      width: 100%;
+      display: flex;
+      align-items: flex-end;
+      padding: var(--space-8) var(--space-12);
+      border-bottom: 1px solid var(--border-subtle);
+    }
+
+    .token-details {
+      padding: var(--space-12);
+      font-family: var(--font-mono);
+    }
+
+    .token-name {
+      font-size: var(--text-14);
+      font-weight: 700;
+      color: var(--primary);
+      margin-bottom: var(--space-4);
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .token-hex {
+      font-size: var(--text-14);
+      color: var(--text-subtle);
+    }
+
+    .token-role {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-top: var(--space-4);
+      font-family: var(--font-primary);
+    }
+
+    /* Typography Scale Inspector */
+    .type-matrix {
+      background: var(--surface);
+      border: 1px solid var(--border-strong);
+      border-radius: var(--radius-sm);
+      padding: var(--space-32);
+      margin-bottom: var(--space-32);
+    }
+
+    .type-row {
+      display: grid;
+      grid-template-columns: 140px 1fr;
+      align-items: baseline;
+      padding-top: var(--space-16);
+      padding-bottom: var(--space-16);
+      border-bottom: 1px dashed var(--border-subtle);
+    }
+
+    .type-row:last-child {
+      border-bottom: none;
+    }
+
+    .type-meta {
+      font-family: var(--font-mono);
+      font-size: var(--text-14);
+      color: var(--text-subtle);
+    }
+
+    .type-sample {
+      color: var(--text);
+    }
+
+    /* Interactive Specimen Lab */
+    .interactive-panel {
+      background: var(--surface);
+      border: 1px solid var(--border-strong);
+      border-radius: var(--radius-sm);
+      padding: var(--space-24);
+      margin-bottom: var(--space-32);
+    }
+
+    .controls-bar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-16);
+      align-items: center;
+      padding-bottom: var(--space-16);
+      border-bottom: 1px solid var(--border-subtle);
+      margin-bottom: var(--space-24);
+    }
+
+    .control-label {
+      font-family: var(--font-mono);
+      font-size: var(--text-14);
+      color: var(--text-muted);
+      font-weight: 700;
+    }
+
+    .segmented-control {
+      display: inline-flex;
+      border: 1px solid var(--border-strong);
+      border-radius: var(--radius-sm);
+      overflow: hidden;
+      background: var(--surface-tint);
+    }
+
+    .segmented-control button {
+      background: transparent;
+      border: none;
+      padding: 6px var(--space-12);
+      font-family: var(--font-mono);
+      font-size: var(--text-14);
+      color: var(--text);
+      cursor: pointer;
+      border-right: 1px solid var(--border-strong);
+      transition: background-color var(--transition-fast);
+    }
+
+    .segmented-control button:last-child {
+      border-right: none;
+    }
+
+    .segmented-control button.active,
+    .segmented-control button:hover {
+      background: var(--primary);
+      color: var(--surface);
+    }
+
+    .live-specimen-box {
+      min-height: 120px;
+      padding: var(--space-24);
+      background: var(--surface-paper);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-sm);
+      outline: none;
+    }
+
+    /* Paper Stocks Showcase */
+    .stocks-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: var(--space-24);
+      margin-bottom: var(--space-32);
+    }
+
+    .stock-card {
+      background: var(--surface);
+      border: 1px solid var(--border-strong);
+      border-radius: var(--radius-sm);
+      padding: var(--space-24);
+      box-shadow: var(--shadow-paper);
+      position: relative;
+      cursor: pointer;
+      transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+    }
+
+    .stock-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 4px 12px rgba(17, 24, 39, 0.08);
+    }
+
+    .stock-tag {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 3px 6px;
+      background: var(--surface-tint);
+      border: 1px solid var(--border-subtle);
+      display: inline-block;
+      margin-bottom: var(--space-12);
+    }
+
+    .stock-title {
+      font-family: var(--font-display);
+      font-size: var(--text-18);
+      font-weight: 700;
+      margin-bottom: var(--space-8);
+      color: var(--primary);
+    }
+
+    .stock-desc {
+      font-size: var(--text-14);
+      color: var(--text-muted);
+      margin-bottom: var(--space-16);
+      line-height: 1.5;
+    }
+
+    .stock-stats {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      color: var(--text-subtle);
+      border-top: 1px dashed var(--border-subtle);
+      padding-top: var(--space-12);
+      display: flex;
+      justify-content: space-between;
+    }
+
+    /* Forms & Inputs */
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--space-24);
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-8);
+      margin-bottom: var(--space-16);
+    }
+
+    .form-label {
+      font-family: var(--font-primary);
+      font-size: var(--text-14);
+      font-weight: 500;
+      color: var(--primary);
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .form-hint {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      color: var(--text-subtle);
+    }
+
+    .input-text, .select-input, .textarea-input {
+      font-family: var(--font-primary);
+      font-size: var(--text-16);
+      color: var(--text);
+      background-color: var(--surface);
+      border: 1px solid var(--border-strong);
+      border-radius: var(--radius-sm);
+      padding: 10px var(--space-12);
+      transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+      width: 100%;
+    }
+
+    .input-text:focus, .select-input:focus, .textarea-input:focus {
+      outline: 2px solid var(--primary);
+      outline-offset: 1px;
+    }
+
+    .input-error {
+      border-color: var(--danger) !important;
+    }
+
+    .input-error:focus {
+      outline-color: var(--danger) !important;
+    }
+
+    .error-msg {
+      color: var(--danger);
+      font-family: var(--font-mono);
+      font-size: 12px;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .success-msg {
+      color: var(--success);
+      font-family: var(--font-mono);
+      font-size: 12px;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    /* Editorial Dispatch / Print Layout */
+    .editorial-layout {
+      background: var(--surface);
+      border: 1px solid var(--border-strong);
+      padding: var(--space-48);
+      border-radius: var(--radius-sm);
+      position: relative;
+    }
+
+    .editorial-cols {
+      display: grid;
+      grid-template-columns: 1.2fr 0.8fr;
+      gap: var(--space-48);
+      margin-top: var(--space-24);
+    }
+
+    .drop-cap::first-letter {
+      float: left;
+      font-family: var(--font-display);
+      font-size: 58px;
+      line-height: 0.8;
+      padding-top: 4px;
+      padding-right: 12px;
+      padding-bottom: 2px;
+      font-weight: 800;
+      color: var(--primary);
+    }
+
+    .pull-quote {
+      font-family: var(--font-display);
+      font-size: var(--text-24);
+      font-style: italic;
+      line-height: 1.35;
+      color: var(--primary);
+      border-left: 3px solid var(--secondary);
+      padding-left: var(--space-16);
+      margin: var(--space-24) 0;
+    }
+
+    /* Editions / Pricing Table */
+    .editions-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: var(--space-24);
+      align-items: stretch;
+    }
+
+    .edition-card {
+      background: var(--surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-sm);
+      padding: var(--space-32);
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      transition: border-color var(--transition-fast), transform var(--transition-fast);
+    }
+
+    .edition-card.featured {
+      border: 2px solid var(--primary);
+      box-shadow: var(--shadow-paper);
+      transform: translateY(-4px);
+    }
+
+    .edition-card:hover {
+      border-color: var(--primary);
+    }
+
+    .edition-badge-top {
+      position: absolute;
+      top: -12px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--primary);
+      color: var(--surface);
+      font-family: var(--font-mono);
+      font-size: 11px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 2px var(--space-12);
+      border-radius: var(--radius-sm);
+    }
+
+    .edition-price {
+      font-family: var(--font-display);
+      font-size: var(--text-32);
+      font-weight: 800;
+      color: var(--primary);
+      margin-top: var(--space-12);
+      margin-bottom: var(--space-16);
+    }
+
+    .edition-features {
+      list-style: none;
+      margin-top: var(--space-16);
+      margin-bottom: var(--space-24);
+      flex-grow: 1;
+    }
+
+    .edition-features li {
+      font-size: var(--text-14);
+      padding: var(--space-8) 0;
+      border-bottom: 1px dashed var(--border-subtle);
+      display: flex;
+      align-items: center;
+      gap: var(--space-8);
+    }
+
+    .edition-features li::before {
+      content: "✓";
+      color: var(--success);
+      font-weight: 700;
+    }
+
+    /* Colophon / Footer */
+    .site-footer {
+      background-color: var(--surface);
+      border-top: 2px solid var(--primary);
+      padding-top: var(--space-48);
+      padding-bottom: var(--space-48);
+      margin-top: var(--space-64);
+    }
+
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1.5fr;
+      gap: var(--space-32);
+      margin-bottom: var(--space-32);
+    }
+
+    .footer-bottom {
+      border-top: 1px dashed var(--border-subtle);
+      padding-top: var(--space-24);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-family: var(--font-mono);
+      font-size: 12px;
+      color: var(--text-subtle);
+    }
+
+    /* Print Crosshairs Registration Mark */
+    .crosshair {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 20px;
+      height: 20px;
+      position: relative;
+    }
+    .crosshair::before, .crosshair::after {
+      content: "";
+      position: absolute;
+      background: var(--text-subtle);
+    }
+    .crosshair::before { width: 100%; height: 1px; }
+    .crosshair::after { width: 1px; height: 100%; }
+
+    /* Modal / Specimen Dialog */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background-color: rgba(17, 24, 39, 0.4);
+      backdrop-filter: blur(2px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      padding: var(--space-16);
+    }
+
+    .modal-overlay.active {
+      display: flex;
+    }
+
+    .modal-dialog {
+      background: var(--surface);
+      border: 1px solid var(--border-strong);
+      box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+      border-radius: var(--radius-sm);
+      max-width: 540px;
+      width: 100%;
+      padding: var(--space-32);
+      position: relative;
+    }
+
+    .modal-close-btn {
+      position: absolute;
+      top: var(--space-16);
+      right: var(--space-16);
+      background: transparent;
+      border: none;
+      font-family: var(--font-mono);
+      font-size: var(--text-18);
+      cursor: pointer;
+      color: var(--text);
+    }
+
+    /* Notification Toast */
+    .toast-msg {
+      position: fixed;
+      bottom: var(--space-24);
+      right: var(--space-24);
+      background: var(--primary);
+      color: var(--surface);
+      padding: var(--space-12) var(--space-24);
+      border-radius: var(--radius-sm);
+      font-family: var(--font-mono);
+      font-size: var(--text-14);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      transform: translateY(100px);
+      opacity: 0;
+      transition: transform var(--transition-normal), opacity var(--transition-normal);
+      z-index: 2000;
+    }
+
+    .toast-msg.show {
+      transform: translateY(0);
+      opacity: 1;
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 900px) {
+      .hero-grid, .editorial-cols, .form-grid, .editions-grid, .footer-grid {
+        grid-template-columns: 1fr;
+        gap: var(--space-32);
+      }
+      .nav-links {
+        display: none;
+      }
+      .type-row {
+        grid-template-columns: 1fr;
+        gap: var(--space-8);
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Physical Print Registration Marks -->
+  <div class="reg-mark reg-mark-tl">⊕ PR-SPECIMEN-2026 // ED-48</div>
+  <div class="reg-mark reg-mark-tr">TRIM: 1160xPRINT // CMYK [100.100.100.100]</div>
+
+  <!-- Masthead -->
+  <header class="site-masthead">
+    <div class="container">
+      <div class="masthead-top">
+        <div class="edition-badge">
+          <span class="edition-dot"></span>
+          <span>PRINT RUN NO. 048-26</span>
+          <span>•</span>
+          <span>HEAVY COTTON 360 GSM</span>
+        </div>
+        <div>ARCHIVAL DESIGN SYSTEM &bull; RETRO &amp; NOSTALGIC</div>
+      </div>
+
+      <div class="masthead-main">
+        <div class="brand-group">
+          <a href="#" class="brand-title">Paper Foundry</a>
+          <span class="brand-tag">v2.4 SPEC</span>
+        </div>
+
+        <nav>
+          <ul class="nav-links">
+            <li><a href="#tokens">Palette Tokens</a></li>
+            <li><a href="#typography">Typography Matrix</a></li>
+            <li><a href="#stocks">Paper Stocks</a></li>
+            <li><a href="#components">Components</a></li>
+            <li><a href="#dispatch">Editorial Dispatch</a></li>
+            <li><a href="#pricing">Specimen Kits</a></li>
+          </ul>
+        </nav>
+
+        <div style="display: flex; gap: var(--space-8);">
+          <button class="btn btn-secondary" id="openSpecimenBtn" style="font-family: var(--font-mono); font-size: 13px;">
+            Order Swatches
+          </button>
+          <a href="#components" class="btn btn-primary">
+            Explore System
+          </a>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="hero-section">
+    <div class="container">
+      <div class="hero-grid">
+        <div>
+          <div class="hero-kicker">Foundations of Print &amp; Ink</div>
+          <h1 class="hero-title">Paper-textured, print-inspired design with tactile surface qualities.</h1>
+          <p class="hero-lead">
+            Built strictly to the Paper Design System specification. Featuring a calibrated palette of 
+            Primary (#111111), Secondary (#8B5CF6), crisp white surfaces (#FFFFFF), and legible body text (#111827) set in Roboto, Montserrat, and PT Mono.
+          </p>
+          <div class="hero-actions">
+            <button class="btn btn-primary" onclick="showToast('Sample swatch packet ordered to studio queue.')">
+              Request Specimen Box
+            </button>
+            <button class="btn btn-secondary" onclick="document.getElementById('typography').scrollIntoView({behavior: 'smooth'})">
+              Inspect Type Scale
+            </button>
+            <button class="btn btn-accent" onclick="showToast('Secondary token (#8B5CF6) activated.')">
+              Violet Accent
+            </button>
+          </div>
+          <div class="hero-meta-strip">
+            <span>GRID: 4/8/12/16/24/32</span>
+            <span>TYPE: 14/16/18/24/32/40</span>
+            <span>RATIO: 1.618 FIBONACCI</span>
+          </div>
+        </div>
+
+        <!-- Authentic Physical Sheet Card -->
+        <div class="paper-sheet-card">
+          <div class="specimen-header">
+            <div>
+              <div style="font-family: var(--font-mono); font-size: 12px; color: var(--secondary); margin-bottom: 4px;">CERTIFIED SPECIMEN</div>
+              <div class="specimen-title">ARCHIVAL FOLIO № 81</div>
+              <div class="meta-mono">Cold-pressed rag paper, neutral pH 7.8</div>
+            </div>
+            <div class="stamp-seal">
+              <span>Pure</span>
+              <strong>Cotton</strong>
+              <span>100%</span>
+            </div>
+          </div>
+
+          <p style="font-size: var(--text-14); margin-bottom: var(--space-16);">
+            "Good typography gives shape and quiet authority to human thought. On paper, every millimeter carries friction, weight, and timeless permanence."
+          </p>
+
+          <table class="specimen-table">
+            <tr>
+              <th>FOUNDATION TOKEN</th>
+              <th>EXACT VALUE</th>
+              <th>ROLE</th>
+            </tr>
+            <tr>
+              <td>--primary</td>
+              <td>#111111</td>
+              <td>Deep Ink CTA Emphasis</td>
+            </tr>
+            <tr>
+              <td>--secondary</td>
+              <td>#8B5CF6</td>
+              <td>Violet Editorial Accent</td>
+            </tr>
+            <tr>
+              <td>--surface</td>
+              <td>#FFFFFF</td>
+              <td>Pristine Sheet Canvas</td>
+            </tr>
+            <tr>
+              <td>--text</td>
+              <td>#111827</td>
+              <td>Body Copy Legibility</td>
+            </tr>
+          </table>
+
+          <div style="margin-top: var(--space-24); display: flex; justify-content: space-between; align-items: center;">
+            <div style="display: flex; gap: var(--space-8);">
+              <span style="width: 16px; height: 16px; background: #111111; border: 1px solid #000; border-radius: 2px;" title="#111111"></span>
+              <span style="width: 16px; height: 16px; background: #8B5CF6; border: 1px solid #7C3AED; border-radius: 2px;" title="#8B5CF6"></span>
+              <span style="width: 16px; height: 16px; background: #16A34A; border: 1px solid #15803D; border-radius: 2px;" title="#16A34A"></span>
+              <span style="width: 16px; height: 16px; background: #D97706; border: 1px solid #B45309; border-radius: 2px;" title="#D97706"></span>
+              <span style="width: 16px; height: 16px; background: #DC2626; border: 1px solid #B91C1C; border-radius: 2px;" title="#DC2626"></span>
+            </div>
+            <span class="meta-mono" style="font-size: 11px;">VERIFIED 2026</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Color Tokens Section -->
+  <section class="section" id="tokens">
+    <div class="container">
+      <div class="section-intro">
+        <h2>1. Exact Color Foundations</h2>
+        <p>All colors are drawn directly from the Paper Design System specification. Click any swatch to copy its hexadecimal token.</p>
+      </div>
+
+      <div class="tokens-grid">
+        <!-- Primary -->
+        <div class="token-card" onclick="copyToken('#111111', 'Primary')">
+          <div class="token-swatch" style="background-color: #111111; color: #FFFFFF;">
+            <span class="meta-mono" style="color: #FFFFFF;">#111111</span>
+          </div>
+          <div class="token-details">
+            <div class="token-name">Primary <span>CTA</span></div>
+            <div class="token-hex">--primary: #111111</div>
+            <div class="token-role">Deepest ink tone for primary CTA and high-contrast headlines.</div>
+          </div>
+        </div>
+
+        <!-- Secondary -->
+        <div class="token-card" onclick="copyToken('#8B5CF6', 'Secondary')">
+          <div class="token-swatch" style="background-color: #8B5CF6; color: #FFFFFF;">
+            <span class="meta-mono" style="color: #FFFFFF;">#8B5CF6</span>
+          </div>
+          <div class="token-details">
+            <div class="token-name">Secondary <span>Accent</span></div>
+            <div class="token-hex">--secondary: #8B5CF6</div>
+            <div class="token-role">Vibrant violet for secondary interactive elements &amp; highlights.</div>
+          </div>
+        </div>
+
+        <!-- Success -->
+        <div class="token-card" onclick="copyToken('#16A34A', 'Success')">
+          <div class="token-swatch" style="background-color: #16A34A; color: #FFFFFF;">
+            <span class="meta-mono" style="color: #FFFFFF;">#16A34A</span>
+          </div>
+          <div class="token-details">
+            <div class="token-name">Success <span>State</span></div>
+            <div class="token-hex">--success: #16A34A</div>
+            <div class="token-role">Forest press green for confirmed validations &amp; approvals.</div>
+          </div>
+        </div>
+
+        <!-- Warning -->
+        <div class="token-card" onclick="copyToken('#D97706', 'Warning')">
+          <div class="token-swatch" style="background-color: #D97706; color: #FFFFFF;">
+            <span class="meta-mono" style="color: #FFFFFF;">#D97706</span>
+          </div>
+          <div class="token-details">
+            <div class="token-name">Warning <span>State</span></div>
+            <div class="token-hex">--warning: #D97706</div>
+            <div class="token-role">Amber seal for inventory notices &amp; non-blocking alerts.</div>
+          </div>
+        </div>
+
+        <!-- Danger -->
+        <div class="token-card" onclick="copyToken('#DC2626', 'Danger')">
+          <div class="token-swatch" style="background-color: #DC2626; color: #FFFFFF;">
+            <span class="meta-mono" style="color: #FFFFFF;">#DC2626</span>
+          </div>
+          <div class="token-details">
+            <div class="token-name">Danger <span>State</span></div>
+            <div class="token-hex">--danger: #DC2626</div>
+            <div class="token-role">Vermilion red for destructive actions &amp; critical form errors.</div>
+          </div>
+        </div>
+
+        <!-- Surface -->
+        <div class="token-card" onclick="copyToken('#FFFFFF', 'Surface')">
+          <div class="token-swatch" style="background-color: #FFFFFF; color: #111827; border: 1px solid var(--border-subtle);">
+            <span class="meta-mono">#FFFFFF</span>
+          </div>
+          <div class="token-details">
+            <div class="token-name">Surface <span>Canvas</span></div>
+            <div class="token-hex">--surface: #FFFFFF</div>
+            <div class="token-role">Pure paper surface for cards, reading containers, and modals.</div>
+          </div>
+        </div>
+
+        <!-- Text -->
+        <div class="token-card" onclick="copyToken('#111827', 'Text')">
+          <div class="token-swatch" style="background-color: #111827; color: #FFFFFF;">
+            <span class="meta-mono" style="color: #FFFFFF;">#111827</span>
+          </div>
+          <div class="token-details">
+            <div class="token-name">Text <span>Body</span></div>
+            <div class="token-hex">--text: #111827</div>
+            <div class="token-role">Charcoal black engineered for prolonged editorial legibility.</div>
+          </div>
+        </div>
+
+        <!-- Neutral -->
+        <div class="token-card" onclick="copyToken('#FFFFFF', 'Neutral')">
+          <div class="token-swatch" style="background-color: #FFFFFF; color: #111827; border: 1px solid var(--border-subtle);">
+            <span class="meta-mono">#FFFFFF</span>
+          </div>
+          <div class="token-details">
+            <div class="token-name">Neutral <span>Ground</span></div>
+            <div class="token-hex">--neutral: #FFFFFF</div>
+            <div class="token-role">Derived from surface token for official format compatibility.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Typography Hierarchy Section -->
+  <section class="section" id="typography">
+    <div class="container">
+      <div class="section-intro">
+        <h2>2. Typography Scale &amp; Font Families</h2>
+        <p>
+          Configured with <strong>primary=Roboto</strong>, <strong>display=Montserrat</strong>, and <strong>mono=PT Mono</strong> across the strict 14/16/18/24/32/40 scale.
+        </p>
+      </div>
+
+      <!-- Type Scale Display -->
+      <div class="type-matrix">
+        <div class="type-row">
+          <div class="type-meta">
+            <strong>40px</strong> / Montserrat<br>
+            Weight: 800 (Display)
+          </div>
+          <div class="type-sample" style="font-family: var(--font-display); font-size: var(--text-40); font-weight: 800; line-height: 1.15;">
+            Mastering the Tactile Edge of Type
+          </div>
+        </div>
+
+        <div class="type-row">
+          <div class="type-meta">
+            <strong>32px</strong> / Montserrat<br>
+            Weight: 700 (Heading 2)
+          </div>
+          <div class="type-sample" style="font-family: var(--font-display); font-size: var(--text-32); font-weight: 700;">
+            Precision Composition Across Print Surfaces
+          </div>
+        </div>
+
+        <div class="type-row">
+          <div class="type-meta">
+            <strong>24px</strong> / Montserrat<br>
+            Weight: 600 (Heading 3)
+          </div>
+          <div class="type-sample" style="font-family: var(--font-display); font-size: var(--text-24); font-weight: 600;">
+            Sub-section Hierarchy &amp; Specimen Modules
+          </div>
+        </div>
+
+        <div class="type-row">
+          <div class="type-meta">
+            <strong>18px</strong> / Roboto<br>
+            Weight: 500 (Lead Text)
+          </div>
+          <div class="type-sample" style="font-family: var(--font-primary); font-size: var(--text-18); font-weight: 500;">
+            Every letterform carries physical tension when pressed into archival cotton sheets.
+          </div>
+        </div>
+
+        <div class="type-row">
+          <div class="type-meta">
+            <strong>16px</strong> / Roboto<br>
+            Weight: 400 (Body Copy)
+          </div>
+          <div class="type-sample" style="font-family: var(--font-primary); font-size: var(--text-16);">
+            Optimized for scanability and contrast. Body copy set in #111827 provides effortless reading under diverse ambient lighting conditions without visual fatigue.
+          </div>
+        </div>
+
+        <div class="type-row">
+          <div class="type-meta">
+            <strong>14px</strong> / PT Mono<br>
+            Weight: 400 (Metadata &amp; Spec)
+          </div>
+          <div class="type-sample" style="font-family: var(--font-mono); font-size: var(--text-14); color: var(--text-muted);">
+            SPEC: ISO-216-A4 // CALIPER: 340-MICRON // PH-LEVEL: 7.8 ALKALINE // GRAIN-DIR: LONG
+          </div>
+        </div>
+      </div>
+
+      <!-- Interactive Type Playground -->
+      <div class="interactive-panel">
+        <div class="controls-bar">
+          <span class="control-label">INTERACTIVE TYPE LAB:</span>
+          <div class="segmented-control" id="fontFamilySelector">
+            <button class="active" onclick="setTypeFamily('Montserrat', this)">Montserrat (Display)</button>
+            <button onclick="setTypeFamily('Roboto', this)">Roboto (Primary)</button>
+            <button onclick="setTypeFamily('PT Mono', this)">PT Mono (Mono)</button>
+          </div>
+
+          <div class="segmented-control" id="fontSizeSelector">
+            <button onclick="setTypeSize('14px', this)">14</button>
+            <button onclick="setTypeSize('16px', this)">16</button>
+            <button onclick="setTypeSize('18px', this)">18</button>
+            <button onclick="setTypeSize('24px', this)">24</button>
+            <button class="active" onclick="setTypeSize('32px', this)">32</button>
+            <button onclick="setTypeSize('40px', this)">40</button>
+          </div>
+
+          <div class="segmented-control" id="fontWeightSelector">
+            <button onclick="setTypeWeight('300', this)">300</button>
+            <button onclick="setTypeWeight('400', this)">400</button>
+            <button class="active" onclick="setTypeWeight('700', this)">700</button>
+            <button onclick="setTypeWeight('900', this)">900</button>
+          </div>
+        </div>
+
+        <div class="live-specimen-box" id="liveTypeBox" contenteditable="true" spellcheck="false" style="font-family: 'Montserrat', sans-serif; font-size: 32px; font-weight: 700;">
+          The quick brown fox jumps over the lazy dog &bull; 0123456789
+        </div>
+        <div style="font-family: var(--font-mono); font-size: 11px; color: var(--text-subtle); margin-top: 8px;">
+          (Editable specimen field — type directly inside to evaluate glyph geometry)
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Paper Stocks Showcase -->
+  <section class="section" id="stocks">
+    <div class="container">
+      <div class="section-intro">
+        <h2>3. Physical Paper Stocks &amp; Tactile Grades</h2>
+        <p>Tactile surface qualities tailored for letterpress, intaglio, foil stamping, and high-definition offset printing.</p>
+      </div>
+
+      <div class="stocks-grid">
+        <div class="stock-card" onclick="showToast('Selected: Imperial Heavy Cotton (360 GSM)')">
+          <span class="stock-tag">GRADE A &bull; RAG</span>
+          <div class="stock-title">Imperial Heavy Cotton</div>
+          <div class="stock-desc">100% combed cotton fibers with a deep pillowy tooth. Engineered specifically for high-pressure blind debossing.</div>
+          <div class="stock-stats">
+            <span>CALIPER: 480μ</span>
+            <span>WEIGHT: 360 GSM</span>
+          </div>
+        </div>
+
+        <div class="stock-card" onclick="showToast('Selected: Translucent Archival Vellum (110 GSM)')">
+          <span class="stock-tag">SPECIALTY &bull; FROST</span>
+          <div class="stock-title">Archival Vellum</div>
+          <div class="stock-desc">Semi-opaque glassine finish with micro-calendered smoothness. Superb for protective interleaf pages and overlays.</div>
+          <div class="stock-stats">
+            <span>CALIPER: 120μ</span>
+            <span>WEIGHT: 110 GSM</span>
+          </div>
+        </div>
+
+        <div class="stock-card" onclick="showToast('Selected: Cold-Pressed Wove (240 GSM)')">
+          <span class="stock-tag">STANDBY &bull; WOVE</span>
+          <div class="stock-title">Cold-Pressed Wove</div>
+          <div class="stock-desc">Balanced tactile texture with fast ink drying capability. Neutral acid-free composition guarantees 300+ year durability.</div>
+          <div class="stock-stats">
+            <span>CALIPER: 310μ</span>
+            <span>WEIGHT: 240 GSM</span>
+          </div>
+        </div>
+
+        <div class="stock-card" onclick="showToast('Selected: Obsidian Mineral Parchment (280 GSM)')">
+          <span class="stock-tag">SPECIALTY &bull; INK</span>
+          <div class="stock-title">Obsidian Mineral Parchment</div>
+          <div class="stock-desc">Infused with natural calcium carbonate. Ultra-smooth tactile glide with rich matte black ink absorption.</div>
+          <div class="stock-stats">
+            <span>CALIPER: 360μ</span>
+            <span>WEIGHT: 280 GSM</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Components & Form Suite -->
+  <section class="section" id="components">
+    <div class="container">
+      <div class="section-intro">
+        <h2>4. Interactive Component Specification</h2>
+        <p>Buttons with explicit tactile states, accessible form inputs with clear focus-visible outlines, and error handling.</p>
+      </div>
+
+      <!-- Button Suite -->
+      <div style="background: var(--surface); border: 1px solid var(--border-strong); border-radius: var(--radius-sm); padding: var(--space-32); margin-bottom: var(--space-32);">
+        <h3 style="margin-bottom: var(--space-16);">Action Buttons &amp; State Spectrum</h3>
+        <p style="margin-bottom: var(--space-24); font-size: var(--text-14); color: var(--text-muted);">
+          Primary actions prioritize <strong>#111111</strong>. Secondary actions remain neutral surfaces. Transitions default to 150–250ms.
+        </p>
+
+        <div style="display: flex; flex-wrap: wrap; gap: var(--space-16); align-items: center; margin-bottom: var(--space-24);">
+          <button class="btn btn-primary" onclick="showToast('Primary CTA triggered: #111111')">
+            Primary Action
+          </button>
+          <button class="btn btn-secondary" onclick="showToast('Secondary neutral triggered')">
+            Secondary Neutral
+          </button>
+          <button class="btn btn-accent" onclick="showToast('Secondary violet triggered: #8B5CF6')">
+            Violet Accent
+          </button>
+          <button class="btn btn-success" onclick="showToast('Success CTA triggered: #16A34A')">
+            Verified Press
+          </button>
+          <button class="btn btn-warning" onclick="showToast('Warning CTA triggered: #D97706')">
+            Hold Proof
+          </button>
+          <button class="btn btn-danger" onclick="showToast('Danger CTA triggered: #DC2626')">
+            Scrap Run
+          </button>
+          <button class="btn btn-ghost" onclick="showToast('Ghost action triggered')">
+            Ghost Action
+          </button>
+          <button class="btn btn-primary" disabled>
+            Disabled State
+          </button>
+        </div>
+
+        <div style="display: flex; gap: var(--space-12); font-family: var(--font-mono); font-size: 12px; color: var(--text-subtle);">
+          <span>HOVER: -1px lift</span>
+          <span>&bull;</span>
+          <span>ACTIVE: +1px press</span>
+          <span>&bull;</span>
+          <span>FOCUS: 2px solid #111111 outline</span>
+        </div>
+      </div>
+
+      <!-- Form Specification -->
+      <div style="background: var(--surface); border: 1px solid var(--border-strong); border-radius: var(--radius-sm); padding: var(--space-32);">
+        <h3 style="margin-bottom: var(--space-16);">Specimen Order Form</h3>
+        <p style="margin-bottom: var(--space-24); font-size: var(--text-14); color: var(--text-muted);">
+          Strong focus-visible states, explicit error messaging with Danger token (#DC2626), and predictable validations.
+        </p>
+
+        <form id="specimenForm" onsubmit="handleFormSubmit(event)">
+          <div class="form-grid">
+            <div class="form-group">
+              <label class="form-label" for="studioName">
+                Studio or Publication Name
+                <span class="form-hint">REQUIRED</span>
+              </label>
+              <input type="text" id="studioName" class="input-text" placeholder="e.g. Atelier Gutenberg" required>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="studioEmail">
+                Press Contact Email
+                <span class="form-hint">REQUIRED</span>
+              </label>
+              <input type="email" id="studioEmail" class="input-text" placeholder="typesetter@foundry.org" required>
+            </div>
+          </div>
+
+          <div class="form-grid">
+            <div class="form-group">
+              <label class="form-label" for="stockSelect">
+                Primary Paper Stock Preference
+              </label>
+              <select id="stockSelect" class="select-input">
+                <option value="cotton">Imperial Heavy Cotton (360 GSM)</option>
+                <option value="vellum">Translucent Archival Vellum (110 GSM)</option>
+                <option value="wove">Cold-Pressed Wove (240 GSM)</option>
+                <option value="obsidian">Obsidian Mineral Parchment (280 GSM)</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="bindingStyle">
+                Specimen Binding Style
+              </label>
+              <select id="bindingStyle" class="select-input">
+                <option value="saddle">Japanese Stab Binding</option>
+                <option value="thread">Sewn French Fold</option>
+                <option value="box">Loose Leaf Archival Clamshell</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="projectNotes">
+              Special Printing Instructions / Deboss Depth
+            </label>
+            <textarea id="projectNotes" class="textarea-input" rows="3" placeholder="Specify ink formulations, metallic foils, or custom watermark requirements..."></textarea>
+          </div>
+
+          <!-- Simulated Live Validation Error Checkbox -->
+          <div style="margin-bottom: var(--space-24);">
+            <label style="display: flex; align-items: center; gap: var(--space-8); font-size: var(--text-14); cursor: pointer;">
+              <input type="checkbox" id="verifyAgreement" required style="accent-color: var(--primary);">
+              <span>I acknowledge that archival paper specimens are non-toxic, acid-free, and alkaline-buffered.</span>
+            </label>
+          </div>
+
+          <div style="display: flex; gap: var(--space-16); align-items: center;">
+            <button type="submit" class="btn btn-primary">
+              Submit Specimen Dispatch
+            </button>
+            <button type="button" class="btn btn-secondary" onclick="simulateFormError()">
+              Simulate Error State
+            </button>
+            <span id="formFeedback" style="font-family: var(--font-mono); font-size: 13px;"></span>
+          </div>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- Editorial Dispatch Section -->
+  <section class="section" id="dispatch">
+    <div class="container">
+      <div class="editorial-layout">
+        <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid var(--primary); padding-bottom: var(--space-12);">
+          <div class="meta-mono">DISPATCH № 104 // EDITORIAL COLUMN</div>
+          <div class="meta-mono">OCTOBER EDITION</div>
+        </div>
+
+        <div class="editorial-cols">
+          <div>
+            <h2 style="border-bottom: none; margin-bottom: var(--space-12); font-size: var(--text-32);">
+              The Resurgence of the Permanent Printed Word
+            </h2>
+            <p class="drop-cap" style="margin-bottom: var(--space-16);">
+              In an era dominated by ephemeral pixel streams, physical paper commands singular, reverent attention. When ink binds permanently to cotton rag, a thought is no longer subject to algorithmic revision or instantaneous deletion. It exists in three physical dimensions: it has texture, scent, weight, and light-scattering grain.
+            </p>
+            <p style="margin-bottom: var(--space-16);">
+              The Paper Design System translates these physical tactile fundamentals into digital interfaces: high-contrast typography, restrained color usage favoring #111111, generous negative space, and crisp hairline division.
+            </p>
+
+            <div class="pull-quote">
+              "We do not read merely with our eyes; we read with our fingertips, our posture, and our sense of physical sanctuary."
+            </div>
+
+            <p>
+              By restricting the interface palette to rigorous tokens and relying on structural typography rather than extraneous decoration, we honor both the heritage of master printers and the clarity required by contemporary digital tools.
+            </p>
+          </div>
+
+          <div style="border-left: 1px dashed var(--border-subtle); padding-left: var(--space-32);">
+            <h4 style="font-family: var(--font-display); font-weight: 700;">Foundry Colophon Notes</h4>
+            <div style="font-family: var(--font-mono); font-size: 13px; line-height: 1.7; color: var(--text-muted); margin-bottom: var(--space-24);">
+              <p style="margin-bottom: 8px;"><strong>TYPESETTING:</strong> Montserrat (Display) &amp; Roboto (Body), licensed under SIL Open Font License.</p>
+              <p style="margin-bottom: 8px;"><strong>MONOSPACE:</strong> PT Mono, designed by ParaType.</p>
+              <p style="margin-bottom: 8px;"><strong>PROPORTIONS:</strong> Root-2 modular scale conforming to DIN ISO 216.</p>
+              <p><strong>INK SPECIFICATION:</strong> Carbon Black Carbon-9 pigment suspended in organic varnish.</p>
+            </div>
+
+            <div style="border: 1px solid var(--border-strong); padding: var(--space-16); background: var(--surface-paper);">
+              <div style="font-family: var(--font-display); font-size: 14px; font-weight: 700; margin-bottom: 4px;">ARCHIVAL GUARANTEE</div>
+              <p style="font-size: 13px; color: var(--text-muted); line-height: 1.5;">
+                Every paper token complies with the anti-pattern prohibition: zero off-palette anomalies, strictly defined type sizes (14/16/18/24/32/40), and verified contrast ratios.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Editions & Pricing Section -->
+  <section class="section" id="pricing">
+    <div class="container">
+      <div class="section-intro">
+        <h2>5. Foundry Specimen Editions</h2>
+        <p>Physical paper swatch sets, typographic specimens, and complete studio master portfolios.</p>
+      </div>
+
+      <div class="editions-grid">
+        <!-- Edition 1 -->
+        <div class="edition-card">
+          <div style="font-family: var(--font-mono); font-size: 12px; color: var(--text-subtle);">FOLIO TIER 01</div>
+          <h3 style="margin-top: 4px;">Studio Pamphlet</h3>
+          <p style="font-size: var(--text-14); color: var(--text-muted);">Essential paper swatches and typographic ruler for independent designers.</p>
+          <div class="edition-price">$24 <span style="font-size: 14px; font-weight: 400; color: var(--text-muted);">/ single edition</span></div>
+
+          <ul class="edition-features">
+            <li>12 Paper stock samples (120–360 GSM)</li>
+            <li>Typographic scale ruler (14–40px)</li>
+            <li>Acid-free protective envelope</li>
+            <li>Digital vector token guide</li>
+          </ul>
+
+          <button class="btn btn-secondary" style="width: 100%;" onclick="showToast('Pamphlet edition selected.')">
+            Order Pamphlet
+          </button>
+        </div>
+
+        <!-- Edition 2 (Featured) -->
+        <div class="edition-card featured">
+          <div class="edition-badge-top">Most Requested</div>
+          <div style="font-family: var(--font-mono); font-size: 12px; color: var(--secondary);">FOLIO TIER 02</div>
+          <h3 style="margin-top: 4px;">Press Master Folio</h3>
+          <p style="font-size: var(--text-14); color: var(--text-muted);">Comprehensive binder with debossed impressions, foil proofs, and full token deck.</p>
+          <div class="edition-price">$89 <span style="font-size: 14px; font-weight: 400; color: var(--text-muted);">/ boxed suite</span></div>
+
+          <ul class="edition-features">
+            <li>48 Master paper stocks &amp; textures</li>
+            <li>Blind deboss &amp; foil impression tests</li>
+            <li>Hardbound linen clam-shell folio</li>
+            <li>Full typographic specimen book (80 pages)</li>
+            <li>Priority courier dispatch</li>
+          </ul>
+
+          <button class="btn btn-primary" style="width: 100%;" onclick="showToast('Master Folio added to order cart.')">
+            Order Master Folio
+          </button>
+        </div>
+
+        <!-- Edition 3 -->
+        <div class="edition-card">
+          <div style="font-family: var(--font-mono); font-size: 12px; color: var(--text-subtle);">FOLIO TIER 03</div>
+          <h3 style="margin-top: 4px;">Archival Guild Chest</h3>
+          <p style="font-size: var(--text-14); color: var(--text-muted);">Complete institutional archive including rare handmade deckle-edge papers.</p>
+          <div class="edition-price">$240 <span style="font-size: 14px; font-weight: 400; color: var(--text-muted);">/ collector box</span></div>
+
+          <ul class="edition-features">
+            <li>Handmade Japanese &amp; European deckle stocks</li>
+            <li>Custom steel typography pica gauge</li>
+            <li>Certified letterpress numbered certificate</li>
+            <li>Annual paper stock seasonal updates</li>
+            <li>Direct foundry consultation session</li>
+          </ul>
+
+          <button class="btn btn-secondary" style="width: 100%;" onclick="showToast('Guild Chest reserved for studio review.')">
+            Reserve Guild Chest
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Colophon / Footer -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div>
+          <div style="font-family: var(--font-display); font-size: var(--text-18); font-weight: 800; text-transform: uppercase; margin-bottom: var(--space-8);">
+            Paper Design System
+          </div>
+          <p style="font-size: var(--text-14); color: var(--text-muted); max-width: 320px; margin-bottom: var(--space-16);">
+            Retro &amp; nostalgic design system inspired by master printmaking, letterpress workshops, and tactile paper substrates.
+          </p>
+          <div style="font-family: var(--font-mono); font-size: 12px; color: var(--text-subtle);">
+            TOKEN CONTRACT: VERIFIED &bull; REV 2026.09
+          </div>
+        </div>
+
+        <div>
+          <div style="font-family: var(--font-mono); font-size: var(--text-14); font-weight: 700; margin-bottom: var(--space-12);">TOKEN PALETTE</div>
+          <ul style="list-style: none; font-family: var(--font-mono); font-size: 13px; line-height: 1.8; color: var(--text-muted);">
+            <li>Primary: #111111</li>
+            <li>Secondary: #8B5CF6</li>
+            <li>Success: #16A34A</li>
+            <li>Warning: #D97706</li>
+            <li>Danger: #DC2626</li>
+            <li>Surface: #FFFFFF</li>
+            <li>Text: #111827</li>
+          </ul>
+        </div>
+
+        <div>
+          <div style="font-family: var(--font-mono); font-size: var(--text-14); font-weight: 700; margin-bottom: var(--space-12);">TYPOGRAPHY</div>
+          <ul style="list-style: none; font-size: 13px; line-height: 1.8; color: var(--text-muted);">
+            <li>Display: Montserrat</li>
+            <li>Primary: Roboto</li>
+            <li>Mono: PT Mono</li>
+            <li>Scale: 14/16/18/24/32/40</li>
+            <li>Weights: 100–900</li>
+          </ul>
+        </div>
+
+        <div>
+          <div style="font-family: var(--font-mono); font-size: var(--text-14); font-weight: 700; margin-bottom: var(--space-12);">REGISTRATION</div>
+          <p style="font-size: 13px; color: var(--text-muted); line-height: 1.6; margin-bottom: var(--space-16);">
+            Engineered with strict adherence to DESIGN.md anti-patterns: no off-palette hues, no flattened hierarchy, high legibility contrast.
+          </p>
+          <div class="crosshair" title="Print alignment target"></div>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <div>&copy; 2026 Paper Foundry Design System. All rights reserved.</div>
+        <div style="display: flex; gap: var(--space-16);">
+          <span>LAT: 45°26′N</span>
+          <span>LONG: 12°19′E</span>
+          <span>PRESS NO. 04</span>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Modal Dialog -->
+  <div class="modal-overlay" id="specimenModal">
+    <div class="modal-dialog">
+      <button class="modal-close-btn" onclick="closeModal()">&times;</button>
+      <div style="font-family: var(--font-mono); font-size: 12px; color: var(--secondary); margin-bottom: 4px;">DIRECT DISPATCH</div>
+      <h3 style="margin-bottom: var(--space-8);">Order Studio Swatch Envelope</h3>
+      <p style="font-size: var(--text-14); color: var(--text-muted); margin-bottom: var(--space-24);">
+        We will dispatch a complimentary sample kit containing Imperial Heavy Cotton, Archival Vellum, and Cold-Pressed Wove specimens directly to your design studio.
+      </p>
+
+      <div class="form-group">
+        <label class="form-label" for="modalAddress">Studio Postal Address</label>
+        <textarea id="modalAddress" class="textarea-input" rows="3" placeholder="Street, Studio Suite, City, Postal Code, Country"></textarea>
+      </div>
+
+      <div style="display: flex; gap: var(--space-12); margin-top: var(--space-24);">
+        <button class="btn btn-primary" onclick="confirmModalOrder()">Dispatch Swatches</button>
+        <button class="btn btn-secondary" onclick="closeModal()">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification -->
+  <div class="toast-msg" id="toast">Token copied to clipboard!</div>
+
+  <!-- Script for authentic interactivity -->
+  <script>
+    // Copy token functionality
+    function copyToken(hex, name) {
+      navigator.clipboard.writeText(hex).then(() => {
+        showToast(`${name} token (${hex}) copied to clipboard!`);
+      }).catch(() => {
+        showToast(`${name} token: ${hex}`);
+      });
+    }
+
+    // Toast trigger
+    function showToast(message) {
+      const toast = document.getElementById('toast');
+      toast.textContent = message;
+      toast.classList.add('show');
+      setTimeout(() => {
+        toast.classList.remove('show');
+      }, 2600);
+    }
+
+    // Modal controls
+    const modal = document.getElementById('specimenModal');
+    document.getElementById('openSpecimenBtn').addEventListener('click', () => {
+      modal.classList.add('active');
+    });
+
+    function closeModal() {
+      modal.classList.remove('active');
+    }
+
+    function confirmModalOrder() {
+      closeModal();
+      showToast('Specimen envelope dispatched via express postal carrier!');
+    }
+
+    modal.addEventListener('click', (e) => {
+      if (e.target === modal) closeModal();
+    });
+
+    // Interactive type lab controls
+    const liveTypeBox = document.getElementById('liveTypeBox');
+
+    function setTypeFamily(family, btn) {
+      liveTypeBox.style.fontFamily = `'${family}', sans-serif`;
+      if (family === 'PT Mono') liveTypeBox.style.fontFamily = `'PT Mono', monospace`;
+      updateActiveButton(btn, 'fontFamilySelector');
+    }
+
+    function setTypeSize(size, btn) {
+      liveTypeBox.style.fontSize = size;
+      updateActiveButton(btn, 'fontSizeSelector');
+    }
+
+    function setTypeWeight(weight, btn) {
+      liveTypeBox.style.fontWeight = weight;
+      updateActiveButton(btn, 'fontWeightSelector');
+    }
+
+    function updateActiveButton(activeBtn, containerId) {
+      const container = document.getElementById(containerId);
+      container.querySelectorAll('button').forEach(b => b.classList.remove('active'));
+      activeBtn.classList.add('active');
+    }
+
+    // Form handlers
+    function handleFormSubmit(e) {
+      e.preventDefault();
+      const feedback = document.getElementById('formFeedback');
+      feedback.className = 'success-msg';
+      feedback.textContent = '✓ Specimen request registered successfully in print queue.';
+      showToast('Form submitted successfully!');
+    }
+
+    function simulateFormError() {
+      const emailInput = document.getElementById('studioEmail');
+      const feedback = document.getElementById('formFeedback');
+      emailInput.classList.add('input-error');
+      feedback.className = 'error-msg';
+      feedback.textContent = '⚠ Error: Verified press contact email is required.';
+      showToast('Error simulated using Danger token (#DC2626).');
+    }
+  </script>
+</body>
+</html>

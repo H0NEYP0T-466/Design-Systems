@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Retro — Vintage Computing & Synthwave Interface</title>
+  <meta name="description" content="Throwback design system showcase with vintage-inspired typography, high-contrast retro palettes, and nostalgic interactive visual elements.">
+  
+  <!-- Google Fonts: Macondo and JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Macondo&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --retro-primary: #3B82F6;
+      --retro-secondary: #8B5CF6;
+      --retro-success: #16A34A;
+      --retro-warning: #D97706;
+      --retro-danger: #DC2626;
+      --retro-surface: #FFFFFF;
+      --retro-text: #111827;
+      --retro-neutral: #FFFFFF;
+
+      --space-4: 4px;
+      --space-8: 8px;
+      --space-12: 12px;
+      --space-16: 16px;
+      --space-24: 24px;
+      --space-32: 32px;
+
+      --font-display: 'Macondo', cursive, sans-serif;
+      --font-body: 'Macondo', cursive, sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+
+      --shadow-retro: 4px 4px 0px #111827;
+      --shadow-retro-lg: 8px 8px 0px #111827;
+      --shadow-primary: 4px 4px 0px #3B82F6;
+      --shadow-secondary: 4px 4px 0px #8B5CF6;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: #F8FAFC;
+      color: var(--retro-text);
+      font-family: var(--font-body);
+      font-size: 18px;
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      background-image: radial-gradient(#E2E8F0 1.5px, transparent 1.5px);
+      background-size: 24px 24px;
+    }
+
+    /* Top marquee banner */
+    .retro-ticker {
+      background: var(--retro-text);
+      color: #F8FAFC;
+      font-family: var(--font-mono);
+      font-size: 13px;
+      letter-spacing: 2px;
+      padding: 6px 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 2px solid #111827;
+    }
+    .retro-ticker span {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .badge-blink {
+      width: 8px;
+      height: 8px;
+      background: #22C55E;
+      border-radius: 50%;
+      box-shadow: 0 0 8px #22C55E;
+      animation: pulse 1s infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.3; }
+    }
+
+    /* Header Nav */
+    header.retro-header {
+      background: var(--retro-surface);
+      border-bottom: 3px solid var(--retro-text);
+      padding: 16px 32px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .header-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .brand-logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+      color: var(--retro-text);
+    }
+    .brand-icon {
+      width: 38px;
+      height: 38px;
+      background: var(--retro-primary);
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-mono);
+      font-weight: 700;
+      border: 2px solid var(--retro-text);
+      box-shadow: 3px 3px 0px var(--retro-text);
+    }
+    .brand-title {
+      font-family: var(--font-display);
+      font-size: 28px;
+      letter-spacing: 0.5px;
+      font-weight: 700;
+    }
+
+    nav.nav-links {
+      display: flex;
+      gap: 24px;
+      align-items: center;
+    }
+    nav.nav-links a {
+      color: var(--retro-text);
+      text-decoration: none;
+      font-size: 19px;
+      font-weight: 600;
+      transition: color 150ms ease;
+    }
+    nav.nav-links a:hover {
+      color: var(--retro-primary);
+      text-decoration: underline;
+    }
+
+    .cta-btn {
+      font-family: var(--font-body);
+      font-size: 18px;
+      font-weight: 700;
+      padding: 10px 22px;
+      background: var(--retro-primary);
+      color: #FFFFFF;
+      border: 2px solid var(--retro-text);
+      box-shadow: var(--shadow-retro);
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 150ms ease;
+    }
+    .cta-btn:hover {
+      transform: translate(-2px, -2px);
+      box-shadow: 6px 6px 0px var(--retro-text);
+    }
+    .cta-btn:active {
+      transform: translate(2px, 2px);
+      box-shadow: 2px 2px 0px var(--retro-text);
+    }
+
+    .cta-secondary {
+      background: var(--retro-surface);
+      color: var(--retro-text);
+    }
+    .cta-secondary:hover {
+      background: #F1F5F9;
+    }
+
+    .cta-accent {
+      background: var(--retro-secondary);
+      color: #FFFFFF;
+    }
+
+    /* Layout Containers */
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 48px 24px;
+    }
+
+    /* Hero Section */
+    .hero-box {
+      background: var(--retro-surface);
+      border: 3px solid var(--retro-text);
+      box-shadow: var(--shadow-retro-lg);
+      padding: 48px 40px;
+      margin-bottom: 48px;
+      position: relative;
+    }
+    .hero-tag {
+      display: inline-block;
+      background: var(--retro-secondary);
+      color: #FFFFFF;
+      font-family: var(--font-mono);
+      font-size: 13px;
+      font-weight: 700;
+      padding: 4px 12px;
+      border: 2px solid var(--retro-text);
+      box-shadow: 2px 2px 0px var(--retro-text);
+      margin-bottom: 20px;
+      text-transform: uppercase;
+    }
+    .hero-title {
+      font-size: 54px;
+      line-height: 1.15;
+      margin-bottom: 20px;
+      color: var(--retro-text);
+    }
+    .hero-lead {
+      font-size: 22px;
+      color: #334155;
+      max-width: 780px;
+      margin-bottom: 32px;
+      line-height: 1.5;
+    }
+    .hero-actions {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    /* Grid Section */
+    .section-title-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 24px;
+      border-bottom: 3px solid var(--retro-text);
+      padding-bottom: 12px;
+    }
+    .section-title {
+      font-size: 34px;
+      font-weight: 700;
+    }
+
+    .retro-grid-3 {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 24px;
+      margin-bottom: 48px;
+    }
+
+    .retro-card {
+      background: var(--retro-surface);
+      border: 2px solid var(--retro-text);
+      box-shadow: var(--shadow-retro);
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: transform 150ms ease, box-shadow 150ms ease;
+    }
+    .retro-card:hover {
+      transform: translate(-3px, -3px);
+      box-shadow: 7px 7px 0px var(--retro-text);
+    }
+    .card-badge {
+      align-self: flex-start;
+      font-family: var(--font-mono);
+      font-size: 12px;
+      font-weight: 700;
+      padding: 2px 8px;
+      border: 1.5px solid var(--retro-text);
+      margin-bottom: 16px;
+    }
+    .badge-blue { background: #DBEAFE; color: var(--retro-primary); }
+    .badge-purple { background: #EDE9FE; color: var(--retro-secondary); }
+    .badge-green { background: #DCFCE7; color: var(--retro-success); }
+    .badge-amber { background: #FEF3C7; color: var(--retro-warning); }
+    .badge-red { background: #FEE2E2; color: var(--retro-danger); }
+
+    .card-heading {
+      font-size: 26px;
+      margin-bottom: 12px;
+    }
+    .card-text {
+      font-size: 18px;
+      color: #475569;
+      margin-bottom: 20px;
+    }
+
+    /* Interactive Arcade / Deck Component */
+    .deck-console {
+      background: #FFFFFF;
+      border: 3px solid var(--retro-text);
+      box-shadow: var(--shadow-retro-lg);
+      padding: 32px;
+      margin-bottom: 48px;
+    }
+    .console-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 24px;
+      padding-bottom: 16px;
+      border-bottom: 2px dashed #CBD5E1;
+    }
+    .console-display {
+      background: #0F172A;
+      color: #38BDF8;
+      font-family: var(--font-mono);
+      padding: 20px;
+      border-radius: 4px;
+      border: 2px solid var(--retro-text);
+      font-size: 16px;
+      margin-bottom: 24px;
+      min-height: 90px;
+      box-shadow: inset 0 2px 8px rgba(0,0,0,0.6);
+    }
+    .console-controls {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 16px;
+    }
+    .retro-input {
+      width: 100%;
+      font-family: var(--font-mono);
+      font-size: 15px;
+      padding: 10px 14px;
+      border: 2px solid var(--retro-text);
+      background: #FFFFFF;
+      color: var(--retro-text);
+      outline: none;
+      transition: all 150ms ease;
+    }
+    .retro-input:focus {
+      border-color: var(--retro-primary);
+      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.35);
+    }
+
+    /* Status indicator tokens */
+    .token-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+      margin-top: 24px;
+    }
+    .token-pill {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 16px;
+      border: 2px solid var(--retro-text);
+      background: #FFF;
+      font-family: var(--font-mono);
+      font-size: 13px;
+      font-weight: 600;
+      box-shadow: 2px 2px 0px var(--retro-text);
+    }
+    .swatch {
+      width: 16px;
+      height: 16px;
+      border: 1.5px solid #111827;
+    }
+
+    footer.retro-footer {
+      background: var(--retro-text);
+      color: #FFFFFF;
+      padding: 40px 24px;
+      border-top: 4px solid var(--retro-primary);
+      margin-top: 60px;
+    }
+    .footer-content {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+    .footer-note {
+      font-family: var(--font-mono);
+      font-size: 14px;
+      color: #94A3B8;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top System Bar -->
+  <div class="retro-ticker">
+    <span><span class="badge-blink"></span> VINTAGE SYSTEM ONLINE // ROM V4.8</span>
+    <span>RETRO DESIGN SPECIFICATION // 1980s-1990s REINVENTED</span>
+    <span>STATUS: OPERATIONAL</span>
+  </div>
+
+  <!-- Header -->
+  <header class="retro-header">
+    <div class="header-container">
+      <a href="#" class="brand-logo">
+        <div class="brand-icon">RT</div>
+        <span class="brand-title">RETRO STUDIO</span>
+      </a>
+      <nav class="nav-links">
+        <a href="#foundations">Foundations</a>
+        <a href="#console">Terminal Deck</a>
+        <a href="#cards">Modules</a>
+        <a href="#spec">Design Spec</a>
+      </nav>
+      <button class="cta-btn" onclick="triggerSound('System Ready')">⚡ Connect Rig</button>
+    </div>
+  </header>
+
+  <main class="container">
+    <!-- Hero Box -->
+    <section class="hero-box">
+      <div class="hero-tag">Vintage Nostalgia & High Contrast</div>
+      <h1 class="hero-title">Throwback Elegance with Modern Mechanical Precision</h1>
+      <p class="hero-lead">
+        A bespoke design system rooted in vintage display typography, high-impact hard offset shadows, and vivid electric color tokens. Built strictly around Macondo typefaces and JetBrains Mono for authentic retro computing feel.
+      </p>
+      <div class="hero-actions">
+        <button class="cta-btn" onclick="logAction('Primary CTA Engaged: Initialize Project')">Launch Interface</button>
+        <button class="cta-btn cta-secondary" onclick="logAction('Secondary Action: Open Audio Synthesizer')">Inspect Oscillators</button>
+        <button class="cta-btn cta-accent" onclick="logAction('Accent Triggered: Neon Preset Activated')">Synthwave Mode</button>
+      </div>
+    </section>
+
+    <!-- Interactive Deck Console -->
+    <section class="deck-console" id="console">
+      <div class="console-header">
+        <div>
+          <h2 style="font-size: 28px; font-family: var(--font-display);">Interactive Synthesizer Deck</h2>
+          <p style="font-family: var(--font-mono); font-size: 13px; color: #64748B;">TEST SYSTEM INTERACTION STATES AND VISUAL TOKENS</p>
+        </div>
+        <div>
+          <button class="cta-btn cta-secondary" style="font-size: 14px; padding: 6px 14px;" onclick="resetConsole()">Clear Buffer</button>
+        </div>
+      </div>
+
+      <div class="console-display" id="terminal-screen">
+        <div>> RETRO OS INITIALIZED WITH SUCCESSFUL PALETTE BINDINGS...</div>
+        <div>> PRIMARY #3B82F6 | SECONDARY #8B5CF6 | SURFACE #FFFFFF | TEXT #111827</div>
+        <div id="live-line">> Ready for user parameter input.</div>
+      </div>
+
+      <div class="console-controls">
+        <div>
+          <label style="display:block; font-family: var(--font-mono); font-size: 13px; margin-bottom: 6px; font-weight:700;">COMMAND INPUT</label>
+          <input type="text" id="cmdInput" class="retro-input" placeholder="Type command e.g. LOAD AUDIO..." onkeydown="if(event.key==='Enter') executeCmd()">
+        </div>
+        <div>
+          <label style="display:block; font-family: var(--font-mono); font-size: 13px; margin-bottom: 6px; font-weight:700;">FILTER FREQUENCY</label>
+          <select id="freqSelect" class="retro-input" onchange="updateFrequency()">
+            <option value="440 Hz (Concert Pitch)">440 Hz - Standard Tuning</option>
+            <option value="880 Hz (Harmonic)">880 Hz - High Resonance</option>
+            <option value="220 Hz (Sub Bass)">220 Hz - Low Sub Bass</option>
+          </select>
+        </div>
+        <div style="display:flex; align-items:flex-end;">
+          <button class="cta-btn" style="width:100%; justify-content:center;" onclick="executeCmd()">Transmit</button>
+        </div>
+      </div>
+
+      <!-- Color Token Readout -->
+      <div class="token-row" id="foundations">
+        <div class="token-pill"><span class="swatch" style="background:#3B82F6;"></span> Primary: #3B82F6</div>
+        <div class="token-pill"><span class="swatch" style="background:#8B5CF6;"></span> Secondary: #8B5CF6</div>
+        <div class="token-pill"><span class="swatch" style="background:#16A34A;"></span> Success: #16A34A</div>
+        <div class="token-pill"><span class="swatch" style="background:#D97706;"></span> Warning: #D97706</div>
+        <div class="token-pill"><span class="swatch" style="background:#DC2626;"></span> Danger: #DC2626</div>
+        <div class="token-pill"><span class="swatch" style="background:#FFFFFF;"></span> Surface: #FFFFFF</div>
+        <div class="token-pill"><span class="swatch" style="background:#111827;"></span> Text: #111827</div>
+      </div>
+    </section>
+
+    <!-- Cards Section -->
+    <div class="section-title-bar" id="cards">
+      <h2 class="section-title">Hardware Architecture Modules</h2>
+      <span style="font-family: var(--font-mono); font-size: 14px;">SYS-SPEC 1988-V2</span>
+    </div>
+
+    <div class="retro-grid-3">
+      <!-- Card 1 -->
+      <div class="retro-card">
+        <div>
+          <span class="card-badge badge-blue">MODULE A1</span>
+          <h3 class="card-heading">Vintage CRT Typography</h3>
+          <p class="card-text">
+            Rendered with the expressive Macondo display font combined with JetBrains Mono precision. Preserves high legibility across retro computing views.
+          </p>
+        </div>
+        <button class="cta-btn" style="font-size:16px; padding:8px 16px;" onclick="logAction('Module A1 Calibrated')">Configure Fonts</button>
+      </div>
+
+      <!-- Card 2 -->
+      <div class="retro-card">
+        <div>
+          <span class="card-badge badge-purple">MODULE B2</span>
+          <h3 class="card-heading">Hard Offset Geometry</h3>
+          <p class="card-text">
+            Features prominent solid 4px and 8px dropshadows, strict 2px/3px borders, and tactile tactile tactile button states with zero ambiguous elevation.
+          </p>
+        </div>
+        <button class="cta-btn cta-accent" style="font-size:16px; padding:8px 16px;" onclick="logAction('Module B2 Tested')">Test Physics</button>
+      </div>
+
+      <!-- Card 3 -->
+      <div class="retro-card">
+        <div>
+          <span class="card-badge badge-green">MODULE C3</span>
+          <h3 class="card-heading">Predictable Grid Alignment</h3>
+          <p class="card-text">
+            Strict 4/8/12/16/24/32 spacing scale maintaining consistent vertical rhythm and rock-solid modular structure across all viewports.
+          </p>
+        </div>
+        <button class="cta-btn cta-secondary" style="font-size:16px; padding:8px 16px;" onclick="logAction('Module C3 Aligned')">Inspect Grid</button>
+      </div>
+    </div>
+  </main>
+
+  <footer class="retro-footer" id="spec">
+    <div class="footer-content">
+      <div>
+        <div style="font-size: 24px; font-weight:700; margin-bottom: 6px;">RETRO DESIGN SYSTEM</div>
+        <div class="footer-note">Hand-crafted following official open-design specification retro/DESIGN.md</div>
+      </div>
+      <div class="footer-note">
+        Macondo & JetBrains Mono • High-Contrast Retrospective Stance
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    function logAction(msg) {
+      const screen = document.getElementById('terminal-screen');
+      const line = document.createElement('div');
+      const timestamp = new Date().toLocaleTimeString();
+      line.textContent = `> [${timestamp}] ${msg}`;
+      screen.appendChild(line);
+      screen.scrollTop = screen.scrollHeight;
+    }
+
+    function triggerSound(title) {
+      logAction(`AUDIO TRIGGER: ${title} tone generated at 440Hz`);
+    }
+
+    function executeCmd() {
+      const input = document.getElementById('cmdInput');
+      const val = input.value.trim();
+      if (!val) {
+        logAction('WARN: Empty instruction buffer');
+        return;
+      }
+      logAction(`EXEC: "${val}" applied to active memory block.`);
+      input.value = '';
+    }
+
+    function updateFrequency() {
+      const sel = document.getElementById('freqSelect');
+      logAction(`OSCILLATOR FREQ UPDATED -> ${sel.value}`);
+    }
+
+    function resetConsole() {
+      const screen = document.getElementById('terminal-screen');
+      screen.innerHTML = '<div>> BUFFER RESET TO DEFAULT CALIBRATION.</div>';
+    }
+  </script>
+</body>
+</html>

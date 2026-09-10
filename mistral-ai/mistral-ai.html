@@ -1,0 +1,722 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mistral AI — Frontier Models in Your Hands</title>
+  <style>
+    /* -------------------------------------------------------------
+       MISTRAL AI DESIGN SYSTEM TOKENS & FOUNDATIONS
+       ------------------------------------------------------------- */
+    :root {
+      /* Primary Brand Oranges */
+      --color-mistral-orange: #fa520f;   /* Core brand color, highest signal */
+      --color-mistral-flame: #fb6424;    /* Secondary brand moments, hover */
+      --color-block-orange: #ff8105;     /* Pure orange in block gradient */
+
+      /* Sunshine & Golden Palette */
+      --color-sunshine-900: #ff8a00;     /* Deep golden amber */
+      --color-sunshine-700: #ffa110;     /* Warm amber-gold */
+      --color-sunshine-500: #ffb83e;     /* Medium golden */
+      --color-sunshine-300: #ffd06a;     /* Light golden */
+      --color-block-gold: #ffe295;       /* Pale gold */
+      --color-bright-yellow: #ffd900;    /* Brightest tone */
+
+      /* Surfaces & Canvases */
+      --color-warm-ivory: #fffaeb;       /* Foundation canvas */
+      --color-cream: #fff0c2;            /* Primary warm surface & secondary button bg */
+      --color-pure-white: #ffffff;       /* Popovers, cards */
+      --color-mistral-black: #1f1f1f;    /* Primary text and dark button bg */
+      --color-black-tint: #3d3d3d;       /* Secondary text */
+      --color-input-border: hsl(240, 5.9%, 90%);
+
+      /* Typography */
+      --font-family: Arial, ui-sans-serif, system-ui, -apple-system, sans-serif;
+      --font-weight-regular: 400;        /* Mistral single-weight discipline */
+
+      /* Warm Golden Shadows */
+      --shadow-golden-multilevel: rgba(127, 99, 21, 0.12) -8px 16px 39px, rgba(127, 99, 21, 0.1) -33px 64px 72px, rgba(127, 99, 21, 0.06) -73px 144px 97px;
+      --shadow-warm-sm: rgba(127, 99, 21, 0.08) 0px 4px 20px;
+
+      /* Sharp Architectural Geometry */
+      --radius-near-zero: 2px;
+    }
+
+    /* Reset & Warm Ivory Canvas */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html, body {
+      background-color: var(--color-warm-ivory);
+      color: var(--color-mistral-black);
+      font-family: var(--font-family);
+      font-weight: var(--font-weight-regular);
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      line-height: 1.5;
+      overflow-x: hidden;
+    }
+
+    a {
+      color: var(--color-mistral-black);
+      text-decoration: none;
+      transition: color 0.15s ease;
+    }
+    a:hover {
+      color: var(--color-mistral-orange);
+    }
+
+    .container {
+      max-width: 1240px;
+      margin: 0 auto;
+      padding: 0 32px;
+    }
+
+    /* -------------------------------------------------------------
+       TYPOGRAPHY RULES (SINGLE WEIGHT 400, ULTRA-TIGHT SCALE)
+       ------------------------------------------------------------- */
+    .hero-display {
+      font-family: var(--font-family);
+      font-size: 82px;
+      font-weight: 400;
+      line-height: 1.00;
+      letter-spacing: -2.05px;
+      color: var(--color-mistral-black);
+    }
+
+    .section-heading {
+      font-family: var(--font-family);
+      font-size: 56px;
+      font-weight: 400;
+      line-height: 0.95;
+      letter-spacing: normal;
+      color: var(--color-mistral-black);
+    }
+
+    .sub-heading-lg {
+      font-family: var(--font-family);
+      font-size: 48px;
+      font-weight: 400;
+      line-height: 0.95;
+      letter-spacing: normal;
+      color: var(--color-mistral-black);
+    }
+
+    .sub-heading {
+      font-family: var(--font-family);
+      font-size: 32px;
+      font-weight: 400;
+      line-height: 1.15;
+      color: var(--color-mistral-black);
+    }
+
+    .card-title {
+      font-family: var(--font-family);
+      font-size: 30px;
+      font-weight: 400;
+      line-height: 1.20;
+      color: var(--color-mistral-black);
+    }
+
+    .feature-title {
+      font-family: var(--font-family);
+      font-size: 24px;
+      font-weight: 400;
+      line-height: 1.33;
+      color: var(--color-mistral-black);
+    }
+
+    .body-standard {
+      font-family: var(--font-family);
+      font-size: 16px;
+      font-weight: 400;
+      line-height: 1.50;
+      color: var(--color-black-tint);
+    }
+
+    .caption-link {
+      font-family: var(--font-family);
+      font-size: 14px;
+      font-weight: 400;
+      line-height: 1.43;
+      color: var(--color-black-tint);
+    }
+
+    .tag-uppercase {
+      font-size: 12px;
+      font-weight: 400;
+      text-transform: uppercase;
+      letter-spacing: 1.2px;
+      color: var(--color-mistral-orange);
+    }
+
+    /* -------------------------------------------------------------
+       BUTTONS (NEAR-ZERO BORDER RADIUS)
+       ------------------------------------------------------------- */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-family);
+      font-size: 16px;
+      font-weight: 400;
+      line-height: 1.50;
+      cursor: pointer;
+      text-decoration: none;
+      transition: all 0.15s ease;
+      border-radius: var(--radius-near-zero);
+      border: none;
+      white-space: nowrap;
+    }
+
+    /* Dark Solid: bg #1f1f1f, text #ffffff, padding 12px */
+    .btn-dark-solid {
+      background-color: var(--color-mistral-black);
+      color: var(--color-pure-white);
+      padding: 12px 24px;
+    }
+    .btn-dark-solid:hover {
+      background-color: #000000;
+      color: var(--color-pure-white);
+    }
+
+    /* Cream Surface: bg #fff0c2, text #1f1f1f */
+    .btn-cream {
+      background-color: var(--color-cream);
+      color: var(--color-mistral-black);
+      padding: 12px 24px;
+    }
+    .btn-cream:hover {
+      background-color: #ffe8a1;
+    }
+
+    /* Orange CTA */
+    .btn-orange {
+      background-color: var(--color-mistral-orange);
+      color: var(--color-pure-white);
+      padding: 12px 24px;
+    }
+    .btn-orange:hover {
+      background-color: var(--color-mistral-flame);
+      color: var(--color-pure-white);
+    }
+
+    /* -------------------------------------------------------------
+       THE SIGNATURE MISTRAL "M" BLOCK GRADIENT
+       ------------------------------------------------------------- */
+    .mistral-m-block {
+      display: grid;
+      grid-template-columns: repeat(5, 14px);
+      grid-template-rows: repeat(5, 14px);
+      gap: 3px;
+    }
+    .m-pixel {
+      width: 14px;
+      height: 14px;
+      border-radius: 1px;
+    }
+
+    /* -------------------------------------------------------------
+       NAVIGATION
+       ------------------------------------------------------------- */
+    .navbar {
+      padding: 24px 0;
+      background: transparent;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+    }
+    .nav-inner {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .brand-group {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+    .brand-wordmark {
+      font-size: 26px;
+      font-weight: 400;
+      letter-spacing: -0.5px;
+      color: var(--color-mistral-black);
+    }
+
+    .nav-menu {
+      display: flex;
+      align-items: center;
+      gap: 36px;
+      list-style: none;
+    }
+    .nav-link {
+      font-size: 15px;
+      font-weight: 400;
+      color: var(--color-mistral-black);
+    }
+
+    /* -------------------------------------------------------------
+       HERO SECTION
+       ------------------------------------------------------------- */
+    .hero-section {
+      padding: 80px 0 90px;
+      background: linear-gradient(180deg, rgba(255, 240, 194, 0.4) 0%, var(--color-warm-ivory) 100%);
+    }
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1.15fr 0.85fr;
+      gap: 48px;
+      align-items: center;
+    }
+
+    /* -------------------------------------------------------------
+       INTERACTIVE INFERENCE STUDIO & LE CHAT PLAYGROUND
+       ------------------------------------------------------------- */
+    .chat-studio-card {
+      background: var(--color-pure-white);
+      border-radius: var(--radius-near-zero);
+      padding: 32px;
+      box-shadow: var(--shadow-golden-multilevel);
+      border: 1px solid rgba(255, 161, 16, 0.2);
+    }
+
+    .studio-topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-bottom: 16px;
+      border-bottom: 1px solid var(--color-input-border);
+      margin-bottom: 20px;
+    }
+
+    .model-pills {
+      display: flex;
+      gap: 6px;
+    }
+    .model-pill-btn {
+      background: var(--color-cream);
+      border: none;
+      padding: 6px 12px;
+      font-size: 12px;
+      font-weight: 400;
+      cursor: pointer;
+      border-radius: var(--radius-near-zero);
+      color: var(--color-mistral-black);
+      transition: all 0.12s ease;
+    }
+    .model-pill-btn.active {
+      background: var(--color-mistral-orange);
+      color: #ffffff;
+    }
+
+    .chat-log {
+      height: 180px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      font-size: 14px;
+      padding-right: 8px;
+    }
+    .chat-bubble-user {
+      align-self: flex-end;
+      background: var(--color-cream);
+      padding: 8px 14px;
+      border-radius: var(--radius-near-zero);
+      max-width: 80%;
+    }
+    .chat-bubble-ai {
+      align-self: flex-start;
+      background: #fafaf9;
+      border-left: 3px solid var(--color-mistral-orange);
+      padding: 8px 14px;
+      border-radius: var(--radius-near-zero);
+      max-width: 88%;
+      color: var(--color-mistral-black);
+    }
+
+    .chat-input-row {
+      display: flex;
+      gap: 8px;
+      margin-top: 18px;
+    }
+    .chat-input {
+      flex: 1;
+      padding: 10px 14px;
+      border: 1px solid var(--color-input-border);
+      border-radius: var(--radius-near-zero);
+      font-family: var(--font-family);
+      font-size: 14px;
+      outline: none;
+    }
+    .chat-input:focus {
+      border-color: var(--color-mistral-orange);
+    }
+
+    /* -------------------------------------------------------------
+       SECTION: FRONTIER MODEL FAMILY
+       ------------------------------------------------------------- */
+    .models-section {
+      padding: 90px 0;
+    }
+
+    .models-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+      margin-top: 48px;
+    }
+
+    .model-card {
+      background: var(--color-pure-white);
+      border-radius: var(--radius-near-zero);
+      padding: 36px 30px;
+      box-shadow: var(--shadow-warm-sm);
+      border-top: 4px solid var(--color-mistral-orange);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    /* -------------------------------------------------------------
+       SECTION: SIGNATURE BLOCK GRADIENT & COLOR FOUNDATION
+       ------------------------------------------------------------- */
+    .tokens-section {
+      padding: 90px 0;
+      background: var(--color-cream);
+      border-top: 1px solid rgba(255, 161, 16, 0.3);
+    }
+
+    .gradient-ribbon {
+      height: 18px;
+      background: linear-gradient(90deg, 
+        #ffd900 0%, 
+        #ffe295 20%, 
+        #ffa110 40%, 
+        #ff8105 60%, 
+        #fb6424 80%, 
+        #fa520f 100%
+      );
+      margin: 28px 0;
+      border-radius: var(--radius-near-zero);
+    }
+
+    .swatches-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 14px;
+      margin-top: 30px;
+    }
+    .mistral-swatch {
+      background: var(--color-pure-white);
+      padding: 14px;
+      border-radius: var(--radius-near-zero);
+    }
+    .swatch-box {
+      height: 44px;
+      border-radius: var(--radius-near-zero);
+      margin-bottom: 8px;
+    }
+
+    /* -------------------------------------------------------------
+       FOOTER
+       ------------------------------------------------------------- */
+    .site-footer {
+      padding: 60px 0;
+      background: var(--color-mistral-black);
+      color: var(--color-pure-white);
+    }
+    .footer-inner {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+
+    /* Responsive */
+    @media (max-width: 960px) {
+      .hero-grid, .models-grid { grid-template-columns: 1fr; }
+      .hero-display { font-size: 52px; letter-spacing: -1.2px; }
+      .section-heading { font-size: 40px; }
+      .nav-menu { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAVIGATION -->
+  <nav class="navbar">
+    <div class="container nav-inner">
+      <div class="brand-group">
+        <!-- Mistral M Block Logo -->
+        <div class="mistral-m-block">
+          <div class="m-pixel" style="background:#ffd900;"></div>
+          <div class="m-pixel" style="background:transparent;"></div>
+          <div class="m-pixel" style="background:transparent;"></div>
+          <div class="m-pixel" style="background:transparent;"></div>
+          <div class="m-pixel" style="background:#ffd900;"></div>
+
+          <div class="m-pixel" style="background:#ffa110;"></div>
+          <div class="m-pixel" style="background:#ffa110;"></div>
+          <div class="m-pixel" style="background:transparent;"></div>
+          <div class="m-pixel" style="background:#ffa110;"></div>
+          <div class="m-pixel" style="background:#ffa110;"></div>
+
+          <div class="m-pixel" style="background:#ff8105;"></div>
+          <div class="m-pixel" style="background:transparent;"></div>
+          <div class="m-pixel" style="background:#ff8105;"></div>
+          <div class="m-pixel" style="background:transparent;"></div>
+          <div class="m-pixel" style="background:#ff8105;"></div>
+
+          <div class="m-pixel" style="background:#fa520f;"></div>
+          <div class="m-pixel" style="background:transparent;"></div>
+          <div class="m-pixel" style="background:transparent;"></div>
+          <div class="m-pixel" style="background:transparent;"></div>
+          <div class="m-pixel" style="background:#fa520f;"></div>
+        </div>
+        <span class="brand-wordmark">Mistral AI</span>
+      </div>
+
+      <ul class="nav-menu">
+        <li><a href="#models" class="nav-link">Models</a></li>
+        <li><a href="#studio" class="nav-link">Le Chat</a></li>
+        <li><a href="#tokens" class="nav-link">Block Tokens</a></li>
+      </ul>
+
+      <div style="display:flex; gap:12px; align-items:center;">
+        <a href="#studio" class="btn btn-cream">Sign In</a>
+        <a href="#models" class="btn btn-dark-solid">Try Le Chat</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- HERO SECTION -->
+  <section class="hero-section">
+    <div class="container hero-grid">
+      <div>
+        <div style="margin-bottom: 16px;">
+          <span class="tag-uppercase">FRONTIER AI IN YOUR HANDS</span>
+        </div>
+
+        <h1 class="hero-display">Frontier models in your hands.</h1>
+
+        <p class="body-standard" style="font-size: 18px; margin-top: 24px; max-width: 520px;">
+          Open and portable generative AI for everyone. Unrivaled reasoning, European data sovereignty, and world-class token efficiency.
+        </p>
+
+        <div style="display: flex; gap: 14px; margin-top: 36px; align-items: center; flex-wrap: wrap;">
+          <a href="#studio" class="btn btn-dark-solid">Start Building with Mistral</a>
+          <a href="#models" class="btn btn-cream">Explore Weights</a>
+        </div>
+
+        <div style="margin-top: 30px; display: flex; gap: 16px; font-size: 12px; color: var(--color-black-tint);">
+          <span>BRAND: #fa520f</span>
+          <span>CANVAS: #fffaeb</span>
+          <span>SURFACE: #fff0c2</span>
+        </div>
+      </div>
+
+      <!-- INTERACTIVE INFERENCE STUDIO -->
+      <div class="chat-studio-card" id="studio">
+        <div class="studio-topbar">
+          <div class="model-pills">
+            <button class="model-pill-btn active" id="btnM1" onclick="selectModel('Mistral Large 2', this)">Large 2</button>
+            <button class="model-pill-btn" id="btnM2" onclick="selectModel('Codestral 25.01', this)">Codestral</button>
+            <button class="model-pill-btn" id="btnM3" onclick="selectModel('Pixtral 12B', this)">Pixtral</button>
+          </div>
+          <span style="font-size: 11px; color: var(--color-mistral-orange);">142 TOKENS/SEC</span>
+        </div>
+
+        <div class="chat-log" id="chatLog">
+          <div class="chat-bubble-user">
+            Summarize the core architectural philosophy of Mistral AI.
+          </div>
+          <div class="chat-bubble-ai" id="aiResponseText">
+            Open weights, maximal compute efficiency, and uncompromising performance on multilingual code and reasoning tasks.
+          </div>
+        </div>
+
+        <div class="chat-input-row">
+          <input type="text" id="chatInputPrompt" class="chat-input" placeholder="Prompt frontier models..." onkeydown="if(event.key==='Enter') sendChatPrompt()">
+          <button class="btn btn-orange" onclick="sendChatPrompt()">Generate</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION: MODELS FAMILY -->
+  <section class="models-section" id="models">
+    <div class="container">
+      <span class="tag-uppercase">OPEN &amp; COMMERCIAL OFFERINGS</span>
+      <h2 class="section-heading" style="margin-top: 10px;">The Frontier Lineup</h2>
+
+      <div class="models-grid">
+        <!-- Card 1 -->
+        <div class="model-card">
+          <div>
+            <span class="tag-uppercase" style="color: var(--color-mistral-orange);">REASONING FRONTIER</span>
+            <h3 class="card-title" style="margin-top: 10px;">Mistral Large 2</h3>
+            <p class="body-standard" style="margin-top: 12px;">
+              Flagship 123B parameter model with state-of-the-art reasoning, code generation, and 128k context window across dozens of languages.
+            </p>
+          </div>
+          <div style="margin-top: 28px;">
+            <a href="#studio" class="btn btn-dark-solid" style="width: 100%;">Deploy Endpoint</a>
+          </div>
+        </div>
+
+        <!-- Card 2 -->
+        <div class="model-card" style="border-top-color: var(--color-sunshine-700);">
+          <div>
+            <span class="tag-uppercase" style="color: var(--color-sunshine-700);">CODE SPECIALIST</span>
+            <h3 class="card-title" style="margin-top: 10px;">Codestral 25.01</h3>
+            <p class="body-standard" style="margin-top: 12px;">
+              Trained natively on 80+ programming languages for ultra-fast fill-in-the-middle code synthesis and test generation.
+            </p>
+          </div>
+          <div style="margin-top: 28px;">
+            <a href="#studio" class="btn btn-cream" style="width: 100%;">API Documentation</a>
+          </div>
+        </div>
+
+        <!-- Card 3 -->
+        <div class="model-card" style="border-top-color: var(--color-sunshine-900);">
+          <div>
+            <span class="tag-uppercase" style="color: var(--color-sunshine-900);">MULTIMODAL VISION</span>
+            <h3 class="card-title" style="margin-top: 10px;">Pixtral 12B</h3>
+            <p class="body-standard" style="margin-top: 12px;">
+              Natively processes arbitrary resolution imagery and charts alongside rich text tokens with low latency.
+            </p>
+          </div>
+          <div style="margin-top: 28px;">
+            <a href="#studio" class="btn btn-cream" style="width: 100%;">Download Weights</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION: BLOCK GRADIENT & DESIGN SYSTEM TOKENS -->
+  <section class="tokens-section" id="tokens">
+    <div class="container">
+      <span class="tag-uppercase">THE MISTRAL IDENTITY</span>
+      <h2 class="sub-heading-lg" style="margin-top: 8px;">Signature Warm Palette</h2>
+      <p class="body-standard" style="margin-top: 8px;">
+        A continuous temperature gradient from bright yellow (#ffd900) through sunshine amber (#ffa110) to burnt orange (#fa520f).
+      </p>
+
+      <div class="gradient-ribbon"></div>
+
+      <div class="swatches-grid">
+        <div class="mistral-swatch">
+          <div class="swatch-box" style="background-color: #fa520f;"></div>
+          <div style="font-size: 13px;">Mistral Orange</div>
+          <div class="caption-link" style="font-size: 11px;">#fa520f</div>
+        </div>
+
+        <div class="mistral-swatch">
+          <div class="swatch-box" style="background-color: #fb6424;"></div>
+          <div style="font-size: 13px;">Mistral Flame</div>
+          <div class="caption-link" style="font-size: 11px;">#fb6424</div>
+        </div>
+
+        <div class="mistral-swatch">
+          <div class="swatch-box" style="background-color: #ff8105;"></div>
+          <div style="font-size: 13px;">Block Orange</div>
+          <div class="caption-link" style="font-size: 11px;">#ff8105</div>
+        </div>
+
+        <div class="mistral-swatch">
+          <div class="swatch-box" style="background-color: #ffa110;"></div>
+          <div style="font-size: 13px;">Sunshine 700</div>
+          <div class="caption-link" style="font-size: 11px;">#ffa110</div>
+        </div>
+
+        <div class="mistral-swatch">
+          <div class="swatch-box" style="background-color: #ffd900;"></div>
+          <div style="font-size: 13px;">Bright Yellow</div>
+          <div class="caption-link" style="font-size: 11px;">#ffd900</div>
+        </div>
+
+        <div class="mistral-swatch">
+          <div class="swatch-box" style="background-color: #fffaeb; border: 1px solid #ffd06a;"></div>
+          <div style="font-size: 13px;">Warm Ivory</div>
+          <div class="caption-link" style="font-size: 11px;">#fffaeb</div>
+        </div>
+
+        <div class="mistral-swatch">
+          <div class="swatch-box" style="background-color: #fff0c2;"></div>
+          <div style="font-size: 13px;">Cream Surface</div>
+          <div class="caption-link" style="font-size: 11px;">#fff0c2</div>
+        </div>
+
+        <div class="mistral-swatch">
+          <div class="swatch-box" style="background-color: #1f1f1f;"></div>
+          <div style="font-size: 13px;">Mistral Black</div>
+          <div class="caption-link" style="font-size: 11px;">#1f1f1f</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <div style="display:flex; align-items:center; gap:12px;">
+        <div class="m-pixel" style="background:#fa520f; width:16px; height:16px;"></div>
+        <span style="font-size:15px;">© Mistral AI. French-engineered minimalism.</span>
+      </div>
+
+      <div style="display:flex; gap:20px; font-size:13px; color:#aaa;">
+        <span>PRIMARY: #fa520f</span>
+        <span>CANVAS: #fffaeb</span>
+        <span>TYPOGRAPHY: 400 REGULAR</span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- SCRIPT -->
+  <script>
+    let activeModel = 'Mistral Large 2';
+
+    function selectModel(name, btn) {
+      activeModel = name;
+      document.querySelectorAll('.model-pill-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+    }
+
+    function sendChatPrompt() {
+      const input = document.getElementById('chatInputPrompt');
+      const val = input.value.trim();
+      if (!val) return;
+
+      const log = document.getElementById('chatLog');
+      
+      const userBubble = document.createElement('div');
+      userBubble.className = 'chat-bubble-user';
+      userBubble.textContent = val;
+      log.appendChild(userBubble);
+
+      const aiBubble = document.createElement('div');
+      aiBubble.className = 'chat-bubble-ai';
+      aiBubble.textContent = `[${activeModel}] Synthesizing frontier reasoning tokens...`;
+      log.appendChild(aiBubble);
+
+      input.value = '';
+      log.scrollTop = log.scrollHeight;
+
+      // Simulated streaming
+      setTimeout(() => {
+        aiBubble.textContent = `Completed evaluation with ${activeModel}. High-speed inference generated across 128k context window with European privacy standards intact.`;
+        log.scrollTop = log.scrollHeight;
+      }, 500);
+    }
+  </script>
+</body>
+</html>

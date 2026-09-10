@@ -1,0 +1,840 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>CLAY — 10x Your Outbound with Data Craft | Official Design System</title>
+  <meta name="description" content="Authentic implementation of Clay's design system: warm cream canvas (#faf9f7), oat borders (#dad4c8), vibrant flavor-swatch palette, Roobert typography with 5 stylistic sets, and playful hover micro-animations." />
+
+  <!-- Google Fonts: Space Mono for technical labels, and Inter/Plus Jakarta Sans as robust geometric fallbacks for Roobert -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+
+  <style>
+    /* ─────────────────────────────────────────────────────────────────
+       CLAY OFFICIAL DESIGN TOKENS (from DESIGN.md)
+       Artisanal craft meets tech duality.
+       Warm cream canvas (#faf9f7), Oat borders (#dad4c8),
+       Named swatch palette: Matcha, Slushie, Lemon, Ube, Pomegranate.
+       Playful hover animations: rotateZ(-8deg) + hard shadow rgb(0,0,0) -7px 7px.
+       Generous radii: 4px, 8px, 12px, 24px, 40px, 1584px (pill).
+       ───────────────────────────────────────────────────────────────── */
+    :root {
+      /* Primary Surfaces & Canvas */
+      --canvas: #faf9f7;
+      --surface-white: #ffffff;
+      --text-black: #000000;
+      --text-muted: #9f9b93;
+      --text-charcoal: #55534e;
+      --text-dark: #333333;
+
+      /* Borders: Warm Oat (Not cold gray) */
+      --border-oat: #dad4c8;
+      --border-oat-light: #eee9df;
+      --border-cool: #e6e8ec;
+      --border-dark: #525a69;
+      --border-input: #717989;
+
+      /* Named Swatch Palette */
+      --swatch-matcha-300: #84e7a5;
+      --swatch-matcha-600: #078a52;
+      --swatch-matcha-800: #02492a;
+
+      --swatch-slushie-500: #3bd3fd;
+      --swatch-slushie-800: #0089ad;
+
+      --swatch-lemon-400: #f8cc65;
+      --swatch-lemon-500: #fbbd41;
+      --swatch-lemon-700: #d08a11;
+      --swatch-lemon-800: #9d6a09;
+
+      --swatch-ube-300: #c1b0ff;
+      --swatch-ube-800: #43089f;
+      --swatch-ube-900: #32037d;
+
+      --swatch-pomegranate-400: #fc7981;
+      --swatch-blueberry-800: #01418d;
+
+      /* Badges */
+      --badge-blue-bg: #f0f8ff;
+      --badge-blue-text: #3859f9;
+      --focus-ring: rgb(20, 110, 245) solid 2px;
+
+      /* Multi-layer Shadow with Inset Highlight */
+      --shadow-clay:
+        rgba(0, 0, 0, 0.1) 0px 1px 1px,
+        rgba(0, 0, 0, 0.04) 0px -1px 1px inset,
+        rgba(0, 0, 0, 0.05) 0px -0.5px 1px;
+
+      --shadow-hard-hover: rgb(0, 0, 0) -7px 7px 0px;
+
+      /* Typography */
+      --font-display: "Roobert", "Plus Jakarta Sans", Arial, sans-serif;
+      --font-body: "Roobert", "Plus Jakarta Sans", Arial, sans-serif;
+      --font-mono: "Space Mono", monospace;
+
+      /* Border Radii (Tokens) */
+      --radius-sharp: 4px;
+      --radius-sm: 8px;
+      --radius-badge: 11px;
+      --radius-card: 12px;
+      --radius-feature: 24px;
+      --radius-section: 40px;
+      --radius-pill: 1584px;
+
+      /* Spacing Scale */
+      --space-1: 1px;
+      --space-2: 2px;
+      --space-4: 4px;
+      --space-6: 6.4px;
+      --space-8: 8px;
+      --space-12: 12px;
+      --space-16: 16px;
+      --space-20: 20px;
+      --space-24: 24px;
+      --space-40: 40px;
+      --space-64: 64px;
+
+      /* Container */
+      --container-max: 1200px;
+    }
+
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      background-color: var(--canvas);
+      color: var(--text-black);
+      font-size: 16px;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    body {
+      background: var(--canvas);
+      color: var(--text-black);
+      font-family: var(--font-body);
+      font-weight: 400;
+      line-height: 1.50;
+      /* OpenType stylistic sets for Roobert identity */
+      font-feature-settings: "ss03" on, "ss10" on, "ss11" on, "ss12" on;
+      overflow-x: hidden;
+    }
+
+    /* ─── TYPOGRAPHY RULES ─── */
+    /* Display Headings: Weight 600 with all 5 stylistic sets and tight tracking */
+    h1, h2, h3, .clay-heading {
+      font-family: var(--font-display);
+      font-weight: 600;
+      color: var(--text-black);
+      font-feature-settings: "ss01" on, "ss03" on, "ss10" on, "ss11" on, "ss12" on;
+    }
+
+    h1 {
+      font-size: clamp(44px, 6.5vw, 80px);
+      line-height: 1.00;
+      letter-spacing: -3.2px;
+    }
+
+    h2 {
+      font-size: clamp(32px, 4.5vw, 60px);
+      line-height: 1.00;
+      letter-spacing: -2.4px;
+    }
+
+    h3 {
+      font-size: 32px;
+      line-height: 1.10;
+      letter-spacing: -0.64px;
+    }
+
+    .section-title {
+      font-size: clamp(28px, 3.8vw, 44px);
+      line-height: 1.10;
+      letter-spacing: -1.32px;
+    }
+
+    .uppercase-label {
+      font-family: var(--font-display);
+      font-size: 12px;
+      font-weight: 600;
+      line-height: 1.20;
+      letter-spacing: 1.08px;
+      text-transform: uppercase;
+      color: var(--text-charcoal);
+      font-feature-settings: "ss03" on, "ss10" on, "ss11" on, "ss12" on;
+    }
+
+    p {
+      color: var(--text-charcoal);
+      font-size: 18px;
+      line-height: 1.60;
+      letter-spacing: -0.36px;
+    }
+
+    /* ─── PLAYFUL HOVER BUTTONS (The Signature) ─── */
+    .btn-playful {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      font-family: var(--font-display);
+      font-size: 16px;
+      font-weight: 500;
+      letter-spacing: -0.16px;
+      padding: 10px 20px;
+      border-radius: var(--radius-pill);
+      text-decoration: none;
+      cursor: pointer;
+      border: 1px solid var(--border-oat);
+      background: var(--surface-white);
+      color: var(--text-black);
+      box-shadow: var(--shadow-clay);
+      transition: all 200ms cubic-bezier(0.34, 1.56, 0.64, 1);
+      position: relative;
+    }
+
+    .btn-playful:hover {
+      transform: rotateZ(-4deg) translateY(-4px);
+      box-shadow: var(--shadow-hard-hover);
+      background: var(--swatch-lemon-500);
+      color: var(--text-black);
+      border-color: var(--text-black);
+    }
+
+    .btn-playful:active {
+      transform: scale(0.96);
+    }
+
+    /* Primary Dark Swatch Button */
+    .btn-dark-playful {
+      background: var(--text-black);
+      color: var(--surface-white);
+      border: 1px solid var(--text-black);
+    }
+
+    .btn-dark-playful:hover {
+      background: var(--swatch-matcha-600);
+      color: var(--surface-white);
+      transform: rotateZ(-6deg) translateY(-5px);
+      box-shadow: var(--shadow-hard-hover);
+      border-color: var(--text-black);
+    }
+
+    /* Ghost Outlined Button */
+    .btn-ghost-clay {
+      background: transparent;
+      color: var(--text-black);
+      border: 1px solid var(--border-input);
+      border-radius: var(--radius-sharp);
+      padding: 8px 14px;
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 180ms ease;
+    }
+
+    .btn-ghost-clay:hover {
+      background: var(--swatch-pomegranate-400);
+      color: var(--surface-white);
+      border-color: var(--text-black);
+      transform: rotateZ(3deg) translateY(-2px);
+      box-shadow: -4px 4px 0px #000;
+    }
+
+    /* ─── STICKY NAVIGATION (Warm Cream Canvas) ─── */
+    .clay-nav {
+      position: sticky;
+      top: 0;
+      width: 100%;
+      background: rgba(250, 249, 247, 0.95);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      z-index: 1000;
+      border-bottom: 1px solid var(--border-oat);
+    }
+
+    .nav-inner {
+      max-width: var(--container-max);
+      margin: 0 auto;
+      padding: 16px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .brand-logo {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      text-decoration: none;
+      color: var(--text-black);
+      font-family: var(--font-display);
+      font-size: 24px;
+      font-weight: 700;
+      letter-spacing: -0.8px;
+    }
+
+    .logo-cube {
+      width: 20px;
+      height: 20px;
+      border-radius: 4px;
+      background: var(--swatch-lemon-500);
+      border: 1.5px solid #000;
+      box-shadow: -2px 2px 0px #000;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 28px;
+      list-style: none;
+    }
+
+    @media (max-width: 860px) {
+      .nav-links {
+        display: none;
+      }
+    }
+
+    .nav-link {
+      font-size: 15px;
+      font-weight: 500;
+      color: var(--text-charcoal);
+      text-decoration: none;
+      transition: color 150ms ease;
+    }
+
+    .nav-link:hover {
+      color: var(--text-black);
+    }
+
+    /* ─── HERO SECTION ─── */
+    .hero-section {
+      max-width: var(--container-max);
+      margin: 0 auto;
+      padding: 72px 24px 64px;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--badge-blue-bg);
+      color: var(--badge-blue-text);
+      font-size: 12px;
+      font-weight: 600;
+      padding: 4px 12px;
+      border-radius: var(--radius-pill);
+      margin-bottom: 24px;
+      border: 1px solid rgba(56, 89, 249, 0.2);
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: 16px;
+      margin-top: 36px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    /* ─── DATA ENRICHMENT TABLE (CRAFT CONTAINER) ─── */
+    .table-stage-container {
+      max-width: 1100px;
+      margin: 48px auto 0;
+      width: 100%;
+      background: var(--surface-white);
+      border: 1px solid var(--border-oat);
+      border-radius: var(--radius-feature);
+      box-shadow: var(--shadow-clay);
+      overflow: hidden;
+    }
+
+    .table-topbar {
+      padding: 16px 24px;
+      border-bottom: 1px solid var(--border-oat);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #fdfdfc;
+    }
+
+    .table-chip {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      background: var(--border-oat-light);
+      padding: 4px 10px;
+      border-radius: 6px;
+      color: var(--text-dark);
+    }
+
+    .data-table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+      font-size: 14px;
+    }
+
+    .data-table th {
+      padding: 12px 20px;
+      background: #faf8f5;
+      font-family: var(--font-mono);
+      font-size: 12px;
+      color: var(--text-charcoal);
+      border-bottom: 1px solid var(--border-oat);
+      font-weight: 600;
+    }
+
+    .data-table td {
+      padding: 14px 20px;
+      border-bottom: 1px solid var(--border-oat-light);
+      color: var(--text-black);
+    }
+
+    .data-table tr:hover {
+      background: #faf9f6;
+    }
+
+    .swatch-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-family: var(--font-mono);
+      font-size: 11px;
+      padding: 2px 8px;
+      border-radius: 4px;
+      border: 1px solid rgba(0,0,0,0.1);
+    }
+
+    /* ─── FULL-WIDTH FLAVOR SWATCH SECTIONS ─── */
+    /* Matcha 800 Section */
+    .swatch-section-matcha {
+      background: var(--swatch-matcha-800);
+      color: #ffffff;
+      padding: 80px 24px;
+      margin: 80px 0;
+      border-radius: var(--radius-section);
+      max-width: var(--container-max);
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .swatch-section-matcha h2 {
+      color: #ffffff;
+    }
+
+    .swatch-section-matcha p {
+      color: var(--swatch-matcha-300);
+    }
+
+    /* Slushie 800 Section */
+    .swatch-section-slushie {
+      background: var(--swatch-slushie-800);
+      color: #ffffff;
+      padding: 80px 24px;
+      margin: 80px 0;
+      border-radius: var(--radius-section);
+      max-width: var(--container-max);
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .swatch-section-slushie h2 {
+      color: #ffffff;
+    }
+
+    .swatch-section-slushie p {
+      color: #bbf2ff;
+    }
+
+    /* Ube 800 Section */
+    .swatch-section-ube {
+      background: var(--swatch-ube-800);
+      color: #ffffff;
+      padding: 80px 24px;
+      margin: 80px 0;
+      border-radius: var(--radius-section);
+      max-width: var(--container-max);
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .swatch-section-ube h2 {
+      color: #ffffff;
+    }
+
+    .swatch-section-ube p {
+      color: var(--swatch-ube-300);
+    }
+
+    /* ─── CARD GRIDS (Solid & Dashed Oat Borders) ─── */
+    .cards-section {
+      max-width: var(--container-max);
+      margin: 80px auto;
+      padding: 0 24px;
+    }
+
+    .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 32px;
+      margin-top: 40px;
+    }
+
+    .craft-card {
+      background: var(--surface-white);
+      border: 1px solid var(--border-oat);
+      border-radius: var(--radius-feature);
+      padding: 32px;
+      box-shadow: var(--shadow-clay);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: transform 180ms ease, box-shadow 180ms ease;
+    }
+
+    .craft-card:hover {
+      transform: translateY(-4px);
+      box-shadow: -6px 6px 0px #000, var(--shadow-clay);
+    }
+
+    .craft-card.dashed {
+      border: 1px dashed var(--border-oat);
+      background: #fafaf8;
+    }
+
+    /* ─── FOOTER (40px Generous Radius Container) ─── */
+    .clay-footer {
+      max-width: var(--container-max);
+      margin: 80px auto 40px;
+      background: var(--surface-white);
+      border: 1px solid var(--border-oat);
+      border-radius: var(--radius-section);
+      padding: 64px 48px 40px;
+      box-shadow: var(--shadow-clay);
+    }
+
+    .footer-columns {
+      display: grid;
+      grid-template-columns: 2fr repeat(3, 1fr);
+      gap: 40px;
+      margin-bottom: 48px;
+    }
+
+    @media (max-width: 768px) {
+      .footer-columns {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    /* ─── FLOATING AUDIT DRAWER ─── */
+    .audit-trigger {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      z-index: 1000;
+    }
+
+    .audit-modal {
+      display: none;
+      position: fixed;
+      bottom: 80px;
+      right: 24px;
+      width: 380px;
+      background: var(--surface-white);
+      border: 1px solid var(--border-oat);
+      border-radius: var(--radius-card);
+      box-shadow: -8px 8px 0px #000, var(--shadow-clay);
+      padding: 24px;
+      z-index: 1001;
+      font-size: 13px;
+    }
+
+    .audit-modal.open {
+      display: block;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- STICKY TOP NAVIGATION -->
+  <header class="clay-nav">
+    <div class="nav-inner">
+      <a href="#" class="brand-logo" aria-label="Clay Homepage">
+        <div class="logo-cube"></div>
+        <span>Clay</span>
+      </a>
+
+      <ul class="nav-links">
+        <li><a href="#enrichment" class="nav-link">Data Craft</a></li>
+        <li><a href="#swatches" class="nav-link">Flavor Swatches</a></li>
+        <li><a href="#templates" class="nav-link">Workflows</a></li>
+        <li><a href="#pricing" class="nav-link">Pricing</a></li>
+      </ul>
+
+      <div style="display: flex; gap: 12px; align-items: center;">
+        <button class="btn-ghost-clay" onclick="alert('Welcome to Clay Sandbox!')">Sign In</button>
+        <a href="#enrichment" class="btn-playful btn-dark-playful">Start Free Trial</a>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <!-- HERO SECTION (Warm Cream Canvas) -->
+    <section class="hero-section">
+      <div class="hero-badge">
+        <span>✨ 75+ ENRICHMENT PROVIDERS BUILT-IN</span>
+      </div>
+
+      <h1>Scale your outbound with artisanal data craft.</h1>
+
+      <p style="max-width: 680px; margin-top: 24px;">
+        Clay combines data from LinkedIn, Apollo, GitHub, and custom web scrapers into one automated spreadsheet. Turn cold outreach into personalized conversations that convert.
+      </p>
+
+      <div class="hero-actions">
+        <a href="#enrichment" class="btn-playful btn-dark-playful" style="padding: 14px 28px; font-size: 17px;">
+          Build Your Workflow →
+        </a>
+        <a href="#swatches" class="btn-playful" style="padding: 14px 28px; font-size: 17px;">
+          Explore Swatches
+        </a>
+      </div>
+
+      <!-- INTERACTIVE DATA ENRICHMENT TABLE STAGE -->
+      <div class="table-stage-container" id="enrichment">
+        <div class="table-topbar">
+          <div style="display: flex; gap: 12px; align-items: center;">
+            <span class="table-chip">Active Sheet: Q4 VP Engineering Outbound</span>
+            <span style="font-size: 12px; color: var(--text-muted);">● Auto-syncing</span>
+          </div>
+          <div style="display: flex; gap: 8px;">
+            <button class="btn-ghost-clay" onclick="enrichRow()">+ Enrich Next Lead</button>
+          </div>
+        </div>
+
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>PROSPECT</th>
+              <th>COMPANY</th>
+              <th>VERIFIED EMAIL</th>
+              <th>ENRICHMENT RECIPE</th>
+              <th>MATCH STATUS</th>
+            </tr>
+          </thead>
+          <tbody id="tableBody">
+            <tr>
+              <td><strong>Elena Rostova</strong><br><span style="font-size: 12px; color: var(--text-muted);">VP Engineering</span></td>
+              <td>Datastream Core</td>
+              <td><span style="font-family: var(--font-mono); font-size: 12px;">elena@datastream.io</span></td>
+              <td><span class="swatch-tag" style="background: #e8f9ee; color: var(--swatch-matcha-600);">Matcha 600 • GitHub Pulls</span></td>
+              <td><span style="color: var(--swatch-matcha-600); font-weight: 600;">99.4% Verified</span></td>
+            </tr>
+            <tr>
+              <td><strong>Marcus Vance</strong><br><span style="font-size: 12px; color: var(--text-muted);">Chief Architect</span></td>
+              <td>HyperScale AI</td>
+              <td><span style="font-family: var(--font-mono); font-size: 12px;">m.vance@hyperscale.ai</span></td>
+              <td><span class="swatch-tag" style="background: #e5f9ff; color: var(--swatch-slushie-800);">Slushie 800 • Tech Stack</span></td>
+              <td><span style="color: var(--swatch-slushie-800); font-weight: 600;">CUDA / Rust / Ray</span></td>
+            </tr>
+            <tr>
+              <td><strong>Sarah Chen</strong><br><span style="font-size: 12px; color: var(--text-muted);">Head of Growth</span></td>
+              <td>SaaS Frontier</td>
+              <td><span style="font-family: var(--font-mono); font-size: 12px;">sarah@frontier.co</span></td>
+              <td><span class="swatch-tag" style="background: #fdf5e2; color: var(--swatch-lemon-800);">Lemon 500 • Funding Round</span></td>
+              <td><span style="color: var(--swatch-lemon-700); font-weight: 600;">Series B ($28M)</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- FULL-WIDTH SWATCH SECTION 1: MATCHA 800 -->
+    <section class="swatch-section-matcha" id="swatches">
+      <div style="max-width: 720px;">
+        <div class="uppercase-label" style="color: var(--swatch-matcha-300); margin-bottom: 16px;">SWATCH ACCENT: MATCHA 800 (#02492A)</div>
+        <h2>Replace 10 prospecting tools with a single canvas.</h2>
+        <p style="margin-top: 18px; font-size: 20px;">
+          No more CSV downloading, manual copy-pasting, or guessing work emails. Clay orchestrates 75+ data providers in real time so you only reach out to high-intent decision makers.
+        </p>
+        <div style="margin-top: 32px;">
+          <button class="btn-playful" style="background: #ffffff; color: var(--text-black);" onclick="alert('Matcha workflow loaded!')">
+            Test Matcha Recipe →
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- CARDS GRID WITH SOLID AND DASHED BORDERS -->
+    <section class="cards-section" id="templates">
+      <div style="text-align: center; max-width: 600px; margin: 0 auto;">
+        <div class="uppercase-label">ARTISANAL WORKFLOWS</div>
+        <h2 class="section-title">Enrichment recipes that work straight out of the box.</h2>
+      </div>
+
+      <div class="cards-grid">
+        <!-- Card 1: Solid Oat -->
+        <div class="craft-card">
+          <div>
+            <div style="width: 40px; height: 40px; border-radius: 8px; background: var(--swatch-matcha-300); border: 1.5px solid #000; margin-bottom: 20px;"></div>
+            <h3>GitHub Contributor Outreach</h3>
+            <p style="font-size: 15px; margin-top: 10px;">
+              Find developers who starred or committed to specific open-source libraries. Enrich with verified LinkedIn URLs and senior engineering emails.
+            </p>
+          </div>
+          <div style="margin-top: 24px;">
+            <button class="btn-ghost-clay">Use Recipe</button>
+          </div>
+        </div>
+
+        <!-- Card 2: Dashed Oat -->
+        <div class="craft-card dashed">
+          <div>
+            <div style="width: 40px; height: 40px; border-radius: 8px; background: var(--swatch-slushie-500); border: 1.5px solid #000; margin-bottom: 20px;"></div>
+            <h3>Executive Job Change Alerts</h3>
+            <p style="font-size: 15px; margin-top: 10px;">
+              Automatically trigger congratulations emails whenever a customer VP transitions to a new enterprise company.
+            </p>
+          </div>
+          <div style="margin-top: 24px;">
+            <button class="btn-ghost-clay">Use Recipe</button>
+          </div>
+        </div>
+
+        <!-- Card 3: Solid Oat -->
+        <div class="craft-card">
+          <div>
+            <div style="width: 40px; height: 40px; border-radius: 8px; background: var(--swatch-ube-300); border: 1.5px solid #000; margin-bottom: 20px;"></div>
+            <h3>AI Personalizer (Claude + GPT-4o)</h3>
+            <p style="font-size: 15px; margin-top: 10px;">
+              Synthesize company 10-K filings, podcast transcripts, and recent blog posts into a tailored 2-sentence opening observation.
+            </p>
+          </div>
+          <div style="margin-top: 24px;">
+            <button class="btn-ghost-clay">Use Recipe</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FULL-WIDTH SWATCH SECTION 2: UBE 800 -->
+    <section class="swatch-section-ube">
+      <div style="max-width: 720px;">
+        <div class="uppercase-label" style="color: var(--swatch-ube-300); margin-bottom: 16px;">SWATCH ACCENT: UBE 800 (#43089F)</div>
+        <h2>Automate cold email with handcrafted taste.</h2>
+        <p style="margin-top: 18px; font-size: 20px;">
+          B2B outreach doesn't have to look like spam. Bring craftsmanship back to sales development with contextual data that proves you did your homework.
+        </p>
+        <div style="margin-top: 32px;">
+          <button class="btn-playful" style="background: var(--swatch-lemon-500); color: #000;" onclick="alert('Ube pipeline activated!')">
+            Explore Ube Recipes →
+          </button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- CLAY FOOTER (40px Radius Oat Container) -->
+  <footer class="clay-footer" id="pricing">
+    <div class="footer-columns">
+      <div>
+        <div class="brand-logo" style="margin-bottom: 12px;">
+          <div class="logo-cube"></div>
+          <span>Clay</span>
+        </div>
+        <p style="font-size: 14px; max-width: 280px; margin-bottom: 20px;">
+          The data enrichment platform built with joy, taste, and precision.
+        </p>
+        <span style="font-size: 13px; color: var(--text-muted);">© 2026 Clay Inc. All rights reserved.</span>
+      </div>
+
+      <div>
+        <h4 class="uppercase-label" style="margin-bottom: 14px;">Product</h4>
+        <div style="display: flex; flex-direction: column; gap: 8px; font-size: 14px;">
+          <a href="#" class="nav-link">Data Waterfall</a>
+          <a href="#" class="nav-link">AI Email Writer</a>
+          <a href="#" class="nav-link">Integrations</a>
+          <a href="#" class="nav-link">Chrome Extension</a>
+        </div>
+      </div>
+
+      <div>
+        <h4 class="uppercase-label" style="margin-bottom: 14px;">Resources</h4>
+        <div style="display: flex; flex-direction: column; gap: 8px; font-size: 14px;">
+          <a href="#" class="nav-link">Clay University</a>
+          <a href="#" class="nav-link">Slack Community</a>
+          <a href="#" class="nav-link">Templates</a>
+          <a href="#" class="nav-link">API Docs</a>
+        </div>
+      </div>
+
+      <div>
+        <h4 class="uppercase-label" style="margin-bottom: 14px;">Company</h4>
+        <div style="display: flex; flex-direction: column; gap: 8px; font-size: 14px;">
+          <a href="#" class="nav-link">About Us</a>
+          <a href="#" class="nav-link">Careers</a>
+          <a href="#" class="nav-link">Design Philosophy</a>
+          <a href="#" class="nav-link">Security (SOC2)</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- FLOATING AUDIT MODAL -->
+  <div class="audit-trigger">
+    <button class="btn-playful" onclick="toggleAudit()" style="box-shadow: -4px 4px 0px #000;">
+      <span>Audit Tokens</span>
+    </button>
+  </div>
+
+  <div class="audit-modal" id="auditModal">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; border-bottom: 1px solid var(--border-oat); padding-bottom: 6px;">
+      <span style="font-weight: 700; font-size: 14px;">CLAY DESIGN SYSTEM AUDIT</span>
+      <button onclick="toggleAudit()" style="background: none; border: none; cursor: pointer; font-size: 14px;">✕</button>
+    </div>
+    <div style="display: flex; flex-direction: column; gap: 6px; font-family: var(--font-mono); font-size: 11px;">
+      <div>• Canvas: <span style="background: #faf9f7; padding: 1px 4px; border: 1px solid #dad4c8;">#faf9f7 (Warm Cream)</span></div>
+      <div>• Borders: <span style="background: #dad4c8; padding: 1px 4px;">#dad4c8 (Warm Oat)</span></div>
+      <div>• Matcha: <span style="color: #078a52;">#078a52 (Matcha 600) / #02492a</span></div>
+      <div>• Slushie: <span style="color: #0089ad;">#3bd3fd / #0089ad</span></div>
+      <div>• Lemon: <span style="color: #d08a11;">#fbbd41 / #9d6a09</span></div>
+      <div>• Ube: <span style="color: #43089f;">#c1b0ff / #43089f</span></div>
+      <div>• Pomegranate: <span style="color: #fc7981;">#fc7981</span></div>
+      <div>• Typography: Roobert (ss01, ss03, ss10, ss11, ss12)</div>
+      <div>• Display 80px: -3.2px tracking, tight leading 1.00</div>
+      <div>• Hover: rotateZ(-8deg) + shadow rgb(0,0,0) -7px 7px</div>
+    </div>
+  </div>
+
+  <!-- SCRIPTING -->
+  <script>
+    function toggleAudit() {
+      document.getElementById('auditModal').classList.toggle('open');
+    }
+
+    let nextCount = 1;
+    function enrichRow() {
+      const tbody = document.getElementById('tableBody');
+      const tr = document.createElement('tr');
+      tr.innerHTML = `
+        <td><strong>Alex Jordan #${nextCount}</strong><br><span style="font-size: 12px; color: var(--text-muted);">Product Lead</span></td>
+        <td>NextGen Cloud</td>
+        <td><span style="font-family: var(--font-mono); font-size: 12px;">a.jordan@nextgen.com</span></td>
+        <td><span class="swatch-tag" style="background: #fae6ff; color: var(--swatch-ube-800);">Ube 800 • Apollo Cascade</span></td>
+        <td><span style="color: var(--swatch-matcha-600); font-weight: 600;">✓ Verified Live</span></td>
+      `;
+      tbody.appendChild(tr);
+      nextCount++;
+    }
+  </script>
+</body>
+</html>

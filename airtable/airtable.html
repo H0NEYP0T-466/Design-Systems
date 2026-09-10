@@ -1,0 +1,649 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Airtable — The Platform to Build Next-Gen Business Apps</title>
+  <meta name="description" content="Airtable design system: deep navy #181d26 text, Airtable Blue #1b61c9, positive letter-spacing, 12px button radius, multi-layer blue-tinted shadows, and interactive relational grid." />
+
+  <!-- Typography: Inter calibrated with positive letter-spacing (representing Haas font stack) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+  <style>
+    /* ─────────────────────────────────────────────────────────────────
+       AIRTABLE DESIGN SYSTEM TOKENS
+       Source: open-design/design-systems/airtable/DESIGN.md
+       ───────────────────────────────────────────────────────────────── */
+    :root {
+      --navy: #181d26;
+      --navy-weak: rgba(4, 14, 32, 0.69);
+      --navy-faint: rgba(4, 14, 32, 0.45);
+      --blue: #1b61c9;
+      --blue-hover: #154ea3;
+      --blue-mid: #254fad;
+      --surface: #ffffff;
+      --surface-light: #f8fafc;
+      --border: #e0e2e6;
+      --border-dark: #c5c8d0;
+      --success: #006400;
+
+      /* Tag Colors (Classic Airtable Field Chips) */
+      --tag-yellow-bg: #fff3c4;
+      --tag-yellow-fg: #8f5b00;
+      --tag-green-bg: #d1f7c4;
+      --tag-green-fg: #0d6e2e;
+      --tag-blue-bg: #d0f0fd;
+      --tag-blue-fg: #0b69a3;
+      --tag-purple-bg: #ede2fe;
+      --tag-purple-fg: #5e35b1;
+
+      --font-haas: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+
+      --radius-sm: 4px;
+      --radius-btn: 12px;
+      --radius-card: 16px;
+      --radius-section: 24px;
+      --radius-lg: 32px;
+      --radius-pill: 9999px;
+
+      /* Blue-tinted shadow (Section 2 & 6) */
+      --shadow-blue: rgba(0,0,0,0.12) 0px 1px 3px, rgba(45,127,249,0.28) 0px 2px 6px;
+      --shadow-ambient: rgba(15, 48, 106, 0.06) 0px 4px 24px;
+      --shadow-card: 0 1px 3px rgba(0,0,0,0.06), 0 8px 24px rgba(27,97,201,0.06);
+
+      --transition-fast: 160ms ease;
+    }
+
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      background-color: var(--surface);
+      color: var(--navy);
+      font-family: var(--font-haas);
+      font-size: 16px;
+      line-height: 1.5;
+      letter-spacing: 0.12px; /* Mandatory positive letter-spacing */
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .container {
+      max-width: 1240px;
+      margin-inline: auto;
+      padding-inline: 32px;
+    }
+
+    /* 1. TOP NAVIGATION */
+    .airtable-nav {
+      height: 76px;
+      border-bottom: 1px solid var(--border);
+      background: var(--surface);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .airtable-nav-inner {
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+    }
+    .nav-brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+      color: var(--navy);
+    }
+    .airtable-logo-mark {
+      width: 32px;
+      height: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .brand-title {
+      font-size: 22px;
+      font-weight: 800;
+      letter-spacing: -0.2px;
+      color: var(--navy);
+    }
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 28px;
+      list-style: none;
+    }
+    @media (max-width: 920px) {
+      .nav-links { display: none; }
+    }
+    .nav-links a {
+      text-decoration: none;
+      color: var(--navy);
+      font-size: 15px;
+      font-weight: 500;
+      letter-spacing: 0.1px;
+      transition: color var(--transition-fast);
+    }
+    .nav-links a:hover {
+      color: var(--blue);
+    }
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    /* 2. BUTTONS (12px Radius) */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      font-family: var(--font-haas);
+      font-size: 16px;
+      font-weight: 500;
+      letter-spacing: 0.08px;
+      padding: 12px 24px;
+      border-radius: var(--radius-btn);
+      border: 1px solid transparent;
+      text-decoration: none;
+      cursor: pointer;
+      transition: all var(--transition-fast);
+    }
+    .btn-primary {
+      background: var(--blue);
+      color: #ffffff;
+      box-shadow: var(--shadow-blue);
+    }
+    .btn-primary:hover {
+      background: var(--blue-hover);
+      transform: translateY(-1px);
+    }
+    .btn-secondary {
+      background: var(--surface);
+      color: var(--navy);
+      border-color: var(--border);
+    }
+    .btn-secondary:hover {
+      border-color: var(--navy);
+      background: var(--surface-light);
+    }
+
+    /* 3. HERO SECTION */
+    .hero-wrap {
+      padding-block: 72px 48px;
+      text-align: center;
+      background: linear-gradient(180deg, var(--surface) 0%, var(--surface-light) 100%);
+    }
+    .hero-eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--blue);
+      text-transform: uppercase;
+      letter-spacing: 0.16px;
+      margin-bottom: 20px;
+    }
+    .hero-title {
+      font-size: clamp(36px, 5.5vw, 60px);
+      font-weight: 800;
+      line-height: 1.15;
+      letter-spacing: -0.3px;
+      color: var(--navy);
+      max-width: 900px;
+      margin: 0 auto 24px;
+    }
+    .hero-lead {
+      font-size: 20px;
+      line-height: 1.45;
+      color: var(--navy-weak);
+      letter-spacing: 0.18px;
+      max-width: 680px;
+      margin: 0 auto 36px;
+    }
+    .hero-ctas {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      flex-wrap: wrap;
+      margin-bottom: 48px;
+    }
+
+    /* 4. INTERACTIVE SPREADSHEET-DATABASE GRID WIDGET */
+    .database-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-card);
+      box-shadow: var(--shadow-card);
+      overflow: hidden;
+      max-width: 1100px;
+      margin: 0 auto;
+      text-align: left;
+    }
+    .db-tab-bar {
+      height: 48px;
+      background: #f4f5f8;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      padding-inline: 16px;
+      gap: 8px;
+    }
+    .db-tab {
+      padding: 6px 14px;
+      background: transparent;
+      border-radius: 6px;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--navy-weak);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .db-tab.active {
+      background: var(--surface);
+      color: var(--navy);
+      box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+    }
+    .db-toolbar {
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 13px;
+      color: var(--navy-weak);
+    }
+    .db-tools-left {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    .tool-btn {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-weight: 500;
+      cursor: pointer;
+    }
+
+    /* Table Grid Representation */
+    .table-responsive {
+      overflow-x: auto;
+    }
+    .airtable-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+    .airtable-table th {
+      background: #fafbfc;
+      border-bottom: 1px solid var(--border);
+      border-right: 1px solid var(--border);
+      padding: 10px 14px;
+      font-weight: 600;
+      color: var(--navy);
+      text-align: left;
+      font-size: 13px;
+    }
+    .airtable-table td {
+      border-bottom: 1px solid var(--border);
+      border-right: 1px solid var(--border);
+      padding: 10px 14px;
+      color: var(--navy);
+    }
+    .airtable-table tr:hover {
+      background: #fbfcfe;
+    }
+
+    /* Chip Badges */
+    .tag-chip {
+      display: inline-flex;
+      align-items: center;
+      padding: 3px 10px;
+      border-radius: var(--radius-pill);
+      font-size: 12px;
+      font-weight: 600;
+    }
+    .tag-yellow { background: var(--tag-yellow-bg); color: var(--tag-yellow-fg); }
+    .tag-green { background: var(--tag-green-bg); color: var(--tag-green-fg); }
+    .tag-blue { background: var(--tag-blue-bg); color: var(--tag-blue-fg); }
+    .tag-purple { background: var(--tag-purple-bg); color: var(--tag-purple-fg); }
+
+    /* 5. VALUE PROPOSITION SECTION */
+    .section-wrap {
+      padding-block: 80px;
+      border-bottom: 1px solid var(--border);
+    }
+    .section-head {
+      text-align: center;
+      max-width: 720px;
+      margin: 0 auto 56px;
+    }
+    .section-title {
+      font-size: 38px;
+      font-weight: 700;
+      color: var(--navy);
+      letter-spacing: -0.2px;
+      margin-bottom: 16px;
+    }
+    .section-sub {
+      font-size: 18px;
+      color: var(--navy-weak);
+      line-height: 1.5;
+    }
+
+    .features-3col {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 32px;
+    }
+    @media (max-width: 860px) {
+      .features-3col { grid-template-columns: 1fr; }
+    }
+    .feature-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-card);
+      padding: 36px 32px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+      transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+    }
+    .feature-card:hover {
+      transform: translateY(-3px);
+      box-shadow: var(--shadow-ambient);
+    }
+    .feature-icon-badge {
+      width: 48px;
+      height: 48px;
+      border-radius: 12px;
+      background: #eff6ff;
+      color: var(--blue);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 20px;
+      font-weight: 800;
+    }
+    .feature-card-title {
+      font-size: 22px;
+      font-weight: 600;
+      color: var(--navy);
+      margin-bottom: 12px;
+    }
+    .feature-card-desc {
+      font-size: 15px;
+      color: var(--navy-weak);
+      line-height: 1.6;
+    }
+
+    /* 6. AIRTABLE FOOTER */
+    .airtable-footer {
+      background: var(--surface-light);
+      padding-block: 64px 40px;
+      border-top: 1px solid var(--border);
+      font-size: 14px;
+    }
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1fr;
+      gap: 40px;
+      padding-bottom: 48px;
+      border-bottom: 1px solid var(--border);
+    }
+    @media (max-width: 860px) {
+      .footer-grid { grid-template-columns: 1fr 1fr; }
+    }
+    .footer-col h6 {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--navy);
+      margin-bottom: 16px;
+    }
+    .footer-col ul {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .footer-col a {
+      color: var(--navy-weak);
+      text-decoration: none;
+      transition: color var(--transition-fast);
+    }
+    .footer-col a:hover {
+      color: var(--blue);
+    }
+    .footer-bottom {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-top: 24px;
+      color: var(--navy-weak);
+      font-size: 13px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- 1. NAVIGATION -->
+  <header class="airtable-nav">
+    <div class="container airtable-nav-inner">
+      <a href="#hero" class="nav-brand">
+        <div class="airtable-logo-mark">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none">
+            <path d="M11.5 2.5L2.5 6.5V17.5L11.5 21.5V2.5Z" fill="#1b61c9"/>
+            <path d="M12.5 2.5L21.5 6.5V17.5L12.5 21.5V2.5Z" fill="#254fad"/>
+            <path d="M2.5 6.5L12 11L21.5 6.5L12 2L2.5 6.5Z" fill="#f8fafc"/>
+          </svg>
+        </div>
+        <span class="brand-title">Airtable</span>
+      </a>
+
+      <ul class="nav-links">
+        <li><a href="#platform">Platform</a></li>
+        <li><a href="#solutions">Solutions</a></li>
+        <li><a href="#resources">Resources</a></li>
+        <li><a href="#pricing">Enterprise</a></li>
+      </ul>
+
+      <div class="nav-actions">
+        <a href="00_Index.md" class="btn btn-secondary" style="padding: 9px 16px; font-size: 14px;">Index</a>
+        <a href="#demo" class="btn btn-primary" style="padding: 9px 18px; font-size: 14px;">Sign up for free</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- 2. HERO -->
+  <section id="hero" class="hero-wrap">
+    <div class="container">
+      <div class="hero-eyebrow">Enterprise App Platform</div>
+      <h1 class="hero-title">The platform to build next-gen apps connected to shared data</h1>
+      <p class="hero-lead">
+        Empower teams to build flexible business applications that automate workflows, synchronize critical datasets, and scale across organizations.
+      </p>
+
+      <div class="hero-ctas">
+        <a href="#demo" class="btn btn-primary">Sign up for free</a>
+        <a href="#platform" class="btn btn-secondary">Explore the platform</a>
+      </div>
+
+      <!-- 3. INTERACTIVE SPREADSHEET DATABASE PREVIEW -->
+      <div id="demo" class="database-card">
+        <div class="db-tab-bar">
+          <div class="db-tab active">
+            <span>📋</span>
+            <span>Product Roadmap 2026</span>
+          </div>
+          <div class="db-tab">
+            <span>📊</span>
+            <span>Sprint Burndown</span>
+          </div>
+          <div class="db-tab">
+            <span>⚙️</span>
+            <span>Release Deployments</span>
+          </div>
+        </div>
+
+        <div class="db-toolbar">
+          <div class="db-tools-left">
+            <span class="tool-btn"><strong>Grid view</strong> ▾</span>
+            <span class="tool-btn">🔍 Filter</span>
+            <span class="tool-btn">👥 Group</span>
+            <span class="tool-btn">↕ Sort</span>
+          </div>
+          <div>
+            <span>42 records</span>
+          </div>
+        </div>
+
+        <div class="table-responsive">
+          <table class="airtable-table">
+            <thead>
+              <tr>
+                <th style="width: 280px;">Feature Initiative</th>
+                <th style="width: 140px;">Status</th>
+                <th style="width: 160px;">Team Domain</th>
+                <th style="width: 130px;">Priority Tier</th>
+                <th>Target Release</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Autonomous Agent Delegation Bridge</strong></td>
+                <td><span class="tag-chip tag-green">In Production</span></td>
+                <td><span class="tag-chip tag-blue">Core Engine</span></td>
+                <td><span class="tag-chip tag-yellow">P0 Critical</span></td>
+                <td>Q3 2026</td>
+              </tr>
+              <tr>
+                <td><strong>Multi-Modal Relational Knowledge Graph</strong></td>
+                <td><span class="tag-chip tag-yellow">In Review</span></td>
+                <td><span class="tag-chip tag-purple">AI Research</span></td>
+                <td><span class="tag-chip tag-blue">P1 High</span></td>
+                <td>Q4 2026</td>
+              </tr>
+              <tr>
+                <td><strong>Real-Time WebSocket Sync Protocol</strong></td>
+                <td><span class="tag-chip tag-green">Completed</span></td>
+                <td><span class="tag-chip tag-blue">Infrastructure</span></td>
+                <td><span class="tag-chip tag-yellow">P0 Critical</span></td>
+                <td>Q2 2026</td>
+              </tr>
+              <tr>
+                <td><strong>Enterprise RBAC Permissions Audit</strong></td>
+                <td><span class="tag-chip tag-blue">Scheduled</span></td>
+                <td><span class="tag-chip tag-purple">Compliance</span></td>
+                <td><span class="tag-chip tag-green">P2 Normal</span></td>
+                <td>Q4 2026</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- 4. VALUE PROPOSITION -->
+  <section id="platform" class="section-wrap">
+    <div class="container">
+      <div class="section-head">
+        <h2 class="section-title">Why Global Organizations Build on Airtable</h2>
+        <p class="section-sub">Connect every workflow, automate repetitive actions, and give every department real-time access to the exact data they need.</p>
+      </div>
+
+      <div class="features-3col">
+        <article class="feature-card">
+          <div class="feature-icon-badge">01</div>
+          <h3 class="feature-card-title">Relational Single Source</h3>
+          <p class="feature-card-desc">
+            Link records across disparate operational bases without writing fragile SQL queries or managing disconnected spreadsheets.
+          </p>
+        </article>
+
+        <article class="feature-card">
+          <div class="feature-icon-badge">02</div>
+          <h3 class="feature-card-title">Visual Automations</h3>
+          <p class="feature-card-desc">
+            Trigger webhooks, send multi-channel notifications, and synchronize third-party systems automatically with zero downtime.
+          </p>
+        </article>
+
+        <article class="feature-card">
+          <div class="feature-icon-badge">03</div>
+          <h3 class="feature-card-title">Enterprise Governance</h3>
+          <p class="feature-card-desc">
+            Granular field-level permissions, SSO integration, SOC2 compliance, and end-to-end encryption trusted by Fortune 500 enterprises.
+          </p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- 5. FOOTER -->
+  <footer class="airtable-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-col">
+          <h6>Airtable</h6>
+          <p style="color: var(--navy-weak); line-height: 1.6; max-width: 300px;">
+            The platform that empowers organizations to build custom workflows and apps connected to shared data.
+          </p>
+        </div>
+
+        <div class="footer-col">
+          <h6>Product</h6>
+          <ul>
+            <li><a href="#">Airtable Platform</a></li>
+            <li><a href="#">Automations</a></li>
+            <li><a href="#">Interface Designer</a></li>
+            <li><a href="#">Enterprise Security</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h6>Solutions</h6>
+          <ul>
+            <li><a href="#">Product Operations</a></li>
+            <li><a href="#">Marketing Campaigns</a></li>
+            <li><a href="#">Engineering Roadmaps</a></li>
+            <li><a href="#">Human Resources</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h6>Resources</h6>
+          <ul>
+            <li><a href="00_Index.md">Master Design Index</a></li>
+            <li><a href="index.html">System Gallery</a></li>
+            <li><a href="#">API Documentation</a></li>
+            <li><a href="#">Community Forum</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <div>&copy; 2026 Airtable, Inc. All rights reserved.</div>
+        <div><a href="00_Index.md" style="color: var(--blue); text-decoration: none; font-weight: 600;">← Return to Master Index</a></div>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>

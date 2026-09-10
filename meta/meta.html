@@ -1,0 +1,869 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Meta Store — Tech Retail Design System</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      /* Meta Primary Tokens */
+      --meta-blue: #0064E0;          /* Primary CTA background */
+      --meta-blue-hover: #0143B5;    /* Darkened blue hover */
+      --meta-blue-pressed: #004BB9;  /* Deep blue pressed */
+      --meta-blue-light: #47A5FA;    /* Light blue on dark surfaces */
+      --facebook-blue: #1877F2;      /* Legacy FDS accent */
+
+      /* Product Accents */
+      --rayban-red: #D6311F;         /* Ray-Ban Meta smart glasses */
+      --oculus-purple: #A121CE;      /* Quest VR content */
+      --work-purple: #6441D2;        /* Meta for Work */
+      --portal-blue: #1B365D;        /* Portal hardware */
+
+      /* Surfaces */
+      --meta-white: #FFFFFF;
+      --dolly-bg-grey: #F1F4F7;      /* Soft gray background */
+      --meta-warm-gray: #F7F8FA;     /* Flat card background */
+      --meta-web-wash: #F0F2F5;      /* Deemphasized areas */
+      --meta-linen: #F2F0E6;         /* Lifestyle off-white */
+      --meta-near-black: #1C1E21;    /* Dark section background */
+      --oculus-light: #181A1B;       /* Quest dark surface */
+      --oculus-dark: #000000;        /* Pure black product void */
+
+      /* Neutrals & Text */
+      --dolly-text-primary: #050505;
+      --dolly-text-charcoal: #1C2B33;
+      --secondary-text: #65676B;
+      --dolly-text-secondary: #5D6C7B;
+      --divider-color: #CED0D4;
+      --divider-gray: #DEE3E9;
+
+      /* Typography */
+      --font-optimistic: 'Montserrat', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+
+      /* Spacing Scale (8px Base Unit) */
+      --sp-4: 4px;
+      --sp-8: 8px;
+      --sp-10: 10px;
+      --sp-12: 12px;
+      --sp-16: 16px;
+      --sp-24: 24px;
+      --sp-32: 32px;
+      --sp-48: 48px;
+      --sp-64: 64px;
+      --sp-80: 80px;
+
+      /* Radii */
+      --radius-input: 8px;
+      --card-corner-radius: 20px;
+      --feature-corner-radius: 24px;
+      --radius-pill: 100px; /* Fully rounded pill */
+
+      /* Dual-Shadow Elevation */
+      --shadow-dual: 0 12px 28px 0 rgba(0, 0, 0, 0.15), 0 2px 4px 0 rgba(0, 0, 0, 0.08);
+      --shadow-subtle: 0 2px 4px 0 rgba(0, 0, 0, 0.1);
+    }
+
+    /* Reset & Base */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      font-size: 16px;
+      background-color: var(--meta-white);
+      color: var(--dolly-text-primary);
+      font-family: var(--font-optimistic);
+      font-feature-settings: "ss01", "ss02"; /* OpenType stylistic sets */
+      -webkit-font-smoothing: antialiased;
+      scroll-behavior: smooth;
+    }
+
+    body {
+      line-height: 1.44;
+      overflow-x: hidden;
+    }
+
+    /* Typography Classes */
+    .display-1 {
+      font-size: clamp(40px, 5vw, 64px);
+      font-weight: 500;
+      line-height: 1.16;
+      color: var(--dolly-text-primary);
+    }
+
+    .display-2 {
+      font-size: clamp(32px, 4vw, 48px);
+      font-weight: 500;
+      line-height: 1.17;
+      color: var(--dolly-text-primary);
+    }
+
+    .heading-1 {
+      font-size: 36px;
+      font-weight: 500;
+      line-height: 1.28;
+    }
+
+    .heading-2-light {
+      font-size: 28px;
+      font-weight: 300; /* Distinctive weight 300 for subheadings */
+      line-height: 1.21;
+      color: var(--dolly-text-secondary);
+    }
+
+    .heading-3-bold {
+      font-size: 18px;
+      font-weight: 700;
+      line-height: 1.44;
+    }
+
+    .body-regular {
+      font-size: 18px;
+      font-weight: 400;
+      line-height: 1.44;
+      color: var(--dolly-text-charcoal);
+    }
+
+    .body-compact {
+      font-size: 16px;
+      font-weight: 500;
+      line-height: 1.50;
+      letter-spacing: -0.16px;
+    }
+
+    .caption-regular {
+      font-size: 14px;
+      font-weight: 400;
+      line-height: 1.43;
+      letter-spacing: -0.14px;
+      color: var(--secondary-text);
+    }
+
+    /* Container */
+    .container {
+      max-width: 1440px;
+      margin: 0 auto;
+      padding: 0 var(--sp-32);
+    }
+
+    /* Frosted Glass Navigation Bar */
+    header.meta-nav {
+      position: sticky;
+      top: 0;
+      background: rgba(241, 244, 247, 0.85);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+      z-index: 1000;
+      height: 60px;
+      display: flex;
+      align-items: center;
+    }
+
+    .nav-content {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      width: 100%;
+    }
+
+    .brand-group {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+      color: var(--dolly-text-primary);
+    }
+
+    .meta-loop-svg {
+      width: 32px;
+      height: 20px;
+      fill: var(--meta-blue);
+    }
+
+    .brand-title {
+      font-size: 18px;
+      font-weight: 600;
+      letter-spacing: -0.5px;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: var(--sp-32);
+      list-style: none;
+    }
+
+    .nav-links a {
+      text-decoration: none;
+      color: var(--dolly-text-charcoal);
+      font-size: 16px;
+      font-weight: 500;
+      letter-spacing: -0.16px;
+      transition: color 0.15s;
+    }
+
+    .nav-links a:hover {
+      color: var(--meta-blue);
+      text-decoration: underline;
+    }
+
+    /* Pill-Shaped Buttons: 100px radius with scale(1.1) hover */
+    .btn-pill {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 10px 22px;
+      border-radius: var(--radius-pill);
+      font-size: 14px;
+      font-weight: 500;
+      letter-spacing: -0.14px;
+      text-decoration: none;
+      cursor: pointer;
+      border: none;
+      transition: background-color 200ms ease, transform 150ms ease, opacity 150ms ease;
+    }
+
+    .btn-pill:hover {
+      transform: scale(1.1); /* Meta scale expansion */
+    }
+
+    .btn-pill:active {
+      transform: scale(0.9);
+      opacity: 0.5;
+    }
+
+    .btn-blue {
+      background-color: var(--meta-blue);
+      color: var(--meta-white);
+    }
+
+    .btn-blue:hover {
+      background-color: var(--meta-blue-hover);
+    }
+
+    .btn-blue:active {
+      background-color: var(--meta-blue-pressed);
+    }
+
+    .btn-outlined {
+      background-color: transparent;
+      color: var(--dolly-text-charcoal);
+      border: 2px solid rgba(10, 19, 23, 0.12);
+    }
+
+    .btn-outlined:hover {
+      background-color: rgba(70, 90, 105, 0.7);
+      color: var(--meta-white);
+    }
+
+    /* Hero Section: Product-Forward Showroom */
+    .hero-section {
+      padding: var(--sp-64) 0;
+      background-color: var(--meta-white);
+    }
+
+    .hero-card {
+      background: var(--dolly-bg-grey);
+      border-radius: var(--feature-corner-radius);
+      padding: var(--sp-64);
+      display: grid;
+      grid-template-columns: 1.1fr 1fr;
+      gap: var(--sp-48);
+      align-items: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--meta-white);
+      color: var(--meta-blue);
+      padding: 4px 12px;
+      border-radius: var(--radius-pill);
+      font-size: 12px;
+      font-weight: 700;
+      margin-bottom: var(--sp-16);
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: var(--sp-16);
+      margin-top: var(--sp-32);
+    }
+
+    /* Product Cards Grid: 20px Radius & Dual Shadow */
+    .catalog-section {
+      padding: var(--sp-64) 0;
+      background-color: var(--meta-white);
+    }
+
+    .catalog-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: var(--sp-24);
+      margin-top: var(--sp-40);
+    }
+
+    .product-card {
+      background: var(--meta-warm-gray);
+      border-radius: var(--card-corner-radius);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      box-shadow: var(--shadow-subtle);
+      transition: transform 300ms ease, box-shadow 300ms ease;
+    }
+
+    .product-card:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-dual);
+    }
+
+    .product-image-box {
+      height: 260px;
+      background: #FFFFFF;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+
+    .product-content {
+      padding: var(--sp-24);
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+    }
+
+    .product-price {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--dolly-text-primary);
+      margin: 8px 0 16px;
+    }
+
+    /* Ray-Ban Meta Section: Warm Lifestyle Linen (#F2F0E6) with Ray-Ban Red (#D6311F) */
+    .rayban-section {
+      background-color: var(--meta-linen);
+      padding: var(--sp-80) 0;
+      border-top: 1px solid var(--divider-gray);
+    }
+
+    .rayban-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--sp-48);
+      align-items: center;
+    }
+
+    .rayban-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--rayban-red);
+      color: #FFF;
+      padding: 4px 12px;
+      border-radius: var(--radius-pill);
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      margin-bottom: var(--sp-16);
+    }
+
+    /* Immersive Dark Section: Near Black (#1C1E21) & Oculus Dark (#000000) */
+    .oculus-section {
+      background-color: var(--oculus-light);
+      color: var(--meta-white);
+      padding: var(--sp-80) 0;
+      position: relative;
+    }
+
+    .oculus-badge {
+      color: var(--oculus-purple);
+      background: rgba(161, 33, 206, 0.15);
+      padding: 4px 12px;
+      border-radius: var(--radius-pill);
+      font-size: 12px;
+      font-weight: 700;
+      margin-bottom: var(--sp-16);
+      display: inline-block;
+    }
+
+    .oculus-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--sp-48);
+      align-items: center;
+    }
+
+    /* Footer: Multi-Column Clean */
+    footer.meta-footer {
+      background-color: var(--meta-white);
+      border-top: 1px solid var(--divider-gray);
+      padding: var(--sp-64) 0 var(--sp-32);
+    }
+
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 1.5fr repeat(3, 1fr);
+      gap: var(--sp-40);
+      margin-bottom: var(--sp-48);
+    }
+
+    .footer-col h5 {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--dolly-text-primary);
+      margin-bottom: var(--sp-16);
+    }
+
+    .footer-links {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .footer-links a {
+      color: var(--dolly-text-secondary);
+      text-decoration: none;
+      font-size: 14px;
+      transition: color 0.15s;
+    }
+
+    .footer-links a:hover {
+      color: var(--meta-blue);
+    }
+
+    .footer-bottom {
+      border-top: 1px solid var(--divider-gray);
+      padding-top: var(--sp-24);
+      display: flex;
+      justify-content: space-between;
+      font-size: 12px;
+      color: var(--secondary-text);
+    }
+
+    /* Token Drawer */
+    .token-audit-toggle {
+      position: fixed;
+      bottom: 24px;
+      left: 24px;
+      z-index: 999;
+      background: var(--dolly-text-charcoal);
+      color: #FFF;
+      padding: 10px 18px;
+      border-radius: var(--radius-pill);
+      font-size: 12px;
+      font-family: var(--font-mono);
+      cursor: pointer;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    }
+
+    .token-audit-toggle:hover {
+      background: var(--meta-blue);
+    }
+
+    .token-drawer {
+      position: fixed;
+      top: 0;
+      left: -460px;
+      width: 420px;
+      height: 100vh;
+      background: var(--meta-white);
+      border-right: 1px solid var(--divider-gray);
+      z-index: 2000;
+      padding: var(--sp-32) var(--sp-24);
+      overflow-y: auto;
+      transition: left 0.25s ease;
+      box-shadow: var(--shadow-dual);
+    }
+
+    .token-drawer.open {
+      left: 0;
+    }
+
+    .token-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 8px 0;
+      border-bottom: 1px solid var(--divider-gray);
+      font-size: 13px;
+    }
+
+    /* Toast */
+    .toast-box {
+      position: fixed;
+      top: 24px;
+      right: 24px;
+      background: var(--dolly-text-charcoal);
+      color: #ffffff;
+      border-left: 4px solid var(--meta-blue);
+      padding: 14px 20px;
+      border-radius: var(--radius-pill);
+      font-size: 14px;
+      z-index: 3000;
+      opacity: 0;
+      transform: translateY(-10px);
+      transition: all 0.2s ease;
+      pointer-events: none;
+    }
+
+    .toast-box.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Responsive */
+    @media (max-width: 960px) {
+      .hero-card { grid-template-columns: 1fr; padding: var(--sp-32); }
+      .catalog-grid { grid-template-columns: repeat(2, 1fr); }
+      .rayban-grid { grid-template-columns: 1fr; }
+      .oculus-grid { grid-template-columns: 1fr; }
+      .footer-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+
+    @media (max-width: 600px) {
+      .catalog-grid { grid-template-columns: 1fr; }
+      .nav-links { display: none; }
+      .footer-grid { grid-template-columns: 1fr; }
+      .hero-actions { flex-direction: column; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navigation Bar: Frosted Glass -->
+  <header class="meta-nav">
+    <div class="container nav-content">
+      <a href="#" class="brand-group" aria-label="Meta Store Home">
+        <svg class="meta-loop-svg" viewBox="0 0 40 24" xmlns="http://www.w3.org/2000/svg">
+          <path d="M19.7 13.5C18.2 9.5 15.3 4 10.6 4 5.3 4 1 8.8 1 14.5 1 20 5.4 24 10.5 24c4.6 0 7.8-4.8 9.2-9 1.4 4.2 4.6 9 9.2 9 5.1 0 9.5-4 9.5-9.5C38.4 8.8 34.1 4 28.8 4c-4.7 0-7.6 5.5-9.1 9.5zm-9.2 7c-3.1 0-5.7-2.6-5.7-6 0-3.5 2.6-6.1 5.7-6.1 3.5 0 6 5.1 7.2 8.5-1.3 2.5-4 3.6-7.2 3.6zm18 0c-3.2 0-5.9-1.1-7.2-3.6 1.2-3.4 3.7-8.5 7.2-8.5 3.1 0 5.7 2.6 5.7 6.1 0 3.4-2.6 6-5.7 6z"/>
+        </svg>
+        <span class="brand-title">Meta Store</span>
+      </a>
+
+      <ul class="nav-links">
+        <li><a href="#quest">Meta Quest</a></li>
+        <li><a href="#rayban">Ray-Ban Meta</a></li>
+        <li><a href="#catalog">Accessories</a></li>
+        <li><a href="#catalog">Support</a></li>
+      </ul>
+
+      <div style="display: flex; gap: 12px;">
+        <button class="btn-pill btn-blue" onclick="triggerToast('Cart: 1 item added (Quest 3S)')">Cart (0)</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero Section: Meta Quest 3S Showroom -->
+  <section class="hero-section" id="quest">
+    <div class="container">
+      <div class="hero-card">
+        <div>
+          <span class="hero-tag">NEW LAUNCH · MIXED REALITY</span>
+          <h1 class="display-1">Meta Quest 3S</h1>
+          <p class="heading-2-light" style="margin-top: 12px;">
+            Unreal experiences at an unbelievable price.
+          </p>
+          <p class="body-regular" style="margin-top: 16px; color: var(--dolly-text-secondary); max-width: 500px;">
+            Blend digital content into your physical living room. High-resolution color passthrough, spatial 3D audio, and thousands of immersive games.
+          </p>
+          <div class="product-price" style="font-size: 24px; margin-top: 20px;">Starting at $299.99</div>
+
+          <div class="hero-actions">
+            <!-- 100px Pill Button in Meta Blue (#0064E0) -->
+            <button class="btn-pill btn-blue" onclick="triggerToast('Configuring Meta Quest 3S (128GB)')">Buy now</button>
+            <button class="btn-pill btn-outlined" onclick="triggerToast('Playing Quest 3S interactive specs tour')">Explore specs</button>
+          </div>
+        </div>
+
+        <!-- Quest 3S Product Graphic -->
+        <div style="display: flex; align-items: center; justify-content: center;">
+          <svg viewBox="0 0 360 260" width="100%" height="240" fill="none">
+            <!-- White VR Visor Body -->
+            <rect x="50" y="70" width="260" height="130" rx="36" fill="#FFFFFF" stroke="#CED0D4" stroke-width="2"/>
+            <rect x="65" y="85" width="230" height="100" rx="24" fill="#F7F8FA"/>
+            <!-- Front Tracking Sensor Lenses -->
+            <circle cx="105" cy="115" r="14" fill="#1C1E21"/>
+            <circle cx="105" cy="115" r="6" fill="#0064E0"/>
+            <circle cx="105" cy="155" r="14" fill="#1C1E21"/>
+            <circle cx="105" cy="155" r="6" fill="#0064E0"/>
+            <circle cx="255" cy="115" r="14" fill="#1C1E21"/>
+            <circle cx="255" cy="115" r="6" fill="#0064E0"/>
+            <circle cx="255" cy="155" r="14" fill="#1C1E21"/>
+            <circle cx="255" cy="155" r="6" fill="#0064E0"/>
+            <!-- Elastic Headstrap -->
+            <path d="M 50 135 C 10 135 10 100 20 80" stroke="#CED0D4" stroke-width="8" stroke-linecap="round"/>
+            <path d="M 310 135 C 350 135 350 100 340 80" stroke="#CED0D4" stroke-width="8" stroke-linecap="round"/>
+          </svg>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Ray-Ban Meta Section: Lifestyle Linen (#F2F0E6) with Ray-Ban Red (#D6311F) -->
+  <section class="rayban-section" id="rayban">
+    <div class="container rayban-grid">
+      <div>
+        <span class="rayban-badge">RAY-BAN | META AI</span>
+        <h2 class="display-2">Capture, call, and listen with built-in AI.</h2>
+        <p class="body-regular" style="margin-top: 16px; max-width: 500px;">
+          Iconic Wayfarer style updated with a 12 MP camera, open-ear spatial audio, and Meta AI voice control so you can keep your eyes on the world.
+        </p>
+        <div class="product-price" style="font-size: 22px; margin-top: 16px;">From $299.00</div>
+
+        <div style="display: flex; gap: 16px; margin-top: 24px;">
+          <button class="btn-pill btn-blue" onclick="triggerToast('Configuring Ray-Ban Meta Wayfarer Shiny Black')">Customize frames</button>
+          <button class="btn-pill btn-outlined" onclick="triggerToast('Testing Meta AI voice command preview')">Ask Meta AI</button>
+        </div>
+      </div>
+
+      <!-- Smart Glasses SVG Art -->
+      <div style="text-align: center;">
+        <svg viewBox="0 0 380 200" width="100%" height="180" fill="none">
+          <!-- Frame bridge -->
+          <rect x="70" y="70" width="105" height="75" rx="14" fill="#1C1E21"/>
+          <rect x="78" y="78" width="89" height="59" rx="10" fill="#2E3842" opacity="0.8"/>
+          <rect x="205" y="70" width="105" height="75" rx="14" fill="#1C1E21"/>
+          <rect x="213" y="78" width="89" height="59" rx="10" fill="#2E3842" opacity="0.8"/>
+          <!-- Nose Bridge -->
+          <rect x="172" y="76" width="36" height="8" rx="4" fill="#1C1E21"/>
+          <!-- Right Camera Sensor & Notification LED -->
+          <circle cx="84" cy="84" r="4" fill="#FFF"/>
+          <circle cx="296" cy="84" r="4" fill="#D6311F"/>
+          <!-- Temples -->
+          <line x1="70" y1="80" x2="30" y2="60" stroke="#1C1E21" stroke-width="8" stroke-linecap="round"/>
+          <line x1="310" y1="80" x2="350" y2="60" stroke="#1C1E21" stroke-width="8" stroke-linecap="round"/>
+        </svg>
+      </div>
+    </div>
+  </section>
+
+  <!-- Product Catalog Grid: 20px Radius Cards with Dual Shadows -->
+  <section class="catalog-section" id="catalog">
+    <div class="container">
+      <div style="display: flex; justify-content: space-between; align-items: flex-end;">
+        <div>
+          <span class="caption-regular" style="font-weight: 700; color: var(--meta-blue); text-transform: uppercase;">RECOMMENDED HARDWARE</span>
+          <h2 class="heading-1" style="margin-top: 6px;">Explore the Meta Ecosystem</h2>
+        </div>
+        <button class="btn-pill btn-outlined" onclick="triggerToast('Viewing all store products')">View all</button>
+      </div>
+
+      <div class="catalog-grid">
+        <!-- Card 1 -->
+        <div class="product-card">
+          <div class="product-image-box">
+            <svg width="180" height="120" viewBox="0 0 180 120" fill="none">
+              <rect x="20" y="30" width="140" height="65" rx="18" fill="#F7F8FA" stroke="#CED0D4" stroke-width="2"/>
+              <circle cx="50" cy="62" r="8" fill="#1C1E21"/>
+              <circle cx="130" cy="62" r="8" fill="#1C1E21"/>
+            </svg>
+          </div>
+          <div class="product-content">
+            <h3 class="heading-3-bold">Meta Quest 3</h3>
+            <p class="caption-regular" style="margin-top: 4px;">4K+ Infinite Display with breakthrough mixed reality optics.</p>
+            <div class="product-price">$499.99</div>
+            <button class="btn-pill btn-blue" style="margin-top: auto;" onclick="triggerToast('Added Meta Quest 3 to cart')">Add to cart</button>
+          </div>
+        </div>
+
+        <!-- Card 2 -->
+        <div class="product-card">
+          <div class="product-image-box">
+            <svg width="180" height="120" viewBox="0 0 180 120" fill="none">
+              <rect x="30" y="45" width="120" height="30" rx="15" fill="#1C1E21"/>
+              <circle cx="90" cy="60" r="10" fill="#0064E0"/>
+            </svg>
+          </div>
+          <div class="product-content">
+            <h3 class="heading-3-bold">Quest Elite Strap with Battery</h3>
+            <p class="caption-regular" style="margin-top: 4px;">Ergonomic dial adjustment with up to 2 hours extra playtime.</p>
+            <div class="product-price">$129.99</div>
+            <button class="btn-pill btn-blue" style="margin-top: auto;" onclick="triggerToast('Added Elite Strap to cart')">Add to cart</button>
+          </div>
+        </div>
+
+        <!-- Card 3 -->
+        <div class="product-card">
+          <div class="product-image-box">
+            <svg width="180" height="120" viewBox="0 0 180 120" fill="none">
+              <rect x="40" y="35" width="100" height="50" rx="10" fill="#E8F3FF" stroke="#0064E0"/>
+              <text x="90" y="65" font-family="'Montserrat', sans-serif" font-size="12" font-weight="700" fill="#0064E0" text-anchor="middle">LINK CABLE</text>
+            </svg>
+          </div>
+          <div class="product-content">
+            <h3 class="heading-3-bold">Meta Quest Link Cable</h3>
+            <p class="caption-regular" style="margin-top: 4px;">High-speed 5-meter fiber optic cable for PC VR gaming.</p>
+            <div class="product-price">$79.99</div>
+            <button class="btn-pill btn-blue" style="margin-top: auto;" onclick="triggerToast('Added Link Cable to cart')">Add to cart</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Oculus Dark Section (#181A1B / #000000) -->
+  <section class="oculus-section">
+    <div class="container oculus-grid">
+      <div>
+        <span class="oculus-badge">OCULUS VR ECOSYSTEM</span>
+        <h2 class="display-2" style="color: #FFF;">Step into infinite virtual worlds.</h2>
+        <p class="body-regular" style="color: #9C9FA5; margin-top: 16px;">
+          Experience blockbuster VR titles, social hangouts, and fitness apps with total freedom of motion.
+        </p>
+        <div style="margin-top: 32px;">
+          <button class="btn-pill" style="background: var(--oculus-purple); color: #FFF;" onclick="triggerToast('Opening Meta Quest Horizon Store')">
+            Explore VR Titles &rarr;
+          </button>
+        </div>
+      </div>
+
+      <div style="background: var(--oculus-dark); border-radius: var(--card-corner-radius); padding: var(--sp-48); text-align: center; border: 1px solid rgba(255,255,255,0.1);">
+        <div style="font-size: 42px; font-weight: 700; color: var(--meta-blue-light);">1,000+</div>
+        <p class="caption-regular" style="color: #9C9FA5; margin-top: 8px;">Titles available in the Meta Horizon Store</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="meta-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div>
+          <div class="brand-group" style="margin-bottom: 16px;">
+            <svg class="meta-loop-svg" viewBox="0 0 40 24">
+              <path d="M19.7 13.5C18.2 9.5 15.3 4 10.6 4 5.3 4 1 8.8 1 14.5 1 20 5.4 24 10.5 24c4.6 0 7.8-4.8 9.2-9 1.4 4.2 4.6 9 9.2 9 5.1 0 9.5-4 9.5-9.5C38.4 8.8 34.1 4 28.8 4c-4.7 0-7.6 5.5-9.1 9.5zm-9.2 7c-3.1 0-5.7-2.6-5.7-6 0-3.5 2.6-6.1 5.7-6.1 3.5 0 6 5.1 7.2 8.5-1.3 2.5-4 3.6-7.2 3.6zm18 0c-3.2 0-5.9-1.1-7.2-3.6 1.2-3.4 3.7-8.5 7.2-8.5 3.1 0 5.7 2.6 5.7 6.1 0 3.4-2.6 6-5.7 6z"/>
+            </svg>
+            <span class="brand-title">Meta Store</span>
+          </div>
+          <p class="caption-regular" style="max-width: 280px;">
+            Designed around the Dolly Store system with Optimistic VF typography and Meta Blue action tokens.
+          </p>
+        </div>
+
+        <div class="footer-col">
+          <h5>Shop Hardware</h5>
+          <ul class="footer-links">
+            <li><a href="#quest">Meta Quest 3S</a></li>
+            <li><a href="#quest">Meta Quest 3</a></li>
+            <li><a href="#rayban">Ray-Ban Meta</a></li>
+            <li><a href="#catalog">VR Accessories</a></li>
+            <li><a href="#catalog">Refurbished Devices</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h5>Support &amp; Orders</h5>
+          <ul class="footer-links">
+            <li><a href="#">Order Status</a></li>
+            <li><a href="#">Returns &amp; Warranties</a></li>
+            <li><a href="#">Find a Retail Store</a></li>
+            <li><a href="#">Help Center</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h5>Legal &amp; Privacy</h5>
+          <ul class="footer-links">
+            <li><a href="#">Privacy Center</a></li>
+            <li><a href="#">Terms of Sale</a></li>
+            <li><a href="#">Safety &amp; Compliance</a></li>
+            <li><a href="#">Cookie Settings</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <div>&copy; 2026 Meta Platforms, Inc. All rights reserved.</div>
+        <div style="display: flex; gap: 20px;">
+          <a href="#" style="color: var(--secondary-text); text-decoration: none;">Privacy</a>
+          <a href="#" style="color: var(--secondary-text); text-decoration: none;">Terms</a>
+          <a href="#" style="color: var(--secondary-text); text-decoration: none;">Cookies</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Token Drawer -->
+  <button class="token-audit-toggle" id="tokenDrawerBtn" aria-label="Open Token Auditor">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <circle cx="12" cy="12" r="10"></circle>
+      <line x1="12" y1="16" x2="12" y2="12"></line>
+      <line x1="12" y1="8" x2="12.01" y2="8"></line>
+    </svg>
+    META TOKENS
+  </button>
+
+  <div class="token-drawer" id="tokenDrawer">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; padding-bottom: 12px; border-bottom: 1px solid var(--divider-gray);">
+      <h3 class="heading-3-bold">META STORE TOKENS</h3>
+      <button id="closeDrawerBtn" style="background: none; border: none; font-size: 20px; cursor: pointer;">&times;</button>
+    </div>
+
+    <div style="margin-bottom: 24px;">
+      <span class="caption-regular" style="font-weight: 700; color: var(--meta-blue);">PRIMARY COLOR TOKENS</span>
+      <div class="token-row"><span>Meta Blue (CTA)</span><code style="color: #0064E0; font-weight: 700;">#0064E0</code></div>
+      <div class="token-row"><span>Meta Blue Hover</span><code>#0143B5</code></div>
+      <div class="token-row"><span>Meta Blue Pressed</span><code>#004BB9</code></div>
+      <div class="token-row"><span>Ray-Ban Red</span><code style="color: #D6311F; font-weight: 700;">#D6311F</code></div>
+      <div class="token-row"><span>Oculus Purple</span><code style="color: #A121CE; font-weight: 700;">#A121CE</code></div>
+    </div>
+
+    <div style="margin-bottom: 24px;">
+      <span class="caption-regular" style="font-weight: 700; color: var(--meta-blue);">GEOMETRY &amp; RADIUS</span>
+      <div class="token-row"><span>Pill Buttons</span><code>100px (Fully Rounded)</code></div>
+      <div class="token-row"><span>Card Radius</span><code>20px (--card-corner-radius)</code></div>
+      <div class="token-row"><span>Feature Card</span><code>24px radius</code></div>
+      <div class="token-row"><span>Inputs</span><code>8px radius</code></div>
+    </div>
+
+    <div>
+      <span class="caption-regular" style="font-weight: 700; color: var(--meta-blue);">ELEVATION DUAL SHADOW</span>
+      <p style="font-size: 13px; color: #555; margin-top: 6px; line-height: 1.4;">
+        <code>0 12px 28px 0 rgba(0,0,0,0.15), 0 2px 4px 0 rgba(0,0,0,0.08)</code>
+      </p>
+    </div>
+  </div>
+
+  <!-- Toast -->
+  <div class="toast-box" id="toastBox">Action acknowledged.</div>
+
+  <script>
+    // Toast
+    const toast = document.getElementById('toastBox');
+    function triggerToast(text) {
+      toast.textContent = text;
+      toast.classList.add('show');
+      setTimeout(() => {
+        toast.classList.remove('show');
+      }, 2500);
+    }
+
+    // Drawer
+    const tokenDrawer = document.getElementById('tokenDrawer');
+    document.getElementById('tokenDrawerBtn').addEventListener('click', () => {
+      tokenDrawer.classList.toggle('open');
+    });
+    document.getElementById('closeDrawerBtn').addEventListener('click', () => {
+      tokenDrawer.classList.remove('open');
+    });
+  </script>
+</body>
+</html>

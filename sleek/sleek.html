@@ -1,0 +1,1107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sleek — Modern Minimalist Design System</title>
+  <meta name="description" content="Modern minimalist design system with clean lines, intentional color palette, subtle interactions, 8pt baseline grid, and strict token adherence.">
+
+  <!-- Typography as specified in sleek/DESIGN.md: primary=Inter, display=Inter, mono=JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+  <style>
+    /* ==========================================================================
+       SLEEK DESIGN SYSTEM TOKENS — Exactly matching sleek/DESIGN.md
+       ========================================================================== */
+    :root {
+      /* Colors */
+      --primary: #3B82F6;
+      --secondary: #8B5CF6;
+      --success: #16A34A;
+      --warning: #D97706;
+      --danger: #DC2626;
+      --surface: #FFFFFF;
+      --text: #111827;
+      --neutral: #FFFFFF;
+
+      /* Minimalist Tonal & Border Foundations */
+      --bg-base: #FAFAFA;
+      --border-subtle: #F3F4F6;
+      --border-default: #E5E7EB;
+      --border-strong: #D1D5DB;
+      --text-muted: #4B5563;
+      --text-subtle: #9CA3AF;
+      --primary-hover: #2563EB;
+      --primary-subtle: rgba(59, 130, 246, 0.08);
+
+      /* Typography Families */
+      --font-display: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      --font-primary: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+
+      /* Desktop-First Expressive Typography Scale */
+      --text-12: 12px;
+      --text-14: 14px;
+      --text-16: 16px;
+      --text-18: 18px;
+      --text-24: 24px;
+      --text-32: 32px;
+      --text-40: 40px;
+
+      /* 8pt Baseline Grid Spacing Scale */
+      --space-4: 4px;
+      --space-8: 8px;
+      --space-12: 12px;
+      --space-16: 16px;
+      --space-24: 24px;
+      --space-32: 32px;
+      --space-48: 48px;
+      --space-64: 64px;
+
+      /* Radii */
+      --radius-sm: 6px;
+      --radius-md: 10px;
+      --radius-lg: 16px;
+      --radius-full: 9999px;
+
+      /* Transitions: 150-250ms with stable easing */
+      --transition-fast: 150ms cubic-bezier(0.16, 1, 0.3, 1);
+      --transition-normal: 240ms cubic-bezier(0.16, 1, 0.3, 1);
+
+      /* Minimalist Subtle Elevation */
+      --shadow-subtle: 0 1px 2px rgba(0, 0, 0, 0.04);
+      --shadow-card: 0 4px 16px -2px rgba(0, 0, 0, 0.05);
+      --shadow-hover: 0 10px 25px -4px rgba(0, 0, 0, 0.08);
+    }
+
+    /* Reset & Base Setup */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--bg-base);
+      color: var(--text);
+      font-family: var(--font-primary);
+      font-size: var(--text-16);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      overflow-x: hidden;
+    }
+
+    /* Layout Containers */
+    .container {
+      width: 100%;
+      max-width: 1140px;
+      margin-left: auto;
+      margin-right: auto;
+      padding-left: var(--space-24);
+      padding-right: var(--space-24);
+    }
+
+    /* Typography Hierarchy */
+    h1, h2, h3, h4 {
+      font-family: var(--font-display);
+      color: var(--text);
+      font-weight: 700;
+      letter-spacing: -0.025em;
+    }
+
+    h1 {
+      font-size: var(--text-40);
+      line-height: 1.15;
+    }
+
+    h2 {
+      font-size: var(--text-32);
+      line-height: 1.25;
+      margin-bottom: var(--space-16);
+    }
+
+    h3 {
+      font-size: var(--text-24);
+      line-height: 1.3;
+      margin-bottom: var(--space-12);
+    }
+
+    h4 {
+      font-size: var(--text-18);
+      line-height: 1.4;
+      margin-bottom: var(--space-8);
+    }
+
+    p {
+      color: var(--text);
+      font-size: var(--text-16);
+      line-height: 1.65;
+    }
+
+    .code-label {
+      font-family: var(--font-mono);
+      font-size: var(--text-12);
+      color: var(--text-muted);
+    }
+
+    /* Navigation Bar */
+    .site-nav {
+      background-color: rgba(255, 255, 255, 0.9);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border-default);
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      padding-top: var(--space-16);
+      padding-bottom: var(--space-16);
+    }
+
+    .nav-inner {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .brand-link {
+      display: flex;
+      align-items: center;
+      gap: var(--space-8);
+      text-decoration: none;
+      color: var(--text);
+    }
+
+    .brand-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background-color: var(--primary);
+    }
+
+    .brand-text {
+      font-size: var(--text-18);
+      font-weight: 800;
+      letter-spacing: -0.03em;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: var(--space-24);
+      list-style: none;
+      align-items: center;
+    }
+
+    .nav-links a {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: var(--text-14);
+      font-weight: 500;
+      transition: color var(--transition-fast);
+    }
+
+    .nav-links a:hover {
+      color: var(--primary);
+    }
+
+    /* Buttons: Favor Primary (#3B82F6) for CTA emphasis */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--space-8);
+      font-family: var(--font-primary);
+      font-size: var(--text-14);
+      font-weight: 600;
+      padding: 10px var(--space-24);
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      text-decoration: none;
+      transition: background-color var(--transition-fast), color var(--transition-fast), transform var(--transition-fast), box-shadow var(--transition-fast), border-color var(--transition-fast);
+      border: 1px solid transparent;
+      user-select: none;
+      white-space: nowrap;
+    }
+
+    .btn:active {
+      transform: translateY(1px);
+    }
+
+    .btn:focus-visible {
+      outline: 2px solid var(--primary);
+      outline-offset: 2px;
+    }
+
+    /* Primary Button: #3B82F6 */
+    .btn-primary {
+      background-color: var(--primary);
+      color: #FFFFFF;
+      border-color: var(--primary);
+      box-shadow: 0 1px 2px rgba(59, 130, 246, 0.2);
+    }
+
+    .btn-primary:hover {
+      background-color: var(--primary-hover);
+      border-color: var(--primary-hover);
+    }
+
+    /* Secondary Button: Neutral surface */
+    .btn-secondary {
+      background-color: var(--surface);
+      color: var(--text);
+      border-color: var(--border-default);
+      box-shadow: var(--shadow-subtle);
+    }
+
+    .btn-secondary:hover {
+      background-color: var(--bg-base);
+      border-color: var(--border-strong);
+    }
+
+    /* Secondary Violet Button: #8B5CF6 */
+    .btn-accent {
+      background-color: var(--secondary);
+      color: #FFFFFF;
+      border-color: var(--secondary);
+    }
+    .btn-accent:hover {
+      background-color: #7C3AED;
+    }
+
+    /* Success Button: #16A34A */
+    .btn-success {
+      background-color: var(--success);
+      color: #FFFFFF;
+      border-color: var(--success);
+    }
+    .btn-success:hover { background-color: #15803D; }
+
+    /* Warning Button: #D97706 */
+    .btn-warning {
+      background-color: var(--warning);
+      color: #FFFFFF;
+      border-color: var(--warning);
+    }
+    .btn-warning:hover { background-color: #B45309; }
+
+    /* Danger Button: #DC2626 */
+    .btn-danger {
+      background-color: var(--danger);
+      color: #FFFFFF;
+      border-color: var(--danger);
+    }
+    .btn-danger:hover { background-color: #B91C1C; }
+
+    .btn:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+      pointer-events: none;
+    }
+
+    /* Hero Section */
+    .hero-section {
+      padding-top: var(--space-64);
+      padding-bottom: var(--space-64);
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: var(--space-48);
+      align-items: center;
+    }
+
+    .hero-eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-8);
+      font-family: var(--font-mono);
+      font-size: var(--text-12);
+      color: var(--primary);
+      background: var(--primary-subtle);
+      padding: 4px var(--space-12);
+      border-radius: var(--radius-full);
+      margin-bottom: var(--space-16);
+      font-weight: 500;
+    }
+
+    .hero-title {
+      font-size: var(--text-40);
+      font-weight: 800;
+      line-height: 1.15;
+      margin-bottom: var(--space-16);
+      color: var(--text);
+    }
+
+    .hero-lead {
+      font-size: var(--text-18);
+      color: var(--text-muted);
+      line-height: 1.6;
+      margin-bottom: var(--space-32);
+      max-width: 520px;
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-12);
+      margin-bottom: var(--space-32);
+    }
+
+    /* Minimalist Showcase Card */
+    .showcase-card {
+      background: var(--surface);
+      border: 1px solid var(--border-default);
+      border-radius: var(--radius-lg);
+      padding: var(--space-32);
+      box-shadow: var(--shadow-card);
+      position: relative;
+    }
+
+    .showcase-card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: var(--space-24);
+      padding-bottom: var(--space-16);
+      border-bottom: 1px solid var(--border-subtle);
+    }
+
+    /* Sections */
+    .section {
+      padding-top: var(--space-64);
+      padding-bottom: var(--space-64);
+      border-top: 1px solid var(--border-default);
+    }
+
+    .section-header {
+      max-width: 600px;
+      margin-bottom: var(--space-48);
+    }
+
+    .section-header p {
+      font-size: var(--text-18);
+      color: var(--text-muted);
+    }
+
+    /* Color Tokens Swatches Grid */
+    .tokens-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: var(--space-16);
+      margin-bottom: var(--space-32);
+    }
+
+    .token-card {
+      background: var(--surface);
+      border: 1px solid var(--border-default);
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      box-shadow: var(--shadow-subtle);
+      transition: transform var(--transition-fast), border-color var(--transition-fast), box-shadow var(--transition-fast);
+      cursor: pointer;
+    }
+
+    .token-card:hover {
+      transform: translateY(-2px);
+      border-color: var(--primary);
+      box-shadow: var(--shadow-card);
+    }
+
+    .token-swatch {
+      height: 90px;
+      width: 100%;
+      padding: var(--space-8) var(--space-12);
+      display: flex;
+      align-items: flex-end;
+      border-bottom: 1px solid var(--border-subtle);
+    }
+
+    .token-info {
+      padding: var(--space-12);
+      font-family: var(--font-mono);
+    }
+
+    .token-name {
+      font-size: var(--text-14);
+      font-weight: 700;
+      color: var(--text);
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: var(--space-4);
+    }
+
+    .token-hex {
+      font-size: var(--text-12);
+      color: var(--text-subtle);
+    }
+
+    .token-role {
+      font-family: var(--font-primary);
+      font-size: var(--text-12);
+      color: var(--text-muted);
+      margin-top: var(--space-4);
+    }
+
+    /* Minimalist Feature Cards Grid */
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: var(--space-24);
+      margin-bottom: var(--space-48);
+    }
+
+    .feature-card {
+      background: var(--surface);
+      border: 1px solid var(--border-default);
+      border-radius: var(--radius-md);
+      padding: var(--space-32);
+      box-shadow: var(--shadow-subtle);
+      transition: transform var(--transition-fast), box-shadow var(--transition-fast), border-color var(--transition-fast);
+    }
+
+    .feature-card:hover {
+      transform: translateY(-3px);
+      box-shadow: var(--shadow-card);
+      border-color: var(--primary);
+    }
+
+    .feature-indicator {
+      width: 32px;
+      height: 32px;
+      border-radius: var(--radius-sm);
+      background: var(--primary-subtle);
+      color: var(--primary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      margin-bottom: var(--space-16);
+    }
+
+    /* Interactive Component Lab */
+    .lab-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--space-32);
+    }
+
+    .lab-card {
+      background: var(--surface);
+      border: 1px solid var(--border-default);
+      border-radius: var(--radius-lg);
+      padding: var(--space-32);
+      box-shadow: var(--shadow-subtle);
+    }
+
+    /* Clean Inputs */
+    .input-group {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-8);
+      margin-bottom: var(--space-16);
+    }
+
+    .input-label {
+      font-size: var(--text-14);
+      font-weight: 600;
+      color: var(--text);
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .sleek-input {
+      width: 100%;
+      font-family: var(--font-primary);
+      font-size: var(--text-14);
+      padding: 10px 14px;
+      background: var(--surface);
+      border: 1px solid var(--border-default);
+      border-radius: var(--radius-sm);
+      color: var(--text);
+      transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+    }
+
+    .sleek-input:focus {
+      outline: 2px solid var(--primary);
+      outline-offset: 1px;
+      border-color: var(--primary);
+    }
+
+    .input-error {
+      border-color: var(--danger) !important;
+    }
+
+    .input-error:focus {
+      outline-color: var(--danger) !important;
+    }
+
+    /* Typography Scale Table */
+    .type-scale-card {
+      background: var(--surface);
+      border: 1px solid var(--border-default);
+      border-radius: var(--radius-lg);
+      padding: var(--space-32);
+      margin-bottom: var(--space-48);
+    }
+
+    .type-row {
+      display: grid;
+      grid-template-columns: 140px 1fr;
+      align-items: baseline;
+      padding: var(--space-12) 0;
+      border-bottom: 1px solid var(--border-subtle);
+    }
+
+    .type-row:last-child {
+      border-bottom: none;
+    }
+
+    /* Footer */
+    .site-footer {
+      border-top: 1px solid var(--border-default);
+      background: var(--surface);
+      padding-top: var(--space-48);
+      padding-bottom: var(--space-48);
+    }
+
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1fr;
+      gap: var(--space-32);
+      margin-bottom: var(--space-32);
+    }
+
+    .footer-bottom {
+      border-top: 1px solid var(--border-subtle);
+      padding-top: var(--space-24);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: var(--text-12);
+      color: var(--text-subtle);
+      font-family: var(--font-mono);
+    }
+
+    /* Toast Notice */
+    .sleek-toast {
+      position: fixed;
+      bottom: var(--space-24);
+      right: var(--space-24);
+      background: var(--text);
+      color: #FFFFFF;
+      padding: 10px 18px;
+      border-radius: var(--radius-sm);
+      font-size: var(--text-14);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transform: translateY(100px);
+      opacity: 0;
+      transition: transform var(--transition-normal), opacity var(--transition-normal);
+      z-index: 1000;
+    }
+
+    .sleek-toast.show {
+      transform: translateY(0);
+      opacity: 1;
+    }
+
+    /* Responsive */
+    @media (max-width: 900px) {
+      .hero-grid, .features-grid, .lab-grid, .footer-grid {
+        grid-template-columns: 1fr;
+        gap: var(--space-32);
+      }
+      .nav-links {
+        display: none;
+      }
+      .type-row {
+        grid-template-columns: 1fr;
+        gap: var(--space-4);
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navigation Bar -->
+  <header class="site-nav">
+    <div class="container">
+      <div class="nav-inner">
+        <a href="#" class="brand-link">
+          <span class="brand-dot"></span>
+          <span class="brand-text">Sleek</span>
+        </a>
+
+        <nav>
+          <ul class="nav-links">
+            <li><a href="#tokens">Colors</a></li>
+            <li><a href="#typography">Typography</a></li>
+            <li><a href="#principles">Grid &amp; Spacing</a></li>
+            <li><a href="#components">Components</a></li>
+          </ul>
+        </nav>
+
+        <div style="display: flex; gap: var(--space-8);">
+          <button class="btn btn-secondary" onclick="showToast('Architecture overview loaded')">
+            Documentation
+          </button>
+          <button class="btn btn-primary" onclick="showToast('Primary Action: #3B82F6 Activated')">
+            Get Started
+          </button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="hero-section">
+    <div class="container">
+      <div class="hero-grid">
+        <div>
+          <div class="hero-eyebrow">Modern &bull; Minimal &bull; Clean</div>
+          <h1 class="hero-title">Modern minimalist design with clean lines and intentional color.</h1>
+          <p class="hero-lead">
+            Adhering strictly to the Sleek design system foundations. Clean surfaces (#FFFFFF), crisp 8pt baseline rhythm, and confident blue CTA emphasis (#3B82F6).
+          </p>
+
+          <div class="hero-actions">
+            <button class="btn btn-primary" onclick="showToast('Primary CTA triggered: #3B82F6')">
+              Start Project
+            </button>
+            <button class="btn btn-secondary" onclick="document.getElementById('components').scrollIntoView({behavior: 'smooth'})">
+              Component Kit
+            </button>
+            <button class="btn btn-accent" onclick="showToast('Secondary Violet Token: #8B5CF6')">
+              Secondary Violet
+            </button>
+          </div>
+
+          <div style="display: flex; gap: var(--space-24); font-family: var(--font-mono); font-size: var(--text-12); color: var(--text-subtle);">
+            <span>GRID: 8PT BASELINE</span>
+            <span>TYPE: INTER EXPRESSIVE</span>
+            <span>MOTION: 150–250MS</span>
+          </div>
+        </div>
+
+        <!-- Showcase Card -->
+        <div class="showcase-card">
+          <div class="showcase-card-header">
+            <div>
+              <div style="font-size: var(--text-14); font-weight: 700;">Deployment Metrics</div>
+              <div class="code-label">NODE: US-EAST-CLUSTER // ACTIVE</div>
+            </div>
+            <span style="font-family: var(--font-mono); font-size: 11px; background: rgba(22, 163, 74, 0.1); color: #16A34A; padding: 2px 8px; border-radius: 9999px; font-weight: 600;">
+              Operational
+            </span>
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-16); margin-bottom: var(--space-24);">
+            <div style="background: var(--bg-base); border: 1px solid var(--border-default); border-radius: var(--radius-sm); padding: var(--space-16);">
+              <div class="code-label">LATENCY P99</div>
+              <div style="font-size: var(--text-24); font-weight: 800; color: var(--text); margin-top: 4px;">12.4 ms</div>
+            </div>
+            <div style="background: var(--bg-base); border: 1px solid var(--border-default); border-radius: var(--radius-sm); padding: var(--space-16);">
+              <div class="code-label">THROUGHPUT</div>
+              <div style="font-size: var(--text-24); font-weight: 800; color: var(--primary); margin-top: 4px;">99.98%</div>
+            </div>
+          </div>
+
+          <p style="font-size: var(--text-14); color: var(--text-muted); line-height: 1.5; margin-bottom: var(--space-16);">
+            Consistent internal padding and obvious visual hierarchy: headline &rarr; support text &rarr; primary action. Whitespace separates concerns naturally.
+          </p>
+
+          <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--border-subtle); padding-top: var(--space-16);">
+            <span class="code-label">VERIFIED SPEC 2026</span>
+            <button class="btn btn-secondary" style="height: 32px; padding: 0 12px; font-size: 13px;" onclick="showToast('Cluster synced')">
+              Synchronize
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Color Tokens Section -->
+  <section class="section" id="tokens">
+    <div class="container">
+      <div class="section-header">
+        <h2>1. Exact Color Foundations</h2>
+        <p>Intentional color stance from style foundations. Primary (#3B82F6) favored for CTA actions, with clean white surfaces (#FFFFFF).</p>
+      </div>
+
+      <div class="tokens-grid">
+        <!-- Primary -->
+        <div class="token-card" onclick="copyToken('#3B82F6', 'Primary')">
+          <div class="token-swatch" style="background-color: #3B82F6; color: #FFFFFF;">
+            <span class="code-label" style="color: #FFFFFF;">#3B82F6</span>
+          </div>
+          <div class="token-info">
+            <div class="token-name">Primary <span>CTA</span></div>
+            <div class="token-hex">--primary: #3B82F6</div>
+            <div class="token-role">Signature blue favored for CTA emphasis and focus rings.</div>
+          </div>
+        </div>
+
+        <!-- Secondary -->
+        <div class="token-card" onclick="copyToken('#8B5CF6', 'Secondary')">
+          <div class="token-swatch" style="background-color: #8B5CF6; color: #FFFFFF;">
+            <span class="code-label" style="color: #FFFFFF;">#8B5CF6</span>
+          </div>
+          <div class="token-info">
+            <div class="token-name">Secondary <span>Accent</span></div>
+            <div class="token-hex">--secondary: #8B5CF6</div>
+            <div class="token-role">Vibrant violet for secondary interactive highlights.</div>
+          </div>
+        </div>
+
+        <!-- Success -->
+        <div class="token-card" onclick="copyToken('#16A34A', 'Success')">
+          <div class="token-swatch" style="background-color: #16A34A; color: #FFFFFF;">
+            <span class="code-label" style="color: #FFFFFF;">#16A34A</span>
+          </div>
+          <div class="token-info">
+            <div class="token-name">Success <span>State</span></div>
+            <div class="token-hex">--success: #16A34A</div>
+            <div class="token-role">Green for successful operations and status confirmation.</div>
+          </div>
+        </div>
+
+        <!-- Warning -->
+        <div class="token-card" onclick="copyToken('#D97706', 'Warning')">
+          <div class="token-swatch" style="background-color: #D97706; color: #FFFFFF;">
+            <span class="code-label" style="color: #FFFFFF;">#D97706</span>
+          </div>
+          <div class="token-info">
+            <div class="token-name">Warning <span>State</span></div>
+            <div class="token-hex">--warning: #D97706</div>
+            <div class="token-role">Amber for cautions, limits, and review notices.</div>
+          </div>
+        </div>
+
+        <!-- Danger -->
+        <div class="token-card" onclick="copyToken('#DC2626', 'Danger')">
+          <div class="token-swatch" style="background-color: #DC2626; color: #FFFFFF;">
+            <span class="code-label" style="color: #FFFFFF;">#DC2626</span>
+          </div>
+          <div class="token-info">
+            <div class="token-name">Danger <span>State</span></div>
+            <div class="token-hex">--danger: #DC2626</div>
+            <div class="token-role">Red for critical errors and destructive actions.</div>
+          </div>
+        </div>
+
+        <!-- Surface -->
+        <div class="token-card" onclick="copyToken('#FFFFFF', 'Surface')">
+          <div class="token-swatch" style="background-color: #FFFFFF; color: #111827; border: 1px solid var(--border-default);">
+            <span class="code-label">#FFFFFF</span>
+          </div>
+          <div class="token-info">
+            <div class="token-name">Surface <span>Canvas</span></div>
+            <div class="token-hex">--surface: #FFFFFF</div>
+            <div class="token-role">Clean white for large backgrounds, panels, and cards.</div>
+          </div>
+        </div>
+
+        <!-- Text -->
+        <div class="token-card" onclick="copyToken('#111827', 'Text')">
+          <div class="token-swatch" style="background-color: #111827; color: #FFFFFF;">
+            <span class="code-label" style="color: #FFFFFF;">#111827</span>
+          </div>
+          <div class="token-info">
+            <div class="token-name">Text <span>Body</span></div>
+            <div class="token-hex">--text: #111827</div>
+            <div class="token-role">Deep charcoal black engineered for maximum legibility.</div>
+          </div>
+        </div>
+
+        <!-- Neutral -->
+        <div class="token-card" onclick="copyToken('#FFFFFF', 'Neutral')">
+          <div class="token-swatch" style="background-color: #FFFFFF; color: #111827; border: 1px solid var(--border-default);">
+            <span class="code-label">#FFFFFF</span>
+          </div>
+          <div class="token-info">
+            <div class="token-name">Neutral <span>Ground</span></div>
+            <div class="token-hex">--neutral: #FFFFFF</div>
+            <div class="token-role">Derived from surface token for official compatibility.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Typography Scale Section -->
+  <section class="section" id="typography">
+    <div class="container">
+      <div class="section-header">
+        <h2>2. Expressive Typography Hierarchy</h2>
+        <p>Built with <strong>primary=Inter</strong>, <strong>display=Inter</strong>, and <strong>mono=JetBrains Mono</strong> across the desktop-first scale.</p>
+      </div>
+
+      <div class="type-scale-card">
+        <div class="type-row">
+          <div class="code-label">40px / Bold (800)</div>
+          <div style="font-size: var(--text-40); font-weight: 800; line-height: 1.15;">
+            Modern Minimalist Aesthetic with Clean Lines
+          </div>
+        </div>
+
+        <div class="type-row">
+          <div class="code-label">32px / Bold (700)</div>
+          <div style="font-size: var(--text-32); font-weight: 700; line-height: 1.25;">
+            Consistent Spacing and Subtle Interactions
+          </div>
+        </div>
+
+        <div class="type-row">
+          <div class="code-label">24px / Semibold (600)</div>
+          <div style="font-size: var(--text-24); font-weight: 600;">
+            Hierarchical Clarity: Headline &rarr; Support &rarr; Action
+          </div>
+        </div>
+
+        <div class="type-row">
+          <div class="code-label">18px / Medium (500)</div>
+          <div style="font-size: var(--text-18); font-weight: 500;">
+            Use whitespace to separate concerns before adding borders or shadows.
+          </div>
+        </div>
+
+        <div class="type-row">
+          <div class="code-label">16px / Regular (400)</div>
+          <div style="font-size: var(--text-16);">
+            Primary body copy set in #111827 on #FFFFFF surfaces ensures prolonged reading comfort and accessibility compliance.
+          </div>
+        </div>
+
+        <div class="type-row">
+          <div class="code-label">14px / Regular (400)</div>
+          <div style="font-size: var(--text-14); color: var(--text-muted);">
+            Secondary labels, metadata descriptions, and input guidance microcopy.
+          </div>
+        </div>
+
+        <div class="type-row">
+          <div class="code-label">12px / Mono (400)</div>
+          <div style="font-family: var(--font-mono); font-size: var(--text-12); color: var(--text-subtle);">
+            TOKEN_ID: SLEEK_CORE_V2 // 8PT_BASELINE // INTER_OPENTYPE
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Layout & 8pt Grid Principles -->
+  <section class="section" id="principles">
+    <div class="container">
+      <div class="section-header">
+        <h2>3. 8pt Baseline Grid &amp; Layout Composition</h2>
+        <p>Vertical rhythm and horizontal alignment eliminate ad-hoc offsets across viewports.</p>
+      </div>
+
+      <div class="features-grid">
+        <div class="feature-card">
+          <div class="feature-indicator">8</div>
+          <h3 style="font-size: var(--text-18); margin-bottom: 8px;">8pt Baseline Grid</h3>
+          <p style="font-size: var(--text-14); color: var(--text-muted);">
+            Spacing strictly steps through 4, 8, 12, 16, 24, 32, and 48px to maintain mathematically harmonized rhythm.
+          </p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-indicator">□</div>
+          <h3 style="font-size: var(--text-18); margin-bottom: 8px;">Content Blocks</h3>
+          <p style="font-size: var(--text-14); color: var(--text-muted);">
+            Predictable padding inside cards and panels keeps content structured and visually grounded.
+          </p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-indicator">⚡</div>
+          <h3 style="font-size: var(--text-18); margin-bottom: 8px;">Purposeful Motion</h3>
+          <p style="font-size: var(--text-14); color: var(--text-muted);">
+            Transitions default to 150–250ms with stable easing, emphasizing Primary (#3B82F6) interaction signals.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Interactive Component Lab & Form -->
+  <section class="section" id="components">
+    <div class="container">
+      <div class="section-header">
+        <h2>4. Component Specification &amp; Forms</h2>
+        <p>Interactive buttons with hover/active states, strong focus-visible rings, and error handling.</p>
+      </div>
+
+      <div class="lab-grid">
+        <!-- Buttons Lab -->
+        <div class="lab-card">
+          <h3 style="margin-bottom: var(--space-16);">Action Buttons</h3>
+          <p style="font-size: var(--text-14); color: var(--text-muted); margin-bottom: var(--space-24);">
+            Primary actions strictly utilize <strong>#3B82F6</strong>. Secondary actions remain neutral surfaces.
+          </p>
+
+          <div style="display: flex; flex-wrap: wrap; gap: var(--space-12); margin-bottom: var(--space-24);">
+            <button class="btn btn-primary" onclick="showToast('Primary CTA: #3B82F6')">
+              Primary Action
+            </button>
+            <button class="btn btn-secondary" onclick="showToast('Neutral Secondary Action')">
+              Neutral Surface
+            </button>
+            <button class="btn btn-accent" onclick="showToast('Secondary Violet: #8B5CF6')">
+              Violet Accent
+            </button>
+            <button class="btn btn-success" onclick="showToast('Success State: #16A34A')">
+              Confirm
+            </button>
+            <button class="btn btn-warning" onclick="showToast('Warning State: #D97706')">
+              Review
+            </button>
+            <button class="btn btn-danger" onclick="showToast('Danger State: #DC2626')">
+              Delete
+            </button>
+            <button class="btn btn-primary" disabled>
+              Disabled
+            </button>
+          </div>
+
+          <div class="code-label">
+            EASING: 150MS FAST &bull; 240MS NORMAL &bull; OUTLINE: 2PX #3B82F6
+          </div>
+        </div>
+
+        <!-- Form Lab -->
+        <div class="lab-card">
+          <h3 style="margin-bottom: var(--space-16);">Minimalist Input Form</h3>
+          <p style="font-size: var(--text-14); color: var(--text-muted); margin-bottom: var(--space-16);">
+            Explicit focus-visible outline and validation error state using Danger token (#DC2626).
+          </p>
+
+          <form id="sleekForm" onsubmit="handleFormSubmit(event)">
+            <div class="input-group">
+              <label class="input-label" for="projectName">
+                Project Name
+                <span class="code-label">REQUIRED</span>
+              </label>
+              <input type="text" id="projectName" class="sleek-input" placeholder="e.g. NextGen Design System" required>
+            </div>
+
+            <div class="input-group">
+              <label class="input-label" for="contactEmail">
+                Contact Email
+                <span class="code-label">REQUIRED</span>
+              </label>
+              <input type="email" id="contactEmail" class="sleek-input" placeholder="engineer@studio.design" required>
+            </div>
+
+            <div style="display: flex; gap: var(--space-12); align-items: center; margin-top: var(--space-24);">
+              <button type="submit" class="btn btn-primary">
+                Save Project
+              </button>
+              <button type="button" class="btn btn-secondary" onclick="simulateFormError()">
+                Simulate Error
+              </button>
+              <span id="formFeedback" class="code-label"></span>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div>
+          <div style="font-size: var(--text-18); font-weight: 800; margin-bottom: var(--space-8);">Sleek Design System</div>
+          <p style="font-size: var(--text-14); color: var(--text-muted); max-width: 300px;">
+            Modern minimalist aesthetic with clean lines, intentional color palette, subtle interactions, and consistent spacing.
+          </p>
+        </div>
+
+        <div>
+          <div style="font-size: var(--text-14); font-weight: 700; margin-bottom: var(--space-12);">COLORS</div>
+          <ul style="list-style: none; font-family: var(--font-mono); font-size: 13px; line-height: 1.8; color: var(--text-muted);">
+            <li>Primary: #3B82F6</li>
+            <li>Secondary: #8B5CF6</li>
+            <li>Success: #16A34A</li>
+            <li>Warning: #D97706</li>
+            <li>Danger: #DC2626</li>
+            <li>Surface: #FFFFFF</li>
+            <li>Text: #111827</li>
+          </ul>
+        </div>
+
+        <div>
+          <div style="font-size: var(--text-14); font-weight: 700; margin-bottom: var(--space-12);">TYPOGRAPHY</div>
+          <ul style="list-style: none; font-size: 13px; line-height: 1.8; color: var(--text-muted);">
+            <li>Primary: Inter</li>
+            <li>Display: Inter</li>
+            <li>Mono: JetBrains Mono</li>
+            <li>Weights: 100–900</li>
+          </ul>
+        </div>
+
+        <div>
+          <div style="font-size: var(--text-14); font-weight: 700; margin-bottom: var(--space-12);">GRID SYSTEM</div>
+          <p style="font-size: 13px; color: var(--text-muted); line-height: 1.6;">
+            8pt baseline grid rhythm with zero off-palette colors and high-contrast accessibility.
+          </p>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <div>&copy; 2026 Sleek Design System. All rights reserved.</div>
+        <div>SPECIFICATION: REV 2026.09</div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Toast Notice -->
+  <div class="sleek-toast" id="sleekToast">
+    <span>✓</span> <span id="toastText">Action confirmed</span>
+  </div>
+
+  <script>
+    function copyToken(hex, name) {
+      navigator.clipboard.writeText(hex).then(() => {
+        showToast(`${name} token (${hex}) copied!`);
+      }).catch(() => {
+        showToast(`${name}: ${hex}`);
+      });
+    }
+
+    function showToast(msg) {
+      const toast = document.getElementById('sleekToast');
+      document.getElementById('toastText').textContent = msg;
+      toast.classList.add('show');
+      setTimeout(() => {
+        toast.classList.remove('show');
+      }, 2500);
+    }
+
+    function handleFormSubmit(e) {
+      e.preventDefault();
+      const feedback = document.getElementById('formFeedback');
+      feedback.style.color = 'var(--success)';
+      feedback.textContent = '✓ Form submitted successfully!';
+      showToast('Project created successfully!');
+    }
+
+    function simulateFormError() {
+      const email = document.getElementById('contactEmail');
+      const feedback = document.getElementById('formFeedback');
+      email.classList.add('input-error');
+      feedback.style.color = 'var(--danger)';
+      feedback.textContent = '⚠ Error: Verified email is required';
+      showToast('Danger token (#DC2626) simulated');
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,798 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Electric Cars, Solar &amp; Clean Energy | Tesla</title>
+  <meta name="description" content="Tesla is accelerating the world's transition to sustainable energy with electric cars, solar and integrated clean energy solutions for homes and businesses." />
+
+  <!-- Universal Sans geometric font fallback -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500&display=swap" rel="stylesheet">
+
+  <style>
+    /* ─────────────────────────────────────────────────────────────────
+       TESLA DESIGN SYSTEM TOKENS
+       Strictly adhering to /design-systems/tesla/DESIGN.md
+       Radical Subtraction & Near-Zero UI
+       ───────────────────────────────────────────────────────────────── */
+    @font-face {
+      font-family: 'Universal Sans Display';
+      src: local('Universal Sans Display'), local('Plus Jakarta Sans'), local('Helvetica Neue');
+      font-weight: 500;
+      font-style: normal;
+    }
+    @font-face {
+      font-family: 'Universal Sans Text';
+      src: local('Universal Sans Text'), local('Plus Jakarta Sans'), local('Helvetica Neue');
+      font-weight: 400 500;
+      font-style: normal;
+    }
+
+    :root {
+      /* Palette: Monochrome-plus-one */
+      --tds-electric-blue: #3E6AE1; /* Primary CTA button background (sole chromatic color) */
+      --tds-white:         #FFFFFF; /* Canvas & secondary button fill */
+      --tds-light-ash:     #F4F4F4; /* Alternate surface */
+      --tds-carbon-dark:   #171A20; /* Primary heading & nav text (rgb 23, 26, 32) */
+      --tds-graphite:      #393C41; /* Body text & secondary button label */
+      --tds-pewter:        #5C5E62; /* Tertiary text for sub-links (Learn, Order) */
+      --tds-silver-fog:    #8E8E8E; /* Placeholder & inactive text */
+      --tds-cloud-gray:    #EEEEEE; /* Light divider lines */
+      --tds-pale-silver:   #D0D1D2; /* Subtle UI delineate */
+
+      /* Typography */
+      --font-display: "Universal Sans Display", -apple-system, Arial, sans-serif;
+      --font-text:    "Universal Sans Text", -apple-system, Arial, sans-serif;
+
+      /* Universal Transition Timing: 0.33s */
+      --tds-transition: 0.33s cubic-bezier(0.5, 0, 0, 0.75);
+
+      /* Border Radii: Strict 4px for buttons, zero for containers */
+      --radius-btn: 4px;
+      --radius-category: 12px;
+    }
+
+    /* Reset & Base Rules */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      background-color: var(--tds-white);
+      color: var(--tds-carbon-dark);
+      font-family: var(--font-text);
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    body {
+      background-color: var(--tds-white);
+      color: var(--tds-graphite);
+      font-size: 14px;
+      font-weight: 400; /* Only 400 & 500 weights allowed! */
+      line-height: 20px;
+      letter-spacing: normal; /* Normal tracking everywhere */
+      overflow-x: hidden;
+    }
+
+    /* Links */
+    a {
+      color: var(--tds-pewter);
+      text-decoration: none;
+      transition: color var(--tds-transition);
+    }
+    a:hover {
+      color: var(--tds-carbon-dark);
+    }
+
+    /* ─────────────────────────────────────────────────────────────────
+       NAVIGATION (Floating frosted glass, spaced wordmark, 14px weight 500)
+       No box shadows, no borders
+       ───────────────────────────────────────────────────────────────── */
+    .tds-site-header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 56px;
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 32px;
+      background: rgba(255, 255, 255, 0.75); /* Frosted Glass */
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      transition: background-color var(--tds-transition);
+    }
+
+    /* Iconic Spaced TESLA Wordmark */
+    .tds-wordmark {
+      font-family: var(--font-display);
+      font-size: 16px;
+      font-weight: 500;
+      letter-spacing: 7px;
+      color: var(--tds-carbon-dark);
+      text-transform: uppercase;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+    }
+
+    .tds-nav-center {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      list-style: none;
+    }
+
+    .tds-nav-btn {
+      font-family: var(--font-text);
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--tds-carbon-dark);
+      padding: 4px 16px;
+      min-height: 32px;
+      border-radius: var(--radius-btn); /* 4px */
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      transition: background-color var(--tds-transition), color var(--tds-transition);
+    }
+    .tds-nav-btn:hover {
+      background-color: rgba(0, 0, 0, 0.05);
+    }
+
+    .tds-nav-right {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .tds-icon-btn {
+      width: 32px;
+      height: 32px;
+      border-radius: var(--radius-btn);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--tds-carbon-dark);
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      transition: background-color var(--tds-transition);
+    }
+    .tds-icon-btn:hover {
+      background-color: rgba(0, 0, 0, 0.05);
+    }
+
+    /* ─────────────────────────────────────────────────────────────────
+       FULL-VIEWPORT SECTIONS (100vh Gallery Aesthetic)
+       No shadows, no gradients, no borders
+       ───────────────────────────────────────────────────────────────── */
+    .viewport-section {
+      position: relative;
+      height: 100vh;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      align-items: center;
+      text-align: center;
+      padding: 120px 24px 80px;
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+    }
+
+    /* Section 1: Model Y */
+    .section-model-y {
+      background-color: #11141a;
+      background-image: linear-gradient(180deg, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0) 40%),
+                        radial-gradient(ellipse at 50% 55%, #2a3342 0%, #151921 70%, #0d0f14 100%);
+    }
+
+    /* Section 2: Model 3 */
+    .section-model-3 {
+      background-color: #181d24;
+      background-image: linear-gradient(180deg, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0) 40%),
+                        radial-gradient(ellipse at 50% 55%, #303746 0%, #191e27 70%, #0f1217 100%);
+    }
+
+    /* Section 3: Cybertruck */
+    .section-cybertruck {
+      background-color: #0b0c0e;
+      background-image: radial-gradient(ellipse at 50% 60%, #1c1e24 0%, #0b0c0e 75%);
+    }
+
+    .hero-text-container {
+      z-index: 2;
+    }
+
+    /* 40px hero display headline, weight 500, line-height 48px */
+    .model-title {
+      font-family: var(--font-display);
+      font-size: 40px;
+      font-weight: 500;
+      line-height: 48px;
+      letter-spacing: normal;
+      color: var(--tds-white);
+      margin-bottom: 6px;
+    }
+
+    .promo-incentive {
+      font-size: 22px;
+      font-weight: 400;
+      line-height: 20px;
+      color: var(--tds-white);
+      margin-bottom: 8px;
+    }
+
+    .promo-link-blue {
+      color: var(--tds-electric-blue);
+      text-decoration: underline;
+      text-underline-offset: 3px;
+    }
+
+    .sub-lease-text {
+      font-size: 14px;
+      color: var(--tds-silver-fog);
+    }
+
+    /* Center Vehicle Illustration Canvas */
+    .vehicle-center-stage {
+      flex-grow: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      max-width: 900px;
+    }
+
+    .vehicle-stage-svg {
+      width: 100%;
+      max-width: 760px;
+      height: auto;
+    }
+
+    /* ─────────────────────────────────────────────────────────────────
+       CTA BUTTON SYSTEM (4px radius, 200px width, 40px height)
+       Electric Blue #3E6AE1 Primary + Pure White Secondary
+       ───────────────────────────────────────────────────────────────── */
+    .cta-button-pair {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 24px;
+      z-index: 2;
+      margin-bottom: 24px;
+    }
+
+    .tds-btn {
+      font-family: var(--font-text);
+      font-size: 14px;
+      font-weight: 500;
+      line-height: 16.8px;
+      letter-spacing: normal;
+      width: 200px;
+      min-height: 40px;
+      border-radius: var(--radius-btn); /* 4px */
+      padding: 4px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      outline: none;
+      user-select: none;
+      text-decoration: none;
+      border: 3px solid transparent; /* space reserved for focus animation */
+      transition: background-color var(--tds-transition), color var(--tds-transition), border-color var(--tds-transition);
+    }
+
+    /* Primary CTA: Electric Blue (#3E6AE1) */
+    .tds-btn-primary {
+      background-color: var(--tds-electric-blue);
+      color: var(--tds-white);
+    }
+    .tds-btn-primary:hover {
+      background-color: #2b54bf;
+    }
+
+    /* Secondary CTA: Pure White (#FFFFFF) */
+    .tds-btn-secondary {
+      background-color: var(--tds-white);
+      color: var(--tds-graphite);
+    }
+    .tds-btn-secondary:hover {
+      background-color: #eaeaea;
+    }
+
+    /* ─────────────────────────────────────────────────────────────────
+       MEGA MENU DROPDOWN PANEL (White 3-column vehicle showcase)
+       No shadows, no borders
+       ───────────────────────────────────────────────────────────────── */
+    .vehicles-dropdown-panel {
+      background-color: var(--tds-white);
+      padding: 60px 40px 40px;
+      display: grid;
+      grid-template-columns: 3fr 1fr;
+      gap: 40px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .vehicle-cards-3col {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+
+    .vehicle-dropdown-card {
+      text-align: center;
+    }
+
+    .vehicle-dropdown-img {
+      width: 100%;
+      height: 120px;
+      background: var(--tds-light-ash);
+      border-radius: var(--radius-btn);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 12px;
+      font-size: 20px;
+      font-weight: 500;
+      color: var(--tds-silver-fog);
+    }
+
+    .vehicle-dropdown-name {
+      font-size: 17px;
+      font-weight: 500;
+      color: var(--tds-carbon-dark);
+      margin-bottom: 8px;
+    }
+
+    .vehicle-dropdown-links {
+      display: flex;
+      justify-content: center;
+      gap: 16px;
+      font-size: 14px;
+    }
+    .vehicle-dropdown-links a {
+      text-decoration: underline;
+      text-underline-offset: 3px;
+    }
+
+    /* ─────────────────────────────────────────────────────────────────
+       CATEGORY CARDS (~12px border-radius)
+       ───────────────────────────────────────────────────────────────── */
+    .category-cards-section {
+      background-color: var(--tds-white);
+      padding: 80px 32px;
+      max-width: 1380px;
+      margin: 0 auto;
+    }
+
+    .category-grid {
+      display: grid;
+      grid-template-columns: 1.4fr 1fr;
+      gap: 24px;
+      margin-top: 32px;
+    }
+
+    .category-card {
+      position: relative;
+      height: 380px;
+      border-radius: var(--radius-category); /* 12px */
+      overflow: hidden;
+      padding: 32px;
+      background: #23272e;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .category-label {
+      font-size: 20px;
+      font-weight: 500;
+      color: var(--tds-white);
+    }
+
+    /* ─────────────────────────────────────────────────────────────────
+       PERSISTENT BOTTOM CHAT BAR
+       Anchored to viewport bottom on pure white background
+       ───────────────────────────────────────────────────────────────── */
+    .tds-chat-bar-bottom {
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 999;
+      background-color: var(--tds-white);
+      border: 1px solid var(--tds-pale-silver);
+      border-radius: var(--radius-btn); /* 4px */
+      padding: 8px 16px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    }
+
+    .chat-input-field {
+      border: none;
+      outline: none;
+      font-family: var(--font-text);
+      font-size: 14px;
+      color: var(--tds-carbon-dark);
+      width: 220px;
+    }
+    .chat-input-field::placeholder {
+      color: var(--tds-silver-fog);
+    }
+
+    .drive-schedule-link {
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--tds-electric-blue);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      border-left: 1px solid var(--tds-cloud-gray);
+      padding-left: 16px;
+    }
+
+    /* ─────────────────────────────────────────────────────────────────
+       DESIGN TOKEN AUDIT SECTION
+       ───────────────────────────────────────────────────────────────── */
+    .token-audit-section {
+      background-color: var(--tds-light-ash);
+      padding: 80px 32px;
+      color: var(--tds-carbon-dark);
+    }
+
+    .token-audit-table {
+      width: 100%;
+      max-width: 1100px;
+      margin: 32px auto 0;
+      border-collapse: collapse;
+      text-align: left;
+      font-size: 14px;
+    }
+
+    .token-audit-table th {
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--tds-pale-silver);
+      font-weight: 500;
+      color: var(--tds-carbon-dark);
+    }
+
+    .token-audit-table td {
+      padding: 14px 16px;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+    }
+
+    .swatch-box {
+      display: inline-block;
+      width: 14px;
+      height: 14px;
+      border-radius: 2px;
+      vertical-align: middle;
+      margin-right: 8px;
+    }
+
+    /* Footer */
+    .tds-footer {
+      background-color: var(--tds-white);
+      padding: 40px 24px;
+      text-align: center;
+      font-size: 12px;
+      color: var(--tds-pewter);
+    }
+
+    .tds-footer ul {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      list-style: none;
+      margin-top: 12px;
+    }
+
+    @media (max-width: 768px) {
+      .tds-nav-center { display: none; }
+      .cta-button-pair { flex-direction: column; gap: 12px; }
+      .category-grid { grid-template-columns: 1fr; }
+      .vehicles-dropdown-panel { grid-template-columns: 1fr; }
+      .tds-chat-bar-bottom { width: 90%; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Floating Sticky Navigation (Frosted Glass, No Shadows, 14px 500) -->
+  <header class="tds-site-header">
+    <a href="#modely" class="tds-wordmark">TESLA</a>
+
+    <nav>
+      <ul class="tds-nav-center">
+        <li><a href="#vehicles" class="tds-nav-btn" onclick="toggleDropdown(event)">Vehicles</a></li>
+        <li><a href="#energy" class="tds-nav-btn">Energy</a></li>
+        <li><a href="#charging" class="tds-nav-btn">Charging</a></li>
+        <li><a href="#discover" class="tds-nav-btn">Discover</a></li>
+        <li><a href="#shop" class="tds-nav-btn">Shop</a></li>
+      </ul>
+    </nav>
+
+    <div class="tds-nav-right">
+      <button class="tds-icon-btn" aria-label="Support">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+      </button>
+      <button class="tds-icon-btn" aria-label="Region">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
+      </button>
+      <button class="tds-icon-btn" aria-label="Account">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="7" r="4"></circle><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path></svg>
+      </button>
+    </div>
+  </header>
+
+  <!-- Interactive Dropdown Panel (Vehicles) -->
+  <div id="vehicles-dropdown" style="display: none; position: fixed; top: 56px; left: 0; width: 100%; z-index: 998; border-bottom: 1px solid var(--tds-cloud-gray);">
+    <div class="vehicles-dropdown-panel">
+      <div class="vehicle-cards-3col">
+        <div class="vehicle-dropdown-card">
+          <div class="vehicle-dropdown-img">Model Y Render</div>
+          <div class="vehicle-dropdown-name">Model Y</div>
+          <div class="vehicle-dropdown-links">
+            <a href="#modely">Learn</a>
+            <a href="#order">Order</a>
+          </div>
+        </div>
+        <div class="vehicle-dropdown-card">
+          <div class="vehicle-dropdown-img">Model 3 Render</div>
+          <div class="vehicle-dropdown-name">Model 3</div>
+          <div class="vehicle-dropdown-links">
+            <a href="#model3">Learn</a>
+            <a href="#order">Order</a>
+          </div>
+        </div>
+        <div class="vehicle-dropdown-card">
+          <div class="vehicle-dropdown-img">Cybertruck Render</div>
+          <div class="vehicle-dropdown-name">Cybertruck</div>
+          <div class="vehicle-dropdown-links">
+            <a href="#cybertruck">Learn</a>
+            <a href="#order">Order</a>
+          </div>
+        </div>
+      </div>
+      <div style="border-left: 1px solid var(--tds-cloud-gray); padding-left: 32px; display: flex; flex-direction: column; gap: 12px;">
+        <a href="#inventory" style="font-weight: 500; color: var(--tds-carbon-dark);">Inventory</a>
+        <a href="#preowned">Pre-Owned</a>
+        <a href="#demo">Demo Drive</a>
+        <a href="#tradein">Trade-in</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Viewport Section 1: Model Y (100vh Full Screen) -->
+  <section id="modely" class="viewport-section section-model-y">
+    <div class="hero-text-container">
+      <h1 class="model-title">Model Y</h1>
+      <div class="promo-incentive">
+        1.99% APR Financing Available
+      </div>
+      <div class="sub-lease-text">
+        From $31,490 After Probable Savings &amp; Federal Tax Credit
+      </div>
+    </div>
+
+    <!-- Minimalist Vector Automotive Silhouette -->
+    <div class="vehicle-center-stage">
+      <svg class="vehicle-stage-svg" viewBox="0 0 700 240" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <ellipse cx="350" cy="210" rx="300" ry="16" fill="black" opacity="0.7" filter="blur(8px)" />
+        <path d="M90 170 Q110 130 170 125 L270 95 Q330 55 420 55 L530 65 Q590 85 620 135 L640 160 Q645 175 625 185 L580 190 Q560 150 510 150 Q460 150 440 190 L270 190 Q250 150 200 150 Q150 150 130 190 L95 185 Q80 175 90 170 Z" fill="#202530" stroke="#4a5568" stroke-width="1.5"/>
+        <path d="M280 98 L410 65 L510 70 Q550 90 570 120 L440 120 L280 98 Z" fill="#0d1117" stroke="#2d3748" stroke-width="1.5"/>
+        <circle cx="200" cy="185" r="32" fill="#171920" stroke="#718096" stroke-width="2"/>
+        <circle cx="510" cy="185" r="32" fill="#171920" stroke="#718096" stroke-width="2"/>
+        <line x1="610" y1="140" x2="625" y2="148" stroke="#ffffff" stroke-width="3" stroke-linecap="round"/>
+      </svg>
+    </div>
+
+    <div class="cta-button-pair">
+      <!-- Electric Blue (#3E6AE1) Primary CTA -->
+      <a href="#order" class="tds-btn tds-btn-primary">Order Now</a>
+      <!-- Pure White (#FFFFFF) Secondary CTA -->
+      <a href="#inventory" class="tds-btn tds-btn-secondary">View Inventory</a>
+    </div>
+  </section>
+
+  <!-- Viewport Section 2: Model 3 (100vh Full Screen) -->
+  <section id="model3" class="viewport-section section-model-3">
+    <div class="hero-text-container">
+      <h2 class="model-title">Model 3</h2>
+      <div class="promo-incentive">
+        Lease Starting at $299/mo
+      </div>
+      <div class="sub-lease-text">
+        Experience the Redesigned Exterior &amp; Upgraded Cabin
+      </div>
+    </div>
+
+    <div class="vehicle-center-stage">
+      <svg class="vehicle-stage-svg" viewBox="0 0 700 240" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <ellipse cx="350" cy="210" rx="300" ry="16" fill="black" opacity="0.7" filter="blur(8px)" />
+        <path d="M100 175 Q120 140 175 135 L260 108 Q320 68 410 68 L520 76 Q580 96 610 145 L630 168 Q635 180 615 190 L570 195 Q550 155 500 155 Q450 155 430 195 L270 195 Q250 155 200 155 Q150 155 130 195 L105 190 Q90 180 100 175 Z" fill="#2d3340" stroke="#718096" stroke-width="1.5"/>
+        <path d="M270 110 L400 75 L500 80 Q540 100 560 130 L430 130 L270 110 Z" fill="#0d1117" stroke="#4a5568" stroke-width="1.5"/>
+        <circle cx="200" cy="190" r="30" fill="#1a202c" stroke="#a0aec0" stroke-width="2"/>
+        <circle cx="500" cy="190" r="30" fill="#1a202c" stroke="#a0aec0" stroke-width="2"/>
+      </svg>
+    </div>
+
+    <div class="cta-button-pair">
+      <a href="#order" class="tds-btn tds-btn-primary">Order Now</a>
+      <a href="#inventory" class="tds-btn tds-btn-secondary">Demo Drive</a>
+    </div>
+  </section>
+
+  <!-- Viewport Section 3: Cybertruck (100vh Full Screen) -->
+  <section id="cybertruck" class="viewport-section section-cybertruck">
+    <div class="hero-text-container">
+      <h2 class="model-title" style="letter-spacing: 4px;">CYBERTRUCK</h2>
+      <div class="promo-incentive">
+        Stainless Steel Exoskeleton &bull; Shatter-Resistant Glass
+      </div>
+    </div>
+
+    <div class="vehicle-center-stage">
+      <svg class="vehicle-stage-svg" viewBox="0 0 700 240" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <ellipse cx="350" cy="210" rx="310" ry="16" fill="black" opacity="0.8" filter="blur(8px)" />
+        <polygon points="100,180 160,110 370,55 580,115 630,180 570,185 550,150 470,150 450,185 270,185 250,150 170,150 150,185" fill="#4a5568" stroke="#cbd5e1" stroke-width="2"/>
+        <polygon points="260,110 370,65 520,115 410,115" fill="#0f172a" stroke="#64748b" stroke-width="1.5"/>
+        <circle cx="210" cy="185" r="34" fill="#020617" stroke="#94a3b8" stroke-width="3"/>
+        <circle cx="510" cy="185" r="34" fill="#020617" stroke="#94a3b8" stroke-width="3"/>
+        <line x1="575" y1="118" x2="628" y2="128" stroke="#ffffff" stroke-width="3"/>
+      </svg>
+    </div>
+
+    <div class="cta-button-pair">
+      <a href="#order" class="tds-btn tds-btn-primary">Order Now</a>
+      <a href="#learn" class="tds-btn tds-btn-secondary">Learn More</a>
+    </div>
+  </section>
+
+  <!-- Category Cards Section (12px radius, no shadows) -->
+  <section class="category-cards-section">
+    <h2 style="font-size: 28px; font-weight: 500; color: var(--tds-carbon-dark);">Discover Tesla</h2>
+    <div class="category-grid">
+      <div class="category-card" style="background: #1a202c;">
+        <span class="category-label">Solar Panels &amp; Solar Roof</span>
+        <div style="color: var(--tds-silver-fog); font-size: 14px;">
+          Clean, renewable energy generation integrated seamlessly into your architecture.
+        </div>
+        <div style="margin-top: 16px;">
+          <a href="#solar" class="tds-btn tds-btn-secondary" style="width: auto; padding: 4px 20px;">Order Solar</a>
+        </div>
+      </div>
+
+      <div class="category-card" style="background: #232a36;">
+        <span class="category-label">Powerwall Storage</span>
+        <div style="color: var(--tds-silver-fog); font-size: 14px;">
+          Compact home battery backup for 24/7 energy protection.
+        </div>
+        <div style="margin-top: 16px;">
+          <a href="#powerwall" class="tds-btn tds-btn-secondary" style="width: auto; padding: 4px 20px;">Explore</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Design Tokens Specification Table -->
+  <section class="token-audit-section">
+    <div style="max-width: 1100px; margin: 0 auto;">
+      <h2 style="font-size: 28px; font-weight: 500;">Tesla Design Tokens &bull; DESIGN.md Verification</h2>
+      <p style="color: var(--tds-pewter); margin-top: 8px;">
+        Extreme visual restraint: no box shadows, no decorative gradients, single accent color.
+      </p>
+
+      <table class="token-audit-table">
+        <thead>
+          <tr>
+            <th>Token Name</th>
+            <th>Hex / CSS Value</th>
+            <th>Application Rule</th>
+            <th>Sample</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Electric Blue</strong></td>
+            <td><code>#3E6AE1</code></td>
+            <td>Exclusive color for primary CTA buttons ("Order Now")</td>
+            <td><span class="swatch-box" style="background: #3E6AE1;"></span> Blue CTA</td>
+          </tr>
+          <tr>
+            <td><strong>Carbon Dark</strong></td>
+            <td><code>#171A20</code></td>
+            <td>Primary text &amp; nav labels on light backgrounds</td>
+            <td><span class="swatch-box" style="background: #171A20;"></span> Carbon</td>
+          </tr>
+          <tr>
+            <td><strong>Graphite</strong></td>
+            <td><code>#393C41</code></td>
+            <td>Body text &amp; secondary button text</td>
+            <td><span class="swatch-box" style="background: #393C41;"></span> Graphite</td>
+          </tr>
+          <tr>
+            <td><strong>Pewter</strong></td>
+            <td><code>#5C5E62</code></td>
+            <td>Tertiary links ("Learn", "Order", "Demo")</td>
+            <td><span class="swatch-box" style="background: #5C5E62;"></span> Pewter</td>
+          </tr>
+          <tr>
+            <td><strong>Pure White</strong></td>
+            <td><code>#FFFFFF</code></td>
+            <td>Canvas, dropdown menus &amp; secondary buttons</td>
+            <td><span class="swatch-box" style="background: #FFFFFF; border: 1px solid #ccc;"></span> White</td>
+          </tr>
+          <tr>
+            <td><strong>Button Radii</strong></td>
+            <td><code>4px</code></td>
+            <td>Barely-rounded rectangle (200px width, 40px min-height)</td>
+            <td>4px Radius</td>
+          </tr>
+          <tr>
+            <td><strong>Universal Transition</strong></td>
+            <td><code>0.33s cubic-bezier(0.5, 0, 0, 0.75)</code></td>
+            <td>Consistent motion timing across all interactions</td>
+            <td>0.33s Easing</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- Persistent Bottom Chat Bar -->
+  <aside class="tds-chat-bar-bottom">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+    </svg>
+    <input type="text" class="chat-input-field" placeholder="Ask a Question (e.g. Dog Mode?)" />
+    <a href="#drive" class="drive-schedule-link">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+      <span>Schedule a Drive</span>
+    </a>
+  </aside>
+
+  <!-- Footer -->
+  <footer class="tds-footer">
+    <div>Tesla &copy; 2026 &bull; Privacy &amp; Legal &bull; Vehicle Recalls &bull; Contact &bull; News &bull; Get Updates &bull; Locations</div>
+    <ul>
+      <li><a href="#">Model S</a></li>
+      <li><a href="#">Model 3</a></li>
+      <li><a href="#">Model X</a></li>
+      <li><a href="#">Model Y</a></li>
+      <li><a href="#">Cybertruck</a></li>
+      <li><a href="#">Energy</a></li>
+    </ul>
+  </footer>
+
+  <script>
+    function toggleDropdown(e) {
+      e.preventDefault();
+      const menu = document.getElementById('vehicles-dropdown');
+      if (menu.style.display === 'none') {
+        menu.style.display = 'block';
+      } else {
+        menu.style.display = 'none';
+      }
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,1260 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>CAFÉ KROMA — Artisanal Roastery & Brew Lab | Official Design System</title>
+  <meta name="description" content="Authentic implementation of the Cafe design system. Cozy cafe-inspired interface with warm tones, soft typography (Poppins + JetBrains Mono), clean layouts, and 2/4/8/12/16/24/32/48 spacing scale." />
+
+  <!-- Google Fonts: Poppins (weights 100-900) and JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Poppins:wght@200;300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    /* ─────────────────────────────────────────────────────────────────
+       CAFE OFFICIAL DESIGN TOKENS (from DESIGN.md)
+       Visual Style: Minimal, clean, cozy cafe-inspired
+       Palette:
+         Primary: #5D4432 (rich roast coffee)
+         Secondary: #E9E3DD (warm oat milk cream)
+         Surface: #F9F7F5 (warm linen canvas)
+         Text: #3E2B1E (deep espresso bean)
+         Neutral: #F9F7F5
+         Success: #16A34A
+         Warning: #D97706
+         Danger: #DC2626
+       Spacing: 2 / 4 / 8 / 12 / 16 / 24 / 32 / 48
+       Typography: Poppins + JetBrains Mono
+       Motion: 150ms - 250ms stable easing
+       ───────────────────────────────────────────────────────────────── */
+    :root {
+      /* Official Color Tokens */
+      --color-primary: #5D4432;
+      --color-secondary: #E9E3DD;
+      --color-surface: #F9F7F5;
+      --color-text: #3E2B1E;
+      --color-neutral: #F9F7F5;
+      --color-success: #16A34A;
+      --color-warning: #D97706;
+      --color-danger: #DC2626;
+
+      /* Surface Variants */
+      --color-surface-card: #FFFFFF;
+      --color-border: #E9E3DD;
+      --color-border-hover: #5D4432;
+
+      /* Typography Families */
+      --font-primary: "Poppins", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      --font-display: "Poppins", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      --font-mono: "JetBrains Mono", ui-monospace, Menlo, Monaco, monospace;
+
+      /* Exact Spacing Scale: 2/4/8/12/16/24/32/48 */
+      --space-2: 2px;
+      --space-4: 4px;
+      --space-8: 8px;
+      --space-12: 12px;
+      --space-16: 16px;
+      --space-24: 24px;
+      --space-32: 32px;
+      --space-48: 48px;
+
+      /* Consistent Radii */
+      --radius-sm: 8px;
+      --radius-md: 14px;
+      --radius-lg: 20px;
+      --radius-full: 9999px;
+
+      /* Elevation & Shadows */
+      --shadow-subtle: 0 4px 16px rgba(93, 68, 50, 0.06);
+      --shadow-card: 0 8px 28px rgba(93, 68, 50, 0.08);
+      --shadow-float: 0 16px 36px rgba(93, 68, 50, 0.12);
+
+      /* Motion (150-250ms stable easing) */
+      --transition-fast: 150ms cubic-bezier(0.2, 0, 0, 1);
+      --transition-normal: 220ms cubic-bezier(0.2, 0, 0, 1);
+
+      /* Container */
+      --container-max: 1200px;
+    }
+
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      background-color: var(--color-surface);
+      color: var(--color-text);
+      font-size: 16px;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    body {
+      background: var(--color-surface);
+      color: var(--color-text);
+      font-family: var(--font-primary);
+      font-weight: 400;
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    /* ─── TYPOGRAPHY HIERARCHY ─── */
+    h1, h2, h3, h4, h5, h6 {
+      font-family: var(--font-display);
+      color: var(--color-text);
+      line-height: 1.2;
+    }
+
+    h1 {
+      font-size: clamp(38px, 5.5vw, 64px);
+      font-weight: 700;
+      letter-spacing: -0.02em;
+    }
+
+    h2 {
+      font-size: clamp(28px, 3.8vw, 42px);
+      font-weight: 600;
+      letter-spacing: -0.015em;
+    }
+
+    h3 {
+      font-size: 22px;
+      font-weight: 600;
+      letter-spacing: -0.01em;
+    }
+
+    p {
+      font-size: 16px;
+      font-weight: 300;
+      color: var(--color-text);
+      line-height: 1.65;
+    }
+
+    .lead-text {
+      font-size: 18px;
+      font-weight: 300;
+      line-height: 1.6;
+      color: var(--color-text);
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-8);
+      font-family: var(--font-mono);
+      font-size: 12px;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--color-primary);
+      background: var(--color-secondary);
+      padding: var(--space-4) var(--space-12);
+      border-radius: var(--radius-full);
+      margin-bottom: var(--space-16);
+    }
+
+    /* ─── BUTTONS ─── */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--space-8);
+      font-family: var(--font-primary);
+      font-size: 14px;
+      font-weight: 500;
+      padding: var(--space-12) var(--space-24);
+      border-radius: var(--radius-md);
+      text-decoration: none;
+      cursor: pointer;
+      border: 1px solid transparent;
+      transition: background-color var(--transition-normal), color var(--transition-normal), border-color var(--transition-normal), transform var(--transition-fast), box-shadow var(--transition-normal);
+      outline: none;
+    }
+
+    .btn:active {
+      transform: scale(0.98);
+    }
+
+    .btn:focus-visible {
+      box-shadow: 0 0 0 3px rgba(93, 68, 50, 0.35);
+    }
+
+    /* Primary: #5D4432 with #F9F7F5 text */
+    .btn-primary {
+      background-color: var(--color-primary);
+      color: var(--color-surface);
+    }
+
+    .btn-primary:hover {
+      background-color: #483324;
+      box-shadow: 0 4px 14px rgba(93, 68, 50, 0.25);
+    }
+
+    /* Secondary: neutral using #E9E3DD */
+    .btn-secondary {
+      background-color: var(--color-secondary);
+      color: var(--color-text);
+      border-color: #ded6cf;
+    }
+
+    .btn-secondary:hover {
+      background-color: #ded6ce;
+      color: var(--color-primary);
+    }
+
+    .btn-outline {
+      background-color: transparent;
+      color: var(--color-primary);
+      border-color: var(--color-primary);
+    }
+
+    .btn-outline:hover {
+      background-color: var(--color-primary);
+      color: var(--color-surface);
+    }
+
+    .btn-pill {
+      border-radius: var(--radius-full);
+      padding: var(--space-8) var(--space-16);
+      font-size: 13px;
+    }
+
+    /* ─── NAVIGATION BAR ─── */
+    .cafe-header {
+      position: sticky;
+      top: 0;
+      width: 100%;
+      background: rgba(249, 247, 245, 0.94);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      z-index: 500;
+      border-bottom: 1px solid var(--color-border);
+      transition: background-color var(--transition-normal);
+    }
+
+    .nav-container {
+      max-width: var(--container-max);
+      margin: 0 auto;
+      padding: var(--space-16) var(--space-32);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .brand-logo {
+      display: flex;
+      align-items: center;
+      gap: var(--space-12);
+      text-decoration: none;
+      color: var(--color-primary);
+      font-size: 20px;
+      font-weight: 700;
+      letter-spacing: -0.01em;
+    }
+
+    .brand-logo svg {
+      width: 28px;
+      height: 28px;
+      fill: var(--color-primary);
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: var(--space-24);
+      list-style: none;
+    }
+
+    @media (max-width: 860px) {
+      .nav-links {
+        display: none;
+      }
+    }
+
+    .nav-link {
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--color-text);
+      text-decoration: none;
+      transition: color var(--transition-fast);
+      padding: var(--space-4) var(--space-8);
+    }
+
+    .nav-link:hover {
+      color: var(--color-primary);
+    }
+
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: var(--space-16);
+    }
+
+    /* ─── HERO SECTION ─── */
+    .hero-section {
+      padding: var(--space-48) var(--space-32) var(--space-48);
+      max-width: var(--container-max);
+      margin: 0 auto;
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1.15fr 0.85fr;
+      gap: var(--space-48);
+      align-items: center;
+    }
+
+    @media (max-width: 960px) {
+      .hero-grid {
+        grid-template-columns: 1fr;
+        gap: var(--space-32);
+      }
+    }
+
+    .hero-text {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: var(--space-16);
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-16);
+      margin-top: var(--space-12);
+    }
+
+    .hero-badges {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-12);
+      margin-top: var(--space-16);
+      padding-top: var(--space-24);
+      border-top: 1px solid var(--color-border);
+      width: 100%;
+    }
+
+    .stat-badge {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-2);
+    }
+
+    .stat-value {
+      font-family: var(--font-mono);
+      font-size: 20px;
+      font-weight: 600;
+      color: var(--color-primary);
+    }
+
+    .stat-label {
+      font-size: 12px;
+      font-weight: 400;
+      color: #6a5a4e;
+    }
+
+    /* Hero Showcase Card */
+    .hero-card {
+      background: var(--color-surface-card);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-lg);
+      padding: var(--space-32);
+      box-shadow: var(--shadow-card);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .roast-badge-floating {
+      position: absolute;
+      top: var(--space-24);
+      right: var(--space-24);
+      background: var(--color-secondary);
+      padding: var(--space-4) var(--space-12);
+      border-radius: var(--radius-full);
+      font-family: var(--font-mono);
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--color-primary);
+    }
+
+    /* ─── ORIGIN RESERVE (CARDS GRID) ─── */
+    .section-container {
+      max-width: var(--container-max);
+      margin: 0 auto;
+      padding: var(--space-48) var(--space-32);
+    }
+
+    .section-header {
+      text-align: center;
+      max-width: 620px;
+      margin: 0 auto var(--space-48);
+    }
+
+    .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: var(--space-32);
+    }
+
+    .coffee-card {
+      background: var(--color-surface-card);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-md);
+      padding: var(--space-24);
+      box-shadow: var(--shadow-subtle);
+      transition: transform var(--transition-normal), box-shadow var(--transition-normal), border-color var(--transition-normal);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .coffee-card:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-card);
+      border-color: var(--color-border-hover);
+    }
+
+    .card-top {
+      margin-bottom: var(--space-16);
+    }
+
+    .origin-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: var(--space-8);
+      font-family: var(--font-mono);
+      font-size: 12px;
+      color: #7b6a5d;
+    }
+
+    .tasting-pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-8);
+      margin: var(--space-12) 0;
+    }
+
+    .tasting-pill {
+      background: var(--color-secondary);
+      color: var(--color-text);
+      font-size: 12px;
+      font-weight: 500;
+      padding: var(--space-2) var(--space-8);
+      border-radius: var(--radius-full);
+    }
+
+    .coffee-specs {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      line-height: 1.6;
+      background: var(--color-surface);
+      padding: var(--space-12);
+      border-radius: var(--radius-sm);
+      margin: var(--space-16) 0;
+      border: 1px solid var(--color-border);
+    }
+
+    .card-bottom {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-top: var(--space-16);
+      border-top: 1px solid var(--color-border);
+    }
+
+    .card-price {
+      font-family: var(--font-mono);
+      font-size: 20px;
+      font-weight: 600;
+      color: var(--color-primary);
+    }
+
+    /* ─── INTERACTIVE BREW RATIO CALCULATOR ─── */
+    .brew-lab {
+      background: var(--color-surface-card);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-lg);
+      padding: var(--space-48);
+      box-shadow: var(--shadow-card);
+      margin-top: var(--space-32);
+    }
+
+    @media (max-width: 768px) {
+      .brew-lab {
+        padding: var(--space-24);
+      }
+    }
+
+    .brew-lab-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--space-48);
+      align-items: center;
+    }
+
+    @media (max-width: 900px) {
+      .brew-lab-grid {
+        grid-template-columns: 1fr;
+        gap: var(--space-32);
+      }
+    }
+
+    .method-selector {
+      display: flex;
+      gap: var(--space-8);
+      margin-bottom: var(--space-24);
+      flex-wrap: wrap;
+    }
+
+    .method-btn {
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-md);
+      padding: var(--space-8) var(--space-16);
+      font-family: var(--font-primary);
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--color-text);
+      cursor: pointer;
+      transition: all var(--transition-fast);
+    }
+
+    .method-btn.active,
+    .method-btn:hover {
+      background: var(--color-primary);
+      color: var(--color-surface);
+      border-color: var(--color-primary);
+    }
+
+    .ratio-slider-box {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-12);
+      margin: var(--space-24) 0;
+    }
+
+    .slider-row {
+      display: flex;
+      justify-content: space-between;
+      font-family: var(--font-mono);
+      font-size: 14px;
+    }
+
+    input[type=range] {
+      accent-color: var(--color-primary);
+      width: 100%;
+      height: 6px;
+      background: var(--color-secondary);
+      border-radius: var(--radius-full);
+      cursor: pointer;
+    }
+
+    /* Live Telemetry Display */
+    .brew-results {
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-md);
+      padding: var(--space-24);
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--space-24);
+    }
+
+    .result-item {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-4);
+    }
+
+    .result-value {
+      font-family: var(--font-mono);
+      font-size: 28px;
+      font-weight: 600;
+      color: var(--color-primary);
+    }
+
+    .result-label {
+      font-size: 12px;
+      color: #7b6a5d;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    /* ─── MENU & BAKES LIST ─── */
+    .menu-table-wrapper {
+      background: var(--color-surface-card);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      box-shadow: var(--shadow-subtle);
+    }
+
+    .menu-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: var(--space-16) var(--space-24);
+      border-bottom: 1px solid var(--color-border);
+      transition: background-color var(--transition-fast);
+    }
+
+    .menu-row:last-child {
+      border-bottom: none;
+    }
+
+    .menu-row:hover {
+      background-color: var(--color-surface);
+    }
+
+    .menu-info {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-2);
+    }
+
+    .menu-name {
+      font-size: 16px;
+      font-weight: 500;
+      color: var(--color-text);
+    }
+
+    .menu-desc {
+      font-size: 13px;
+      color: #7a6b5e;
+    }
+
+    .menu-price-tag {
+      font-family: var(--font-mono);
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--color-primary);
+      text-align: right;
+    }
+
+    .tag-success {
+      display: inline-block;
+      font-size: 11px;
+      font-family: var(--font-mono);
+      color: var(--color-success);
+      background: rgba(22, 163, 74, 0.12);
+      padding: var(--space-2) var(--space-8);
+      border-radius: var(--radius-full);
+      margin-left: var(--space-8);
+    }
+
+    /* ─── TABLE RESERVATION FORM ─── */
+    .reservation-card {
+      background: var(--color-surface-card);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-lg);
+      padding: var(--space-48);
+      max-width: 680px;
+      margin: 0 auto;
+      box-shadow: var(--shadow-card);
+    }
+
+    @media (max-width: 640px) {
+      .reservation-card {
+        padding: var(--space-24);
+      }
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-8);
+      margin-bottom: var(--space-16);
+    }
+
+    .form-label {
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--color-text);
+    }
+
+    .form-input, .form-select {
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-sm);
+      padding: var(--space-12) var(--space-16);
+      font-family: var(--font-primary);
+      font-size: 14px;
+      color: var(--color-text);
+      transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+      outline: none;
+    }
+
+    .form-input:focus, .form-select:focus {
+      border-color: var(--color-primary);
+      box-shadow: 0 0 0 3px rgba(93, 68, 50, 0.2);
+    }
+
+    .form-input.error {
+      border-color: var(--color-danger);
+    }
+
+    .error-msg {
+      font-size: 12px;
+      color: var(--color-danger);
+      display: none;
+    }
+
+    /* ─── TOKEN AUDIT DRAWER ─── */
+    .token-audit-trigger {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      z-index: 1000;
+    }
+
+    .token-modal {
+      display: none;
+      position: fixed;
+      bottom: 80px;
+      right: 24px;
+      width: 360px;
+      background: var(--color-surface-card);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-md);
+      padding: var(--space-24);
+      box-shadow: var(--shadow-float);
+      z-index: 1001;
+      font-family: var(--font-mono);
+      font-size: 12px;
+    }
+
+    .token-modal.open {
+      display: block;
+    }
+
+    /* ─── FOOTER ─── */
+    .cafe-footer {
+      background: var(--color-secondary);
+      border-top: 1px solid #dfd7cf;
+      padding: var(--space-48) var(--space-32) var(--space-24);
+      margin-top: var(--space-48);
+    }
+
+    .footer-content {
+      max-width: var(--container-max);
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: var(--space-32);
+    }
+
+    .footer-bottom {
+      max-width: var(--container-max);
+      margin: var(--space-32) auto 0;
+      padding-top: var(--space-24);
+      border-top: 1px solid #d4cbc1;
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: var(--space-16);
+      font-size: 13px;
+      color: #6a5a4e;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- STICKY NAVIGATION -->
+  <header class="cafe-header">
+    <nav class="nav-container">
+      <a href="#" class="brand-logo" aria-label="Café Kroma Homepage">
+        <!-- Artisanal Coffee Cup & Leaf Icon -->
+        <svg viewBox="0 0 24 24">
+          <path d="M2 19h18v2H2v-2zm2-17h13a1 1 0 0 1 1 1v7a5 5 0 0 1-5 5H8a5 5 0 0 1-5-5V3a1 1 0 0 1 1-1zm12 2H5v6a3 3 0 0 0 3 3h4a3 3 0 0 0 3-3V4zm3 2h2a2 2 0 0 1 2 2v1a2 2 0 0 1-2 2h-2V6z"/>
+        </svg>
+        <span>CAFÉ KROMA</span>
+      </a>
+
+      <ul class="nav-links">
+        <li><a href="#reserve" class="nav-link">Origin Reserve</a></li>
+        <li><a href="#brewlab" class="nav-link">Brew Lab</a></li>
+        <li><a href="#menu" class="nav-link">Café Menu</a></li>
+        <li><a href="#reserve-table" class="nav-link">Reservations</a></li>
+      </ul>
+
+      <div class="nav-actions">
+        <a href="#reserve" class="btn btn-secondary btn-pill">
+          <span>Bag (0)</span>
+        </a>
+        <a href="#reserve-table" class="btn btn-primary btn-pill">
+          <span>Order Reserve</span>
+        </a>
+      </div>
+    </nav>
+  </header>
+
+  <main>
+    <!-- HERO SECTION -->
+    <section class="hero-section">
+      <div class="hero-grid">
+        <div class="hero-text">
+          <div class="eyebrow">
+            <span>●</span>
+            <span>ETHICALLY SOURCED SPECIALTY COFFEE</span>
+          </div>
+
+          <h1>Slow Mornings, Masterful Roasts.</h1>
+
+          <p class="lead-text">
+            We roast in small 12kg batches using direct-trade heirloom beans. Experience gentle acidity, delicate floral sweetness, and an unhurried brewing ritual designed for quiet minds.
+          </p>
+
+          <div class="hero-actions">
+            <a href="#reserve" class="btn btn-primary">
+              <span>Explore Reserve Beans</span>
+              <span>→</span>
+            </a>
+            <a href="#brewlab" class="btn btn-secondary">
+              <span>Launch Ratio Guide</span>
+            </a>
+          </div>
+
+          <div class="hero-badges">
+            <div class="stat-badge">
+              <span class="stat-value">88.5+</span>
+              <span class="stat-label">SCA Cup Score</span>
+            </div>
+            <div style="width: 1px; height: 36px; background: var(--color-border); margin: 0 var(--space-8);"></div>
+            <div class="stat-badge">
+              <span class="stat-value">12 KG</span>
+              <span class="stat-label">Drum Batch Limit</span>
+            </div>
+            <div style="width: 1px; height: 36px; background: var(--color-border); margin: 0 var(--space-8);"></div>
+            <div class="stat-badge">
+              <span class="stat-value">48 HRS</span>
+              <span class="stat-label">Peak Degas Window</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Hero Showcase Card -->
+        <div class="hero-card">
+          <div class="roast-badge-floating">ROAST PROFILE 04</div>
+          <span style="font-family: var(--font-mono); font-size: 12px; color: var(--color-primary); text-transform: uppercase;">TODAY'S BENCH SELECTION</span>
+          <h2 style="font-size: 28px; margin: var(--space-8) 0;">Ethiopia Yirgacheffe G1</h2>
+          <p style="font-size: 14px; margin-bottom: var(--space-16);">
+            Grown at 2,150 meters in misty Gedeb highlands. Delicate jasmine aroma with sparkling bergamot and honeyed peach nectar.
+          </p>
+
+          <!-- SVG Visual Tasting Wheel & Beans Representation -->
+          <div style="background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-md); padding: var(--space-16); margin-bottom: var(--space-16); text-align: center;">
+            <svg viewBox="0 0 320 120" width="100%" height="120">
+              <circle cx="60" cy="60" r="42" fill="none" stroke="#E9E3DD" stroke-width="8" />
+              <circle cx="60" cy="60" r="42" fill="none" stroke="#5D4432" stroke-width="8" stroke-dasharray="210 264" transform="rotate(-90 60 60)" />
+              <text x="60" y="65" font-family="'JetBrains Mono', monospace" font-size="14" font-weight="600" fill="#5D4432" text-anchor="middle">89</text>
+              <text x="60" y="115" font-family="'Poppins', sans-serif" font-size="11" fill="#3E2B1E" text-anchor="middle">Sweetness</text>
+
+              <circle cx="160" cy="60" r="42" fill="none" stroke="#E9E3DD" stroke-width="8" />
+              <circle cx="160" cy="60" r="42" fill="none" stroke="#5D4432" stroke-width="8" stroke-dasharray="190 264" transform="rotate(-90 160 60)" />
+              <text x="160" y="65" font-family="'JetBrains Mono', monospace" font-size="14" font-weight="600" fill="#5D4432" text-anchor="middle">84</text>
+              <text x="160" y="115" font-family="'Poppins', sans-serif" font-size="11" fill="#3E2B1E" text-anchor="middle">Acidity</text>
+
+              <circle cx="260" cy="60" r="42" fill="none" stroke="#E9E3DD" stroke-width="8" />
+              <circle cx="260" cy="60" r="42" fill="none" stroke="#5D4432" stroke-width="8" stroke-dasharray="175 264" transform="rotate(-90 260 60)" />
+              <text x="260" y="65" font-family="'JetBrains Mono', monospace" font-size="14" font-weight="600" fill="#5D4432" text-anchor="middle">78</text>
+              <text x="260" y="115" font-family="'Poppins', sans-serif" font-size="11" fill="#3E2B1E" text-anchor="middle">Body</text>
+            </svg>
+          </div>
+
+          <div style="display: flex; justify-content: space-between; align-items: center;">
+            <div>
+              <span style="font-size: 11px; color: #7a6b5e; display: block;">250G WHOLE BEAN</span>
+              <span style="font-family: var(--font-mono); font-size: 20px; font-weight: 600; color: var(--color-primary);">$22.00</span>
+            </div>
+            <button class="btn btn-primary btn-pill" onclick="addToCart('Ethiopia Yirgacheffe')">Add to Basket</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION: ORIGIN RESERVE -->
+    <section class="section-container" id="reserve">
+      <div class="section-header">
+        <div class="eyebrow">CURATED MICROLOTS</div>
+        <h2>Current Roaster Releases</h2>
+        <p>Direct farm-gate relationships with seasonal terroir transparency.</p>
+      </div>
+
+      <div class="cards-grid">
+        <!-- Bean 1 -->
+        <article class="coffee-card">
+          <div class="card-top">
+            <div class="origin-meta">
+              <span>AFRICA / GEDEB</span>
+              <span style="color: var(--color-success);">IN STOCK</span>
+            </div>
+            <h3>01. Ethiopia Yirgacheffe G1</h3>
+            <p style="font-size: 14px; margin-top: var(--space-4);">Washed heirloom varietal harvested by smallholder families.</p>
+            <div class="tasting-pills">
+              <span class="tasting-pill">Jasmine Flower</span>
+              <span class="tasting-pill">White Peach</span>
+              <span class="tasting-pill">Bergamot Tea</span>
+            </div>
+            <div class="coffee-specs">
+              <div>ELEVATION: 2,050 – 2,200m</div>
+              <div>PROCESS: Fully Washed & Sun Dried</div>
+              <div>ROAST DEGREE: Light Nordic Filter</div>
+            </div>
+          </div>
+          <div class="card-bottom">
+            <span class="card-price">$22.00</span>
+            <button class="btn btn-primary btn-pill" onclick="addToCart('Ethiopia Yirgacheffe')">Select Grind</button>
+          </div>
+        </article>
+
+        <!-- Bean 2 -->
+        <article class="coffee-card">
+          <div class="card-top">
+            <div class="origin-meta">
+              <span>SOUTH AMERICA / HUILA</span>
+              <span style="color: var(--color-warning);">LOW INVENTORY</span>
+            </div>
+            <h3>02. Colombia Geisha Reserve</h3>
+            <p style="font-size: 14px; margin-top: var(--space-4);">Single-estate prize winner cultivated on volcanic loam soil.</p>
+            <div class="tasting-pills">
+              <span class="tasting-pill">Orange Blossom</span>
+              <span class="tasting-pill">Lychee</span>
+              <span class="tasting-pill">Clover Honey</span>
+            </div>
+            <div class="coffee-specs">
+              <div>ELEVATION: 1,850m</div>
+              <div>PROCESS: Anaerobic Fermentation</div>
+              <div>ROAST DEGREE: Ultra Light Filter</div>
+            </div>
+          </div>
+          <div class="card-bottom">
+            <span class="card-price">$34.00</span>
+            <button class="btn btn-primary btn-pill" onclick="addToCart('Colombia Geisha')">Select Grind</button>
+          </div>
+        </article>
+
+        <!-- Bean 3 -->
+        <article class="coffee-card">
+          <div class="card-top">
+            <div class="origin-meta">
+              <span>CENTRAL AMERICA / TARRAZÚ</span>
+              <span style="color: var(--color-success);">IN STOCK</span>
+            </div>
+            <h3>03. Costa Rica Black Honey</h3>
+            <p style="font-size: 14px; margin-top: var(--space-4);">Rich viscous cup with deep stone fruit and cocoa complexity.</p>
+            <div class="tasting-pills">
+              <span class="tasting-pill">Black Cherry</span>
+              <span class="tasting-pill">Cacao Nibs</span>
+              <span class="tasting-pill">Bourbon Vanilla</span>
+            </div>
+            <div class="coffee-specs">
+              <div>ELEVATION: 1,700m</div>
+              <div>PROCESS: Black Honey Maceration</div>
+              <div>ROAST DEGREE: Medium Modern Espresso</div>
+            </div>
+          </div>
+          <div class="card-bottom">
+            <span class="card-price">$24.00</span>
+            <button class="btn btn-primary btn-pill" onclick="addToCart('Costa Rica Black Honey')">Select Grind</button>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <!-- SECTION: INTERACTIVE BREW LAB & RATIO CALCULATOR -->
+    <section class="section-container" id="brewlab">
+      <div class="brew-lab">
+        <div class="brew-lab-grid">
+          <div>
+            <div class="eyebrow">BREW LAB RATIO TOOL</div>
+            <h2>Precision Extraction Engine</h2>
+            <p style="margin-bottom: var(--space-24);">
+              Select your brew geometry and bean mass. We calculate the optimal water mass, recommended grind microns, and extraction timing down to the second.
+            </p>
+
+            <div class="method-selector">
+              <button class="method-btn active" onclick="setMethod('v60', 16, 250, 93, '2:45 min', 'Medium-Fine')">Hario V60 (1:16)</button>
+              <button class="method-btn" onclick="setMethod('aeropress', 14, 200, 88, '1:30 min', 'Medium')">AeroPress (1:14)</button>
+              <button class="method-btn" onclick="setMethod('chemex', 15, 250, 94, '4:00 min', 'Medium-Coarse')">Chemex (1:15)</button>
+              <button class="method-btn" onclick="setMethod('espresso', 2, 36, 93, '0:28 sec', 'Fine 200µm')">Espresso (1:2)</button>
+            </div>
+
+            <div class="ratio-slider-box">
+              <div class="slider-row">
+                <span>Dose Coffee Mass:</span>
+                <span id="doseLabel" style="font-weight: 600; color: var(--color-primary);">18 grams</span>
+              </div>
+              <input type="range" id="doseSlider" min="10" max="40" value="18" oninput="updateCalculation()" />
+            </div>
+          </div>
+
+          <!-- Dynamic Output Results -->
+          <div class="brew-results">
+            <div class="result-item">
+              <span class="result-value" id="calcWater">288 g</span>
+              <span class="result-label">Water Target</span>
+            </div>
+            <div class="result-item">
+              <span class="result-value" id="calcTemp">93°C</span>
+              <span class="result-label">Water Temp</span>
+            </div>
+            <div class="result-item">
+              <span class="result-value" id="calcTime">2:45</span>
+              <span class="result-label">Extraction Time</span>
+            </div>
+            <div class="result-item">
+              <span class="result-value" id="calcGrind" style="font-size: 20px;">Medium-Fine</span>
+              <span class="result-label">Grind Size</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION: CAFÉ MENU & BAKES -->
+    <section class="section-container" id="menu">
+      <div class="section-header">
+        <div class="eyebrow">BAR & BAKERY</div>
+        <h2>Artisanal In-House Menu</h2>
+        <p>Prepared with local organic farm dairy, stoneground grains, and cold-pressed plant milks.</p>
+      </div>
+
+      <div class="menu-table-wrapper">
+        <div class="menu-row">
+          <div class="menu-info">
+            <div class="menu-name">Espresso Cortado (1:1)</div>
+            <div class="menu-desc">Double shot espresso folded with velvety steamed textured whole milk.</div>
+          </div>
+          <div class="menu-price-tag">$4.75</div>
+        </div>
+
+        <div class="menu-row">
+          <div class="menu-info">
+            <div class="menu-name">Kyoto Style Slow Drip Cold Brew <span class="tag-success">24h Brew</span></div>
+            <div class="menu-desc">Single-origin iced extraction served over a clear hand-carved ice sphere.</div>
+          </div>
+          <div class="menu-price-tag">$6.50</div>
+        </div>
+
+        <div class="menu-row">
+          <div class="menu-info">
+            <div class="menu-name">Cardamom & Brown Butter Morning Bun</div>
+            <div class="menu-desc">Laminated sourdough pastry dusted with green cardamom sugar.</div>
+          </div>
+          <div class="menu-price-tag">$5.25</div>
+        </div>
+
+        <div class="menu-row">
+          <div class="menu-info">
+            <div class="menu-name">Ceremonial Uji Matcha Latte <span class="tag-success">Organic</span></div>
+            <div class="menu-desc">Stone-milled Kyoto green tea whisked with silky steamed oat milk.</div>
+          </div>
+          <div class="menu-price-tag">$6.25</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION: TABLE RESERVATION / TASTING FLIGHT -->
+    <section class="section-container" id="reserve-table">
+      <div class="reservation-card">
+        <div class="eyebrow">RESERVE A TASTING TABLE</div>
+        <h2 style="margin-bottom: var(--space-8);">Join Our Cupping Table</h2>
+        <p style="margin-bottom: var(--space-24);">
+          Book an intimate 45-minute guided flight of three single-origin coffees with our head roaster.
+        </p>
+
+        <form onsubmit="handleReservation(event)" id="reserveForm">
+          <div class="form-group">
+            <label class="form-label" for="resName">Full Name</label>
+            <input type="text" id="resName" class="form-input" placeholder="Eleanor Vance" required />
+            <span class="error-msg" id="nameError">Please enter your name.</span>
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-16);">
+            <div class="form-group">
+              <label class="form-label" for="resDate">Date</label>
+              <input type="date" id="resDate" class="form-input" value="2026-09-12" required />
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="resGuests">Guests</label>
+              <select id="resGuests" class="form-select">
+                <option value="1">1 Person</option>
+                <option value="2" selected>2 Persons</option>
+                <option value="4">4 Persons</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="resNote">Tasting Preference / Dietary Notes</label>
+            <input type="text" id="resNote" class="form-input" placeholder="e.g., Oat milk, Light roast filter focus" />
+          </div>
+
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-top: var(--space-24);">
+            <button type="submit" class="btn btn-primary" id="resSubmitBtn">Confirm Table Booking</button>
+            <span style="font-family: var(--font-mono); font-size: 12px; color: var(--color-primary);" id="bookingStatus"></span>
+          </div>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="cafe-footer">
+    <div class="footer-content">
+      <div>
+        <div class="brand-logo" style="margin-bottom: var(--space-12);">
+          <span>CAFÉ KROMA</span>
+        </div>
+        <p style="font-size: 14px; max-width: 320px;">
+          Artisanal roastery and neighborhood espresso bar. Slow coffee, warm community, and honest craftsmanship.
+        </p>
+      </div>
+
+      <div>
+        <h4 style="font-size: 14px; margin-bottom: var(--space-12); font-family: var(--font-mono); text-transform: uppercase;">LOCATIONS</h4>
+        <p style="font-size: 13px;">418 Roastery Lane, High Ground<br>Daily 7:00 AM — 6:00 PM</p>
+      </div>
+
+      <div>
+        <h4 style="font-size: 14px; margin-bottom: var(--space-12); font-family: var(--font-mono); text-transform: uppercase;">NEWSLETTER</h4>
+        <p style="font-size: 13px; margin-bottom: var(--space-8);">Fresh micro-lot releases in your inbox.</p>
+        <div style="display: flex; gap: var(--space-8);">
+          <input type="email" placeholder="email@domain.com" class="form-input" style="padding: var(--space-8) var(--space-12); font-size: 12px;" />
+          <button class="btn btn-primary btn-pill">Join</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <span>© 2026 CAFÉ KROMA. DESIGNED WITH WARMTH & CARE.</span>
+      <div style="display: flex; gap: var(--space-16);">
+        <a href="#" style="color: inherit; text-decoration: none;">Privacy</a>
+        <a href="#" style="color: inherit; text-decoration: none;">Sourcing Policy</a>
+        <a href="#" style="color: inherit; text-decoration: none;">Allergens</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- FLOATING DESIGN SYSTEM TOKEN INSPECTOR -->
+  <div class="token-audit-trigger">
+    <button class="btn btn-primary btn-pill" onclick="toggleTokens()" style="box-shadow: var(--shadow-card);">
+      <span>Token Spec</span>
+    </button>
+  </div>
+
+  <div class="token-modal" id="tokenModal">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; border-bottom: 1px solid var(--color-border); padding-bottom: 6px;">
+      <span style="font-weight: 600; color: var(--color-primary);">CAFE DESIGN TOKENS</span>
+      <button onclick="toggleTokens()" style="background: none; border: none; cursor: pointer; color: var(--color-text);">✕</button>
+    </div>
+    <div style="display: flex; flex-direction: column; gap: 8px;">
+      <div style="display: flex; align-items: center; gap: 8px;">
+        <span style="width: 14px; height: 14px; border-radius: 3px; background: #5D4432; display: inline-block;"></span>
+        <span>Primary: #5D4432</span>
+      </div>
+      <div style="display: flex; align-items: center; gap: 8px;">
+        <span style="width: 14px; height: 14px; border-radius: 3px; background: #E9E3DD; border: 1px solid #ccc; display: inline-block;"></span>
+        <span>Secondary: #E9E3DD</span>
+      </div>
+      <div style="display: flex; align-items: center; gap: 8px;">
+        <span style="width: 14px; height: 14px; border-radius: 3px; background: #F9F7F5; border: 1px solid #ccc; display: inline-block;"></span>
+        <span>Surface/Neutral: #F9F7F5</span>
+      </div>
+      <div style="display: flex; align-items: center; gap: 8px;">
+        <span style="width: 14px; height: 14px; border-radius: 3px; background: #3E2B1E; display: inline-block;"></span>
+        <span>Text: #3E2B1E</span>
+      </div>
+      <div style="display: flex; align-items: center; gap: 8px;">
+        <span style="width: 14px; height: 14px; border-radius: 3px; background: #16A34A; display: inline-block;"></span>
+        <span>Success: #16A34A</span>
+      </div>
+      <div style="display: flex; align-items: center; gap: 8px;">
+        <span style="width: 14px; height: 14px; border-radius: 3px; background: #D97706; display: inline-block;"></span>
+        <span>Warning: #D97706</span>
+      </div>
+      <div style="display: flex; align-items: center; gap: 8px;">
+        <span style="width: 14px; height: 14px; border-radius: 3px; background: #DC2626; display: inline-block;"></span>
+        <span>Danger: #DC2626</span>
+      </div>
+      <div style="border-top: 1px solid var(--color-border); padding-top: 8px; margin-top: 4px;">
+        <div>Fonts: Poppins + JetBrains Mono</div>
+        <div>Scale: 2/4/8/12/16/24/32/48</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- INTERACTIVE SCRIPTS -->
+  <script>
+    // Token Modal Toggle
+    function toggleTokens() {
+      document.getElementById('tokenModal').classList.toggle('open');
+    }
+
+    // Interactive Brew Ratio Engine
+    let currentRatio = 16;
+    let currentTemp = 93;
+    let currentTime = '2:45';
+    let currentGrind = 'Medium-Fine';
+
+    function setMethod(method, ratio, baseWater, temp, time, grind) {
+      currentRatio = ratio;
+      currentTemp = temp;
+      currentTime = time;
+      currentGrind = grind;
+
+      document.querySelectorAll('.method-btn').forEach(btn => btn.classList.remove('active'));
+      event.currentTarget.classList.add('active');
+
+      document.getElementById('calcTemp').textContent = temp + '°C';
+      document.getElementById('calcTime').textContent = time;
+      document.getElementById('calcGrind').textContent = grind;
+
+      updateCalculation();
+    }
+
+    function updateCalculation() {
+      const dose = parseInt(document.getElementById('doseSlider').value);
+      document.getElementById('doseLabel').textContent = dose + ' grams';
+      const water = Math.round(dose * currentRatio);
+      document.getElementById('calcWater').textContent = water + ' g';
+    }
+
+    // Cart Notification
+    let cartCount = 0;
+    function addToCart(item) {
+      cartCount++;
+      const badge = document.querySelector('.btn-secondary.btn-pill span');
+      badge.textContent = `Bag (${cartCount})`;
+      badge.style.transform = 'scale(1.2)';
+      setTimeout(() => {
+        badge.style.transform = 'scale(1)';
+      }, 200);
+    }
+
+    // Reservation Handler
+    function handleReservation(e) {
+      e.preventDefault();
+      const name = document.getElementById('resName').value;
+      const status = document.getElementById('bookingStatus');
+      const btn = document.getElementById('resSubmitBtn');
+
+      btn.disabled = true;
+      status.textContent = "Reserving table...";
+
+      setTimeout(() => {
+        status.textContent = `✓ Reserved for ${name}!`;
+        status.style.color = "#16A34A";
+        btn.disabled = false;
+      }, 600);
+    }
+  </script>
+</body>
+</html>

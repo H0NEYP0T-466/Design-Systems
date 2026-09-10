@@ -1,0 +1,438 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Arc — The Browser That Browses for You</title>
+  <meta name="description" content="Arc Browser design system: frosted glass translucency, saturated gradient warmth (Sunset #ff7e5f to #feb47b), sidebar-first layout, and squircle-soft geometry." />
+
+  <!-- Google Fonts: Playfair Display (approximating Argent CF editorial serif) & Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+  <style>
+    /* ─────────────────────────────────────────────────────────────────
+       ARC BROWSER DESIGN SYSTEM TOKENS
+       Source: open-design/design-systems/arc/DESIGN.md
+       ───────────────────────────────────────────────────────────────── */
+    :root {
+      /* Theme Gradient: Sunset (Default) */
+      --sunset-start: #ff7e5f;
+      --sunset-end: #feb47b;
+      --twilight-start: #7f5af0;
+      --twilight-end: #e84393;
+      --aurora-start: #16f2b3;
+      --aurora-end: #0db4f7;
+
+      --arc-coral: #ff5f5f;
+      --arc-lavender: #b794f4;
+
+      /* Frosted Glass Layers */
+      --glass-light: rgba(255, 255, 255, 0.72);
+      --glass-medium: rgba(255, 255, 255, 0.52);
+      --glass-heavy: rgba(255, 255, 255, 0.88);
+      --glass-dark: rgba(20, 20, 25, 0.65);
+      --border-glass: rgba(255, 255, 255, 0.45);
+
+      --ink-primary: #1a1a1f;
+      --ink-secondary: #54545a;
+      --ink-muted: #8c8c93;
+
+      --font-display-serif: "Playfair Display", Georgia, serif; /* Argent CF fallback */
+      --font-ui: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
+      --font-mono: "JetBrains Mono", Menlo, Consolas, monospace;
+
+      --radius-sm: 8px;
+      --radius-squircle: 14px;
+      --radius-card: 18px;
+      --radius-pill: 9999px;
+
+      --shadow-glass: 0 8px 32px rgba(0, 0, 0, 0.08);
+      --shadow-btn: 0 4px 16px rgba(255, 126, 95, 0.35);
+
+      --transition-fast: 0.18s cubic-bezier(0.2, 0, 0, 1);
+    }
+
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      background: linear-gradient(135deg, var(--sunset-start) 0%, var(--sunset-end) 100%);
+      color: var(--ink-primary);
+      font-family: var(--font-ui);
+      font-size: 15px;
+      line-height: 1.55;
+      min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
+      padding: 24px;
+    }
+
+    /* Outer Window Container */
+    .arc-window-shell {
+      max-width: 1360px;
+      margin: 0 auto;
+      background: var(--glass-light);
+      backdrop-filter: blur(32px) saturate(180%);
+      -webkit-backdrop-filter: blur(32px) saturate(180%);
+      border: 1px solid var(--border-glass);
+      border-radius: 20px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      min-height: 90vh;
+    }
+
+    /* Top Command Bar & Window Header */
+    .window-header {
+      padding: 14px 20px;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+    }
+    .traffic-lights {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .traffic-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+    }
+    .dot-close { background: #ff5f56; }
+    .dot-min { background: #ffbd2e; }
+    .dot-max { background: #27c93f; }
+
+    /* Floating Center Command Bar (Cmd+T Launcher) */
+    .command-bar-pill {
+      flex: 1;
+      max-width: 580px;
+      background: var(--glass-heavy);
+      border: 1px solid var(--border-glass);
+      border-radius: var(--radius-pill);
+      padding: 8px 18px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 14px;
+      color: var(--ink-secondary);
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.04);
+      cursor: pointer;
+    }
+    .shortcut-kbd {
+      padding: 2px 8px;
+      background: rgba(0, 0, 0, 0.06);
+      border-radius: 4px;
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--ink-primary);
+    }
+
+    /* Main Window Body: Sidebar-First Layout */
+    .window-body {
+      display: grid;
+      grid-template-columns: 260px 1fr;
+      flex: 1;
+    }
+    @media (max-width: 860px) {
+      .window-body { grid-template-columns: 1fr; }
+      .arc-sidebar { display: none; }
+    }
+
+    /* 1. ARC SIDEBAR (Tabs, Spaces, Pins on the left) */
+    .arc-sidebar {
+      background: rgba(255, 255, 255, 0.35);
+      border-right: 1px solid rgba(0, 0, 0, 0.06);
+      padding: 20px 16px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    .sidebar-section-title {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--ink-muted);
+      margin-bottom: 12px;
+      padding-left: 8px;
+    }
+    .tab-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .tab-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 12px;
+      border-radius: var(--radius-sm);
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--ink-secondary);
+      text-decoration: none;
+      transition: all var(--transition-fast);
+    }
+    .tab-item:hover {
+      background: var(--glass-medium);
+      color: var(--ink-primary);
+    }
+    .tab-item.active {
+      background: var(--glass-heavy);
+      color: var(--ink-primary);
+      font-weight: 600;
+      box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
+    }
+    .tab-icon {
+      font-size: 14px;
+    }
+
+    /* Theme Picker Wheel in Sidebar Footer */
+    .spaces-bar {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding-top: 16px;
+      border-top: 1px solid rgba(0, 0, 0, 0.06);
+    }
+    .space-pill {
+      flex: 1;
+      text-align: center;
+      padding: 6px;
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: 600;
+      background: rgba(0, 0, 0, 0.04);
+      color: var(--ink-primary);
+    }
+    .space-pill.active {
+      background: var(--glass-heavy);
+      box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+    }
+
+    /* 2. ARC CONTENT PANE (Marketing & Live Surfaces) */
+    .arc-content-pane {
+      background: var(--glass-heavy);
+      padding: 48px;
+      overflow-y: auto;
+    }
+    .hero-editorial {
+      max-width: 800px;
+      margin-bottom: 56px;
+    }
+    .hero-serif-title {
+      font-family: var(--font-display-serif);
+      font-size: clamp(38px, 5.5vw, 68px);
+      font-weight: 400;
+      line-height: 1.05;
+      letter-spacing: -0.03em;
+      color: var(--ink-primary);
+      margin-bottom: 24px;
+    }
+    .hero-serif-title em {
+      font-style: italic;
+      color: var(--arc-coral);
+    }
+    .hero-lead-text {
+      font-size: 19px;
+      line-height: 1.5;
+      color: var(--ink-secondary);
+      max-width: 580px;
+      margin-bottom: 32px;
+    }
+
+    /* Primary Filled Gradient Button */
+    .btn-gradient {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 26px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, var(--sunset-start), var(--sunset-end));
+      color: #ffffff;
+      font-weight: 600;
+      font-size: 15px;
+      text-decoration: none;
+      box-shadow: var(--shadow-btn);
+      border: none;
+      cursor: pointer;
+      transition: all var(--transition-fast);
+    }
+    .btn-gradient:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 8px 24px rgba(255, 126, 95, 0.45);
+    }
+
+    /* Bento Feature Cards with Squircle Radii */
+    .cards-grid-arc {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 24px;
+      margin-top: 36px;
+    }
+    @media (max-width: 768px) {
+      .cards-grid-arc { grid-template-columns: 1fr; }
+    }
+    .card-squircle {
+      background: var(--glass-light);
+      border: 1px solid var(--border-glass);
+      border-radius: var(--radius-card);
+      padding: 32px;
+      box-shadow: var(--shadow-glass);
+      transition: transform var(--transition-fast);
+    }
+    .card-squircle:hover {
+      transform: translateY(-2px);
+    }
+    .card-tag {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--arc-coral);
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 12px;
+    }
+    .card-title {
+      font-family: var(--font-display-serif);
+      font-size: 24px;
+      font-weight: 600;
+      margin-bottom: 10px;
+      color: var(--ink-primary);
+    }
+    .card-desc {
+      color: var(--ink-secondary);
+      font-size: 14.5px;
+      line-height: 1.55;
+    }
+
+    /* Footer in Shell */
+    .shell-footer {
+      margin-top: 56px;
+      padding-top: 24px;
+      border-top: 1px solid rgba(0, 0, 0, 0.06);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 13px;
+      color: var(--ink-muted);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Full Frosted Glass Window Shell -->
+  <div class="arc-window-shell">
+    
+    <!-- Window Header & Command Bar -->
+    <div class="window-header">
+      <div class="traffic-lights">
+        <div class="traffic-dot dot-close"></div>
+        <div class="traffic-dot dot-min"></div>
+        <div class="traffic-dot dot-max"></div>
+      </div>
+
+      <!-- Floating Command Bar (Cmd+T) -->
+      <div class="command-bar-pill">
+        <span>🔍 Search or type a URL...</span>
+        <span class="shortcut-kbd">⌘ T</span>
+      </div>
+
+      <div>
+        <a href="00_Index.md" style="color: var(--ink-secondary); font-size: 12px; text-decoration: none; font-weight: 600;">Vault Index</a>
+      </div>
+    </div>
+
+    <!-- Window Body: Sidebar-First -->
+    <div class="window-body">
+      
+      <!-- Left Sidebar -->
+      <aside class="arc-sidebar">
+        <div>
+          <div class="sidebar-section-title">Pinned Spaces</div>
+          <ul class="tab-list">
+            <li><a href="#" class="tab-item active"><span class="tab-icon">🌐</span> Overview</a></li>
+            <li><a href="#" class="tab-item"><span class="tab-icon">🎨</span> Themes &amp; Gradients</a></li>
+            <li><a href="#" class="tab-item"><span class="tab-icon">⚡</span> Easels &amp; Notes</a></li>
+            <li><a href="#" class="tab-item"><span class="tab-icon">📦</span> Boosts Gallery</a></li>
+          </ul>
+
+          <div class="sidebar-section-title" style="margin-top: 28px;">Recent Tabs</div>
+          <ul class="tab-list">
+            <li><a href="#" class="tab-item"><span class="tab-icon">📄</span> GitHub · Pull Requests</a></li>
+            <li><a href="#" class="tab-item"><span class="tab-icon">🎧</span> Spotify · Focus Audio</a></li>
+            <li><a href="#" class="tab-item"><span class="tab-icon">🔬</span> Claude AI · Analysis</a></li>
+          </ul>
+        </div>
+
+        <div class="spaces-bar">
+          <div class="space-pill active">Work</div>
+          <div class="space-pill">Personal</div>
+          <div class="space-pill">+</div>
+        </div>
+      </aside>
+
+      <!-- Main Editorial Content Pane -->
+      <main class="arc-content-pane">
+        <div class="hero-editorial">
+          <h1 class="hero-serif-title">
+            The browser that <em>browses</em> for you.
+          </h1>
+          <p class="hero-lead-text">
+            Arc dissolves the boundary between chrome and web canvas. Translucent frosted panes, user-driven gradient warmth, and a sidebar-first workspace.
+          </p>
+
+          <div style="display: flex; gap: 14px; align-items: center; flex-wrap: wrap;">
+            <a href="#download" class="btn-gradient">
+              <span>Download Arc for macOS</span>
+              <span>→</span>
+            </a>
+            <a href="#spaces" style="color: var(--ink-primary); font-weight: 600; text-decoration: underline; font-size: 14px;">
+              Explore Spaces &amp; Boosts
+            </a>
+          </div>
+        </div>
+
+        <!-- Squircle Feature Cards -->
+        <div class="cards-grid-arc">
+          <div class="card-squircle">
+            <div class="card-tag">Translucent Canvas</div>
+            <h3 class="card-title">Scenery Over Chrome</h3>
+            <p class="card-desc">
+              Frosted glass with 32px blur and soft saturated gradients replace rigid grey toolbars, turning web navigation into an immersive physical space.
+            </p>
+          </div>
+
+          <div class="card-squircle">
+            <div class="card-tag">Sidebar Architecture</div>
+            <h3 class="card-title">Vertical Space Mastery</h3>
+            <p class="card-desc">
+              Horizontal tab sprawl is eliminated. Tabs, bookmarks, and split-screen canvases organize naturally along the left margin at 13px density.
+            </p>
+          </div>
+        </div>
+
+        <div class="shell-footer">
+          <div>Arc Browser Specification &copy; 2026. The Browser Company.</div>
+          <div><a href="00_Index.md" style="color: var(--arc-coral); text-decoration: none; font-weight: 600;">← Master Index</a></div>
+        </div>
+      </main>
+
+    </div>
+  </div>
+
+</body>
+</html>

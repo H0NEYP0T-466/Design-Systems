@@ -1,0 +1,466 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Composio — The Tooling Infrastructure for AI Agents</title>
+  <meta name="description" content="Composio design system: Void Black #0f0f0f canvas, Composio Cobalt #0007cd, Electric Cyan #00ffff bioluminescent glows, ultra-tight heading line-heights, and JetBrains Mono tooling." />
+
+  <!-- Google Fonts: Inter & JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+  <style>
+    /* ─────────────────────────────────────────────────────────────────
+       COMPOSIO DESIGN SYSTEM TOKENS
+       Source: open-design/design-systems/composio/DESIGN.md
+       ───────────────────────────────────────────────────────────────── */
+    :root {
+      --void-black: #0f0f0f;
+      --pure-black: #000000;
+      --charcoal: #2c2c2c;
+
+      --composio-cobalt: #0007cd;
+      --electric-cyan: #00ffff;
+      --signal-blue: #0089ff;
+      --ocean-blue: #0096ff;
+
+      --text-white: #ffffff;
+      --text-ghost: rgba(255, 255, 255, 0.6);
+      --text-whisper: rgba(255, 255, 255, 0.5);
+      --text-muted: #444444;
+
+      --border-mist-12: rgba(255, 255, 255, 0.12);
+      --border-mist-08: rgba(255, 255, 255, 0.08);
+      --border-mist-04: rgba(255, 255, 255, 0.04);
+
+      --font-diatype: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      --font-mono: "JetBrains Mono", Menlo, Consolas, monospace;
+
+      --radius-sm: 6px;
+      --radius-md: 12px;
+      --radius-lg: 16px;
+
+      --shadow-brutal: 4px 4px 0 #000000;
+      --glow-cyan: 0 0 40px rgba(0, 255, 255, 0.12);
+
+      --transition-fast: 0.16s ease;
+    }
+
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      background-color: var(--void-black);
+      color: var(--text-white);
+      font-family: var(--font-diatype);
+      font-size: 16px;
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    /* Ambient Cyan Glow Halo */
+    .cyan-ambient-glow {
+      position: absolute;
+      top: 100px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 700px;
+      height: 350px;
+      background: radial-gradient(ellipse at center, rgba(0, 255, 255, 0.08) 0%, transparent 70%);
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    .container {
+      max-width: 1240px;
+      margin-inline: auto;
+      padding-inline: 28px;
+      position: relative;
+      z-index: 2;
+    }
+
+    /* Top Navigation (Nocturnal Command Bar) */
+    .composio-nav {
+      height: 72px;
+      border-bottom: 1px solid var(--border-mist-08);
+      background: rgba(15, 15, 15, 0.85);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .nav-inner {
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .brand-composio {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+      color: var(--text-white);
+    }
+    .brand-logo-hex {
+      width: 28px;
+      height: 28px;
+      background: var(--composio-cobalt);
+      border: 1px solid var(--signal-blue);
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #ffffff;
+      font-weight: 700;
+      font-size: 14px;
+      box-shadow: 0 0 12px rgba(0, 137, 255, 0.4);
+    }
+    .brand-title {
+      font-size: 18px;
+      font-weight: 500;
+      letter-spacing: -0.01em;
+    }
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 28px;
+      list-style: none;
+    }
+    @media (max-width: 860px) {
+      .nav-links { display: none; }
+    }
+    .nav-links a {
+      color: var(--text-ghost);
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 400;
+      transition: color var(--transition-fast);
+    }
+    .nav-links a:hover {
+      color: var(--text-white);
+    }
+
+    /* Buttons */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      font-family: var(--font-diatype);
+      font-size: 14px;
+      font-weight: 500;
+      padding: 10px 20px;
+      border-radius: var(--radius-sm);
+      text-decoration: none;
+      cursor: pointer;
+      transition: all var(--transition-fast);
+    }
+    .btn-white {
+      background: #ffffff;
+      color: #000000;
+      border: 1px solid #ffffff;
+      box-shadow: var(--shadow-brutal);
+    }
+    .btn-white:hover {
+      background: #f0f0f0;
+      transform: translateY(-1px);
+    }
+    .btn-cyan-glow {
+      background: rgba(0, 255, 255, 0.08);
+      color: var(--electric-cyan);
+      border: 1px solid rgba(0, 255, 255, 0.3);
+      box-shadow: 0 0 16px rgba(0, 255, 255, 0.15);
+    }
+    .btn-cyan-glow:hover {
+      background: rgba(0, 255, 255, 0.15);
+      border-color: var(--electric-cyan);
+    }
+    .btn-outline {
+      background: transparent;
+      color: var(--text-ghost);
+      border: 1px solid var(--border-mist-12);
+    }
+    .btn-outline:hover {
+      border-color: var(--text-white);
+      color: var(--text-white);
+    }
+
+    /* Hero Section (Ultra-Tight Heading Line-Height: 0.87) */
+    .hero-wrap {
+      padding-block: 88px 72px;
+      text-align: center;
+    }
+    .hero-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-family: var(--font-mono);
+      font-size: 12px;
+      letter-spacing: 0.7px;
+      text-transform: uppercase;
+      color: var(--electric-cyan);
+      margin-bottom: 24px;
+      padding: 4px 12px;
+      background: rgba(0, 255, 255, 0.06);
+      border: 1px solid rgba(0, 255, 255, 0.2);
+      border-radius: var(--radius-sm);
+    }
+    .hero-title-compressed {
+      font-size: clamp(40px, 6.5vw, 76px);
+      font-weight: 400; /* Regular weight creates authority with dense line height */
+      line-height: 0.90; /* Mandatory ultra-tight line height */
+      letter-spacing: -0.03em;
+      color: var(--text-white);
+      max-width: 960px;
+      margin: 0 auto 28px;
+    }
+    .hero-title-compressed span {
+      color: var(--electric-cyan);
+    }
+    .hero-sub {
+      font-size: 18px;
+      line-height: 1.5;
+      color: var(--text-ghost);
+      max-width: 640px;
+      margin: 0 auto 40px;
+    }
+
+    /* Interactive Tool Calling Console Grid */
+    .tooling-terminal-card {
+      background: var(--pure-black);
+      border: 1px solid var(--border-mist-12);
+      border-radius: var(--radius-md);
+      box-shadow: 0 16px 48px rgba(0, 0, 0, 0.9), var(--glow-cyan);
+      overflow: hidden;
+      max-width: 1040px;
+      margin: 0 auto 64px;
+      text-align: left;
+    }
+    .terminal-header {
+      padding: 12px 20px;
+      border-bottom: 1px solid var(--border-mist-08);
+      background: #141414;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-family: var(--font-mono);
+      font-size: 12px;
+      color: var(--text-ghost);
+    }
+    .terminal-body {
+      padding: 24px;
+      font-family: var(--font-mono);
+      font-size: 14px;
+      line-height: 1.6;
+    }
+    .kw { color: #f472b6; }
+    .fn { color: var(--electric-cyan); }
+    .str { color: #facc15; }
+    .num { color: #a78bfa; }
+
+    /* Integration Icons Grid */
+    .integrations-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 20px;
+      margin-block: 48px;
+    }
+    @media (max-width: 900px) {
+      .integrations-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    .tool-box {
+      background: var(--pure-black);
+      border: 1px solid var(--border-mist-08);
+      border-radius: var(--radius-md);
+      padding: 24px;
+      transition: all var(--transition-fast);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      min-height: 180px;
+    }
+    .tool-box:hover {
+      border-color: var(--signal-blue);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(0, 137, 255, 0.12);
+    }
+    .tool-icon-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 16px;
+    }
+    .tool-glyph {
+      font-size: 24px;
+    }
+    .tool-badge {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--electric-cyan);
+      background: rgba(0, 255, 255, 0.08);
+      padding: 2px 8px;
+      border-radius: 4px;
+    }
+    .tool-name {
+      font-size: 18px;
+      font-weight: 500;
+      color: var(--text-white);
+      margin-bottom: 6px;
+    }
+    .tool-desc {
+      font-size: 13px;
+      color: var(--text-ghost);
+    }
+
+    /* Footer */
+    .composio-footer {
+      border-top: 1px solid var(--border-mist-08);
+      padding-block: 48px 32px;
+      font-size: 13px;
+      color: var(--text-ghost);
+    }
+    .footer-flex {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Ambient Bioluminescent Glow -->
+  <div class="cyan-ambient-glow" aria-hidden="true"></div>
+
+  <!-- Top Navigation -->
+  <header class="composio-nav">
+    <div class="container nav-inner">
+      <a href="#hero" class="brand-composio">
+        <div class="brand-logo-hex">C</div>
+        <span class="brand-title">Composio</span>
+      </a>
+
+      <ul class="nav-links">
+        <li><a href="#tools">Integrations</a></li>
+        <li><a href="#console">Tool Runtime</a></li>
+        <li><a href="#docs">API Specs</a></li>
+      </ul>
+
+      <div style="display: flex; gap: 12px; align-items: center;">
+        <a href="00_Index.md" class="btn btn-outline" style="padding: 7px 14px; font-size: 12px;">Index</a>
+        <a href="#console" class="btn btn-white" style="padding: 7px 16px; font-size: 12px;">Start Building</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section id="hero" class="hero-wrap">
+    <div class="container">
+      <div class="hero-tag">Tooling Infrastructure For AI Agents</div>
+      <h1 class="hero-title-compressed">
+        Connect autonomous agents to <span>250+ tools</span> in 3 lines of code.
+      </h1>
+      <p class="hero-sub">
+        Nocturnal command center architecture, bioluminescent cyan glows, and zero-friction OAuth authentication for LLM applications.
+      </p>
+
+      <div style="display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; margin-bottom: 64px;">
+        <a href="#console" class="btn btn-white">Browse 250+ Tools</a>
+        <a href="#console" class="btn btn-cyan-glow">Execute Agent Sandbox</a>
+      </div>
+
+      <!-- Live Tool Call Terminal -->
+      <div id="console" class="tooling-terminal-card">
+        <div class="terminal-header">
+          <span>● python3 agent_executor.py</span>
+          <span>RUNTIME: ACTIVE</span>
+        </div>
+        <div class="terminal-body">
+          <p>
+            <span class="kw">from</span> composio <span class="kw">import</span> ComposioToolSet, Action<br><br>
+            toolset = <span class="fn">ComposioToolSet</span>(api_key=<span class="str">"cmp_live_9a4f2"</span>)<br>
+            tools = toolset.<span class="fn">get_tools</span>(actions=[<span class="str">"GITHUB_CREATE_PULL_REQUEST"</span>, <span class="str">"SLACK_SEND_MESSAGE"</span>])<br><br>
+            <span class="kw">print</span>(<span class="str">f"Connected tools for autonomous agent: {len(tools)}"</span>)
+          </p>
+          <p style="margin-top: 16px; color: var(--electric-cyan);">
+            [✓] Authenticated GitHub App (org: antigravity-labs)<br>
+            [✓] Slack Webhook bridge established (#deployments)<br>
+            [✓] Schema validated against OpenAI Tool Calling specification
+          </p>
+        </div>
+      </div>
+
+      <!-- 4 Integration Cards -->
+      <div id="tools" class="integrations-grid">
+        <article class="tool-box">
+          <div class="tool-icon-row">
+            <span class="tool-glyph">🐙</span>
+            <span class="tool-badge">38 Actions</span>
+          </div>
+          <div>
+            <h3 class="tool-name">GitHub</h3>
+            <p class="tool-desc">Autonomous pull requests, issue triage, branch merging, and code review comments.</p>
+          </div>
+        </article>
+
+        <article class="tool-box">
+          <div class="tool-icon-row">
+            <span class="tool-glyph">💬</span>
+            <span class="tool-badge">42 Actions</span>
+          </div>
+          <div>
+            <h3 class="tool-name">Slack</h3>
+            <p class="tool-desc">Channel broadcasting, thread replies, canvas editing, and user mention routing.</p>
+          </div>
+        </article>
+
+        <article class="tool-box">
+          <div class="tool-icon-row">
+            <span class="tool-glyph">📐</span>
+            <span class="tool-badge">26 Actions</span>
+          </div>
+          <div>
+            <h3 class="tool-name">Linear</h3>
+            <p class="tool-desc">Ticket creation, cycle planning, label syncing, and project roadmap milestones.</p>
+          </div>
+        </article>
+
+        <article class="tool-box">
+          <div class="tool-icon-row">
+            <span class="tool-glyph">📑</span>
+            <span class="tool-badge">31 Actions</span>
+          </div>
+          <div>
+            <h3 class="tool-name">Notion</h3>
+            <p class="tool-desc">Database record syncing, block appends, page publishing, and workspace queries.</p>
+          </div>
+        </article>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="composio-footer">
+    <div class="container footer-flex">
+      <div>Composio Design Language &copy; 2026. Void Black #0f0f0f &amp; Electric Cyan #00ffff.</div>
+      <div><a href="00_Index.md" style="color: var(--electric-cyan); text-decoration: none; font-weight: 500;">← Master Index</a></div>
+    </div>
+  </footer>
+
+</body>
+</html>

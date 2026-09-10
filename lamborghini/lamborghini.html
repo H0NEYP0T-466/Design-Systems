@@ -1,0 +1,1069 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Automobili Lamborghini — Beyond the Horizon</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,300;0,400;0,500;0,700;0,900;1,400&display=swap" rel="stylesheet">
+  <style>
+    /* -------------------------------------------------------------
+       LAMBORGHINI DESIGN SYSTEM TOKENS & FOUNDATIONS
+       ------------------------------------------------------------- */
+    :root {
+      /* Primary Surfaces & Void */
+      --color-black: #000000;          /* Absolute Black - dominant canvas */
+      --color-charcoal: #202020;       /* Elevated dark surface, cards */
+      --color-dark-iron: #181818;      /* Subtle surface variant */
+      --color-shadow: #313131;
+
+      /* Primary Brand Accent */
+      --color-gold: #FFC000;           /* Lamborghini Gold - exclusive CTA accent */
+      --color-dark-gold: #917300;      /* Hover/pressed state for gold buttons */
+      --color-gold-text: #FFCE3E;      /* Highlighted labels and accents */
+
+      /* Pure Neutrals & Text */
+      --color-white: #FFFFFF;          /* Primary text, logos, nav */
+      --color-smoke: #F5F5F5;          /* Secondary text on dark */
+      --color-ash: #7D7D7D;            /* Mid-range gray, timestamps */
+      --color-steel: #969696;          /* Disabled text and tags */
+      --color-graphite: #494949;
+
+      /* Semantics & Secondary */
+      --color-cyan-pulse: #29ABE2;     /* Information highlights */
+      --color-link-blue: #3860BE;      /* Link hover state */
+      --color-teal-action: #1EAEDB;    /* Ghost button hover */
+
+      /* Typography */
+      --font-lambo: "LamboType", "Roboto", "Helvetica Neue", Arial, sans-serif;
+
+      /* Zero Border-Radius Principle: Sharp, angular, automotive geometry */
+      --radius-zero: 0px;
+    }
+
+    /* Reset & Darkness Void */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html, body {
+      background-color: var(--color-black);
+      color: var(--color-white);
+      font-family: var(--font-lambo);
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      overflow-x: hidden;
+      line-height: 1.5;
+    }
+
+    a {
+      color: var(--color-white);
+      text-decoration: none;
+      transition: color 0.15s ease;
+    }
+    a:hover {
+      color: var(--color-link-blue);
+    }
+
+    .container {
+      max-width: 1440px;
+      margin: 0 auto;
+      padding: 0 40px;
+    }
+
+    /* -------------------------------------------------------------
+       TYPOGRAPHY (LAMBOTYPE ALL-CAPS COMMANDING VOICE)
+       ------------------------------------------------------------- */
+    .hero-display {
+      font-family: var(--font-lambo);
+      font-size: 120px;
+      font-weight: 400;
+      line-height: 0.92;
+      text-transform: uppercase;
+      letter-spacing: normal;
+      color: var(--color-white);
+    }
+
+    .display-2 {
+      font-family: var(--font-lambo);
+      font-size: 80px;
+      font-weight: 400;
+      line-height: 1.13;
+      text-transform: uppercase;
+      letter-spacing: normal;
+      color: var(--color-white);
+    }
+
+    .section-title {
+      font-family: var(--font-lambo);
+      font-size: 54px;
+      font-weight: 400;
+      line-height: 1.19;
+      text-transform: uppercase;
+      letter-spacing: normal;
+      color: var(--color-white);
+    }
+
+    .sub-section-title {
+      font-family: var(--font-lambo);
+      font-size: 40px;
+      font-weight: 400;
+      line-height: 1.15;
+      text-transform: uppercase;
+      letter-spacing: normal;
+      color: var(--color-white);
+    }
+
+    .feature-heading {
+      font-family: var(--font-lambo);
+      font-size: 27px;
+      font-weight: 400;
+      line-height: 1.37;
+      text-transform: uppercase;
+      letter-spacing: normal;
+      color: var(--color-white);
+    }
+
+    .body-large {
+      font-family: var(--font-lambo);
+      font-size: 18px;
+      font-weight: 400;
+      line-height: 1.56;
+      color: var(--color-smoke);
+    }
+
+    .body-text {
+      font-family: var(--font-lambo);
+      font-size: 16px;
+      font-weight: 400;
+      line-height: 1.50;
+      color: var(--color-ash);
+    }
+
+    .caption-text {
+      font-family: var(--font-lambo);
+      font-size: 14px;
+      font-weight: 700;
+      line-height: 1.20;
+      letter-spacing: -0.42px;
+      text-transform: uppercase;
+      color: var(--color-white);
+    }
+
+    .label-meta {
+      font-family: var(--font-lambo);
+      font-size: 12px;
+      font-weight: 500;
+      line-height: 1.83;
+      letter-spacing: 0.96px;
+      text-transform: uppercase;
+      color: var(--color-ash);
+    }
+
+    .micro-text {
+      font-family: var(--font-lambo);
+      font-size: 10px;
+      font-weight: 400;
+      line-height: 1.50;
+      letter-spacing: 0.225px;
+      text-transform: uppercase;
+      color: var(--color-steel);
+    }
+
+    /* -------------------------------------------------------------
+       BUTTONS: ZERO BORDER-RADIUS (SHARP, ANGULAR RECTANGLES)
+       ------------------------------------------------------------- */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-lambo);
+      text-transform: uppercase;
+      text-decoration: none;
+      cursor: pointer;
+      border-radius: var(--radius-zero) !important;
+      border: none;
+      transition: background-color 0.2s ease, opacity 0.2s ease;
+      white-space: nowrap;
+      user-select: none;
+    }
+
+    /* Gold Accent CTA: #FFC000, text #000000, padding 24px, hover #917300 */
+    .btn-gold-accent {
+      background-color: var(--color-gold);
+      color: var(--color-black);
+      padding: 16px 28px;
+      font-size: 16px;
+      font-weight: 500;
+      letter-spacing: 1px;
+    }
+    .btn-gold-accent:hover {
+      background-color: var(--color-dark-gold);
+      color: var(--color-black);
+    }
+
+    /* Transparent Ghost: border 1px solid #FFFFFF (50% opacity), padding 16px */
+    .btn-transparent-ghost {
+      background-color: transparent;
+      color: var(--color-white);
+      border: 1px solid rgba(255, 255, 255, 0.5);
+      padding: 15px 26px;
+      font-size: 14.4px;
+      font-weight: 400;
+      letter-spacing: 1px;
+      opacity: 0.85;
+    }
+    .btn-transparent-ghost:hover {
+      background-color: var(--color-teal-action);
+      border-color: var(--color-teal-action);
+      opacity: 1;
+      color: var(--color-white);
+    }
+
+    /* White Filled */
+    .btn-white-filled {
+      background-color: var(--color-white);
+      color: var(--color-charcoal);
+      padding: 14px 24px;
+      font-size: 14px;
+      font-weight: 500;
+    }
+
+    /* Hexagonal Motif Button */
+    .btn-hexagon {
+      width: 44px;
+      height: 44px;
+      clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+      background: rgba(255, 255, 255, 0.15);
+      border: 1px solid rgba(255, 255, 255, 0.5);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .btn-hexagon:hover {
+      background: var(--color-gold);
+      color: #000;
+    }
+
+    /* -------------------------------------------------------------
+       NAVIGATION: FLOATING IN DARKNESS (CENTERED BULL, LEFT MENU)
+       ------------------------------------------------------------- */
+    .site-nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 1000;
+      height: 84px;
+      background: transparent;
+      display: flex;
+      align-items: center;
+      padding: 0 40px;
+    }
+    .nav-container {
+      width: 100%;
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      align-items: center;
+    }
+
+    .nav-left {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    .menu-trigger {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: transparent;
+      border: none;
+      color: var(--color-white);
+      cursor: pointer;
+      font-family: var(--font-lambo);
+      font-size: 14px;
+      font-weight: 400;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+    .hamburger-bars {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      width: 22px;
+    }
+    .hamburger-line {
+      height: 2px;
+      background-color: var(--color-white);
+      width: 100%;
+    }
+
+    .nav-center-logo {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .bull-shield {
+      width: 38px;
+      height: 44px;
+      fill: var(--color-white);
+      transition: fill 0.2s ease;
+    }
+    .bull-shield:hover {
+      fill: var(--color-gold);
+    }
+
+    .nav-right {
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      gap: 24px;
+    }
+    .nav-icon-btn {
+      background: transparent;
+      border: none;
+      color: var(--color-white);
+      cursor: pointer;
+    }
+
+    /* -------------------------------------------------------------
+       HERO: CINEMATIC FULL-VIEWPORT STAGE
+       ------------------------------------------------------------- */
+    .hero-stage {
+      height: 100vh;
+      min-height: 720px;
+      background: #000000;
+      position: relative;
+      display: flex;
+      align-items: flex-end;
+      padding-bottom: 90px;
+      overflow: hidden;
+      border-bottom: 1px solid var(--color-charcoal);
+    }
+
+    .hero-ambient-darkness {
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at 50% 40%, rgba(255, 192, 0, 0.08) 0%, rgba(0, 0, 0, 0.95) 75%);
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    .hero-inner {
+      position: relative;
+      z-index: 2;
+      width: 100%;
+    }
+
+    .hero-content-block {
+      max-width: 900px;
+    }
+
+    .hero-model-tag {
+      color: var(--color-gold-text);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+
+    .hero-btn-row {
+      display: flex;
+      gap: 16px;
+      margin-top: 36px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    /* Progress bar & Hexagon Video controls */
+    .hero-bottom-controls {
+      position: absolute;
+      bottom: 24px;
+      left: 40px;
+      right: 40px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      z-index: 5;
+    }
+    .hero-progress-line {
+      flex: 1;
+      height: 1px;
+      background: rgba(255, 255, 255, 0.2);
+      margin-right: 24px;
+      position: relative;
+    }
+    .hero-progress-active {
+      width: 42%;
+      height: 1px;
+      background: var(--color-white);
+    }
+
+    /* -------------------------------------------------------------
+       SECTION: AD PERSONAM CONFIGURATOR & V12 ACOUSTICS
+       ------------------------------------------------------------- */
+    .config-section {
+      padding: 100px 0;
+      background: var(--color-black);
+      border-bottom: 1px solid var(--color-charcoal);
+    }
+
+    .config-grid {
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: 48px;
+      margin-top: 50px;
+      align-items: center;
+    }
+
+    .car-stage-panel {
+      background: var(--color-dark-iron);
+      border: 1px solid var(--color-charcoal);
+      border-radius: var(--radius-zero);
+      padding: 32px;
+      position: relative;
+      min-height: 480px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .car-silhouette-canvas {
+      width: 100%;
+      height: 280px;
+      background: #0d0d0d;
+      display: block;
+      border-bottom: 1px solid var(--color-charcoal);
+    }
+
+    /* Livery Paint Swatches (0px radius) */
+    .livery-selector {
+      display: flex;
+      gap: 12px;
+      margin-top: 20px;
+      align-items: center;
+    }
+    .paint-swatch {
+      width: 36px;
+      height: 36px;
+      cursor: pointer;
+      border-radius: var(--radius-zero);
+      border: 2px solid transparent;
+      transition: all 0.15s ease;
+    }
+    .paint-swatch.active {
+      border-color: var(--color-white);
+      transform: scale(1.1);
+    }
+
+    /* Acoustic Telemetry Panel */
+    .acoustic-panel {
+      background: var(--color-charcoal);
+      border-radius: var(--radius-zero);
+      padding: 36px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .rpm-display-gauge {
+      margin: 24px 0;
+      padding: 20px;
+      background: #111111;
+      border: 1px solid #2a2a2a;
+    }
+    .rpm-bar-track {
+      height: 14px;
+      background: #1f1f1f;
+      margin: 12px 0 6px;
+      position: relative;
+    }
+    .rpm-bar-fill {
+      height: 100%;
+      width: 15%;
+      background: var(--color-gold);
+      transition: width 0.05s linear;
+    }
+
+    /* -------------------------------------------------------------
+       SECTION: SUPER SPORTS CAR MODELS GRID (CHARCOAL SURFACES)
+       ------------------------------------------------------------- */
+    .models-section {
+      padding: 100px 0;
+      background: var(--color-black);
+    }
+
+    .models-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+      margin-top: 48px;
+    }
+
+    .model-card {
+      background: var(--color-charcoal);
+      border-radius: var(--radius-zero);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      border-bottom: 2px solid transparent;
+      transition: border-color 0.2s ease;
+    }
+    .model-card:hover {
+      border-color: var(--color-gold);
+    }
+
+    .card-photo-box {
+      height: 240px;
+      background: #141414;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .card-body {
+      padding: 30px;
+    }
+
+    .spec-table-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 8px 0;
+      border-bottom: 1px solid #2e2e2e;
+      font-size: 14px;
+    }
+
+    /* -------------------------------------------------------------
+       SECTION: DESIGN SYSTEM TOKENS & FOUNDATION
+       ------------------------------------------------------------- */
+    .tokens-section {
+      padding: 90px 0;
+      background: var(--color-dark-iron);
+      border-top: 1px solid var(--color-charcoal);
+    }
+
+    .token-swatches {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 16px;
+      margin-top: 36px;
+    }
+    .lambo-token-card {
+      background: var(--color-charcoal);
+      padding: 16px;
+      border-radius: var(--radius-zero);
+      border-left: 3px solid var(--color-gold);
+    }
+    .token-box-preview {
+      height: 48px;
+      margin-bottom: 10px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    /* -------------------------------------------------------------
+       FOOTER: TRUE BLACK CATHEDRAL
+       ------------------------------------------------------------- */
+    .site-footer {
+      background: var(--color-black);
+      border-top: 1px solid var(--color-charcoal);
+      padding: 60px 0 80px;
+    }
+    .footer-layout {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 24px;
+    }
+
+    /* Responsive */
+    @media (max-width: 1199px) {
+      .hero-display { font-size: 80px; }
+      .models-grid { grid-template-columns: 1fr; }
+      .config-grid { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 768px) {
+      .hero-display { font-size: 54px; }
+      .container { padding: 0 20px; }
+      .site-nav { padding: 0 20px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- FLOATING TRANSPARENT NAVIGATION -->
+  <header class="site-nav">
+    <div class="container nav-container">
+      <div class="nav-left">
+        <button class="menu-trigger">
+          <div class="hamburger-bars">
+            <div class="hamburger-line"></div>
+            <div class="hamburger-line"></div>
+          </div>
+          <span>MENU</span>
+        </button>
+      </div>
+
+      <div class="nav-center-logo">
+        <a href="#">
+          <svg class="bull-shield" viewBox="0 0 40 48">
+            <polygon points="20,2 38,10 34,44 20,48 6,44 2,10" fill="none" stroke="currentColor" stroke-width="2"/>
+            <path d="M12 24 C14 18 26 18 28 24 C27 30 24 34 20 38 C16 34 13 30 12 24 Z" fill="currentColor"/>
+          </svg>
+        </a>
+      </div>
+
+      <div class="nav-right">
+        <button class="nav-icon-btn" title="Search">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        </button>
+        <button class="nav-icon-btn" title="Saved Models">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- CINEMATIC HERO SECTION (120px UPPERCASE DISPLAY) -->
+  <section class="hero-stage">
+    <div class="hero-ambient-darkness"></div>
+    <div class="container hero-inner">
+      <div class="hero-content-block">
+        <div class="hero-model-tag">
+          <span class="micro-text" style="color: var(--color-gold); font-weight: 700;">HPEV V12 SUPER SPORTS CAR</span>
+          <span style="color: var(--color-ash);">//</span>
+          <span class="micro-text">FROM NOW ON</span>
+        </div>
+
+        <h1 class="hero-display">REVUELTO</h1>
+
+        <p class="body-large" style="margin-top: 20px; max-width: 640px;">
+          The first High Performance Electrified Vehicle (HPEV). A paradigm shift in performance, driving dynamics, and aerodynamic aggression.
+        </p>
+
+        <div class="hero-btn-row">
+          <a href="#configurator" class="btn btn-gold-accent">Discover More</a>
+          <a href="#configurator" class="btn btn-transparent-ghost">Start Configuration</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Video control & Progress Bar -->
+    <div class="hero-bottom-controls">
+      <div class="hero-progress-line">
+        <div class="hero-progress-active"></div>
+      </div>
+      <button class="btn-hexagon" onclick="toggleEngineAudio()" title="V12 Engine Throttle">
+        ▶
+      </button>
+    </div>
+  </section>
+
+  <!-- AD PERSONAM CONFIGURATOR & V12 ACOUSTIC SIMULATOR -->
+  <section class="config-section" id="configurator">
+    <div class="container">
+      <div>
+        <span class="label-meta" style="color: var(--color-gold);">AD PERSONAM STUDIO</span>
+        <h2 class="section-title" style="margin-top: 8px;">CUSTOMIZE YOUR WEAPON</h2>
+        <p class="body-text" style="max-width: 680px; margin-top: 10px;">
+          Uncompromised bespoke engineering. Experience the naturally aspirated 6.5L V12 screaming to 9,500 RPM alongside three high-density axial flux electric motors.
+        </p>
+      </div>
+
+      <div class="config-grid">
+        <!-- Live Visual Car Canvas Stage -->
+        <div class="car-stage-panel">
+          <div>
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+              <span class="caption-text" id="selectedLiveryName">GIALLO INTI (GOLD)</span>
+              <span class="micro-text" style="color:var(--color-gold);">AERODYNAMICS ACTIVE</span>
+            </div>
+            <canvas id="carSilhouetteCanvas" class="car-silhouette-canvas" width="560" height="280"></canvas>
+          </div>
+
+          <div>
+            <span class="label-meta">EXTERIOR LIVERY</span>
+            <div class="livery-selector">
+              <!-- Giallo Inti -->
+              <div class="paint-swatch active" style="background-color: #FFC000;" onclick="selectLivery('Giallo Inti', '#FFC000', this)" title="Giallo Inti (#FFC000)"></div>
+              <!-- Nero Noctis -->
+              <div class="paint-swatch" style="background-color: #000000; border: 1px solid #444;" onclick="selectLivery('Nero Noctis', '#050505', this)" title="Nero Noctis (#000000)"></div>
+              <!-- Verde Mantis -->
+              <div class="paint-swatch" style="background-color: #76C043;" onclick="selectLivery('Verde Mantis', '#76C043', this)" title="Verde Mantis"></div>
+              <!-- Blu Nethuns -->
+              <div class="paint-swatch" style="background-color: #15518F;" onclick="selectLivery('Blu Nethuns', '#15518F', this)" title="Blu Nethuns"></div>
+              <!-- Grigio Telesto -->
+              <div class="paint-swatch" style="background-color: #64696C;" onclick="selectLivery('Grigio Telesto', '#64696C', this)" title="Grigio Telesto"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Interactive V12 Acoustic Telemetry Stage -->
+        <div class="acoustic-panel">
+          <div style="display:flex; justify-content:space-between; align-items:center;">
+            <span class="caption-text">V12 HYBRID TELEMETRY</span>
+            <span class="label-meta" style="color: var(--color-cyan-pulse);">1,015 CV TOTAL</span>
+          </div>
+
+          <div class="rpm-display-gauge">
+            <div style="display:flex; justify-content:space-between; align-items:flex-end;">
+              <span class="micro-text">INTERNAL COMBUSTION SPEED</span>
+              <span style="font-size: 32px; font-weight: 700; color: #fff;" id="rpmText">1,200 <span style="font-size:14px; font-weight:400; color:var(--color-ash)">RPM</span></span>
+            </div>
+            <div class="rpm-bar-track">
+              <div class="rpm-bar-fill" id="rpmBar"></div>
+            </div>
+            <div style="display:flex; justify-content:space-between; font-size:10px; color:var(--color-ash);">
+              <span>0</span>
+              <span>4,000</span>
+              <span>7,000</span>
+              <span style="color:var(--color-gold)">9,500 REDLINE</span>
+            </div>
+          </div>
+
+          <div style="display:flex; gap:12px; margin-top:20px;">
+            <button class="btn btn-gold-accent" style="flex:1; padding:14px;" onmousedown="revEngine(true)" onmouseup="revEngine(false)" ontouchstart="revEngine(true)" ontouchend="revEngine(false)">
+              HOLD THROTTLE
+            </button>
+            <button class="btn btn-transparent-ghost" style="padding:14px;" onclick="toggleEngineAudio()">
+              MUTE / UNMUTE
+            </button>
+          </div>
+
+          <div style="margin-top: 24px; padding-top: 20px; border-top: 1px solid #333; display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
+            <div>
+              <span class="micro-text">ACCELERATION 0-100 KM/H</span>
+              <div class="caption-text" style="font-size: 20px; margin-top: 4px; color: var(--color-gold);">2.5 S</div>
+            </div>
+            <div>
+              <span class="micro-text">MAX SPEED</span>
+              <div class="caption-text" style="font-size: 20px; margin-top: 4px; color: #ffffff;">&gt; 350 KM/H</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SUPER SPORTS CAR MODELS SHOWCASE (BOOTSTRAP-STYLE CHARCOAL CARDS) -->
+  <section class="models-section">
+    <div class="container">
+      <span class="label-meta" style="color: var(--color-gold);">MOTORSPORT LINEUP</span>
+      <h2 class="display-2" style="margin-top: 8px;">MODELS</h2>
+
+      <div class="models-grid">
+        <!-- Model Card 1: Revuelto -->
+        <div class="model-card">
+          <div class="card-photo-box">
+            <svg width="220" height="100" viewBox="0 0 220 100">
+              <path d="M10 70 L40 50 L90 35 L150 35 L190 55 L210 70 Z" fill="none" stroke="#FFC000" stroke-width="2"/>
+              <circle cx="50" cy="72" r="14" fill="#000" stroke="#FFC000" stroke-width="2"/>
+              <circle cx="170" cy="72" r="14" fill="#000" stroke="#FFC000" stroke-width="2"/>
+            </svg>
+          </div>
+          <div class="card-body">
+            <span class="micro-text" style="color: var(--color-gold);">V12 HPEV</span>
+            <h3 class="feature-heading" style="margin: 8px 0 16px;">REVUELTO</h3>
+            <div class="spec-table-row">
+              <span class="body-text">POWER (CV)</span>
+              <span class="caption-text">1,015 CV</span>
+            </div>
+            <div class="spec-table-row">
+              <span class="body-text">MAX SPEED</span>
+              <span class="caption-text">&gt; 350 KM/H</span>
+            </div>
+            <div class="spec-table-row">
+              <span class="body-text">0-100 KM/H</span>
+              <span class="caption-text">2.5 S</span>
+            </div>
+            <a href="#configurator" class="btn btn-gold-accent" style="width:100%; margin-top: 24px; padding: 14px;">
+              DISCOVER MORE
+            </a>
+          </div>
+        </div>
+
+        <!-- Model Card 2: Temerario -->
+        <div class="model-card">
+          <div class="card-photo-box">
+            <svg width="220" height="100" viewBox="0 0 220 100">
+              <path d="M15 72 L45 52 L95 38 L145 38 L185 54 L205 72 Z" fill="none" stroke="#FFFFFF" stroke-width="2"/>
+              <circle cx="50" cy="72" r="14" fill="#000" stroke="#FFFFFF" stroke-width="2"/>
+              <circle cx="170" cy="72" r="14" fill="#000" stroke="#FFFFFF" stroke-width="2"/>
+            </svg>
+          </div>
+          <div class="card-body">
+            <span class="micro-text" style="color: var(--color-ash);">V8 BITURBO HYBRID</span>
+            <h3 class="feature-heading" style="margin: 8px 0 16px;">TEMERARIO</h3>
+            <div class="spec-table-row">
+              <span class="body-text">POWER (CV)</span>
+              <span class="caption-text">920 CV</span>
+            </div>
+            <div class="spec-table-row">
+              <span class="body-text">MAX SPEED</span>
+              <span class="caption-text">343 KM/H</span>
+            </div>
+            <div class="spec-table-row">
+              <span class="body-text">0-100 KM/H</span>
+              <span class="caption-text">2.7 S</span>
+            </div>
+            <a href="#configurator" class="btn btn-transparent-ghost" style="width:100%; margin-top: 24px; padding: 14px;">
+              DISCOVER MORE
+            </a>
+          </div>
+        </div>
+
+        <!-- Model Card 3: Urus SE -->
+        <div class="model-card">
+          <div class="card-photo-box">
+            <svg width="220" height="100" viewBox="0 0 220 100">
+              <path d="M10 75 L35 55 L75 30 L155 30 L195 50 L210 75 Z" fill="none" stroke="#FFFFFF" stroke-width="2"/>
+              <circle cx="50" cy="75" r="16" fill="#000" stroke="#FFFFFF" stroke-width="2"/>
+              <circle cx="170" cy="75" r="16" fill="#000" stroke="#FFFFFF" stroke-width="2"/>
+            </svg>
+          </div>
+          <div class="card-body">
+            <span class="micro-text" style="color: var(--color-ash);">SUPER SUV PHEV</span>
+            <h3 class="feature-heading" style="margin: 8px 0 16px;">URUS SE</h3>
+            <div class="spec-table-row">
+              <span class="body-text">POWER (CV)</span>
+              <span class="caption-text">800 CV</span>
+            </div>
+            <div class="spec-table-row">
+              <span class="body-text">MAX SPEED</span>
+              <span class="caption-text">312 KM/H</span>
+            </div>
+            <div class="spec-table-row">
+              <span class="body-text">0-100 KM/H</span>
+              <span class="caption-text">3.4 S</span>
+            </div>
+            <a href="#configurator" class="btn btn-transparent-ghost" style="width:100%; margin-top: 24px; padding: 14px;">
+              DISCOVER MORE
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION: DESIGN SYSTEM TOKENS & RULES -->
+  <section class="tokens-section">
+    <div class="container">
+      <span class="label-meta" style="color: var(--color-gold);">DESIGN SYSTEM SPECIFICATION</span>
+      <h2 class="sub-section-title" style="margin-top: 8px;">COLOR FOUNDATIONS & ZERO RADIUS</h2>
+      <p class="body-text" style="margin-top: 8px; max-width: 720px;">
+        Every button, container, card, and image adheres strictly to 0px border-radius and the pure monochrome-plus-gold palette.
+      </p>
+
+      <div class="token-swatches">
+        <!-- Lamborghini Gold -->
+        <div class="lambo-token-card">
+          <div class="token-box-preview" style="background-color: #FFC000;"></div>
+          <div class="caption-text" style="font-size: 12px;">LAMBORGHINI GOLD</div>
+          <div class="micro-text" style="color: var(--color-ash); margin-top: 4px;">#FFC000 (PRIMARY CTA)</div>
+        </div>
+
+        <!-- Dark Gold -->
+        <div class="lambo-token-card">
+          <div class="token-box-preview" style="background-color: #917300;"></div>
+          <div class="caption-text" style="font-size: 12px;">DARK GOLD</div>
+          <div class="micro-text" style="color: var(--color-ash); margin-top: 4px;">#917300 (HOVER)</div>
+        </div>
+
+        <!-- Absolute Black -->
+        <div class="lambo-token-card">
+          <div class="token-box-preview" style="background-color: #000000; border: 1px solid #333;"></div>
+          <div class="caption-text" style="font-size: 12px;">ABSOLUTE BLACK</div>
+          <div class="micro-text" style="color: var(--color-ash); margin-top: 4px;">#000000 (CANVAS VOID)</div>
+        </div>
+
+        <!-- Charcoal -->
+        <div class="lambo-token-card">
+          <div class="token-box-preview" style="background-color: #202020;"></div>
+          <div class="caption-text" style="font-size: 12px;">CHARCOAL</div>
+          <div class="micro-text" style="color: var(--color-ash); margin-top: 4px;">#202020 (CARDS)</div>
+        </div>
+
+        <!-- Pure White -->
+        <div class="lambo-token-card">
+          <div class="token-box-preview" style="background-color: #FFFFFF;"></div>
+          <div class="caption-text" style="font-size: 12px; color: #FFFFFF;">PURE WHITE</div>
+          <div class="micro-text" style="color: var(--color-ash); margin-top: 4px;">#FFFFFF (PRIMARY TEXT)</div>
+        </div>
+
+        <!-- Cyan Pulse -->
+        <div class="lambo-token-card">
+          <div class="token-box-preview" style="background-color: #29ABE2;"></div>
+          <div class="caption-text" style="font-size: 12px;">CYAN PULSE</div>
+          <div class="micro-text" style="color: var(--color-ash); margin-top: 4px;">#29ABE2 (ACCENT)</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CATHEDRAL OF DARKNESS FOOTER -->
+  <footer class="site-footer">
+    <div class="container footer-layout">
+      <div style="display:flex; align-items:center; gap:16px;">
+        <svg class="bull-shield" style="width:24px; height:30px;" viewBox="0 0 40 48">
+          <polygon points="20,2 38,10 34,44 20,48 6,44 2,10" fill="none" stroke="currentColor" stroke-width="2"/>
+          <path d="M12 24 C14 18 26 18 28 24 C27 30 24 34 20 38 C16 34 13 30 12 24 Z" fill="currentColor"/>
+        </svg>
+        <span class="caption-text" style="font-size: 13px;">AUTOMOBILI LAMBORGHINI S.P.A.</span>
+      </div>
+
+      <div style="display:flex; gap:24px; align-items:center;">
+        <span class="micro-text" style="color:var(--color-gold);">ACCENT: #FFC000</span>
+        <span class="micro-text" style="color:var(--color-white);">RADIUS: 0px</span>
+        <span class="micro-text" style="color:var(--color-ash);">TYPE: UPPERCASE ONLY</span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- INTERACTIVE V12 AUDIO & LIVERY SCRIPT -->
+  <script>
+    let activeColor = '#FFC000';
+    let audioCtx = null;
+    let osc1 = null;
+    let osc2 = null;
+    let gainNode = null;
+    let isAudioActive = false;
+    let targetRpm = 1200;
+    let currentRpm = 1200;
+
+    // Car Silhouette Canvas Renderer
+    const carCanvas = document.getElementById('carSilhouetteCanvas');
+    const carCtx = carCanvas.getContext('2d');
+
+    function drawCar() {
+      carCtx.clearRect(0, 0, carCanvas.width, carCanvas.height);
+      const w = carCanvas.width;
+      const h = carCanvas.height;
+
+      // Studio grid floor
+      carCtx.strokeStyle = '#181818';
+      carCtx.lineWidth = 1;
+      carCtx.beginPath();
+      for (let x = 0; x < w; x += 30) {
+        carCtx.moveTo(x, h - 50);
+        carCtx.lineTo(x + (x - w / 2) * 0.8, h);
+      }
+      carCtx.stroke();
+
+      // Car body contour
+      carCtx.beginPath();
+      carCtx.moveTo(40, h - 70);
+      carCtx.lineTo(90, h - 90);
+      carCtx.lineTo(170, h - 130);
+      carCtx.lineTo(310, h - 130);
+      carCtx.lineTo(440, h - 95);
+      carCtx.lineTo(510, h - 70);
+      carCtx.lineTo(480, h - 70);
+      carCtx.arc(430, h - 70, 26, 0, Math.PI, true);
+      carCtx.lineTo(160, h - 70);
+      carCtx.arc(110, h - 70, 26, 0, Math.PI, true);
+      carCtx.closePath();
+
+      carCtx.fillStyle = '#141414';
+      carCtx.fill();
+      carCtx.strokeStyle = activeColor;
+      carCtx.lineWidth = 3;
+      carCtx.shadowBlur = 16;
+      carCtx.shadowColor = activeColor;
+      carCtx.stroke();
+      carCtx.shadowBlur = 0;
+
+      // Wheels
+      carCtx.fillStyle = '#080808';
+      carCtx.beginPath();
+      carCtx.arc(110, h - 70, 22, 0, Math.PI * 2);
+      carCtx.arc(430, h - 70, 22, 0, Math.PI * 2);
+      carCtx.fill();
+      carCtx.strokeStyle = '#444';
+      carCtx.lineWidth = 2;
+      carCtx.stroke();
+    }
+
+    drawCar();
+
+    function selectLivery(name, hex, elem) {
+      activeColor = hex;
+      document.getElementById('selectedLiveryName').textContent = name.toUpperCase();
+      document.querySelectorAll('.paint-swatch').forEach(e => e.classList.remove('active'));
+      elem.classList.add('active');
+      drawCar();
+    }
+
+    // Web Audio API V12 Hybrid Acoustic Engine
+    function initAudio() {
+      if (audioCtx) return;
+      const AudioCtx = window.AudioContext || window.webkitAudioContext;
+      audioCtx = new AudioCtx();
+
+      osc1 = audioCtx.createOscillator();
+      osc2 = audioCtx.createOscillator();
+      gainNode = audioCtx.createGain();
+
+      osc1.type = 'sawtooth';
+      osc2.type = 'triangle';
+
+      osc1.frequency.setValueAtTime(60, audioCtx.currentTime);
+      osc2.frequency.setValueAtTime(120, audioCtx.currentTime);
+      gainNode.gain.setValueAtTime(0.001, audioCtx.currentTime);
+
+      osc1.connect(gainNode);
+      osc2.connect(gainNode);
+      gainNode.connect(audioCtx.destination);
+
+      osc1.start();
+      osc2.start();
+    }
+
+    function toggleEngineAudio() {
+      initAudio();
+      if (!isAudioActive) {
+        if (audioCtx.state === 'suspended') audioCtx.resume();
+        gainNode.gain.linearRampToValueAtTime(0.04, audioCtx.currentTime + 0.3);
+        isAudioActive = true;
+      } else {
+        gainNode.gain.linearRampToValueAtTime(0.0001, audioCtx.currentTime + 0.3);
+        isAudioActive = false;
+      }
+    }
+
+    function revEngine(isReving) {
+      initAudio();
+      if (!isAudioActive) toggleEngineAudio();
+      targetRpm = isReving ? 9200 : 1200;
+    }
+
+    // RPM animation loop
+    function updateRpmLoop() {
+      const diff = targetRpm - currentRpm;
+      currentRpm += diff * 0.08;
+
+      document.getElementById('rpmText').innerHTML = 
+        `${Math.round(currentRpm).toLocaleString()} <span style="font-size:14px; font-weight:400; color:var(--color-ash)">RPM</span>`;
+      
+      const pct = Math.min(100, (currentRpm / 9500) * 100);
+      document.getElementById('rpmBar').style.width = pct + '%';
+
+      if (isAudioActive && audioCtx) {
+        const baseFreq = 40 + (currentRpm / 9500) * 280;
+        osc1.frequency.setValueAtTime(baseFreq, audioCtx.currentTime);
+        osc2.frequency.setValueAtTime(baseFreq * 1.5, audioCtx.currentTime);
+      }
+
+      requestAnimationFrame(updateRpmLoop);
+    }
+
+    updateRpmLoop();
+  </script>
+</body>
+</html>

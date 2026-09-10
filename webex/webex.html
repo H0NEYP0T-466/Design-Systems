@@ -1,0 +1,2319 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Webex Design System — Momentum Collaboration UI</title>
+  <meta name="description" content="Authentic implementation of the Webex Design System: Momentum typography, Action Blue interactive system, collaboration spectrum, and hybrid white-canvas/charcoal product surfaces." />
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+  <style>
+    /* ─────────────────────────────────────────────────────────────────
+       WEBEX MOMENTUM DESIGN SYSTEM TOKENS
+       Specification: /home/honeypot/open-design/design-systems/webex/DESIGN.md
+       ───────────────────────────────────────────────────────────────── */
+    :root {
+      /* Primary Action */
+      --webex-blue-action: #1170cf;
+      --webex-blue-hover: #0353a8;
+      --webex-blue-pressed: #063a75;
+      --webex-blue-accent: #64b4fa;
+      --webex-focus-halo: 0 0 0 2px #64b4fa;
+      --webex-focus-halo-offset: 0 0 0 2px #ffffff, 0 0 0 4px #64b4fa;
+
+      /* Text & Surfaces - Light Default */
+      --webex-text-primary: #000000f2;
+      --webex-text-secondary: #000000b3;
+      --webex-canvas: #ffffff;
+      --webex-canvas-subtle: #f8fafc;
+      --webex-border: rgba(0, 0, 0, 0.08);
+      --webex-border-hover: rgba(0, 0, 0, 0.16);
+      --webex-card-bg: #ffffff;
+      --webex-card-elevated: #ffffff;
+      --webex-surface-muted: rgba(0, 0, 0, 0.04);
+
+      /* Dark Surfaces for embedded product surfaces & dark mode */
+      --webex-dark-canvas: #000000;
+      --webex-dark-surface-1: #1a1a1a;
+      --webex-dark-surface-2: #262626;
+      --webex-dark-surface-3: #333333;
+      --webex-dark-text-primary: #fffffff2;
+      --webex-dark-text-secondary: #ffffffb3;
+      --webex-dark-border: rgba(255, 255, 255, 0.12);
+      --webex-dark-border-hover: rgba(255, 255, 255, 0.22);
+
+      /* Collaboration / Team Spectrum (Secondary Accents ONLY) */
+      --team-cobalt: #5ebff7;
+      --team-cyan: #22c7d6;
+      --team-mint: #30c9b0;
+      --team-lime: #93c437;
+      --team-gold: #d6b220;
+      --team-orange: #fd884e;
+      --team-pink: #fc97aa;
+      --team-purple: #f294f1;
+
+      /* Semantic */
+      --webex-success: #3cc29a;
+      --webex-warning: #f2990a;
+      --webex-danger: #fc8b98;
+
+      /* Typography Scale (Momentum Font Stack) */
+      --font-momentum: Momentum, Inter, -apple-system, BlinkMacSystemFont, Arial, "Helvetica Neue", Helvetica, sans-serif;
+      --font-mono: "JetBrains Mono", SFMono-Regular, Consolas, monospace;
+
+      /* Type Hierarchy */
+      --hero-display-size: 64px;
+      --hero-display-weight: 500;
+      --hero-display-leading: 1.10;
+      --hero-display-tracking: -1px;
+
+      --section-display-size: 40px;
+      --section-display-weight: 500;
+      --section-display-leading: 1.20;
+      --section-display-tracking: -0.5px;
+
+      --heading-size: 24px;
+      --heading-weight: 500;
+      --heading-leading: 1.33;
+
+      --body-size: 16px;
+      --body-weight: 400;
+      --body-leading: 1.50;
+
+      --body-sm-size: 14px;
+      --body-sm-weight: 400;
+      --body-sm-leading: 1.43;
+
+      --label-size: 12px;
+      --label-weight: 500;
+      --label-leading: 1.33;
+
+      --btn-text-size: 16px;
+      --btn-text-weight: 500;
+      --btn-text-leading: 1.25;
+
+      /* Spacing Scale (8px Base Rhythm) */
+      --space-8: 8px;
+      --space-12: 12px;
+      --space-16: 16px;
+      --space-24: 24px;
+      --space-32: 32px;
+      --space-48: 48px;
+      --space-64: 64px;
+      --space-88: 88px;
+
+      /* Radii */
+      --radius-sm: 8px;
+      --radius-md: 12px;
+      --radius-card: 16px;
+      --radius-pill: 9999px;
+
+      /* Motion */
+      --motion-fast: 160ms;
+      --motion-normal: 240ms;
+      --motion-slow: 280ms;
+      --motion-ease: cubic-bezier(0.2, 0, 0, 1);
+
+      /* Touch target */
+      --min-touch-target: 44px;
+    }
+
+    [data-theme="dark"] {
+      --webex-text-primary: #fffffff2;
+      --webex-text-secondary: #ffffffb3;
+      --webex-canvas: #000000;
+      --webex-canvas-subtle: #0d0d0d;
+      --webex-border: rgba(255, 255, 255, 0.12);
+      --webex-border-hover: rgba(255, 255, 255, 0.22);
+      --webex-card-bg: #1a1a1a;
+      --webex-card-elevated: #262626;
+      --webex-surface-muted: rgba(255, 255, 255, 0.06);
+    }
+
+    /* Reset & Base */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      font-family: var(--font-momentum);
+      color: var(--webex-text-primary);
+      background-color: var(--webex-canvas);
+      scroll-behavior: smooth;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    body {
+      font-size: var(--body-size);
+      line-height: var(--body-leading);
+      min-height: 100vh;
+      overflow-x: hidden;
+      transition: background-color var(--motion-normal) var(--motion-ease), color var(--motion-normal) var(--motion-ease);
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 120ms !important;
+        scroll-behavior: auto !important;
+      }
+    }
+
+    /* Utility Layout */
+    .container {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 0 var(--space-24);
+    }
+
+    @media (max-width: 767px) {
+      .container {
+        padding: 0 var(--space-16);
+      }
+    }
+
+    /* Header & Navigation */
+    .webex-nav-header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background-color: var(--webex-canvas);
+      border-bottom: 1px solid var(--webex-border);
+      backdrop-filter: blur(12px);
+      transition: border-color var(--motion-normal);
+    }
+
+    .nav-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 72px;
+    }
+
+    .brand-mark {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+      color: var(--webex-text-primary);
+      font-weight: 600;
+      font-size: 20px;
+      letter-spacing: -0.3px;
+    }
+
+    .webex-helix-logo {
+      width: 32px;
+      height: 32px;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+
+    .nav-menu {
+      display: flex;
+      align-items: center;
+      gap: 28px;
+      list-style: none;
+    }
+
+    .nav-link {
+      font-size: var(--body-sm-size);
+      font-weight: 500;
+      color: var(--webex-text-secondary);
+      text-decoration: none;
+      padding: 8px 12px;
+      border-radius: var(--radius-pill);
+      transition: color var(--motion-fast), background var(--motion-fast);
+      min-height: var(--min-touch-target);
+      display: inline-flex;
+      align-items: center;
+    }
+
+    .nav-link:hover {
+      color: var(--webex-blue-action);
+      background-color: rgba(17, 112, 207, 0.06);
+    }
+
+    .nav-link:focus-visible {
+      outline: none;
+      box-shadow: var(--webex-focus-halo);
+    }
+
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    /* BUTTONS */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      font-family: var(--font-momentum);
+      font-size: var(--btn-text-size);
+      font-weight: var(--btn-text-weight);
+      line-height: var(--btn-text-leading);
+      border-radius: var(--radius-pill);
+      padding: 10px 24px;
+      min-height: var(--min-touch-target);
+      cursor: pointer;
+      text-decoration: none;
+      transition: background-color var(--motion-fast) var(--motion-ease),
+                  border-color var(--motion-fast) var(--motion-ease),
+                  color var(--motion-fast) var(--motion-ease),
+                  transform var(--motion-fast) var(--motion-ease),
+                  box-shadow var(--motion-fast) var(--motion-ease);
+      border: 1px solid transparent;
+      user-select: none;
+      white-space: nowrap;
+    }
+
+    .btn:focus-visible {
+      outline: none;
+      box-shadow: var(--webex-focus-halo-offset);
+    }
+
+    /* Primary Blue Pill */
+    .btn-primary {
+      background-color: var(--webex-blue-action);
+      color: #ffffff;
+      border-color: transparent;
+    }
+
+    .btn-primary:hover {
+      background-color: var(--webex-blue-hover);
+    }
+
+    .btn-primary:active {
+      background-color: var(--webex-blue-pressed);
+      transform: scale(0.99);
+    }
+
+    /* Secondary Ghost/Outline on Light */
+    .btn-outline-light {
+      background-color: transparent;
+      color: var(--webex-blue-action);
+      border-color: rgba(17, 112, 207, 0.28);
+    }
+
+    .btn-outline-light:hover {
+      background-color: rgba(17, 112, 207, 0.08);
+      border-color: var(--webex-blue-action);
+    }
+
+    .btn-outline-light:active {
+      background-color: rgba(17, 112, 207, 0.14);
+    }
+
+    /* Secondary Ghost/Outline on Dark */
+    .btn-outline-dark {
+      background-color: transparent;
+      color: var(--webex-blue-accent);
+      border-color: rgba(100, 180, 250, 0.35);
+    }
+
+    .btn-outline-dark:hover {
+      background-color: rgba(17, 112, 207, 0.2);
+      border-color: var(--webex-blue-accent);
+      color: #ffffff;
+    }
+
+    .btn-outline-dark:active {
+      background-color: rgba(17, 112, 207, 0.35);
+    }
+
+    .btn-outline-dark:focus-visible {
+      outline: none;
+      box-shadow: var(--webex-focus-halo);
+    }
+
+    .btn-icon {
+      width: 44px;
+      height: 44px;
+      padding: 0;
+      border-radius: var(--radius-pill);
+    }
+
+    /* Hero Section */
+    .hero-section {
+      padding: var(--space-64) 0 var(--space-88);
+      position: relative;
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--space-48);
+      align-items: center;
+    }
+
+    @media (max-width: 991px) {
+      .hero-grid {
+        grid-template-columns: 1fr;
+        gap: var(--space-32);
+      }
+    }
+
+    .hero-content {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-24);
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(17, 112, 207, 0.08);
+      color: var(--webex-blue-action);
+      padding: 6px 14px;
+      border-radius: var(--radius-pill);
+      font-size: var(--label-size);
+      font-weight: 500;
+      width: fit-content;
+      border: 1px solid rgba(17, 112, 207, 0.15);
+    }
+
+    .hero-badge .status-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--webex-success);
+    }
+
+    .hero-headline {
+      font-size: var(--hero-display-size);
+      font-weight: var(--hero-display-weight);
+      line-height: var(--hero-display-leading);
+      letter-spacing: var(--hero-display-tracking);
+      color: var(--webex-text-primary);
+    }
+
+    .hero-subhead {
+      font-size: 20px;
+      line-height: 1.5;
+      color: var(--webex-text-secondary);
+      max-width: 540px;
+    }
+
+    .hero-cta-group {
+      display: flex;
+      align-items: center;
+      gap: var(--space-16);
+      flex-wrap: wrap;
+    }
+
+    /* Embedded Dark Product Surface - Real Webex Live Stage */
+    .embedded-stage-container {
+      background-color: var(--webex-dark-canvas);
+      border: 1px solid var(--webex-dark-border);
+      border-radius: var(--radius-card);
+      overflow: hidden;
+      box-shadow: 0 24px 64px rgba(0, 0, 0, 0.28);
+      color: var(--webex-dark-text-primary);
+    }
+
+    .stage-top-bar {
+      height: 48px;
+      background-color: var(--webex-dark-surface-1);
+      border-bottom: 1px solid var(--webex-dark-border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 var(--space-16);
+      font-size: var(--body-sm-size);
+    }
+
+    .meeting-badge-live {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(252, 139, 152, 0.2);
+      color: var(--webex-danger);
+      padding: 2px 10px;
+      border-radius: var(--radius-pill);
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+    }
+
+    .rec-indicator {
+      width: 8px;
+      height: 8px;
+      background-color: var(--webex-danger);
+      border-radius: 50%;
+      animation: pulse 1.8s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.3; }
+    }
+
+    .stage-video-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 8px;
+      padding: 12px;
+      background: var(--webex-dark-surface-1);
+      min-height: 320px;
+    }
+
+    .video-tile {
+      background-color: var(--webex-dark-surface-2);
+      border-radius: 10px;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 12px;
+      border: 2px solid transparent;
+      transition: border-color var(--motion-fast);
+      aspect-ratio: 16/10;
+    }
+
+    .video-tile.active-speaker {
+      border-color: var(--webex-blue-action);
+    }
+
+    .video-tile-center {
+      margin: auto;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .tile-avatar {
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 600;
+      font-size: 18px;
+      color: #000000f2;
+    }
+
+    .video-tile-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 12px;
+      background: rgba(0, 0, 0, 0.45);
+      padding: 4px 8px;
+      border-radius: 6px;
+      backdrop-filter: blur(4px);
+    }
+
+    .speech-wave {
+      display: inline-flex;
+      align-items: flex-end;
+      gap: 2px;
+      height: 12px;
+    }
+
+    .speech-wave span {
+      width: 2px;
+      background: var(--webex-success);
+      border-radius: 1px;
+      animation: wave 1s ease-in-out infinite alternate;
+    }
+    .speech-wave span:nth-child(2) { animation-delay: 0.2s; height: 10px; }
+    .speech-wave span:nth-child(3) { animation-delay: 0.4s; height: 6px; }
+
+    @keyframes wave {
+      0% { height: 3px; }
+      100% { height: 12px; }
+    }
+
+    .stage-controls-rail {
+      background-color: var(--webex-dark-surface-1);
+      border-top: 1px solid var(--webex-dark-border);
+      padding: 12px var(--space-16);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .call-ctl-btn {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: var(--webex-dark-surface-2);
+      border: 1px solid var(--webex-dark-border);
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: background-color var(--motion-fast), border-color var(--motion-fast);
+      position: relative;
+    }
+
+    .call-ctl-btn:hover {
+      background: var(--webex-dark-surface-3);
+      border-color: var(--webex-dark-border-hover);
+    }
+
+    .call-ctl-btn:focus-visible {
+      outline: none;
+      box-shadow: var(--webex-focus-halo);
+    }
+
+    .call-ctl-btn.active-control {
+      background: var(--webex-blue-action);
+      border-color: var(--webex-blue-action);
+    }
+
+    .call-ctl-btn.danger-action {
+      background: #e11d48;
+      border-color: #e11d48;
+      width: 56px;
+      border-radius: var(--radius-pill);
+    }
+
+    .call-ctl-btn.danger-action:hover {
+      background: #be123c;
+    }
+
+    /* Section Component: Collaboration Token Spectrum */
+    .token-showcase-section {
+      padding: var(--space-64) 0;
+      background: var(--webex-canvas-subtle);
+      border-top: 1px solid var(--webex-border);
+      border-bottom: 1px solid var(--webex-border);
+    }
+
+    .section-header {
+      margin-bottom: var(--space-48);
+      max-width: 760px;
+    }
+
+    .section-title {
+      font-size: var(--section-display-size);
+      font-weight: var(--section-display-weight);
+      line-height: var(--section-display-leading);
+      letter-spacing: var(--section-display-tracking);
+      color: var(--webex-text-primary);
+      margin-bottom: var(--space-12);
+    }
+
+    .section-lead {
+      font-size: var(--body-size);
+      color: var(--webex-text-secondary);
+      line-height: var(--body-leading);
+    }
+
+    .token-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+      gap: 16px;
+    }
+
+    .token-chip-card {
+      background: var(--webex-card-bg);
+      border: 1px solid var(--webex-border);
+      border-radius: var(--radius-card);
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+      text-align: center;
+      transition: transform var(--motion-fast), box-shadow var(--motion-fast);
+      cursor: pointer;
+    }
+
+    .token-chip-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
+    }
+
+    .token-swatch {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      border: 1px solid rgba(0, 0, 0, 0.08);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #000000;
+      font-weight: 600;
+      font-size: 14px;
+    }
+
+    .token-name {
+      font-size: var(--body-sm-size);
+      font-weight: 500;
+      color: var(--webex-text-primary);
+    }
+
+    .token-hex {
+      font-size: 12px;
+      font-family: var(--font-mono);
+      color: var(--webex-text-secondary);
+    }
+
+    .token-tag {
+      font-size: 11px;
+      padding: 2px 8px;
+      border-radius: var(--radius-pill);
+      background: var(--webex-surface-muted);
+      color: var(--webex-text-secondary);
+    }
+
+    /* Core Product Recipes */
+    .recipes-section {
+      padding: var(--space-64) 0;
+    }
+
+    .recipe-showcase-grid {
+      display: grid;
+      grid-template-columns: 320px 1fr;
+      gap: var(--space-24);
+      background: var(--webex-card-bg);
+      border: 1px solid var(--webex-border);
+      border-radius: var(--radius-card);
+      overflow: hidden;
+      min-height: 640px;
+    }
+
+    @media (max-width: 991px) {
+      .recipe-showcase-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* RECIPE 1: Workspace Sidebar */
+    .workspace-sidebar {
+      background: var(--webex-canvas);
+      border-right: 1px solid var(--webex-border);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: var(--space-16);
+      transition: width var(--motion-fast);
+    }
+
+    .workspace-switcher {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 8px 12px;
+      background: var(--webex-surface-muted);
+      border-radius: 10px;
+      margin-bottom: 16px;
+      cursor: pointer;
+    }
+
+    .workspace-icon {
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      background: var(--webex-blue-action);
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 600;
+    }
+
+    .workspace-info {
+      flex: 1;
+      overflow: hidden;
+    }
+
+    .workspace-name {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--webex-text-primary);
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      overflow: hidden;
+    }
+
+    .workspace-status {
+      font-size: 12px;
+      color: var(--webex-text-secondary);
+    }
+
+    .sidebar-search-box {
+      margin-bottom: 16px;
+      position: relative;
+    }
+
+    .sidebar-search-input {
+      width: 100%;
+      height: 36px;
+      border-radius: var(--radius-pill);
+      border: 1px solid var(--webex-border);
+      background: var(--webex-canvas-subtle);
+      padding: 0 12px 0 36px;
+      font-size: var(--body-sm-size);
+      color: var(--webex-text-primary);
+      outline: none;
+      transition: border-color var(--motion-fast), box-shadow var(--motion-fast);
+    }
+
+    .sidebar-search-input:focus {
+      border-color: var(--webex-blue-action);
+      box-shadow: var(--webex-focus-halo);
+    }
+
+    .sidebar-search-icon {
+      position: absolute;
+      left: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--webex-text-secondary);
+      pointer-events: none;
+    }
+
+    .nav-group-title {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--webex-text-secondary);
+      font-weight: 600;
+      margin: 16px 8px 8px;
+    }
+
+    .sidebar-nav-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .sidebar-nav-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 8px 12px;
+      border-radius: 8px;
+      color: var(--webex-text-primary);
+      font-size: var(--body-sm-size);
+      font-weight: 500;
+      cursor: pointer;
+      text-decoration: none;
+      transition: background-color var(--motion-fast), color var(--motion-fast);
+    }
+
+    .sidebar-nav-item:hover {
+      background: var(--webex-surface-muted);
+    }
+
+    .sidebar-nav-item.selected {
+      background: rgba(17, 112, 207, 0.1);
+      color: var(--webex-blue-action);
+      font-weight: 600;
+    }
+
+    .sidebar-nav-left {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .badge-count {
+      background: var(--webex-blue-action);
+      color: #ffffff;
+      font-size: 11px;
+      font-weight: 600;
+      padding: 2px 8px;
+      border-radius: var(--radius-pill);
+      min-width: 20px;
+      text-align: center;
+    }
+
+    .badge-count.unread {
+      background: var(--webex-warning);
+    }
+
+    /* Main Recipe Area: Cards & Rosters */
+    .recipe-main-content {
+      padding: var(--space-24);
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-32);
+      overflow-y: auto;
+    }
+
+    /* RECIPE 2: Meeting Cards */
+    .meeting-cards-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 16px;
+    }
+
+    .meeting-card {
+      background: var(--webex-card-bg);
+      border: 1px solid var(--webex-border);
+      border-radius: var(--radius-card);
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 16px;
+      transition: border-color var(--motion-fast), box-shadow var(--motion-fast);
+      position: relative;
+    }
+
+    .meeting-card:hover {
+      border-color: var(--webex-border-hover);
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
+    }
+
+    .meeting-card-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 8px;
+    }
+
+    .meeting-title {
+      font-size: 17px;
+      font-weight: 600;
+      color: var(--webex-text-primary);
+      margin-bottom: 4px;
+    }
+
+    .meeting-time {
+      font-size: var(--body-sm-size);
+      color: var(--webex-text-secondary);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .meeting-state-chip {
+      font-size: 11px;
+      font-weight: 600;
+      padding: 3px 8px;
+      border-radius: var(--radius-pill);
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .meeting-state-chip.live {
+      background: rgba(60, 194, 154, 0.15);
+      color: #0d825f;
+    }
+
+    .meeting-state-chip.upcoming {
+      background: rgba(17, 112, 207, 0.10);
+      color: var(--webex-blue-action);
+    }
+
+    .meeting-state-chip.recording {
+      background: rgba(252, 139, 152, 0.2);
+      color: #d11a33;
+    }
+
+    .meeting-state-chip.warning {
+      background: rgba(242, 153, 10, 0.15);
+      color: #9c6000;
+    }
+
+    .meeting-meta-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-top: 12px;
+      border-top: 1px solid var(--webex-border);
+    }
+
+    .meeting-attendees-avatars {
+      display: flex;
+      align-items: center;
+    }
+
+    .attendee-avatar-overlap {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      border: 2px solid var(--webex-card-bg);
+      margin-left: -8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      font-weight: 600;
+      color: #1a1a1a;
+    }
+
+    .attendee-avatar-overlap:first-child {
+      margin-left: 0;
+    }
+
+    /* RECIPE 3: Presence Chips Showcase */
+    .presence-showcase-box {
+      background: var(--webex-canvas-subtle);
+      border: 1px solid var(--webex-border);
+      border-radius: var(--radius-card);
+      padding: 20px;
+    }
+
+    .presence-chips-grid {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+      margin-top: 16px;
+    }
+
+    .presence-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 14px 6px 6px;
+      background: var(--webex-card-bg);
+      border: 1px solid var(--webex-border);
+      border-radius: var(--radius-pill);
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+      cursor: pointer;
+      transition: background-color var(--motion-fast);
+    }
+
+    .presence-chip:hover {
+      background-color: var(--webex-surface-muted);
+    }
+
+    .presence-avatar-wrapper {
+      position: relative;
+      width: 32px;
+      height: 32px;
+    }
+
+    .presence-avatar-wrapper.size-24 { width: 24px; height: 24px; }
+    .presence-avatar-wrapper.size-40 { width: 40px; height: 40px; }
+
+    .presence-avatar-circle {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 600;
+      font-size: 12px;
+      color: #000;
+    }
+
+    .presence-dot-indicator {
+      position: absolute;
+      bottom: -1px;
+      right: -1px;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      border: 2px solid var(--webex-card-bg);
+    }
+
+    .presence-dot-indicator.available { background-color: var(--webex-success); }
+    .presence-dot-indicator.presenting { background-color: var(--team-orange); }
+    .presence-dot-indicator.in-meeting { background-color: var(--webex-blue-action); }
+    .presence-dot-indicator.away { background-color: var(--webex-warning); }
+    .presence-dot-indicator.dnd { background-color: var(--webex-danger); }
+
+    .presence-user-details {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .presence-user-name {
+      font-size: var(--body-sm-size);
+      font-weight: 600;
+      color: var(--webex-text-primary);
+    }
+
+    .presence-user-state {
+      font-size: 11px;
+      color: var(--webex-text-secondary);
+    }
+
+    /* RECIPE 4: Roster Rows */
+    .roster-card {
+      background: var(--webex-card-bg);
+      border: 1px solid var(--webex-border);
+      border-radius: var(--radius-card);
+      padding: 20px;
+    }
+
+    .roster-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 16px;
+    }
+
+    .roster-list {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .roster-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 14px;
+      border-radius: 8px;
+      transition: background-color var(--motion-fast);
+    }
+
+    .roster-row:hover {
+      background: var(--webex-surface-muted);
+    }
+
+    .roster-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .roster-name-block {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .roster-name {
+      font-size: var(--body-sm-size);
+      font-weight: 600;
+      color: var(--webex-text-primary);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .roster-role-chip {
+      font-size: 11px;
+      padding: 1px 6px;
+      border-radius: 4px;
+      background: rgba(17, 112, 207, 0.1);
+      color: var(--webex-blue-action);
+      font-weight: 500;
+    }
+
+    .roster-status-desc {
+      font-size: 12px;
+      color: var(--webex-text-secondary);
+    }
+
+    .roster-controls {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .roster-ctl-icon {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: transparent;
+      border: 1px solid transparent;
+      cursor: pointer;
+      color: var(--webex-text-secondary);
+      transition: background var(--motion-fast), color var(--motion-fast);
+    }
+
+    .roster-ctl-icon:hover {
+      background: var(--webex-surface-muted);
+      color: var(--webex-text-primary);
+    }
+
+    .roster-ctl-icon.muted-alert {
+      color: var(--webex-danger);
+    }
+
+    .roster-ctl-icon.hand-raised {
+      color: var(--webex-warning);
+      background: rgba(242, 153, 10, 0.12);
+    }
+
+    /* Comparison / Anti-patterns */
+    .anti-patterns-section {
+      padding: var(--space-64) 0;
+      background: var(--webex-canvas-subtle);
+    }
+
+    .comparison-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--space-24);
+    }
+
+    @media (max-width: 767px) {
+      .comparison-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .comparison-card {
+      background: var(--webex-card-bg);
+      border-radius: var(--radius-card);
+      padding: var(--space-24);
+      border: 1px solid var(--webex-border);
+    }
+
+    .comparison-card.do-card {
+      border-top: 4px solid var(--webex-success);
+    }
+
+    .comparison-card.dont-card {
+      border-top: 4px solid var(--webex-danger);
+    }
+
+    .card-badge-pill {
+      display: inline-block;
+      padding: 4px 12px;
+      border-radius: var(--radius-pill);
+      font-size: 12px;
+      font-weight: 600;
+      margin-bottom: 16px;
+    }
+
+    .do-card .card-badge-pill {
+      background: rgba(60, 194, 154, 0.15);
+      color: #0c7a59;
+    }
+
+    .dont-card .card-badge-pill {
+      background: rgba(252, 139, 152, 0.2);
+      color: #b9152b;
+    }
+
+    .anti-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .anti-list li {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      font-size: var(--body-sm-size);
+      color: var(--webex-text-secondary);
+      line-height: 1.5;
+    }
+
+    .anti-list li strong {
+      color: var(--webex-text-primary);
+    }
+
+    /* Interactive Sandbox Controls */
+    .sandbox-floating-dock {
+      position: fixed;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 999;
+      background: rgba(26, 26, 26, 0.92);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      border-radius: var(--radius-pill);
+      padding: 8px 16px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      box-shadow: 0 16px 36px rgba(0, 0, 0, 0.35);
+      color: #ffffff;
+    }
+
+    .sandbox-dock-title {
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      color: var(--webex-blue-accent);
+      padding-right: 8px;
+      border-right: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .dock-btn {
+      background: transparent;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      color: #ffffff;
+      padding: 6px 14px;
+      font-size: 13px;
+      font-weight: 500;
+      border-radius: var(--radius-pill);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all var(--motion-fast);
+    }
+
+    .dock-btn:hover {
+      background: rgba(255, 255, 255, 0.15);
+      border-color: var(--webex-blue-accent);
+    }
+
+    .dock-btn.active {
+      background: var(--webex-blue-action);
+      border-color: var(--webex-blue-action);
+    }
+
+    /* Toast */
+    .webex-toast {
+      position: fixed;
+      top: 24px;
+      right: 24px;
+      background: #1a1a1a;
+      color: #ffffff;
+      padding: 12px 20px;
+      border-radius: var(--radius-pill);
+      font-size: 14px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      box-shadow: 0 12px 32px rgba(0, 0, 0, 0.3);
+      z-index: 1000;
+      opacity: 0;
+      transform: translateY(-10px);
+      transition: opacity 0.2s, transform 0.2s;
+      pointer-events: none;
+    }
+
+    .webex-toast.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Footer */
+    .webex-footer {
+      padding: var(--space-48) 0;
+      border-top: 1px solid var(--webex-border);
+      background: var(--webex-canvas);
+      font-size: var(--body-sm-size);
+      color: var(--webex-text-secondary);
+    }
+
+    .footer-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Sticky Webex Top Navigation -->
+  <header class="webex-nav-header">
+    <div class="container">
+      <div class="nav-inner">
+        <a href="#hero" class="brand-mark">
+          <!-- Webex Helix SVG -->
+          <svg class="webex-helix-logo" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="16" cy="16" r="15" fill="#1170cf" />
+            <path d="M10 16C10 12.6863 12.6863 10 16 10C19.3137 10 22 12.6863 22 16C22 19.3137 19.3137 22 16 22" stroke="#ffffff" stroke-width="3" stroke-linecap="round"/>
+            <circle cx="16" cy="16" r="3" fill="#ffffff" />
+          </svg>
+          <span>webex</span>
+          <span style="font-size: 11px; font-weight: 500; background: rgba(17,112,207,0.1); color: #1170cf; padding: 2px 8px; border-radius: 9999px;">Momentum DS</span>
+        </a>
+
+        <ul class="nav-menu">
+          <li><a href="#hero" class="nav-link">Overview</a></li>
+          <li><a href="#stage" class="nav-link">Live Stage</a></li>
+          <li><a href="#tokens" class="nav-link">Spectrum Tokens</a></li>
+          <li><a href="#recipes" class="nav-link">Component Recipes</a></li>
+          <li><a href="#guidelines" class="nav-link">Anti-Patterns</a></li>
+        </ul>
+
+        <div class="nav-actions">
+          <button id="themeToggleBtn" class="btn btn-outline-light" onclick="toggleTheme()" title="Switch Light/Dark mode">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="5"></circle>
+              <line x1="12" y1="1" x2="12" y2="3"></line>
+              <line x1="12" y1="21" x2="12" y2="23"></line>
+              <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+              <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+              <line x1="1" y1="12" x2="3" y2="12"></line>
+              <line x1="21" y1="12" x2="23" y2="12"></line>
+              <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+              <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+            </svg>
+            <span id="themeLabel">Dark Canvas</span>
+          </button>
+          <a href="#stage" class="btn btn-primary">Start a Meeting</a>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section id="hero" class="hero-section">
+    <div class="container">
+      <div class="hero-grid">
+        <!-- Marketing Story / Left Column -->
+        <div class="hero-content">
+          <div class="hero-badge">
+            <span class="status-dot"></span>
+            Momentum System • Webex Action Blue (#1170cf)
+          </div>
+
+          <h1 class="hero-headline">
+            Continuous collaboration, engineered for clarity.
+          </h1>
+
+          <p class="hero-subhead">
+            Clean white marketing canvases paired with charcoal dark-mode surfaces. Anchored by the precise Momentum blue action system and disciplined multi-user spectrum accents.
+          </p>
+
+          <div class="hero-cta-group">
+            <button class="btn btn-primary" onclick="simulateJoinMeeting()">
+              Join Meeting (Primary Blue)
+            </button>
+            <button class="btn btn-outline-light" onclick="copyToken('#1170cf', 'Webex Action Blue')">
+              Copy #1170cf Token
+            </button>
+          </div>
+
+          <!-- Micro-spec callout -->
+          <div style="display: flex; gap: 24px; padding-top: 16px; border-top: 1px solid var(--webex-border); font-size: 13px; color: var(--webex-text-secondary);">
+            <div><strong style="color: var(--webex-text-primary);">Font Stack:</strong> Momentum, Inter, Arial</div>
+            <div><strong style="color: var(--webex-text-primary);">Base Rhythm:</strong> 8px grid scale</div>
+            <div><strong style="color: var(--webex-text-primary);">Controls:</strong> 44px min touch target</div>
+          </div>
+        </div>
+
+        <!-- Right Column: Live Embedded Dark Product Surface -->
+        <div id="stage" class="embedded-stage-container" aria-label="Webex Collaboration Stage">
+          <!-- Top meeting bar -->
+          <div class="stage-top-bar">
+            <div style="display: flex; align-items: center; gap: 8px;">
+              <span class="meeting-badge-live">
+                <span class="rec-indicator"></span> REC 00:34:12
+              </span>
+              <span style="font-weight: 500;">Product Design Sprint 2026</span>
+            </div>
+            <div style="display: flex; align-items: center; gap: 12px; font-size: 12px; color: var(--webex-dark-text-secondary);">
+              <span>Room 4B • Webex Desk Pro</span>
+              <span style="background: rgba(255,255,255,0.1); padding: 2px 6px; border-radius: 4px;">Encrypted</span>
+            </div>
+          </div>
+
+          <!-- Video grid -->
+          <div class="stage-video-grid" id="videoGrid">
+            <!-- Tile 1: Active Speaker (Team Cobalt) -->
+            <div class="video-tile active-speaker" id="speakerTile1">
+              <div style="display: flex; justify-content: space-between;">
+                <span style="font-size: 11px; background: rgba(17,112,207,0.85); color: #fff; padding: 2px 6px; border-radius: 4px;">Active Speaker</span>
+                <span class="speech-wave">
+                  <span></span><span></span><span></span>
+                </span>
+              </div>
+              <div class="video-tile-center">
+                <div class="tile-avatar" style="background-color: var(--team-cobalt);">SK</div>
+                <div style="font-size: 13px; font-weight: 500;">Sonia Kapoor</div>
+              </div>
+              <div class="video-tile-footer">
+                <span>Design Lead (San Jose)</span>
+                <span style="color: var(--webex-success);">● 1080p 60fps</span>
+              </div>
+            </div>
+
+            <!-- Tile 2: Team Mint -->
+            <div class="video-tile" id="speakerTile2">
+              <div></div>
+              <div class="video-tile-center">
+                <div class="tile-avatar" style="background-color: var(--team-mint);">AL</div>
+                <div style="font-size: 13px; font-weight: 500;">Alex Lin</div>
+              </div>
+              <div class="video-tile-footer">
+                <span>Eng Manager (Tokyo)</span>
+                <span style="color: rgba(255,255,255,0.6);">Unmuted</span>
+              </div>
+            </div>
+
+            <!-- Tile 3: Team Purple -->
+            <div class="video-tile" id="speakerTile3">
+              <div></div>
+              <div class="video-tile-center">
+                <div class="tile-avatar" style="background-color: var(--team-purple);">MR</div>
+                <div style="font-size: 13px; font-weight: 500;">Maya Rao</div>
+              </div>
+              <div class="video-tile-footer">
+                <span>Staff Architect</span>
+                <span style="color: var(--webex-danger);">Muted</span>
+              </div>
+            </div>
+
+            <!-- Tile 4: Team Orange (Hand Raised) -->
+            <div class="video-tile" id="speakerTile4">
+              <div style="display: flex; justify-content: flex-end;">
+                <span style="background: rgba(242,153,10,0.25); color: var(--team-orange); padding: 2px 8px; border-radius: 4px; font-size: 11px; font-weight: 600;">✋ Hand Raised</span>
+              </div>
+              <div class="video-tile-center">
+                <div class="tile-avatar" style="background-color: var(--team-orange);">DJ</div>
+                <div style="font-size: 13px; font-weight: 500;">David Jin</div>
+              </div>
+              <div class="video-tile-footer">
+                <span>Product Ops</span>
+                <span>Webex Board Pro</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Bottom Control Rail -->
+          <div class="stage-controls-rail">
+            <button class="call-ctl-btn" id="ctlMute" onclick="toggleMute()" title="Mute Audio (M)">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path>
+                <path d="M19 10v2a7 7 0 0 1-14 0v-2"></path>
+                <line x1="12" y1="19" x2="12" y2="23"></line>
+                <line x1="8" y1="23" x2="16" y2="23"></line>
+              </svg>
+            </button>
+
+            <button class="call-ctl-btn" id="ctlVideo" onclick="toggleVideo()" title="Stop Video (V)">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polygon points="23 7 16 12 23 17 23 7"></polygon>
+                <rect x="1" y="5" width="15" height="14" rx="2" ry="2"></rect>
+              </svg>
+            </button>
+
+            <button class="call-ctl-btn active-control" id="ctlShare" onclick="toggleShare()" title="Share Content">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"></path>
+                <polyline points="16 6 12 2 8 6"></polyline>
+                <line x1="12" y1="2" x2="12" y2="15"></line>
+              </svg>
+            </button>
+
+            <button class="call-ctl-btn" id="ctlReaction" onclick="sendReaction('🎉')" title="Send Reaction">
+              <span>🎉</span>
+            </button>
+
+            <button class="call-ctl-btn" id="ctlHand" onclick="toggleHand()" title="Raise Hand">
+              <span>✋</span>
+            </button>
+
+            <button class="call-ctl-btn" title="Whiteboard Collaboration">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                <circle cx="8.5" cy="8.5" r="1.5"></circle>
+                <polyline points="21 15 16 10 5 21"></polyline>
+              </svg>
+            </button>
+
+            <button class="call-ctl-btn danger-action" onclick="endCall()" title="Leave Meeting">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M10.68 13.31a16 16 0 0 0 3.41 2.6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7 2 2 0 0 1 1.72 2v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.42 19.42 0 0 1-6-6 19.8 19.8 0 0 1-3.11-8.69 2 2 0 0 1 2-2.18h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L7.09 9.91"></path>
+                <line x1="23" y1="1" x2="1" y2="23"></line>
+              </svg>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Spectrum Tokens Section -->
+  <section id="tokens" class="token-showcase-section">
+    <div class="container">
+      <div class="section-header">
+        <h2 class="section-title">Collaboration / Team Spectrum</h2>
+        <p class="section-lead">
+          Webex enforces blue-guided clarity. The supporting collaboration palette represents multi-user presence, teams, and workspace states — never as primary CTAs or arbitrary rainbow decoration.
+        </p>
+      </div>
+
+      <!-- Token Grid -->
+      <div class="token-grid">
+        <!-- Team Cobalt -->
+        <div class="token-chip-card" onclick="copyToken('#5ebff7', 'Team Cobalt')">
+          <div class="token-swatch" style="background-color: #5ebff7;">Co</div>
+          <div class="token-name">Team Cobalt</div>
+          <div class="token-hex">#5ebff7</div>
+          <span class="token-tag">Presence / Identity</span>
+        </div>
+
+        <!-- Team Cyan -->
+        <div class="token-chip-card" onclick="copyToken('#22c7d6', 'Team Cyan')">
+          <div class="token-swatch" style="background-color: #22c7d6;">Cy</div>
+          <div class="token-name">Team Cyan</div>
+          <div class="token-hex">#22c7d6</div>
+          <span class="token-tag">Workspace State</span>
+        </div>
+
+        <!-- Team Mint -->
+        <div class="token-chip-card" onclick="copyToken('#30c9b0', 'Team Mint')">
+          <div class="token-swatch" style="background-color: #30c9b0;">Mi</div>
+          <div class="token-name">Team Mint</div>
+          <div class="token-hex">#30c9b0</div>
+          <span class="token-tag">Active Team</span>
+        </div>
+
+        <!-- Team Lime -->
+        <div class="token-chip-card" onclick="copyToken('#93c437', 'Team Lime')">
+          <div class="token-swatch" style="background-color: #93c437;">Li</div>
+          <div class="token-name">Team Lime</div>
+          <div class="token-hex">#93c437</div>
+          <span class="token-tag">Productivity Tag</span>
+        </div>
+
+        <!-- Team Gold -->
+        <div class="token-chip-card" onclick="copyToken('#d6b220', 'Team Gold')">
+          <div class="token-swatch" style="background-color: #d6b220;">Go</div>
+          <div class="token-name">Team Gold</div>
+          <div class="token-hex">#d6b220</div>
+          <span class="token-tag">Priority Space</span>
+        </div>
+
+        <!-- Team Orange -->
+        <div class="token-chip-card" onclick="copyToken('#fd884e', 'Team Orange')">
+          <div class="token-swatch" style="background-color: #fd884e;">Or</div>
+          <div class="token-name">Team Orange</div>
+          <div class="token-hex">#fd884e</div>
+          <span class="token-tag">Presenting State</span>
+        </div>
+
+        <!-- Team Pink -->
+        <div class="token-chip-card" onclick="copyToken('#fc97aa', 'Team Pink')">
+          <div class="token-swatch" style="background-color: #fc97aa;">Pi</div>
+          <div class="token-name">Team Pink</div>
+          <div class="token-hex">#fc97aa</div>
+          <span class="token-tag">Community</span>
+        </div>
+
+        <!-- Team Purple -->
+        <div class="token-chip-card" onclick="copyToken('#f294f1', 'Team Purple')">
+          <div class="token-swatch" style="background-color: #f294f1;">Pu</div>
+          <div class="token-name">Team Purple</div>
+          <div class="token-hex">#f294f1</div>
+          <span class="token-tag">Special Group</span>
+        </div>
+      </div>
+
+      <!-- Action System Tokens Row -->
+      <div style="margin-top: 32px; background: var(--webex-card-bg); border: 1px solid var(--webex-border); border-radius: var(--radius-card); padding: 20px;">
+        <div style="font-size: 14px; font-weight: 600; margin-bottom: 12px; color: var(--webex-text-primary);">Core Action System Tokens (Momentum Blue Stack)</div>
+        <div style="display: flex; gap: 16px; flex-wrap: wrap;">
+          <div style="display: flex; align-items: center; gap: 8px; font-size: 13px; cursor: pointer;" onclick="copyToken('#1170cf', 'Webex Action Blue')">
+            <span style="width: 20px; height: 20px; border-radius: 4px; background: #1170cf; display: inline-block;"></span>
+            <span>Primary: <code>#1170cf</code></span>
+          </div>
+          <div style="display: flex; align-items: center; gap: 8px; font-size: 13px; cursor: pointer;" onclick="copyToken('#0353a8', 'Action Blue Hover')">
+            <span style="width: 20px; height: 20px; border-radius: 4px; background: #0353a8; display: inline-block;"></span>
+            <span>Hover: <code>#0353a8</code></span>
+          </div>
+          <div style="display: flex; align-items: center; gap: 8px; font-size: 13px; cursor: pointer;" onclick="copyToken('#063a75', 'Action Blue Pressed')">
+            <span style="width: 20px; height: 20px; border-radius: 4px; background: #063a75; display: inline-block;"></span>
+            <span>Pressed: <code>#063a75</code></span>
+          </div>
+          <div style="display: flex; align-items: center; gap: 8px; font-size: 13px; cursor: pointer;" onclick="copyToken('#64b4fa', 'Accent Light Blue')">
+            <span style="width: 20px; height: 20px; border-radius: 4px; background: #64b4fa; display: inline-block;"></span>
+            <span>Focus / Accent: <code>#64b4fa</code></span>
+          </div>
+          <div style="display: flex; align-items: center; gap: 8px; font-size: 13px; cursor: pointer;" onclick="copyToken('#3cc29a', 'Success')">
+            <span style="width: 20px; height: 20px; border-radius: 4px; background: #3cc29a; display: inline-block;"></span>
+            <span>Success: <code>#3cc29a</code></span>
+          </div>
+          <div style="display: flex; align-items: center; gap: 8px; font-size: 13px; cursor: pointer;" onclick="copyToken('#f2990a', 'Warning')">
+            <span style="width: 20px; height: 20px; border-radius: 4px; background: #f2990a; display: inline-block;"></span>
+            <span>Warning: <code>#f2990a</code></span>
+          </div>
+          <div style="display: flex; align-items: center; gap: 8px; font-size: 13px; cursor: pointer;" onclick="copyToken('#fc8b98', 'Danger')">
+            <span style="width: 20px; height: 20px; border-radius: 4px; background: #fc8b98; display: inline-block;"></span>
+            <span>Danger: <code>#fc8b98</code></span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Brand-Specific Recipes Section -->
+  <section id="recipes" class="recipes-section">
+    <div class="container">
+      <div class="section-header">
+        <h2 class="section-title">Brand-Specific Recipes</h2>
+        <p class="section-lead">
+          Webex specifications for Workspace Sidebar, Meeting Cards, Presence Chips, and Roster Rows in real collaborative contexts.
+        </p>
+      </div>
+
+      <div class="recipe-showcase-grid">
+        <!-- RECIPE 1: Workspace Sidebar -->
+        <aside class="workspace-sidebar" id="sidebarContainer">
+          <div>
+            <!-- Workspace Switcher -->
+            <div class="workspace-switcher" onclick="toggleWorkspaceMenu()">
+              <div class="workspace-icon">WX</div>
+              <div class="workspace-info">
+                <div class="workspace-name">Google DeepMind Org</div>
+                <div class="workspace-status">Enterprise Cloud Tier</div>
+              </div>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="6 9 12 15 18 9"></polyline>
+              </svg>
+            </div>
+
+            <!-- Search input with blue focus halo -->
+            <div class="sidebar-search-box">
+              <svg class="sidebar-search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="11" cy="11" r="8"></circle>
+                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+              </svg>
+              <input type="text" class="sidebar-search-input" placeholder="Search people, spaces, files..." id="spaceSearch" onkeyup="filterSidebarSpaces(this.value)">
+            </div>
+
+            <!-- Nav Groups -->
+            <div class="nav-group-title">Primary Navigation</div>
+            <ul class="sidebar-nav-list">
+              <li>
+                <a href="#messages" class="sidebar-nav-item selected">
+                  <div class="sidebar-nav-left">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+                    <span>Messages</span>
+                  </div>
+                  <span class="badge-count">14</span>
+                </a>
+              </li>
+              <li>
+                <a href="#calling" class="sidebar-nav-item">
+                  <div class="sidebar-nav-left">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+                    <span>Calling</span>
+                  </div>
+                </a>
+              </li>
+              <li>
+                <a href="#meetings" class="sidebar-nav-item">
+                  <div class="sidebar-nav-left">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+                    <span>Calendar</span>
+                  </div>
+                  <span class="badge-count unread">3 Live</span>
+                </a>
+              </li>
+              <li>
+                <a href="#whiteboards" class="sidebar-nav-item">
+                  <div class="sidebar-nav-left">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 2 7 12 12 22 7 12 2"></polygon><polyline points="2 17 12 22 22 17"></polyline><polyline points="2 12 12 17 22 12"></polyline></svg>
+                    <span>Whiteboards</span>
+                  </div>
+                </a>
+              </li>
+            </ul>
+
+            <div class="nav-group-title">Pinned Spaces</div>
+            <ul class="sidebar-nav-list" id="spacesList">
+              <li class="sidebar-nav-item">
+                <div class="sidebar-nav-left">
+                  <span style="width: 8px; height: 8px; border-radius: 50%; background: var(--team-cobalt);"></span>
+                  <span>#agentic-design-sys</span>
+                </div>
+                <span class="badge-count">2</span>
+              </li>
+              <li class="sidebar-nav-item">
+                <div class="sidebar-nav-left">
+                  <span style="width: 8px; height: 8px; border-radius: 50%; background: var(--team-mint);"></span>
+                  <span>#runtime-infra</span>
+                </div>
+              </li>
+              <li class="sidebar-nav-item">
+                <div class="sidebar-nav-left">
+                  <span style="width: 8px; height: 8px; border-radius: 50%; background: var(--team-purple);"></span>
+                  <span>#executive-sync</span>
+                </div>
+              </li>
+            </ul>
+          </div>
+
+          <!-- Footer utility -->
+          <div style="border-top: 1px solid var(--webex-border); padding-top: 12px; display: flex; align-items: center; justify-content: space-between;">
+            <div style="display: flex; align-items: center; gap: 8px;">
+              <div class="presence-avatar-wrapper size-24">
+                <div class="presence-avatar-circle" style="background: var(--team-cyan);">AG</div>
+                <div class="presence-dot-indicator available"></div>
+              </div>
+              <span style="font-size: 13px; font-weight: 500;">Antigravity Pair</span>
+            </div>
+            <button class="btn-icon btn-outline-light" onclick="toggleSidebarWidth()" title="Collapse/Expand sidebar">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+            </button>
+          </div>
+        </aside>
+
+        <!-- Main Content Area with Recipes 2, 3, 4 -->
+        <main class="recipe-main-content">
+          <!-- RECIPE 2: Meeting Cards Grid with States -->
+          <div>
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+              <h3 style="font-size: var(--heading-size); font-weight: var(--heading-weight); color: var(--webex-text-primary);">Meeting Cards & States</h3>
+              <div style="display: flex; gap: 8px;">
+                <button class="btn btn-outline-light" style="padding: 4px 12px; font-size: 12px;" onclick="switchCardFilter('all')">All</button>
+                <button class="btn btn-outline-light" style="padding: 4px 12px; font-size: 12px;" onclick="switchCardFilter('live')">Live Now</button>
+              </div>
+            </div>
+
+            <div class="meeting-cards-row">
+              <!-- Card 1: Live Now -->
+              <div class="meeting-card card-filter-item live">
+                <div>
+                  <div class="meeting-card-header">
+                    <div>
+                      <div class="meeting-title">Design System Working Group</div>
+                      <div class="meeting-time">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                        18:30 – 19:30 • Live Now
+                      </div>
+                    </div>
+                    <span class="meeting-state-chip live">● In Progress</span>
+                  </div>
+                  <p style="font-size: 13px; color: var(--webex-text-secondary); margin-top: 8px;">
+                    Reviewing Momentum 2.0 multi-user color spectrum and tablet action rail alignment.
+                  </p>
+                </div>
+
+                <div class="meeting-meta-footer">
+                  <div class="meeting-attendees-avatars">
+                    <div class="attendee-avatar-overlap" style="background: var(--team-cobalt);" title="Sonia Kapoor">SK</div>
+                    <div class="attendee-avatar-overlap" style="background: var(--team-mint);" title="Alex Lin">AL</div>
+                    <div class="attendee-avatar-overlap" style="background: var(--team-purple);" title="Maya Rao">MR</div>
+                    <div class="attendee-avatar-overlap" style="background: #e2e8f0;">+6</div>
+                  </div>
+                  <button class="btn btn-primary" style="padding: 6px 18px; font-size: 13px;" onclick="simulateJoinMeeting()">
+                    Join Now
+                  </button>
+                </div>
+              </div>
+
+              <!-- Card 2: Upcoming with Device Status -->
+              <div class="meeting-card card-filter-item upcoming">
+                <div>
+                  <div class="meeting-card-header">
+                    <div>
+                      <div class="meeting-title">Global Architecture Review</div>
+                      <div class="meeting-time">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                        Starts in 25 mins • 19:15
+                      </div>
+                    </div>
+                    <span class="meeting-state-chip upcoming">Upcoming</span>
+                  </div>
+                  <p style="font-size: 13px; color: var(--webex-text-secondary); margin-top: 8px;">
+                    Room: <strong>Tokyo Boardroom Pro 70</strong> (Ready to connect automatically).
+                  </p>
+                </div>
+
+                <div class="meeting-meta-footer">
+                  <div class="meeting-attendees-avatars">
+                    <div class="attendee-avatar-overlap" style="background: var(--team-gold);" title="Koji Tanaka">KT</div>
+                    <div class="attendee-avatar-overlap" style="background: var(--team-pink);" title="Elena Rostova">ER</div>
+                  </div>
+                  <button class="btn btn-outline-light" style="padding: 6px 18px; font-size: 13px;" onclick="simulateStartRoom()">
+                    Join from Room
+                  </button>
+                </div>
+              </div>
+
+              <!-- Card 3: Recording & Warning State -->
+              <div class="meeting-card card-filter-item warning">
+                <div>
+                  <div class="meeting-card-header">
+                    <div>
+                      <div class="meeting-title">Quarterly Product Townhall</div>
+                      <div class="meeting-time">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                        Recorded • Archive Ready
+                      </div>
+                    </div>
+                    <span class="meeting-state-chip recording">● Cloud Rec</span>
+                  </div>
+                  <div style="margin-top: 8px; font-size: 12px; color: var(--webex-warning); background: rgba(242,153,10,0.08); padding: 6px 10px; border-radius: 6px;">
+                    ⚠️ Microphones were muted during section 2.
+                  </div>
+                </div>
+
+                <div class="meeting-meta-footer">
+                  <span style="font-size: 12px; color: var(--webex-text-secondary);">184 Viewers</span>
+                  <button class="btn btn-outline-light" style="padding: 6px 18px; font-size: 13px;" onclick="showToast('Playing Cloud Recording...')">
+                    View Recap
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- RECIPE 3: Presence Chips (Sizes & States) -->
+          <div class="presence-showcase-box">
+            <h3 style="font-size: 18px; font-weight: 600; color: var(--webex-text-primary);">
+              Presence Chips (24px, 32px, 40px) & Real States
+            </h3>
+            <p style="font-size: 13px; color: var(--webex-text-secondary); margin-top: 4px;">
+              Statuses: Available (#3cc29a), Presenting (#fd884e), In Meeting (#1170cf), Away (#f2990a), Do Not Disturb (#fc8b98).
+            </p>
+
+            <div class="presence-chips-grid">
+              <!-- 40px Prominent Available -->
+              <div class="presence-chip">
+                <div class="presence-avatar-wrapper size-40">
+                  <div class="presence-avatar-circle" style="background: var(--team-cobalt); font-size: 14px;">SK</div>
+                  <div class="presence-dot-indicator available" style="width: 12px; height: 12px;"></div>
+                </div>
+                <div class="presence-user-details">
+                  <span class="presence-user-name">Sonia Kapoor</span>
+                  <span class="presence-user-state" style="color: var(--webex-success);">Available • Desk 4A</span>
+                </div>
+              </div>
+
+              <!-- 32px Default Presenting -->
+              <div class="presence-chip">
+                <div class="presence-avatar-wrapper">
+                  <div class="presence-avatar-circle" style="background: var(--team-orange);">DJ</div>
+                  <div class="presence-dot-indicator presenting"></div>
+                </div>
+                <div class="presence-user-details">
+                  <span class="presence-user-name">David Jin</span>
+                  <span class="presence-user-state" style="color: var(--team-orange);">Presenting screen</span>
+                </div>
+              </div>
+
+              <!-- 32px Default In Meeting -->
+              <div class="presence-chip">
+                <div class="presence-avatar-wrapper">
+                  <div class="presence-avatar-circle" style="background: var(--team-mint);">AL</div>
+                  <div class="presence-dot-indicator in-meeting"></div>
+                </div>
+                <div class="presence-user-details">
+                  <span class="presence-user-name">Alex Lin</span>
+                  <span class="presence-user-state" style="color: var(--webex-blue-action);">In Meeting (until 19:30)</span>
+                </div>
+              </div>
+
+              <!-- 32px Away -->
+              <div class="presence-chip">
+                <div class="presence-avatar-wrapper">
+                  <div class="presence-avatar-circle" style="background: var(--team-gold);">KT</div>
+                  <div class="presence-dot-indicator away"></div>
+                </div>
+                <div class="presence-user-details">
+                  <span class="presence-user-name">Koji Tanaka</span>
+                  <span class="presence-user-state" style="color: var(--webex-warning);">Away • 15m</span>
+                </div>
+              </div>
+
+              <!-- 24px Compact DND -->
+              <div class="presence-chip">
+                <div class="presence-avatar-wrapper size-24">
+                  <div class="presence-avatar-circle" style="background: var(--team-pink); font-size: 10px;">MR</div>
+                  <div class="presence-dot-indicator dnd" style="width: 8px; height: 8px;"></div>
+                </div>
+                <div class="presence-user-details">
+                  <span class="presence-user-name" style="font-size: 12px;">Maya Rao</span>
+                  <span class="presence-user-state" style="color: var(--webex-danger);">Do Not Disturb</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- RECIPE 4: Roster Rows & Multi-user Control -->
+          <div class="roster-card">
+            <div class="roster-header">
+              <div>
+                <h3 style="font-size: 18px; font-weight: 600; color: var(--webex-text-primary);">Live Roster Controls</h3>
+                <span style="font-size: 12px; color: var(--webex-text-secondary);">4 active participants • 1 hand raised</span>
+              </div>
+              <button class="btn btn-outline-light" style="padding: 6px 14px; font-size: 12px;" onclick="muteAllParticipants()">
+                Mute All Others
+              </button>
+            </div>
+
+            <div class="roster-list">
+              <!-- Roster 1: Host Speaking -->
+              <div class="roster-row">
+                <div class="roster-left">
+                  <div class="presence-avatar-wrapper">
+                    <div class="presence-avatar-circle" style="background: var(--team-cobalt);">SK</div>
+                    <div class="presence-dot-indicator in-meeting"></div>
+                  </div>
+                  <div class="roster-name-block">
+                    <div class="roster-name">
+                      Sonia Kapoor (You)
+                      <span class="roster-role-chip">Host</span>
+                    </div>
+                    <div class="roster-status-desc">Speaking • Webex App Desktop</div>
+                  </div>
+                </div>
+                <div class="roster-controls">
+                  <span class="speech-wave" style="margin-right: 8px;">
+                    <span></span><span></span><span></span>
+                  </span>
+                  <button class="roster-ctl-icon" title="Microphone Active">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path><path d="M19 10v2a7 7 0 0 1-14 0v-2"></path></svg>
+                  </button>
+                  <button class="roster-ctl-icon" title="Video Active">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="23 7 16 12 23 17 23 7"></polygon><rect x="1" y="5" width="15" height="14" rx="2" ry="2"></rect></svg>
+                  </button>
+                </div>
+              </div>
+
+              <!-- Roster 2: Hand Raised -->
+              <div class="roster-row">
+                <div class="roster-left">
+                  <div class="presence-avatar-wrapper">
+                    <div class="presence-avatar-circle" style="background: var(--team-orange);">DJ</div>
+                    <div class="presence-dot-indicator presenting"></div>
+                  </div>
+                  <div class="roster-name-block">
+                    <div class="roster-name">
+                      David Jin
+                      <span class="roster-role-chip" style="background: rgba(242,153,10,0.15); color: #b26c00;">Attendee</span>
+                    </div>
+                    <div class="roster-status-desc">Hand raised for 2m • Muted</div>
+                  </div>
+                </div>
+                <div class="roster-controls">
+                  <button class="roster-ctl-icon hand-raised" onclick="lowerHand(this)" title="Lower hand">
+                    ✋
+                  </button>
+                  <button class="roster-ctl-icon muted-alert" onclick="unmuteRosterMember(this)" title="Muted by host">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="1" y1="1" x2="23" y2="23"></line><path d="M9 9v3a3 3 0 0 0 5.12 2.12M15 9.34V4a3 3 0 0 0-5.94-.6"></path></svg>
+                  </button>
+                </div>
+              </div>
+
+              <!-- Roster 3: Alex Lin -->
+              <div class="roster-row">
+                <div class="roster-left">
+                  <div class="presence-avatar-wrapper">
+                    <div class="presence-avatar-circle" style="background: var(--team-mint);">AL</div>
+                    <div class="presence-dot-indicator in-meeting"></div>
+                  </div>
+                  <div class="roster-name-block">
+                    <div class="roster-name">Alex Lin</div>
+                    <div class="roster-status-desc">Connected via Room Bar • Audio Only</div>
+                  </div>
+                </div>
+                <div class="roster-controls">
+                  <button class="roster-ctl-icon" title="Microphone Active">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path></svg>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </main>
+      </div>
+    </div>
+  </section>
+
+  <!-- Guidelines & Anti-Patterns -->
+  <section id="guidelines" class="anti-patterns-section">
+    <div class="container">
+      <div class="section-header">
+        <h2 class="section-title">Design Guidelines & Anti-Patterns</h2>
+        <p class="section-lead">
+          Strict rules for preserving Webex's disciplined collaboration aesthetic and accessibility standards.
+        </p>
+      </div>
+
+      <div class="comparison-grid">
+        <!-- DO CARD -->
+        <div class="comparison-card do-card">
+          <span class="card-badge-pill">✓ Webex Canonical Practice</span>
+          <ul class="anti-list">
+            <li>
+              <strong>Blue Action Clarity:</strong> Keep primary CTA buttons and active controls strictly in Webex Action Blue (<code>#1170cf</code>).
+            </li>
+            <li>
+              <strong>Multi-User Presence Accents:</strong> Use Team Cobalt, Mint, Orange, Pink, etc., exclusively for avatars, presence markers, and workspace identity chips.
+            </li>
+            <li>
+              <strong>Pill Geometry:</strong> Use <code>border-radius: 9999px</code> for interactive buttons and control chips; use 16px radius for containers and cards.
+            </li>
+            <li>
+              <strong>44px Touch Affordance:</strong> Maintain at least 44px × 44px hit bounds for all call controls, tabs, and roster actions.
+            </li>
+            <li>
+              <strong>Light Canvas + Dark Embedded Surface:</strong> Blend clean white productivity canvases with charcoal dark-mode surfaces for in-meeting chrome.
+            </li>
+          </ul>
+        </div>
+
+        <!-- DON'T CARD -->
+        <div class="comparison-card dont-card">
+          <span class="card-badge-pill">✗ Prohibited Anti-Patterns</span>
+          <ul class="anti-list">
+            <li>
+              <strong>No Consumer Social Rainbow:</strong> Do not turn Webex into a consumer party app by splashing vibrant secondary gradients everywhere.
+            </li>
+            <li>
+              <strong>Never Spectrum as CTAs:</strong> Never use Team Orange, Lime, or Pink as primary action or "Join Meeting" button backgrounds.
+            </li>
+            <li>
+              <strong>Avoid Heavy Corporate Darkness:</strong> Do not darken every surface into corporate black when the artifact is intended to feel collaborative and open.
+            </li>
+            <li>
+              <strong>No Decorative Font Theatrics:</strong> Avoid whimsical display serif or ultra-bold weights that hinder scannability in dashboards.
+            </li>
+            <li>
+              <strong>No Loud Spring Physics:</strong> Keep transitions smooth, practical, and in the 160ms–280ms duration bracket.
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="webex-footer">
+    <div class="container">
+      <div class="footer-inner">
+        <div>
+          <strong>Webex Design System</strong> • Rebuilt authentically from <code>open-design/design-systems/webex/DESIGN.md</code>
+        </div>
+        <div style="display: flex; gap: 16px;">
+          <span>Action Blue: #1170cf</span>
+          <span>Hover: #0353a8</span>
+          <span>Accent: #64b4fa</span>
+          <span>Radius: 16px Card / Pill Buttons</span>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Floating Sandbox Controller -->
+  <div class="sandbox-floating-dock" role="region" aria-label="Webex Interactive Demo Controls">
+    <div class="sandbox-dock-title">MOMENTUM LIVE</div>
+    <button class="dock-btn" onclick="toggleTheme()">
+      <span>🌓 Surface Mode</span>
+    </button>
+    <button class="dock-btn" onclick="simulateActiveSpeakerSwitch()">
+      <span>🎤 Cycle Speaker</span>
+    </button>
+    <button class="dock-btn" onclick="sendReaction('🚀')">
+      <span>🚀 Send Reaction</span>
+    </button>
+    <button class="dock-btn active" onclick="simulateJoinMeeting()">
+      <span>📞 Toggle Call</span>
+    </button>
+  </div>
+
+  <!-- Toast Notification -->
+  <div class="webex-toast" id="toastMessage">
+    <span id="toastIcon">ℹ️</span>
+    <span id="toastText">Token copied</span>
+  </div>
+
+  <!-- Client JavaScript for Authentic Interactions -->
+  <script>
+    let isDark = false;
+    let isMuted = false;
+    let isVideoOn = true;
+    let isSharing = true;
+    let isHandRaised = false;
+    let currentSpeakerIndex = 1;
+
+    function toggleTheme() {
+      isDark = !isDark;
+      const html = document.documentElement;
+      html.setAttribute('data-theme', isDark ? 'dark' : 'light');
+      document.getElementById('themeLabel').innerText = isDark ? 'White Canvas' : 'Dark Canvas';
+      showToast(isDark ? 'Dark surface activated (#1a1a1a / #262626)' : 'Light canvas activated (#ffffff)');
+    }
+
+    function copyToken(hex, name) {
+      navigator.clipboard.writeText(hex).then(() => {
+        showToast(`Copied ${name} (${hex}) to clipboard!`, '📋');
+      }).catch(() => {
+        showToast(`${name}: ${hex}`, '🎨');
+      });
+    }
+
+    function showToast(message, icon = 'ℹ️') {
+      const toast = document.getElementById('toastMessage');
+      document.getElementById('toastText').innerText = message;
+      document.getElementById('toastIcon').innerText = icon;
+      toast.classList.add('show');
+      setTimeout(() => {
+        toast.classList.remove('show');
+      }, 2400);
+    }
+
+    function toggleMute() {
+      isMuted = !isMuted;
+      const btn = document.getElementById('ctlMute');
+      if (isMuted) {
+        btn.classList.add('active-control');
+        btn.style.backgroundColor = 'var(--webex-danger)';
+        btn.style.borderColor = 'var(--webex-danger)';
+        showToast('Microphone muted', '🔇');
+      } else {
+        btn.classList.remove('active-control');
+        btn.style.backgroundColor = '';
+        btn.style.borderColor = '';
+        showToast('Microphone unmuted', '🎙️');
+      }
+    }
+
+    function toggleVideo() {
+      isVideoOn = !isVideoOn;
+      const btn = document.getElementById('ctlVideo');
+      if (!isVideoOn) {
+        btn.classList.add('active-control');
+        btn.style.backgroundColor = 'var(--webex-danger)';
+        showToast('Camera stopped', '📷');
+      } else {
+        btn.classList.remove('active-control');
+        btn.style.backgroundColor = '';
+        showToast('Camera active (1080p 60fps)', '🎥');
+      }
+    }
+
+    function toggleShare() {
+      isSharing = !isSharing;
+      const btn = document.getElementById('ctlShare');
+      if (isSharing) {
+        btn.classList.add('active-control');
+        showToast('Screen sharing started', '🖥️');
+      } else {
+        btn.classList.remove('active-control');
+        showToast('Screen sharing paused', '⏸️');
+      }
+    }
+
+    function toggleHand() {
+      isHandRaised = !isHandRaised;
+      const btn = document.getElementById('ctlHand');
+      if (isHandRaised) {
+        btn.classList.add('active-control');
+        btn.style.backgroundColor = 'var(--webex-warning)';
+        showToast('You raised your hand', '✋');
+      } else {
+        btn.classList.remove('active-control');
+        btn.style.backgroundColor = '';
+        showToast('Hand lowered', '🤝');
+      }
+    }
+
+    function sendReaction(emoji) {
+      showToast(`Reaction sent: ${emoji}`, emoji);
+      const stage = document.getElementById('videoGrid');
+      const floater = document.createElement('div');
+      floater.innerText = emoji;
+      floater.style.position = 'absolute';
+      floater.style.right = '40px';
+      floater.style.bottom = '80px';
+      floater.style.fontSize = '36px';
+      floater.style.pointerEvents = 'none';
+      floater.style.zIndex = '50';
+      floater.style.transition = 'all 1s cubic-bezier(0.2, 0.8, 0.2, 1)';
+      floater.style.opacity = '1';
+      floater.style.transform = 'translateY(0) scale(0.8)';
+      stage.appendChild(floater);
+
+      requestAnimationFrame(() => {
+        floater.style.opacity = '0';
+        floater.style.transform = 'translateY(-120px) scale(1.4)';
+      });
+
+      setTimeout(() => floater.remove(), 1100);
+    }
+
+    function simulateActiveSpeakerSwitch() {
+      currentSpeakerIndex = (currentSpeakerIndex % 4) + 1;
+      for (let i = 1; i <= 4; i++) {
+        const tile = document.getElementById(`speakerTile${i}`);
+        if (tile) {
+          tile.classList.remove('active-speaker');
+        }
+      }
+      const activeTile = document.getElementById(`speakerTile${currentSpeakerIndex}`);
+      if (activeTile) {
+        activeTile.classList.add('active-speaker');
+      }
+      showToast(`Speaker switched to Tile #${currentSpeakerIndex}`, '🎙️');
+    }
+
+    function simulateJoinMeeting() {
+      showToast('Connecting to Webex Secure Collaboration Mesh...', '🌐');
+      document.getElementById('stage').scrollIntoView({ behavior: 'smooth' });
+    }
+
+    function simulateStartRoom() {
+      showToast('Pairing with Tokyo Boardroom Pro 70...', '📺');
+    }
+
+    function endCall() {
+      showToast('Call ended. Participant session logged.', '📞');
+    }
+
+    function switchCardFilter(type) {
+      const cards = document.querySelectorAll('.card-filter-item');
+      cards.forEach(card => {
+        if (type === 'all') {
+          card.style.display = 'flex';
+        } else if (card.classList.contains(type)) {
+          card.style.display = 'flex';
+        } else {
+          card.style.display = 'none';
+        }
+      });
+      showToast(`Filtered meetings: ${type}`, '🔍');
+    }
+
+    function lowerHand(btn) {
+      btn.style.display = 'none';
+      showToast('Lowered attendee hand', '✋');
+    }
+
+    function unmuteRosterMember(btn) {
+      btn.classList.remove('muted-alert');
+      showToast('Prompted participant to unmute', '🔔');
+    }
+
+    function muteAllParticipants() {
+      showToast('All other participants muted by Host', '🔇');
+    }
+
+    function toggleSidebarWidth() {
+      const sb = document.getElementById('sidebarContainer');
+      if (sb.style.width === '80px') {
+        sb.style.width = '320px';
+      } else {
+        sb.style.width = '80px';
+      }
+    }
+
+    function filterSidebarSpaces(query) {
+      const items = document.querySelectorAll('#spacesList li');
+      items.forEach(it => {
+        if (it.innerText.toLowerCase().includes(query.toLowerCase())) {
+          it.style.display = 'flex';
+        } else {
+          it.style.display = 'none';
+        }
+      });
+    }
+
+    function toggleWorkspaceMenu() {
+      showToast('Workspace selector opened: Switch between Webex Tenants', '🏢');
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,519 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Neutral Modern — Official Design System Implementation</title>
+  <meta name="description" content="Authentic implementation of the Neutral Modern (Default) design system: calm, functional, content-first, Background #FAFAFA, Foreground #111111, Accent #2F6FEB, Inter typography, 12-column grid, and 80px section spacing." />
+
+  <!-- Google Fonts: Inter (display & body) and JetBrains Mono (mono) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+  <style>
+    /* ─────────────────────────────────────────────────────────────────
+       NEUTRAL MODERN OFFICIAL DESIGN TOKENS (from DESIGN.md)
+       Category: Starter / Neutral Modern
+       Theme: Calm, functional, quietly confident. Content-first, chrome-second.
+       Never pure black; never pure white for backgrounds.
+       ───────────────────────────────────────────────────────────────── */
+    :root {
+      --bg: #FAFAFA;
+      --fg: #111111;
+      --accent: #2F6FEB;
+      --muted: #6B6B6B;
+      --border: #E5E5E5;
+      --surface: #FFFFFF;
+      --success: #17A34A;
+      --warn: #EAB308;
+      --danger: #DC2626;
+
+      /* Typography */
+      --font-family: "Inter", -apple-system, system-ui, sans-serif;
+      --font-mono: ui-monospace, "JetBrains Mono", monospace;
+
+      /* Type Scale (px): 12 · 14 · 16 · 20 · 24 · 32 · 48 · 64 */
+      --text-12: 12px;
+      --text-14: 14px;
+      --text-16: 16px;
+      --text-20: 20px;
+      --text-24: 24px;
+      --text-32: 32px;
+      --text-48: 48px;
+      --text-64: 64px;
+
+      /* Layout */
+      --container-max: 1200px;
+      --gutter: 24px;
+
+      /* Elevation: Two levels only (Flat 0 & Raised 1) */
+      --elev-flat: none;
+      --elev-raised: 0 2px 8px rgba(17, 17, 17, 0.08);
+
+      /* Transitions */
+      --transition-subtle: 150ms ease;
+    }
+
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      background: var(--bg);
+      color: var(--fg);
+      font-size: 16px;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--fg);
+      font-family: var(--font-family);
+      font-weight: 400;
+      font-size: var(--text-16);
+      line-height: 1.5;
+      overflow-x: hidden;
+    }
+
+    /* ─── TYPOGRAPHY RULES ─── */
+    /* Sentence-case headings by default; weight 600; line-height 1.2 */
+    h1, h2, h3, h4 {
+      font-family: var(--font-family);
+      font-weight: 600;
+      line-height: 1.2;
+      color: var(--fg);
+    }
+
+    h1 {
+      font-size: clamp(32px, 5vw, var(--text-48));
+      letter-spacing: -0.01em;
+    }
+
+    h2 {
+      font-size: var(--text-32);
+      letter-spacing: -0.01em;
+    }
+
+    h3 {
+      font-size: var(--text-20);
+    }
+
+    p {
+      color: var(--muted);
+      font-size: var(--text-16);
+      line-height: 1.5;
+    }
+
+    /* Links: cobalt, no underline, underline on hover */
+    a.text-link {
+      color: var(--accent);
+      text-decoration: none;
+      transition: text-decoration var(--transition-subtle);
+    }
+
+    a.text-link:hover {
+      text-decoration: underline;
+    }
+
+    /* ─── BUTTONS (8px radius, 10px block, 16px inline) ─── */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      font-family: var(--font-family);
+      font-size: var(--text-14);
+      font-weight: 600;
+      padding-block: 10px;
+      padding-inline: 16px;
+      border-radius: 8px;
+      text-decoration: none;
+      cursor: pointer;
+      border: 1px solid transparent;
+      transition: all var(--transition-subtle);
+      outline: none;
+    }
+
+    /* Primary = cobalt fill, white label */
+    .btn-primary {
+      background: var(--accent);
+      color: #FFFFFF;
+    }
+
+    .btn-primary:hover {
+      background: #2558be;
+    }
+
+    /* Secondary = 1px border, transparent fill */
+    .btn-secondary {
+      background: transparent;
+      color: var(--fg);
+      border-color: var(--border);
+    }
+
+    .btn-secondary:hover {
+      background: #F0F0F0;
+    }
+
+    /* ─── INPUTS ─── */
+    .input-field {
+      width: 100%;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding-block: 10px;
+      padding-inline: 14px;
+      font-family: var(--font-family);
+      font-size: var(--text-14);
+      color: var(--fg);
+      outline: none;
+      transition: border-color var(--transition-subtle);
+    }
+
+    .input-field:focus {
+      border-color: var(--accent);
+    }
+
+    /* ─── CARDS (White, 1px border, 12px radius, 20px padding, no shadow) ─── */
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 20px;
+    }
+
+    /* Raised level (1) */
+    .card-raised {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 20px;
+      box-shadow: var(--elev-raised);
+    }
+
+    /* ─── 12-COLUMN GRID CONTAINER ─── */
+    .container {
+      max-width: var(--container-max);
+      margin: 0 auto;
+      padding-left: var(--gutter);
+      padding-right: var(--gutter);
+    }
+
+    /* ─── TOP NAVIGATION ─── */
+    .nav-bar {
+      border-bottom: 1px solid var(--border);
+      background: var(--bg);
+    }
+
+    .nav-inner {
+      height: 64px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .brand-mark {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+      color: var(--fg);
+      font-weight: 600;
+      font-size: var(--text-16);
+    }
+
+    .nav-items {
+      display: flex;
+      align-items: center;
+      gap: 24px;
+      list-style: none;
+    }
+
+    @media (max-width: 768px) {
+      .nav-items {
+        display: none;
+      }
+    }
+
+    .nav-link {
+      font-size: var(--text-14);
+      color: var(--muted);
+      text-decoration: none;
+      transition: color var(--transition-subtle);
+    }
+
+    .nav-link:hover {
+      color: var(--fg);
+    }
+
+    /* ─── HERO (40-60vh, Top-Biased) ─── */
+    .hero-section {
+      min-height: 48vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      padding-top: 64px;
+      padding-bottom: 40px;
+    }
+
+    .hero-content {
+      max-width: 680px;
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: 12px;
+      margin-top: 24px;
+      align-items: center;
+    }
+
+    /* ─── SECTIONS (80px top+bottom spacing desktop) ─── */
+    .section-spacing {
+      padding-top: 80px;
+      padding-bottom: 80px;
+    }
+
+    @media (max-width: 1023px) {
+      .section-spacing {
+        padding-top: 48px;
+        padding-bottom: 48px;
+      }
+    }
+
+    @media (max-width: 639px) {
+      .section-spacing {
+        padding-top: 32px;
+        padding-bottom: 32px;
+      }
+    }
+
+    /* 12-Column Grid Layout */
+    .grid-12 {
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap: var(--gutter);
+    }
+
+    .col-4 {
+      grid-column: span 4;
+    }
+
+    .col-6 {
+      grid-column: span 6;
+    }
+
+    .col-8 {
+      grid-column: span 8;
+    }
+
+    .col-12 {
+      grid-column: span 12;
+    }
+
+    @media (max-width: 900px) {
+      .col-4, .col-6, .col-8 {
+        grid-column: span 12;
+      }
+    }
+
+    /* ─── FOOTER ─── */
+    .page-footer {
+      border-top: 1px solid var(--border);
+      padding-top: 40px;
+      padding-bottom: 40px;
+      margin-top: 80px;
+      font-size: var(--text-14);
+      color: var(--muted);
+    }
+
+    /* ─── FLOATING AUDIT DRAWER ─── */
+    .audit-trigger {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      z-index: 1000;
+    }
+
+    .audit-modal {
+      display: none;
+      position: fixed;
+      bottom: 72px;
+      right: 24px;
+      width: 340px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      box-shadow: var(--elev-raised);
+      padding: 20px;
+      z-index: 1001;
+      font-size: var(--text-12);
+    }
+
+    .audit-modal.open {
+      display: block;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAVIGATION BAR -->
+  <nav class="nav-bar">
+    <div class="container nav-inner">
+      <a href="#" class="brand-mark">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="9"></circle>
+          <path d="M12 7v5l3 3"></path>
+        </svg>
+        <span>Neutral Modern</span>
+      </a>
+
+      <ul class="nav-items">
+        <li><a href="#features" class="nav-link">Features</a></li>
+        <li><a href="#principles" class="nav-link">Layout rules</a></li>
+        <li><a href="#spec" class="nav-link">Specification</a></li>
+      </ul>
+
+      <div style="display: flex; gap: 8px;">
+        <button class="btn btn-secondary" onclick="toggleAuditor()">Audit</button>
+        <a href="#features" class="btn btn-primary">Get started</a>
+      </div>
+    </div>
+  </nav>
+
+  <main class="container">
+    <!-- HERO: TOP-BIASED, 40-60vh -->
+    <section class="hero-section">
+      <div class="hero-content">
+        <h1>Clean, product-oriented default for utility and focus</h1>
+        <p style="margin-top: 16px;">
+          Calm, functional, quietly confident. Content-first, chrome-second. Designed with disciplined whitespace, Inter typography, and a single cobalt accent.
+        </p>
+
+        <div class="hero-actions">
+          <a href="#features" class="btn btn-primary">Explore components</a>
+          <a href="#principles" class="text-link" style="font-size: var(--text-14); margin-left: 8px;">Read layout guide</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- 12-COLUMN GRID SECTION (80px padding) -->
+    <section class="section-spacing" id="features" style="border-top: 1px solid var(--border);">
+      <h2 style="margin-bottom: 24px;">Core components</h2>
+
+      <div class="grid-12">
+        <!-- Card 1 (Col 4) -->
+        <div class="card col-4">
+          <h3 style="margin-bottom: 8px;">Standard cards</h3>
+          <p>White background, 1px neutral border, 12px radius, and 20px internal padding with zero decorative shadows.</p>
+        </div>
+
+        <!-- Card 2 (Col 4) -->
+        <div class="card col-4">
+          <h3 style="margin-bottom: 8px;">Cobalt accent</h3>
+          <p>One reserved accent (#2F6FEB) strictly used for primary calls to action, active indicators, and hyperlinks.</p>
+        </div>
+
+        <!-- Card 3 (Col 4) -->
+        <div class="card col-4">
+          <h3 style="margin-bottom: 8px;">Semantic tokens</h3>
+          <p>Success (#17A34A), Warning (#EAB308), and Danger (#DC2626) provide unambiguous status communication.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- FORM & INTERACTIVE SECTION -->
+    <section class="section-spacing" id="principles" style="border-top: 1px solid var(--border);">
+      <div class="grid-12">
+        <div class="col-6">
+          <h2 style="margin-bottom: 16px;">Interactive input discipline</h2>
+          <p style="margin-bottom: 24px;">
+            Inputs feature 8px radius, 10px vertical padding, and clean border transitions without heavy drop shadows.
+          </p>
+
+          <form onsubmit="handleFormSubmit(event)" style="display: flex; flex-direction: column; gap: 12px; max-width: 440px;">
+            <input type="text" class="input-field" id="sampleInput" placeholder="Organization workspace slug" required />
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 4px;">
+              <button type="submit" class="btn btn-primary">Save configuration</button>
+              <span id="formFeedback" style="font-size: var(--text-12); color: var(--success); font-family: var(--font-mono);"></span>
+            </div>
+          </form>
+        </div>
+
+        <div class="col-6">
+          <div class="card-raised">
+            <h3 style="margin-bottom: 8px;">Elevation level 1 (Raised)</h3>
+            <p style="font-size: var(--text-14); margin-bottom: 16px;">
+              Reserved for floating overlays, active dropdowns, and modals: 2px y-offset, 8px blur, 8% opacity.
+            </p>
+            <div style="font-family: var(--font-mono); font-size: var(--text-12); background: var(--bg); padding: 12px; border-radius: 8px; border: 1px solid var(--border);">
+              box-shadow: 0 2px 8px rgba(17, 17, 17, 0.08);
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="page-footer" id="spec">
+    <div class="container" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px;">
+      <span>Neutral Modern design system starter. Content-first.</span>
+      <div style="display: flex; gap: 20px;">
+        <a href="#" class="text-link" style="font-size: var(--text-14);">Documentation</a>
+        <a href="#" class="text-link" style="font-size: var(--text-14);">GitHub</a>
+        <a href="#" class="text-link" style="font-size: var(--text-14);">License</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- FLOATING AUDIT DRAWER -->
+  <div class="audit-trigger">
+    <button class="btn btn-secondary" onclick="toggleAuditor()" style="background: var(--surface); box-shadow: var(--elev-raised);">
+      <span>Audit Tokens</span>
+    </button>
+  </div>
+
+  <div class="audit-modal" id="auditModal">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; border-bottom: 1px solid var(--border); padding-bottom: 6px;">
+      <span style="font-weight: 600; color: var(--fg);">NEUTRAL MODERN SPEC</span>
+      <button onclick="toggleAuditor()" style="background: none; border: none; cursor: pointer; color: var(--fg);">✕</button>
+    </div>
+    <div style="display: flex; flex-direction: column; gap: 6px; font-family: var(--font-mono); font-size: 11px;">
+      <div>• Background: <span style="font-weight: 600;">#FAFAFA</span></div>
+      <div>• Foreground: <span style="font-weight: 600;">#111111</span></div>
+      <div>• Accent: <span style="color: #2F6FEB; font-weight: 600;">#2F6FEB (Cobalt)</span></div>
+      <div>• Muted: <span style="font-weight: 600;">#6B6B6B</span></div>
+      <div>• Border: <span style="font-weight: 600;">#E5E5E5</span></div>
+      <div>• Surface: <span style="font-weight: 600;">#FFFFFF</span></div>
+      <div>• Success: <span style="color: #17A34A;">#17A34A</span></div>
+      <div>• Warn: <span style="color: #EAB308;">#EAB308</span></div>
+      <div>• Danger: <span style="color: #DC2626;">#DC2626</span></div>
+      <div>• Font: Inter (wt 400/600)</div>
+      <div>• Hero: 40–60vh top-biased</div>
+      <div>• Grid: 12-column, 1200px, 80px y-spacing</div>
+    </div>
+  </div>
+
+  <!-- SCRIPTING -->
+  <script>
+    function toggleAuditor() {
+      document.getElementById('auditModal').classList.toggle('open');
+    }
+
+    function handleFormSubmit(e) {
+      e.preventDefault();
+      const input = document.getElementById('sampleInput').value;
+      const feedback = document.getElementById('formFeedback');
+      feedback.textContent = `✓ Configured: ${input}`;
+      setTimeout(() => {
+        feedback.textContent = '';
+      }, 3000);
+    }
+  </script>
+</body>
+</html>

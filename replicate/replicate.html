@@ -1,0 +1,641 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Replicate — Run AI with an API</title>
+  <meta name="description" content="Authentic implementation of the Replicate design system featuring explosive blaze gradient, 9999px pill geometry on all components, massive display typography, and live model runner.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      /* Brand Colors */
+      --replicate-dark: #202020;
+      --replicate-red: #ea2804;
+      --secondary-red: #dd4425;
+      --status-green: #2b9a66;
+      --github-dark: #24292e;
+
+      /* Neutrals */
+      --pure-white: #ffffff;
+      --near-white: #fcfcfc;
+      --medium-gray: #646464;
+      --warm-gray: #4e4e4e;
+      --mid-silver: #8d8d8d;
+      --light-silver: #bbbbbb;
+
+      /* Hero Blaze Gradient */
+      --gradient-blaze: linear-gradient(135deg, #ea2804 0%, #d81b60 45%, #9c27b0 80%, #e040fb 100%);
+
+      /* Geometry Rule: 9999px on EVERYTHING */
+      --radius-pill: 9999px;
+
+      /* Typography */
+      --font-display: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--pure-white);
+      color: var(--replicate-dark);
+      font-family: var(--font-display);
+      font-size: 16px;
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+
+    .container {
+      max-width: 1240px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    /* 1. TOP NAV */
+    .rep-nav {
+      background: rgba(255, 255, 255, 0.94);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid rgba(32, 32, 32, 0.08);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+
+    .nav-inner {
+      height: 72px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .brand-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+      color: var(--replicate-dark);
+      font-size: 22px;
+      font-weight: 800;
+      letter-spacing: -0.8px;
+    }
+
+    .logo-badge {
+      width: 16px;
+      height: 16px;
+      background: var(--replicate-red);
+      border-radius: var(--radius-pill);
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 32px;
+      list-style: none;
+    }
+
+    .nav-links a {
+      color: var(--replicate-dark);
+      text-decoration: underline dotted var(--light-silver);
+      text-underline-offset: 4px;
+      font-size: 15px;
+      font-weight: 600;
+      transition: color 0.15s;
+    }
+
+    .nav-links a:hover {
+      color: var(--replicate-red);
+      text-decoration-color: var(--replicate-red);
+    }
+
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    /* Buttons (Strictly 9999px Pill) */
+    .btn-dark-pill {
+      background-color: var(--replicate-dark);
+      color: var(--near-white);
+      border: 2px solid var(--replicate-dark);
+      border-radius: var(--radius-pill);
+      padding: 10px 24px;
+      font-family: var(--font-display);
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .btn-dark-pill:hover {
+      background-color: var(--replicate-red);
+      border-color: var(--replicate-red);
+      color: #ffffff;
+    }
+
+    .btn-outline-pill {
+      background-color: transparent;
+      color: var(--replicate-dark);
+      border: 1.5px solid var(--replicate-dark);
+      border-radius: var(--radius-pill);
+      padding: 10px 24px;
+      font-family: var(--font-display);
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      text-decoration: none;
+    }
+
+    .btn-outline-pill:hover {
+      background-color: rgba(32, 32, 32, 0.05);
+    }
+
+    .status-badge {
+      background: var(--status-green);
+      color: #ffffff;
+      border-radius: var(--radius-pill);
+      padding: 4px 14px;
+      font-size: 13px;
+      font-weight: 700;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    /* 2. EXPLOSIVE BLAZE GRADIENT HERO */
+    .hero-blaze-section {
+      background: var(--gradient-blaze);
+      color: #ffffff;
+      padding: 120px 0 100px 0;
+      position: relative;
+    }
+
+    .hero-eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(255, 255, 255, 0.2);
+      backdrop-filter: blur(10px);
+      border-radius: var(--radius-pill);
+      padding: 6px 18px;
+      font-size: 13px;
+      font-weight: 700;
+      margin-bottom: 24px;
+      border: 1px solid rgba(255, 255, 255, 0.3);
+    }
+
+    .hero-display-title {
+      font-size: 76px;
+      font-weight: 800;
+      line-height: 1.0;
+      letter-spacing: -2px;
+      margin-bottom: 24px;
+      max-width: 900px;
+    }
+
+    .hero-lead-text {
+      font-size: 22px;
+      font-weight: 400;
+      line-height: 1.45;
+      max-width: 680px;
+      margin-bottom: 40px;
+      color: rgba(255, 255, 255, 0.92);
+    }
+
+    .hero-actions-row {
+      display: flex;
+      gap: 16px;
+      align-items: center;
+    }
+
+    /* 3. INTERACTIVE MODEL RUNNER PLAYGROUND */
+    .playground-section {
+      padding: 96px 0;
+    }
+
+    .runner-card {
+      background: #ffffff;
+      border: 2px solid var(--replicate-dark);
+      border-radius: 32px;
+      box-shadow: 0 12px 36px rgba(32, 32, 32, 0.08);
+      overflow: hidden;
+    }
+
+    .runner-topbar {
+      background: var(--replicate-dark);
+      color: #ffffff;
+      padding: 16px 28px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .runner-pills-nav {
+      display: flex;
+      gap: 8px;
+    }
+
+    .runner-tab {
+      background: rgba(255, 255, 255, 0.1);
+      color: #ffffff;
+      border: none;
+      border-radius: var(--radius-pill);
+      padding: 6px 16px;
+      font-family: var(--font-display);
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+
+    .runner-tab.active {
+      background: var(--replicate-red);
+    }
+
+    .runner-body {
+      padding: 32px;
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: 32px;
+      align-items: center;
+    }
+
+    .prompt-field-pill {
+      background: #f5f5f5;
+      border: 1.5px solid var(--replicate-dark);
+      border-radius: var(--radius-pill);
+      padding: 14px 24px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+
+    .prompt-input {
+      background: transparent;
+      border: none;
+      outline: none;
+      font-family: var(--font-display);
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--replicate-dark);
+      flex: 1;
+    }
+
+    .code-console-block {
+      background: var(--github-dark);
+      color: #f6f8fa;
+      border-radius: 20px;
+      padding: 20px;
+      font-family: var(--font-mono);
+      font-size: 13px;
+      line-height: 1.5;
+      overflow-x: auto;
+    }
+
+    .model-output-pill-frame {
+      width: 100%;
+      height: 280px;
+      background: linear-gradient(135deg, #111111 0%, #292929 100%);
+      border: 2px solid var(--replicate-dark);
+      border-radius: var(--radius-pill);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      color: #ffffff;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 16px 32px rgba(234, 40, 4, 0.15);
+    }
+
+    .output-art {
+      font-size: 64px;
+      margin-bottom: 12px;
+      transition: transform 0.3s ease;
+    }
+
+    /* 4. MODEL GALLERY GRID */
+    .gallery-section {
+      padding: 48px 0 96px 0;
+    }
+
+    .section-head {
+      margin-bottom: 40px;
+    }
+
+    .section-title {
+      font-size: 40px;
+      font-weight: 800;
+      letter-spacing: -1px;
+      margin-bottom: 12px;
+    }
+
+    .models-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+
+    .model-box {
+      border: 1.5px solid var(--replicate-dark);
+      border-radius: 24px;
+      padding: 24px;
+      transition: all 0.2s ease;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .model-box:hover {
+      transform: translateY(-4px);
+      border-color: var(--replicate-red);
+      box-shadow: 0 8px 24px rgba(234, 40, 4, 0.12);
+    }
+
+    .model-pill-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: var(--radius-pill);
+      background: #f5f5f5;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      margin-bottom: 16px;
+      border: 1px solid var(--replicate-dark);
+    }
+
+    .model-name {
+      font-size: 20px;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+      margin-bottom: 8px;
+    }
+
+    .model-desc {
+      font-size: 14px;
+      color: var(--medium-gray);
+      line-height: 1.45;
+      margin-bottom: 16px;
+    }
+
+    .model-meta-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-family: var(--font-mono);
+      font-size: 12px;
+      color: var(--warm-gray);
+    }
+
+    /* 5. 128PX CLOSING MANIFESTO */
+    .manifesto-section {
+      background: var(--replicate-dark);
+      color: #ffffff;
+      padding: 128px 0;
+      text-align: center;
+      border-top: 2px solid var(--replicate-dark);
+    }
+
+    .manifesto-huge {
+      font-size: 104px;
+      font-weight: 800;
+      line-height: 0.95;
+      letter-spacing: -3px;
+      max-width: 1080px;
+      margin: 0 auto 48px auto;
+    }
+
+    .manifesto-huge span {
+      color: var(--replicate-red);
+    }
+
+    /* Footer */
+    .rep-footer {
+      background: var(--replicate-dark);
+      color: var(--mid-silver);
+      border-top: 1px solid rgba(255, 255, 255, 0.15);
+      padding: 48px 0 32px 0;
+      font-size: 14px;
+    }
+
+    .footer-flex {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navigation -->
+  <nav class="rep-nav">
+    <div class="container nav-inner">
+      <a href="#" class="brand-logo">
+        <div class="logo-badge"></div>
+        <span>replicate</span>
+      </a>
+
+      <ul class="nav-links">
+        <li><a href="#models">Explore</a></li>
+        <li><a href="#playground">Playground</a></li>
+        <li><a href="#">Docs</a></li>
+        <li><a href="#">Pricing</a></li>
+      </ul>
+
+      <div class="nav-actions">
+        <div class="status-badge">● Operational</div>
+        <a href="#playground" class="btn-dark-pill">Start Running</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero Blaze Section -->
+  <header class="hero-blaze-section">
+    <div class="container">
+      <div class="hero-eyebrow">
+        <span>⚡ RUN OPEN-SOURCE AI WITH AN API</span>
+      </div>
+
+      <h1 class="hero-display-title">
+        Run models with a few lines of code.
+      </h1>
+
+      <p class="hero-lead-text">
+        Replicate lets you run machine learning models with a cloud API, without having to manage your own GPU clusters. Pay only for what you run.
+      </p>
+
+      <div class="hero-actions-row">
+        <button class="btn-dark-pill" style="background: #ffffff; color: var(--replicate-dark); border-color: #ffffff;" onclick="runModelSimulation()">
+          Run Prediction in 1s 🚀
+        </button>
+        <a href="#models" class="btn-outline-pill" style="color: #ffffff; border-color: rgba(255,255,255,0.6);">
+          Browse 25,000+ Models
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Interactive Model Playground -->
+  <section class="container playground-section" id="playground">
+    <div class="runner-card">
+      <div class="runner-topbar">
+        <div class="runner-pills-nav">
+          <button class="runner-tab active" onclick="switchRunner('flux', this)">black-forest-labs/flux-schnell</button>
+          <button class="runner-tab" onclick="switchRunner('llama', this)">meta/meta-llama-3-70b</button>
+          <button class="runner-tab" onclick="switchRunner('whisper', this)">openai/whisper-large-v3</button>
+        </div>
+        <span style="font-family: var(--font-mono); font-size: 13px;">Cold Boot: 0.8s</span>
+      </div>
+
+      <div class="runner-body">
+        <div>
+          <div class="prompt-field-pill">
+            <span style="color: var(--replicate-red); font-weight: 700;">PROMPT</span>
+            <input type="text" class="prompt-input" id="modelPrompt" value="A hyper-realistic cinematic portrait of an astronaut on Mars during golden hour">
+            <button class="btn-dark-pill" style="padding: 6px 16px; font-size: 13px;" onclick="runModelSimulation()">Run ⚡</button>
+          </div>
+
+          <pre class="code-console-block" id="curlSnippet"><span style="color: #ff7b72;">import</span> replicate
+
+output = replicate.run(
+    <span style="color: #a5d6ff;">"black-forest-labs/flux-schnell"</span>,
+    input={<span style="color: #7ee787;">"prompt"</span>: <span style="color: #a5d6ff;">"astronaut on Mars..."</span>}
+)
+<span style="color: #ff7b72;">print</span>(output)</pre>
+        </div>
+
+        <div>
+          <div class="model-output-pill-frame" id="outputFrame">
+            <div class="output-art" id="artEmoji">🧑‍🚀</div>
+            <div style="font-weight: 700; font-size: 17px;" id="outputTitle">Flux 12B Generation Complete</div>
+            <div style="font-family: var(--font-mono); font-size: 12px; color: #aaa; margin-top: 4px;" id="outputMeta">
+              Latency: 920ms • 4 Diffusion Steps
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Models Gallery Grid -->
+  <section class="container gallery-section" id="models">
+    <div class="section-head">
+      <h2 class="section-title">Explore Production Models</h2>
+      <p style="color: var(--medium-gray); font-size: 18px;">Ready to deploy into your stack with a single curl request.</p>
+    </div>
+
+    <div class="models-grid">
+      <div class="model-box" onclick="switchRunner('flux')">
+        <div>
+          <div class="model-pill-icon">🎨</div>
+          <h3 class="model-name">FLUX.1-schnell</h3>
+          <p class="model-desc">State-of-the-art fast 12-billion parameter rectified flow image synthesis.</p>
+        </div>
+        <div class="model-meta-row">
+          <span>black-forest-labs</span>
+          <span>12.4M runs</span>
+        </div>
+      </div>
+
+      <div class="model-box" onclick="switchRunner('llama')">
+        <div>
+          <div class="model-pill-icon">🧠</div>
+          <h3 class="model-name">Meta Llama 3 70B</h3>
+          <p class="model-desc">Frontier open-weights multilingual conversational and reasoning engine.</p>
+        </div>
+        <div class="model-meta-row">
+          <span>meta</span>
+          <span>48.9M runs</span>
+        </div>
+      </div>
+
+      <div class="model-box" onclick="switchRunner('whisper')">
+        <div>
+          <div class="model-pill-icon">🎙️</div>
+          <h3 class="model-name">Whisper Large v3</h3>
+          <p class="model-desc">Robust speech recognition and translation across 99 natural languages.</p>
+        </div>
+        <div class="model-meta-row">
+          <span>openai</span>
+          <span>34.1M runs</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 128px Manifesto Section -->
+  <section class="manifesto-section">
+    <div class="container">
+      <h2 class="manifesto-huge">
+        Imagine what <span>you can build.</span>
+      </h2>
+      <a href="#playground" class="btn-dark-pill" style="background: var(--replicate-red); border-color: var(--replicate-red); font-size: 18px; padding: 16px 48px;">
+        Start Building with Replicate →
+      </a>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="rep-footer">
+    <div class="container footer-flex">
+      <div>© 2026 Replicate, Inc. All rights reserved.</div>
+      <div>Strictly adhering to <code>open-design/design-systems/replicate/DESIGN.md</code></div>
+    </div>
+  </footer>
+
+  <script>
+    function switchRunner(model, btn) {
+      if (btn) {
+        document.querySelectorAll('.runner-tab').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+      }
+
+      const snippet = document.getElementById('curlSnippet');
+      const art = document.getElementById('artEmoji');
+      const title = document.getElementById('outputTitle');
+
+      if (model === 'flux') {
+        snippet.textContent = `import replicate\n\noutput = replicate.run(\n    "black-forest-labs/flux-schnell",\n    input={"prompt": "astronaut on Mars..."}\n)\nprint(output)`;
+        art.textContent = '🧑‍🚀';
+        title.textContent = 'Flux 12B Generation Complete';
+      } else if (model === 'llama') {
+        snippet.textContent = `import replicate\n\noutput = replicate.run(\n    "meta/meta-llama-3-70b-instruct",\n    input={"prompt": "Explain quantum teleportation"}\n)\nprint("".join(output))`;
+        art.textContent = '💡';
+        title.textContent = 'Llama 3 70B Response Generated';
+      } else if (model === 'whisper') {
+        snippet.textContent = `import replicate\n\noutput = replicate.run(\n    "openai/whisper-large-v3",\n    input={"audio": open("audio.mp3", "rb")}\n)\nprint(output["transcription"])`;
+        art.textContent = '🔊';
+        title.textContent = 'Whisper Audio Transcription Ready';
+      }
+    }
+
+    function runModelSimulation() {
+      const art = document.getElementById('artEmoji');
+      const meta = document.getElementById('outputMeta');
+      art.style.transform = 'scale(1.2) rotate(10deg)';
+      meta.textContent = 'Predicting on A100 GPU cluster...';
+      meta.style.color = '#ea2804';
+
+      setTimeout(() => {
+        art.style.transform = 'scale(1) rotate(0)';
+        meta.textContent = 'Prediction Success: 200 OK • 840ms Latency';
+        meta.style.color = '#2b9a66';
+      }, 500);
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,2064 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Canva — Design System & Creation Platform</title>
+  <meta name="description" content="Authentic Canva Design System website. Clean white canvas, vivid purple-to-blue gradient, friendly geometry, template discovery, Magic Studio, and live editor workspace." />
+  
+  <!-- Fonts: Plus Jakarta Sans provides authentic Canva Sans geometric rounded letterforms -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    /* ─────────────────────────────────────────────────────────────────────────
+     * CANVA DESIGN SYSTEM TOKENS (DESIGN.md & tokens.css verbatim alignment)
+     * ───────────────────────────────────────────────────────────────────────── */
+    :root {
+      /* Surface */
+      --bg: #ffffff;             /* Canvas — primary background */
+      --surface: #f4f5f7;        /* Surface Subtle — section break, sidebar */
+      --surface-warm: var(--surface);
+      --surface-inset: #e8eaed;  /* Surface Inset — disabled, inset block */
+      --surface-cool: #eef0fc;   /* Surface Cool — hover tint on purple cards */
+
+      /* Ink & Text */
+      --fg: #0e1318;             /* Ink Primary — headings, max emphasis */
+      --fg-2: #3c4043;           /* Ink Secondary — body prose */
+      --muted: #5f6368;          /* Ink Muted — captions, descriptions */
+      --meta: #9aa0a6;           /* Ink Faint — placeholder, disabled */
+
+      /* Brand Gradients & Accents */
+      --accent: #7d2ae8;         /* Canva Purple — primary origin */
+      --accent-secondary: #00c4cc; /* Canva Cyan — gradient terminus */
+      --accent-pink: #ff5757;    /* Canva Pink — Magic Studio & Error */
+      --accent-on: #ffffff;
+      --accent-hover: #6815d4;
+      --accent-active: color-mix(in oklab, var(--accent), black 14%);
+
+      /* Semantic */
+      --success: #00b894;        /* Saved, exported */
+      --warn: #ffb020;           /* Storage limit, advisory */
+      --danger: #ff5757;         /* Validation, destructive, Magic Studio */
+      --info: #0d99ff;           /* Tip, link */
+
+      /* Category Accents (Template Tags) */
+      --cat-coral: #ff7059;      /* Social posts */
+      --cat-tangerine: #ff9633;  /* Marketing */
+      --cat-mint: #48c997;       /* Education */
+      --cat-sky: #3ea6ff;        /* Business */
+      --cat-lavender: #9b87f5;   /* Personal */
+
+      /* Border */
+      --border: #e1e3e6;         /* Border Default hairline */
+      --border-strong: #c7cdd3;  /* Emphasized border / hover state */
+      --border-soft: var(--border);
+
+      /* Typography */
+      --font-display: "Canva Sans", "Plus Jakarta Sans", "YS Text", system-ui, -apple-system, sans-serif;
+      --font-body: "Canva Sans", "Plus Jakarta Sans", "YS Text", system-ui, -apple-system, sans-serif;
+      --font-mono: "JetBrains Mono", ui-monospace, Menlo, Consolas, monospace;
+
+      /* Type Scale (DESIGN.md §3) */
+      --text-xs: 11px;           /* Tag — uppercase category chip */
+      --text-sm: 12px;           /* Caption — metadata, hints */
+      --text-base: 14px;         /* Body — standard UI prose */
+      --text-lg: 16px;           /* Body Large — lede, marketing body */
+      --text-xl: 18px;           /* H3 — card title, sub-section */
+      --text-2xl: 24px;          /* H2 — section heading */
+      --text-3xl: 36px;          /* H1 — page heading */
+      --text-4xl: 64px;          /* Hero — "Design anything." */
+
+      --leading-body: 1.5;
+      --leading-tight: 1.15;
+      --tracking-display: -0.02em;
+
+      /* Spacing Scale (4px base) */
+      --space-1: 4px;
+      --space-2: 8px;
+      --space-3: 12px;
+      --space-4: 16px;
+      --space-5: 20px;
+      --space-6: 24px;
+      --space-8: 32px;
+      --space-10: 40px;
+      --space-12: 48px;
+      --space-16: 64px;
+      --space-24: 96px;
+
+      /* Container & Section Rhythm */
+      --container-max: 1320px;
+      --container-gutter-desktop: 32px;
+      --container-gutter-tablet: 24px;
+      --container-gutter-phone: 16px;
+      --section-y-desktop: 96px;
+      --section-y-tablet: 64px;
+      --section-y-phone: 48px;
+
+      /* Radii */
+      --radius-sm: 8px;          /* Buttons, inputs */
+      --radius-md: 12px;         /* Cards, template tiles */
+      --radius-lg: 16px;         /* Panels, hero blocks */
+      --radius-xl: 24px;
+      --radius-pill: 9999px;     /* Chips, tags, pro badge */
+
+      /* Elevation & Shadows */
+      --elev-flat: none;
+      --elev-ring: 0 0 0 1px var(--border);
+      --elev-raised: 0 2px 8px rgba(0, 0, 0, 0.06);
+      --shadow-hover: 0 8px 24px rgba(0, 0, 0, 0.08);
+
+      /* Focus Ring */
+      --focus-ring: 0 0 0 3px rgba(125, 42, 232, 0.16);
+
+      /* Motion */
+      --motion-fast: 180ms;
+      --motion-base: 280ms;
+      --motion-slow: 420ms;
+      --ease-standard: cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    /* ─────────────────────────────────────────────────────────────────────────
+     * RESET & BASE ELEMENTS
+     * ───────────────────────────────────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--bg);
+      color: var(--fg-2);
+      font-family: var(--font-body);
+      font-size: var(--text-base);
+      line-height: var(--leading-body);
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+
+    /* Container */
+    .container {
+      max-width: var(--container-max);
+      margin-inline: auto;
+      padding-inline: var(--container-gutter-desktop);
+    }
+    @media (max-width: 1024px) {
+      .container { padding-inline: var(--container-gutter-tablet); }
+    }
+    @media (max-width: 640px) {
+      .container { padding-inline: var(--container-gutter-phone); }
+    }
+
+    /* Typography Utilities */
+    h1, h2, h3, h4 {
+      font-family: var(--font-display);
+      color: var(--fg);
+      line-height: var(--leading-tight);
+    }
+    h1 {
+      font-size: clamp(38px, 5vw, var(--text-4xl));
+      font-weight: 800;
+      letter-spacing: var(--tracking-display);
+    }
+    h2 {
+      font-size: clamp(24px, 3vw, var(--text-3xl));
+      font-weight: 700;
+      letter-spacing: -0.01em;
+    }
+    h3 {
+      font-size: var(--text-xl);
+      font-weight: 600;
+    }
+    p { margin-bottom: 0; }
+    .lead {
+      font-size: var(--text-lg);
+      line-height: 1.55;
+      color: var(--fg-2);
+      font-weight: 400;
+    }
+    .muted { color: var(--muted); }
+    .faint { color: var(--meta); }
+
+    /* ─────────────────────────────────────────────────────────────────────────
+     * BUTTONS & CHIPS
+     * ───────────────────────────────────────────────────────────────────────── */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--space-2);
+      padding: 12px 20px;
+      border-radius: var(--radius-sm);
+      font-family: var(--font-body);
+      font-size: var(--text-base);
+      font-weight: 600;
+      line-height: 1.2;
+      text-decoration: none;
+      border: 1px solid transparent;
+      cursor: pointer;
+      white-space: nowrap;
+      transition:
+        background-color var(--motion-fast) var(--ease-standard),
+        border-color var(--motion-fast) var(--ease-standard),
+        box-shadow var(--motion-fast) var(--ease-standard),
+        transform var(--motion-fast) var(--ease-standard);
+    }
+    .btn:focus-visible { outline: none; box-shadow: var(--focus-ring); }
+    .btn:active { transform: translateY(0); }
+
+    /* Primary Gradient Button (Hero / Pro CTA) */
+    .btn-gradient {
+      background: linear-gradient(135deg, #7d2ae8, #00c4cc);
+      color: #ffffff;
+      box-shadow: 0 2px 8px rgba(125, 42, 232, 0.2);
+    }
+    .btn-gradient:hover {
+      box-shadow: 0 4px 14px rgba(125, 42, 232, 0.3);
+      transform: translateY(-1px);
+    }
+
+    /* Primary Solid Purple Button */
+    .btn-primary {
+      background: var(--accent);
+      color: #ffffff;
+      box-shadow: var(--elev-raised);
+    }
+    .btn-primary:hover {
+      background: var(--accent-hover);
+      box-shadow: 0 4px 12px rgba(125, 42, 232, 0.25);
+      transform: translateY(-1px);
+    }
+
+    /* Secondary Button */
+    .btn-secondary {
+      background: var(--bg);
+      color: var(--fg);
+      border-color: var(--border);
+      box-shadow: 0 1px 2px rgba(0,0,0,0.04);
+    }
+    .btn-secondary:hover {
+      background: var(--surface);
+      border-color: var(--border-strong);
+    }
+
+    /* Subtle / Tertiary Button */
+    .btn-subtle {
+      background: rgba(125, 42, 232, 0.08);
+      color: var(--accent);
+    }
+    .btn-subtle:hover {
+      background: rgba(125, 42, 232, 0.14);
+    }
+
+    /* Icon-only button */
+    .btn-icon {
+      width: 40px;
+      height: 40px;
+      padding: 0;
+      border-radius: var(--radius-sm);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: transparent;
+      border: 1px solid transparent;
+      color: var(--fg-2);
+      cursor: pointer;
+      transition: all var(--motion-fast) var(--ease-standard);
+    }
+    .btn-icon:hover {
+      background: var(--surface);
+      color: var(--fg);
+    }
+
+    /* Pro / Magic Badge */
+    .pro-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 2px 8px;
+      border-radius: var(--radius-pill);
+      background: linear-gradient(135deg, #7d2ae8, #ff5757);
+      color: #ffffff;
+      font-size: 10px;
+      font-weight: 700;
+      line-height: 1.4;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      flex-shrink: 0;
+    }
+    .pro-badge svg { width: 10px; height: 10px; fill: currentColor; }
+
+    /* Chips / Tags (9999px pills) */
+    .chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 10px;
+      border-radius: var(--radius-pill);
+      font-size: var(--text-xs);
+      font-weight: 600;
+      line-height: 1.2;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      border: none;
+      cursor: pointer;
+      transition: all var(--motion-fast) var(--ease-standard);
+    }
+    .chip-coral { background: rgba(255, 112, 89, 0.14); color: #d03d27; }
+    .chip-coral:hover { background: rgba(255, 112, 89, 0.22); }
+    .chip-tangerine { background: rgba(255, 150, 51, 0.16); color: #c46200; }
+    .chip-tangerine:hover { background: rgba(255, 150, 51, 0.24); }
+    .chip-mint { background: rgba(72, 201, 151, 0.18); color: #1a885b; }
+    .chip-mint:hover { background: rgba(72, 201, 151, 0.26); }
+    .chip-sky { background: rgba(62, 166, 255, 0.16); color: #0d70c9; }
+    .chip-sky:hover { background: rgba(62, 166, 255, 0.24); }
+    .chip-lavender { background: rgba(155, 135, 245, 0.18); color: #583ecc; }
+    .chip-lavender:hover { background: rgba(155, 135, 245, 0.26); }
+
+    .chip-filter {
+      background: var(--surface);
+      color: var(--fg-2);
+      font-size: var(--text-base);
+      font-weight: 600;
+      text-transform: none;
+      letter-spacing: normal;
+      padding: 8px 16px;
+      border: 1px solid var(--border);
+    }
+    .chip-filter:hover {
+      background: #e8eaed;
+      color: var(--fg);
+    }
+    .chip-filter.active {
+      background: var(--fg);
+      color: #ffffff;
+      border-color: var(--fg);
+    }
+
+    /* ─────────────────────────────────────────────────────────────────────────
+     * TOP NAVIGATION BAR
+     * ───────────────────────────────────────────────────────────────────────── */
+    .canva-nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(255, 255, 255, 0.96);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      height: 72px;
+      display: flex;
+      align-items: center;
+    }
+    .nav-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+      gap: var(--space-4);
+    }
+    .brand-group {
+      display: flex;
+      align-items: center;
+      gap: var(--space-6);
+    }
+    .canva-logo {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      text-decoration: none;
+      font-size: 26px;
+      font-weight: 800;
+      color: var(--fg);
+      letter-spacing: -0.04em;
+    }
+    .canva-mark {
+      width: 34px;
+      height: 34px;
+      border-radius: var(--radius-pill);
+      background: linear-gradient(135deg, #7d2ae8, #00c4cc);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #ffffff;
+      font-size: 18px;
+      font-weight: 800;
+      box-shadow: 0 2px 8px rgba(125, 42, 232, 0.25);
+    }
+    .nav-menu {
+      display: flex;
+      align-items: center;
+      gap: var(--space-1);
+      list-style: none;
+    }
+    @media (max-width: 960px) {
+      .nav-menu { display: none; }
+    }
+    .nav-link {
+      padding: 8px 12px;
+      border-radius: var(--radius-sm);
+      font-size: var(--text-base);
+      font-weight: 600;
+      color: var(--fg-2);
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      transition: background var(--motion-fast) var(--ease-standard), color var(--motion-fast) var(--ease-standard);
+    }
+    .nav-link:hover {
+      background: var(--surface);
+      color: var(--fg);
+    }
+    .nav-link svg { width: 14px; height: 14px; fill: var(--muted); }
+
+    .nav-search {
+      flex: 1;
+      max-width: 440px;
+      position: relative;
+    }
+    @media (max-width: 800px) {
+      .nav-search { display: none; }
+    }
+    .nav-search input {
+      width: 100%;
+      height: 42px;
+      padding: 0 16px 0 42px;
+      background: var(--surface);
+      border: 1px solid transparent;
+      border-radius: var(--radius-sm);
+      font-size: var(--text-base);
+      font-family: var(--font-body);
+      color: var(--fg);
+      outline: none;
+      transition: all var(--motion-fast) var(--ease-standard);
+    }
+    .nav-search input:hover {
+      background: #edeff2;
+    }
+    .nav-search input:focus {
+      background: #ffffff;
+      border-color: var(--accent);
+      box-shadow: var(--focus-ring);
+    }
+    .nav-search-icon {
+      position: absolute;
+      left: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 18px;
+      height: 18px;
+      fill: var(--muted);
+      pointer-events: none;
+    }
+
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: var(--space-2);
+    }
+
+    /* ─────────────────────────────────────────────────────────────────────────
+     * HERO SECTION
+     * ───────────────────────────────────────────────────────────────────────── */
+    .hero-section {
+      padding-top: 64px;
+      padding-bottom: 72px;
+      text-align: center;
+      position: relative;
+    }
+    .hero-eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--surface-cool);
+      color: var(--accent);
+      padding: 6px 14px;
+      border-radius: var(--radius-pill);
+      font-size: var(--text-xs);
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      margin-bottom: var(--space-4);
+    }
+    .hero-title {
+      max-width: 920px;
+      margin-inline: auto;
+      margin-bottom: var(--space-4);
+      color: var(--fg);
+    }
+    .hero-lead {
+      max-width: 640px;
+      margin-inline: auto;
+      font-size: var(--text-lg);
+      color: var(--muted);
+      margin-bottom: var(--space-8);
+    }
+
+    /* Search & Category Ribbon in Hero */
+    .hero-search-box {
+      max-width: 760px;
+      margin-inline: auto;
+      background: #ffffff;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 8px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: var(--space-6);
+      transition: border-color var(--motion-fast) var(--ease-standard), box-shadow var(--motion-fast) var(--ease-standard);
+    }
+    .hero-search-box:focus-within {
+      border-color: var(--accent);
+      box-shadow: 0 4px 24px rgba(125, 42, 232, 0.15);
+    }
+    .hero-search-input {
+      flex: 1;
+      border: none;
+      outline: none;
+      padding: 12px 16px;
+      font-size: var(--text-lg);
+      font-family: var(--font-body);
+      color: var(--fg);
+    }
+    .hero-search-input::placeholder { color: var(--meta); }
+
+    /* Quick Categories Dock */
+    .category-ribbon {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--space-4);
+      flex-wrap: wrap;
+    }
+    .category-pill-btn {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      text-decoration: none;
+      color: var(--fg-2);
+      font-size: var(--text-sm);
+      font-weight: 600;
+      transition: transform var(--motion-fast) var(--ease-standard), color var(--motion-fast) var(--ease-standard);
+    }
+    .category-pill-btn:hover {
+      transform: translateY(-2px);
+      color: var(--accent);
+    }
+    .category-pill-icon {
+      width: 52px;
+      height: 52px;
+      border-radius: var(--radius-md);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: box-shadow var(--motion-fast) var(--ease-standard);
+    }
+    .category-pill-btn:hover .category-pill-icon {
+      box-shadow: 0 4px 14px rgba(0,0,0,0.1);
+    }
+
+    /* ─────────────────────────────────────────────────────────────────────────
+     * TEMPLATE DISCOVERY SECTION
+     * ───────────────────────────────────────────────────────────────────────── */
+    .section-templates {
+      padding-block: var(--section-y-desktop);
+      background: #ffffff;
+      border-top: 1px solid var(--border);
+    }
+    .section-header {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      margin-bottom: var(--space-8);
+      flex-wrap: wrap;
+      gap: var(--space-4);
+    }
+    .filter-bar {
+      display: flex;
+      align-items: center;
+      gap: var(--space-2);
+      overflow-x: auto;
+      padding-bottom: 4px;
+    }
+
+    /* Template Cards Grid (12px radius, 4:3 / 1:1 / 9:16 aspect ratios) */
+    .template-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: var(--space-6);
+    }
+    @media (max-width: 1200px) {
+      .template-grid { grid-template-columns: repeat(3, 1fr); }
+    }
+    @media (max-width: 840px) {
+      .template-grid { grid-template-columns: repeat(2, 1fr); gap: var(--space-4); }
+    }
+    @media (max-width: 520px) {
+      .template-grid { grid-template-columns: 1fr; }
+    }
+
+    .template-card {
+      background: #ffffff;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+      transition:
+        box-shadow var(--motion-fast) var(--ease-standard),
+        transform var(--motion-fast) var(--ease-standard),
+        border-color var(--motion-fast) var(--ease-standard);
+      position: relative;
+      cursor: pointer;
+    }
+    .template-card:hover {
+      box-shadow: var(--shadow-hover);
+      transform: translateY(-2px);
+      border-color: var(--border-strong);
+    }
+    .template-card:hover .template-hover-overlay {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .template-visual {
+      position: relative;
+      width: 100%;
+      background: var(--surface);
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .aspect-4-3 { aspect-ratio: 4 / 3; }
+    .aspect-1-1 { aspect-ratio: 1 / 1; }
+    .aspect-9-16 { aspect-ratio: 9 / 16; max-height: 280px; }
+
+    /* Authentic SVG graphic layout previews */
+    .preview-art {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: var(--space-4);
+      position: relative;
+    }
+
+    .template-hover-overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(14, 19, 24, 0.45);
+      backdrop-filter: blur(2px);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: var(--space-2);
+      opacity: 0;
+      visibility: hidden;
+      transition: all var(--motion-fast) var(--ease-standard);
+      padding: var(--space-4);
+    }
+
+    .template-info {
+      padding: var(--space-4);
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      flex: 1;
+    }
+    .template-title {
+      font-size: var(--text-base);
+      font-weight: 600;
+      color: var(--fg);
+      line-height: var(--leading-tight);
+      margin: 0;
+    }
+    .template-meta-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: auto;
+      padding-top: 6px;
+    }
+    .template-type {
+      font-size: var(--text-sm);
+      color: var(--muted);
+    }
+
+    /* ─────────────────────────────────────────────────────────────────────────
+     * MAGIC STUDIO AI SECTION
+     * ───────────────────────────────────────────────────────────────────────── */
+    .section-magic {
+      padding-block: var(--section-y-desktop);
+      background: linear-gradient(180deg, #fdfaff 0%, #ffffff 100%);
+      border-top: 1px solid var(--border);
+    }
+    .magic-badge-large {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: linear-gradient(135deg, #7d2ae8, #ff5757);
+      color: #ffffff;
+      padding: 4px 14px;
+      border-radius: var(--radius-pill);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-bottom: var(--space-3);
+    }
+    .magic-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--space-12);
+      align-items: center;
+      margin-top: var(--space-8);
+    }
+    @media (max-width: 960px) {
+      .magic-grid { grid-template-columns: 1fr; gap: var(--space-8); }
+    }
+    .magic-card-feature {
+      background: #ffffff;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: var(--space-8);
+      box-shadow: 0 4px 20px rgba(125, 42, 232, 0.08);
+      position: relative;
+      overflow: hidden;
+    }
+    .magic-tool-item {
+      display: flex;
+      gap: var(--space-4);
+      padding: var(--space-4);
+      border-radius: var(--radius-md);
+      cursor: pointer;
+      transition: all var(--motion-fast) var(--ease-standard);
+      border: 1px solid transparent;
+    }
+    .magic-tool-item:hover, .magic-tool-item.active {
+      background: var(--surface-cool);
+      border-color: rgba(125, 42, 232, 0.2);
+    }
+    .magic-icon-box {
+      width: 44px;
+      height: 44px;
+      border-radius: var(--radius-sm);
+      background: linear-gradient(135deg, #7d2ae8, #ff5757);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #ffffff;
+      flex-shrink: 0;
+    }
+    .magic-icon-box svg { width: 22px; height: 22px; fill: currentColor; }
+
+    /* Interactive AI prompt playground */
+    .magic-demo-canvas {
+      background: #ffffff;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      box-shadow: 0 8px 32px rgba(0,0,0,0.08);
+      padding: var(--space-6);
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-4);
+    }
+    .ai-prompt-box {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 8px 14px;
+    }
+    .ai-prompt-box input {
+      flex: 1;
+      border: none;
+      background: transparent;
+      outline: none;
+      font-size: var(--text-base);
+      font-family: var(--font-body);
+      color: var(--fg);
+    }
+    .ai-canvas-output {
+      height: 240px;
+      border-radius: var(--radius-md);
+      background: linear-gradient(135deg, #7d2ae8 0%, #3ea6ff 50%, #00c4cc 100%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      color: #ffffff;
+      text-align: center;
+      padding: var(--space-6);
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* ─────────────────────────────────────────────────────────────────────────
+     * INTERACTIVE MINI-EDITOR WORKSPACE MOCKUP (Sidebar 320px collapsing)
+     * ───────────────────────────────────────────────────────────────────────── */
+    .section-editor {
+      padding-block: var(--section-y-desktop);
+      background: var(--surface);
+      border-top: 1px solid var(--border);
+    }
+    .editor-frame {
+      background: #ffffff;
+      border: 1px solid var(--border-strong);
+      border-radius: var(--radius-lg);
+      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.08);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      height: 640px;
+    }
+    /* Editor Topbar */
+    .editor-topbar {
+      height: 54px;
+      background: #ffffff;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-inline: var(--space-4);
+      gap: var(--space-4);
+    }
+    .editor-doc-title {
+      font-size: var(--text-base);
+      font-weight: 600;
+      color: var(--fg);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .editor-tools-row {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    /* Editor Workspace Layout */
+    .editor-workspace {
+      display: flex;
+      flex: 1;
+      overflow: hidden;
+      position: relative;
+    }
+    /* Sidebar: 320px expandable / 56px collapsed icons */
+    .editor-sidebar {
+      width: 320px;
+      border-right: 1px solid var(--border);
+      background: #ffffff;
+      display: flex;
+      flex-direction: column;
+      transition: width var(--motion-slow) var(--ease-standard);
+      position: relative;
+      z-index: 10;
+    }
+    .editor-sidebar.collapsed {
+      width: 64px;
+    }
+    .sidebar-dock {
+      display: flex;
+      height: 100%;
+    }
+    .sidebar-icon-rail {
+      width: 64px;
+      border-right: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding-block: var(--space-3);
+      gap: 6px;
+      background: #ffffff;
+      flex-shrink: 0;
+    }
+    .rail-btn {
+      width: 52px;
+      height: 52px;
+      border-radius: var(--radius-sm);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+      font-size: 10px;
+      font-weight: 600;
+      color: var(--fg-2);
+      border: none;
+      background: transparent;
+      cursor: pointer;
+      transition: all var(--motion-fast) var(--ease-standard);
+    }
+    .rail-btn svg { width: 18px; height: 18px; fill: currentColor; }
+    .rail-btn:hover { background: var(--surface); color: var(--fg); }
+    .rail-btn.active {
+      background: var(--surface-cool);
+      color: var(--accent);
+    }
+    .sidebar-panel-content {
+      flex: 1;
+      padding: var(--space-4);
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-4);
+      overflow-y: auto;
+      background: #fafbfc;
+    }
+    .editor-sidebar.collapsed .sidebar-panel-content {
+      display: none;
+    }
+
+    /* Central Canvas Stage */
+    .editor-stage {
+      flex: 1;
+      background: #ebedf0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+      padding: var(--space-6);
+    }
+    .canvas-artboard {
+      width: 460px;
+      height: 380px;
+      background: #ffffff;
+      border-radius: var(--radius-sm);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+      position: relative;
+      padding: var(--space-6);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      user-select: none;
+    }
+    .canvas-element {
+      position: absolute;
+      cursor: move;
+      padding: 6px 12px;
+      border: 1px dashed transparent;
+      border-radius: var(--radius-sm);
+      transition: border-color var(--motion-fast) var(--ease-standard);
+    }
+    .canvas-element:hover, .canvas-element.selected {
+      border-color: var(--accent);
+      background: rgba(125, 42, 232, 0.04);
+    }
+    .element-heading {
+      top: 36px;
+      left: 36px;
+      right: 36px;
+      font-size: 28px;
+      font-weight: 800;
+      color: var(--fg);
+      line-height: 1.15;
+    }
+    .element-subtitle {
+      top: 110px;
+      left: 36px;
+      font-size: var(--text-base);
+      color: var(--muted);
+      max-width: 280px;
+    }
+    .element-sticker {
+      bottom: 40px;
+      right: 40px;
+      width: 100px;
+      height: 100px;
+      border-radius: var(--radius-md);
+      background: linear-gradient(135deg, #ff7059, #ff9633);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #ffffff;
+      font-weight: 700;
+      transform: rotate(-6deg);
+      box-shadow: 0 6px 16px rgba(255, 112, 89, 0.3);
+    }
+    .element-pill-badge {
+      bottom: 44px;
+      left: 36px;
+    }
+
+    /* ─────────────────────────────────────────────────────────────────────────
+     * PLANS & PRICING MATRIX
+     * ───────────────────────────────────────────────────────────────────────── */
+    .section-pricing {
+      padding-block: var(--section-y-desktop);
+      background: #ffffff;
+      border-top: 1px solid var(--border);
+    }
+    .pricing-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: var(--space-6);
+      margin-top: var(--space-8);
+    }
+    @media (max-width: 960px) {
+      .pricing-grid { grid-template-columns: 1fr; }
+    }
+    .pricing-card {
+      background: #ffffff;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: var(--space-8);
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-4);
+      position: relative;
+      transition: all var(--motion-fast) var(--ease-standard);
+    }
+    .pricing-card:hover {
+      box-shadow: var(--shadow-hover);
+      transform: translateY(-2px);
+    }
+    .pricing-card.featured {
+      border: 2px solid var(--accent);
+      box-shadow: 0 8px 30px rgba(125, 42, 232, 0.12);
+    }
+    .price-value {
+      font-size: 42px;
+      font-weight: 800;
+      color: var(--fg);
+      line-height: 1;
+    }
+    .pricing-features-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-3);
+      margin-block: var(--space-4);
+    }
+    .pricing-feature-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: var(--text-base);
+      color: var(--fg-2);
+    }
+    .feature-check-icon {
+      width: 18px;
+      height: 18px;
+      border-radius: var(--radius-pill);
+      background: rgba(0, 184, 148, 0.16);
+      color: var(--success);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .feature-check-icon svg { width: 12px; height: 12px; fill: currentColor; }
+
+    /* ─────────────────────────────────────────────────────────────────────────
+     * DESIGN SYSTEM TOKENS & ATOMS INSPECTOR DRAWER / SECTION
+     * ───────────────────────────────────────────────────────────────────────── */
+    .section-tokens {
+      padding-block: var(--section-y-desktop);
+      background: var(--surface);
+      border-top: 1px solid var(--border);
+    }
+    .token-box {
+      background: #ffffff;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: var(--space-6);
+      margin-bottom: var(--space-6);
+    }
+    .swatch-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
+      gap: var(--space-4);
+      margin-top: var(--space-4);
+    }
+    .swatch-card {
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      overflow: hidden;
+      background: #ffffff;
+    }
+    .swatch-color {
+      height: 64px;
+      width: 100%;
+    }
+    .swatch-meta {
+      padding: 8px 10px;
+      font-size: var(--text-xs);
+    }
+    .swatch-title {
+      font-weight: 700;
+      color: var(--fg);
+    }
+    .swatch-val {
+      font-family: var(--font-mono);
+      color: var(--muted);
+    }
+
+    /* ─────────────────────────────────────────────────────────────────────────
+     * FOOTER
+     * ───────────────────────────────────────────────────────────────────────── */
+    .canva-footer {
+      background: #ffffff;
+      border-top: 1px solid var(--border);
+      padding-top: var(--space-16);
+      padding-bottom: var(--space-10);
+    }
+    .footer-columns {
+      display: grid;
+      grid-template-columns: 2fr repeat(4, 1fr);
+      gap: var(--space-8);
+      margin-bottom: var(--space-12);
+    }
+    @media (max-width: 960px) {
+      .footer-columns { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 560px) {
+      .footer-columns { grid-template-columns: 1fr; }
+    }
+    .footer-col h4 {
+      font-size: var(--text-base);
+      font-weight: 700;
+      margin-bottom: var(--space-4);
+      color: var(--fg);
+    }
+    .footer-links {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .footer-links a {
+      color: var(--muted);
+      text-decoration: none;
+      font-size: var(--text-sm);
+      transition: color var(--motion-fast) var(--ease-standard);
+    }
+    .footer-links a:hover {
+      color: var(--accent);
+    }
+    .footer-bottom {
+      border-top: 1px solid var(--border);
+      padding-top: var(--space-6);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: var(--space-4);
+      font-size: var(--text-sm);
+      color: var(--muted);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ─────────────────────────────────────────────────────────────────────────
+       TOP NAVIGATION BAR
+       ───────────────────────────────────────────────────────────────────────── -->
+  <header class="canva-nav" role="banner">
+    <div class="container nav-inner">
+      <div class="brand-group">
+        <a href="#hero" class="canva-logo" aria-label="Canva Home">
+          <div class="canva-mark">C</div>
+          <span>Canva</span>
+        </a>
+        <nav aria-label="Product Navigation">
+          <ul class="nav-menu">
+            <li>
+              <a href="#templates" class="nav-link">
+                Visual Suite
+                <svg viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>
+              </a>
+            </li>
+            <li>
+              <a href="#magic" class="nav-link">
+                Magic Studio
+                <span class="pro-badge" style="margin-left: 4px;">AI</span>
+              </a>
+            </li>
+            <li><a href="#editor" class="nav-link">Editor</a></li>
+            <li><a href="#pricing" class="nav-link">Plans & Pricing</a></li>
+            <li><a href="#tokens" class="nav-link">Design Tokens</a></li>
+          </ul>
+        </nav>
+      </div>
+
+      <!-- Navigation Search Bar -->
+      <div class="nav-search">
+        <svg class="nav-search-icon" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
+        <input type="text" placeholder="Search thousands of templates..." aria-label="Search templates" />
+      </div>
+
+      <!-- User Actions -->
+      <div class="nav-actions">
+        <button class="btn btn-icon" aria-label="Help & Resources">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 16h-2v-2h2v2zm1.07-7.75l-.9.92C12.45 11.9 12 12.5 12 14h-2v-.5c0-1.1.45-2.1 1.17-2.83l1.24-1.26c.37-.36.59-.86.59-1.41 0-1.1-.9-2-2-2s-2 .9-2 2H7c0-2.76 2.24-5 5-5s5 2.24 5 5c0 .88-.36 1.68-.93 2.25z"/></svg>
+        </button>
+        <button class="btn btn-secondary" style="padding: 10px 16px;">Log in</button>
+        <a href="#pricing" class="btn btn-gradient" style="padding: 10px 18px;">
+          Create a design
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- ─────────────────────────────────────────────────────────────────────────
+       HERO SECTION
+       ───────────────────────────────────────────────────────────────────────── -->
+  <section class="hero-section" id="hero">
+    <div class="container">
+      <div class="hero-eyebrow">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"/></svg>
+        Canva Design System
+      </div>
+      <h1 class="hero-title">Design anything.<br />Publish anywhere.</h1>
+      <p class="hero-lead">
+        Empowering the world to design. Clean white canvas, signature violet-to-cyan gradients, and friendly rounded geometry built for effortless creativity.
+      </p>
+
+      <!-- Instant Search & Quick Action -->
+      <div class="hero-search-box">
+        <svg style="width: 24px; height: 24px; fill: var(--muted); margin-left: 8px;" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
+        <input type="text" class="hero-search-input" placeholder="Search presentations, social posts, posters, videos..." />
+        <a href="#templates" class="btn btn-gradient">Explore Templates</a>
+      </div>
+
+      <!-- Category Dock (DESIGN.md §2 Category Accents) -->
+      <div class="category-ribbon">
+        <a href="#templates" class="category-pill-btn">
+          <div class="category-pill-icon" style="background: rgba(255, 112, 89, 0.15); color: var(--cat-coral);">
+            <svg width="26" height="26" viewBox="0 0 24 24" fill="currentColor"><path d="M18 3H6c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-6 3.5c1.38 0 2.5 1.12 2.5 2.5s-1.12 2.5-2.5 2.5S9.5 10.38 9.5 9s1.12-2.5 2.5-2.5zM16 17H8v-1.5c0-1.33 2.67-2 4-2s4 .67 4 2V17z"/></svg>
+          </div>
+          <span>Social Media</span>
+        </a>
+        <a href="#templates" class="category-pill-btn">
+          <div class="category-pill-icon" style="background: rgba(62, 166, 255, 0.15); color: var(--cat-sky);">
+            <svg width="26" height="26" viewBox="0 0 24 24" fill="currentColor"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 14H6v-2h6v2zm4-4H6v-2h10v2zm0-4H6V7h10v2z"/></svg>
+          </div>
+          <span>Presentations</span>
+        </a>
+        <a href="#templates" class="category-pill-btn">
+          <div class="category-pill-icon" style="background: rgba(255, 150, 51, 0.15); color: var(--cat-tangerine);">
+            <svg width="26" height="26" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>
+          </div>
+          <span>Marketing</span>
+        </a>
+        <a href="#templates" class="category-pill-btn">
+          <div class="category-pill-icon" style="background: rgba(72, 201, 151, 0.15); color: var(--cat-mint);">
+            <svg width="26" height="26" viewBox="0 0 24 24" fill="currentColor"><path d="M5 13.18v4L12 21l7-3.82v-4L12 17l-7-3.82zM12 3L1 9l11 6 9-4.91V17h2V9L12 3z"/></svg>
+          </div>
+          <span>Education</span>
+        </a>
+        <a href="#templates" class="category-pill-btn">
+          <div class="category-pill-icon" style="background: rgba(155, 135, 245, 0.15); color: var(--cat-lavender);">
+            <svg width="26" height="26" viewBox="0 0 24 24" fill="currentColor"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+          </div>
+          <span>Personal</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─────────────────────────────────────────────────────────────────────────
+       TEMPLATES DISCOVERY SHOWCASE
+       ───────────────────────────────────────────────────────────────────────── -->
+  <section class="section-templates" id="templates">
+    <div class="container">
+      <div class="section-header">
+        <div>
+          <h2>Templates inspired by your imagination</h2>
+          <p class="lead muted">Thousands of professional layouts crafted with soft 12px geometry.</p>
+        </div>
+        <!-- Category Filter Tabs -->
+        <div class="filter-bar" role="tablist">
+          <button class="chip chip-filter active" role="tab" onclick="filterTemplates('all', this)">All</button>
+          <button class="chip chip-filter" role="tab" onclick="filterTemplates('social', this)">Social Posts</button>
+          <button class="chip chip-filter" role="tab" onclick="filterTemplates('presentation', this)">Presentations</button>
+          <button class="chip chip-filter" role="tab" onclick="filterTemplates('marketing', this)">Marketing</button>
+          <button class="chip chip-filter" role="tab" onclick="filterTemplates('education', this)">Education</button>
+        </div>
+      </div>
+
+      <!-- 4-Column Template Grid -->
+      <div class="template-grid" id="templateGrid">
+        
+        <!-- Template 1: Business Presentation (4:3) -->
+        <article class="template-card" data-cat="presentation" onclick="selectTemplate('Q4 Strategy & Revenue Deck')">
+          <div class="template-visual aspect-4-3" style="background: #f0f4f9;">
+            <div class="preview-art" style="background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%); color: #ffffff;">
+              <span style="font-size: 11px; font-weight: 700; opacity: 0.8;">ANNUAL REPORT</span>
+              <div>
+                <h3 style="color: #ffffff; font-size: 20px; font-weight: 800;">Q4 Growth Matrix</h3>
+                <p style="font-size: 11px; opacity: 0.9;">16:9 Slide Presentation</p>
+              </div>
+              <div style="display: flex; gap: 4px;">
+                <div style="width: 24px; height: 4px; background: #00c4cc; border-radius: 2px;"></div>
+                <div style="width: 12px; height: 4px; background: rgba(255,255,255,0.4); border-radius: 2px;"></div>
+              </div>
+            </div>
+            <div class="template-hover-overlay">
+              <button class="btn btn-gradient" style="padding: 8px 16px; font-size: 13px;">Customize this</button>
+              <span style="color: #ffffff; font-size: 11px;">1920 × 1080 px</span>
+            </div>
+          </div>
+          <div class="template-info">
+            <div style="display: flex; align-items: center; justify-content: space-between;">
+              <span class="chip chip-sky">Business</span>
+              <span class="pro-badge">
+                <svg viewBox="0 0 24 24"><path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"/></svg>
+                PRO
+              </span>
+            </div>
+            <h4 class="template-title">Quarterly Strategy & Revenue Deck</h4>
+            <div class="template-meta-row">
+              <span class="template-type">Presentation (16:9)</span>
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="var(--meta)"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+            </div>
+          </div>
+        </article>
+
+        <!-- Template 2: Social Media Festival (1:1) -->
+        <article class="template-card" data-cat="social" onclick="selectTemplate('Summer Festival Square Post')">
+          <div class="template-visual aspect-1-1" style="background: #fff5f2;">
+            <div class="preview-art" style="background: linear-gradient(135deg, #ff7059 0%, #ff9633 100%); color: #ffffff;">
+              <span style="font-size: 11px; font-weight: 700; background: rgba(0,0,0,0.2); padding: 2px 6px; border-radius: 4px; align-self: flex-start;">LIVE CONCERT</span>
+              <div style="text-align: center;">
+                <h3 style="color: #ffffff; font-size: 24px; font-weight: 800; text-transform: uppercase;">SoundWave<br/>2026</h3>
+                <p style="font-size: 12px;">AUGUST 24–26 · VENICE BEACH</p>
+              </div>
+              <span style="font-size: 11px; text-align: center; opacity: 0.9;">TICKETS ON SALE NOW</span>
+            </div>
+            <div class="template-hover-overlay">
+              <button class="btn btn-gradient" style="padding: 8px 16px; font-size: 13px;">Customize this</button>
+              <span style="color: #ffffff; font-size: 11px;">1080 × 1080 px</span>
+            </div>
+          </div>
+          <div class="template-info">
+            <div style="display: flex; align-items: center; justify-content: space-between;">
+              <span class="chip chip-coral">Social</span>
+              <span style="font-size: 11px; color: var(--success); font-weight: 700;">FREE</span>
+            </div>
+            <h4 class="template-title">Summer Festival Square Post</h4>
+            <div class="template-meta-row">
+              <span class="template-type">Instagram Post (1:1)</span>
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="var(--meta)"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+            </div>
+          </div>
+        </article>
+
+        <!-- Template 3: Education Infographic (4:3) -->
+        <article class="template-card" data-cat="education" onclick="selectTemplate('Solar System Infographic')">
+          <div class="template-visual aspect-4-3" style="background: #eefbf6;">
+            <div class="preview-art" style="background: linear-gradient(135deg, #0b875b 0%, #48c997 100%); color: #ffffff;">
+              <span style="font-size: 11px; font-weight: 700;">SCIENCE LAB</span>
+              <div>
+                <h3 style="color: #ffffff; font-size: 20px; font-weight: 800;">Deep Marine Ecology</h3>
+                <p style="font-size: 11px; opacity: 0.9;">Bioluminescent Zones</p>
+              </div>
+              <div style="font-size: 10px; background: rgba(0,0,0,0.15); padding: 4px 8px; border-radius: 4px;">GRADES 9–12 LESSON</div>
+            </div>
+            <div class="template-hover-overlay">
+              <button class="btn btn-gradient" style="padding: 8px 16px; font-size: 13px;">Customize this</button>
+              <span style="color: #ffffff; font-size: 11px;">1200 × 900 px</span>
+            </div>
+          </div>
+          <div class="template-info">
+            <div style="display: flex; align-items: center; justify-content: space-between;">
+              <span class="chip chip-mint">Education</span>
+              <span style="font-size: 11px; color: var(--success); font-weight: 700;">FREE</span>
+            </div>
+            <h4 class="template-title">Deep Marine Biology Infographic</h4>
+            <div class="template-meta-row">
+              <span class="template-type">Infographic (4:3)</span>
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="var(--meta)"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+            </div>
+          </div>
+        </article>
+
+        <!-- Template 4: Marketing Banner (4:3) -->
+        <article class="template-card" data-cat="marketing" onclick="selectTemplate('Tech Launch Brand Kit')">
+          <div class="template-visual aspect-4-3" style="background: #fdf5eb;">
+            <div class="preview-art" style="background: linear-gradient(135deg, #7d2ae8 0%, #00c4cc 100%); color: #ffffff;">
+              <span style="font-size: 11px; font-weight: 700;">NEW PRODUCT</span>
+              <div>
+                <h3 style="color: #ffffff; font-size: 22px; font-weight: 800;">Aura Studio 2.0</h3>
+                <p style="font-size: 11px; opacity: 0.9;">Spatial Audio Everywhere</p>
+              </div>
+              <span style="font-size: 11px; background: rgba(255,255,255,0.25); padding: 4px 8px; border-radius: 9999px; align-self: flex-start;">EARLY ACCESS</span>
+            </div>
+            <div class="template-hover-overlay">
+              <button class="btn btn-gradient" style="padding: 8px 16px; font-size: 13px;">Customize this</button>
+              <span style="color: #ffffff; font-size: 11px;">1600 × 1200 px</span>
+            </div>
+          </div>
+          <div class="template-info">
+            <div style="display: flex; align-items: center; justify-content: space-between;">
+              <span class="chip chip-tangerine">Marketing</span>
+              <span class="pro-badge">
+                <svg viewBox="0 0 24 24"><path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"/></svg>
+                PRO
+              </span>
+            </div>
+            <h4 class="template-title">Aura Tech Launch Campaign Kit</h4>
+            <div class="template-meta-row">
+              <span class="template-type">Digital Marketing Banner</span>
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="var(--meta)"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+            </div>
+          </div>
+        </article>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ─────────────────────────────────────────────────────────────────────────
+       CANVA MAGIC STUDIO (AI SUITE)
+       ───────────────────────────────────────────────────────────────────────── -->
+  <section class="section-magic" id="magic">
+    <div class="container">
+      <div style="text-align: center; max-width: 720px; margin-inline: auto;">
+        <span class="magic-badge-large">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M7.5 5.6L10 0l2.5 5.6L18 8l-5.5 2.4L10 16l-2.5-5.6L2 8l5.5-2.4zm12 9.4l1.5 3.4L24 20l-3 1.4-1.5 3.4-1.5-3.4L15 20l3-1.4 1.5-3.4zM4.5 17.5L6 14l1.5 3.5L11 19l-3.5 1.5L6 24l-1.5-3.5L1 19l3.5-1.5z"/></svg>
+          Magic Studio™
+        </span>
+        <h2>All the power of AI. All in one place.</h2>
+        <p class="lead muted">
+          Magic Studio brings generative design tools directly to your fingertips. Create custom graphics, rewrite copy, and resize layouts with one tap.
+        </p>
+      </div>
+
+      <div class="magic-grid">
+        <!-- AI Features Interactive List -->
+        <div style="display: flex; flex-direction: column; gap: var(--space-3);">
+          
+          <div class="magic-tool-item active" onclick="switchMagicTab('design', this)">
+            <div class="magic-icon-box">
+              <svg viewBox="0 0 24 24"><path d="M12 3c-4.97 0-9 4.03-9 9 0 2.12.74 4.07 1.97 5.61L4.35 19.4c-.39.39-.39 1.02 0 1.41.39.39 1.02.39 1.41 0l1.9-1.9C9.22 19.58 10.56 20 12 20c4.97 0 9-4.03 9-9s-4.03-9-9-9zm0 15c-3.31 0-6-2.69-6-6s2.69-6 6-6 6 2.69 6 6-2.69 6-6 6z"/></svg>
+            </div>
+            <div>
+              <h3 style="font-size: 16px;">Magic Design™</h3>
+              <p class="muted" style="font-size: 13px;">Type a prompt, upload your media, and watch tailored presentations, videos, and posts generate instantly.</p>
+            </div>
+          </div>
+
+          <div class="magic-tool-item" onclick="switchMagicTab('write', this)">
+            <div class="magic-icon-box" style="background: linear-gradient(135deg, #ff7059, #ff9633);">
+              <svg viewBox="0 0 24 24"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg>
+            </div>
+            <div>
+              <h3 style="font-size: 16px;">Magic Write™</h3>
+              <p class="muted" style="font-size: 13px;">Your AI brainstorming partner. Generate headlines, rewrite paragraphs in your brand voice, and summarize key takeaways.</p>
+            </div>
+          </div>
+
+          <div class="magic-tool-item" onclick="switchMagicTab('switch', this)">
+            <div class="magic-icon-box" style="background: linear-gradient(135deg, #00c4cc, #3ea6ff);">
+              <svg viewBox="0 0 24 24"><path d="M19 8l-4 4h3c0 3.31-2.69 6-6 6-1.01 0-1.97-.25-2.8-.7l-1.46 1.46C8.97 19.54 10.43 20 12 20c4.42 0 8-3.58 8-8h3l-4-4zM6 12c0-3.31 2.69-6 6-6 1.01 0 1.97.25 2.8.7l1.46-1.46C15.03 4.46 13.57 4 12 4c-4.42 0-8 3.58-8 8H1l4 4 4-4H6z"/></svg>
+            </div>
+            <div>
+              <h3 style="font-size: 16px;">Magic Switch™</h3>
+              <p class="muted" style="font-size: 13px;">Transform a whiteboard into a doc, a slide deck into an email newsletter, or translate into 100+ languages in seconds.</p>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Interactive AI Generator Canvas -->
+        <div class="magic-demo-canvas">
+          <div style="display: flex; align-items: center; justify-content: space-between;">
+            <span style="font-weight: 700; font-size: 13px; color: var(--accent); text-transform: uppercase;">Interactive Prompt Simulator</span>
+            <span class="pro-badge">PRO FEATURE</span>
+          </div>
+
+          <div class="ai-prompt-box">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="var(--accent)"><path d="M7.5 5.6L10 0l2.5 5.6L18 8l-5.5 2.4L10 16l-2.5-5.6L2 8l5.5-2.4z"/></svg>
+            <input type="text" id="magicInput" value="Modern neon branding poster for an eco-tech summit in Tokyo" />
+            <button class="btn btn-gradient" style="padding: 6px 14px; font-size: 13px;" onclick="runMagicSim()">Generate</button>
+          </div>
+
+          <div class="ai-canvas-output" id="magicOutput">
+            <span style="font-size: 12px; font-weight: 700; letter-spacing: 0.1em; opacity: 0.85;">GENERATED WITH MAGIC DESIGN</span>
+            <h3 style="color: #ffffff; font-size: 26px; font-weight: 800; margin-block: 8px;" id="magicOutputTitle">ECO·TOKYO 2026</h3>
+            <p style="font-size: 13px; max-width: 320px; opacity: 0.9;" id="magicOutputSub">Redefining urban sustainable tech with AI and circular design systems.</p>
+            <button class="btn btn-secondary" style="margin-top: 14px; font-size: 12px; padding: 6px 14px;" onclick="sendToMiniEditor()">Open in Live Editor</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─────────────────────────────────────────────────────────────────────────
+       LIVE INTERACTIVE MINI-EDITOR WORKSPACE
+       ───────────────────────────────────────────────────────────────────────── -->
+  <section class="section-editor" id="editor">
+    <div class="container">
+      <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: var(--space-4); flex-wrap: wrap; gap: var(--space-3);">
+        <div>
+          <h2>Canva Studio Workspace</h2>
+          <p class="muted">Live interactive artboard. Test real-time layout editing, sidebar toggling, and typography controls.</p>
+        </div>
+        <div style="display: flex; gap: var(--space-2);">
+          <button class="btn btn-secondary" onclick="toggleSidebar()">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/></svg>
+            <span id="sidebarToggleLabel">Collapse Tools</span>
+          </button>
+          <button class="btn btn-primary" onclick="exportArtboard()">Export (PNG)</button>
+        </div>
+      </div>
+
+      <!-- Editor Window Frame -->
+      <div class="editor-frame">
+        <!-- Top Toolbar -->
+        <div class="editor-topbar">
+          <div class="editor-doc-title">
+            <span style="width: 24px; height: 24px; background: var(--accent); border-radius: 4px; display: inline-flex; align-items: center; justify-content: center; color: #fff; font-size: 12px; font-weight: 800;">C</span>
+            <input type="text" id="docTitleInput" value="Spring Brand Announcement" style="border: 1px solid transparent; font-size: 14px; font-weight: 600; padding: 4px 8px; border-radius: 4px; outline: none;" onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='transparent'" />
+            <span style="font-size: 12px; color: var(--success); font-weight: 600;">● Saved to cloud</span>
+          </div>
+
+          <!-- Alignment & Formatting Quick Controls -->
+          <div class="editor-tools-row">
+            <button class="btn-icon" title="Undo" onclick="editorUndo()"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12.5 8c-2.65 0-5.05.99-6.9 2.6L2 7v9h9l-3.62-3.62c1.39-1.16 3.16-1.88 5.12-1.88 3.54 0 6.55 2.31 7.6 5.5l2.37-.78C21.08 11.03 17.15 8 12.5 8z"/></svg></button>
+            <button class="btn-icon" title="Redo" onclick="editorRedo()"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M18.4 10.6C16.55 8.99 14.15 8 11.5 8c-4.65 0-8.58 3.03-9.96 7.22L3.9 16c1.05-3.19 4.05-5.5 7.6-5.5 1.95 0 3.73.72 5.12 1.88L13 16h9V7l-3.6 3.6z"/></svg></button>
+            <div style="width: 1px; height: 24px; background: var(--border); margin-inline: 4px;"></div>
+            <button class="btn btn-secondary" style="padding: 6px 12px; font-size: 12px;" onclick="changeArtboardBg()">Change Color</button>
+            <button class="btn btn-gradient" style="padding: 6px 14px; font-size: 12px;">Share</button>
+          </div>
+        </div>
+
+        <!-- Main Workspace: Left Sidebar + Central Artboard Stage -->
+        <div class="editor-workspace">
+          <!-- Collapsible Sidebar (320px collapsing to 64px) -->
+          <aside class="editor-sidebar" id="editorSidebar">
+            <div class="sidebar-dock">
+              <!-- Leftmost Icon Rail -->
+              <div class="sidebar-icon-rail">
+                <button class="rail-btn active" onclick="switchSidebarTab('elements', this)">
+                  <svg viewBox="0 0 24 24"><path d="M4 8h4V4H4v4zm6 12h4v-4h-4v4zm-6 0h4v-4H4v4zm0-6h4v-4H4v4zm6 0h4v-4h-4v4zm6-10v4h4V4h-4zm-6 4h4V4h-4v4zm6 6h4v-4h-4v4zm0 6h4v-4h-4v4z"/></svg>
+                  <span>Elements</span>
+                </button>
+                <button class="rail-btn" onclick="switchSidebarTab('text', this)">
+                  <svg viewBox="0 0 24 24"><path d="M5 4v3h5.5v12h3V7H19V4z"/></svg>
+                  <span>Text</span>
+                </button>
+                <button class="rail-btn" onclick="switchSidebarTab('brand', this)">
+                  <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/></svg>
+                  <span>Brand</span>
+                </button>
+                <button class="rail-btn" onclick="switchSidebarTab('draw', this)">
+                  <svg viewBox="0 0 24 24"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg>
+                  <span>Draw</span>
+                </button>
+              </div>
+
+              <!-- Sidebar Detailed Panel -->
+              <div class="sidebar-panel-content" id="sidebarPanelContent">
+                <span style="font-size: 12px; font-weight: 700; color: var(--fg); text-transform: uppercase;">Shapes & Stickers</span>
+                <input type="text" placeholder="Search graphics..." style="padding: 8px 12px; border: 1px solid var(--border); border-radius: 6px; font-size: 13px; outline: none;" />
+                
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
+                  <button class="btn btn-secondary" style="padding: 12px; font-size: 12px; justify-content: center;" onclick="addSticker('🔥 HOT')">🔥 Add Badge</button>
+                  <button class="btn btn-secondary" style="padding: 12px; font-size: 12px; justify-content: center;" onclick="addSticker('✨ NEW')">✨ Add Star</button>
+                  <button class="btn btn-secondary" style="padding: 12px; font-size: 12px; justify-content: center;" onclick="addSticker('🎉 SALE')">🎉 Add Promo</button>
+                  <button class="btn btn-secondary" style="padding: 12px; font-size: 12px; justify-content: center;" onclick="addSticker('🚀 PRO')">🚀 Add Launch</button>
+                </div>
+
+                <span style="font-size: 12px; font-weight: 700; color: var(--fg); text-transform: uppercase; margin-top: 8px;">Typography Kit</span>
+                <button class="btn btn-subtle" style="justify-content: flex-start;" onclick="updateHeadingText()">Add Heading (800 weight)</button>
+                <button class="btn btn-secondary" style="justify-content: flex-start;" onclick="updateSubtitleText()">Add Subheading (600 weight)</button>
+              </div>
+            </div>
+          </aside>
+
+          <!-- Central Canvas Stage -->
+          <main class="editor-stage" id="editorStage">
+            <div class="canvas-artboard" id="artboard" onclick="selectCanvasElement(event, this)">
+              <div class="canvas-element element-heading" id="canvasHeading" onclick="selectCanvasElement(event, this)">
+                Design your future with confidence
+              </div>
+              
+              <div class="canvas-element element-subtitle" id="canvasSubtitle" onclick="selectCanvasElement(event, this)">
+                Everything you need to build, collaborate, and scale your brand identity.
+              </div>
+
+              <div class="canvas-element element-pill-badge" id="canvasBadge">
+                <span class="chip chip-coral">Social Campaign</span>
+              </div>
+
+              <div class="canvas-element element-sticker" id="canvasSticker" onclick="selectCanvasElement(event, this)">
+                NEW DROP
+              </div>
+            </div>
+          </main>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─────────────────────────────────────────────────────────────────────────
+       PLANS & PRICING MATRIX
+       ───────────────────────────────────────────────────────────────────────── -->
+  <section class="section-pricing" id="pricing">
+    <div class="container">
+      <div style="text-align: center; max-width: 640px; margin-inline: auto;">
+        <h2>Simple pricing for every creative journey</h2>
+        <p class="lead muted">Start for free with your team, or unlock millions of premium assets with Canva Pro.</p>
+      </div>
+
+      <div class="pricing-grid">
+        
+        <!-- Canva Free -->
+        <div class="pricing-card">
+          <span style="font-size: var(--text-sm); font-weight: 700; color: var(--muted); text-transform: uppercase;">Canva Free</span>
+          <div class="price-value">$0 <span style="font-size: 16px; font-weight: 500; color: var(--muted);">forever</span></div>
+          <p class="muted" style="font-size: 14px;">For anyone wanting to design anything, on their own or with others.</p>
+          <a href="#editor" class="btn btn-secondary" style="width: 100%;">Get started free</a>
+          
+          <ul class="pricing-features-list">
+            <li class="pricing-feature-item">
+              <span class="feature-check-icon"><svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg></span>
+              250,000+ free templates
+            </li>
+            <li class="pricing-feature-item">
+              <span class="feature-check-icon"><svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg></span>
+              1+ million free photos and graphics
+            </li>
+            <li class="pricing-feature-item">
+              <span class="feature-check-icon"><svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg></span>
+              5GB cloud storage
+            </li>
+          </ul>
+        </div>
+
+        <!-- Canva Pro (Featured) -->
+        <div class="pricing-card featured">
+          <div style="display: flex; align-items: center; justify-content: space-between;">
+            <span style="font-size: var(--text-sm); font-weight: 700; color: var(--accent); text-transform: uppercase;">Canva Pro</span>
+            <span class="pro-badge">
+              <svg viewBox="0 0 24 24"><path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"/></svg>
+              MOST POPULAR
+            </span>
+          </div>
+          <div class="price-value">$14.99 <span style="font-size: 16px; font-weight: 500; color: var(--muted);">/ month</span></div>
+          <p class="muted" style="font-size: 14px;">For individuals, solopreneurs, and freelance designers wanting unlimited premium content.</p>
+          <a href="#editor" class="btn btn-gradient" style="width: 100%;">Start 30-Day Free Trial</a>
+
+          <ul class="pricing-features-list">
+            <li class="pricing-feature-item">
+              <span class="feature-check-icon" style="background: rgba(125,42,232,0.15); color: var(--accent);"><svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg></span>
+              Unlimited access to 100M+ premium photos & templates
+            </li>
+            <li class="pricing-feature-item">
+              <span class="feature-check-icon" style="background: rgba(125,42,232,0.15); color: var(--accent);"><svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg></span>
+              Full Magic Studio™ AI generation suite
+            </li>
+            <li class="pricing-feature-item">
+              <span class="feature-check-icon" style="background: rgba(125,42,232,0.15); color: var(--accent);"><svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg></span>
+              Brand Kits with custom fonts, logos & colors
+            </li>
+            <li class="pricing-feature-item">
+              <span class="feature-check-icon" style="background: rgba(125,42,232,0.15); color: var(--accent);"><svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg></span>
+              1TB cloud storage & 24/7 priority support
+            </li>
+          </ul>
+        </div>
+
+        <!-- Canva for Teams -->
+        <div class="pricing-card">
+          <span style="font-size: var(--text-sm); font-weight: 700; color: var(--muted); text-transform: uppercase;">Canva for Teams</span>
+          <div class="price-value">$29.99 <span style="font-size: 16px; font-weight: 500; color: var(--muted);">/ month (for first 5)</span></div>
+          <p class="muted" style="font-size: 14px;">All the power of Pro, plus collaborative workflows, asset approvals, and team controls.</p>
+          <button class="btn btn-secondary" style="width: 100%;">Contact Sales</button>
+
+          <ul class="pricing-features-list">
+            <li class="pricing-feature-item">
+              <span class="feature-check-icon"><svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg></span>
+              Team folders, brand locks & approval workflows
+            </li>
+            <li class="pricing-feature-item">
+              <span class="feature-check-icon"><svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg></span>
+              Unlimited Brand Kits for client accounts
+            </li>
+            <li class="pricing-feature-item">
+              <span class="feature-check-icon"><svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg></span>
+              SSO, audit logs & dedicated customer success
+            </li>
+          </ul>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ─────────────────────────────────────────────────────────────────────────
+       DESIGN SYSTEM TOKEN SPEC & ATOMS
+       ───────────────────────────────────────────────────────────────────────── -->
+  <section class="section-tokens" id="tokens">
+    <div class="container">
+      <div style="text-align: center; max-width: 640px; margin-inline: auto; margin-bottom: var(--space-8);">
+        <h2>Canva Token Specifications</h2>
+        <p class="lead muted">Verbatim bindings from DESIGN.md and tokens.css.</p>
+      </div>
+
+      <!-- Color Tokens -->
+      <div class="token-box">
+        <h3>Palette & Roles</h3>
+        <p class="muted" style="font-size: 14px;">White canvas dominant, signature purple-to-cyan gradient, and vibrant secondary category chips.</p>
+        
+        <div class="swatch-grid">
+          <div class="swatch-card">
+            <div class="swatch-color" style="background: #7d2ae8;"></div>
+            <div class="swatch-meta">
+              <div class="swatch-title">Canva Purple</div>
+              <div class="swatch-val">#7d2ae8</div>
+            </div>
+          </div>
+
+          <div class="swatch-card">
+            <div class="swatch-color" style="background: #00c4cc;"></div>
+            <div class="swatch-meta">
+              <div class="swatch-title">Canva Cyan</div>
+              <div class="swatch-val">#00c4cc</div>
+            </div>
+          </div>
+
+          <div class="swatch-card">
+            <div class="swatch-color" style="background: linear-gradient(135deg, #7d2ae8, #00c4cc);"></div>
+            <div class="swatch-meta">
+              <div class="swatch-title">Brand Gradient</div>
+              <div class="swatch-val">#7d2ae8 → #00c4cc</div>
+            </div>
+          </div>
+
+          <div class="swatch-card">
+            <div class="swatch-color" style="background: #ff7059;"></div>
+            <div class="swatch-meta">
+              <div class="swatch-title">Coral (Social)</div>
+              <div class="swatch-val">#ff7059</div>
+            </div>
+          </div>
+
+          <div class="swatch-card">
+            <div class="swatch-color" style="background: #ff9633;"></div>
+            <div class="swatch-meta">
+              <div class="swatch-title">Tangerine (Mktg)</div>
+              <div class="swatch-val">#ff9633</div>
+            </div>
+          </div>
+
+          <div class="swatch-card">
+            <div class="swatch-color" style="background: #48c997;"></div>
+            <div class="swatch-meta">
+              <div class="swatch-title">Mint (Edu)</div>
+              <div class="swatch-val">#48c997</div>
+            </div>
+          </div>
+
+          <div class="swatch-card">
+            <div class="swatch-color" style="background: #3ea6ff;"></div>
+            <div class="swatch-meta">
+              <div class="swatch-title">Sky (Business)</div>
+              <div class="swatch-val">#3ea6ff</div>
+            </div>
+          </div>
+
+          <div class="swatch-card">
+            <div class="swatch-color" style="background: #9b87f5;"></div>
+            <div class="swatch-meta">
+              <div class="swatch-title">Lavender (Personal)</div>
+              <div class="swatch-val">#9b87f5</div>
+            </div>
+          </div>
+
+          <div class="swatch-card">
+            <div class="swatch-color" style="background: #0e1318;"></div>
+            <div class="swatch-meta">
+              <div class="swatch-title">Ink Primary</div>
+              <div class="swatch-val">#0e1318</div>
+            </div>
+          </div>
+
+          <div class="swatch-card">
+            <div class="swatch-color" style="background: #3c4043;"></div>
+            <div class="swatch-meta">
+              <div class="swatch-title">Ink Secondary</div>
+              <div class="swatch-val">#3c4043</div>
+            </div>
+          </div>
+
+          <div class="swatch-card">
+            <div class="swatch-color" style="background: #f4f5f7; border-bottom: 1px solid var(--border);"></div>
+            <div class="swatch-meta">
+              <div class="swatch-title">Surface Subtle</div>
+              <div class="swatch-val">#f4f5f7</div>
+            </div>
+          </div>
+
+          <div class="swatch-card">
+            <div class="swatch-color" style="background: #eef0fc; border-bottom: 1px solid var(--border);"></div>
+            <div class="swatch-meta">
+              <div class="swatch-title">Surface Cool</div>
+              <div class="swatch-val">#eef0fc</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Typography Hierarchy Spec -->
+      <div class="token-box">
+        <h3>Typography Hierarchy (Weight-Driven)</h3>
+        <p class="muted" style="font-size: 14px; margin-bottom: var(--space-4);">Canva Sans letterforms stepping through 800 → 700 → 600 → 400 with tight card line-heights.</p>
+
+        <div style="display: flex; flex-direction: column; gap: var(--space-3); border-top: 1px solid var(--border); padding-top: var(--space-4);">
+          <div style="display: flex; justify-content: space-between; align-items: baseline; border-bottom: 1px solid var(--border); padding-bottom: 8px;">
+            <span style="font-weight: 800; font-size: 28px;">Hero Display (64px / 800 / 1.05 / -0.02em)</span>
+            <span class="muted" style="font-size: 12px; font-family: var(--font-mono);">--text-4xl</span>
+          </div>
+          <div style="display: flex; justify-content: space-between; align-items: baseline; border-bottom: 1px solid var(--border); padding-bottom: 8px;">
+            <span style="font-weight: 700; font-size: 22px;">H1 Page Heading (36px / 700 / 1.15)</span>
+            <span class="muted" style="font-size: 12px; font-family: var(--font-mono);">--text-3xl</span>
+          </div>
+          <div style="display: flex; justify-content: space-between; align-items: baseline; border-bottom: 1px solid var(--border); padding-bottom: 8px;">
+            <span style="font-weight: 700; font-size: 18px;">H2 Section Heading (24px / 700 / 1.20)</span>
+            <span class="muted" style="font-size: 12px; font-family: var(--font-mono);">--text-2xl</span>
+          </div>
+          <div style="display: flex; justify-content: space-between; align-items: baseline; border-bottom: 1px solid var(--border); padding-bottom: 8px;">
+            <span style="font-weight: 600; font-size: 16px;">H3 Card Title (18px / 600 / 1.30)</span>
+            <span class="muted" style="font-size: 12px; font-family: var(--font-mono);">--text-xl</span>
+          </div>
+          <div style="display: flex; justify-content: space-between; align-items: baseline; border-bottom: 1px solid var(--border); padding-bottom: 8px;">
+            <span style="font-weight: 400; font-size: 14px;">Body Standard (14px / 400 / 1.50)</span>
+            <span class="muted" style="font-size: 12px; font-family: var(--font-mono);">--text-base</span>
+          </div>
+          <div style="display: flex; justify-content: space-between; align-items: baseline;">
+            <span class="chip chip-coral">Tag Uppercase (11px / 600 / 0.04em)</span>
+            <span class="muted" style="font-size: 12px; font-family: var(--font-mono);">--text-xs</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ─────────────────────────────────────────────────────────────────────────
+       CANVA FOOTER
+       ───────────────────────────────────────────────────────────────────────── -->
+  <footer class="canva-footer" role="contentinfo">
+    <div class="container">
+      <div class="footer-columns">
+        <div class="footer-col">
+          <div class="canva-logo" style="margin-bottom: var(--space-3);">
+            <div class="canva-mark">C</div>
+            <span>Canva</span>
+          </div>
+          <p class="muted" style="font-size: 14px; max-width: 280px; margin-bottom: var(--space-4);">
+            Design anything. Publish anywhere. Empowering every person and organization to create beautiful visual communications.
+          </p>
+          <span style="font-size: 12px; color: var(--meta);">© 2026 Canva Pty Ltd. All rights reserved.</span>
+        </div>
+
+        <div class="footer-col">
+          <h4>Features</h4>
+          <ul class="footer-links">
+            <li><a href="#templates">Visual Suite</a></li>
+            <li><a href="#magic">Magic Studio AI</a></li>
+            <li><a href="#editor">Live Design Editor</a></li>
+            <li><a href="#pricing">Brand Kits</a></li>
+            <li><a href="#pricing">Team Workflows</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4>Explore</h4>
+          <ul class="footer-links">
+            <li><a href="#templates">Presentations</a></li>
+            <li><a href="#templates">Instagram Posts</a></li>
+            <li><a href="#templates">Video Editor</a></li>
+            <li><a href="#templates">Posters & Flyers</a></li>
+            <li><a href="#templates">Logos & Identity</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4>Community</h4>
+          <ul class="footer-links">
+            <li><a href="#tokens">Design Tokens</a></li>
+            <li><a href="#tokens">Creators Program</a></li>
+            <li><a href="#tokens">Developers API</a></li>
+            <li><a href="#tokens">Canva for Education</a></li>
+            <li><a href="#tokens">Nonprofits</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4>Company</h4>
+          <ul class="footer-links">
+            <li><a href="#">About Us</a></li>
+            <li><a href="#">Careers</a></li>
+            <li><a href="#">Newsroom</a></li>
+            <li><a href="#">Privacy Policy</a></li>
+            <li><a href="#">Terms of Service</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <div style="display: flex; gap: var(--space-4);">
+          <span>English (US)</span>
+          <span>Security & Compliance</span>
+          <span>Status: All Systems Operational</span>
+        </div>
+        <div>
+          <span>Design System Reference: Canva (Design & Creative)</span>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ─────────────────────────────────────────────────────────────────────────
+       CLIENT INTERACTION LOGIC
+       ───────────────────────────────────────────────────────────────────────── -->
+  <script>
+    // Filter templates by category
+    function filterTemplates(category, btn) {
+      document.querySelectorAll('.filter-bar button').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+
+      const cards = document.querySelectorAll('.template-card');
+      cards.forEach(card => {
+        if (category === 'all' || card.dataset.cat === category) {
+          card.style.display = 'flex';
+        } else {
+          card.style.display = 'none';
+        }
+      });
+    }
+
+    // Interactive Magic Studio Feature Switcher
+    function switchMagicTab(type, el) {
+      document.querySelectorAll('.magic-tool-item').forEach(i => i.classList.remove('active'));
+      el.classList.add('active');
+
+      const input = document.getElementById('magicInput');
+      const title = document.getElementById('magicOutputTitle');
+      const sub = document.getElementById('magicOutputSub');
+
+      if (type === 'design') {
+        input.value = "Modern neon branding poster for an eco-tech summit in Tokyo";
+        title.textContent = "ECO·TOKYO 2026";
+        sub.textContent = "Redefining urban sustainable tech with AI and circular design systems.";
+      } else if (type === 'write') {
+        input.value = "Punchy value proposition for creative marketing agencies";
+        title.textContent = "UNLEASH YOUR SPARK";
+        sub.textContent = "From prompt to publication in minutes. High-impact copy crafted for scale.";
+      } else if (type === 'switch') {
+        input.value = "Convert 16:9 keynote deck into mobile vertical reels & story";
+        title.textContent = "STORY RESIZED (9:16)";
+        sub.textContent = "Automatically reformatted 18 slides with responsive typography reflow.";
+      }
+    }
+
+    function runMagicSim() {
+      const input = document.getElementById('magicInput').value;
+      const title = document.getElementById('magicOutputTitle');
+      const sub = document.getElementById('magicOutputSub');
+      title.textContent = "GENERATING...";
+      setTimeout(() => {
+        title.textContent = input.toUpperCase().substring(0, 24);
+        sub.textContent = "Custom artwork & layout generated with Canva Sans and soft 12px radii.";
+      }, 500);
+    }
+
+    function sendToMiniEditor() {
+      const title = document.getElementById('magicOutputTitle').textContent;
+      const sub = document.getElementById('magicOutputSub').textContent;
+      document.getElementById('canvasHeading').textContent = title;
+      document.getElementById('canvasSubtitle').textContent = sub;
+      document.getElementById('editor').scrollIntoView({ behavior: 'smooth' });
+    }
+
+    // Mini Editor Controls
+    let sidebarCollapsed = false;
+    function toggleSidebar() {
+      const sidebar = document.getElementById('editorSidebar');
+      const label = document.getElementById('sidebarToggleLabel');
+      sidebarCollapsed = !sidebarCollapsed;
+      if (sidebarCollapsed) {
+        sidebar.classList.add('collapsed');
+        label.textContent = "Expand Tools";
+      } else {
+        sidebar.classList.remove('collapsed');
+        label.textContent = "Collapse Tools";
+      }
+    }
+
+    function switchSidebarTab(tab, btn) {
+      document.querySelectorAll('.rail-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      if (sidebarCollapsed) {
+        toggleSidebar();
+      }
+    }
+
+    function addSticker(label) {
+      const sticker = document.getElementById('canvasSticker');
+      sticker.textContent = label;
+      sticker.style.transform = `rotate(${Math.floor(Math.random() * 20 - 10)}deg) scale(1.05)`;
+      setTimeout(() => {
+        sticker.style.transform = `rotate(-6deg) scale(1)`;
+      }, 200);
+    }
+
+    function updateHeadingText() {
+      const text = prompt("Enter heading text:", "Design without limits");
+      if (text) {
+        document.getElementById('canvasHeading').textContent = text;
+      }
+    }
+
+    function updateSubtitleText() {
+      const text = prompt("Enter subtitle text:", "Collaborate in real time with high-velocity creative assets.");
+      if (text) {
+        document.getElementById('canvasSubtitle').textContent = text;
+      }
+    }
+
+    const bgColors = ['#ffffff', '#fdf7f4', '#f0fbf7', '#f4f5fc', '#fdf3f3'];
+    let bgIndex = 0;
+    function changeArtboardBg() {
+      bgIndex = (bgIndex + 1) % bgColors.length;
+      document.getElementById('artboard').style.backgroundColor = bgColors[bgIndex];
+    }
+
+    function selectCanvasElement(e, el) {
+      e.stopPropagation();
+      document.querySelectorAll('.canvas-element').forEach(c => c.classList.remove('selected'));
+      if (el.classList.contains('canvas-element')) {
+        el.classList.add('selected');
+      }
+    }
+
+    function selectTemplate(name) {
+      document.getElementById('docTitleInput').value = name;
+      document.getElementById('canvasHeading').textContent = name;
+      document.getElementById('editor').scrollIntoView({ behavior: 'smooth' });
+    }
+
+    function exportArtboard() {
+      alert("Export successful! Rendered as high-resolution PNG using Canva design specifications.");
+    }
+
+    function editorUndo() {
+      document.getElementById('canvasHeading').textContent = "Design your future with confidence";
+    }
+    function editorRedo() {
+      document.getElementById('canvasHeading').textContent = "Design without limits";
+    }
+  </script>
+</body>
+</html>

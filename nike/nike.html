@@ -1,0 +1,931 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Nike — Kinetic Retail Cathedral</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      /* Official Nike Podium CDS Color Tokens per DESIGN.md */
+      --nike-black: #111111;         /* Primary text, button bg (not pure black) */
+      --nike-white: #FFFFFF;         /* Primary canvas, button text */
+
+      /* Surface & Background */
+      --nike-snow: #FAFAFA;          /* Grey-50: Lightest surface */
+      --nike-light-gray: #F5F5F5;    /* Grey-100: Secondary bg, input fill */
+      --nike-hover-gray: #E5E5E5;    /* Grey-200: Hover bg, disabled fill */
+      --nike-dark-surface: #28282A;  /* Grey-800: Dark section bg */
+      --nike-deep-charcoal: #1F1F21;/* Grey-900: Darkest non-black surface */
+      --nike-dark-hover: #39393B;    /* Grey-700: Dark hover state */
+
+      /* Neutrals & Text */
+      --text-primary: #111111;       /* Main text, headings */
+      --text-secondary: #707072;     /* Grey-500: Subdued copy, price labels */
+      --text-disabled: #9E9EA0;      /* Grey-400: Inactive elements */
+      --text-disabled-inverse: #4B4B4D;
+      --border-primary: #707072;
+      --border-secondary: #CACACB;   /* Grey-300: Subtle divider lines */
+      --border-active: #111111;
+
+      /* Semantic & Accents */
+      --nike-red: #D30005;           /* Red-600: Critical, sale badges */
+      --nike-red-bright: #EE0005;    /* Red-500: Urgent emphasis */
+      --nike-orange-badge: #D33918;  /* Text badges, promos */
+      --nike-orange-flash: #FF5000;  /* Expressive athletic accent */
+      --nike-green-success: #007D48; /* Positive confirmation */
+      --nike-green-inverse: #1EAA52;
+      --nike-blue-link: #1151FF;     /* Text links */
+      --nike-yellow-warning: #FEDF35;
+      --focus-ring: rgba(39, 93, 197, 1);
+
+      /* Typography Families */
+      --font-display: 'Anton', 'Impact', sans-serif; /* Emulates Nike Futura ND condensed */
+      --font-body: 'Inter', -apple-system, BlinkMacSystemFont, "Helvetica Neue", Helvetica, Arial, sans-serif;
+
+      /* Spacing Scale (4px Base Unit) */
+      --sp-4: 4px;
+      --sp-8: 8px;
+      --sp-12: 12px;
+      --sp-16: 16px;
+      --sp-20: 20px;
+      --sp-24: 24px;
+      --sp-32: 32px;
+      --sp-48: 48px;
+      --sp-64: 64px;
+      --sp-80: 80px;
+
+      /* Radii */
+      --radius-image: 0px;   /* Product images strictly have 0px radius */
+      --radius-input: 8px;
+      --radius-search: 24px;
+      --radius-pill: 30px;    /* Signature Nike pill button */
+    }
+
+    /* Reset & Base */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      font-size: 16px;
+      background-color: var(--nike-white);
+      color: var(--text-primary);
+      font-family: var(--font-body);
+      -webkit-font-smoothing: antialiased;
+      scroll-behavior: smooth;
+    }
+
+    body {
+      line-height: 1.5;
+      overflow-x: hidden;
+    }
+
+    /* Nike Massive Condensed Uppercase Display Typography */
+    .display-hero {
+      font-family: var(--font-display);
+      font-size: clamp(54px, 8vw, 96px);
+      font-weight: 500;
+      line-height: 0.90; /* Tight stadium scoreboard line-height */
+      letter-spacing: -0.5px;
+      text-transform: uppercase;
+      color: var(--text-primary);
+    }
+
+    .heading-section {
+      font-family: var(--font-body);
+      font-size: 24px;
+      font-weight: 500;
+      line-height: 1.20;
+      letter-spacing: -0.3px;
+      color: var(--text-primary);
+    }
+
+    .product-title {
+      font-family: var(--font-body);
+      font-size: 16px;
+      font-weight: 500;
+      line-height: 1.50;
+      color: var(--text-primary);
+    }
+
+    .product-category {
+      font-family: var(--font-body);
+      font-size: 16px;
+      font-weight: 400;
+      line-height: 1.50;
+      color: var(--text-secondary);
+    }
+
+    .product-price {
+      font-family: var(--font-body);
+      font-size: 16px;
+      font-weight: 500;
+      line-height: 1.50;
+      color: var(--text-primary);
+      margin-top: 4px;
+    }
+
+    .promo-text {
+      font-family: var(--font-body);
+      font-size: 12px;
+      font-weight: 500;
+      line-height: 1.50;
+      letter-spacing: 0.2px;
+    }
+
+    /* Container */
+    .container {
+      max-width: 1440px;
+      margin: 0 auto;
+      padding: 0 var(--sp-48);
+    }
+
+    /* Top Promotional Banner: #111111 background */
+    .promo-banner {
+      background-color: var(--nike-black);
+      color: var(--nike-white);
+      text-align: center;
+      padding: 10px var(--sp-16);
+    }
+
+    .promo-banner a {
+      color: var(--nike-white);
+      text-decoration: underline;
+      margin-left: 6px;
+    }
+
+    /* Sticky Navigation Bar */
+    header.nike-nav {
+      position: sticky;
+      top: 0;
+      background-color: var(--nike-white);
+      border-bottom: 1px solid var(--nike-hover-gray);
+      z-index: 1000;
+      height: 64px;
+      display: flex;
+      align-items: center;
+    }
+
+    .nav-inner {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      width: 100%;
+    }
+
+    .swoosh-logo-svg {
+      width: 60px;
+      height: 24px;
+      fill: var(--nike-black);
+      transition: opacity 0.15s;
+    }
+
+    .swoosh-logo-svg:hover {
+      opacity: 0.7;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 28px;
+      list-style: none;
+    }
+
+    .nav-links a {
+      text-decoration: none;
+      color: var(--text-primary);
+      font-size: 16px;
+      font-weight: 500;
+      transition: color 0.15s;
+    }
+
+    .nav-links a:hover {
+      color: var(--text-secondary);
+    }
+
+    .nav-right {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .search-input-box {
+      display: flex;
+      align-items: center;
+      background: var(--nike-light-gray);
+      border-radius: var(--radius-search);
+      padding: 8px 16px;
+      width: 180px;
+      transition: width 0.2s ease, background 0.2s ease;
+    }
+
+    .search-input-box:focus-within {
+      width: 240px;
+      background: #EAEAEA;
+    }
+
+    .search-input-box input {
+      border: none;
+      background: transparent;
+      outline: none;
+      font-family: var(--font-body);
+      font-size: 14px;
+      color: var(--text-primary);
+      width: 100%;
+    }
+
+    .nav-icon-btn {
+      background: none;
+      border: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 6px;
+      border-radius: 50%;
+      transition: background 0.15s;
+    }
+
+    .nav-icon-btn:hover {
+      background: var(--nike-light-gray);
+    }
+
+    /* Buttons: Fully rounded 30px pill */
+    .btn-pill {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 12px 24px;
+      border-radius: var(--radius-pill);
+      font-size: 16px;
+      font-weight: 500;
+      cursor: pointer;
+      text-decoration: none;
+      border: none;
+      transition: background-color 200ms ease, color 200ms ease;
+    }
+
+    .btn-pill:focus-visible {
+      outline: 2px solid var(--focus-ring);
+      outline-offset: 2px;
+    }
+
+    .btn-primary-dark {
+      background-color: var(--nike-black);
+      color: var(--nike-white);
+    }
+
+    .btn-primary-dark:hover {
+      background-color: var(--text-secondary);
+    }
+
+    .btn-secondary-white {
+      background-color: var(--nike-white);
+      color: var(--nike-black);
+    }
+
+    .btn-secondary-white:hover {
+      background-color: var(--nike-hover-gray);
+    }
+
+    .btn-outlined {
+      background-color: transparent;
+      color: var(--nike-black);
+      border: 1.5px solid var(--border-secondary);
+    }
+
+    .btn-outlined:hover {
+      border-color: var(--text-secondary);
+      background-color: var(--nike-hover-gray);
+    }
+
+    /* Hero Section: Full Bleed Athletic Imagery */
+    .hero-section {
+      background-color: #0E0E10;
+      color: var(--nike-white);
+      min-height: 82vh;
+      position: relative;
+      display: flex;
+      align-items: flex-end;
+      padding: var(--sp-64) 0;
+      overflow: hidden;
+    }
+
+    .hero-stage-bg {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: radial-gradient(circle at 60% 40%, #2a2a2e 0%, #0E0E10 70%);
+      z-index: 1;
+    }
+
+    .hero-shoe-svg {
+      width: 75%;
+      max-width: 900px;
+      filter: drop-shadow(0 30px 40px rgba(0,0,0,0.85));
+      transform: rotate(-8deg);
+      transition: transform 0.5s ease;
+    }
+
+    .hero-shoe-svg:hover {
+      transform: rotate(-4deg) scale(1.03);
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      max-width: 760px;
+    }
+
+    .hero-kicker {
+      font-family: var(--font-body);
+      font-size: 16px;
+      font-weight: 500;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      margin-bottom: var(--sp-12);
+      color: var(--nike-white);
+    }
+
+    .hero-content .display-hero {
+      color: var(--nike-white);
+      margin-bottom: var(--sp-16);
+    }
+
+    .hero-subhead {
+      font-size: 16px;
+      font-weight: 400;
+      line-height: 1.6;
+      color: #D1D1D6;
+      max-width: 580px;
+      margin-bottom: var(--sp-32);
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: var(--sp-12);
+    }
+
+    /* Product Section: Tight 4-12px Grid Gaps */
+    .catalog-section {
+      padding: var(--sp-80) 0;
+      background-color: var(--nike-white);
+    }
+
+    .section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      margin-bottom: var(--sp-24);
+    }
+
+    .products-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px; /* Tight athletic grid gap per DESIGN.md */
+    }
+
+    .product-card {
+      background: var(--nike-white);
+      text-decoration: none;
+      display: flex;
+      flex-direction: column;
+      cursor: pointer;
+    }
+
+    .product-img-box {
+      width: 100%;
+      height: 380px;
+      background-color: var(--nike-light-gray);
+      border-radius: var(--radius-image); /* Strictly 0px radius */
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+
+    .product-img-box svg {
+      width: 75%;
+      height: 75%;
+      transition: transform 0.3s ease;
+    }
+
+    .product-card:hover .product-img-box svg {
+      transform: scale(1.06);
+    }
+
+    .product-badge-sale {
+      position: absolute;
+      top: 16px;
+      left: 16px;
+      background: var(--nike-red);
+      color: #FFF;
+      font-size: 12px;
+      font-weight: 700;
+      padding: 4px 8px;
+      border-radius: 2px;
+      text-transform: uppercase;
+    }
+
+    .product-meta {
+      padding-top: var(--sp-12);
+    }
+
+    /* Category Banner Section */
+    .category-section {
+      padding: 0 0 var(--sp-80);
+    }
+
+    .category-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+    }
+
+    .category-card {
+      height: 480px;
+      background: #111111;
+      position: relative;
+      border-radius: 0px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: var(--sp-32);
+      color: var(--nike-white);
+    }
+
+    .category-card::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.2) 60%, transparent 100%);
+      z-index: 1;
+    }
+
+    .category-content {
+      position: relative;
+      z-index: 2;
+    }
+
+    /* Footer: Multi-Column Dark */
+    footer.nike-footer {
+      background-color: var(--nike-black);
+      color: var(--text-secondary);
+      padding: var(--sp-64) 0 var(--sp-32);
+    }
+
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 1.5fr repeat(3, 1fr);
+      gap: var(--sp-48);
+      margin-bottom: var(--sp-64);
+    }
+
+    .footer-col h5 {
+      font-family: var(--font-display);
+      font-size: 16px;
+      color: var(--nike-white);
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      margin-bottom: var(--sp-16);
+    }
+
+    .footer-links {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .footer-links a {
+      color: var(--text-secondary);
+      text-decoration: none;
+      font-size: 12px;
+      font-weight: 500;
+      transition: color 0.15s;
+    }
+
+    .footer-links a:hover {
+      color: var(--nike-white);
+    }
+
+    .footer-bottom {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-top: var(--sp-24);
+      border-top: 1px solid #28282A;
+      font-size: 11px;
+    }
+
+    /* Token Drawer */
+    .token-audit-toggle {
+      position: fixed;
+      bottom: 24px;
+      left: 24px;
+      z-index: 999;
+      background: var(--nike-black);
+      color: var(--nike-white);
+      padding: 10px 20px;
+      border-radius: var(--radius-pill);
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .token-audit-toggle:hover {
+      background: var(--text-secondary);
+    }
+
+    .token-drawer {
+      position: fixed;
+      top: 0;
+      left: -440px;
+      width: 400px;
+      height: 100vh;
+      background: var(--nike-white);
+      border-right: 1px solid var(--border-secondary);
+      z-index: 2000;
+      padding: var(--sp-32) var(--sp-24);
+      overflow-y: auto;
+      transition: left 0.25s ease;
+    }
+
+    .token-drawer.open {
+      left: 0;
+    }
+
+    .token-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 8px 0;
+      border-bottom: 1px solid var(--nike-hover-gray);
+      font-size: 13px;
+    }
+
+    /* Toast */
+    .toast-box {
+      position: fixed;
+      top: 24px;
+      right: 24px;
+      background: var(--nike-black);
+      color: var(--nike-white);
+      padding: 14px 22px;
+      border-radius: var(--radius-pill);
+      font-size: 14px;
+      font-weight: 500;
+      z-index: 3000;
+      opacity: 0;
+      transform: translateY(-10px);
+      transition: all 0.2s ease;
+      pointer-events: none;
+    }
+
+    .toast-box.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Responsive */
+    @media (max-width: 960px) {
+      .container { padding: 0 var(--sp-24); }
+      .products-grid { grid-template-columns: repeat(2, 1fr); }
+      .category-grid { grid-template-columns: 1fr; }
+      .footer-grid { grid-template-columns: repeat(2, 1fr); }
+      .nav-links { display: none; }
+    }
+
+    @media (max-width: 640px) {
+      .products-grid { grid-template-columns: 1fr; }
+      .footer-grid { grid-template-columns: 1fr; }
+      .hero-actions { flex-direction: column; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Promotional Banner Strip (#111111) -->
+  <aside class="promo-banner">
+    <span class="promo-text">FREE SHIPPING &amp; 60-DAY FREE RETURNS FOR NIKE MEMBERS. <a href="#">JOIN US</a></span>
+  </aside>
+
+  <!-- Navigation Bar -->
+  <header class="nike-nav">
+    <div class="container nav-inner">
+      <!-- Nike Swoosh SVG Logo -->
+      <a href="#" aria-label="Nike Home">
+        <svg class="swoosh-logo-svg" viewBox="0 0 24 24">
+          <path d="M21.707 5.293c-.201-.19-.497-.267-.768-.198l-14 3.5a1 1 0 0 0-.743.832c-.053.484.092.97.404 1.348l6 7.273a1 1 0 0 0 1.503.042l7.5-8.5a1 1 0 0 0 .104-1.297zM7.414 9.414l11.493-2.873-6.236 7.068-5.257-4.195z"/>
+        </svg>
+      </a>
+
+      <!-- Category Navigation Links (16px/500) -->
+      <ul class="nav-links">
+        <li><a href="#new">New &amp; Featured</a></li>
+        <li><a href="#catalog">Men</a></li>
+        <li><a href="#catalog">Women</a></li>
+        <li><a href="#catalog">Kids</a></li>
+        <li><a href="#catalog">Sale</a></li>
+      </ul>
+
+      <!-- Nav Right: Search (24px radius) + Cart -->
+      <div class="nav-right">
+        <div class="search-input-box">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#707072" stroke-width="2" style="margin-right: 8px;">
+            <circle cx="11" cy="11" r="8"></circle>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+          </svg>
+          <input type="text" placeholder="Search">
+        </div>
+
+        <button class="nav-icon-btn" aria-label="Favorites" onclick="triggerToast('Favorites updated')">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+          </svg>
+        </button>
+
+        <button class="nav-icon-btn" aria-label="Cart" onclick="triggerToast('Bag: 1 item ($160.00)')">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="9" cy="21" r="1"></circle>
+            <circle cx="20" cy="21" r="1"></circle>
+            <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero Section: Stadium Energy & 96px Headline -->
+  <section class="hero-section" id="new">
+    <div class="hero-stage-bg">
+      <!-- Kinetic Nike Air Zoom Running Shoe Silhouette SVG -->
+      <svg class="hero-shoe-svg" viewBox="0 0 800 400" fill="none">
+        <path d="M 120 320 Q 240 330 380 320 Q 560 300 700 240 Q 730 200 680 180 Q 560 170 480 140 Q 380 90 280 130 Q 180 180 120 280 Z" fill="#E5E5E5"/>
+        <path d="M 280 130 Q 360 210 500 240 L 460 270 L 260 210 Z" fill="#111111"/>
+        <!-- Iconic Swoosh on Shoe -->
+        <path d="M 320 220 C 370 240 450 250 540 210 C 490 225 420 230 360 205 Z" fill="#FF5000"/>
+        <!-- Zoom Air Cushion Unit -->
+        <rect x="240" y="315" width="220" height="15" rx="7" fill="#007D48" opacity="0.85"/>
+        <line x1="120" y1="330" x2="700" y2="310" stroke="#111111" stroke-width="12" stroke-linecap="round"/>
+      </svg>
+    </div>
+
+    <div class="container hero-content">
+      <div class="hero-kicker">AIR ZOOM ALPHAFLY NEXT% 3</div>
+      <h1 class="display-hero">WIN ON AIR.</h1>
+      <p class="hero-subhead">
+        Engineered for marathon barrier-breakers. Tuned dual Air Zoom units, full-length carbon fiber Flyplate, and atomknit breathability for ultimate energy return.
+      </p>
+
+      <div class="hero-actions">
+        <!-- 30px Pill Button -->
+        <button class="btn-pill btn-secondary-white" onclick="triggerToast('Configuring Air Zoom Alphafly Next% 3')">Shop Running</button>
+        <button class="btn-pill btn-outlined" style="border-color: #FFFFFF; color: #FFFFFF;" onclick="triggerToast('Playing athlete marathon documentary')">Watch Film</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Product Catalog Grid: Tight 12px Gaps & 0px Image Radius -->
+  <section class="catalog-section" id="catalog">
+    <div class="container">
+      <div class="section-header">
+        <h2 class="heading-section">Trending Footwear</h2>
+        <div style="display: flex; gap: 8px;">
+          <button class="btn-pill btn-outlined" style="padding: 6px 14px; font-size: 14px;" onclick="triggerToast('Filtered: Men')">Men</button>
+          <button class="btn-pill btn-outlined" style="padding: 6px 14px; font-size: 14px;" onclick="triggerToast('Filtered: Women')">Women</button>
+          <button class="btn-pill btn-primary-dark" style="padding: 6px 14px; font-size: 14px;" onclick="triggerToast('All footwear loaded')">Shop All</button>
+        </div>
+      </div>
+
+      <!-- 3-Column Tight Athletic Grid -->
+      <div class="products-grid">
+        <!-- Shoe 1 -->
+        <div class="product-card" onclick="triggerToast('Added Nike Dunk Low Retro to Bag ($115.00)')">
+          <div class="product-img-box">
+            <span class="product-badge-sale">Best Seller</span>
+            <svg viewBox="0 0 300 180" fill="none">
+              <path d="M 40 140 Q 120 150 200 140 Q 250 110 270 90 Q 240 70 190 75 Q 120 80 80 110 Z" fill="#111111"/>
+              <path d="M 120 100 Q 160 120 220 105" stroke="#FFF" stroke-width="4"/>
+              <rect x="40" y="140" width="230" height="12" fill="#CACACB"/>
+            </svg>
+          </div>
+          <div class="product-meta">
+            <h3 class="product-title">Nike Dunk Low Retro</h3>
+            <div class="product-category">Men's Shoes</div>
+            <div class="product-price">$115.00</div>
+          </div>
+        </div>
+
+        <!-- Shoe 2 -->
+        <div class="product-card" onclick="triggerToast('Added Air Jordan 1 Retro High to Bag ($180.00)')">
+          <div class="product-img-box">
+            <svg viewBox="0 0 300 180" fill="none">
+              <path d="M 40 140 Q 120 150 200 140 Q 250 90 260 50 Q 220 50 180 75 Q 120 80 70 110 Z" fill="#D30005"/>
+              <path d="M 100 90 Q 150 120 210 100" stroke="#111" stroke-width="5"/>
+              <rect x="40" y="140" width="220" height="12" fill="#FFFFFF"/>
+            </svg>
+          </div>
+          <div class="product-meta">
+            <h3 class="product-title">Air Jordan 1 Retro High OG</h3>
+            <div class="product-category">Men's Lifestyle</div>
+            <div class="product-price">$180.00</div>
+          </div>
+        </div>
+
+        <!-- Shoe 3 -->
+        <div class="product-card" onclick="triggerToast('Added Nike Pegasus 41 to Bag ($140.00)')">
+          <div class="product-img-box">
+            <svg viewBox="0 0 300 180" fill="none">
+              <path d="M 40 140 Q 120 150 210 135 Q 260 110 270 85 Q 230 75 180 80 Q 110 90 60 120 Z" fill="#007D48"/>
+              <path d="M 110 105 Q 160 125 210 110" stroke="#FF5000" stroke-width="4"/>
+              <rect x="40" y="140" width="230" height="12" fill="#E5E5E5"/>
+            </svg>
+          </div>
+          <div class="product-meta">
+            <h3 class="product-title">Nike Pegasus 41 ReactX</h3>
+            <div class="product-category">Road Running Shoes</div>
+            <div class="product-price">$140.00</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Category Nav Cards (Full Bleed Photography Stance) -->
+  <section class="category-section">
+    <div class="container">
+      <div class="section-header">
+        <h2 class="heading-section">Featured Disciplines</h2>
+      </div>
+
+      <div class="category-grid">
+        <div class="category-card" style="background: #1C1C1E;">
+          <div class="category-content">
+            <div class="promo-text" style="color: #FF5000;">SPEED &amp; MARATHON</div>
+            <h3 style="font-family: var(--font-display); font-size: 32px; text-transform: uppercase; margin: 8px 0 16px;">Running</h3>
+            <button class="btn-pill btn-secondary-white" onclick="triggerToast('Navigating: Running')">Shop Running</button>
+          </div>
+        </div>
+
+        <div class="category-card" style="background: #232326;">
+          <div class="category-content">
+            <div class="promo-text" style="color: #007D48;">COURT PERFORMANCE</div>
+            <h3 style="font-family: var(--font-display); font-size: 32px; text-transform: uppercase; margin: 8px 0 16px;">Basketball</h3>
+            <button class="btn-pill btn-secondary-white" onclick="triggerToast('Navigating: Basketball')">Shop Basketball</button>
+          </div>
+        </div>
+
+        <div class="category-card" style="background: #18181A;">
+          <div class="category-content">
+            <div class="promo-text" style="color: #D30005;">PITCH PRECISION</div>
+            <h3 style="font-family: var(--font-display); font-size: 32px; text-transform: uppercase; margin: 8px 0 16px;">Football</h3>
+            <button class="btn-pill btn-secondary-white" onclick="triggerToast('Navigating: Football')">Shop Football</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="nike-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div>
+          <h5 style="color: #FFFFFF;">GIFT CARDS</h5>
+          <h5 style="color: #FFFFFF; margin-top: 12px;">FIND A STORE</h5>
+          <h5 style="color: #FFFFFF; margin-top: 12px;">NIKE JOURNAL</h5>
+          <h5 style="color: #FFFFFF; margin-top: 12px;">BECOME A MEMBER</h5>
+        </div>
+
+        <div class="footer-col">
+          <h5>GET HELP</h5>
+          <ul class="footer-links">
+            <li><a href="#">Order Status</a></li>
+            <li><a href="#">Shipping &amp; Delivery</a></li>
+            <li><a href="#">Returns</a></li>
+            <li><a href="#">Payment Options</a></li>
+            <li><a href="#">Contact Us</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h5>ABOUT NIKE</h5>
+          <ul class="footer-links">
+            <li><a href="#">News</a></li>
+            <li><a href="#">Careers</a></li>
+            <li><a href="#">Investors</a></li>
+            <li><a href="#">Sustainability</a></li>
+            <li><a href="#">Purpose</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h5>JOIN US</h5>
+          <ul class="footer-links">
+            <li><a href="#">Nike App</a></li>
+            <li><a href="#">Nike Run Club</a></li>
+            <li><a href="#">Nike Training Club</a></li>
+            <li><a href="#">SNKRS</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <div>&copy; 2026 Nike, Inc. All Rights Reserved</div>
+        <div style="display: flex; gap: 24px;">
+          <a href="#" style="color: var(--text-secondary); text-decoration: none;">Guides</a>
+          <a href="#" style="color: var(--text-secondary); text-decoration: none;">Terms of Sale</a>
+          <a href="#" style="color: var(--text-secondary); text-decoration: none;">Terms of Use</a>
+          <a href="#" style="color: var(--text-secondary); text-decoration: none;">Nike Privacy Policy</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Token Drawer -->
+  <button class="token-audit-toggle" id="tokenDrawerBtn" aria-label="Open Token Auditor">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <circle cx="12" cy="12" r="10"></circle>
+      <line x1="12" y1="16" x2="12" y2="12"></line>
+      <line x1="12" y1="8" x2="12.01" y2="8"></line>
+    </svg>
+    NIKE TOKENS
+  </button>
+
+  <div class="token-drawer" id="tokenDrawer">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; padding-bottom: 12px; border-bottom: 1px solid var(--border-secondary);">
+      <h3 style="font-size: 16px; font-weight: 700; text-transform: uppercase;">NIKE PODIUM CDS AUDIT</h3>
+      <button id="closeDrawerBtn" style="background: none; border: none; font-size: 20px; cursor: pointer;">&times;</button>
+    </div>
+
+    <div style="margin-bottom: 24px;">
+      <div style="font-size: 12px; font-weight: 700; color: var(--text-secondary); margin-bottom: 8px;">MONOCHROME PALETTE</div>
+      <div class="token-row"><span>Nike Black (Primary)</span><code>#111111</code></div>
+      <div class="token-row"><span>Nike White (Surface)</span><code>#FFFFFF</code></div>
+      <div class="token-row"><span>Light Gray (Input/Card)</span><code>#F5F5F5</code></div>
+      <div class="token-row"><span>Hover Gray</span><code>#E5E5E5</code></div>
+      <div class="token-row"><span>Border Secondary</span><code>#CACACB</code></div>
+      <div class="token-row"><span>Dark Surface</span><code>#28282A</code></div>
+    </div>
+
+    <div style="margin-bottom: 24px;">
+      <div style="font-size: 12px; font-weight: 700; color: var(--text-secondary); margin-bottom: 8px;">SEMANTIC ACCENTS</div>
+      <div class="token-row"><span>Nike Red (Error/Sale)</span><code style="color: #D30005; font-weight: 700;">#D30005</code></div>
+      <div class="token-row"><span>Orange Flash</span><code style="color: #FF5000; font-weight: 700;">#FF5000</code></div>
+      <div class="token-row"><span>Success Green</span><code style="color: #007D48; font-weight: 700;">#007D48</code></div>
+    </div>
+
+    <div style="margin-bottom: 24px;">
+      <div style="font-size: 12px; font-weight: 700; color: var(--text-secondary); margin-bottom: 8px;">RADII &amp; ELEVATION</div>
+      <div class="token-row"><span>Button Radius</span><code>30px (Pill)</code></div>
+      <div class="token-row"><span>Search Input</span><code>24px radius</code></div>
+      <div class="token-row"><span>Image Radius</span><code>0px (Strictly Sharp)</code></div>
+      <div class="token-row"><span>Card Shadows</span><code>None (Flat Model)</code></div>
+    </div>
+
+    <div>
+      <div style="font-size: 12px; font-weight: 700; color: var(--text-secondary); margin-bottom: 8px;">DISPLAY TYPOGRAPHY</div>
+      <p style="font-size: 13px; line-height: 1.4; color: var(--text-secondary);">
+        Nike Futura ND style at 96px, uppercase, 0.90 line-height. Product photography supplies 100% of the color vibrancy.
+      </p>
+    </div>
+  </div>
+
+  <!-- Toast -->
+  <div class="toast-box" id="toastBox">Action acknowledged.</div>
+
+  <script>
+    // Toast
+    const toast = document.getElementById('toastBox');
+    function triggerToast(text) {
+      toast.textContent = text;
+      toast.classList.add('show');
+      setTimeout(() => {
+        toast.classList.remove('show');
+      }, 2500);
+    }
+
+    // Drawer
+    const tokenDrawer = document.getElementById('tokenDrawer');
+    document.getElementById('tokenDrawerBtn').addEventListener('click', () => {
+      tokenDrawer.classList.toggle('open');
+    });
+    document.getElementById('closeDrawerBtn').addEventListener('click', () => {
+      tokenDrawer.classList.remove('open');
+    });
+  </script>
+</body>
+</html>

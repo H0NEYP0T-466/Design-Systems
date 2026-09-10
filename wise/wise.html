@@ -1,0 +1,1277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Wise — Money without borders | International Money Transfer</title>
+
+  <!-- High quality font imports -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@700;800&display=swap" rel="stylesheet">
+
+  <style>
+    /* ==========================================================================
+       WISE DESIGN SYSTEM TOKENS & FOUNDATIONS (from DESIGN.md)
+       ========================================================================== */
+    :root {
+      /* Primary Brand */
+      --color-near-black: #0e0f0c;
+      --color-wise-green: #9fe870;
+      --color-dark-green: #163300;
+      --color-light-mint: #e2f6d5;
+      --color-pastel-green: #cdffad;
+
+      /* Semantic */
+      --color-sentiment-positive-primary: #054d28;
+      --color-positive-green: #054d28;
+      --color-interactive-negative-hover: #d03238;
+      --color-danger-red: #d03238;
+      --color-sentiment-warning-hover: #ffd11a;
+      --color-warning-yellow: #ffd11a;
+      --color-background-accent: rgba(56, 200, 255, 0.10);
+      --color-bright-orange: #ffc091;
+
+      /* Neutral */
+      --color-warm-dark: #454745;
+      --color-gray: #868685;
+      --color-light-surface: #e8ebe6;
+      --color-pure-white: #ffffff;
+      --color-canvas-offwhite: #fbfcfb;
+      --color-nav-hover: rgba(211, 242, 192, 0.4);
+
+      /* Typography */
+      --font-wise-sans: "Wise Sans", "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      --font-inter: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+
+      /* Border Radii */
+      --radius-minimal: 2px;
+      --radius-standard: 10px;
+      --radius-card-sm: 16px;
+      --radius-card-md: 20px;
+      --radius-card-lg: 30px;
+      --radius-section: 40px;
+      --radius-mega: 1000px;
+      --radius-pill: 9999px;
+      --radius-circle: 50%;
+
+      /* Elevation: Wise uses minimal ring shadows only */
+      --shadow-ring: rgba(14, 15, 12, 0.12) 0px 0px 0px 1px;
+      --shadow-ring-focus: rgb(134, 134, 133) 0px 0px 0px 1px inset;
+      --shadow-ring-green: #9fe870 0px 0px 0px 1px;
+
+      /* Spacing Scale (8px base) */
+      --space-1: 1px;
+      --space-2: 2px;
+      --space-3: 3px;
+      --space-4: 4px;
+      --space-5: 5px;
+      --space-8: 8px;
+      --space-10: 10px;
+      --space-11: 11px;
+      --space-12: 12px;
+      --space-16: 16px;
+      --space-18: 18px;
+      --space-19: 19px;
+      --space-20: 20px;
+      --space-22: 22px;
+      --space-24: 24px;
+      --space-32: 32px;
+      --space-48: 48px;
+      --space-64: 64px;
+      --space-96: 96px;
+    }
+
+    /* CSS Reset & Contextual Alternates "calt" on ALL text */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-feature-settings: "calt" 1;
+      -webkit-font-feature-settings: "calt" 1;
+      font-variant-ligatures: contextual;
+    }
+
+    body {
+      background-color: var(--color-canvas-offwhite);
+      color: var(--color-near-black);
+      font-family: var(--font-inter);
+      font-size: 18px;
+      font-weight: 600; /* Inter 600 body default as specified */
+      line-height: 1.44;
+      letter-spacing: -0.108px;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      overflow-x: hidden;
+    }
+
+    a {
+      color: var(--color-near-black);
+      text-decoration: none;
+      transition: opacity 150ms ease;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+
+    .container {
+      max-width: 1240px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    /* ==========================================================================
+       NAVIGATION BAR
+       ========================================================================== */
+    .wise-nav-header {
+      background-color: var(--color-canvas-offwhite);
+      border-bottom: 1px solid rgba(14, 15, 12, 0.08);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      backdrop-filter: blur(12px);
+    }
+
+    .nav-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 80px;
+    }
+
+    .nav-brand-wrap {
+      display: flex;
+      align-items: center;
+      gap: 36px;
+    }
+
+    .wise-wordmark {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      text-decoration: none !important;
+      color: var(--color-near-black);
+    }
+
+    .wise-logo-svg {
+      width: 110px;
+      height: 28px;
+      fill: var(--color-near-black);
+    }
+
+    .nav-segment-toggle {
+      display: flex;
+      background-color: rgba(22, 51, 0, 0.06);
+      border-radius: var(--radius-pill);
+      padding: 4px;
+      gap: 2px;
+    }
+
+    .segment-btn {
+      padding: 6px 16px;
+      border-radius: var(--radius-pill);
+      font-family: var(--font-inter);
+      font-size: 14px;
+      font-weight: 600;
+      border: none;
+      background: transparent;
+      cursor: pointer;
+      color: var(--color-warm-dark);
+      transition: all 180ms ease;
+    }
+
+    .segment-btn.active {
+      background-color: var(--color-pure-white);
+      color: var(--color-near-black);
+      box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+    }
+
+    .nav-menu-links {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      list-style: none;
+    }
+
+    .nav-menu-item a {
+      font-family: var(--font-inter);
+      font-size: 15px;
+      font-weight: 600;
+      padding: 8px 14px;
+      border-radius: var(--radius-pill);
+      transition: background-color 150ms ease;
+    }
+
+    .nav-menu-item a:hover {
+      background-color: var(--color-nav-hover);
+      text-decoration: none;
+    }
+
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    /* ==========================================================================
+       BUTTONS (Scale 1.05 on hover, 0.95 active, Pill 9999px)
+       ========================================================================== */
+    .btn-wise-primary {
+      background-color: var(--color-wise-green);
+      color: var(--color-dark-green);
+      font-family: var(--font-inter);
+      font-size: 16px;
+      font-weight: 700;
+      line-height: 1.25;
+      padding: 10px 22px;
+      border-radius: var(--radius-pill);
+      border: none;
+      cursor: pointer;
+      text-decoration: none !important;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: transform 180ms cubic-bezier(0.2, 0, 0, 1), background-color 180ms ease;
+      transform: scale(1);
+    }
+
+    .btn-wise-primary:hover {
+      transform: scale(1.05); /* Buttons physically grow as specified */
+      background-color: var(--color-pastel-green);
+    }
+
+    .btn-wise-primary:active {
+      transform: scale(0.95); /* Compress on active */
+    }
+
+    .btn-wise-subtle {
+      background-color: rgba(22, 51, 0, 0.08);
+      color: var(--color-near-black);
+      font-family: var(--font-inter);
+      font-size: 16px;
+      font-weight: 600;
+      padding: 10px 20px;
+      border-radius: var(--radius-pill);
+      border: none;
+      cursor: pointer;
+      text-decoration: none !important;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      transition: transform 180ms cubic-bezier(0.2, 0, 0, 1), background-color 180ms ease;
+      transform: scale(1);
+    }
+
+    .btn-wise-subtle:hover {
+      transform: scale(1.05);
+      background-color: rgba(22, 51, 0, 0.14);
+    }
+
+    .btn-wise-subtle:active {
+      transform: scale(0.95);
+    }
+
+    .btn-wise-dark {
+      background-color: var(--color-near-black);
+      color: var(--color-pure-white);
+      font-family: var(--font-inter);
+      font-size: 16px;
+      font-weight: 600;
+      padding: 10px 22px;
+      border-radius: var(--radius-pill);
+      border: none;
+      cursor: pointer;
+      text-decoration: none !important;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      transition: transform 180ms cubic-bezier(0.2, 0, 0, 1);
+      transform: scale(1);
+    }
+
+    .btn-wise-dark:hover {
+      transform: scale(1.05);
+    }
+
+    .btn-wise-dark:active {
+      transform: scale(0.95);
+    }
+
+    /* ==========================================================================
+       HERO SECTION: BILLBOARD-SCALE WISE SANS 900 TYPOGRAPHY
+       ========================================================================== */
+    .hero-section {
+      padding: 64px 0 80px 0;
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1.15fr 0.85fr;
+      gap: 48px;
+      align-items: start;
+    }
+
+    .hero-content {
+      padding-top: 16px;
+    }
+
+    /* Tag / Badge */
+    .wise-badge-mint {
+      background-color: var(--color-light-mint);
+      color: var(--color-dark-green);
+      font-family: var(--font-inter);
+      font-size: 14px;
+      font-weight: 700;
+      padding: 6px 14px;
+      border-radius: var(--radius-pill);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      margin-bottom: 24px;
+    }
+
+    /* Display Hero: Wise Sans 900 at 0.85 ultra-tight line height */
+    .display-hero {
+      font-family: var(--font-wise-sans);
+      font-size: 88px;
+      font-weight: 900;
+      line-height: 0.85; /* Ultra-tight 0.85 line-height as specified */
+      color: var(--color-near-black);
+      letter-spacing: -2px;
+      margin-bottom: 28px;
+      text-transform: none;
+    }
+
+    .hero-subtext {
+      font-family: var(--font-inter);
+      font-size: 20px;
+      font-weight: 600; /* Inter 600 body default */
+      line-height: 1.45;
+      color: var(--color-warm-dark);
+      margin-bottom: 36px;
+      max-width: 540px;
+    }
+
+    .hero-metrics {
+      display: flex;
+      gap: 32px;
+      padding-top: 24px;
+      border-top: 1px solid rgba(14, 15, 12, 0.12);
+    }
+
+    .metric-item {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .metric-val {
+      font-family: var(--font-wise-sans);
+      font-size: 36px;
+      font-weight: 900;
+      line-height: 0.95;
+      color: var(--color-near-black);
+    }
+
+    .metric-label {
+      font-family: var(--font-inter);
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--color-gray);
+      margin-top: 4px;
+    }
+
+    /* ==========================================================================
+       TRANSFER CALCULATOR CARD (Large 30px / 40px radius, Ring Shadow)
+       ========================================================================== */
+    .calculator-card {
+      background-color: var(--color-pure-white);
+      border-radius: var(--radius-card-lg); /* 30px card radius */
+      box-shadow: var(--shadow-ring); /* Minimal ring shadow */
+      padding: 32px;
+      position: relative;
+    }
+
+    .calc-currency-box {
+      border: 1px solid rgba(14, 15, 12, 0.16);
+      border-radius: var(--radius-card-sm); /* 16px radius */
+      padding: 14px 18px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+      background-color: var(--color-pure-white);
+      transition: border-color 150ms ease;
+    }
+
+    .calc-currency-box:focus-within {
+      box-shadow: var(--shadow-ring-focus);
+      border-color: var(--color-near-black);
+    }
+
+    .calc-input-col {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .calc-input-label {
+      font-family: var(--font-inter);
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--color-gray);
+      margin-bottom: 4px;
+    }
+
+    .calc-amount-input {
+      font-family: var(--font-inter);
+      font-size: 26px;
+      font-weight: 700;
+      border: none;
+      outline: none;
+      color: var(--color-near-black);
+      background: transparent;
+      width: 140px;
+    }
+
+    .currency-pill-btn {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background-color: rgba(22, 51, 0, 0.06);
+      padding: 8px 14px;
+      border-radius: var(--radius-pill);
+      font-family: var(--font-inter);
+      font-size: 16px;
+      font-weight: 700;
+      cursor: pointer;
+      border: none;
+    }
+
+    .currency-flag {
+      width: 22px;
+      height: 22px;
+      border-radius: var(--radius-circle);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background-color: #f0f0f0;
+      font-size: 13px;
+    }
+
+    /* Transparent Fee Stepper breakdown */
+    .fee-breakdown {
+      padding: 8px 16px 16px 20px;
+      position: relative;
+      margin-left: 12px;
+      border-left: 2px dashed rgba(14, 15, 12, 0.18);
+    }
+
+    .fee-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-family: var(--font-inter);
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--color-warm-dark);
+      margin-bottom: 10px;
+    }
+
+    .fee-row:last-child {
+      margin-bottom: 0;
+    }
+
+    .fee-bullet {
+      width: 10px;
+      height: 10px;
+      border-radius: var(--radius-circle);
+      background-color: var(--color-near-black);
+      position: absolute;
+      left: -6px;
+    }
+
+    .fee-bullet.green {
+      background-color: var(--color-wise-green);
+      box-shadow: 0 0 0 2px var(--color-near-black);
+    }
+
+    .fee-text-highlight {
+      color: var(--color-near-black);
+      font-weight: 700;
+    }
+
+    .rate-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      background-color: var(--color-light-mint);
+      color: var(--color-sentiment-positive-primary);
+      padding: 2px 8px;
+      border-radius: var(--radius-pill);
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .calc-submit-btn {
+      width: 100%;
+      margin-top: 16px;
+      padding: 16px 24px;
+      font-size: 18px;
+    }
+
+    .guarantee-note {
+      text-align: center;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--color-gray);
+      margin-top: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+
+    /* ==========================================================================
+       VALUE PROPOSITION FEATURE CARDS (30px radius, Ring Shadows)
+       ========================================================================== */
+    .features-section {
+      padding: 64px 0;
+    }
+
+    .section-title-wrap {
+      margin-bottom: 48px;
+      text-align: left;
+    }
+
+    .section-heading-wise {
+      font-family: var(--font-wise-sans);
+      font-size: 64px;
+      font-weight: 900;
+      line-height: 0.85; /* Wise signature line-height */
+      color: var(--color-near-black);
+      letter-spacing: -1.5px;
+      margin-bottom: 16px;
+    }
+
+    .section-lead-text {
+      font-family: var(--font-inter);
+      font-size: 20px;
+      font-weight: 600;
+      color: var(--color-warm-dark);
+      max-width: 640px;
+    }
+
+    .cards-grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+
+    .wise-feature-card {
+      background-color: var(--color-pure-white);
+      border-radius: var(--radius-card-lg); /* 30px */
+      box-shadow: var(--shadow-ring);
+      padding: 36px 32px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      min-height: 380px;
+      transition: box-shadow 200ms ease;
+    }
+
+    .wise-feature-card:hover {
+      box-shadow: rgba(14, 15, 12, 0.24) 0px 0px 0px 1.5px;
+    }
+
+    .card-icon-pill {
+      width: 56px;
+      height: 56px;
+      border-radius: var(--radius-circle);
+      background-color: var(--color-light-mint);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--color-dark-green);
+      margin-bottom: 24px;
+    }
+
+    .card-title-inter {
+      font-family: var(--font-inter);
+      font-size: 26px;
+      font-weight: 600;
+      line-height: 1.23;
+      letter-spacing: -0.39px;
+      color: var(--color-near-black);
+      margin-bottom: 12px;
+    }
+
+    .card-body-inter {
+      font-family: var(--font-inter);
+      font-size: 18px;
+      font-weight: 400;
+      line-height: 1.44;
+      letter-spacing: 0.18px;
+      color: var(--color-warm-dark);
+      margin-bottom: 24px;
+    }
+
+    .card-link-action {
+      font-family: var(--font-inter);
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--color-near-black);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      text-decoration: underline;
+    }
+
+    /* ==========================================================================
+       COMPARISON TABLE: SECTION RADIUS 40px
+       ========================================================================== */
+    .table-section {
+      padding: 40px 0 80px 0;
+    }
+
+    .table-wrapper-card {
+      background-color: var(--color-pure-white);
+      border-radius: var(--radius-section); /* 40px radius as specified */
+      box-shadow: var(--shadow-ring);
+      padding: 40px;
+      overflow-x: auto;
+    }
+
+    .comparison-table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+    }
+
+    .comparison-table th {
+      font-family: var(--font-inter);
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--color-warm-dark);
+      padding: 18px 24px;
+      border-bottom: 2px solid rgba(14, 15, 12, 0.08);
+    }
+
+    .comparison-table th.highlight-th {
+      background-color: rgba(159, 232, 112, 0.15);
+      color: var(--color-near-black);
+      border-radius: 12px 12px 0 0;
+    }
+
+    .comparison-table td {
+      font-family: var(--font-inter);
+      font-size: 16px;
+      font-weight: 600;
+      padding: 20px 24px;
+      border-bottom: 1px solid rgba(14, 15, 12, 0.06);
+    }
+
+    .comparison-table tr:last-child td {
+      border-bottom: none;
+    }
+
+    .comparison-table td.highlight-td {
+      background-color: rgba(159, 232, 112, 0.15);
+      font-weight: 700;
+      color: var(--color-near-black);
+    }
+
+    .comparison-table tr:last-child td.highlight-td {
+      border-radius: 0 0 12px 12px;
+    }
+
+    .table-speed-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--color-sentiment-positive-primary);
+      font-weight: 700;
+    }
+
+    /* ==========================================================================
+       DARK SECTION: NEAR BLACK (#0e0f0c) BACKGROUND
+       ========================================================================== */
+    .dark-showcase-section {
+      background-color: var(--color-near-black);
+      color: var(--color-pure-white);
+      border-radius: var(--radius-section); /* 40px */
+      padding: 72px 56px;
+      margin: 40px 0 80px 0;
+    }
+
+    .dark-section-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 48px;
+      align-items: center;
+    }
+
+    .dark-headline {
+      font-family: var(--font-wise-sans);
+      font-size: 56px;
+      font-weight: 900;
+      line-height: 0.85; /* Wise 0.85 line-height */
+      color: var(--color-pure-white);
+      letter-spacing: -1.5px;
+      margin-bottom: 24px;
+    }
+
+    .dark-subtext {
+      font-family: var(--font-inter);
+      font-size: 18px;
+      font-weight: 400;
+      line-height: 1.5;
+      color: #b3b5b1;
+      margin-bottom: 32px;
+    }
+
+    .currency-capsules-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+    }
+
+    .currency-capsule {
+      background-color: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: var(--radius-card-sm);
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .capsule-curr {
+      font-family: var(--font-inter);
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--color-wise-green);
+    }
+
+    .capsule-bal {
+      font-family: var(--font-inter);
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--color-pure-white);
+    }
+
+    /* ==========================================================================
+       FOOTER
+       ========================================================================== */
+    .wise-footer {
+      background-color: var(--color-canvas-offwhite);
+      border-top: 1px solid rgba(14, 15, 12, 0.12);
+      padding: 64px 0 40px 0;
+    }
+
+    .footer-columns-grid {
+      display: grid;
+      grid-template-columns: 2fr repeat(4, 1fr);
+      gap: 32px;
+      padding-bottom: 48px;
+      border-bottom: 1px solid rgba(14, 15, 12, 0.08);
+    }
+
+    .footer-col h5 {
+      font-family: var(--font-inter);
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--color-near-black);
+      margin-bottom: 18px;
+    }
+
+    .footer-col ul {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .footer-col ul a {
+      font-family: var(--font-inter);
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--color-warm-dark);
+    }
+
+    .footer-col ul a:hover {
+      color: var(--color-near-black);
+    }
+
+    .footer-bottom-bar {
+      padding-top: 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 16px;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--color-gray);
+    }
+
+    /* ==========================================================================
+       RESPONSIVE BEHAVIOR
+       ========================================================================== */
+    @media (max-width: 992px) {
+      .hero-grid {
+        grid-template-columns: 1fr;
+      }
+      .display-hero {
+        font-size: 64px;
+      }
+      .cards-grid-3 {
+        grid-template-columns: 1fr;
+      }
+      .dark-section-grid {
+        grid-template-columns: 1fr;
+      }
+      .footer-columns-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 576px) {
+      .display-hero {
+        font-size: 48px;
+      }
+      .section-heading-wise {
+        font-size: 42px;
+      }
+      .dark-headline {
+        font-size: 38px;
+      }
+      .dark-showcase-section {
+        padding: 36px 20px;
+      }
+      .currency-capsules-grid {
+        grid-template-columns: 1fr;
+      }
+      .footer-columns-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAVIGATION HEADER -->
+  <header class="wise-nav-header">
+    <div class="container">
+      <div class="nav-inner">
+        <div class="nav-brand-wrap">
+          <!-- Wise Logo -->
+          <a href="#" class="wise-wordmark" aria-label="Wise Homepage">
+            <svg class="wise-logo-svg" viewBox="0 0 100 24" xmlns="http://www.w3.org/2000/svg">
+              <path d="M12.5 4.5L5.8 20.8H1.2L6.9 7.2H2.8V4.5H12.5ZM24.8 4.5L18.1 20.8H13.5L19.2 7.2H15.1V4.5H24.8ZM31.2 4.5V20.8H26.8V4.5H31.2ZM46.8 9.8C46.8 6.4 43.6 4.3 39.4 4.3C35.1 4.3 32.1 6.5 32.1 9.6C32.1 14.8 42.4 12.8 42.4 16.5C42.4 17.8 41.1 18.5 39.3 18.5C36.8 18.5 34.6 17.1 33.6 15.5L30.2 18C32.1 20.4 35.4 21.3 39.1 21.3C44.1 21.3 47.1 18.9 47.1 15.5C47.1 10.3 36.8 12.2 36.8 8.6C36.8 7.5 37.9 6.8 39.5 6.8C41.6 6.8 43.3 7.8 44.1 9L46.8 9.8ZM61.8 16.2H52.5C52.8 17.8 54.2 18.7 56.1 18.7C57.8 18.7 59.1 18 59.8 17.1L62.2 19C60.8 20.6 58.7 21.4 56 21.4C51.6 21.4 48.1 18.3 48.1 13C48.1 7.8 51.6 4.4 55.8 4.4C60.2 4.4 62.3 7.8 62.3 12.8C62.3 13.9 62.1 15.3 61.8 16.2ZM52.5 13.5H57.9C57.7 11.8 56.8 7.3 55.7 7.3C54.4 7.3 53 11.2 52.5 13.5Z"/>
+            </svg>
+          </a>
+
+          <!-- Personal / Business segment -->
+          <div class="nav-segment-toggle">
+            <button class="segment-btn active" onclick="switchSegment(this, 'personal')">Personal</button>
+            <button class="segment-btn" onclick="switchSegment(this, 'business')">Business</button>
+          </div>
+
+          <!-- Nav Menu -->
+          <ul class="nav-menu-links">
+            <li class="nav-menu-item"><a href="#money-transfer">Money transfer</a></li>
+            <li class="nav-menu-item"><a href="#multi-currency">Multi-currency card</a></li>
+            <li class="nav-menu-item"><a href="#large-amounts">Large amounts</a></li>
+            <li class="nav-menu-item"><a href="#pricing">Pricing</a></li>
+          </ul>
+        </div>
+
+        <div class="nav-actions">
+          <a href="#login" class="btn-wise-subtle">Log in</a>
+          <a href="#register" class="btn-wise-primary">Register</a>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <!-- HERO SECTION -->
+    <section class="hero-section">
+      <div class="container">
+        <div class="hero-grid">
+          
+          <!-- LEFT HERO INTRO -->
+          <div class="hero-content">
+            <div class="wise-badge-mint">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+              <span>MONEY WITHOUT BORDERS</span>
+            </div>
+
+            <!-- Billboard 900 Wise Sans headline at 0.85 line-height -->
+            <h1 class="display-hero">
+              Move money anywhere, for less.
+            </h1>
+
+            <p class="hero-subtext">
+              Banks charge up to 5x more for hidden exchange rate markups. Wise gives you the real, fair mid-market exchange rate with zero sneaky fees.
+            </p>
+
+            <div style="display: flex; gap: 16px; align-items: center; margin-bottom: 36px;">
+              <a href="#open-account" class="btn-wise-primary" style="padding: 14px 28px; font-size: 18px;">Open an account</a>
+              <a href="#how-it-works" class="btn-wise-subtle" style="padding: 14px 24px; font-size: 18px;">How it works</a>
+            </div>
+
+            <div class="hero-metrics">
+              <div class="metric-item">
+                <span class="metric-val">16M+</span>
+                <span class="metric-label">Happy customers</span>
+              </div>
+              <div class="metric-item">
+                <span class="metric-val">£1.5B</span>
+                <span class="metric-label">Saved in bank fees each year</span>
+              </div>
+              <div class="metric-item">
+                <span class="metric-val">50+</span>
+                <span class="metric-label">Currencies supported</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- RIGHT: LIVE TRANSFER CALCULATOR -->
+          <div>
+            <div class="calculator-card">
+              
+              <!-- Send Box -->
+              <div class="calc-currency-box">
+                <div class="calc-input-col">
+                  <label class="calc-input-label" for="sendAmount">You send exactly</label>
+                  <input type="number" id="sendAmount" class="calc-amount-input" value="1000" oninput="calculateTransfer()">
+                </div>
+                <div class="currency-pill-btn" onclick="toggleCurrency('send')">
+                  <span class="currency-flag">🇬🇧</span>
+                  <span>GBP</span>
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                </div>
+              </div>
+
+              <!-- Transparent Fee Breakdown Stepper -->
+              <div class="fee-breakdown">
+                <div class="fee-row">
+                  <div class="fee-bullet"></div>
+                  <span>Transfer fee: <strong id="feeDisplay" class="fee-text-highlight">£3.42 GBP</strong></span>
+                </div>
+                <div class="fee-row">
+                  <div class="fee-bullet"></div>
+                  <span>Total to convert: <strong id="convertDisplay" class="fee-text-highlight">£996.58 GBP</strong></span>
+                </div>
+                <div class="fee-row">
+                  <div class="fee-bullet green"></div>
+                  <span>Guaranteed rate: <strong id="rateDisplay" class="fee-text-highlight">1.1742</strong></span>
+                  <span class="rate-badge">MID-MARKET</span>
+                </div>
+              </div>
+
+              <!-- Recipient Gets Box -->
+              <div class="calc-currency-box">
+                <div class="calc-input-col">
+                  <label class="calc-input-label" for="receiveAmount">Recipient gets</label>
+                  <input type="text" id="receiveAmount" class="calc-amount-input" value="1,170.18" readonly>
+                </div>
+                <div class="currency-pill-btn" onclick="toggleCurrency('receive')">
+                  <span class="currency-flag">🇪🇺</span>
+                  <span>EUR</span>
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                </div>
+              </div>
+
+              <!-- Delivery Speed -->
+              <div style="display: flex; justify-content: space-between; align-items: center; padding: 6px 4px; font-size: 14px; font-weight: 600;">
+                <span style="color: var(--color-warm-dark);">Should arrive:</span>
+                <span class="table-speed-tag">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                  In seconds
+                </span>
+              </div>
+
+              <!-- Primary CTA Button with scale(1.05) hover -->
+              <button class="btn-wise-primary calc-submit-btn" onclick="alert('Redirecting to secure Wise transfer flow...')">
+                <span>Get started</span>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+              </button>
+
+              <div class="guarantee-note">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+                <span>FCA regulated &amp; safeguarded</span>
+              </div>
+
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- 3-CARD FEATURE SECTION (30px radius, Ring Shadows) -->
+    <section class="features-section">
+      <div class="container">
+        <div class="section-title-wrap">
+          <h2 class="section-heading-wise">Why Wise beats your high street bank</h2>
+          <p class="section-lead-text">Built to make money move as freely, fairly, and transparently as the web itself.</p>
+        </div>
+
+        <div class="cards-grid-3">
+          
+          <div class="wise-feature-card">
+            <div>
+              <div class="card-icon-pill">
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 1v22M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
+              </div>
+              <h3 class="card-title-inter">Fair, honest fees</h3>
+              <p class="card-body-inter">
+                No surprises. You always see the upfront cost down to the last penny, and you get the real exchange rate you see on Google or Reuters.
+              </p>
+            </div>
+            <a href="#rates" class="card-link-action">Compare our fees →</a>
+          </div>
+
+          <div class="wise-feature-card">
+            <div>
+              <div class="card-icon-pill">
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>
+              </div>
+              <h3 class="card-title-inter">Lightning-fast payouts</h3>
+              <p class="card-body-inter">
+                Over 60% of our global transfers arrive in under 20 seconds. Track your funds every step of the journey in real-time notifications.
+              </p>
+            </div>
+            <a href="#speed" class="card-link-action">Explore transfer speeds →</a>
+          </div>
+
+          <div class="wise-feature-card">
+            <div>
+              <div class="card-icon-pill">
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect><line x1="1" y1="10" x2="23" y2="10"></line></svg>
+              </div>
+              <h3 class="card-title-inter">Spend in 160+ countries</h3>
+              <p class="card-body-inter">
+                The Wise debit card auto-converts at the lowest possible fee wherever you tap. No foreign transaction fees, ever.
+              </p>
+            </div>
+            <a href="#card" class="card-link-action">Order your Wise card →</a>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- TRANSPARENT COMPARISON TABLE (40px SECTION RADIUS) -->
+    <section class="table-section">
+      <div class="container">
+        <div class="section-title-wrap">
+          <h2 class="section-heading-wise">Compare the cost of sending £1,000 GBP to EUR</h2>
+        </div>
+
+        <div class="table-wrapper-card">
+          <table class="comparison-table">
+            <thead>
+              <tr>
+                <th>Provider</th>
+                <th>Exchange Rate Markup</th>
+                <th>Upfront Transfer Fee</th>
+                <th>Recipient Receives</th>
+                <th class="highlight-th">Total Saved with Wise</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Wise</strong></td>
+                <td>0.00% (Mid-market)</td>
+                <td>£3.42</td>
+                <td><strong>€1,170.18</strong></td>
+                <td class="highlight-td">— (Baseline)</td>
+              </tr>
+              <tr>
+                <td>Barclays</td>
+                <td>3.20% hidden spread</td>
+                <td>£10.00</td>
+                <td>€1,121.40</td>
+                <td class="highlight-td" style="color: var(--color-sentiment-positive-primary);">+ £48.78 saved</td>
+              </tr>
+              <tr>
+                <td>HSBC UK</td>
+                <td>2.85% hidden spread</td>
+                <td>£9.50</td>
+                <td>€1,126.90</td>
+                <td class="highlight-td" style="color: var(--color-sentiment-positive-primary);">+ £43.28 saved</td>
+              </tr>
+              <tr>
+                <td>Lloyds Bank</td>
+                <td>3.10% hidden spread</td>
+                <td>£9.50</td>
+                <td>€1,123.80</td>
+                <td class="highlight-td" style="color: var(--color-sentiment-positive-primary);">+ £46.38 saved</td>
+              </tr>
+              <tr>
+                <td>PayPal</td>
+                <td>4.00% currency spread</td>
+                <td>£1.99</td>
+                <td>€1,114.20</td>
+                <td class="highlight-td" style="color: var(--color-sentiment-positive-primary);">+ £55.98 saved</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- DARK SECTION: NEAR BLACK (#0e0f0c) BACKGROUND WITH WISE GREEN ACCENTS -->
+    <div class="container">
+      <section class="dark-showcase-section">
+        <div class="dark-section-grid">
+          <div>
+            <div class="wise-badge-mint" style="background-color: rgba(159, 232, 112, 0.2); color: var(--color-wise-green);">
+              <span>WISE MULTI-CURRENCY ACCOUNT</span>
+            </div>
+            <h2 class="dark-headline">Hold 40+ currencies. Convert in seconds.</h2>
+            <p class="dark-subtext">
+              Get local account details for GBP, EUR, USD, AUD, CAD, and more. Receive salary, client payments, or pensions like a local with zero receiving fees.
+            </p>
+            <div style="display: flex; gap: 16px;">
+              <a href="#open-multi" class="btn-wise-primary">Open multi-currency account</a>
+              <a href="#account-details" class="btn-wise-subtle" style="background-color: rgba(255,255,255,0.12); color: #fff;">Learn more</a>
+            </div>
+          </div>
+
+          <!-- Currency capsules preview -->
+          <div class="currency-capsules-grid">
+            <div class="currency-capsule">
+              <span class="capsule-curr">🇬🇧 British Pound</span>
+              <span class="capsule-bal">£ 4,820.50</span>
+            </div>
+            <div class="currency-capsule">
+              <span class="capsule-curr">🇪🇺 Euro</span>
+              <span class="capsule-bal">€ 3,140.00</span>
+            </div>
+            <div class="currency-capsule">
+              <span class="capsule-curr">🇺🇸 US Dollar</span>
+              <span class="capsule-bal">$ 6,590.20</span>
+            </div>
+            <div class="currency-capsule">
+              <span class="capsule-curr">🇯🇵 Japanese Yen</span>
+              <span class="capsule-bal">¥ 450,000</span>
+            </div>
+            <div class="currency-capsule">
+              <span class="capsule-curr">🇦🇺 Australian Dollar</span>
+              <span class="capsule-bal">A$ 2,800.00</span>
+            </div>
+            <div class="currency-capsule">
+              <span class="capsule-curr">🇨🇭 Swiss Franc</span>
+              <span class="capsule-bal">CHF 1,950.00</span>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="wise-footer">
+    <div class="container">
+      <div class="footer-columns-grid">
+        <div class="footer-col">
+          <svg class="wise-logo-svg" viewBox="0 0 100 24" xmlns="http://www.w3.org/2000/svg" style="margin-bottom: 16px;">
+            <path d="M12.5 4.5L5.8 20.8H1.2L6.9 7.2H2.8V4.5H12.5ZM24.8 4.5L18.1 20.8H13.5L19.2 7.2H15.1V4.5H24.8ZM31.2 4.5V20.8H26.8V4.5H31.2ZM46.8 9.8C46.8 6.4 43.6 4.3 39.4 4.3C35.1 4.3 32.1 6.5 32.1 9.6C32.1 14.8 42.4 12.8 42.4 16.5C42.4 17.8 41.1 18.5 39.3 18.5C36.8 18.5 34.6 17.1 33.6 15.5L30.2 18C32.1 20.4 35.4 21.3 39.1 21.3C44.1 21.3 47.1 18.9 47.1 15.5C47.1 10.3 36.8 12.2 36.8 8.6C36.8 7.5 37.9 6.8 39.5 6.8C41.6 6.8 43.3 7.8 44.1 9L46.8 9.8ZM61.8 16.2H52.5C52.8 17.8 54.2 18.7 56.1 18.7C57.8 18.7 59.1 18 59.8 17.1L62.2 19C60.8 20.6 58.7 21.4 56 21.4C51.6 21.4 48.1 18.3 48.1 13C48.1 7.8 51.6 4.4 55.8 4.4C60.2 4.4 62.3 7.8 62.3 12.8C62.3 13.9 62.1 15.3 61.8 16.2ZM52.5 13.5H57.9C57.7 11.8 56.8 7.3 55.7 7.3C54.4 7.3 53 11.2 52.5 13.5Z"/>
+          </svg>
+          <p style="font-size: 14px; font-weight: 400; color: var(--color-warm-dark); line-height: 1.5;">
+            Wise Payments Limited is authorised by the Financial Conduct Authority under the Electronic Money Regulations 2011, Firm Reference 900508.
+          </p>
+        </div>
+
+        <div class="footer-col">
+          <h5>Company &amp; Team</h5>
+          <ul>
+            <li><a href="#about">About Wise</a></li>
+            <li><a href="#mission">Our mission</a></li>
+            <li><a href="#careers">Careers</a></li>
+            <li><a href="#press">Press</a></li>
+            <li><a href="#investors">Investor relations</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h5>Products</h5>
+          <ul>
+            <li><a href="#money-transfer">International transfer</a></li>
+            <li><a href="#account">Wise Account</a></li>
+            <li><a href="#card">Wise Debit Card</a></li>
+            <li><a href="#business">Wise Business</a></li>
+            <li><a href="#platform">Wise Platform (API)</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h5>Resources</h5>
+          <ul>
+            <li><a href="#rate-alerts">Rate alerts</a></li>
+            <li><a href="#converter">Currency converter</a></li>
+            <li><a href="#swift">SWIFT / BIC codes</a></li>
+            <li><a href="#iban">IBAN calculator</a></li>
+            <li><a href="#community">Mission Roadmap</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h5>Support</h5>
+          <ul>
+            <li><a href="#help">Help centre</a></li>
+            <li><a href="#status">System status</a></li>
+            <li><a href="#security">Security &amp; Fraud</a></li>
+            <li><a href="#complaints">Complaints</a></li>
+            <li><a href="#contact">Contact us</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="footer-bottom-bar">
+        <span>© 2026 Wise Payments Ltd. All rights reserved.</span>
+        <div style="display: flex; gap: 20px;">
+          <a href="#privacy" style="color: var(--color-gray);">Privacy policy</a>
+          <a href="#terms" style="color: var(--color-gray);">Terms &amp; conditions</a>
+          <a href="#cookies" style="color: var(--color-gray);">Cookie policy</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Interactive JavaScript -->
+  <script>
+    const rate = 1.1742;
+    const feeRate = 0.00342;
+
+    function calculateTransfer() {
+      const input = document.getElementById('sendAmount');
+      const val = parseFloat(input.value) || 0;
+      const fee = Math.max(0.65, (val * feeRate)).toFixed(2);
+      const toConvert = Math.max(0, val - fee).toFixed(2);
+      const recipient = (toConvert * rate).toFixed(2);
+
+      document.getElementById('feeDisplay').textContent = '£' + fee + ' GBP';
+      document.getElementById('convertDisplay').textContent = '£' + toConvert + ' GBP';
+      document.getElementById('receiveAmount').value = Number(recipient).toLocaleString('en-US', { minimumFractionDigits: 2 });
+    }
+
+    function switchSegment(btn, mode) {
+      document.querySelectorAll('.segment-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+    }
+
+    function toggleCurrency(type) {
+      // Functional mock toggle
+      alert('Selecting ' + type + ' currency. Wise supports 50+ world currencies.');
+    }
+  </script>
+
+</body>
+</html>

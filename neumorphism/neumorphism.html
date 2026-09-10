@@ -1,0 +1,1610 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Neumorphism — Tactile Extruded Interface System</title>
+  <meta name="description" content="Official tactile website built strictly with the Neumorphism design system. Soft, extruded UI elements with inner and outer shadows on monochromatic surfaces.">
+
+  <!-- Google Fonts: Space Mono (primary & display), JetBrains Mono (mono) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700;800&family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
+
+  <style>
+    /* ─────────────────────────────────────────────────────────────
+       1. EXACT TOKENS FROM neumorphism/DESIGN.md
+       ───────────────────────────────────────────────────────────── */
+    :root {
+      /* Foundations */
+      --color-primary: #006666;      /* Primary teal CTA emphasis */
+      --color-primary-hover: #007a7a;
+      --color-primary-active: #004d4d;
+      --color-secondary: #F1F2F5;    /* Soft near-white / cool grey */
+      --color-success: #00A63D;      /* Success token */
+      --color-warning: #FE9900;      /* Warning token */
+      --color-danger: #FF2157;       /* Danger token */
+      --color-surface: #E7E5E4;      /* Monochromatic tactile base surface */
+      --color-text: #1E2938;         /* Deep slate body text */
+      --color-neutral: #E7E5E4;      /* Neutral surface token */
+
+      /* Neumorphic Lighting Physics (Surface #E7E5E4) */
+      /* Light angle: 135deg (top-left light source) */
+      --shadow-light: #ffffff;
+      --shadow-dark: #c2c0bf;
+      --shadow-dark-deep: #a8a6a5;
+
+      /* Outer Raised Elevations (Embossed / Extruded) */
+      --neu-raised-sm: 4px 4px 8px var(--shadow-dark), -4px -4px 8px var(--shadow-light);
+      --neu-raised: 8px 8px 16px var(--shadow-dark), -8px -8px 16px var(--shadow-light);
+      --neu-raised-lg: 12px 12px 24px var(--shadow-dark), -12px -12px 24px var(--shadow-light);
+      --neu-raised-teal: 6px 6px 16px rgba(0, 60, 60, 0.42), -6px -6px 14px rgba(255, 255, 255, 0.9);
+
+      /* Inset Depressed Elevations (Grooves / Pressed / Embedded) */
+      --neu-inset-sm: inset 3px 3px 6px var(--shadow-dark), inset -3px -3px 6px var(--shadow-light);
+      --neu-inset: inset 5px 5px 10px var(--shadow-dark), inset -5px -5px 10px var(--shadow-light);
+      --neu-inset-deep: inset 7px 7px 14px var(--shadow-dark-deep), inset -7px -7px 14px var(--shadow-light);
+      --neu-inset-teal: inset 4px 4px 8px rgba(0, 30, 30, 0.7), inset -4px -4px 8px rgba(0, 150, 150, 0.3);
+
+      /* Focus Ring */
+      --neu-focus: 0 0 0 3px rgba(0, 102, 102, 0.45);
+
+      /* Typography Families */
+      --font-primary: 'Space Mono', monospace;
+      --font-display: 'Space Mono', monospace;
+      --font-mono: 'JetBrains Mono', monospace;
+
+      /* Desktop-First Expressive Scale */
+      --text-xs: 12px;
+      --text-sm: 14px;
+      --text-base: 16px;
+      --text-md: 18px;
+      --text-lg: 22px;
+      --text-xl: 28px;
+      --text-2xl: 36px;
+      --text-3xl: 48px;
+
+      /* Compact Density Mode Spacing Scale */
+      --space-4: 4px;
+      --space-8: 8px;
+      --space-12: 12px;
+      --space-16: 16px;
+      --space-20: 20px;
+      --space-24: 24px;
+      --space-32: 32px;
+      --space-48: 48px;
+
+      /* Radii */
+      --radius-sm: 8px;
+      --radius-md: 14px;
+      --radius-lg: 20px;
+      --radius-pill: 9999px;
+
+      /* Motion (150-250ms with stable easing) */
+      --motion-fast: 150ms cubic-bezier(0.2, 0, 0, 1);
+      --motion-base: 220ms cubic-bezier(0.2, 0, 0, 1);
+    }
+
+    /* Reset & Monochromatic Foundation */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      font-size: 16px;
+      background-color: var(--color-surface);
+      color: var(--color-text);
+      font-family: var(--font-primary);
+      scroll-behavior: smooth;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    body {
+      background-color: var(--color-surface);
+      color: var(--color-text);
+      line-height: 1.5;
+      overflow-x: hidden;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin-left: auto;
+      margin-right: auto;
+      padding-left: var(--space-24);
+      padding-right: var(--space-24);
+    }
+
+    /* Selection */
+    ::selection {
+      background: var(--color-primary);
+      color: var(--color-secondary);
+    }
+
+    /* ─────────────────────────────────────────────────────────────
+       2. TYPOGRAPHY (Space Mono Display & Body + JetBrains Mono)
+       ───────────────────────────────────────────────────────────── */
+    h1, h2, h3, h4 {
+      font-family: var(--font-display);
+      font-weight: 700;
+      color: var(--color-text);
+      text-transform: uppercase;
+      letter-spacing: -0.02em;
+    }
+
+    h1 {
+      font-size: clamp(28px, 4.5vw, 48px);
+      line-height: 1.15;
+    }
+
+    h2 {
+      font-size: clamp(22px, 3vw, 32px);
+      line-height: 1.2;
+    }
+
+    h3 {
+      font-size: var(--text-lg);
+      line-height: 1.3;
+    }
+
+    p {
+      font-family: var(--font-primary);
+      font-size: var(--text-base);
+      color: #374151;
+      line-height: 1.6;
+    }
+
+    .mono-code {
+      font-family: var(--font-mono);
+    }
+
+    /* ─────────────────────────────────────────────────────────────
+       3. NAVIGATION BAR
+       ───────────────────────────────────────────────────────────── */
+    .header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background-color: var(--color-surface);
+      padding-top: var(--space-16);
+      padding-bottom: var(--space-16);
+      box-shadow: 0 4px 12px rgba(194, 192, 191, 0.5);
+    }
+
+    .nav-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--space-16);
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: var(--space-12);
+      text-decoration: none;
+      color: var(--color-text);
+    }
+
+    .brand-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: var(--radius-md);
+      background: var(--color-surface);
+      box-shadow: var(--neu-raised-sm);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--color-primary);
+      font-weight: 700;
+      font-size: var(--text-base);
+    }
+
+    .brand-text {
+      font-family: var(--font-display);
+      font-size: var(--text-lg);
+      font-weight: 700;
+      letter-spacing: -0.01em;
+    }
+
+    .nav-links {
+      display: none;
+      align-items: center;
+      gap: var(--space-20);
+      list-style: none;
+    }
+
+    @media (min-width: 860px) {
+      .nav-links {
+        display: flex;
+      }
+    }
+
+    .nav-link {
+      color: var(--color-text);
+      text-decoration: none;
+      font-size: var(--text-sm);
+      font-weight: 700;
+      padding: var(--space-8) var(--space-16);
+      border-radius: var(--radius-sm);
+      transition: all var(--motion-fast);
+    }
+
+    .nav-link:hover {
+      box-shadow: var(--neu-inset-sm);
+      color: var(--color-primary);
+    }
+
+    .nav-link.active {
+      box-shadow: var(--neu-inset-sm);
+      color: var(--color-primary);
+    }
+
+    /* ─────────────────────────────────────────────────────────────
+       4. NEUMORPHIC BUTTONS & TACTILE CONTROLS
+       Primary action uses #006666; secondary actions stay neutral.
+       ───────────────────────────────────────────────────────────── */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--space-8);
+      font-family: var(--font-primary);
+      font-size: var(--text-sm);
+      font-weight: 700;
+      padding: var(--space-12) var(--space-20);
+      border-radius: var(--radius-md);
+      border: none;
+      cursor: pointer;
+      text-decoration: none;
+      text-transform: uppercase;
+      letter-spacing: 0.02em;
+      transition: all var(--motion-fast);
+      outline: none;
+      user-select: none;
+    }
+
+    .btn:focus-visible {
+      box-shadow: var(--neu-focus);
+    }
+
+    /* Primary CTA Button (#006666) */
+    .btn-primary {
+      background-color: var(--color-primary);
+      color: var(--color-secondary);
+      box-shadow: var(--neu-raised-teal);
+    }
+
+    .btn-primary:hover {
+      background-color: var(--color-primary-hover);
+      transform: translateY(-1px);
+    }
+
+    .btn-primary:active, .btn-primary.is-active {
+      background-color: var(--color-primary-active);
+      box-shadow: var(--neu-inset-teal);
+      transform: translateY(1px);
+    }
+
+    /* Secondary Neutral Button (#E7E5E4 Surface) */
+    .btn-secondary {
+      background-color: var(--color-surface);
+      color: var(--color-text);
+      box-shadow: var(--neu-raised-sm);
+    }
+
+    .btn-secondary:hover {
+      color: var(--color-primary);
+      box-shadow: var(--neu-raised);
+      transform: translateY(-1px);
+    }
+
+    .btn-secondary:active, .btn-secondary.is-active {
+      box-shadow: var(--neu-inset);
+      transform: translateY(1px);
+    }
+
+    .btn-pill {
+      border-radius: var(--radius-pill);
+    }
+
+    .btn-sm {
+      padding: var(--space-8) var(--space-12);
+      font-size: var(--text-xs);
+    }
+
+    .btn:disabled {
+      opacity: 0.55;
+      cursor: not-allowed;
+      box-shadow: var(--neu-inset-sm);
+      transform: none !important;
+    }
+
+    /* ─────────────────────────────────────────────────────────────
+       5. BADGES & EMBOSSED TAGS
+       ───────────────────────────────────────────────────────────── */
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-8);
+      padding: var(--space-4) var(--space-12);
+      border-radius: var(--radius-pill);
+      font-size: var(--text-xs);
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    .badge-extruded {
+      background: var(--color-surface);
+      color: var(--color-text);
+      box-shadow: var(--neu-raised-sm);
+    }
+
+    .badge-sunken {
+      background: var(--color-surface);
+      color: var(--color-primary);
+      box-shadow: var(--neu-inset-sm);
+    }
+
+    .badge-teal {
+      background: var(--color-primary);
+      color: var(--color-secondary);
+      box-shadow: 2px 2px 6px rgba(0, 60, 60, 0.4);
+    }
+
+    .badge-success {
+      background: var(--color-surface);
+      color: var(--color-success);
+      box-shadow: var(--neu-inset-sm);
+    }
+
+    .badge-warning {
+      background: var(--color-surface);
+      color: var(--color-warning);
+      box-shadow: var(--neu-inset-sm);
+    }
+
+    .badge-danger {
+      background: var(--color-surface);
+      color: var(--color-danger);
+      box-shadow: var(--neu-inset-sm);
+    }
+
+    .status-pip {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--color-primary);
+      box-shadow: 0 0 6px var(--color-primary);
+    }
+
+    /* ─────────────────────────────────────────────────────────────
+       6. HERO SECTION
+       Soft tactile extruded surfaces on monochromatic canvas
+       ───────────────────────────────────────────────────────────── */
+    .hero {
+      padding-top: var(--space-48);
+      padding-bottom: 64px;
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: var(--space-48);
+      align-items: center;
+    }
+
+    @media (min-width: 980px) {
+      .hero-grid {
+        grid-template-columns: 1.15fr 0.85fr;
+      }
+    }
+
+    .hero-eyebrow {
+      display: flex;
+      gap: var(--space-8);
+      margin-bottom: var(--space-16);
+      align-items: center;
+    }
+
+    .hero-title {
+      margin-bottom: var(--space-16);
+    }
+
+    .hero-title span {
+      color: var(--color-primary);
+    }
+
+    .hero-lead {
+      font-size: var(--text-md);
+      color: #374151;
+      max-width: 600px;
+      margin-bottom: var(--space-24);
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-16);
+      margin-bottom: var(--space-32);
+    }
+
+    .hero-specs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-16);
+      font-size: var(--text-xs);
+      font-family: var(--font-mono);
+      color: #4B5563;
+    }
+
+    /* Hardware Simulator Card */
+    .hardware-card {
+      background: var(--color-surface);
+      border-radius: var(--radius-lg);
+      padding: var(--space-24);
+      box-shadow: var(--neu-raised-lg);
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-20);
+    }
+
+    .hardware-screen {
+      background: #D9D7D5;
+      border-radius: var(--radius-md);
+      padding: var(--space-16);
+      box-shadow: var(--neu-inset);
+      font-family: var(--font-mono);
+      font-size: var(--text-xs);
+      color: var(--color-text);
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-8);
+    }
+
+    .screen-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    /* Segmented switch controller */
+    .segmented-control {
+      display: flex;
+      background: var(--color-surface);
+      padding: var(--space-4);
+      border-radius: var(--radius-md);
+      box-shadow: var(--neu-inset-sm);
+      gap: var(--space-4);
+    }
+
+    .segment-btn {
+      flex: 1;
+      padding: var(--space-8) var(--space-12);
+      border: none;
+      background: transparent;
+      color: var(--color-text);
+      font-family: var(--font-primary);
+      font-size: var(--text-xs);
+      font-weight: 700;
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      transition: all var(--motion-fast);
+      text-transform: uppercase;
+    }
+
+    .segment-btn.active {
+      background: var(--color-surface);
+      color: var(--color-primary);
+      box-shadow: var(--neu-raised-sm);
+    }
+
+    /* Tactile Push Buttons Grid */
+    .keypad-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: var(--space-12);
+    }
+
+    .key-btn {
+      aspect-ratio: 1;
+      border-radius: var(--radius-md);
+      background: var(--color-surface);
+      box-shadow: var(--neu-raised-sm);
+      border: none;
+      font-family: var(--font-display);
+      font-size: var(--text-base);
+      font-weight: 700;
+      color: var(--color-text);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all var(--motion-fast);
+    }
+
+    .key-btn:hover {
+      color: var(--color-primary);
+      transform: translateY(-1px);
+    }
+
+    .key-btn:active, .key-btn.is-pressed {
+      box-shadow: var(--neu-inset-sm);
+      transform: translateY(1px);
+      color: var(--color-primary);
+    }
+
+    /* ─────────────────────────────────────────────────────────────
+       7. DESIGN SYSTEM TOKENS FOUNDATION SHOWCASE
+       ───────────────────────────────────────────────────────────── */
+    .section {
+      padding-top: var(--space-48);
+      padding-bottom: var(--space-48);
+    }
+
+    .section-head {
+      margin-bottom: var(--space-32);
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-8);
+    }
+
+    .token-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      gap: var(--space-20);
+    }
+
+    .neu-card {
+      background: var(--color-surface);
+      border-radius: var(--radius-md);
+      padding: var(--space-20);
+      box-shadow: var(--neu-raised);
+      transition: transform var(--motion-fast), box-shadow var(--motion-fast);
+    }
+
+    .neu-card:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--neu-raised-lg);
+    }
+
+    .token-well {
+      height: 80px;
+      border-radius: var(--radius-sm);
+      margin-bottom: var(--space-12);
+      box-shadow: var(--neu-inset-sm);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: var(--text-xs);
+    }
+
+    .token-title {
+      font-size: var(--text-base);
+      font-weight: 700;
+      margin-bottom: var(--space-4);
+    }
+
+    .token-code {
+      font-family: var(--font-mono);
+      font-size: var(--text-xs);
+      color: var(--color-primary);
+      font-weight: 600;
+    }
+
+    .token-desc {
+      font-size: var(--text-sm);
+      color: #4B5563;
+      margin-top: var(--space-8);
+    }
+
+    /* ─────────────────────────────────────────────────────────────
+       8. COMPONENT LAB & EMBEDDED FORM CONTROLS
+       Strong focus-visible states, clear labels, predictable errors
+       ───────────────────────────────────────────────────────────── */
+    .lab-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: var(--space-24);
+    }
+
+    @media (min-width: 900px) {
+      .lab-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-8);
+      margin-bottom: var(--space-20);
+    }
+
+    .form-label {
+      font-size: var(--text-sm);
+      font-weight: 700;
+      color: var(--color-text);
+      display: flex;
+      justify-content: space-between;
+    }
+
+    /* Embedded Inset Inputs */
+    .neu-input {
+      width: 100%;
+      height: 48px;
+      padding: 0 var(--space-16);
+      background-color: var(--color-surface);
+      border: 1px solid rgba(0, 102, 102, 0.08);
+      border-radius: var(--radius-sm);
+      box-shadow: var(--neu-inset-sm);
+      font-family: var(--font-primary);
+      font-size: var(--text-sm);
+      color: var(--color-text);
+      outline: none;
+      transition: all var(--motion-fast);
+    }
+
+    /* Strong focus-visible states as required by DESIGN.md */
+    .neu-input:focus, .neu-input:focus-visible {
+      box-shadow: var(--neu-inset-deep), 0 0 0 2px var(--color-primary);
+      border-color: var(--color-primary);
+    }
+
+    .neu-input.error {
+      box-shadow: var(--neu-inset-sm), 0 0 0 2px var(--color-danger);
+      border-color: var(--color-danger);
+    }
+
+    .form-helper {
+      font-size: var(--text-xs);
+      font-family: var(--font-mono);
+      color: #6B7280;
+    }
+
+    .form-helper.error-text {
+      color: var(--color-danger);
+      font-weight: 700;
+    }
+
+    /* Neumorphic Toggle Switch */
+    .toggle-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: var(--space-12) 0;
+      border-bottom: 1px dashed #D1CFCD;
+    }
+
+    .neu-switch {
+      position: relative;
+      display: inline-block;
+      width: 58px;
+      height: 32px;
+    }
+
+    .neu-switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+
+    .neu-switch-slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: var(--color-surface);
+      box-shadow: var(--neu-inset-sm);
+      border-radius: var(--radius-pill);
+      transition: var(--motion-fast);
+    }
+
+    .neu-switch-slider:before {
+      position: absolute;
+      content: "";
+      height: 24px;
+      width: 24px;
+      left: 4px;
+      bottom: 4px;
+      background-color: var(--color-surface);
+      box-shadow: var(--neu-raised-sm);
+      border-radius: 50%;
+      transition: var(--motion-fast);
+    }
+
+    .neu-switch input:checked + .neu-switch-slider {
+      background-color: var(--color-surface);
+    }
+
+    .neu-switch input:checked + .neu-switch-slider:before {
+      transform: translateX(26px);
+      background-color: var(--color-primary);
+      box-shadow: 2px 2px 5px rgba(0, 60, 60, 0.4);
+    }
+
+    /* Embedded Tactile Range Slider */
+    .neu-range-container {
+      margin-top: var(--space-12);
+      margin-bottom: var(--space-16);
+    }
+
+    .neu-range {
+      width: 100%;
+      height: 12px;
+      appearance: none;
+      -webkit-appearance: none;
+      background: var(--color-surface);
+      border-radius: var(--radius-pill);
+      box-shadow: var(--neu-inset-sm);
+      outline: none;
+    }
+
+    .neu-range::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      background: var(--color-surface);
+      box-shadow: var(--neu-raised-sm);
+      cursor: pointer;
+      border: 2px solid var(--color-primary);
+      transition: all var(--motion-fast);
+    }
+
+    .neu-range::-webkit-slider-thumb:hover {
+      transform: scale(1.1);
+    }
+
+    /* ─────────────────────────────────────────────────────────────
+       9. ARCHITECTURE / FEATURE CARDS
+       Consistent radii, spacing, and elevation strategy
+       ───────────────────────────────────────────────────────────── */
+    .features-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: var(--space-24);
+    }
+
+    .feature-card {
+      background: var(--color-surface);
+      border-radius: var(--radius-lg);
+      padding: var(--space-32);
+      box-shadow: var(--neu-raised);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: var(--space-20);
+      transition: all var(--motion-fast);
+    }
+
+    .feature-card:hover {
+      transform: translateY(-3px);
+      box-shadow: var(--neu-raised-lg);
+    }
+
+    .feature-icon-well {
+      width: 56px;
+      height: 56px;
+      border-radius: var(--radius-md);
+      background: var(--color-surface);
+      box-shadow: var(--neu-raised-sm);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: var(--text-xl);
+      color: var(--color-primary);
+    }
+
+    /* ─────────────────────────────────────────────────────────────
+       10. TACTILE PRICING MATRIX
+       ───────────────────────────────────────────────────────────── */
+    .pricing-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: var(--space-24);
+      margin-top: var(--space-32);
+    }
+
+    .price-card {
+      background: var(--color-surface);
+      border-radius: var(--radius-lg);
+      padding: var(--space-32);
+      box-shadow: var(--neu-raised);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: var(--space-24);
+    }
+
+    .price-card.featured {
+      box-shadow: var(--neu-raised-lg);
+      border: 2px solid rgba(0, 102, 102, 0.2);
+    }
+
+    .price-val {
+      font-size: var(--text-3xl);
+      font-weight: 700;
+      color: var(--color-text);
+      display: flex;
+      align-items: baseline;
+      gap: var(--space-4);
+    }
+
+    .price-sub {
+      font-size: var(--text-sm);
+      color: #6B7280;
+      font-family: var(--font-mono);
+    }
+
+    .feature-sunken-list {
+      list-style: none;
+      background: var(--color-surface);
+      border-radius: var(--radius-md);
+      box-shadow: var(--neu-inset-sm);
+      padding: var(--space-16);
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-12);
+      font-size: var(--text-sm);
+    }
+
+    .feature-sunken-item {
+      display: flex;
+      align-items: center;
+      gap: var(--space-8);
+    }
+
+    .check-mark {
+      color: var(--color-primary);
+      font-weight: 700;
+    }
+
+    /* ─────────────────────────────────────────────────────────────
+       11. ANTI-PATTERNS & SHADOW EQUATION SPEC
+       ───────────────────────────────────────────────────────────── */
+    .code-console {
+      background: var(--color-surface);
+      border-radius: var(--radius-md);
+      padding: var(--space-20);
+      box-shadow: var(--neu-inset);
+      font-family: var(--font-mono);
+      font-size: var(--text-sm);
+      color: var(--color-text);
+      overflow-x: auto;
+      line-height: 1.6;
+    }
+
+    /* ─────────────────────────────────────────────────────────────
+       12. FOOTER
+       ───────────────────────────────────────────────────────────── */
+    .footer {
+      background: var(--color-surface);
+      padding-top: var(--space-48);
+      padding-bottom: var(--space-32);
+      box-shadow: 0 -4px 16px rgba(194, 192, 191, 0.4);
+      margin-top: var(--space-48);
+    }
+
+    .footer-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: var(--space-32);
+      margin-bottom: var(--space-32);
+    }
+
+    .footer-title {
+      font-size: var(--text-base);
+      margin-bottom: var(--space-16);
+    }
+
+    .footer-links {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-8);
+      font-size: var(--text-sm);
+    }
+
+    .footer-links a {
+      color: #4B5563;
+      text-decoration: none;
+      transition: color var(--motion-fast);
+    }
+
+    .footer-links a:hover {
+      color: var(--color-primary);
+    }
+
+    .footer-bottom {
+      padding-top: var(--space-20);
+      border-top: 1px solid #D1CFCD;
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-12);
+      align-items: center;
+      justify-content: space-between;
+      font-size: var(--text-xs);
+      font-family: var(--font-mono);
+      color: #6B7280;
+    }
+
+    @media (min-width: 680px) {
+      .footer-bottom {
+        flex-direction: row;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ==================== HEADER ==================== -->
+  <header class="header">
+    <div class="container nav-inner">
+      <a href="#hero" class="brand">
+        <div class="brand-icon">⬡</div>
+        <span class="brand-text">NEUMORPHISM</span>
+      </a>
+
+      <ul class="nav-links">
+        <li><a href="#tokens" class="nav-link">Tokens</a></li>
+        <li><a href="#physics" class="nav-link">Shadow Physics</a></li>
+        <li><a href="#lab" class="nav-link">Control Lab</a></li>
+        <li><a href="#architecture" class="nav-link">Modules</a></li>
+        <li><a href="#pricing" class="nav-link">Pricing</a></li>
+      </ul>
+
+      <div style="display: flex; align-items: center; gap: var(--space-12);">
+        <span class="badge badge-sunken">
+          <span class="status-pip"></span>
+          SURFACE: #E7E5E4
+        </span>
+        <a href="#lab" class="btn btn-primary btn-sm">Engage Matrix</a>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <!-- ==================== HERO SECTION ==================== -->
+    <section id="hero" class="hero">
+      <div class="container hero-grid">
+        <div>
+          <div class="hero-eyebrow">
+            <span class="badge badge-extruded">Morphism &amp; Effects</span>
+            <span class="badge badge-teal">Tactile Matrix</span>
+          </div>
+
+          <h1 class="hero-title">
+            Soft extruded surfaces with <span>tactile dual shadows</span>.
+          </h1>
+
+          <p class="hero-lead">
+            Faithful realization of the Neumorphic foundation: extruded buttons, embedded inputs, and concave controls formed through opposite-angle light &amp; dark shadow pairs on continuous <code class="mono-code">#E7E5E4</code> monochromatic stone.
+          </p>
+
+          <div class="hero-actions">
+            <button class="btn btn-primary" onclick="triggerDepress(this)">
+              Primary CTA (#006666)
+            </button>
+            <button class="btn btn-secondary" onclick="triggerDepress(this)">
+              Neutral Extruded
+            </button>
+            <a href="#tokens" class="btn btn-secondary">
+              Inspect Tokens
+            </a>
+          </div>
+
+          <div class="hero-specs">
+            <span>✓ Primary: #006666</span>
+            <span>✓ Surface: #E7E5E4</span>
+            <span>✓ Space Mono Type</span>
+            <span>✓ 150-250ms Easing</span>
+          </div>
+        </div>
+
+        <!-- Hardware Simulator Interactive Console -->
+        <div class="hardware-card">
+          <div style="display: flex; justify-content: space-between; align-items: center;">
+            <span class="badge badge-sunken">HARDWARE CONSOLE :: DEV-01</span>
+            <span class="badge badge-teal" id="hardware-status">STANDBY</span>
+          </div>
+
+          <div class="hardware-screen">
+            <div class="screen-row">
+              <span>SYSTEM: NEUMO//CORE 2.4</span>
+              <span id="screen-voltage">VOLT: 3.3V</span>
+            </div>
+            <div class="screen-row">
+              <span>TEAL CTA CHANNEL:</span>
+              <span style="color: var(--color-primary); font-weight: bold;">#006666 ENGAGED</span>
+            </div>
+            <div class="screen-row">
+              <span>SURFACE AMBIENT REFLECTION:</span>
+              <span>#E7E5E4 MONOCHROME</span>
+            </div>
+          </div>
+
+          <!-- Segmented Tab Switcher -->
+          <div class="segmented-control">
+            <button class="segment-btn active" onclick="setSegment(this, 'TACTILE')">Tactile</button>
+            <button class="segment-btn" onclick="setSegment(this, 'EMBEDDED')">Embedded</button>
+            <button class="segment-btn" onclick="setSegment(this, 'ANALYTICS')">Analytics</button>
+          </div>
+
+          <!-- Tactile Keypad -->
+          <div class="keypad-grid">
+            <button class="key-btn" onclick="pressKey(this, '01')">01</button>
+            <button class="key-btn" onclick="pressKey(this, '02')">02</button>
+            <button class="key-btn" onclick="pressKey(this, '03')">03</button>
+            <button class="key-btn" onclick="pressKey(this, 'CLR')" style="color: var(--color-danger);">✕</button>
+          </div>
+
+          <div style="display: flex; justify-content: space-between; align-items: center; padding-top: var(--space-8);">
+            <span class="form-label" style="font-size: var(--text-xs);">Extrusion Depth</span>
+            <span class="mono-code" style="font-size: var(--text-xs); color: var(--color-primary);" id="haptic-val">8px Dual Light</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== FOUNDATION TOKENS ==================== -->
+    <section id="tokens" class="section" style="background: rgba(220, 218, 216, 0.4);">
+      <div class="container">
+        <div class="section-head">
+          <span class="badge badge-extruded" style="width: fit-content;">Color Architecture</span>
+          <h2>Exact Foundation Color Palette</h2>
+          <p style="max-width: 650px;">
+            The 8 exact tokens declared in <code class="mono-code">neumorphism/DESIGN.md</code>. Soft monochromatic surfaces form the canvas for primary teal CTAs and semantic indicators.
+          </p>
+        </div>
+
+        <div class="token-grid">
+          <!-- Primary -->
+          <div class="neu-card">
+            <div class="token-well" style="background: var(--color-primary); color: #FFFFFF;">
+              #006666
+            </div>
+            <div class="token-title">Primary</div>
+            <div class="token-code">--color-primary</div>
+            <p class="token-desc">Primary CTA emphasis; signature deep teal anchor.</p>
+          </div>
+
+          <!-- Secondary -->
+          <div class="neu-card">
+            <div class="token-well" style="background: var(--color-secondary); color: var(--color-text);">
+              #F1F2F5
+            </div>
+            <div class="token-title">Secondary</div>
+            <div class="token-code">--color-secondary</div>
+            <p class="token-desc">Cool crisp highlight and secondary control contrast.</p>
+          </div>
+
+          <!-- Surface -->
+          <div class="neu-card">
+            <div class="token-well" style="background: var(--color-surface); color: var(--color-text);">
+              #E7E5E4
+            </div>
+            <div class="token-title">Surface</div>
+            <div class="token-code">--color-surface</div>
+            <p class="token-desc">Monochromatic foundation enabling physical bevel light.</p>
+          </div>
+
+          <!-- Text -->
+          <div class="neu-card">
+            <div class="token-well" style="background: var(--color-text); color: #FFFFFF;">
+              #1E2938
+            </div>
+            <div class="token-title">Text</div>
+            <div class="token-code">--color-text</div>
+            <p class="token-desc">Deep slate body copy optimizing scanability and contrast.</p>
+          </div>
+
+          <!-- Success -->
+          <div class="neu-card">
+            <div class="token-well" style="background: var(--color-success); color: #FFFFFF;">
+              #00A63D
+            </div>
+            <div class="token-title">Success</div>
+            <div class="token-code">--color-success</div>
+            <p class="token-desc">Telemetry confirmations and calibrated actuators.</p>
+          </div>
+
+          <!-- Warning -->
+          <div class="neu-card">
+            <div class="token-well" style="background: var(--color-warning); color: #FFFFFF;">
+              #FE9900
+            </div>
+            <div class="token-title">Warning</div>
+            <div class="token-code">--color-warning</div>
+            <p class="token-desc">Thermal drift alerts and resource limits.</p>
+          </div>
+
+          <!-- Danger -->
+          <div class="neu-card">
+            <div class="token-well" style="background: var(--color-danger); color: #FFFFFF;">
+              #FF2157
+            </div>
+            <div class="token-title">Danger</div>
+            <div class="token-code">--color-danger</div>
+            <p class="token-desc">Critical overrides, disengagement alerts.</p>
+          </div>
+
+          <!-- Neutral -->
+          <div class="neu-card">
+            <div class="token-well" style="background: var(--color-neutral); color: var(--color-text);">
+              #E7E5E4
+            </div>
+            <div class="token-title">Neutral</div>
+            <div class="token-code">--color-neutral</div>
+            <p class="token-desc">Derived from surface token for official compatibility.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== SHADOW PHYSICS SPEC ==================== -->
+    <section id="physics" class="section">
+      <div class="container">
+        <div class="section-head">
+          <span class="badge badge-sunken" style="width: fit-content;">Optics &amp; Bevels</span>
+          <h2>Shadow Physics &amp; Dual Lighting</h2>
+          <p style="max-width: 650px;">
+            True neumorphism requires two opposite shadows: a negative-offset pure light reflection (<code class="mono-code">#ffffff</code>) and a positive-offset dark absorption shadow (<code class="mono-code">#c2c0bf</code>).
+          </p>
+        </div>
+
+        <div class="lab-grid">
+          <!-- Raised vs Inset Specimen -->
+          <div class="neu-card" style="display: flex; flex-direction: column; gap: var(--space-20);">
+            <h3>1. Outer Raised (Extruded)</h3>
+            <p class="token-desc">
+              Light bounces off the top-left edge while casting a soft shadow to the bottom-right. Creates an elevated surface that begs to be touched.
+            </p>
+            <div style="display: flex; gap: var(--space-16); align-items: center; justify-content: center; padding: var(--space-24) 0;">
+              <div style="width: 110px; height: 110px; border-radius: 16px; background: var(--color-surface); box-shadow: var(--neu-raised); display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 13px;">
+                RAISED
+              </div>
+              <div style="width: 110px; height: 110px; border-radius: 16px; background: var(--color-primary); box-shadow: var(--neu-raised-teal); color: #FFFFFF; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 13px;">
+                TEAL CTA
+              </div>
+            </div>
+            <div class="code-console">
+box-shadow: 8px 8px 16px #c2c0bf,
+           -8px -8px 16px #ffffff;
+            </div>
+          </div>
+
+          <!-- Inset Specimen -->
+          <div class="neu-card" style="display: flex; flex-direction: column; gap: var(--space-20);">
+            <h3>2. Inner Sunken (Depressed / Inset)</h3>
+            <p class="token-desc">
+              Shadows cast inside the perimeter indicate an engraved slot, a sunken screen, a hollow track, or an actively pressed button.
+            </p>
+            <div style="display: flex; gap: var(--space-16); align-items: center; justify-content: center; padding: var(--space-24) 0;">
+              <div style="width: 110px; height: 110px; border-radius: 16px; background: var(--color-surface); box-shadow: var(--neu-inset); display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 13px; color: var(--color-primary);">
+                INSET
+              </div>
+              <div style="width: 110px; height: 110px; border-radius: 16px; background: var(--color-primary-active); box-shadow: var(--neu-inset-teal); color: #FFFFFF; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 13px;">
+                ACTIVE
+              </div>
+            </div>
+            <div class="code-console">
+box-shadow: inset 5px 5px 10px #c2c0bf,
+           inset -5px -5px 10px #ffffff;
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== INTERACTIVE CONTROL LAB ==================== -->
+    <section id="lab" class="section" style="background: rgba(220, 218, 216, 0.4);">
+      <div class="container">
+        <div class="section-head">
+          <span class="badge badge-extruded" style="width: fit-content;">Interactive Spec</span>
+          <h2>Component Laboratory &amp; Inputs</h2>
+          <p style="max-width: 650px;">
+            Test button states, form inputs with strong focus-visible outlines, tactile switches, and calibrated sliders.
+          </p>
+        </div>
+
+        <div class="lab-grid">
+          <!-- Form Inputs & Validation -->
+          <div class="neu-card">
+            <h3>Embedded Input Fields</h3>
+            <p class="token-desc" style="margin-bottom: var(--space-16);">
+              Embedded into the stone surface with inset bevels. Receives a strong teal focus ring on activation.
+            </p>
+
+            <form onsubmit="event.preventDefault(); validateNeumoForm();">
+              <div class="form-group">
+                <label class="form-label" for="node-name">
+                  <span>Actuator Node Label</span>
+                  <span class="mono-code" style="color: var(--color-primary);">[ASCII ONLY]</span>
+                </label>
+                <input type="text" id="node-name" class="neu-input" value="TACTILE-CORE-DELTA" placeholder="Enter node identifier...">
+                <span class="form-helper">Click inside to test the strong focus-visible boundary.</span>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label" for="neu-pass">
+                  <span>Frequency Key</span>
+                  <span class="badge badge-danger" id="key-badge" style="display:none;">FAULT</span>
+                </label>
+                <input type="password" id="neu-pass" class="neu-input" placeholder="Min 6 characters...">
+                <span class="form-helper" id="pass-helper">Protected cryptographic input slot.</span>
+              </div>
+
+              <div style="display: flex; gap: var(--space-12);">
+                <button type="submit" class="btn btn-primary btn-sm">Calibrate Input</button>
+                <button type="button" class="btn btn-secondary btn-sm" onclick="resetNeumoForm()">Clear</button>
+              </div>
+            </form>
+          </div>
+
+          <!-- Tactile Toggles & Sliders -->
+          <div class="neu-card">
+            <h3>Tactile Switches &amp; Dials</h3>
+            <p class="token-desc" style="margin-bottom: var(--space-16);">
+              Sliders and switches designed with embedded tracks and extruded sliding pucks.
+            </p>
+
+            <div class="toggle-row">
+              <div>
+                <strong>Haptic Matrix Damping</strong>
+                <p style="font-size: var(--text-xs); color: #6B7280;">Absorbs micro-rebound vibrations</p>
+              </div>
+              <label class="neu-switch">
+                <input type="checkbox" checked onchange="toggleDamping(this)">
+                <span class="neu-switch-slider"></span>
+              </label>
+            </div>
+
+            <div class="toggle-row">
+              <div>
+                <strong>Teal CTA Overclock</strong>
+                <p style="font-size: var(--text-xs); color: #6B7280;">Deepen petroleum cyan saturation</p>
+              </div>
+              <label class="neu-switch">
+                <input type="checkbox" checked onchange="toggleOverclock(this)">
+                <span class="neu-switch-slider"></span>
+              </label>
+            </div>
+
+            <div class="neu-range-container">
+              <div style="display: flex; justify-content: space-between; margin-bottom: 6px;">
+                <span class="form-label" style="font-size: var(--text-xs);">Acoustic Resonance</span>
+                <span class="mono-code" style="font-size: var(--text-xs); color: var(--color-primary);" id="range-val">68%</span>
+              </div>
+              <input type="range" class="neu-range" min="0" max="100" value="68" oninput="updateRange(this.value)">
+            </div>
+
+            <div style="display: flex; gap: var(--space-8); margin-top: var(--space-16);">
+              <span class="badge badge-sunken">STATUS: CALIBRATED</span>
+              <span class="badge badge-success">0.0% DRIFT</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== ARCHITECTURE MODULES ==================== -->
+    <section id="architecture" class="section">
+      <div class="container">
+        <div class="section-head">
+          <span class="badge badge-extruded" style="width: fit-content;">System Modules</span>
+          <h2>Extruded Architecture Units</h2>
+          <p style="max-width: 650px;">
+            Modular physical cards demonstrating consistent radii, compact density spacing, and tactile hierarchy.
+          </p>
+        </div>
+
+        <div class="features-row">
+          <div class="feature-card">
+            <div>
+              <div class="feature-icon-well">◈</div>
+              <h3 style="margin-top: var(--space-16); margin-bottom: var(--space-8);">Extruded Compute Node</h3>
+              <p>
+                Each compute module is physically isolated with dual light-absorption shadows, preventing visual bleed into adjacent planes.
+              </p>
+            </div>
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+              <span class="badge badge-sunken">UNIT 01</span>
+              <button class="btn btn-secondary btn-sm" onclick="triggerDepress(this)">Audit</button>
+            </div>
+          </div>
+
+          <div class="feature-card" style="box-shadow: var(--neu-raised-lg);">
+            <div>
+              <div class="feature-icon-well" style="color: #FFFFFF; background: var(--color-primary); box-shadow: var(--neu-raised-teal);">⬡</div>
+              <h3 style="margin-top: var(--space-16); margin-bottom: var(--space-8);">Teal Bus Interconnect</h3>
+              <p>
+                The primary color token (<code class="mono-code">#006666</code>) acts as the high-priority action indicator throughout the tactile network.
+              </p>
+            </div>
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+              <span class="badge badge-teal">PRIORITY</span>
+              <button class="btn btn-primary btn-sm" onclick="triggerDepress(this)">Engage</button>
+            </div>
+          </div>
+
+          <div class="feature-card">
+            <div>
+              <div class="feature-icon-well">◉</div>
+              <h3 style="margin-top: var(--space-16); margin-bottom: var(--space-8);">Sunken Inset Memory</h3>
+              <p>
+                Protected cache registers exist in embedded slots (<code class="mono-code">var(--neu-inset)</code>) protecting data from stray tactile hits.
+              </p>
+            </div>
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+              <span class="badge badge-sunken">SECURE</span>
+              <button class="btn btn-secondary btn-sm" onclick="triggerDepress(this)">Inspect</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== PRICING & TIERS ==================== -->
+    <section id="pricing" class="section" style="background: rgba(220, 218, 216, 0.4);">
+      <div class="container">
+        <div class="section-head" style="text-align: center; align-items: center;">
+          <span class="badge badge-extruded">Capacity Matrix</span>
+          <h2>Tactile Provisioning Tiers</h2>
+          <p style="max-width: 600px;">
+            Choose your physical node allotment with guaranteed 150–250ms haptic transitions.
+          </p>
+        </div>
+
+        <div class="pricing-grid">
+          <!-- Standard -->
+          <div class="price-card">
+            <div>
+              <span class="badge badge-extruded">PROTOTYPE</span>
+              <div class="price-val" style="margin-top: var(--space-12);">$0 <span class="price-sub">/ mo</span></div>
+              <p style="font-size: var(--text-sm); color: #6B7280; margin-top: 6px;">For design engineers exploring tactile shadow mathematics.</p>
+
+              <ul class="feature-sunken-list" style="margin-top: var(--space-20);">
+                <li class="feature-sunken-item"><span class="check-mark">✓</span> 3 Extruded Nodes</li>
+                <li class="feature-sunken-item"><span class="check-mark">✓</span> Space Mono Typography</li>
+                <li class="feature-sunken-item"><span class="check-mark">✓</span> Standard Dual Shadows</li>
+              </ul>
+            </div>
+            <button class="btn btn-secondary" onclick="triggerDepress(this)">Deploy Free</button>
+          </div>
+
+          <!-- Featured Teal -->
+          <div class="price-card featured">
+            <div>
+              <div style="display: flex; justify-content: space-between; align-items: center;">
+                <span class="badge badge-teal">RECOMMENDED</span>
+                <span class="status-pip"></span>
+              </div>
+              <div class="price-val" style="margin-top: var(--space-12);">$89 <span class="price-sub">/ cluster / mo</span></div>
+              <p style="font-size: var(--text-sm); color: #6B7280; margin-top: 6px;">Enterprise cluster with full primary teal CTA routing.</p>
+
+              <ul class="feature-sunken-list" style="margin-top: var(--space-20);">
+                <li class="feature-sunken-item"><span class="check-mark">✓</span> Unlimited Extruded Panels</li>
+                <li class="feature-sunken-item"><span class="check-mark">✓</span> Dedicated Teal (#006666) CTA Rails</li>
+                <li class="feature-sunken-item"><span class="check-mark">✓</span> Hardware-Accelerated Bevels</li>
+                <li class="feature-sunken-item"><span class="check-mark">✓</span> Sub-200ms Easing Guarantees</li>
+              </ul>
+            </div>
+            <button class="btn btn-primary" onclick="triggerDepress(this)">Activate Cluster</button>
+          </div>
+
+          <!-- Custom -->
+          <div class="price-card">
+            <div>
+              <span class="badge badge-extruded">INDUSTRIAL</span>
+              <div class="price-val" style="margin-top: var(--space-12);">Custom</div>
+              <p style="font-size: var(--text-sm); color: #6B7280; margin-top: 6px;">Custom physical console installations and aerospace haptics.</p>
+
+              <ul class="feature-sunken-list" style="margin-top: var(--space-20);">
+                <li class="feature-sunken-item"><span class="check-mark">✓</span> Bespoke Stone Densities</li>
+                <li class="feature-sunken-item"><span class="check-mark">✓</span> Hardware Telemetry Sensors</li>
+                <li class="feature-sunken-item"><span class="check-mark">✓</span> 24/7 Tactile Support</li>
+              </ul>
+            </div>
+            <button class="btn btn-secondary" onclick="triggerDepress(this)">Inquire</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== ANTI-PATTERNS SPEC ==================== -->
+    <section class="section">
+      <div class="container">
+        <div class="section-head">
+          <span class="badge badge-sunken" style="width: fit-content;">Rule Enforcement</span>
+          <h2>Anti-Patterns (Section 9)</h2>
+          <p style="max-width: 650px;">
+            Strict adherence requirements defined in <code class="mono-code">neumorphism/DESIGN.md</code>.
+          </p>
+        </div>
+
+        <div class="lab-grid">
+          <div class="neu-card">
+            <h3 style="color: var(--color-danger); margin-bottom: var(--space-12);">✕ Prohibited Practices</h3>
+            <ul style="list-style: none; display: flex; flex-direction: column; gap: var(--space-12); font-size: var(--text-sm);">
+              <li><strong>No Off-Palette Colors:</strong> Do not add random accent gradients or unrelated colors outside the 8 declared tokens.</li>
+              <li><strong>No Flat Hierarchy:</strong> Always modulate weights and sizes in Space Mono; do not collapse headings into uniform body sizes.</li>
+              <li><strong>No Readability Reductions:</strong> Neumorphic bevels must preserve minimum WCAG contrast for body text against <code class="mono-code">#E7E5E4</code>.</li>
+              <li><strong>No Metaphor Blending:</strong> Never mix glassmorphism backdrops or skeuomorphic textures into pure monochromatic neumorphism.</li>
+            </ul>
+          </div>
+
+          <div class="neu-card">
+            <h3 style="color: var(--color-primary); margin-bottom: var(--space-12);">✓ CSS Declarations</h3>
+            <div class="code-console">
+:root {
+  --color-primary:   #006666;
+  --color-secondary: #F1F2F5;
+  --color-surface:   #E7E5E4;
+  --color-text:      #1E2938;
+  --font-primary:    'Space Mono', monospace;
+  --font-mono:       'JetBrains Mono', monospace;
+}
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ==================== FOOTER ==================== -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div>
+          <div class="brand" style="margin-bottom: var(--space-16);">
+            <div class="brand-icon">⬡</div>
+            <span class="brand-text">NEUMORPHISM</span>
+          </div>
+          <p style="font-size: var(--text-sm); color: #4B5563;">
+            Tactile, extruded interface system engineered with dual light &amp; dark shadow equations on monochromatic stone.
+          </p>
+        </div>
+
+        <div>
+          <h4 class="footer-title">Tokens</h4>
+          <ul class="footer-links">
+            <li><a href="#tokens">Primary (#006666)</a></li>
+            <li><a href="#tokens">Surface (#E7E5E4)</a></li>
+            <li><a href="#tokens">Secondary (#F1F2F5)</a></li>
+            <li><a href="#tokens">Text (#1E2938)</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h4 class="footer-title">Physics</h4>
+          <ul class="footer-links">
+            <li><a href="#physics">Outer Raised Elevation</a></li>
+            <li><a href="#physics">Inner Inset Grooves</a></li>
+            <li><a href="#lab">Embedded Form Fields</a></li>
+            <li><a href="#lab">Haptic Switches</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h4 class="footer-title">Typography</h4>
+          <ul class="footer-links">
+            <li><a href="#hero">Space Mono Display</a></li>
+            <li><a href="#hero">JetBrains Mono Code</a></li>
+            <li><a href="#pricing">Pricing Architecture</a></li>
+            <li><a href="#physics">Section 9 Rules</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <div>Neumorphism Design System • Complies with open-design/neumorphism/DESIGN.md</div>
+        <div style="display: flex; gap: var(--space-12); align-items: center;">
+          <span class="status-pip"></span>
+          <span>ALL TOKENS &amp; SHADOWS VERIFIED</span>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Interactive JavaScript for Tactile Reactions -->
+  <script>
+    // Tactile button depress feedback
+    function triggerDepress(btn) {
+      btn.classList.add('is-active');
+      setTimeout(() => {
+        btn.classList.remove('is-active');
+      }, 180);
+    }
+
+    // Hardware keypad depress feedback
+    function pressKey(btn, keyVal) {
+      btn.classList.add('is-pressed');
+      const scr = document.getElementById('screen-voltage');
+      if (keyVal === 'CLR') {
+        scr.textContent = 'BUFFER CLEARED';
+      } else {
+        scr.textContent = `KEY [${keyVal}] REGISTERED`;
+      }
+      setTimeout(() => {
+        btn.classList.remove('is-pressed');
+      }, 160);
+    }
+
+    // Segmented tab toggle
+    function setSegment(btn, name) {
+      const parent = btn.parentElement;
+      parent.querySelectorAll('.segment-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      const stat = document.getElementById('hardware-status');
+      stat.textContent = name;
+    }
+
+    // Dynamic Range Slider
+    function updateRange(val) {
+      document.getElementById('range-val').textContent = val + '%';
+    }
+
+    // Toggle Matrix Damping
+    function toggleDamping(cb) {
+      const hapticVal = document.getElementById('haptic-val');
+      if (cb.checked) {
+        hapticVal.textContent = '8px Dual Light (Active)';
+        document.documentElement.style.setProperty('--shadow-dark', '#c2c0bf');
+      } else {
+        hapticVal.textContent = 'Hard Edge Reflection';
+        document.documentElement.style.setProperty('--shadow-dark', '#aba9a8');
+      }
+    }
+
+    // Toggle Overclock
+    function toggleOverclock(cb) {
+      if (cb.checked) {
+        document.documentElement.style.setProperty('--color-primary', '#006666');
+      } else {
+        document.documentElement.style.setProperty('--color-primary', '#004d4d');
+      }
+    }
+
+    // Form validation demo
+    function validateNeumoForm() {
+      const pass = document.getElementById('neu-pass');
+      const helper = document.getElementById('pass-helper');
+      const badge = document.getElementById('key-badge');
+
+      if (!pass.value || pass.value.length < 6) {
+        pass.classList.add('error');
+        helper.classList.add('error-text');
+        helper.textContent = 'Error: Frequency key must be at least 6 characters.';
+        badge.style.display = 'inline-flex';
+        badge.textContent = 'FAILED';
+      } else {
+        pass.classList.remove('error');
+        helper.classList.remove('error-text');
+        helper.textContent = '✓ Calibration confirmed. Signal synchronized.';
+        helper.style.color = 'var(--color-success)';
+        badge.style.display = 'inline-flex';
+        badge.className = 'badge badge-success';
+        badge.textContent = 'PASSED';
+      }
+    }
+
+    function resetNeumoForm() {
+      const pass = document.getElementById('neu-pass');
+      const helper = document.getElementById('pass-helper');
+      const badge = document.getElementById('key-badge');
+      pass.value = '';
+      pass.classList.remove('error');
+      helper.classList.remove('error-text');
+      helper.style.color = '#6B7280';
+      helper.textContent = 'Protected cryptographic input slot.';
+      badge.style.display = 'none';
+    }
+  </script>
+</body>
+</html>

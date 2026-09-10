@@ -1,0 +1,801 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Minimal Design System — Stripped-Back Clarity</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inconsolata:wght@400;500;600&family=Inter:wght@400;500;600;700;800;900&family=Open+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      /* Official Minimal Tokens per DESIGN.md */
+      --min-primary: #0C0C09;    /* Dark ink black - primary CTA */
+      --min-secondary: #312C85;  /* Deep indigo token */
+      --min-success: #16A34A;    /* Success token */
+      --min-warning: #D97706;    /* Warning token */
+      --min-danger: #DC2626;     /* Danger token */
+      --min-surface: #F4F4F1;    /* Warm off-white surface & background */
+      --min-text: #0C0C09;       /* High-contrast dark text */
+      --min-neutral: #F4F4F1;    /* Neutral surface */
+
+      --min-card-bg: #FFFFFF;    /* Lifted container surface */
+      --min-border: #E2E2DC;     /* Subtle warm border */
+      --min-muted: #5C5C54;      /* Subdued secondary text */
+
+      /* Typography Families */
+      --font-display: 'Inter', sans-serif;
+      --font-primary: 'Open Sans', sans-serif;
+      --font-mono: 'Inconsolata', monospace;
+
+      /* Spacing Scale per DESIGN.md: 4 / 8 / 12 / 16 / 24 / 32 */
+      --sp-4: 4px;
+      --sp-8: 8px;
+      --sp-12: 12px;
+      --sp-16: 16px;
+      --sp-24: 24px;
+      --sp-32: 32px;
+
+      /* Radii */
+      --radius-sm: 4px;
+      --radius-md: 6px;
+
+      /* Motion: 150-250ms stable transitions */
+      --trans-speed: 200ms ease;
+    }
+
+    /* Reset & Base */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      font-size: 16px;
+      background-color: var(--min-surface); /* Warm off-white canvas */
+      color: var(--min-text);
+      font-family: var(--font-primary);
+      -webkit-font-smoothing: antialiased;
+      scroll-behavior: smooth;
+    }
+
+    body {
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    /* Expressive Typography Scale using Inter for Headings */
+    h1, .display-hero {
+      font-family: var(--font-display);
+      font-size: clamp(40px, 6vw, 68px);
+      font-weight: 800;
+      line-height: 1.1;
+      letter-spacing: -1px;
+      color: var(--min-text);
+    }
+
+    h2, .heading-section {
+      font-family: var(--font-display);
+      font-size: clamp(28px, 3.5vw, 40px);
+      font-weight: 700;
+      line-height: 1.2;
+      letter-spacing: -0.5px;
+      color: var(--min-text);
+    }
+
+    h3, .title-medium {
+      font-family: var(--font-display);
+      font-size: 24px;
+      font-weight: 600;
+      line-height: 1.3;
+      color: var(--min-text);
+    }
+
+    p, .body-regular {
+      font-family: var(--font-primary);
+      font-size: 16px;
+      font-weight: 400;
+      line-height: 1.6;
+      color: var(--min-text);
+    }
+
+    .caption {
+      font-family: var(--font-primary);
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--min-muted);
+    }
+
+    .mono-meta {
+      font-family: var(--font-mono);
+      font-size: 13px;
+      letter-spacing: 0.5px;
+    }
+
+    /* Layout Containers */
+    .container {
+      max-width: 1140px;
+      margin: 0 auto;
+      padding: 0 var(--sp-24);
+    }
+
+    /* Navigation Bar */
+    header.min-nav {
+      background: var(--min-surface);
+      border-bottom: 1px solid var(--min-border);
+      padding: var(--sp-24) 0;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .nav-inner {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .brand-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+      color: var(--min-text);
+      font-family: var(--font-display);
+      font-size: 20px;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+    }
+
+    .brand-square {
+      width: 14px;
+      height: 14px;
+      background: var(--min-primary);
+    }
+
+    .nav-menu {
+      display: flex;
+      gap: var(--sp-32);
+      list-style: none;
+    }
+
+    .nav-menu a {
+      text-decoration: none;
+      color: var(--min-text);
+      font-size: 14px;
+      font-weight: 500;
+      transition: color var(--trans-speed);
+    }
+
+    .nav-menu a:hover {
+      color: var(--min-secondary);
+    }
+
+    /* Stripped-Back Buttons */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 10px 22px;
+      border-radius: var(--radius-sm);
+      font-size: 14px;
+      font-weight: 600;
+      text-decoration: none;
+      cursor: pointer;
+      border: 1px solid transparent;
+      transition: background-color var(--trans-speed), border-color var(--trans-speed), color var(--trans-speed);
+    }
+
+    .btn:focus-visible {
+      outline: 2px solid var(--min-primary);
+      outline-offset: 2px;
+    }
+
+    .btn-primary {
+      background-color: var(--min-primary);
+      color: #FFFFFF;
+      border-color: var(--min-primary);
+    }
+
+    .btn-primary:hover {
+      background-color: #262622;
+      border-color: #262622;
+    }
+
+    .btn-secondary {
+      background-color: var(--min-secondary);
+      color: #FFFFFF;
+      border-color: var(--min-secondary);
+    }
+
+    .btn-secondary:hover {
+      background-color: #242066;
+    }
+
+    .btn-outline {
+      background-color: transparent;
+      color: var(--min-text);
+      border-color: var(--min-primary);
+    }
+
+    .btn-outline:hover {
+      background-color: var(--min-primary);
+      color: #FFFFFF;
+    }
+
+    /* Hero Section: Expressive Whitespace */
+    .hero-section {
+      padding: 96px 0 80px;
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1.2fr 1fr;
+      gap: var(--sp-32);
+      align-items: center;
+    }
+
+    .hero-tag {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--min-secondary);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: var(--sp-16);
+      display: block;
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: var(--sp-16);
+      margin-top: var(--sp-32);
+    }
+
+    /* Clean Architectural Vector Stage */
+    .hero-stage {
+      background: var(--min-card-bg);
+      border: 1px solid var(--min-border);
+      border-radius: var(--radius-sm);
+      padding: var(--sp-32);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      min-height: 280px;
+    }
+
+    /* Spacing Scale Visualizer */
+    .section-block {
+      padding: var(--sp-32) 0;
+      border-top: 1px solid var(--min-border);
+    }
+
+    .spacing-visualizer {
+      display: flex;
+      gap: var(--sp-12);
+      align-items: flex-end;
+      margin-top: var(--sp-24);
+      background: var(--min-card-bg);
+      padding: var(--sp-24);
+      border: 1px solid var(--min-border);
+      border-radius: var(--radius-sm);
+    }
+
+    .spacing-bar {
+      background: var(--min-primary);
+      width: 48px;
+      border-radius: 2px;
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      padding-top: 4px;
+      color: #FFF;
+      font-family: var(--font-mono);
+      font-size: 11px;
+      font-weight: 600;
+    }
+
+    /* Component Studio */
+    .studio-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--sp-24);
+      margin-top: var(--sp-24);
+    }
+
+    .min-card {
+      background: var(--min-card-bg);
+      border: 1px solid var(--min-border);
+      border-radius: var(--radius-sm);
+      padding: var(--sp-24);
+    }
+
+    /* Inputs with explicit focus */
+    .min-form-group {
+      margin-bottom: var(--sp-16);
+    }
+
+    .min-label {
+      display: block;
+      font-size: 13px;
+      font-weight: 600;
+      margin-bottom: var(--sp-4);
+      color: var(--min-text);
+    }
+
+    .min-input {
+      width: 100%;
+      padding: 10px 14px;
+      font-family: var(--font-primary);
+      font-size: 14px;
+      background: var(--min-surface);
+      border: 1px solid var(--min-border);
+      border-radius: var(--radius-sm);
+      color: var(--min-text);
+      outline: none;
+      transition: border-color var(--trans-speed);
+    }
+
+    .min-input:focus {
+      border-color: var(--min-primary);
+      background: #FFFFFF;
+    }
+
+    /* Status Badges */
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      padding: 2px 8px;
+      border-radius: 2px;
+      font-size: 12px;
+      font-family: var(--font-mono);
+      font-weight: 600;
+    }
+
+    .badge-primary { background: #0C0C09; color: #FFF; }
+    .badge-secondary { background: #EAE8FF; color: #312C85; }
+    .badge-success { background: #DCFCE7; color: #16A34A; }
+    .badge-warning { background: #FEF3C7; color: #D97706; }
+    .badge-danger { background: #FEE2E2; color: #DC2626; }
+
+    /* Clean Task & Project Data Grid */
+    .task-list {
+      margin-top: var(--sp-16);
+      display: flex;
+      flex-direction: column;
+      gap: var(--sp-8);
+    }
+
+    .task-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: var(--sp-12) var(--sp-16);
+      background: var(--min-card-bg);
+      border: 1px solid var(--min-border);
+      border-radius: var(--radius-sm);
+    }
+
+    /* Color Swatches */
+    .swatches-row {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: var(--sp-12);
+      margin-top: var(--sp-16);
+    }
+
+    .swatch-card {
+      background: var(--min-card-bg);
+      border: 1px solid var(--min-border);
+      border-radius: var(--radius-sm);
+      padding: var(--sp-8);
+      text-align: center;
+    }
+
+    .swatch-box {
+      height: 44px;
+      border-radius: 2px;
+      margin-bottom: var(--sp-8);
+      border: 1px solid rgba(0,0,0,0.06);
+    }
+
+    /* Footer */
+    footer.min-footer {
+      border-top: 1px solid var(--min-border);
+      padding: var(--sp-32) 0;
+      margin-top: 60px;
+    }
+
+    .footer-inner {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 13px;
+      color: var(--min-muted);
+    }
+
+    /* Token Drawer */
+    .token-audit-toggle {
+      position: fixed;
+      bottom: 24px;
+      left: 24px;
+      z-index: 999;
+      background: var(--min-primary);
+      color: #FFF;
+      padding: 8px 16px;
+      border-radius: var(--radius-sm);
+      font-size: 12px;
+      font-family: var(--font-mono);
+      cursor: pointer;
+      border: 1px solid var(--min-primary);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .token-drawer {
+      position: fixed;
+      top: 0;
+      left: -420px;
+      width: 380px;
+      height: 100vh;
+      background: var(--min-surface);
+      border-right: 1px solid var(--min-border);
+      z-index: 2000;
+      padding: var(--sp-24);
+      overflow-y: auto;
+      transition: left var(--trans-speed);
+    }
+
+    .token-drawer.open {
+      left: 0;
+    }
+
+    .token-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 8px 0;
+      border-bottom: 1px solid var(--min-border);
+      font-size: 13px;
+    }
+
+    /* Toast */
+    .toast-box {
+      position: fixed;
+      top: 24px;
+      right: 24px;
+      background: var(--min-primary);
+      color: #FFF;
+      padding: 12px 18px;
+      border-radius: var(--radius-sm);
+      font-size: 13px;
+      z-index: 3000;
+      opacity: 0;
+      transform: translateY(-10px);
+      transition: all 0.2s ease;
+      pointer-events: none;
+    }
+
+    .toast-box.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Responsive */
+    @media (max-width: 900px) {
+      .hero-grid { grid-template-columns: 1fr; }
+      .studio-grid { grid-template-columns: 1fr; }
+      .swatches-row { grid-template-columns: repeat(4, 1fr); }
+    }
+
+    @media (max-width: 600px) {
+      .swatches-row { grid-template-columns: repeat(2, 1fr); }
+      .nav-menu { display: none; }
+      .hero-actions { flex-direction: column; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navigation -->
+  <header class="min-nav">
+    <div class="container nav-inner">
+      <a href="#" class="brand-logo">
+        <div class="brand-square"></div>
+        <span>Minimal</span>
+      </a>
+
+      <ul class="nav-menu">
+        <li><a href="#foundations">Foundations</a></li>
+        <li><a href="#spacing">Spacing</a></li>
+        <li><a href="#studio">Studio</a></li>
+        <li><a href="#records">Records</a></li>
+      </ul>
+
+      <div>
+        <button class="btn btn-primary" onclick="triggerToast('Action Initialized')">Get Started</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="hero-section">
+    <div class="container hero-grid">
+      <div>
+        <span class="hero-tag">MODERN &amp; MINIMAL FOUNDATIONS</span>
+        <h1 class="display-hero">Restraint as a design discipline.</h1>
+        <p class="body-regular" style="margin-top: var(--sp-20); color: var(--min-muted); max-width: 520px;">
+          Stripped-back design emphasizing whitespace, crisp typography, and restrained color for maximum clarity and focus. No decorative excess.
+        </p>
+
+        <div class="hero-actions">
+          <button class="btn btn-primary" onclick="triggerToast('Primary Action Fired (#0C0C09)')">Primary Action</button>
+          <button class="btn btn-outline" onclick="tokenDrawer.classList.toggle('open')">Inspect Tokens</button>
+        </div>
+      </div>
+
+      <!-- Architectural Stage Card -->
+      <div class="hero-stage">
+        <div>
+          <span class="mono-meta" style="color: var(--min-secondary);">GEOMETRIC BALANCE</span>
+          <h3 class="title-medium" style="margin-top: 6px;">Clarity Before Ornament</h3>
+          <p class="caption" style="margin-top: 8px;">
+            Content blocks use consistent internal padding and clear hierarchy to separate concerns before adding borders.
+          </p>
+        </div>
+        <div style="display: flex; gap: var(--sp-8); margin-top: var(--sp-24);">
+          <span class="badge badge-primary">Primary #0C0C09</span>
+          <span class="badge badge-secondary">Secondary #312C85</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Foundations: Color Swatches -->
+  <section class="section-block" id="foundations">
+    <div class="container">
+      <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: var(--sp-16);">
+        <div>
+          <span class="mono-meta" style="color: var(--min-secondary);">01 · COLOR TOKENS</span>
+          <h2 class="heading-section">Minimal Palette Stance</h2>
+        </div>
+        <span class="caption">Strict Stance</span>
+      </div>
+
+      <div class="swatches-row">
+        <div class="swatch-card">
+          <div class="swatch-box" style="background: #0C0C09;"></div>
+          <div style="font-size: 12px; font-weight: 700;">Primary</div>
+          <div class="mono-meta" style="font-size: 11px; color: var(--min-muted);">#0C0C09</div>
+        </div>
+
+        <div class="swatch-card">
+          <div class="swatch-box" style="background: #312C85;"></div>
+          <div style="font-size: 12px; font-weight: 700;">Secondary</div>
+          <div class="mono-meta" style="font-size: 11px; color: var(--min-muted);">#312C85</div>
+        </div>
+
+        <div class="swatch-card">
+          <div class="swatch-box" style="background: #16A34A;"></div>
+          <div style="font-size: 12px; font-weight: 700;">Success</div>
+          <div class="mono-meta" style="font-size: 11px; color: var(--min-muted);">#16A34A</div>
+        </div>
+
+        <div class="swatch-card">
+          <div class="swatch-box" style="background: #D97706;"></div>
+          <div style="font-size: 12px; font-weight: 700;">Warning</div>
+          <div class="mono-meta" style="font-size: 11px; color: var(--min-muted);">#D97706</div>
+        </div>
+
+        <div class="swatch-card">
+          <div class="swatch-box" style="background: #DC2626;"></div>
+          <div style="font-size: 12px; font-weight: 700;">Danger</div>
+          <div class="mono-meta" style="font-size: 11px; color: var(--min-muted);">#DC2626</div>
+        </div>
+
+        <div class="swatch-card">
+          <div class="swatch-box" style="background: #F4F4F1; border: 1px solid #CCC;"></div>
+          <div style="font-size: 12px; font-weight: 700;">Surface</div>
+          <div class="mono-meta" style="font-size: 11px; color: var(--min-muted);">#F4F4F1</div>
+        </div>
+
+        <div class="swatch-card">
+          <div class="swatch-box" style="background: #0C0C09;"></div>
+          <div style="font-size: 12px; font-weight: 700;">Text</div>
+          <div class="mono-meta" style="font-size: 11px; color: var(--min-muted);">#0C0C09</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Spacing Scale 4 / 8 / 12 / 16 / 24 / 32 -->
+  <section class="section-block" id="spacing">
+    <div class="container">
+      <div style="display: flex; justify-content: space-between; align-items: baseline;">
+        <div>
+          <span class="mono-meta" style="color: var(--min-secondary);">02 · SPACING SYSTEM</span>
+          <h2 class="heading-section">Strict 4 to 32 Scale</h2>
+        </div>
+        <span class="caption">Predictable Grid</span>
+      </div>
+
+      <div class="spacing-visualizer">
+        <div class="spacing-bar" style="height: 30px;">4</div>
+        <div class="spacing-bar" style="height: 50px;">8</div>
+        <div class="spacing-bar" style="height: 70px;">12</div>
+        <div class="spacing-bar" style="height: 90px;">16</div>
+        <div class="spacing-bar" style="height: 120px;">24</div>
+        <div class="spacing-bar" style="height: 150px;">32</div>
+        <div style="margin-left: auto; align-self: center;">
+          <p class="caption">Units in pixels. Consistent vertical rhythm across modules.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Component Studio -->
+  <section class="section-block" id="studio">
+    <div class="container">
+      <div style="display: flex; justify-content: space-between; align-items: baseline;">
+        <div>
+          <span class="mono-meta" style="color: var(--min-secondary);">03 · COMPONENT STUDIO</span>
+          <h2 class="heading-section">Form &amp; Action States</h2>
+        </div>
+        <span class="caption">150–250ms Transitions</span>
+      </div>
+
+      <div class="studio-grid">
+        <!-- Interactive Form -->
+        <div class="min-card">
+          <h3 class="title-medium" style="margin-bottom: var(--sp-16);">Action Verification</h3>
+          
+          <form onsubmit="event.preventDefault(); handleMinForm();">
+            <div class="min-form-group">
+              <label class="min-label" for="taskTitle">Task Designation</label>
+              <input type="text" class="min-input" id="taskTitle" placeholder="e.g. Audit Typography Scale" required>
+            </div>
+
+            <div class="min-form-group">
+              <label class="min-label" for="taskOwner">Assigned Engineer</label>
+              <input type="email" class="min-input" id="taskOwner" placeholder="lead@design-ops.org" required>
+            </div>
+
+            <div style="display: flex; justify-content: flex-end; gap: var(--sp-8); margin-top: var(--sp-24);">
+              <button type="reset" class="btn btn-outline">Reset</button>
+              <button type="submit" class="btn btn-primary">Save Entry</button>
+            </div>
+          </form>
+        </div>
+
+        <!-- Task Records List -->
+        <div class="min-card" id="records">
+          <h3 class="title-medium" style="margin-bottom: var(--sp-16);">Verified Pipelines</h3>
+          
+          <div class="task-list" id="taskList">
+            <div class="task-item">
+              <div>
+                <strong>Enforce #0C0C09 CTA Stance</strong>
+                <div class="caption">Design Token Foundation</div>
+              </div>
+              <span class="badge badge-success">Active</span>
+            </div>
+
+            <div class="task-item">
+              <div>
+                <strong>Eliminate Unnecessary Shadows</strong>
+                <div class="caption">Clarity First</div>
+              </div>
+              <span class="badge badge-secondary">Verified</span>
+            </div>
+
+            <div class="task-item">
+              <div>
+                <strong>Verify Open Sans Scanning Contrast</strong>
+                <div class="caption">Body Typography</div>
+              </div>
+              <span class="badge badge-warning">Review</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="min-footer">
+    <div class="container footer-inner">
+      <div>
+        <strong>Minimal Design System</strong> — Stripped-back design and clarity.
+      </div>
+      <div style="display: flex; gap: var(--sp-16); font-family: var(--font-mono); font-size: 12px;">
+        <span>PRIMARY: #0C0C09</span>
+        <span>SURFACE: #F4F4F1</span>
+        <span>TEXT: #0C0C09</span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Token Drawer -->
+  <button class="token-audit-toggle" id="tokenDrawerBtn" aria-label="Open Token Auditor">
+    <div style="width: 8px; height: 8px; background: #FFF;"></div>
+    <span>MINIMAL TOKENS</span>
+  </button>
+
+  <div class="token-drawer" id="tokenDrawer">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--sp-24); padding-bottom: var(--sp-8); border-bottom: 1px solid var(--min-border);">
+      <h3 style="font-family: var(--font-display); font-size: 16px; font-weight: 700;">MINIMAL SPEC</h3>
+      <button id="closeDrawerBtn" style="background: none; border: none; font-size: 20px; cursor: pointer;">&times;</button>
+    </div>
+
+    <div style="margin-bottom: var(--sp-24);">
+      <span class="mono-meta" style="color: var(--min-muted);">FOUNDATION COLOR</span>
+      <div class="token-row"><span>Primary</span><code style="font-weight: 700;">#0C0C09</code></div>
+      <div class="token-row"><span>Secondary</span><code style="color: #312C85; font-weight: 700;">#312C85</code></div>
+      <div class="token-row"><span>Success</span><code style="color: #16A34A; font-weight: 700;">#16A34A</code></div>
+      <div class="token-row"><span>Warning</span><code style="color: #D97706; font-weight: 700;">#D97706</code></div>
+      <div class="token-row"><span>Danger</span><code style="color: #DC2626; font-weight: 700;">#DC2626</code></div>
+      <div class="token-row"><span>Surface</span><code>#F4F4F1</code></div>
+      <div class="token-row"><span>Text</span><code>#0C0C09</code></div>
+    </div>
+
+    <div style="margin-bottom: var(--sp-24);">
+      <span class="mono-meta" style="color: var(--min-muted);">TYPOGRAPHY FAMILIES</span>
+      <div class="token-row"><span>Display</span><code>Inter</code></div>
+      <div class="token-row"><span>Primary</span><code>Open Sans</code></div>
+      <div class="token-row"><span>Mono</span><code>Inconsolata</code></div>
+    </div>
+
+    <div>
+      <span class="mono-meta" style="color: var(--min-muted);">SPACING SCALE</span>
+      <div class="token-row"><span>Scale Steps</span><code>4 / 8 / 12 / 16 / 24 / 32</code></div>
+      <div class="token-row"><span>Transitions</span><code>150–250ms stable easing</code></div>
+    </div>
+  </div>
+
+  <!-- Toast -->
+  <div class="toast-box" id="toastBox">Action acknowledged.</div>
+
+  <script>
+    // Toast
+    const toast = document.getElementById('toastBox');
+    function triggerToast(text) {
+      toast.textContent = text;
+      toast.classList.add('show');
+      setTimeout(() => {
+        toast.classList.remove('show');
+      }, 2500);
+    }
+
+    // Form
+    function handleMinForm() {
+      const title = document.getElementById('taskTitle').value;
+      const list = document.getElementById('taskList');
+      const item = document.createElement('div');
+      item.className = 'task-item';
+      item.innerHTML = `
+        <div>
+          <strong>${title}</strong>
+          <div class="caption">User Record</div>
+        </div>
+        <span class="badge badge-primary">New</span>
+      `;
+      list.prepend(item);
+      triggerToast('Task registered: ' + title);
+      document.getElementById('taskTitle').value = '';
+      document.getElementById('taskOwner').value = '';
+    }
+
+    // Drawer
+    const tokenDrawer = document.getElementById('tokenDrawer');
+    document.getElementById('tokenDrawerBtn').addEventListener('click', () => {
+      tokenDrawer.classList.toggle('open');
+    });
+    document.getElementById('closeDrawerBtn').addEventListener('click', () => {
+      tokenDrawer.classList.remove('open');
+    });
+  </script>
+</body>
+</html>

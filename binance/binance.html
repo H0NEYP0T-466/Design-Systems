@@ -1,0 +1,494 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Binance.US — Digital Asset Exchange &amp; Crypto Trading</title>
+  <meta name="description" content="Binance design system: signature Binance Yellow #F0B90B, trading floor urgency, two-tone light/dark alternation, IBM Plex Sans typography, and live ticker market tables." />
+
+  <!-- Google Fonts: IBM Plex Sans (BinancePlex proxy) & JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    /* ─────────────────────────────────────────────────────────────────
+       BINANCE.US DESIGN SYSTEM TOKENS
+       Source: open-design/design-systems/binance/DESIGN.md
+       ───────────────────────────────────────────────────────────────── */
+    :root {
+      --binance-yellow: #F0B90B;
+      --binance-gold: #FFD000;
+      --yellow-active: #D0980B;
+      --focus-blue: #1EAEDB;
+
+      --canvas: #FFFFFF;
+      --snow: #F5F5F5;
+      --dark-bg: #222126;
+      --dark-card: #2B2F36;
+
+      --ink: #1E2026;
+      --text-secondary: #32313A;
+      --slate: #848E9C;
+      --steel: #686A6C;
+
+      --crypto-green: #0ECB81;
+      --crypto-red: #F6465D;
+      --border-light: #E6E8EA;
+      --border-dark: #373d48;
+
+      --font-plex: "IBM Plex Sans", -apple-system, BlinkMacSystemFont, sans-serif;
+      --font-mono: "JetBrains Mono", Menlo, Consolas, monospace;
+
+      --radius-pill: 50px;
+      --radius-sm: 6px;
+      --radius-md: 12px;
+      --radius-lg: 16px;
+
+      --shadow-yellow: 0 4px 16px rgba(240, 185, 11, 0.28);
+      --transition-fast: 0.16s ease;
+    }
+
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      background-color: var(--canvas);
+      color: var(--ink);
+      font-family: var(--font-plex);
+      font-size: 15px;
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .container {
+      max-width: 1240px;
+      margin-inline: auto;
+      padding-inline: 24px;
+    }
+
+    /* Top Navigation (Light Surface) */
+    .binance-nav {
+      height: 72px;
+      border-bottom: 1px solid var(--border-light);
+      background: var(--canvas);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .nav-inner {
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .nav-left {
+      display: flex;
+      align-items: center;
+      gap: 36px;
+    }
+    .brand-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+      color: var(--ink);
+      font-weight: 800;
+      font-size: 20px;
+      letter-spacing: -0.02em;
+    }
+    .brand-icon {
+      width: 28px;
+      height: 28px;
+      background: var(--binance-yellow);
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 900;
+      color: var(--ink);
+      font-size: 15px;
+    }
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 28px;
+      list-style: none;
+    }
+    @media (max-width: 860px) {
+      .nav-links { display: none; }
+    }
+    .nav-links a {
+      color: var(--text-secondary);
+      text-decoration: none;
+      font-weight: 500;
+      font-size: 14px;
+      transition: color var(--transition-fast);
+    }
+    .nav-links a:hover {
+      color: var(--binance-yellow);
+    }
+
+    /* Binance Buttons (50px Pill Radius) */
+    .btn-pill {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 12px 24px;
+      border-radius: var(--radius-pill);
+      font-family: var(--font-plex);
+      font-size: 14px;
+      font-weight: 600;
+      text-decoration: none;
+      border: 1px solid transparent;
+      cursor: pointer;
+      transition: all var(--transition-fast);
+    }
+    .btn-yellow {
+      background: var(--binance-yellow);
+      color: var(--ink);
+      box-shadow: var(--shadow-yellow);
+    }
+    .btn-yellow:hover {
+      background: var(--binance-gold);
+      transform: translateY(-1px);
+    }
+    .btn-yellow:active {
+      background: var(--yellow-active);
+    }
+    .btn-ghost-dark {
+      background: transparent;
+      color: var(--ink);
+      border-color: var(--border-light);
+    }
+    .btn-ghost-dark:hover {
+      border-color: var(--ink);
+    }
+
+    /* Hero Section (Light Trading Surface) */
+    .hero-wrap {
+      padding-block: 64px 48px;
+      background: linear-gradient(180deg, #FFFFFF 0%, #FAFAFA 100%);
+      border-bottom: 1px solid var(--border-light);
+    }
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1.15fr 0.85fr;
+      gap: 48px;
+      align-items: center;
+    }
+    @media (max-width: 900px) {
+      .hero-grid { grid-template-columns: 1fr; }
+    }
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--ink);
+      background: rgba(240, 185, 11, 0.15);
+      border: 1px solid rgba(240, 185, 11, 0.4);
+      padding: 4px 14px;
+      border-radius: var(--radius-pill);
+      margin-bottom: 20px;
+    }
+    .hero-title {
+      font-size: clamp(36px, 5vw, 56px);
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      line-height: 1.12;
+      color: var(--ink);
+      margin-bottom: 20px;
+    }
+    .hero-desc {
+      font-size: 18px;
+      color: var(--slate);
+      line-height: 1.55;
+      margin-bottom: 32px;
+      max-width: 520px;
+    }
+
+    /* Live Market Ticker Mini-Card */
+    .hero-market-card {
+      background: var(--canvas);
+      border: 1px solid var(--border-light);
+      border-radius: var(--radius-lg);
+      box-shadow: 0 12px 36px rgba(0, 0, 0, 0.06);
+      padding: 24px;
+    }
+    .market-card-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--border-light);
+    }
+
+    /* Market Pair Rows */
+    .market-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-block: 12px;
+      border-bottom: 1px solid #f0f0f0;
+      font-family: var(--font-mono);
+      font-size: 14px;
+    }
+    .market-row:last-child {
+      border-bottom: none;
+    }
+    .coin-name {
+      font-family: var(--font-plex);
+      font-weight: 700;
+      color: var(--ink);
+    }
+    .coin-sub {
+      color: var(--slate);
+      font-size: 12px;
+      margin-left: 6px;
+    }
+    .change-badge {
+      display: inline-block;
+      padding: 3px 8px;
+      border-radius: 4px;
+      font-weight: 600;
+      font-size: 12px;
+    }
+    .change-up {
+      background: rgba(14, 203, 129, 0.12);
+      color: var(--crypto-green);
+    }
+    .change-down {
+      background: rgba(246, 70, 93, 0.12);
+      color: var(--crypto-red);
+    }
+
+    /* Two-Tone Section: Deep Dark Panel (#222126) */
+    .dark-monograph-section {
+      background-color: var(--dark-bg);
+      color: #FFFFFF;
+      padding-block: 80px;
+      border-top: 1px solid var(--border-dark);
+      border-bottom: 1px solid var(--border-dark);
+    }
+    .dark-sec-title {
+      font-size: 36px;
+      font-weight: 800;
+      color: #FFFFFF;
+      text-align: center;
+      margin-bottom: 16px;
+    }
+    .dark-sec-desc {
+      color: var(--slate);
+      text-align: center;
+      max-width: 600px;
+      margin: 0 auto 56px;
+      font-size: 17px;
+    }
+    .dark-cards-3col {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 28px;
+    }
+    @media (max-width: 860px) {
+      .dark-cards-3col { grid-template-columns: 1fr; }
+    }
+    .dark-card {
+      background: var(--dark-card);
+      border: 1px solid var(--border-dark);
+      border-radius: var(--radius-lg);
+      padding: 32px;
+      transition: transform var(--transition-fast), border-color var(--transition-fast);
+    }
+    .dark-card:hover {
+      transform: translateY(-3px);
+      border-color: var(--binance-yellow);
+    }
+    .dark-card-icon {
+      width: 44px;
+      height: 44px;
+      background: rgba(240, 185, 11, 0.15);
+      color: var(--binance-yellow);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 18px;
+      margin-bottom: 20px;
+    }
+    .dark-card-title {
+      font-size: 20px;
+      font-weight: 700;
+      color: #FFFFFF;
+      margin-bottom: 10px;
+    }
+    .dark-card-body {
+      color: var(--slate);
+      font-size: 14.5px;
+      line-height: 1.6;
+    }
+
+    /* Footer */
+    .binance-footer {
+      background: var(--dark-bg);
+      color: var(--slate);
+      padding-block: 48px 32px;
+      font-size: 13px;
+    }
+    .footer-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navigation -->
+  <header class="binance-nav">
+    <div class="container nav-inner">
+      <div class="nav-left">
+        <a href="#hero" class="brand-logo">
+          <div class="brand-icon">❖</div>
+          <span>Binance.US</span>
+        </a>
+        <ul class="nav-links">
+          <li><a href="#markets">Markets</a></li>
+          <li><a href="#trade">Trade</a></li>
+          <li><a href="#earn">Earn</a></li>
+          <li><a href="#institution">Institutions</a></li>
+        </ul>
+      </div>
+
+      <div style="display: flex; gap: 12px; align-items: center;">
+        <a href="00_Index.md" class="btn-pill btn-ghost-dark" style="padding: 8px 16px; font-size: 13px;">Index</a>
+        <a href="#trade" class="btn-pill btn-yellow" style="padding: 8px 20px; font-size: 13px;">Get Started</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Light Section: Trading Surface Hero -->
+  <section id="hero" class="hero-wrap">
+    <div class="container hero-grid">
+      <div>
+        <div class="hero-badge">
+          <span>⚡</span>
+          <span>Zero Trading Fees on BTC Pairs</span>
+        </div>
+        <h1 class="hero-title">
+          Buy, trade &amp; hold 150+ cryptocurrencies with institutional grade security.
+        </h1>
+        <p class="hero-desc">
+          High-urgency execution engines, deep market liquidity, and state-of-the-art compliance architecture.
+        </p>
+        <div style="display: flex; gap: 14px; align-items: center;">
+          <a href="#trade" class="btn-pill btn-yellow">Sign Up in 2 Minutes</a>
+          <a href="#markets" class="btn-pill btn-ghost-dark">View Exchange Markets</a>
+        </div>
+      </div>
+
+      <!-- Live Market Rates Card -->
+      <div class="hero-market-card">
+        <div class="market-card-head">
+          <span style="font-weight: 700; font-size: 15px;">Hot Crypto Markets</span>
+          <span style="font-size: 12px; color: var(--slate);">24h Volume</span>
+        </div>
+
+        <div class="market-row">
+          <div>
+            <span class="coin-name">BTC</span><span class="coin-sub">Bitcoin</span>
+          </div>
+          <div>$64,820.50</div>
+          <span class="change-badge change-up">+3.84%</span>
+        </div>
+
+        <div class="market-row">
+          <div>
+            <span class="coin-name">ETH</span><span class="coin-sub">Ethereum</span>
+          </div>
+          <div>$3,480.12</div>
+          <span class="change-badge change-up">+2.15%</span>
+        </div>
+
+        <div class="market-row">
+          <div>
+            <span class="coin-name">SOL</span><span class="coin-sub">Solana</span>
+          </div>
+          <div>$148.90</div>
+          <span class="change-badge change-down">-1.42%</span>
+        </div>
+
+        <div class="market-row">
+          <div>
+            <span class="coin-name">BNB</span><span class="coin-sub">Build &amp; Build</span>
+          </div>
+          <div>$580.40</div>
+          <span class="change-badge change-up">+4.90%</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Two-Tone Deep Dark Panel (#222126) -->
+  <section id="markets" class="dark-monograph-section">
+    <div class="container">
+      <h2 class="dark-sec-title">The Digital Asset Platform Trusted by Millions</h2>
+      <p class="dark-sec-desc">
+        A bull-and-bear dual rhythm pairing cold operational clarity with golden yellow #F0B90B execution points.
+      </p>
+
+      <div class="dark-cards-3col">
+        <article class="dark-card">
+          <div class="dark-card-icon">🛡</div>
+          <h3 class="dark-card-title">1:1 Backed Reserves</h3>
+          <p class="dark-card-body">
+            All user assets are held 1:1 on chain with regular cryptographic Proof of Reserves audits verified by independent security firms.
+          </p>
+        </article>
+
+        <article class="dark-card">
+          <div class="dark-card-icon">⚡</div>
+          <h3 class="dark-card-title">Sub-Millisecond Matching</h3>
+          <p class="dark-card-body">
+            Engineered to process over 1.4 million transactions per second with institutional low-latency order routing.
+          </p>
+        </article>
+
+        <article class="dark-card">
+          <div class="dark-card-icon">🔒</div>
+          <h3 class="dark-card-title">SOC2 Type II Certified</h3>
+          <p class="dark-card-body">
+            Strict regulatory compliance across United States jurisdictions with cold multi-party compute key custody.
+          </p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="binance-footer">
+    <div class="container footer-inner">
+      <div>
+        <strong>Binance.US Design Language</strong> · Binance Yellow #F0B90B &amp; Binance Dark #222126
+      </div>
+      <div>
+        <a href="00_Index.md" style="color: var(--binance-yellow); text-decoration: none; font-weight: 600;">← Master Index</a>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>

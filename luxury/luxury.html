@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MAISON NOIR — Haute Horlogerie & Luxury Atelier</title>
+  <meta name="description" content="Authentic implementation of the Luxury design system with pure black void (#000000), Oswald condensed display typography, monochromatic palette, and haute horlogerie atelier.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      /* Luxury Foundations */
+      --surface: #000000;
+      --surface-elevated: #0a0a0a;
+      --surface-card: #121212;
+      --primary: #FAFAFA;
+      --secondary: #FAFAFA;
+      --text: #FFFFFF;
+      --text-muted: #888888;
+      --border-hairline: rgba(255, 255, 255, 0.15);
+      --border-strong: rgba(255, 255, 255, 0.4);
+
+      /* 8pt Baseline Grid */
+      --space-1: 8px;
+      --space-2: 16px;
+      --space-3: 24px;
+      --space-4: 32px;
+      --space-6: 48px;
+      --space-8: 64px;
+      --space-12: 96px;
+
+      /* Typography */
+      --font-display: 'Oswald', sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+      --font-body: 'Inter', sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--surface);
+      color: var(--text);
+      font-family: var(--font-body);
+      font-size: 15px;
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+
+    .container {
+      max-width: 1240px;
+      margin: 0 auto;
+      padding: 0 var(--space-4);
+    }
+
+    /* 1. LUXURY NAVIGATION */
+    .luxury-nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(0, 0, 0, 0.92);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border-hairline);
+    }
+
+    .nav-inner {
+      height: 80px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .brand-mark {
+      font-family: var(--font-display);
+      font-size: 26px;
+      font-weight: 700;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--primary);
+      text-decoration: none;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: var(--space-6);
+      list-style: none;
+    }
+
+    .nav-links a {
+      font-family: var(--font-display);
+      font-size: 14px;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      text-decoration: none;
+      transition: color 0.2s ease;
+    }
+
+    .nav-links a:hover {
+      color: var(--text);
+    }
+
+    /* Primary Action Buttons */
+    .btn-luxury-primary {
+      background-color: var(--primary);
+      color: var(--surface);
+      border: 1px solid var(--primary);
+      padding: 12px 28px;
+      font-family: var(--font-display);
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      cursor: pointer;
+      border-radius: 0px;
+      transition: all 0.2s ease;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .btn-luxury-primary:hover {
+      background-color: transparent;
+      color: var(--primary);
+    }
+
+    .btn-luxury-outline {
+      background-color: transparent;
+      color: var(--primary);
+      border: 1px solid var(--border-strong);
+      padding: 12px 28px;
+      font-family: var(--font-display);
+      font-size: 13px;
+      font-weight: 500;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      cursor: pointer;
+      border-radius: 0px;
+      transition: all 0.2s ease;
+      text-decoration: none;
+    }
+
+    .btn-luxury-outline:hover {
+      border-color: var(--primary);
+      background: rgba(255, 255, 255, 0.05);
+    }
+
+    /* 2. HERO SECTION */
+    .hero-section {
+      padding: var(--space-12) 0 var(--space-8) 0;
+      text-align: center;
+      position: relative;
+    }
+
+    .serial-tag {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      letter-spacing: 0.2em;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      margin-bottom: var(--space-3);
+      display: block;
+    }
+
+    .hero-headline {
+      font-family: var(--font-display);
+      font-size: 72px;
+      font-weight: 700;
+      line-height: 1.05;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--primary);
+      max-width: 960px;
+      margin: 0 auto var(--space-3) auto;
+    }
+
+    .hero-lead {
+      font-size: 16px;
+      font-weight: 300;
+      color: var(--text-muted);
+      max-width: 600px;
+      margin: 0 auto var(--space-6) auto;
+      letter-spacing: 0.02em;
+    }
+
+    .hero-actions {
+      display: flex;
+      justify-content: center;
+      gap: var(--space-3);
+    }
+
+    /* 3. TIMEPIECE INSPECTOR WIDGET */
+    .inspector-wrapper {
+      margin-top: var(--space-8);
+      border: 1px solid var(--border-hairline);
+      background: var(--surface-elevated);
+      padding: var(--space-6);
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--space-6);
+      align-items: center;
+      text-align: left;
+    }
+
+    .timepiece-visual {
+      height: 380px;
+      border: 1px solid var(--border-hairline);
+      background: radial-gradient(circle at center, #181818 0%, #000000 70%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+
+    .chronometer-dial {
+      width: 220px;
+      height: 220px;
+      border: 2px solid var(--primary);
+      border-radius: 50%;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 0 30px rgba(255, 255, 255, 0.05);
+      transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .dial-hand {
+      position: absolute;
+      width: 2px;
+      height: 90px;
+      background: var(--primary);
+      top: 20px;
+      transform-origin: bottom center;
+      transition: transform 0.5s ease;
+    }
+
+    .dial-center-screw {
+      width: 12px;
+      height: 12px;
+      background: var(--primary);
+      border-radius: 50%;
+      z-index: 5;
+    }
+
+    .specs-column h3 {
+      font-family: var(--font-display);
+      font-size: 32px;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-bottom: var(--space-2);
+    }
+
+    .specs-desc {
+      color: var(--text-muted);
+      font-size: 14px;
+      line-height: 1.6;
+      margin-bottom: var(--space-4);
+    }
+
+    .telemetry-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-family: var(--font-mono);
+      font-size: 13px;
+      margin-bottom: var(--space-4);
+    }
+
+    .telemetry-table td {
+      padding: 10px 0;
+      border-top: 1px solid var(--border-hairline);
+    }
+
+    .t-label {
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .t-val {
+      text-align: right;
+      color: var(--primary);
+      font-weight: 600;
+    }
+
+    /* 4. ATELIER COLLECTION CARDS */
+    .collection-section {
+      padding: var(--space-12) 0;
+      border-top: 1px solid var(--border-hairline);
+    }
+
+    .section-headline {
+      font-family: var(--font-display);
+      font-size: 40px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-bottom: var(--space-2);
+      text-align: center;
+    }
+
+    .section-lead {
+      text-align: center;
+      color: var(--text-muted);
+      margin-bottom: var(--space-8);
+      font-size: 15px;
+    }
+
+    .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: var(--space-4);
+    }
+
+    .luxury-card {
+      background: var(--surface-card);
+      border: 1px solid var(--border-hairline);
+      padding: var(--space-4);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: border-color 0.25s, transform 0.25s;
+    }
+
+    .luxury-card:hover {
+      border-color: var(--border-strong);
+      transform: translateY(-4px);
+    }
+
+    .card-photo-placeholder {
+      height: 240px;
+      background: #000000;
+      border: 1px solid var(--border-hairline);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 40px;
+      margin-bottom: var(--space-3);
+    }
+
+    .card-title {
+      font-family: var(--font-display);
+      font-size: 22px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-bottom: var(--space-1);
+    }
+
+    .card-desc {
+      color: var(--text-muted);
+      font-size: 13px;
+      line-height: 1.5;
+      margin-bottom: var(--space-3);
+    }
+
+    .card-price {
+      font-family: var(--font-mono);
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--primary);
+    }
+
+    /* 5. FOOTER */
+    .luxury-footer {
+      border-top: 1px solid var(--border-hairline);
+      padding: var(--space-8) 0;
+      text-align: center;
+      font-family: var(--font-display);
+      letter-spacing: 0.15em;
+      font-size: 13px;
+      text-transform: uppercase;
+      color: var(--text-muted);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navigation -->
+  <header class="luxury-nav">
+    <div class="container nav-inner">
+      <a href="#" class="brand-mark">Maison Noir</a>
+
+      <ul class="nav-links">
+        <li><a href="#collection">Creations</a></li>
+        <li><a href="#inspector">Atelier</a></li>
+        <li><a href="#">Savoir-Faire</a></li>
+        <li><a href="#">Private Viewing</a></li>
+      </ul>
+
+      <a href="#inspector" class="btn-luxury-primary">Acquire</a>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="hero-section">
+    <div class="container">
+      <span class="serial-tag">EDITION LIMITÉE • 01 / 25 EXCLUSIVES</span>
+      <h1 class="hero-headline">THE PINNACLE OF MONOCHROMATIC HOROLOGY</h1>
+      <p class="hero-lead">
+        Forged in pure obsidian grade-5 titanium and DLC-coated platinum. An uncompromising study in dark architectural form, adhering strictly to the Luxury design system.
+      </p>
+
+      <div class="hero-actions">
+        <button class="btn-luxury-primary" onclick="windCrown()">Wind Mechanism</button>
+        <a href="#collection" class="btn-luxury-outline">Explore Gallery</a>
+      </div>
+
+      <!-- Timepiece Inspector -->
+      <div class="inspector-wrapper" id="inspector">
+        <div class="timepiece-visual">
+          <div class="chronometer-dial" id="chronometerDial">
+            <div class="dial-hand" id="dialHand"></div>
+            <div class="dial-center-screw"></div>
+          </div>
+          <div style="font-family: var(--font-mono); font-size: 11px; color: var(--text-muted); margin-top: 16px;">
+            REF. MN-9904 / TOURBILLON NOIR
+          </div>
+        </div>
+
+        <div class="specs-column">
+          <h3>CALIBRE 1888</h3>
+          <p class="specs-desc">
+            Manual winding flying tourbillon oscillating at 21,600 vibrations per hour. Hand-chamfered bridges finished in black ruthenium.
+          </p>
+
+          <table class="telemetry-table">
+            <tr>
+              <td class="t-label">Case Diameter</td>
+              <td class="t-val">41.5 MM</td>
+            </tr>
+            <tr>
+              <td class="t-label">Power Reserve</td>
+              <td class="t-val">120 HOURS</td>
+            </tr>
+            <tr>
+              <td class="t-label">Water Resistance</td>
+              <td class="t-val">50 METRES</td>
+            </tr>
+            <tr>
+              <td class="t-label">Craftsmanship</td>
+              <td class="t-val">GENÈVE POINÇON</td>
+            </tr>
+          </table>
+
+          <button class="btn-luxury-primary" style="width: 100%;" onclick="alert('Private Concierge inquiry sent.')">
+            Request Private Appointment
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Collections Grid -->
+  <section class="collection-section" id="collection">
+    <div class="container">
+      <h2 class="section-headline">THE NOIR COLLECTION</h2>
+      <p class="section-lead">Individually numbered masterworks sculpted from pure light and darkness.</p>
+
+      <div class="cards-grid">
+        <div class="luxury-card">
+          <div>
+            <div class="card-photo-placeholder">⌚</div>
+            <h4 class="card-title">Chronographe Monopoussoir</h4>
+            <p class="card-desc">Single-button column wheel chronograph with instantaneous minute jump counter.</p>
+          </div>
+          <div class="card-price">CHF 148,000</div>
+        </div>
+
+        <div class="luxury-card">
+          <div>
+            <div class="card-photo-placeholder">💎</div>
+            <h4 class="card-title">Quantième Perpétuel</h4>
+            <p class="card-desc">Secular perpetual calendar accurate to 400 years with astronomical moon phase.</p>
+          </div>
+          <div class="card-price">CHF 210,000</div>
+        </div>
+
+        <div class="luxury-card">
+          <div>
+            <div class="card-photo-placeholder">⏱️</div>
+            <h4 class="card-title">Répétition Minutes</h4>
+            <p class="card-desc">Cathedral gongs chiming hours, quarter-hours, and minutes in high-acoustics titanium.</p>
+          </div>
+          <div class="card-price">CHF 385,000</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="luxury-footer">
+    <div class="container">
+      <div>© 2026 MAISON NOIR. MANUFACTURE D'HORLOGERIE. ALL RIGHTS RESERVED.</div>
+      <div style="font-family: var(--font-mono); font-size: 11px; margin-top: 8px; color: #555;">
+        Adhering strictly to <code>open-design/design-systems/luxury/DESIGN.md</code> tokens.
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    let rot = 0;
+    function windCrown() {
+      rot += 60;
+      document.getElementById('dialHand').style.transform = `rotate(${rot}deg)`;
+      const dial = document.getElementById('chronometerDial');
+      dial.style.boxShadow = '0 0 50px rgba(255, 255, 255, 0.2)';
+      setTimeout(() => {
+        dial.style.boxShadow = '0 0 30px rgba(255, 255, 255, 0.05)';
+      }, 300);
+    }
+  </script>
+</body>
+</html>

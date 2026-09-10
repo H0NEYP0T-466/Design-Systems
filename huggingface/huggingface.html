@@ -1,0 +1,734 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hugging Face — The AI Community Building the Future</title>
+  <meta name="description" content="Authentic implementation of the Hugging Face design system with sunshine yellow (#ffd21e), IBM Plex Mono identity, model cards, task tags, and live inference playground.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Source+Sans+3:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      /* Brand & Yellow Accents */
+      --hf-yellow: #ffd21e;
+      --hf-yellow-deep: #f59e0b;
+      --hf-yellow-soft: #fff4cc;
+
+      /* Surfaces */
+      --canvas: #ffffff;
+      --canvas-subtle: #fafafa;
+      --canvas-inset: #f3f4f6;
+      --canvas-dark: #0d1117;
+
+      /* Ink / Text */
+      --ink-primary: #0d1117;
+      --ink-secondary: #374151;
+      --ink-muted: #6b7280;
+      --ink-inverse: #f9fafb;
+
+      /* Model Categories */
+      --tag-nlp-bg: #dbeafe;
+      --tag-nlp-text: #2563eb;
+      --tag-vision-bg: #dcfce7;
+      --tag-vision-text: #16a34a;
+      --tag-audio-bg: #f3e8ff;
+      --tag-audio-text: #9333ea;
+      --tag-multimodal-bg: #fce7f3;
+      --tag-multimodal-text: #db2777;
+
+      /* Borders & Radii */
+      --border-default: #e5e7eb;
+      --border-strong: #d1d5db;
+      --radius-sm: 4px;
+      --radius-md: 6px;
+
+      /* Typography */
+      --font-mono: 'IBM Plex Mono', monospace;
+      --font-sans: 'Source Sans 3', sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--canvas-subtle);
+      color: var(--ink-primary);
+      font-family: var(--font-sans);
+      font-size: 15px;
+      line-height: 1.55;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .container {
+      max-width: 1240px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+
+    /* Top Strip */
+    .hf-topbar {
+      background: var(--hf-yellow);
+      color: var(--ink-primary);
+      font-family: var(--font-mono);
+      font-size: 12px;
+      font-weight: 600;
+      text-align: center;
+      padding: 6px 12px;
+      border-bottom: 1px solid rgba(0,0,0,0.08);
+    }
+
+    /* Navigation */
+    .hf-nav {
+      background: var(--canvas);
+      border-bottom: 1px solid var(--border-default);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .nav-inner {
+      height: 64px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .nav-left {
+      display: flex;
+      align-items: center;
+      gap: 24px;
+    }
+
+    .hf-logo {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      text-decoration: none;
+      font-family: var(--font-mono);
+      font-size: 18px;
+      font-weight: 600;
+      color: var(--ink-primary);
+    }
+
+    .hf-logo-emoji {
+      font-size: 26px;
+      line-height: 1;
+    }
+
+    .nav-search {
+      background: var(--canvas-subtle);
+      border: 1px solid var(--border-default);
+      border-radius: var(--radius-md);
+      padding: 6px 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      width: 260px;
+    }
+
+    .nav-search input {
+      background: transparent;
+      border: none;
+      outline: none;
+      font-family: var(--font-mono);
+      font-size: 13px;
+      color: var(--ink-primary);
+      width: 100%;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 20px;
+      list-style: none;
+      font-family: var(--font-mono);
+      font-size: 14px;
+      font-weight: 500;
+    }
+
+    .nav-links a {
+      color: var(--ink-secondary);
+      text-decoration: none;
+      transition: color 0.12s ease-out;
+    }
+
+    .nav-links a:hover {
+      color: var(--ink-primary);
+    }
+
+    .nav-right {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    /* Buttons */
+    .btn-hf-black {
+      background: var(--ink-primary);
+      color: #ffffff;
+      border: none;
+      border-radius: var(--radius-md);
+      padding: 7px 16px;
+      font-family: var(--font-mono);
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      text-decoration: none;
+      transition: background 0.12s;
+    }
+
+    .btn-hf-black:hover {
+      background: var(--ink-secondary);
+    }
+
+    .btn-hf-yellow {
+      background: var(--hf-yellow);
+      color: var(--ink-primary);
+      border: none;
+      border-radius: var(--radius-md);
+      padding: 7px 16px;
+      font-family: var(--font-mono);
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.12s;
+      text-decoration: none;
+    }
+
+    .btn-hf-yellow:hover {
+      background: var(--hf-yellow-deep);
+    }
+
+    .btn-hf-outline {
+      background: var(--canvas);
+      color: var(--ink-primary);
+      border: 1px solid var(--border-default);
+      border-radius: var(--radius-md);
+      padding: 7px 14px;
+      font-family: var(--font-mono);
+      font-size: 13px;
+      cursor: pointer;
+      text-decoration: none;
+      transition: background 0.12s;
+    }
+
+    .btn-hf-outline:hover {
+      background: var(--canvas-inset);
+    }
+
+    /* Hero Section */
+    .hero-section {
+      padding: 48px 0 32px 0;
+      border-bottom: 1px solid var(--border-default);
+      background: var(--canvas);
+    }
+
+    .hero-title {
+      font-family: var(--font-mono);
+      font-size: 44px;
+      font-weight: 600;
+      letter-spacing: -0.01em;
+      line-height: 1.15;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .hero-desc {
+      font-size: 18px;
+      color: var(--ink-secondary);
+      max-width: 760px;
+      margin-bottom: 24px;
+      line-height: 1.5;
+    }
+
+    .category-pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 16px;
+    }
+
+    .cat-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 10px;
+      border-radius: var(--radius-sm);
+      font-family: var(--font-mono);
+      font-size: 12px;
+      font-weight: 500;
+      text-decoration: none;
+      cursor: pointer;
+      transition: transform 0.12s ease-out;
+    }
+
+    .cat-chip:hover {
+      transform: scale(1.05);
+    }
+
+    .cat-nlp { background: var(--tag-nlp-bg); color: var(--tag-nlp-text); }
+    .cat-vision { background: var(--tag-vision-bg); color: var(--tag-vision-text); }
+    .cat-audio { background: var(--tag-audio-bg); color: var(--tag-audio-text); }
+    .cat-multimodal { background: var(--tag-multimodal-bg); color: var(--tag-multimodal-text); }
+
+    /* Main Hub Grid */
+    .hub-layout {
+      display: grid;
+      grid-template-columns: 280px 1fr;
+      gap: 24px;
+      padding: 32px 0 64px 0;
+    }
+
+    /* Sidebar Filters */
+    .filter-sidebar {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .filter-group-title {
+      font-family: var(--font-mono);
+      font-size: 13px;
+      font-weight: 600;
+      text-transform: uppercase;
+      color: var(--ink-muted);
+      margin-bottom: 8px;
+      letter-spacing: 0.05em;
+    }
+
+    .filter-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .filter-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 6px 10px;
+      border-radius: var(--radius-sm);
+      font-family: var(--font-mono);
+      font-size: 13px;
+      color: var(--ink-secondary);
+      cursor: pointer;
+      transition: background 0.1s;
+    }
+
+    .filter-item:hover, .filter-item.active {
+      background: var(--canvas-inset);
+      color: var(--ink-primary);
+      font-weight: 600;
+    }
+
+    .filter-count {
+      color: var(--ink-muted);
+      font-size: 11px;
+    }
+
+    /* Model Cards Grid */
+    .models-stream {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .section-head-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid var(--border-default);
+      padding-bottom: 12px;
+    }
+
+    .section-headline {
+      font-family: var(--font-mono);
+      font-size: 20px;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .cards-deck {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    .model-card {
+      background: var(--canvas);
+      border: 1px solid var(--border-default);
+      border-radius: var(--radius-md);
+      padding: 16px 20px;
+      transition: border-color 0.12s, box-shadow 0.12s;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      cursor: pointer;
+    }
+
+    .model-card:hover {
+      border-color: var(--border-strong);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.04);
+    }
+
+    .model-card.featured::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: var(--hf-yellow);
+    }
+
+    .model-author-repo {
+      font-family: var(--font-mono);
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--ink-primary);
+      margin-bottom: 6px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .model-author-repo:hover {
+      color: var(--tag-nlp-text);
+    }
+
+    .model-card-desc {
+      font-size: 13px;
+      color: var(--ink-secondary);
+      line-height: 1.45;
+      margin-bottom: 12px;
+    }
+
+    .card-footer-meta {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-family: var(--font-mono);
+      font-size: 12px;
+      color: var(--ink-muted);
+      border-top: 1px solid var(--border-default);
+      padding-top: 10px;
+      margin-top: 8px;
+    }
+
+    .meta-counts {
+      display: flex;
+      gap: 12px;
+    }
+
+    /* Live Inference Playground */
+    .playground-box {
+      background: var(--canvas);
+      border: 1px solid var(--border-default);
+      border-radius: var(--radius-md);
+      padding: 24px;
+      margin-top: 16px;
+    }
+
+    .playground-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 16px;
+    }
+
+    .input-prompt-area {
+      width: 100%;
+      height: 72px;
+      background: var(--canvas-subtle);
+      border: 1px solid var(--border-default);
+      border-radius: var(--radius-sm);
+      padding: 10px 12px;
+      font-family: var(--font-sans);
+      font-size: 14px;
+      color: var(--ink-primary);
+      outline: none;
+      resize: none;
+      margin-bottom: 12px;
+    }
+
+    .input-prompt-area:focus {
+      border-color: var(--ink-primary);
+      box-shadow: 0 0 0 3px rgba(13,17,23,0.1);
+    }
+
+    .output-console {
+      background: var(--canvas-dark);
+      color: var(--ink-inverse);
+      padding: 16px;
+      border-radius: var(--radius-sm);
+      font-family: var(--font-mono);
+      font-size: 13px;
+      line-height: 1.5;
+      min-height: 80px;
+    }
+
+    /* Footer */
+    .hf-footer {
+      background: var(--canvas-subtle);
+      border-top: 1px solid var(--border-default);
+      padding: 48px 0 32px 0;
+      font-size: 13px;
+      color: var(--ink-muted);
+    }
+
+    .footer-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Announcement -->
+  <div class="hf-topbar">
+    🤗 HUGGING FACE COMMUNITY HUB • THE DEMOCRATIZATION OF ARTIFICIAL INTELLIGENCE
+  </div>
+
+  <!-- Navigation -->
+  <nav class="hf-nav">
+    <div class="container nav-inner">
+      <div class="nav-left">
+        <a href="#" class="hf-logo">
+          <span class="hf-logo-emoji">🤗</span>
+          <span>Hugging Face</span>
+        </a>
+        <div class="nav-search">
+          <span>🔍</span>
+          <input type="text" placeholder="Search models, datasets, users...">
+        </div>
+        <ul class="nav-links">
+          <li><a href="#models">Models</a></li>
+          <li><a href="#">Datasets</a></li>
+          <li><a href="#">Spaces</a></li>
+          <li><a href="#">Docs</a></li>
+          <li><a href="#">Pricing</a></li>
+        </ul>
+      </div>
+
+      <div class="nav-right">
+        <a href="#" class="btn-hf-outline">Log In</a>
+        <a href="#" class="btn-hf-yellow">Sign Up</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <header class="hero-section">
+    <div class="container">
+      <h1 class="hero-title">
+        <span>🤗</span>
+        <span>The AI community building the future.</span>
+      </h1>
+      <p class="hero-desc">
+        The platform where the machine learning community collaborates on models, datasets, and open-source applications with sunshine-yellow precision.
+      </p>
+
+      <div class="category-pills">
+        <span class="cat-chip cat-nlp">📖 Text Generation</span>
+        <span class="cat-chip cat-nlp">💬 Conversational</span>
+        <span class="cat-chip cat-vision">👁️ Text-to-Image</span>
+        <span class="cat-chip cat-vision">🖼️ Image Classification</span>
+        <span class="cat-chip cat-audio">🎙️ Text-to-Speech</span>
+        <span class="cat-chip cat-multimodal">✨ Multimodal & Robotics</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hub Explorer Layout -->
+  <main class="container hub-layout" id="models">
+    <!-- Left Filters -->
+    <aside class="filter-sidebar">
+      <div>
+        <div class="filter-group-title">TASKS</div>
+        <ul class="filter-list">
+          <li class="filter-item active"><span>Text Generation</span> <span class="filter-count">142,890</span></li>
+          <li class="filter-item"><span>Text-to-Image</span> <span class="filter-count">84,120</span></li>
+          <li class="filter-item"><span>Automatic Speech Rec</span> <span class="filter-count">31,450</span></li>
+          <li class="filter-item"><span>Translation</span> <span class="filter-count">24,800</span></li>
+        </ul>
+      </div>
+
+      <div>
+        <div class="filter-group-title">LIBRARIES</div>
+        <ul class="filter-list">
+          <li class="filter-item"><span>PyTorch</span> <span class="filter-count">512,040</span></li>
+          <li class="filter-item"><span>Transformers</span> <span class="filter-count">480,210</span></li>
+          <li class="filter-item"><span>Diffusers</span> <span class="filter-count">94,300</span></li>
+          <li class="filter-item"><span>Safetensors</span> <span class="filter-count">320,110</span></li>
+        </ul>
+      </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <section class="models-stream">
+      <div class="section-head-row">
+        <h2 class="section-headline">
+          <span>Trending Models</span>
+          <span style="font-size: 13px; font-weight: 500; color: var(--ink-muted);">980,412 items</span>
+        </h2>
+        <button class="btn-hf-black" onclick="alert('Filtered by trending')">Sort: Trending</button>
+      </div>
+
+      <!-- Models Deck -->
+      <div class="cards-deck">
+        <!-- Model 1 (Featured with yellow strip) -->
+        <div class="model-card featured" onclick="loadPrompt('meta-llama/Meta-Llama-3-8B-Instruct')">
+          <div>
+            <div class="model-author-repo">
+              <span>meta-llama / Meta-Llama-3-8B-Instruct</span>
+            </div>
+            <p class="model-card-desc">
+              State-of-the-art instruction-tuned text generation LLM trained on 15T multilingual tokens.
+            </p>
+            <div style="display: flex; gap: 6px;">
+              <span class="cat-chip cat-nlp" style="font-size: 11px; padding: 2px 6px;">text-generation</span>
+              <span style="background: var(--canvas-inset); font-family: var(--font-mono); font-size: 11px; padding: 2px 6px; border-radius: 4px;">PyTorch</span>
+            </div>
+          </div>
+          <div class="card-footer-meta">
+            <span>Updated 2 days ago</span>
+            <div class="meta-counts">
+              <span>⬇️ 4.2M</span>
+              <span>❤️ 14.8k</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Model 2 -->
+        <div class="model-card" onclick="loadPrompt('black-forest-labs/FLUX.1-schnell')">
+          <div>
+            <div class="model-author-repo">
+              <span>black-forest-labs / FLUX.1-schnell</span>
+            </div>
+            <p class="model-card-desc">
+              12 billion parameter rectified flow transformer for 1-4 step high-fidelity image synthesis.
+            </p>
+            <div style="display: flex; gap: 6px;">
+              <span class="cat-chip cat-vision" style="font-size: 11px; padding: 2px 6px;">text-to-image</span>
+              <span style="background: var(--canvas-inset); font-family: var(--font-mono); font-size: 11px; padding: 2px 6px; border-radius: 4px;">Diffusers</span>
+            </div>
+          </div>
+          <div class="card-footer-meta">
+            <span>Updated yesterday</span>
+            <div class="meta-counts">
+              <span>⬇️ 1.8M</span>
+              <span>❤️ 8.9k</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Model 3 -->
+        <div class="model-card" onclick="loadPrompt('mistralai/Mistral-7B-Instruct-v0.3')">
+          <div>
+            <div class="model-author-repo">
+              <span>mistralai / Mistral-7B-Instruct-v0.3</span>
+            </div>
+            <p class="model-card-desc">
+              High-efficiency instruction model supporting 32k context window and native function calling.
+            </p>
+            <div style="display: flex; gap: 6px;">
+              <span class="cat-chip cat-nlp" style="font-size: 11px; padding: 2px 6px;">text-generation</span>
+            </div>
+          </div>
+          <div class="card-footer-meta">
+            <span>Updated 4 days ago</span>
+            <div class="meta-counts">
+              <span>⬇️ 890k</span>
+              <span>❤️ 5.2k</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Model 4 -->
+        <div class="model-card" onclick="loadPrompt('openai/whisper-large-v3-turbo')">
+          <div>
+            <div class="model-author-repo">
+              <span>openai / whisper-large-v3-turbo</span>
+            </div>
+            <p class="model-card-desc">
+              Optimized speech recognition and translation model with reduced decoder latency.
+            </p>
+            <div style="display: flex; gap: 6px;">
+              <span class="cat-chip cat-audio" style="font-size: 11px; padding: 2px 6px;">automatic-speech-recognition</span>
+            </div>
+          </div>
+          <div class="card-footer-meta">
+            <span>Updated 1 week ago</span>
+            <div class="meta-counts">
+              <span>⬇️ 620k</span>
+              <span>❤️ 3.4k</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Live Inference Playground -->
+      <div class="playground-box">
+        <div class="playground-header">
+          <div style="font-family: var(--font-mono); font-weight: 600; font-size: 16px;">
+            ⚡ Inference API Playground (<span id="activeModelLabel" style="color: var(--tag-nlp-text);">meta-llama/Meta-Llama-3-8B-Instruct</span>)
+          </div>
+          <button class="btn-hf-yellow" onclick="runInference()">Compute Inference</button>
+        </div>
+
+        <textarea class="input-prompt-area" id="promptInput" placeholder="Enter input prompt...">Explain the Hugging Face design system in two concise sentences.</textarea>
+
+        <div class="output-console" id="consoleOutput">
+          <span style="color: #6b7280;"># Press "Compute Inference" to generate tokens...</span>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer class="hf-footer">
+    <div class="container footer-row">
+      <div style="display: flex; align-items: center; gap: 8px;">
+        <span style="font-size: 20px;">🤗</span>
+        <span style="font-family: var(--font-mono); font-weight: 600; color: var(--ink-primary);">Hugging Face, Inc.</span>
+      </div>
+      <div style="font-family: var(--font-mono);">
+        Adheres to <code>open-design/design-systems/huggingface/DESIGN.md</code>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    function loadPrompt(modelId) {
+      document.getElementById('activeModelLabel').textContent = modelId;
+      document.getElementById('promptInput').value = `Explain why ${modelId} is ideal for developer production workflows.`;
+    }
+
+    function runInference() {
+      const out = document.getElementById('consoleOutput');
+      out.textContent = 'Tokenizing prompt... running transformer decoder...';
+      out.style.color = 'var(--hf-yellow)';
+
+      setTimeout(() => {
+        out.textContent = `[
+  {
+    "generated_text": "The Hugging Face design system pairs high-energy sunshine yellow (#ffd21e) accents with a developer-first monospace voice (IBM Plex Mono). It delivers clean, accessible, repository-driven interfaces with authentic model cards and categorical task tags."
+  }
+]`;
+        out.style.color = '#34d399';
+      }, 700);
+    }
+  </script>
+</body>
+</html>

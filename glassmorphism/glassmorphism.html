@@ -1,0 +1,1049 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Glassmorphism Design System — Frosted Translucence & Depth</title>
+  
+  <!-- Typography: Plus Jakarta Sans (Primary & Display) & JetBrains Mono (Code) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    /* Glassmorphism Design Tokens (from DESIGN.md & tokens.css) */
+    :root {
+      /* Palette */
+      --primary: #1856FF;           /* Luminous cobalt blue */
+      --primary-hover: #1044cc;
+      --primary-glow: rgba(24, 86, 255, 0.4);
+      --secondary: #3A344E;         /* Deep twilight slate */
+      --secondary-light: #4e4668;
+      
+      --success: #07CA6B;
+      --warning: #E89558;
+      --danger: #EA2143;
+      --meta: #4f8cff;
+      
+      /* Canvas & Glass Surfaces */
+      --bg: #eef6ff;
+      --surface: rgba(255, 255, 255, 0.74);
+      --surface-subtle: rgba(255, 255, 255, 0.45);
+      --surface-warm: rgba(238, 246, 255, 0.72);
+      --surface-solid: #FFFFFF;
+      
+      /* Glass Borders & Refraction Highlights */
+      --border: rgba(255, 255, 255, 0.64);
+      --border-soft: rgba(255, 255, 255, 0.38);
+      --border-accent: rgba(24, 86, 255, 0.35);
+      
+      /* Typography & Text */
+      --text: #141414;
+      --text-muted: #60708a;
+      --text-subtle: #8a9bb3;
+      --font-display: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+      --font-body: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+      --font-mono: 'JetBrains Mono', ui-monospace, Menlo, monospace;
+      
+      /* Radii & Elevation */
+      --radius-sm: 16px;
+      --radius-md: 24px;
+      --radius-lg: 36px;
+      --radius-pill: 9999px;
+      --elev-raised: 0 24px 80px rgba(79, 140, 255, 0.18);
+      --elev-glass: 0 20px 40px -15px rgba(24, 86, 255, 0.12), 0 0 0 1px rgba(255, 255, 255, 0.6);
+      --focus-ring: 0 0 0 4px rgba(79, 140, 255, 0.28);
+      
+      /* Glass Controls Dynamic State */
+      --glass-blur: 20px;
+      --glass-opacity: 0.74;
+      --glass-sheen: 1;
+    }
+
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--bg);
+      color: var(--text);
+      font-family: var(--font-body);
+      font-size: 15px;
+      line-height: 1.55;
+      min-height: 100vh;
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    /* Ambient Floating Gradient Orbs (Creates real optical refraction behind frosted glass) */
+    .ambient-canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      pointer-events: none;
+      z-index: 0;
+      overflow: hidden;
+    }
+
+    .orb {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(80px);
+      opacity: 0.65;
+      animation: float 20s infinite alternate ease-in-out;
+    }
+
+    .orb-1 {
+      width: 550px;
+      height: 550px;
+      background: radial-gradient(circle, #38bdf8 0%, #1856FF 70%);
+      top: -100px;
+      right: 5%;
+      animation-duration: 24s;
+    }
+
+    .orb-2 {
+      width: 600px;
+      height: 600px;
+      background: radial-gradient(circle, #c084fc 0%, #a855f7 60%, #ec4899 100%);
+      bottom: 5%;
+      left: -100px;
+      animation-duration: 28s;
+      animation-delay: -5s;
+    }
+
+    .orb-3 {
+      width: 450px;
+      height: 450px;
+      background: radial-gradient(circle, #34d399 0%, #07CA6B 70%);
+      top: 40%;
+      right: 25%;
+      animation-duration: 18s;
+      animation-delay: -10s;
+      opacity: 0.45;
+    }
+
+    .orb-4 {
+      width: 400px;
+      height: 400px;
+      background: radial-gradient(circle, #f472b6 0%, #E89558 80%);
+      bottom: -150px;
+      right: 15%;
+      animation-duration: 22s;
+      opacity: 0.5;
+    }
+
+    @keyframes float {
+      0% { transform: translate(0, 0) scale(1); }
+      50% { transform: translate(60px, 40px) scale(1.08); }
+      100% { transform: translate(-40px, 80px) scale(0.95); }
+    }
+
+    /* Floating Glass Navigation Bar */
+    .glass-nav-wrapper {
+      position: sticky;
+      top: 24px;
+      z-index: 100;
+      padding: 0 2rem;
+      max-width: 1240px;
+      margin: 0 auto;
+    }
+
+    .glass-navbar {
+      background: rgba(255, 255, 255, var(--glass-opacity));
+      backdrop-filter: blur(var(--glass-blur));
+      -webkit-backdrop-filter: blur(var(--glass-blur));
+      border: 1px solid var(--border);
+      box-shadow: var(--elev-glass);
+      border-radius: var(--radius-pill);
+      padding: 10px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1.5rem;
+      position: relative;
+    }
+
+    /* Specular light highlight on glass edge */
+    .glass-navbar::before, .glass-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 20px;
+      right: 20px;
+      height: 1px;
+      background: linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.9) 50%, transparent 100%);
+      opacity: var(--glass-sheen);
+      pointer-events: none;
+    }
+
+    .glass-brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+      color: var(--text);
+    }
+
+    .glass-brand-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.4));
+      border: 1px solid rgba(255, 255, 255, 0.8);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--primary);
+      box-shadow: 0 4px 12px rgba(24, 86, 255, 0.2);
+    }
+
+    .glass-brand-title {
+      font-family: var(--font-display);
+      font-weight: 800;
+      font-size: 1.15rem;
+      letter-spacing: -0.02em;
+    }
+
+    .glass-nav-links {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      list-style: none;
+    }
+
+    .nav-pill {
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--secondary);
+      padding: 8px 16px;
+      border-radius: var(--radius-pill);
+      transition: all 180ms ease;
+    }
+
+    .nav-pill:hover, .nav-pill.active {
+      color: var(--primary);
+      background: rgba(24, 86, 255, 0.08);
+    }
+
+    .glass-nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    /* Buttons */
+    .btn {
+      font-family: var(--font-body);
+      font-size: 14px;
+      font-weight: 700;
+      padding: 10px 22px;
+      border-radius: var(--radius-pill);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      text-decoration: none;
+      transition: all 200ms cubic-bezier(0.22, 1, 0.36, 1);
+      border: none;
+      outline: none;
+    }
+
+    .btn-primary {
+      background: var(--primary);
+      color: #ffffff;
+      box-shadow: 0 8px 24px var(--primary-glow);
+    }
+
+    .btn-primary:hover {
+      background: var(--primary-hover);
+      transform: translateY(-2px);
+      box-shadow: 0 12px 30px rgba(24, 86, 255, 0.5);
+    }
+
+    .btn-glass {
+      background: rgba(255, 255, 255, 0.65);
+      color: var(--secondary);
+      border: 1px solid var(--border);
+      backdrop-filter: blur(12px);
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
+    }
+
+    .btn-glass:hover {
+      background: rgba(255, 255, 255, 0.95);
+      color: var(--primary);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(24, 86, 255, 0.15);
+    }
+
+    /* Interactive Live Glass Controller Bar */
+    .glass-controller-strip {
+      max-width: 1240px;
+      margin: 20px auto 0 auto;
+      padding: 0 2rem;
+      position: relative;
+      z-index: 10;
+    }
+
+    .control-panel {
+      background: rgba(255, 255, 255, 0.6);
+      backdrop-filter: blur(16px);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 12px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 2rem;
+      flex-wrap: wrap;
+    }
+
+    .control-group {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--secondary);
+    }
+
+    .glass-slider {
+      appearance: none;
+      width: 140px;
+      height: 6px;
+      border-radius: 3px;
+      background: rgba(24, 86, 255, 0.2);
+      outline: none;
+    }
+
+    .glass-slider::-webkit-slider-thumb {
+      appearance: none;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: var(--primary);
+      cursor: pointer;
+      box-shadow: 0 2px 6px rgba(24, 86, 255, 0.5);
+    }
+
+    /* Main Content Container */
+    .glass-main {
+      max-width: 1240px;
+      margin: 0 auto;
+      padding: 2.5rem 2rem 4rem 2rem;
+      position: relative;
+      z-index: 10;
+      display: flex;
+      flex-direction: column;
+      gap: 3rem;
+    }
+
+    /* Hero Section */
+    .hero-glass-section {
+      text-align: center;
+      padding: 3rem 1.5rem;
+      position: relative;
+    }
+
+    .glass-hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(255, 255, 255, 0.7);
+      backdrop-filter: blur(12px);
+      border: 1px solid var(--border);
+      padding: 6px 18px;
+      border-radius: var(--radius-pill);
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--primary);
+      margin-bottom: 1.5rem;
+      box-shadow: 0 4px 14px rgba(24, 86, 255, 0.08);
+    }
+
+    .hero-headline {
+      font-family: var(--font-display);
+      font-size: clamp(2.5rem, 5vw, 4rem);
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      line-height: 1.1;
+      margin-bottom: 1.25rem;
+      color: var(--text);
+    }
+
+    .hero-headline span {
+      background: linear-gradient(135deg, #1856FF 0%, #3A344E 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .hero-subtext {
+      font-size: 1.15rem;
+      color: var(--text-muted);
+      max-width: 680px;
+      margin: 0 auto 2rem auto;
+      line-height: 1.6;
+    }
+
+    .hero-cta-row {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+    }
+
+    /* Bento Grid of Glass Cards */
+    .bento-grid {
+      display: grid;
+      grid-template-columns: 1.2fr 0.8fr;
+      gap: 2rem;
+    }
+
+    @media (max-width: 900px) {
+      .bento-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .glass-card {
+      background: rgba(255, 255, 255, var(--glass-opacity));
+      backdrop-filter: blur(var(--glass-blur));
+      -webkit-backdrop-filter: blur(var(--glass-blur));
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 2rem;
+      box-shadow: var(--elev-glass);
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .glass-card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 1.5rem;
+    }
+
+    .glass-card-title {
+      font-family: var(--font-display);
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--text);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    /* Feature 1: Spatial Media Player */
+    .media-player-card {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    .media-track-info {
+      display: flex;
+      align-items: center;
+      gap: 1.25rem;
+    }
+
+    .media-album-art {
+      width: 72px;
+      height: 72px;
+      border-radius: var(--radius-sm);
+      background: linear-gradient(135deg, #1856FF, #c084fc, #07CA6B);
+      box-shadow: 0 8px 20px rgba(24, 86, 255, 0.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #ffffff;
+      font-size: 28px;
+    }
+
+    .media-details h4 {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    .media-details p {
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+
+    .glass-progress-bar {
+      height: 8px;
+      background: rgba(24, 86, 255, 0.12);
+      border-radius: 4px;
+      position: relative;
+      cursor: pointer;
+      overflow: hidden;
+    }
+
+    .glass-progress-fill {
+      width: 64%;
+      height: 100%;
+      background: linear-gradient(90deg, #1856FF, #4f8cff);
+      border-radius: 4px;
+    }
+
+    .media-controls-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .media-btn-circle {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.7);
+      border: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      color: var(--secondary);
+      transition: all 180ms ease;
+    }
+
+    .media-btn-circle:hover {
+      background: #ffffff;
+      color: var(--primary);
+      transform: scale(1.06);
+    }
+
+    .media-btn-play {
+      width: 54px;
+      height: 54px;
+      background: var(--primary);
+      color: #ffffff;
+      box-shadow: 0 8px 20px var(--primary-glow);
+    }
+
+    .media-btn-play:hover {
+      background: var(--primary-hover);
+      color: #ffffff;
+    }
+
+    /* Feature 2: Glass Crypto Vault Card */
+    .vault-card {
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.85), rgba(255, 255, 255, 0.55));
+    }
+
+    .vault-balance-num {
+      font-family: var(--font-display);
+      font-size: 2.4rem;
+      font-weight: 800;
+      color: var(--text);
+      letter-spacing: -0.02em;
+    }
+
+    .vault-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 4px 10px;
+      border-radius: var(--radius-pill);
+      font-size: 12px;
+      font-weight: 700;
+      background: rgba(7, 202, 107, 0.15);
+      color: var(--success);
+      margin-top: 4px;
+    }
+
+    .telemetry-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+      margin-top: 1.5rem;
+    }
+
+    .telemetry-stat {
+      background: rgba(255, 255, 255, 0.5);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 12px 16px;
+    }
+
+    .telemetry-stat-label {
+      font-size: 12px;
+      color: var(--text-muted);
+      font-weight: 600;
+    }
+
+    .telemetry-stat-val {
+      font-family: var(--font-display);
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: var(--secondary);
+      margin-top: 4px;
+    }
+
+    /* Lower Bento: Interactive Sandbox & Tokens */
+    .bottom-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+    }
+
+    @media (max-width: 900px) {
+      .bottom-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* Interactive CSS Code Output */
+    .code-glass-box {
+      background: rgba(16, 32, 51, 0.85);
+      backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: var(--radius-md);
+      padding: 1.5rem;
+      color: #eef6ff;
+      font-family: var(--font-mono);
+      font-size: 13px;
+      line-height: 1.7;
+      position: relative;
+    }
+
+    .copy-btn {
+      position: absolute;
+      top: 14px;
+      right: 14px;
+      background: rgba(255, 255, 255, 0.15);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      color: #ffffff;
+      padding: 4px 10px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 11px;
+    }
+
+    .copy-btn:hover {
+      background: rgba(255, 255, 255, 0.3);
+    }
+
+    /* Tokens Showcase */
+    .token-audit-panel {
+      background: rgba(255, 255, 255, var(--glass-opacity));
+      backdrop-filter: blur(var(--glass-blur));
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 2rem;
+      box-shadow: var(--elev-glass);
+    }
+
+    .token-pill-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 1rem;
+      margin-top: 1.5rem;
+    }
+
+    .token-swatch-box {
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      overflow: hidden;
+      background: rgba(255, 255, 255, 0.6);
+    }
+
+    .token-color-block {
+      height: 50px;
+      display: flex;
+      align-items: flex-end;
+      padding: 6px 10px;
+      font-family: var(--font-mono);
+      font-size: 11px;
+      font-weight: 700;
+    }
+
+    .token-info-block {
+      padding: 8px 12px;
+      font-size: 12px;
+    }
+
+    .token-var {
+      font-family: var(--font-mono);
+      font-weight: 700;
+      color: var(--primary);
+    }
+
+    /* Glass Footer */
+    .glass-footer {
+      max-width: 1240px;
+      margin: 0 auto 3rem auto;
+      padding: 0 2rem;
+      position: relative;
+      z-index: 10;
+    }
+
+    .footer-panel {
+      background: rgba(255, 255, 255, 0.6);
+      backdrop-filter: blur(16px);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 1.5rem 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+
+    .footer-links {
+      display: flex;
+      gap: 1.5rem;
+      list-style: none;
+    }
+
+    .footer-links a {
+      color: var(--secondary);
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    .footer-links a:hover {
+      color: var(--primary);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Animated Ambient Refraction Orbs -->
+  <div class="ambient-canvas">
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="orb orb-3"></div>
+    <div class="orb orb-4"></div>
+  </div>
+
+  <!-- Floating Glass Navigation -->
+  <div class="glass-nav-wrapper">
+    <nav class="glass-navbar">
+      <a href="#" class="glass-brand">
+        <div class="glass-brand-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>
+        </div>
+        <span class="glass-brand-title">AURA GLASS</span>
+      </a>
+
+      <ul class="glass-nav-links">
+        <li><a href="#overview" class="nav-pill active">Overview</a></li>
+        <li><a href="#components" class="nav-pill">Components</a></li>
+        <li><a href="#sandbox" class="nav-pill">Refraction Lab</a></li>
+        <li><a href="#tokens" class="nav-pill">Tokens</a></li>
+      </ul>
+
+      <div class="glass-nav-actions">
+        <button class="btn btn-glass" onclick="triggerGlassModal()">Glass Modal</button>
+        <button class="btn btn-primary" onclick="alert('Glassmorphism primary action executed!')">Get Started</button>
+      </div>
+    </nav>
+  </div>
+
+  <!-- Interactive Live Glass Controller Strip -->
+  <div class="glass-controller-strip">
+    <div class="control-panel">
+      <div class="control-group">
+        <span>Backdrop Blur:</span>
+        <input type="range" class="glass-slider" min="4" max="40" value="20" id="blurSlider" oninput="updateBlur(this.value)">
+        <span id="blurVal" style="font-family: var(--font-mono); width: 45px;">20px</span>
+      </div>
+
+      <div class="control-group">
+        <span>Surface Translucency:</span>
+        <input type="range" class="glass-slider" min="30" max="95" value="74" id="opacitySlider" oninput="updateOpacity(this.value)">
+        <span id="opacityVal" style="font-family: var(--font-mono); width: 45px;">74%</span>
+      </div>
+
+      <div class="control-group">
+        <span>Specular Sheen:</span>
+        <input type="checkbox" id="sheenToggle" checked onchange="toggleSheen(this.checked)" style="width: 18px; height: 18px; accent-color: var(--primary); cursor: pointer;">
+        <label for="sheenToggle" style="cursor: pointer;">Active</label>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main View -->
+  <main class="glass-main" id="overview">
+
+    <!-- Hero Section -->
+    <section class="hero-glass-section">
+      <div class="glass-hero-badge">
+        <span>●</span>
+        <span>Morphism &amp; Effects Design System</span>
+      </div>
+
+      <h1 class="hero-headline">
+        Translucent Depth &amp;<br>
+        <span>Luminous Frosted Refraction</span>
+      </h1>
+
+      <p class="hero-subtext">
+        An authentic implementation of frosted glass ergonomics. Engineered with dynamic optical blur, luminous hairline borders (<code>rgba(255, 255, 255, 0.64)</code>), and high-contrast sapphire accents (<code>#1856FF</code>) that ensure readability above vivid backdrops.
+      </p>
+
+      <div class="hero-cta-row">
+        <button class="btn btn-primary" onclick="triggerGlassModal()">Launch Glass Experience</button>
+        <a href="#sandbox" class="btn btn-glass">Explore Refraction Sandbox</a>
+      </div>
+    </section>
+
+    <!-- Bento Grid of Glass Components -->
+    <div class="bento-grid" id="components">
+
+      <!-- Spatial Media Player Card -->
+      <div class="glass-card media-player-card">
+        <div class="glass-card-header">
+          <div class="glass-card-title">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
+            <span>Spatial Audio Refractor</span>
+          </div>
+          <span style="font-family: var(--font-mono); font-size: 12px; color: var(--primary); font-weight: 700;">FLAC 96kHz</span>
+        </div>
+
+        <div class="media-track-info">
+          <div class="media-album-art">♫</div>
+          <div class="media-details">
+            <h4>Luminescent Horizons</h4>
+            <p>Ethereal Waves · Glassmorphism Session Vol. 4</p>
+          </div>
+        </div>
+
+        <div>
+          <div class="glass-progress-bar" onclick="scrubAudio(event)">
+            <div class="glass-progress-fill" id="progressFill"></div>
+          </div>
+          <div style="display: flex; justify-content: space-between; font-family: var(--font-mono); font-size: 11px; color: var(--text-muted); margin-top: 6px;">
+            <span id="currentTime">02:18</span>
+            <span>03:45</span>
+          </div>
+        </div>
+
+        <div class="media-controls-row">
+          <button class="media-btn-circle">⏮</button>
+          <button class="media-btn-circle media-btn-play" onclick="togglePlay(this)">⏸</button>
+          <button class="media-btn-circle">⏭</button>
+          <button class="media-btn-circle" onclick="alert('Added to glass favorites!')">♥</button>
+        </div>
+      </div>
+
+      <!-- Financial Vault Glass Card -->
+      <div class="glass-card vault-card">
+        <div class="glass-card-header">
+          <div class="glass-card-title">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>
+            <span>Luminous Liquidity Pool</span>
+          </div>
+          <span class="vault-tag">▲ +18.4%</span>
+        </div>
+
+        <div>
+          <div style="font-size: 13px; color: var(--text-muted); font-weight: 600;">PORTFOLIO BALANCE</div>
+          <div class="vault-balance-num">$128,490.50</div>
+        </div>
+
+        <div class="telemetry-row">
+          <div class="telemetry-stat">
+            <div class="telemetry-stat-label">Yield Rate</div>
+            <div class="telemetry-stat-val" style="color: var(--success);">7.85% APY</div>
+          </div>
+          <div class="telemetry-stat">
+            <div class="telemetry-stat-label">Refraction Ratio</div>
+            <div class="telemetry-stat-val">1.488 n</div>
+          </div>
+        </div>
+
+        <div style="margin-top: 1.5rem; display: flex; gap: 10px;">
+          <button class="btn btn-primary" style="flex: 1;" onclick="alert('Deposited into vault!')">Deposit</button>
+          <button class="btn btn-glass" style="flex: 1;" onclick="alert('Withdraw initiated.')">Withdraw</button>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Lower Section: Sandbox & Token Audit -->
+    <div class="bottom-grid" id="sandbox">
+
+      <!-- Glass CSS Snippet Generator -->
+      <div class="glass-card">
+        <div class="glass-card-header">
+          <div class="glass-card-title">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+            <span>Live CSS Code Output</span>
+          </div>
+        </div>
+
+        <div class="code-glass-box">
+          <button class="copy-btn" onclick="copySnippet()">Copy</button>
+<pre id="codeSnippet">.glass-surface {
+  background: rgba(255, 255, 255, <span id="codeOpacity">0.74</span>);
+  backdrop-filter: blur(<span id="codeBlur">20px</span>);
+  -webkit-backdrop-filter: blur(<span id="codeBlur2">20px</span>);
+  border: 1px solid rgba(255, 255, 255, 0.64);
+  box-shadow: 0 20px 40px -15px rgba(24, 86, 255, 0.12);
+  border-radius: 24px;
+}</pre>
+        </div>
+        <p style="font-size: 13px; color: var(--text-muted); margin-top: 1rem;">
+          This code is dynamically updated whenever you adjust the sliders above.
+        </p>
+      </div>
+
+      <!-- Design Token Foundations Audit -->
+      <div class="token-audit-panel" id="tokens">
+        <div class="glass-card-header">
+          <div class="glass-card-title">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="m4.93 4.93 4.24 4.24"/><path d="m14.83 9.17 4.24-4.24"/><path d="m14.83 14.83 4.24 4.24"/><path d="m9.17 14.83-4.24 4.24"/></svg>
+            <span>Design Tokens Audit</span>
+          </div>
+        </div>
+
+        <div class="token-pill-grid">
+          <!-- Token 1 -->
+          <div class="token-swatch-box">
+            <div class="token-color-block" style="background-color: #1856FF; color: #ffffff;">
+              #1856FF
+            </div>
+            <div class="token-info-block">
+              <div class="token-var">--primary</div>
+              <div style="color: var(--text-muted);">Luminous Cobalt</div>
+            </div>
+          </div>
+
+          <!-- Token 2 -->
+          <div class="token-swatch-box">
+            <div class="token-color-block" style="background-color: #3A344E; color: #ffffff;">
+              #3A344E
+            </div>
+            <div class="token-info-block">
+              <div class="token-var">--secondary</div>
+              <div style="color: var(--text-muted);">Deep Twilight Slate</div>
+            </div>
+          </div>
+
+          <!-- Token 3 -->
+          <div class="token-swatch-box">
+            <div class="token-color-block" style="background-color: #07CA6B; color: #ffffff;">
+              #07CA6B
+            </div>
+            <div class="token-info-block">
+              <div class="token-var">--success</div>
+              <div style="color: var(--text-muted);">Luminous Mint</div>
+            </div>
+          </div>
+
+          <!-- Token 4 -->
+          <div class="token-swatch-box">
+            <div class="token-color-block" style="background: rgba(255, 255, 255, 0.74); color: #141414; border-bottom: 1px solid #d0d7de;">
+              rgba(255,255,255,0.74)
+            </div>
+            <div class="token-info-block">
+              <div class="token-var">--surface</div>
+              <div style="color: var(--text-muted);">Frosted Glass Panel</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+  </main>
+
+  <!-- Glass Modal Overlay (Interactive Feature) -->
+  <div id="modalOverlay" style="display: none; position: fixed; inset: 0; background: rgba(16, 32, 51, 0.4); backdrop-filter: blur(12px); z-index: 200; align-items: center; justify-content: center; padding: 1.5rem;" onclick="closeModalOnBackdrop(event)">
+    <div class="glass-card" style="max-width: 480px; width: 100%; box-shadow: 0 32px 80px rgba(0,0,0,0.25); border-color: rgba(255,255,255,0.85);" onclick="event.stopPropagation()">
+      <div class="glass-card-header">
+        <h3 style="font-family: var(--font-display); font-weight: 800; font-size: 1.3rem;">Frosted Glass Modal</h3>
+        <button style="background: none; border: none; font-size: 20px; cursor: pointer; color: var(--secondary);" onclick="closeGlassModal()">✕</button>
+      </div>
+      <p style="color: var(--text-muted); font-size: 14px; margin-bottom: 1.5rem; line-height: 1.6;">
+        Notice the dual-layer blur effect: the page background is blurred by the modal backdrop, while the modal itself applies its own refractive surface filter.
+      </p>
+      <div style="display: flex; gap: 10px; justify-content: flex-end;">
+        <button class="btn btn-glass" onclick="closeGlassModal()">Dismiss</button>
+        <button class="btn btn-primary" onclick="closeGlassModal()">Confirm Action</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Glass Footer -->
+  <footer class="glass-footer">
+    <div class="footer-panel">
+      <div>
+        <strong>AURA GLASS DESIGN SYSTEM</strong> — Frosted translucence specifications from open-design.
+      </div>
+      <ul class="footer-links">
+        <li><a href="#overview">Overview</a></li>
+        <li><a href="#components">Components</a></li>
+        <li><a href="#sandbox">Sandbox</a></li>
+        <li><a href="#tokens">Tokens</a></li>
+      </ul>
+    </div>
+  </footer>
+
+  <script>
+    function updateBlur(val) {
+      document.documentElement.style.setProperty('--glass-blur', val + 'px');
+      document.getElementById('blurVal').textContent = val + 'px';
+      document.getElementById('codeBlur').textContent = val + 'px';
+      document.getElementById('codeBlur2').textContent = val + 'px';
+    }
+
+    function updateOpacity(val) {
+      const dec = (val / 100).toFixed(2);
+      document.documentElement.style.setProperty('--glass-opacity', dec);
+      document.getElementById('opacityVal').textContent = val + '%';
+      document.getElementById('codeOpacity').textContent = dec;
+    }
+
+    function toggleSheen(checked) {
+      document.documentElement.style.setProperty('--glass-sheen', checked ? '1' : '0');
+    }
+
+    function triggerGlassModal() {
+      const modal = document.getElementById('modalOverlay');
+      modal.style.display = 'flex';
+    }
+
+    function closeGlassModal() {
+      document.getElementById('modalOverlay').style.display = 'none';
+    }
+
+    function closeModalOnBackdrop(e) {
+      if (e.target.id === 'modalOverlay') {
+        closeGlassModal();
+      }
+    }
+
+    function copySnippet() {
+      const text = document.getElementById('codeSnippet').innerText;
+      navigator.clipboard.writeText(text).then(() => {
+        alert('CSS snippet copied to clipboard!');
+      });
+    }
+
+    let isPlaying = true;
+    function togglePlay(btn) {
+      isPlaying = !isPlaying;
+      btn.textContent = isPlaying ? '⏸' : '▶';
+    }
+
+    function scrubAudio(e) {
+      const bar = e.currentTarget;
+      const rect = bar.getBoundingClientRect();
+      const clickX = e.clientX - rect.left;
+      const pct = Math.max(0, Math.min(100, (clickX / rect.width) * 100));
+      document.getElementById('progressFill').style.width = pct + '%';
+    }
+  </script>
+</body>
+</html>

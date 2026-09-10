@@ -1,0 +1,1058 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Intercom Design System — AI-First Customer Service</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      /* Intercom Primary Tokens per DESIGN.md */
+      --color-off-black: #111111;
+      --wsc-color-content-primary: #ffffff;
+      --color-warm-cream: #faf9f6;
+      --color-fin: #ff5600; /* Fin Orange - AI agent accent */
+      --color-report-orange: #fe4c02;
+
+      /* Report Palette for Data Visualization */
+      --color-report-blue: #65b5ff;
+      --color-report-green: #0bdf50;
+      --color-report-red: #c41c1c;
+      --color-report-pink: #ff2067;
+      --color-report-lime: #b3e01c;
+      --color-green: #00da00;
+      --color-deep-blue: #0007cb;
+
+      /* Warm Neutrals */
+      --wsc-color-black-80: #313130;
+      --wsc-color-black-60: #626260;
+      --wsc-color-black-50: #7b7b78; /* Muted text */
+      --wsc-color-content-tertiary: #9c9fa5;
+      --color-oat-border: #dedbd6;   /* Warm oat border */
+      --color-warm-sand: #d3cec6;
+
+      /* Font Families */
+      --font-saans: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      --font-serif: 'Instrument Serif', Georgia, serif;
+      --font-mono: 'JetBrains Mono', monospace;
+
+      /* Spacing Scale */
+      --sp-8: 8px;
+      --sp-10: 10px;
+      --sp-12: 12px;
+      --sp-14: 14px;
+      --sp-16: 16px;
+      --sp-20: 20px;
+      --sp-24: 24px;
+      --sp-32: 32px;
+      --sp-40: 40px;
+      --sp-48: 48px;
+      --sp-60: 60px;
+      --sp-64: 64px;
+      --sp-80: 80px;
+      --sp-96: 96px;
+
+      /* Strict Border Radius Scale */
+      --radius-btn: 4px;   /* Sharp near-rectangular */
+      --radius-nav: 6px;
+      --radius-card: 8px;
+    }
+
+    /* Reset & Base */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      font-size: 16px;
+      background-color: var(--color-warm-cream); /* Never pure white canvas */
+      color: var(--color-off-black);
+      font-family: var(--font-saans);
+      -webkit-font-smoothing: antialiased;
+      scroll-behavior: smooth;
+    }
+
+    body {
+      overflow-x: hidden;
+      line-height: 1.5;
+    }
+
+    /* Saans Typography Hierarchy with 1.00 line-height and extreme negative tracking */
+    .display-hero {
+      font-size: clamp(48px, 6vw, 80px);
+      font-weight: 400;
+      line-height: 1.00;
+      letter-spacing: -2.4px;
+      color: var(--color-off-black);
+    }
+
+    .section-heading {
+      font-size: clamp(32px, 4vw, 54px);
+      font-weight: 400;
+      line-height: 1.00;
+      letter-spacing: -1.6px;
+      color: var(--color-off-black);
+    }
+
+    .sub-heading {
+      font-size: 40px;
+      font-weight: 400;
+      line-height: 1.00;
+      letter-spacing: -1.2px;
+      color: var(--color-off-black);
+    }
+
+    .card-title {
+      font-size: 32px;
+      font-weight: 400;
+      line-height: 1.00;
+      letter-spacing: -0.96px;
+      color: var(--color-off-black);
+    }
+
+    .feature-title {
+      font-size: 24px;
+      font-weight: 400;
+      line-height: 1.00;
+      letter-spacing: -0.48px;
+      color: var(--color-off-black);
+    }
+
+    .body-emphasis {
+      font-size: 20px;
+      font-weight: 400;
+      line-height: 0.95;
+      letter-spacing: -0.2px;
+      color: var(--color-off-black);
+    }
+
+    .body-regular {
+      font-size: 16px;
+      font-weight: 400;
+      line-height: 1.50;
+      color: var(--wsc-color-black-80);
+    }
+
+    .body-light {
+      font-size: 14px;
+      font-weight: 300;
+      line-height: 1.40;
+      color: var(--wsc-color-black-60);
+    }
+
+    .serif-quote {
+      font-family: var(--font-serif);
+      font-size: 24px;
+      font-weight: 400;
+      line-height: 1.30;
+      color: var(--color-off-black);
+    }
+
+    .mono-label {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      font-weight: 500;
+      line-height: 1.20;
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+      color: var(--wsc-color-black-50);
+    }
+
+    /* Container */
+    .container {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 0 var(--sp-32);
+    }
+
+    /* Navigation Bar */
+    header.intercom-nav {
+      background: var(--color-warm-cream);
+      border-bottom: 1px solid var(--color-oat-border);
+      padding: var(--sp-16) 0;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .nav-inner {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .nav-left {
+      display: flex;
+      align-items: center;
+      gap: var(--sp-32);
+    }
+
+    .brand-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+      color: var(--color-off-black);
+      font-weight: 700;
+      font-size: 20px;
+      letter-spacing: -0.5px;
+    }
+
+    .intercom-symbol {
+      width: 28px;
+      height: 28px;
+      background: var(--color-off-black);
+      border-radius: var(--radius-btn);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 2.5px;
+    }
+
+    .symbol-bar {
+      width: 3px;
+      background: #ffffff;
+      border-radius: 1px;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: var(--sp-24);
+      list-style: none;
+    }
+
+    .nav-links a {
+      color: var(--color-off-black);
+      text-decoration: none;
+      font-size: 16px;
+      font-weight: 400;
+      transition: color 0.15s;
+    }
+
+    .nav-links a:hover {
+      color: var(--color-fin);
+    }
+
+    /* Buttons: Sharp 4px radius with physical scale(1.1) hover and scale(0.85) active */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 10px 18px;
+      border-radius: var(--radius-btn); /* 4px radius strictly */
+      font-size: 14px;
+      font-weight: 500;
+      text-decoration: none;
+      cursor: pointer;
+      border: 1px solid transparent;
+      transform-origin: center;
+      transition: transform 0.18s cubic-bezier(0.34, 1.56, 0.64, 1), background-color 0.15s, color 0.15s, border-color 0.15s;
+      white-space: nowrap;
+    }
+
+    .btn:hover {
+      transform: scale(1.1); /* Signature Intercom button expansion */
+    }
+
+    .btn:active {
+      transform: scale(0.85); /* Signature Intercom active press */
+    }
+
+    .btn-dark {
+      background-color: var(--color-off-black);
+      color: #ffffff;
+      border-color: var(--color-off-black);
+    }
+
+    .btn-dark:hover {
+      background-color: #ffffff;
+      color: var(--color-off-black);
+      border-color: var(--color-off-black);
+    }
+
+    .btn-dark:active {
+      background-color: #2c6415; /* Active green state per DESIGN.md */
+      border-color: #2c6415;
+      color: #ffffff;
+    }
+
+    .btn-outlined {
+      background-color: transparent;
+      color: var(--color-off-black);
+      border-color: var(--color-off-black);
+    }
+
+    .btn-outlined:hover {
+      background-color: var(--color-off-black);
+      color: #ffffff;
+    }
+
+    .btn-fin {
+      background-color: var(--color-fin);
+      color: #ffffff;
+      border-color: var(--color-fin);
+    }
+
+    .btn-fin:hover {
+      background-color: #e54d00;
+      color: #ffffff;
+    }
+
+    /* Fin AI Badge */
+    .fin-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(255, 86, 0, 0.1);
+      color: var(--color-fin);
+      padding: 4px 10px;
+      border-radius: var(--radius-btn);
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      margin-bottom: var(--sp-16);
+    }
+
+    .fin-dot {
+      width: 8px;
+      height: 8px;
+      background: var(--color-fin);
+      border-radius: 50%;
+      box-shadow: 0 0 8px var(--color-fin);
+    }
+
+    /* Hero Section: Warm Canvas with Fin AI Integration */
+    .hero-section {
+      padding: var(--sp-80) 0 var(--sp-64);
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1.2fr 1fr;
+      gap: var(--sp-48);
+      align-items: center;
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: var(--sp-16);
+      margin-top: var(--sp-32);
+      align-items: center;
+    }
+
+    /* Interactive Fin AI Conversational Simulator */
+    .chat-card {
+      background: #ffffff;
+      border: 1px solid var(--color-oat-border);
+      border-radius: var(--radius-card);
+      overflow: hidden;
+      box-shadow: 0 12px 32px rgba(0, 0, 0, 0.04);
+    }
+
+    .chat-header {
+      background: var(--color-warm-cream);
+      padding: 14px 20px;
+      border-bottom: 1px solid var(--color-oat-border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .chat-agent-info {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .fin-avatar {
+      width: 32px;
+      height: 32px;
+      background: var(--color-fin);
+      color: #FFF;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 14px;
+    }
+
+    .chat-body {
+      padding: 20px;
+      height: 280px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      background: #ffffff;
+    }
+
+    .chat-bubble {
+      max-width: 82%;
+      padding: 12px 16px;
+      border-radius: var(--radius-btn);
+      font-size: 14px;
+      line-height: 1.45;
+    }
+
+    .chat-bubble.bot {
+      background: var(--color-warm-cream);
+      border: 1px solid var(--color-oat-border);
+      color: var(--color-off-black);
+      align-self: flex-start;
+    }
+
+    .chat-bubble.user {
+      background: var(--color-off-black);
+      color: #ffffff;
+      align-self: flex-end;
+    }
+
+    .chat-input-row {
+      display: flex;
+      border-top: 1px solid var(--color-oat-border);
+      padding: 8px 12px;
+      background: var(--color-warm-cream);
+    }
+
+    .chat-input {
+      flex: 1;
+      border: none;
+      background: transparent;
+      padding: 8px 12px;
+      font-size: 14px;
+      font-family: var(--font-saans);
+      color: var(--color-off-black);
+      outline: none;
+    }
+
+    .chat-send-btn {
+      background: var(--color-fin);
+      color: #FFF;
+      border: none;
+      border-radius: var(--radius-btn);
+      padding: 6px 14px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: transform 0.15s;
+    }
+
+    .chat-send-btn:hover {
+      transform: scale(1.08);
+    }
+
+    /* Report Analytics Cards (Full Report Palette) */
+    .reports-section {
+      padding: var(--sp-64) 0;
+      border-top: 1px solid var(--color-oat-border);
+    }
+
+    .reports-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: var(--sp-20);
+      margin-top: var(--sp-40);
+    }
+
+    .report-card {
+      background: #ffffff;
+      border: 1px solid var(--color-oat-border);
+      border-radius: var(--radius-card);
+      padding: 24px 20px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .report-badge {
+      display: inline-block;
+      width: 10px;
+      height: 10px;
+      border-radius: 2px;
+      margin-right: 6px;
+    }
+
+    .report-val {
+      font-size: 38px;
+      font-weight: 400;
+      line-height: 1.0;
+      letter-spacing: -1px;
+      margin: 12px 0 6px;
+      color: var(--color-off-black);
+    }
+
+    .report-sub {
+      font-size: 13px;
+      color: var(--wsc-color-black-50);
+      line-height: 1.4;
+    }
+
+    /* Editorial Feature Cards */
+    .features-section {
+      padding: var(--sp-64) 0 var(--sp-96);
+    }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: var(--sp-24);
+      margin-top: var(--sp-48);
+    }
+
+    .feature-card {
+      background: var(--color-warm-cream);
+      border: 1px solid var(--color-oat-border);
+      border-radius: var(--radius-card);
+      padding: 32px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .feature-card:hover {
+      border-color: var(--color-off-black);
+    }
+
+    /* Footer: Clean Warm Neutral */
+    footer.intercom-footer {
+      border-top: 1px solid var(--color-oat-border);
+      padding: var(--sp-64) 0 var(--sp-32);
+      background: var(--color-warm-cream);
+    }
+
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 1.5fr repeat(3, 1fr);
+      gap: var(--sp-40);
+      margin-bottom: var(--sp-48);
+    }
+
+    .footer-col h5 {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+      color: var(--color-off-black);
+      margin-bottom: var(--sp-16);
+    }
+
+    .footer-links {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .footer-links a {
+      color: var(--wsc-color-black-60);
+      text-decoration: none;
+      font-size: 14px;
+      transition: color 0.15s;
+    }
+
+    .footer-links a:hover {
+      color: var(--color-fin);
+    }
+
+    .footer-bottom {
+      border-top: 1px solid var(--color-oat-border);
+      padding-top: var(--sp-24);
+      display: flex;
+      justify-content: space-between;
+      font-size: 13px;
+      color: var(--wsc-color-black-50);
+    }
+
+    /* Token Drawer */
+    .token-audit-toggle {
+      position: fixed;
+      bottom: 24px;
+      left: 24px;
+      z-index: 999;
+      background: var(--color-off-black);
+      color: #FFF;
+      padding: 8px 16px;
+      border-radius: var(--radius-btn);
+      font-size: 12px;
+      font-family: var(--font-mono);
+      cursor: pointer;
+      border: 1px solid var(--color-off-black);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .token-audit-toggle:hover {
+      background: var(--color-fin);
+      border-color: var(--color-fin);
+    }
+
+    .token-drawer {
+      position: fixed;
+      top: 0;
+      left: -440px;
+      width: 400px;
+      height: 100vh;
+      background: var(--color-warm-cream);
+      border-right: 1px solid var(--color-oat-border);
+      z-index: 2000;
+      padding: var(--sp-24);
+      overflow-y: auto;
+      transition: left 0.25s ease;
+    }
+
+    .token-drawer.open {
+      left: 0;
+    }
+
+    .token-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 8px 0;
+      border-bottom: 1px solid var(--color-oat-border);
+      font-size: 13px;
+    }
+
+    /* Toast */
+    .toast-box {
+      position: fixed;
+      top: 24px;
+      right: 24px;
+      background: var(--color-off-black);
+      color: #ffffff;
+      border-left: 3px solid var(--color-fin);
+      padding: 12px 18px;
+      border-radius: var(--radius-btn);
+      font-size: 13px;
+      z-index: 3000;
+      opacity: 0;
+      transform: translateY(-10px);
+      transition: all 0.2s ease;
+      pointer-events: none;
+    }
+
+    .toast-box.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Responsive */
+    @media (max-width: 960px) {
+      .hero-grid {
+        grid-template-columns: 1fr;
+      }
+      .reports-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      .features-grid {
+        grid-template-columns: 1fr;
+      }
+      .footer-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 600px) {
+      .reports-grid {
+        grid-template-columns: 1fr;
+      }
+      .nav-links {
+        display: none;
+      }
+      .footer-grid {
+        grid-template-columns: 1fr;
+      }
+      .hero-actions {
+        flex-direction: column;
+        align-items: stretch;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navigation Bar -->
+  <header class="intercom-nav">
+    <div class="container nav-inner">
+      <div class="nav-left">
+        <a href="#" class="brand-logo" aria-label="Intercom Home">
+          <div class="intercom-symbol">
+            <span class="symbol-bar" style="height: 10px;"></span>
+            <span class="symbol-bar" style="height: 16px;"></span>
+            <span class="symbol-bar" style="height: 18px;"></span>
+            <span class="symbol-bar" style="height: 14px;"></span>
+            <span class="symbol-bar" style="height: 8px;"></span>
+          </div>
+          <span>Intercom</span>
+        </a>
+
+        <ul class="nav-links">
+          <li><a href="#ai">Fin AI Agent</a></li>
+          <li><a href="#helpdesk">Help Desk</a></li>
+          <li><a href="#reports">AI Reports</a></li>
+          <li><a href="#pricing">Pricing</a></li>
+        </ul>
+      </div>
+
+      <div style="display: flex; gap: 12px; align-items: center;">
+        <a href="#signin" class="btn btn-outlined" style="padding: 8px 14px;">Sign in</a>
+        <a href="#trial" class="btn btn-dark" style="padding: 8px 14px;">Start free trial</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero Section: Warm Cream Canvas (#faf9f6) with Aggressive Negative Tracking -->
+  <section class="hero-section" id="ai">
+    <div class="container hero-grid">
+      <div>
+        <div class="fin-pill">
+          <span class="fin-dot"></span>
+          <span>FIN AI AGENT · 51% INSTANT RESOLUTION</span>
+        </div>
+
+        <h1 class="display-hero">The only AI customer service solution you need.</h1>
+        <p class="body-regular" style="margin-top: var(--sp-24); max-width: 520px;">
+          Meet Fin — the groundbreaking AI agent that immediately resolves over 50% of your support volume with conversational accuracy across all customer channels.
+        </p>
+
+        <div class="hero-actions">
+          <button class="btn btn-dark" onclick="triggerToast('Provisioning Fin AI sandbox')">Get started with Fin</button>
+          <button class="btn btn-outlined" onclick="triggerToast('Launching live Fin demo')">View product tour</button>
+        </div>
+      </div>
+
+      <!-- Live Fin AI Conversational Simulator -->
+      <div class="chat-card">
+        <div class="chat-header">
+          <div class="chat-agent-info">
+            <div class="fin-avatar">F</div>
+            <div>
+              <div style="font-size: 14px; font-weight: 600; color: var(--color-off-black);">Fin AI Agent</div>
+              <div class="mono-label" style="font-size: 10px; color: var(--color-fin);">Active · 0.2s Response Time</div>
+            </div>
+          </div>
+          <span class="mono-label" style="background: #FFF; padding: 4px 8px; border-radius: 4px; border: 1px solid var(--color-oat-border);">
+            Resolution: 99.4%
+          </span>
+        </div>
+
+        <div class="chat-body" id="chatBody">
+          <div class="chat-bubble bot">
+            Hello! I am Fin, your AI service copilot. How can I resolve your query today?
+          </div>
+          <div class="chat-bubble user">
+            How do I route high-priority enterprise tickets to our dedicated tier-3 support queue?
+          </div>
+          <div class="chat-bubble bot">
+            You can configure SLA automation rules under <strong>Settings &rarr; Workflows</strong>. Fin will automatically classify urgency and assign matching skill tags to your tier-3 team!
+          </div>
+        </div>
+
+        <form class="chat-input-row" onsubmit="event.preventDefault(); sendChatMessage();">
+          <input type="text" class="chat-input" id="chatInput" placeholder="Ask Fin anything..." required>
+          <button type="submit" class="chat-send-btn">Send</button>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- Report Palette Analytics Section -->
+  <section class="reports-section" id="reports">
+    <div class="container">
+      <div style="display: flex; justify-content: space-between; align-items: flex-end;">
+        <div>
+          <span class="mono-label" style="color: var(--color-fin);">BENCHMARK PERFORMANCE</span>
+          <h2 class="section-heading" style="margin-top: 8px;">Proven AI results at enterprise scale</h2>
+        </div>
+        <span class="serif-quote" style="color: var(--wsc-color-black-50); font-size: 18px;">
+          "Customer satisfaction soared to 98% in week one."
+        </span>
+      </div>
+
+      <!-- 4 Cards using the Official Report Palette -->
+      <div class="reports-grid">
+        <!-- 1. Report Green #0bdf50 -->
+        <div class="report-card">
+          <div style="display: flex; align-items: center;">
+            <span class="report-badge" style="background: var(--color-report-green);"></span>
+            <span class="mono-label">RESOLUTION RATE</span>
+          </div>
+          <div class="report-val" style="color: #059638;">51%</div>
+          <p class="report-sub">Of total support tickets answered and closed autonomously without human intervention.</p>
+        </div>
+
+        <!-- 2. Report Blue #65b5ff -->
+        <div class="report-card">
+          <div style="display: flex; align-items: center;">
+            <span class="report-badge" style="background: var(--color-report-blue);"></span>
+            <span class="mono-label">FIRST RESPONSE TIME</span>
+          </div>
+          <div class="report-val" style="color: #0066cc;">&lt;1.2s</div>
+          <p class="report-sub">Instant zero-wait responses delivered across email, in-app messenger, and WhatsApp.</p>
+        </div>
+
+        <!-- 3. Report Orange #fe4c02 -->
+        <div class="report-card">
+          <div style="display: flex; align-items: center;">
+            <span class="report-badge" style="background: var(--color-report-orange);"></span>
+            <span class="mono-label">COST REDUCTION</span>
+          </div>
+          <div class="report-val" style="color: var(--color-report-orange);">64%</div>
+          <p class="report-sub">Average reduction in operating cost per resolved conversation for SaaS leaders.</p>
+        </div>
+
+        <!-- 4. Report Pink #ff2067 -->
+        <div class="report-card">
+          <div style="display: flex; align-items: center;">
+            <span class="report-badge" style="background: var(--color-report-pink);"></span>
+            <span class="mono-label">CSAT SATISFACTION</span>
+          </div>
+          <div class="report-val" style="color: var(--color-report-pink);">4.9/5</div>
+          <p class="report-sub">Verified customer satisfaction scores gathered directly after Fin conversations.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features Section: Warm Cards with 8px Radius -->
+  <section class="features-section" id="helpdesk">
+    <div class="container">
+      <span class="mono-label" style="color: var(--color-off-black);">THE THREE-IN-ONE PLATFORM</span>
+      <h2 class="section-heading" style="margin-top: 8px;">Everything customer support needs</h2>
+
+      <div class="features-grid">
+        <div class="feature-card">
+          <div>
+            <span class="mono-label" style="color: var(--color-fin);">01 · AI AGENT</span>
+            <h3 class="card-title" style="margin: 12px 0 16px;">Fin AI Copilot</h3>
+            <p class="body-regular">
+              Equip human support representatives with instantaneous AI summarization, smart reply generation, and automated knowledge base ingestion.
+            </p>
+          </div>
+          <div style="margin-top: 32px;">
+            <button class="btn btn-outlined" onclick="triggerToast('Exploring Fin Copilot')">Explore Copilot &rarr;</button>
+          </div>
+        </div>
+
+        <div class="feature-card">
+          <div>
+            <span class="mono-label" style="color: #0066cc;">02 · WORKSPACE</span>
+            <h3 class="card-title" style="margin: 12px 0 16px;">Omnichannel Inbox</h3>
+            <p class="body-regular">
+              Connect email, live chat, phone, SMS, and social media into a single lightning-fast unified inbox built for modern distributed teams.
+            </p>
+          </div>
+          <div style="margin-top: 32px;">
+            <button class="btn btn-outlined" onclick="triggerToast('Exploring Omnichannel Inbox')">Explore Inbox &rarr;</button>
+          </div>
+        </div>
+
+        <div class="feature-card">
+          <div>
+            <span class="mono-label" style="color: #059638;">03 · PROACTIVE</span>
+            <h3 class="card-title" style="margin: 12px 0 16px;">Proactive Support</h3>
+            <p class="body-regular">
+              Deliver targeted onboarding tours, feature announcements, and status updates before customers even need to ask for help.
+            </p>
+          </div>
+          <div style="margin-top: 32px;">
+            <button class="btn btn-outlined" onclick="triggerToast('Exploring Proactive Support')">Explore Proactive &rarr;</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="intercom-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div>
+          <div class="brand-logo" style="margin-bottom: 16px;">
+            <div class="intercom-symbol">
+              <span class="symbol-bar" style="height: 10px;"></span>
+              <span class="symbol-bar" style="height: 16px;"></span>
+              <span class="symbol-bar" style="height: 18px;"></span>
+              <span class="symbol-bar" style="height: 14px;"></span>
+              <span class="symbol-bar" style="height: 8px;"></span>
+            </div>
+            <span>Intercom</span>
+          </div>
+          <p class="body-light" style="max-width: 260px;">
+            The complete customer service platform powered by Fin AI Agent.
+          </p>
+        </div>
+
+        <div class="footer-col">
+          <h5>Products</h5>
+          <ul class="footer-links">
+            <li><a href="#ai">Fin AI Agent</a></li>
+            <li><a href="#helpdesk">Help Desk</a></li>
+            <li><a href="#helpdesk">Proactive Support</a></li>
+            <li><a href="#reports">AI Customer Service</a></li>
+            <li><a href="#reports">Omnichannel Inbox</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h5>Resources</h5>
+          <ul class="footer-links">
+            <li><a href="#">Customer Stories</a></li>
+            <li><a href="#">The Customer Service Guide</a></li>
+            <li><a href="#">Product Tour</a></li>
+            <li><a href="#">API Documentation</a></li>
+            <li><a href="#">Security &amp; Trust</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h5>Company</h5>
+          <ul class="footer-links">
+            <li><a href="#">About Us</a></li>
+            <li><a href="#">Careers</a></li>
+            <li><a href="#">Newsroom</a></li>
+            <li><a href="#">Contact Sales</a></li>
+            <li><a href="#">Privacy Policy</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <div>&copy; 2026 Intercom, Inc. All rights reserved.</div>
+        <div style="display: flex; gap: 20px;">
+          <a href="#" style="color: var(--wsc-color-black-50); text-decoration: none;">Terms of Service</a>
+          <a href="#" style="color: var(--wsc-color-black-50); text-decoration: none;">Privacy Policy</a>
+          <a href="#" style="color: var(--wsc-color-black-50); text-decoration: none;">Cookie Preferences</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Token Audit Inspector Drawer -->
+  <button class="token-audit-toggle" id="tokenDrawerBtn" aria-label="Open Token Auditor">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <circle cx="12" cy="12" r="10"></circle>
+      <line x1="12" y1="16" x2="12" y2="12"></line>
+      <line x1="12" y1="8" x2="12.01" y2="8"></line>
+    </svg>
+    INTERCOM TOKENS
+  </button>
+
+  <div class="token-drawer" id="tokenDrawer">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; padding-bottom: 12px; border-bottom: 1px solid var(--color-oat-border);">
+      <h3 style="font-size: 16px; font-weight: 700; color: var(--color-off-black);">INTERCOM TOKEN AUDIT</h3>
+      <button id="closeDrawerBtn" style="background: none; border: none; font-size: 20px; cursor: pointer;">&times;</button>
+    </div>
+
+    <div style="margin-bottom: 24px;">
+      <span class="mono-label">PRIMARY COLORS</span>
+      <div class="token-row">
+        <span>Warm Cream (Canvas)</span>
+        <code>#faf9f6</code>
+      </div>
+      <div class="token-row">
+        <span>Off Black (Text/Buttons)</span>
+        <code>#111111</code>
+      </div>
+      <div class="token-row">
+        <span>Fin Orange (Brand Accent)</span>
+        <code style="color: #ff5600; font-weight: 700;">#ff5600</code>
+      </div>
+      <div class="token-row">
+        <span>Oat Border (Warm Border)</span>
+        <code>#dedbd6</code>
+      </div>
+    </div>
+
+    <div style="margin-bottom: 24px;">
+      <span class="mono-label">REPORT PALETTE</span>
+      <div class="token-row"><span>Report Blue</span><code>#65b5ff</code></div>
+      <div class="token-row"><span>Report Green</span><code>#0bdf50</code></div>
+      <div class="token-row"><span>Report Red</span><code>#c41c1c</code></div>
+      <div class="token-row"><span>Report Pink</span><code>#ff2067</code></div>
+      <div class="token-row"><span>Report Lime</span><code>#b3e01c</code></div>
+    </div>
+
+    <div style="margin-bottom: 24px;">
+      <span class="mono-label">GEOMETRY &amp; MOTION</span>
+      <div class="token-row">
+        <span>Button Border Radius</span>
+        <code>4px (Sharp Rectangle)</code>
+      </div>
+      <div class="token-row">
+        <span>Button Hover Physics</span>
+        <code>scale(1.1) expansion</code>
+      </div>
+      <div class="token-row">
+        <span>Button Active State</span>
+        <code>scale(0.85) / #2c6415</code>
+      </div>
+      <div class="token-row">
+        <span>Card Radius</span>
+        <code>8px (Warm Oat Border)</code>
+      </div>
+    </div>
+
+    <div>
+      <span class="mono-label">SAANS TYPOGRAPHY RULES</span>
+      <p style="font-size: 13px; color: #555; margin-top: 6px; line-height: 1.4;">
+        1.00 line-height across all headings paired with negative letter-spacing (-2.4px at 80px).
+      </p>
+    </div>
+  </div>
+
+  <!-- Toast Notification -->
+  <div class="toast-box" id="toastBox">Action completed.</div>
+
+  <script>
+    // Toast
+    const toast = document.getElementById('toastBox');
+    function triggerToast(text) {
+      toast.textContent = text;
+      toast.classList.add('show');
+      setTimeout(() => {
+        toast.classList.remove('show');
+      }, 2500);
+    }
+
+    // Chat Simulator
+    function sendChatMessage() {
+      const input = document.getElementById('chatInput');
+      const chatBody = document.getElementById('chatBody');
+      const val = input.value.trim();
+      if (!val) return;
+
+      const userBubble = document.createElement('div');
+      userBubble.className = 'chat-bubble user';
+      userBubble.textContent = val;
+      chatBody.appendChild(userBubble);
+      input.value = '';
+
+      setTimeout(() => {
+        const botBubble = document.createElement('div');
+        botBubble.className = 'chat-bubble bot';
+        botBubble.innerHTML = 'Fin is analyzing: <em>"' + val + '"</em>. Answer generated from your verified company docs in 0.3s!';
+        chatBody.appendChild(botBubble);
+        chatBody.scrollTop = chatBody.scrollHeight;
+      }, 400);
+
+      chatBody.scrollTop = chatBody.scrollHeight;
+    }
+
+    // Drawer
+    const tokenDrawer = document.getElementById('tokenDrawer');
+    document.getElementById('tokenDrawerBtn').addEventListener('click', () => {
+      tokenDrawer.classList.toggle('open');
+    });
+    document.getElementById('closeDrawerBtn').addEventListener('click', () => {
+      tokenDrawer.classList.remove('open');
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,1703 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Enterprise Design System — Mission Critical Workflow Orchestration</title>
+  
+  <!-- Fonts: Oswald (Display), Ubuntu (Primary Body), Ubuntu Mono (Code/Telemetry) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400&family=Ubuntu+Mono:wght@400;700&display=swap" rel="stylesheet">
+
+  <style>
+    /* Enterprise Design System Tokens (from DESIGN.md & tokens.css) */
+    :root {
+      /* Brand Foundations */
+      --primary: #072C2C;           /* Deep petroleum teal ground / CTA focus */
+      --primary-hover: #0d4242;
+      --primary-active: #041c1c;
+      --secondary: #FF5F03;         /* Electric flame / safety orange accent */
+      --secondary-hover: #e55300;
+      --secondary-light: #fff2eb;
+      
+      /* Semantic Status */
+      --success: #16A34A;
+      --success-surface: #edfbf2;
+      --warning: #D97706;
+      --warning-surface: #fdf6ec;
+      --danger: #DC2626;
+      --danger-surface: #fef2f2;
+      
+      /* Surfaces & Neutrals */
+      --surface: #EDEADE;          /* Refined bone / warm natural stone */
+      --surface-dark: #e4dfd1;
+      --surface-card: #FFFFFF;
+      --surface-warm: #eef2f7;
+      --bg: #EDEADE;
+      
+      /* Text & Borders */
+      --text: #111827;             /* High contrast deep charcoal */
+      --text-muted: #4b5563;
+      --text-subtle: #6b7280;
+      --border: #d4cec0;
+      --border-dark: #072C2C;
+      --border-strong: #9ca3af;
+      
+      /* Typography */
+      --font-display: 'Oswald', -apple-system, sans-serif;
+      --font-body: 'Ubuntu', -apple-system, sans-serif;
+      --font-mono: 'Ubuntu Mono', monospace;
+      
+      /* Elevation & Radii */
+      --radius-sm: 4px;
+      --radius-md: 8px;
+      --radius-lg: 12px;
+      --radius-pill: 9999px;
+      --shadow-sm: 0 1px 3px rgba(7, 44, 44, 0.08);
+      --shadow-md: 0 4px 12px rgba(7, 44, 44, 0.08);
+      --shadow-lg: 0 12px 32px rgba(7, 44, 44, 0.12);
+      --shadow-hard: 3px 3px 0px #072C2C;
+      
+      /* Motion */
+      --transition-fast: 150ms cubic-bezier(0.2, 0, 0, 1);
+      --transition-base: 220ms cubic-bezier(0.2, 0, 0, 1);
+    }
+
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--surface);
+      color: var(--text);
+      font-family: var(--font-body);
+      font-size: 15px;
+      line-height: 1.55;
+      -webkit-font-smoothing: antialiased;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Architectural Header */
+    .enterprise-header {
+      background-color: var(--primary);
+      color: #ffffff;
+      padding: 0 2rem;
+      border-bottom: 2px solid var(--secondary);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+
+    .header-inner {
+      max-width: 1440px;
+      margin: 0 auto;
+      height: 64px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1.5rem;
+    }
+
+    .brand-mark {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      text-decoration: none;
+      color: #ffffff;
+    }
+
+    .brand-icon {
+      width: 36px;
+      height: 36px;
+      background: var(--secondary);
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: var(--radius-sm);
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: 20px;
+      letter-spacing: 1px;
+    }
+
+    .brand-text {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .brand-title {
+      font-family: var(--font-display);
+      font-size: 1.35rem;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      line-height: 1;
+    }
+
+    .brand-sub {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      color: #94a3b8;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-top: 3px;
+    }
+
+    .cluster-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      padding: 4px 10px;
+      border-radius: var(--radius-pill);
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: #e2e8f0;
+    }
+
+    .pulse-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--success);
+      box-shadow: 0 0 8px var(--success);
+      animation: pulse 2s infinite ease-in-out;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.4; transform: scale(0.85); }
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+      list-style: none;
+    }
+
+    .nav-link {
+      color: #cbd5e1;
+      text-decoration: none;
+      font-family: var(--font-body);
+      font-size: 14px;
+      font-weight: 500;
+      padding: 6px 12px;
+      border-radius: var(--radius-sm);
+      transition: all var(--transition-fast);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .nav-link:hover, .nav-link.active {
+      color: #ffffff;
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    .nav-link.active {
+      border-bottom: 2px solid var(--secondary);
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    /* Buttons */
+    .btn {
+      font-family: var(--font-body);
+      font-size: 13px;
+      font-weight: 600;
+      padding: 8px 18px;
+      border-radius: var(--radius-sm);
+      border: 1px solid transparent;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: all var(--transition-fast);
+      text-decoration: none;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    .btn:focus-visible {
+      outline: none;
+      box-shadow: 0 0 0 3px rgba(255, 95, 3, 0.4);
+    }
+
+    .btn-primary {
+      background-color: var(--primary);
+      color: #ffffff;
+      border-color: var(--primary);
+    }
+
+    .btn-primary:hover {
+      background-color: var(--primary-hover);
+      border-color: var(--primary-hover);
+      transform: translateY(-1px);
+    }
+
+    .btn-secondary {
+      background-color: var(--secondary);
+      color: #ffffff;
+      border-color: var(--secondary);
+    }
+
+    .btn-secondary:hover {
+      background-color: var(--secondary-hover);
+      border-color: var(--secondary-hover);
+      transform: translateY(-1px);
+    }
+
+    .btn-outline {
+      background-color: transparent;
+      color: var(--primary);
+      border-color: var(--primary);
+    }
+
+    .btn-outline:hover {
+      background-color: var(--primary);
+      color: #ffffff;
+    }
+
+    .btn-white-outline {
+      background-color: transparent;
+      color: #ffffff;
+      border-color: rgba(255, 255, 255, 0.3);
+    }
+
+    .btn-white-outline:hover {
+      background-color: rgba(255, 255, 255, 0.1);
+      border-color: #ffffff;
+    }
+
+    .btn-sm {
+      padding: 5px 12px;
+      font-size: 11px;
+    }
+
+    /* Sub-nav / Breadcrumb bar */
+    .subnav-bar {
+      background-color: #ffffff;
+      border-bottom: 1px solid var(--border);
+      padding: 10px 2rem;
+    }
+
+    .subnav-inner {
+      max-width: 1440px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+    }
+
+    .breadcrumb {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+
+    .breadcrumb-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .breadcrumb-item:last-child {
+      color: var(--primary);
+      font-weight: 600;
+    }
+
+    .breadcrumb-separator {
+      color: var(--text-subtle);
+    }
+
+    .quick-search {
+      display: flex;
+      align-items: center;
+      background: var(--surface-warm);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 5px 10px;
+      gap: 8px;
+      width: 320px;
+    }
+
+    .quick-search input {
+      border: none;
+      background: transparent;
+      outline: none;
+      font-family: var(--font-body);
+      font-size: 13px;
+      color: var(--text);
+      width: 100%;
+    }
+
+    .shortcut-tag {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      background: #ffffff;
+      border: 1px solid #cbd5e1;
+      padding: 2px 5px;
+      border-radius: 3px;
+      color: #64748b;
+    }
+
+    /* Main Container */
+    .main-layout {
+      max-width: 1440px;
+      margin: 0 auto;
+      padding: 2rem;
+      width: 100%;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
+    }
+
+    /* Overview Banner */
+    .hero-banner {
+      background: #ffffff;
+      border: 1px solid var(--border);
+      border-left: 6px solid var(--primary);
+      border-radius: var(--radius-sm);
+      padding: 2rem 2.5rem;
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 2rem;
+      align-items: center;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .hero-title {
+      font-family: var(--font-display);
+      font-size: 2.5rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: -0.01em;
+      color: var(--primary);
+      line-height: 1.1;
+      margin-bottom: 0.5rem;
+    }
+
+    .hero-desc {
+      color: var(--text-muted);
+      font-size: 15px;
+      max-width: 760px;
+      line-height: 1.6;
+    }
+
+    .hero-stats {
+      display: flex;
+      gap: 1.5rem;
+    }
+
+    .stat-pill {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      padding: 1rem 1.5rem;
+      border-radius: var(--radius-sm);
+      min-width: 140px;
+    }
+
+    .stat-pill-label {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--text-subtle);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .stat-pill-val {
+      font-family: var(--font-display);
+      font-size: 1.85rem;
+      font-weight: 700;
+      color: var(--primary);
+      line-height: 1.2;
+      margin-top: 4px;
+    }
+
+    .stat-pill-change {
+      font-size: 11px;
+      color: var(--success);
+      font-weight: 600;
+      margin-top: 2px;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    /* Section Headers */
+    .section-header {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      border-bottom: 2px solid var(--primary);
+      padding-bottom: 0.75rem;
+      margin-bottom: 1.25rem;
+    }
+
+    .section-title {
+      font-family: var(--font-display);
+      font-size: 1.5rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+      color: var(--primary);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .section-badge {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      background: var(--secondary);
+      color: #ffffff;
+      padding: 2px 8px;
+      border-radius: var(--radius-pill);
+      vertical-align: middle;
+    }
+
+    /* Workflow Pipeline Canvas (Drag and drop) */
+    .canvas-card {
+      background: #ffffff;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      box-shadow: var(--shadow-sm);
+      overflow: hidden;
+    }
+
+    .canvas-toolbar {
+      background: var(--surface-warm);
+      border-bottom: 1px solid var(--border);
+      padding: 12px 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+    }
+
+    .canvas-status {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-family: var(--font-mono);
+      font-size: 12px;
+    }
+
+    .pipeline-container {
+      padding: 2rem 1.5rem;
+      background: #ffffff;
+      position: relative;
+    }
+
+    .pipeline-instructions {
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-bottom: 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    /* Pipeline Stages Grid */
+    .stage-track {
+      display: flex;
+      gap: 1.25rem;
+      align-items: stretch;
+      overflow-x: auto;
+      padding-bottom: 1rem;
+    }
+
+    .stage-card {
+      flex: 1;
+      min-width: 250px;
+      max-width: 280px;
+      background: var(--surface);
+      border: 2px solid var(--border);
+      border-radius: var(--radius-sm);
+      display: flex;
+      flex-direction: column;
+      cursor: grab;
+      position: relative;
+      transition: all var(--transition-fast);
+      user-select: none;
+    }
+
+    .stage-card:hover {
+      border-color: var(--primary);
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-md);
+    }
+
+    .stage-card.active-selected {
+      border-color: var(--secondary);
+      box-shadow: 0 0 0 2px var(--secondary);
+    }
+
+    .stage-card.dragging {
+      opacity: 0.4;
+      cursor: grabbing;
+      border-style: dashed;
+      border-color: var(--secondary);
+    }
+
+    .stage-card.drag-over {
+      border-color: var(--secondary);
+      transform: scale(1.02);
+    }
+
+    .stage-header {
+      background: #ffffff;
+      padding: 12px 14px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .stage-step {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--secondary);
+    }
+
+    .stage-drag-handle {
+      color: #94a3b8;
+      cursor: grab;
+      font-size: 14px;
+    }
+
+    .stage-body {
+      padding: 14px;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .stage-name {
+      font-family: var(--font-display);
+      font-size: 1.15rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      color: var(--primary);
+    }
+
+    .stage-subtext {
+      font-size: 12px;
+      color: var(--text-muted);
+      line-height: 1.4;
+    }
+
+    .stage-meta {
+      background: #ffffff;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 8px 10px;
+      margin-top: auto;
+      font-family: var(--font-mono);
+      font-size: 11px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .stage-meta-row {
+      display: flex;
+      justify-content: space-between;
+      color: var(--text-subtle);
+    }
+
+    .stage-meta-val {
+      font-weight: 700;
+      color: var(--primary);
+    }
+
+    .stage-footer {
+      padding: 10px 14px;
+      background: #ffffff;
+      border-top: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 11px;
+      font-weight: 600;
+      font-family: var(--font-mono);
+      padding: 2px 8px;
+      border-radius: var(--radius-pill);
+    }
+
+    .status-badge.running {
+      background: var(--success-surface);
+      color: var(--success);
+      border: 1px solid rgba(22, 163, 74, 0.3);
+    }
+
+    .status-badge.verified {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border: 1px solid rgba(29, 78, 216, 0.3);
+    }
+
+    .status-badge.sealed {
+      background: var(--secondary-light);
+      color: var(--secondary);
+      border: 1px solid rgba(255, 95, 3, 0.3);
+    }
+
+    /* Pipeline Stage Inspector Drawer */
+    .inspector-panel {
+      background: #ffffff;
+      border-top: 2px solid var(--primary);
+      padding: 1.5rem;
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 2rem;
+    }
+
+    .inspector-col {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .inspector-label {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--text-subtle);
+    }
+
+    .inspector-field {
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--primary);
+    }
+
+    /* Multi-Column Grid: Governance Table & Live Logs */
+    .dashboard-grid {
+      display: grid;
+      grid-template-columns: 1.3fr 1fr;
+      gap: 2rem;
+    }
+
+    @media (max-width: 1024px) {
+      .dashboard-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* Governance Table */
+    .data-table-card {
+      background: #ffffff;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      overflow: hidden;
+      box-shadow: var(--shadow-sm);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .table-toolbar {
+      padding: 1rem 1.25rem;
+      background: var(--surface-warm);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .table-title {
+      font-family: var(--font-display);
+      font-size: 1.15rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      color: var(--primary);
+    }
+
+    .enterprise-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+    }
+
+    .enterprise-table th {
+      background: #f1f5f9;
+      color: var(--primary);
+      font-family: var(--font-display);
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      padding: 10px 14px;
+      text-align: left;
+      border-bottom: 1px solid var(--border);
+      font-size: 12px;
+    }
+
+    .enterprise-table td {
+      padding: 12px 14px;
+      border-bottom: 1px solid #f1f5f9;
+      vertical-align: middle;
+    }
+
+    .enterprise-table tr:hover {
+      background-color: #fafbfc;
+    }
+
+    .role-badge {
+      display: inline-block;
+      font-family: var(--font-mono);
+      font-size: 10px;
+      padding: 2px 6px;
+      border-radius: 3px;
+      background: #f1f5f9;
+      color: var(--primary);
+      border: 1px solid #cbd5e1;
+    }
+
+    .checkbox-switch {
+      appearance: none;
+      width: 36px;
+      height: 20px;
+      background: #cbd5e1;
+      border-radius: 10px;
+      position: relative;
+      cursor: pointer;
+      outline: none;
+      transition: background var(--transition-fast);
+      vertical-align: middle;
+    }
+
+    .checkbox-switch::before {
+      content: '';
+      position: absolute;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      top: 2px;
+      left: 2px;
+      background: #ffffff;
+      transition: transform var(--transition-fast);
+      box-shadow: 0 1px 2px rgba(0,0,0,0.2);
+    }
+
+    .checkbox-switch:checked {
+      background: var(--primary);
+    }
+
+    .checkbox-switch:checked::before {
+      transform: translateX(16px);
+    }
+
+    /* Live Telemetry Console */
+    .console-card {
+      background: #0b1319;
+      border: 1px solid #1e293b;
+      border-radius: var(--radius-sm);
+      box-shadow: var(--shadow-sm);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    .console-header {
+      background: #072C2C;
+      padding: 10px 14px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid #1e3a3a;
+    }
+
+    .console-title {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      color: #94a3b8;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .console-terminal {
+      padding: 1rem;
+      font-family: var(--font-mono);
+      font-size: 12px;
+      line-height: 1.6;
+      height: 340px;
+      overflow-y: auto;
+      color: #e2e8f0;
+      background: #080f14;
+    }
+
+    .log-row {
+      margin-bottom: 4px;
+      word-break: break-all;
+    }
+
+    .log-ts {
+      color: #64748b;
+      margin-right: 8px;
+    }
+
+    .log-lvl-info {
+      color: #38bdf8;
+      font-weight: 700;
+    }
+
+    .log-lvl-warn {
+      color: #fbbf24;
+      font-weight: 700;
+    }
+
+    .log-lvl-success {
+      color: #4ade80;
+      font-weight: 700;
+    }
+
+    .log-lvl-error {
+      color: #f87171;
+      font-weight: 700;
+    }
+
+    /* Design System Foundation Drawer */
+    .token-drawer {
+      background: #ffffff;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 1.75rem;
+      margin-top: 1rem;
+    }
+
+    .token-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1.25rem;
+      margin-top: 1.25rem;
+    }
+
+    .token-box {
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      overflow: hidden;
+      background: #ffffff;
+    }
+
+    .token-swatch {
+      height: 60px;
+      display: flex;
+      align-items: flex-end;
+      padding: 8px;
+      font-family: var(--font-mono);
+      font-size: 11px;
+      font-weight: 700;
+    }
+
+    .token-info {
+      padding: 10px 12px;
+      background: #ffffff;
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+
+    .token-name {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--text-subtle);
+    }
+
+    .token-desc {
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--primary);
+    }
+
+    /* Footer */
+    .enterprise-footer {
+      background: var(--primary);
+      color: #94a3b8;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      padding: 2rem;
+      margin-top: 3rem;
+      font-size: 13px;
+    }
+
+    .footer-inner {
+      max-width: 1440px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .footer-links {
+      display: flex;
+      gap: 1.5rem;
+    }
+
+    .footer-links a {
+      color: #cbd5e1;
+      text-decoration: none;
+    }
+
+    .footer-links a:hover {
+      color: #ffffff;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Enterprise Header -->
+  <header class="enterprise-header">
+    <div class="header-inner">
+      <a href="#" class="brand-mark">
+        <div class="brand-icon">E</div>
+        <div class="brand-text">
+          <span class="brand-title">Enterprise OS</span>
+          <span class="brand-sub">Mission-Critical Pipelines</span>
+        </div>
+      </a>
+
+      <div class="cluster-badge">
+        <span class="pulse-dot"></span>
+        <span>CLUSTER: PROD-NORTH-01</span>
+      </div>
+
+      <nav>
+        <ul class="nav-links">
+          <li><a href="#pipelines" class="nav-link active">Pipelines</a></li>
+          <li><a href="#governance" class="nav-link">Governance & RBAC</a></li>
+          <li><a href="#telemetry" class="nav-link">Real-time Logs</a></li>
+          <li><a href="#tokens" class="nav-link">Design Tokens</a></li>
+        </ul>
+      </nav>
+
+      <div class="header-actions">
+        <button class="btn btn-secondary btn-sm" onclick="deployPipeline()">+ Deploy Pipeline</button>
+        <button class="btn btn-white-outline btn-sm" onclick="triggerHealthCheck()">Sync Cluster</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Subnav / Search Bar -->
+  <div class="subnav-bar">
+    <div class="subnav-inner">
+      <div class="breadcrumb">
+        <span class="breadcrumb-item">Enterprise Console</span>
+        <span class="breadcrumb-separator">/</span>
+        <span class="breadcrumb-item">Data Engineering</span>
+        <span class="breadcrumb-separator">/</span>
+        <span class="breadcrumb-item">Realtime Ingestion Cluster</span>
+      </div>
+
+      <div class="quick-search">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+        <input type="text" placeholder="Search stage, node, schema or RBAC role..." id="pipelineSearch" oninput="filterPipeline(this.value)">
+        <span class="shortcut-tag">⌘K</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Content Layout -->
+  <main class="main-layout">
+
+    <!-- Overview Hero Banner -->
+    <section class="hero-banner">
+      <div>
+        <h1 class="hero-title">High-Throughput Governance Grid</h1>
+        <p class="hero-desc">
+          Unified enterprise workflow orchestration engine built with high contrast, deterministic stage routing, and SOC2 compliant telemetry tracking. Reorder pipeline stages by dragging below to reconfigure live data transformations.
+        </p>
+      </div>
+      <div class="hero-stats">
+        <div class="stat-pill">
+          <div class="stat-pill-label">Total Ingestion</div>
+          <div class="stat-pill-val">18.4M</div>
+          <div class="stat-pill-change">▲ +12.4% / hr</div>
+        </div>
+        <div class="stat-pill">
+          <div class="stat-pill-label">Cluster Health</div>
+          <div class="stat-pill-val">99.99%</div>
+          <div class="stat-pill-change">● 0 Anomalies</div>
+        </div>
+        <div class="stat-pill">
+          <div class="stat-pill-label">Mean Latency</div>
+          <div class="stat-pill-val">11.8ms</div>
+          <div class="stat-pill-change">▼ -3.2ms opt</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Interactive Drag-and-Drop Workflow Canvas -->
+    <section id="pipelines">
+      <div class="section-header">
+        <div class="section-title">
+          <span>Workflow Execution Canvas</span>
+          <span class="section-badge">INTERACTIVE DRAG & DROP</span>
+        </div>
+        <div>
+          <button class="btn btn-outline btn-sm" onclick="resetPipelineStages()">Reset Order</button>
+          <button class="btn btn-primary btn-sm" onclick="addNewStage()">+ Insert Node</button>
+        </div>
+      </div>
+
+      <div class="canvas-card">
+        <div class="canvas-toolbar">
+          <div class="canvas-status">
+            <strong>DAG TOPOLOGY:</strong>
+            <span>Active Sequential Pipeline (5 Stages Connected)</span>
+            <span style="color: var(--secondary); font-weight: 700;">[STATUS: SYNCHRONIZED]</span>
+          </div>
+          <div style="font-family: var(--font-mono); font-size: 11px; color: var(--text-subtle);">
+            Drag any card left or right to re-order execution stages
+          </div>
+        </div>
+
+        <div class="pipeline-container">
+          <div class="pipeline-instructions">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+            <span>Click any node below to inspect runtime telemetry in the drawer below. Drag and drop stage cards to reconfigure DAG topology.</span>
+          </div>
+
+          <!-- Drag and drop track -->
+          <div class="stage-track" id="stageTrack">
+            <!-- Stage 1 -->
+            <div class="stage-card active-selected" draggable="true" data-stage="1" onclick="selectStage(1)">
+              <div class="stage-header">
+                <span class="stage-step">STAGE 01</span>
+                <span class="stage-drag-handle">⠿</span>
+              </div>
+              <div class="stage-body">
+                <div class="stage-name">Ingestion Stream</div>
+                <div class="stage-subtext">Kafka partition broker consumer on cluster `us-east-bus`.</div>
+                <div class="stage-meta">
+                  <div class="stage-meta-row"><span>Throughput:</span><span class="stage-meta-val">48,200 msg/s</span></div>
+                  <div class="stage-meta-row"><span>Lag:</span><span class="stage-meta-val">1.2 ms</span></div>
+                </div>
+              </div>
+              <div class="stage-footer">
+                <span class="status-badge running">● RUNNING</span>
+                <span style="font-size: 11px; font-family: var(--font-mono); color: var(--text-subtle);">Node 1A</span>
+              </div>
+            </div>
+
+            <!-- Stage 2 -->
+            <div class="stage-card" draggable="true" data-stage="2" onclick="selectStage(2)">
+              <div class="stage-header">
+                <span class="stage-step">STAGE 02</span>
+                <span class="stage-drag-handle">⠿</span>
+              </div>
+              <div class="stage-body">
+                <div class="stage-name">Schema Validation</div>
+                <div class="stage-subtext">ProtoBuf deserialization and enterprise PII redaction.</div>
+                <div class="stage-meta">
+                  <div class="stage-meta-row"><span>Compliance:</span><span class="stage-meta-val">100% Passed</span></div>
+                  <div class="stage-meta-row"><span>Dropped:</span><span class="stage-meta-val">0 payloads</span></div>
+                </div>
+              </div>
+              <div class="stage-footer">
+                <span class="status-badge verified">✓ VERIFIED</span>
+                <span style="font-size: 11px; font-family: var(--font-mono); color: var(--text-subtle);">Worker 4B</span>
+              </div>
+            </div>
+
+            <!-- Stage 3 -->
+            <div class="stage-card" draggable="true" data-stage="3" onclick="selectStage(3)">
+              <div class="stage-header">
+                <span class="stage-step">STAGE 03</span>
+                <span class="stage-drag-handle">⠿</span>
+              </div>
+              <div class="stage-body">
+                <div class="stage-name">Vector Transform</div>
+                <div class="stage-subtext">Apache Flink window aggregations & embedding enrichments.</div>
+                <div class="stage-meta">
+                  <div class="stage-meta-row"><span>Memory:</span><span class="stage-meta-val">4.2 GB / 8 GB</span></div>
+                  <div class="stage-meta-row"><span>Workers:</span><span class="stage-meta-val">12 Active</span></div>
+                </div>
+              </div>
+              <div class="stage-footer">
+                <span class="status-badge running">● RUNNING</span>
+                <span style="font-size: 11px; font-family: var(--font-mono); color: var(--text-subtle);">Spark 8C</span>
+              </div>
+            </div>
+
+            <!-- Stage 4 -->
+            <div class="stage-card" draggable="true" data-stage="4" onclick="selectStage(4)">
+              <div class="stage-header">
+                <span class="stage-step">STAGE 04</span>
+                <span class="stage-drag-handle">⠿</span>
+              </div>
+              <div class="stage-body">
+                <div class="stage-name">Audit & Sign-off</div>
+                <div class="stage-subtext">Immutable SHA-256 ledger signoff & SOC2 telemetry sealing.</div>
+                <div class="stage-meta">
+                  <div class="stage-meta-row"><span>Cipher:</span><span class="stage-meta-val">AES-256-GCM</span></div>
+                  <div class="stage-meta-row"><span>Audit ID:</span><span class="stage-meta-val">#AUD-9918</span></div>
+                </div>
+              </div>
+              <div class="stage-footer">
+                <span class="status-badge sealed">★ SEALED</span>
+                <span style="font-size: 11px; font-family: var(--font-mono); color: var(--text-subtle);">Vault 01</span>
+              </div>
+            </div>
+
+            <!-- Stage 5 -->
+            <div class="stage-card" draggable="true" data-stage="5" onclick="selectStage(5)">
+              <div class="stage-header">
+                <span class="stage-step">STAGE 05</span>
+                <span class="stage-drag-handle">⠿</span>
+              </div>
+              <div class="stage-body">
+                <div class="stage-name">Data Lakehouse</div>
+                <div class="stage-subtext">Synchronized columnar commit to Snowflake and S3 lake.</div>
+                <div class="stage-meta">
+                  <div class="stage-meta-row"><span>Commits:</span><span class="stage-meta-val">1,248 / sec</span></div>
+                  <div class="stage-meta-row"><span>Egress:</span><span class="stage-meta-val">840 MB/s</span></div>
+                </div>
+              </div>
+              <div class="stage-footer">
+                <span class="status-badge running">● SYNCING</span>
+                <span style="font-size: 11px; font-family: var(--font-mono); color: var(--text-subtle);">Sink 9D</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Dynamic Node Telemetry Drawer -->
+        <div class="inspector-panel" id="nodeInspector">
+          <div class="inspector-col">
+            <span class="inspector-label">Selected Node Configuration</span>
+            <span class="inspector-field" id="inspNodeName">STAGE 01 // Ingestion Stream (Kafka Broker)</span>
+            <p style="font-size: 12px; color: var(--text-muted);" id="inspNodeDesc">
+              Consumes raw ingress payloads from 64 distributed Kafka partition queues with exponential backoff on connection fault.
+            </p>
+          </div>
+          <div class="inspector-col">
+            <span class="inspector-label">Failover & Retry Policy</span>
+            <span class="inspector-field" id="inspNodePolicy">Exponential Backoff (Max 5 Retries, 500ms Base)</span>
+            <span style="font-family: var(--font-mono); font-size: 11px; color: var(--success);" id="inspNodeStatus">Health Check: 0 Errors in last 24h</span>
+          </div>
+          <div class="inspector-col">
+            <span class="inspector-label">Actions</span>
+            <div style="display: flex; gap: 8px; margin-top: 4px;">
+              <button class="btn btn-primary btn-sm" onclick="restartSelectedNode()">Restart Node</button>
+              <button class="btn btn-outline btn-sm" onclick="flushBuffers()">Flush Buffers</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Governance Matrix & Real-time Console Grid -->
+    <div class="dashboard-grid">
+
+      <!-- Left Column: RBAC Governance Matrix -->
+      <section id="governance" class="data-table-card">
+        <div class="table-toolbar">
+          <span class="table-title">Access Governance & Privilege Matrix</span>
+          <span style="font-family: var(--font-mono); font-size: 11px; color: var(--text-subtle);">RBAC Enforced</span>
+        </div>
+        <table class="enterprise-table">
+          <thead>
+            <tr>
+              <th>Role & Identity</th>
+              <th>Schema Read</th>
+              <th>Pipeline Exec</th>
+              <th>PII Decrypt</th>
+              <th>Audit Log Access</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>
+                <div style="font-weight: 600; color: var(--primary);">Principal Admin</div>
+                <span class="role-badge">secops-super</span>
+              </td>
+              <td><input type="checkbox" class="checkbox-switch" checked></td>
+              <td><input type="checkbox" class="checkbox-switch" checked></td>
+              <td><input type="checkbox" class="checkbox-switch" checked></td>
+              <td><input type="checkbox" class="checkbox-switch" checked></td>
+            </tr>
+            <tr>
+              <td>
+                <div style="font-weight: 600; color: var(--primary);">Data Pipeline Steward</div>
+                <span class="role-badge">etl-engineer</span>
+              </td>
+              <td><input type="checkbox" class="checkbox-switch" checked></td>
+              <td><input type="checkbox" class="checkbox-switch" checked></td>
+              <td><input type="checkbox" class="checkbox-switch"></td>
+              <td><input type="checkbox" class="checkbox-switch" checked></td>
+            </tr>
+            <tr>
+              <td>
+                <div style="font-weight: 600; color: var(--primary);">Compliance Officer</div>
+                <span class="role-badge">soc2-auditor</span>
+              </td>
+              <td><input type="checkbox" class="checkbox-switch" checked></td>
+              <td><input type="checkbox" class="checkbox-switch"></td>
+              <td><input type="checkbox" class="checkbox-switch"></td>
+              <td><input type="checkbox" class="checkbox-switch" checked></td>
+            </tr>
+            <tr>
+              <td>
+                <div style="font-weight: 600; color: var(--primary);">BI Analyst Readonly</div>
+                <span class="role-badge">analyst-view</span>
+              </td>
+              <td><input type="checkbox" class="checkbox-switch" checked></td>
+              <td><input type="checkbox" class="checkbox-switch"></td>
+              <td><input type="checkbox" class="checkbox-switch"></td>
+              <td><input type="checkbox" class="checkbox-switch"></td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <!-- Right Column: Live High-Frequency Event Console -->
+      <section id="telemetry" class="console-card">
+        <div class="console-header">
+          <div class="console-title">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/></svg>
+            <span>LIVE TELEMETRY STREAM // UTC</span>
+          </div>
+          <div style="display: flex; gap: 8px;">
+            <button class="btn btn-white-outline btn-sm" style="padding: 2px 8px; font-size: 10px;" onclick="clearConsole()">Clear</button>
+            <button class="btn btn-secondary btn-sm" style="padding: 2px 8px; font-size: 10px;" id="streamToggleBtn" onclick="toggleStream()">Pause</button>
+          </div>
+        </div>
+        <div class="console-terminal" id="consoleTerminal">
+          <div class="log-row"><span class="log-ts">21:30:02.102</span><span class="log-lvl-info">[INFO]</span> Cluster orchestrator online. Node topology verified.</div>
+          <div class="log-row"><span class="log-ts">21:30:03.421</span><span class="log-lvl-success">[OK]</span> Connected to Kafka broker cluster. Partition lag: 0.8ms.</div>
+          <div class="log-row"><span class="log-ts">21:30:05.890</span><span class="log-lvl-info">[INFO]</span> Deserialized 48,200 events from `us-east-bus`. Zero schema violations.</div>
+          <div class="log-row"><span class="log-ts">21:30:07.114</span><span class="log-lvl-warn">[WARN]</span> Node 3 worker memory watermark at 52%. Scaling dynamic threads.</div>
+          <div class="log-row"><span class="log-ts">21:30:09.642</span><span class="log-lvl-success">[AUDIT]</span> Cryptographic batch digest signed: SHA256:7f9a8b1...</div>
+          <div class="log-row"><span class="log-ts">21:30:11.002</span><span class="log-lvl-info">[SYNC]</span> Egress stream committed 1,248 micro-batches to Snowflake lakehouse.</div>
+        </div>
+      </section>
+
+    </div>
+
+    <!-- Design System Token Architecture Showcase -->
+    <section id="tokens">
+      <div class="section-header">
+        <div class="section-title">
+          <span>Enterprise Design Tokens & Style Foundations</span>
+          <span class="section-badge">DESIGN.MD AUDIT</span>
+        </div>
+      </div>
+
+      <div class="token-drawer">
+        <p style="font-size: 14px; color: var(--text-muted); max-width: 900px; margin-bottom: 1.5rem;">
+          Enterprise governance design relies on authoritative contrast: Deep Teal (<code>#072C2C</code>) grounds the interactive hierarchy, Flame Safety Orange (<code>#FF5F03</code>) directs critical path actions, and Warm Linen Bone (<code>#EDEADE</code>) delivers an unhurried, durable visual atmosphere.
+        </p>
+
+        <div class="token-grid">
+          <!-- Token 1: Primary -->
+          <div class="token-box">
+            <div class="token-swatch" style="background-color: #072C2C; color: #FFFFFF;">
+              #072C2C
+            </div>
+            <div class="token-info">
+              <span class="token-name">--primary</span>
+              <span class="token-desc">Primary CTA & Brand Ground</span>
+            </div>
+          </div>
+
+          <!-- Token 2: Secondary -->
+          <div class="token-box">
+            <div class="token-swatch" style="background-color: #FF5F03; color: #FFFFFF;">
+              #FF5F03
+            </div>
+            <div class="token-info">
+              <span class="token-name">--secondary</span>
+              <span class="token-desc">High-Contrast Flame Accent</span>
+            </div>
+          </div>
+
+          <!-- Token 3: Surface -->
+          <div class="token-box">
+            <div class="token-swatch" style="background-color: #EDEADE; color: #111827; border-bottom: 1px solid #d4cec0;">
+              #EDEADE
+            </div>
+            <div class="token-info">
+              <span class="token-name">--surface / --neutral</span>
+              <span class="token-desc">Refined Bone Canvas</span>
+            </div>
+          </div>
+
+          <!-- Token 4: Text -->
+          <div class="token-box">
+            <div class="token-swatch" style="background-color: #111827; color: #FFFFFF;">
+              #111827
+            </div>
+            <div class="token-info">
+              <span class="token-name">--text</span>
+              <span class="token-desc">High Contrast Body Copy</span>
+            </div>
+          </div>
+
+          <!-- Token 5: Success -->
+          <div class="token-box">
+            <div class="token-swatch" style="background-color: #16A34A; color: #FFFFFF;">
+              #16A34A
+            </div>
+            <div class="token-info">
+              <span class="token-name">--success</span>
+              <span class="token-desc">Telemetry Compliant</span>
+            </div>
+          </div>
+
+          <!-- Token 6: Warning -->
+          <div class="token-box">
+            <div class="token-swatch" style="background-color: #D97706; color: #FFFFFF;">
+              #D97706
+            </div>
+            <div class="token-info">
+              <span class="token-name">--warning</span>
+              <span class="token-desc">Threshold Alert</span>
+            </div>
+          </div>
+
+          <!-- Token 7: Danger -->
+          <div class="token-box">
+            <div class="token-swatch" style="background-color: #DC2626; color: #FFFFFF;">
+              #DC2626
+            </div>
+            <div class="token-info">
+              <span class="token-name">--danger</span>
+              <span class="token-desc">Pipeline Fault</span>
+            </div>
+          </div>
+
+          <!-- Token 8: Typography Display -->
+          <div class="token-box">
+            <div class="token-swatch" style="background-color: #072C2C; color: #EDEADE; font-family: 'Oswald'; font-size: 16px; align-items: center; justify-content: center; text-transform: uppercase;">
+              OSWALD 700
+            </div>
+            <div class="token-info">
+              <span class="token-name">--font-display</span>
+              <span class="token-desc">Expressive Condensed Headings</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Enterprise Footer -->
+  <footer class="enterprise-footer">
+    <div class="footer-inner">
+      <div>
+        <div style="font-family: var(--font-display); font-size: 1.1rem; color: #ffffff; text-transform: uppercase; margin-bottom: 4px;">
+          ENTERPRISE ARCHITECTURE FRAMEWORK
+        </div>
+        <div>Standardized under open-design systems specification. All tokens verified against DESIGN.md.</div>
+      </div>
+      <div class="footer-links">
+        <a href="#pipelines">Pipeline Canvas</a>
+        <a href="#governance">RBAC Policy</a>
+        <a href="#telemetry">Live Logs</a>
+        <a href="#tokens">Token Spec</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Interactive Drag-and-Drop & Console Script -->
+  <script>
+    // Drag-and-drop state management
+    const stageTrack = document.getElementById('stageTrack');
+    let draggedItem = null;
+
+    function initDragAndDrop() {
+      const cards = stageTrack.querySelectorAll('.stage-card');
+      cards.forEach(card => {
+        card.addEventListener('dragstart', handleDragStart);
+        card.addEventListener('dragend', handleDragEnd);
+        card.addEventListener('dragover', handleDragOver);
+        card.addEventListener('dragenter', handleDragEnter);
+        card.addEventListener('dragleave', handleDragLeave);
+        card.addEventListener('drop', handleDrop);
+      });
+    }
+
+    function handleDragStart(e) {
+      draggedItem = this;
+      this.classList.add('dragging');
+      e.dataTransfer.effectAllowed = 'move';
+      e.dataTransfer.setData('text/plain', this.dataset.stage);
+    }
+
+    function handleDragEnd() {
+      this.classList.remove('dragging');
+      const cards = stageTrack.querySelectorAll('.stage-card');
+      cards.forEach(card => card.classList.remove('drag-over'));
+      updateStageNumbers();
+      appendLog('SUCCESS', `DAG Topology updated. Stage sequence re-indexed.`);
+    }
+
+    function handleDragOver(e) {
+      e.preventDefault();
+      e.dataTransfer.dropEffect = 'move';
+      return false;
+    }
+
+    function handleDragEnter() {
+      if (this !== draggedItem) {
+        this.classList.add('drag-over');
+      }
+    }
+
+    function handleDragLeave() {
+      this.classList.remove('drag-over');
+    }
+
+    function handleDrop(e) {
+      e.stopPropagation();
+      e.preventDefault();
+      this.classList.remove('drag-over');
+
+      if (draggedItem !== this) {
+        const allCards = Array.from(stageTrack.children);
+        const draggedIndex = allCards.indexOf(draggedItem);
+        const targetIndex = allCards.indexOf(this);
+
+        if (draggedIndex < targetIndex) {
+          this.after(draggedItem);
+        } else {
+          this.before(draggedItem);
+        }
+      }
+      return false;
+    }
+
+    function updateStageNumbers() {
+      const cards = stageTrack.querySelectorAll('.stage-card');
+      cards.forEach((card, idx) => {
+        const stepBadge = card.querySelector('.stage-step');
+        if (stepBadge) {
+          stepBadge.textContent = `STAGE 0${idx + 1}`;
+        }
+      });
+    }
+
+    // Node Selection and Inspector
+    const nodeDescriptions = {
+      '1': {
+        name: 'STAGE 01 // Ingestion Stream (Kafka Partition Broker)',
+        desc: 'Subscribed to `us-east-bus` with 64 dynamic partitions. Real-time backpressure monitoring with auto-scaling consumers.',
+        policy: 'Exponential Backoff (Max 5 Retries, 500ms Base)',
+        status: 'Health Check: 0 Errors in last 24h'
+      },
+      '2': {
+        name: 'STAGE 02 // Schema Validation & PII Redactor',
+        desc: 'Compiles protobuf schemas on the fly and scrubs sensitive customer fields (emails, SSNs, credit cards) before downstream distribution.',
+        policy: 'Strict Quarantine on Failure (Route to Dead Letter Queue)',
+        status: 'Audit Sealed: SOC2 Compliant'
+      },
+      '3': {
+        name: 'STAGE 03 // Vector Transform & Aggregation Engine',
+        desc: 'High-throughput windowing pipeline aggregating event bursts across 1-minute tumbling windows and generating vector embeddings.',
+        policy: 'Worker Heartbeat Timeout (3000ms threshold)',
+        status: 'Active Workers: 12 Nodes Assigned'
+      },
+      '4': {
+        name: 'STAGE 04 // Compliance & Cryptographic Sign-off',
+        desc: 'Hashes payload buffers using SHA-256 and signs them with hardware security module (HSM) keys for irreversible provenance audit logs.',
+        policy: 'Enforce Dual-Signature Cryptographic Verification',
+        status: 'Cert Status: Validated against Master Keystore'
+      },
+      '5': {
+        name: 'STAGE 05 // Data Lakehouse & Realtime Index',
+        desc: 'Dual-path sink committing compressed Parquet batches to Snowflake data warehouses and feeding OpenSearch realtime indices.',
+        policy: 'Transaction Commit Isolation: Read-Committed',
+        status: 'Write Speed: 840 MB/sec'
+      }
+    };
+
+    function selectStage(stageId) {
+      document.querySelectorAll('.stage-card').forEach(c => c.classList.remove('active-selected'));
+      const targetCard = document.querySelector(`.stage-card[data-stage="${stageId}"]`);
+      if (targetCard) targetCard.classList.add('active-selected');
+
+      const data = nodeDescriptions[stageId] || {
+        name: `STAGE 0${stageId} // Custom Pipeline Worker`,
+        desc: 'User-configured custom processing stage executed in isolated sandbox container.',
+        policy: 'Restart on Failure',
+        status: 'Active'
+      };
+
+      document.getElementById('inspNodeName').textContent = data.name;
+      document.getElementById('inspNodeDesc').textContent = data.desc;
+      document.getElementById('inspNodePolicy').textContent = data.policy;
+      document.getElementById('inspNodeStatus').textContent = data.status;
+
+      appendLog('INFO', `Inspecting telemetry for [${data.name}]`);
+    }
+
+    // Live Telemetry Log Generator
+    const consoleTerminal = document.getElementById('consoleTerminal');
+    let streamActive = true;
+    let streamTimer = null;
+
+    const sampleLogMessages = [
+      { lvl: 'INFO', text: 'Telemetry beacon heartbeat received from Worker-node-08.' },
+      { lvl: 'SUCCESS', text: 'Batch #44109 signed and committed to analytical cold storage.' },
+      { lvl: 'INFO', text: 'Backpressure normalized across all 64 ingress queues.' },
+      { lvl: 'WARN', text: 'Network packet jitter detected on peering link 10.14.2.1. Routing via backup transit.' },
+      { lvl: 'INFO', text: 'Parquet compaction finished. 4,200 micro-files aggregated into 16 optimized extents.' },
+      { lvl: 'SUCCESS', text: 'PII scrubbing pass complete: 14,200 records tokenized with AES-256.' }
+    ];
+
+    function appendLog(lvl, text) {
+      const now = new Date();
+      const ts = now.toTimeString().split(' ')[0] + '.' + String(now.getMilliseconds()).padStart(3, '0');
+      
+      let lvlClass = 'log-lvl-info';
+      if (lvl === 'WARN') lvlClass = 'log-lvl-warn';
+      if (lvl === 'SUCCESS') lvlClass = 'log-lvl-success';
+      if (lvl === 'ERROR') lvlClass = 'log-lvl-error';
+
+      const row = document.createElement('div');
+      row.className = 'log-row';
+      row.innerHTML = `<span class="log-ts">${ts}</span><span class="${lvlClass}">[${lvl}]</span> ${text}`;
+      consoleTerminal.appendChild(row);
+      consoleTerminal.scrollTop = consoleTerminal.scrollHeight;
+    }
+
+    function toggleStream() {
+      const btn = document.getElementById('streamToggleBtn');
+      if (streamActive) {
+        streamActive = false;
+        clearInterval(streamTimer);
+        btn.textContent = 'Resume';
+        btn.classList.replace('btn-secondary', 'btn-primary');
+        appendLog('WARN', 'Live stream paused by operator.');
+      } else {
+        streamActive = true;
+        btn.textContent = 'Pause';
+        btn.classList.replace('btn-primary', 'btn-secondary');
+        startStream();
+        appendLog('INFO', 'Live stream resumed.');
+      }
+    }
+
+    function startStream() {
+      streamTimer = setInterval(() => {
+        if (!streamActive) return;
+        const msg = sampleLogMessages[Math.floor(Math.random() * sampleLogMessages.length)];
+        appendLog(msg.lvl, msg.text);
+      }, 3500);
+    }
+
+    function clearConsole() {
+      consoleTerminal.innerHTML = '';
+      appendLog('INFO', 'Telemetry console buffer cleared by user.');
+    }
+
+    // Button Actions
+    function deployPipeline() {
+      appendLog('WARN', 'Deploy triggered: Initiating staged rollout across cluster PROD-NORTH-01...');
+      setTimeout(() => {
+        appendLog('SUCCESS', 'Rolling deployment completed successfully. 5/5 nodes synchronized.');
+      }, 1200);
+    }
+
+    function triggerHealthCheck() {
+      appendLog('INFO', 'Starting comprehensive cluster health check & cryptographic audit...');
+      setTimeout(() => {
+        appendLog('SUCCESS', 'Cluster health check passed. Zero packet loss, all HMAC certificates active.');
+      }, 800);
+    }
+
+    function restartSelectedNode() {
+      const name = document.getElementById('inspNodeName').textContent;
+      appendLog('WARN', `Restart command issued for [${name}]...`);
+      setTimeout(() => {
+        appendLog('SUCCESS', `Node restart finished. Warm cache restored in 420ms.`);
+      }, 1000);
+    }
+
+    function flushBuffers() {
+      appendLog('INFO', 'Flushing active pipeline memory buffers to disk...');
+      setTimeout(() => {
+        appendLog('SUCCESS', '142 MB flushed cleanly with zero dropped records.');
+      }, 600);
+    }
+
+    function addNewStage() {
+      const count = stageTrack.children.length + 1;
+      const newCard = document.createElement('div');
+      newCard.className = 'stage-card';
+      newCard.draggable = true;
+      newCard.dataset.stage = count;
+      newCard.onclick = () => selectStage(count);
+      newCard.innerHTML = `
+        <div class="stage-header">
+          <span class="stage-step">STAGE 0${count}</span>
+          <span class="stage-drag-handle">⠿</span>
+        </div>
+        <div class="stage-body">
+          <div class="stage-name">Custom Filter Node</div>
+          <div class="stage-subtext">Dynamic runtime script filter created by operator.</div>
+          <div class="stage-meta">
+            <div class="stage-meta-row"><span>Status:</span><span class="stage-meta-val">Ready</span></div>
+            <div class="stage-meta-row"><span>Throughput:</span><span class="stage-meta-val">0 msg/s</span></div>
+          </div>
+        </div>
+        <div class="stage-footer">
+          <span class="status-badge running">● READY</span>
+          <span style="font-size: 11px; font-family: var(--font-mono); color: var(--text-subtle);">Node ${count}X</span>
+        </div>
+      `;
+      stageTrack.appendChild(newCard);
+      initDragAndDrop();
+      updateStageNumbers();
+      appendLog('SUCCESS', `Added new stage 0${count} to pipeline graph.`);
+    }
+
+    function resetPipelineStages() {
+      location.reload();
+    }
+
+    function filterPipeline(query) {
+      const cards = stageTrack.querySelectorAll('.stage-card');
+      const q = query.toLowerCase().trim();
+      cards.forEach(c => {
+        if (!q || c.textContent.toLowerCase().includes(q)) {
+          c.style.display = 'flex';
+        } else {
+          c.style.display = 'none';
+        }
+      });
+    }
+
+    // Initialize
+    initDragAndDrop();
+    startStream();
+  </script>
+</body>
+</html>

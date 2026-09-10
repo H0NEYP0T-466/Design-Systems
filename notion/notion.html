@@ -1,0 +1,1525 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Notion — All-in-One Connected Workspace</title>
+  <meta name="description" content="Authentic living website built strictly with the Notion design system. Warm minimalism, precise letter-spacing compression, whisper borders, soft 4-layer shadows, and Notion Blue accents.">
+
+  <!-- Google Fonts: Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    /* ─────────────────────────────────────────────────────────────
+       1. NOTION DESIGN SYSTEM TOKENS FROM notion/DESIGN.md
+       ───────────────────────────────────────────────────────────── */
+    :root {
+      /* Primary Foundations */
+      --notion-black: rgba(0, 0, 0, 0.95);       /* Primary text, headings (#000000f2) */
+      --notion-white: #ffffff;                    /* Pure white canvas */
+      --notion-blue: #0075de;                     /* Primary CTA, link color, active accent */
+      
+      /* Brand Secondary */
+      --notion-navy: #213183;                     /* Secondary brand color */
+      --notion-blue-active: #005bab;              /* Button active/pressed state */
+
+      /* Warm Neutral Scale (yellow-brown undertones) */
+      --warm-white: #f6f5f4;                      /* Background surface tint, section alternation */
+      --warm-dark: #31302e;                       /* Dark surface background, dark section text */
+      --warm-gray-500: #615d59;                   /* Secondary text, descriptions, muted labels */
+      --warm-gray-300: #a39e98;                   /* Placeholder text, disabled states, captions */
+      --warm-gray-100: #ecebe8;                   /* Divider lines & subtle fills */
+
+      /* Semantic Accent Colors */
+      --accent-teal: #2a9d99;
+      --accent-green: #1aae39;
+      --accent-orange: #dd5b00;
+      --accent-pink: #ff64c8;
+      --accent-purple: #391c57;
+      --accent-brown: #523410;
+
+      /* Interactive */
+      --color-link-blue: #0075de;
+      --color-link-light-blue: #62aef0;
+      --color-focus-blue: #097fe8;
+      --color-badge-blue-bg: #f2f9ff;
+      --color-badge-blue-text: #097fe8;
+
+      /* Shadows & Elevation (Multi-layer stacks with cumulative opacity <= 0.05) */
+      --shadow-card: rgba(0, 0, 0, 0.04) 0px 4px 18px, 
+                     rgba(0, 0, 0, 0.027) 0px 2.025px 7.84688px, 
+                     rgba(0, 0, 0, 0.02) 0px 0.8px 2.925px, 
+                     rgba(0, 0, 0, 0.01) 0px 0.175px 1.04062px;
+      
+      --shadow-deep: rgba(0, 0, 0, 0.01) 0px 1px 3px, 
+                     rgba(0, 0, 0, 0.02) 0px 3px 7px, 
+                     rgba(0, 0, 0, 0.02) 0px 7px 15px, 
+                     rgba(0, 0, 0, 0.04) 0px 14px 28px, 
+                     rgba(0, 0, 0, 0.05) 0px 23px 52px;
+
+      /* Ultra-thin Whisper Border */
+      --whisper-border: 1px solid rgba(0, 0, 0, 0.1);
+      --whisper-border-dark: 1px solid rgba(255, 255, 255, 0.12);
+
+      /* Typography Font Stack */
+      --font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+
+      /* Spacing Scale (8px Base Unit) */
+      --sp-2: 2px;
+      --sp-4: 4px;
+      --sp-6: 6px;
+      --sp-8: 8px;
+      --sp-12: 12px;
+      --sp-16: 16px;
+      --sp-24: 24px;
+      --sp-32: 32px;
+      --sp-48: 48px;
+      --sp-64: 64px;
+      --sp-80: 80px;
+      --sp-100: 100px;
+
+      /* Radii */
+      --radius-micro: 4px;      /* Buttons, inputs, functional items */
+      --radius-subtle: 5px;     /* Links, menu items */
+      --radius-standard: 8px;   /* Small containers, tabs */
+      --radius-card: 12px;      /* Standard cards, feature containers */
+      --radius-hero: 16px;      /* Hero cards, promotional blocks */
+      --radius-pill: 9999px;    /* Status pills, badges */
+    }
+
+    /* Reset & Canvas */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      font-size: 16px;
+      background-color: var(--notion-white);
+      color: var(--notion-black);
+      font-family: var(--font-family);
+      font-feature-settings: "lnum", "locl";
+      scroll-behavior: smooth;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    body {
+      background-color: var(--notion-white);
+      color: var(--notion-black);
+      line-height: 1.5;
+      overflow-x: hidden;
+    }
+
+    a {
+      color: var(--color-link-blue);
+      text-decoration: none;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin-left: auto;
+      margin-right: auto;
+      padding-left: var(--sp-24);
+      padding-right: var(--sp-24);
+    }
+
+    /* ─────────────────────────────────────────────────────────────
+       2. TYPOGRAPHY HIERARCHY (Exact Table from DESIGN.md)
+       Display Hero: 64px, weight 700, line-height 1.00, letter-spacing -2.125px
+       Display Secondary: 54px, weight 700, line-height 1.04, letter-spacing -1.875px
+       Section Heading: 48px, weight 700, line-height 1.00, letter-spacing -1.5px
+       Sub-heading Large: 40px, weight 700, line-height 1.50, normal
+       Sub-heading: 26px, weight 700, line-height 1.23, letter-spacing -0.625px
+       Card Title: 22px, weight 700, line-height 1.27, letter-spacing -0.25px
+       Body Large: 20px, weight 600, line-height 1.40, letter-spacing -0.125px
+       Body: 16px, weight 400, line-height 1.50, normal
+       Body Medium: 16px, weight 500, line-height 1.50, normal
+       Body Semibold: 16px, weight 600, line-height 1.50, normal
+       Nav / Button: 15px, weight 600, line-height 1.33, normal
+       Caption: 14px, weight 500, line-height 1.43, normal
+       Badge: 12px, weight 600, line-height 1.33, letter-spacing +0.125px
+       ───────────────────────────────────────────────────────────── */
+    .display-hero {
+      font-size: clamp(38px, 5.5vw, 64px);
+      font-weight: 700;
+      line-height: 1.00;
+      letter-spacing: -2.125px;
+      color: var(--notion-black);
+    }
+
+    .display-secondary {
+      font-size: clamp(32px, 4.5vw, 54px);
+      font-weight: 700;
+      line-height: 1.04;
+      letter-spacing: -1.875px;
+      color: var(--notion-black);
+    }
+
+    .section-heading {
+      font-size: clamp(28px, 4vw, 48px);
+      font-weight: 700;
+      line-height: 1.00;
+      letter-spacing: -1.5px;
+      color: var(--notion-black);
+    }
+
+    .sub-heading-lg {
+      font-size: 40px;
+      font-weight: 700;
+      line-height: 1.50;
+      letter-spacing: normal;
+    }
+
+    .sub-heading {
+      font-size: 26px;
+      font-weight: 700;
+      line-height: 1.23;
+      letter-spacing: -0.625px;
+    }
+
+    .card-title {
+      font-size: 22px;
+      font-weight: 700;
+      line-height: 1.27;
+      letter-spacing: -0.25px;
+    }
+
+    .body-large {
+      font-size: 20px;
+      font-weight: 600;
+      line-height: 1.40;
+      letter-spacing: -0.125px;
+      color: var(--warm-gray-500);
+    }
+
+    .body-standard {
+      font-size: 16px;
+      font-weight: 400;
+      line-height: 1.50;
+      color: var(--notion-black);
+    }
+
+    .body-medium {
+      font-size: 16px;
+      font-weight: 500;
+      line-height: 1.50;
+    }
+
+    .body-semibold {
+      font-size: 16px;
+      font-weight: 600;
+      line-height: 1.50;
+    }
+
+    .caption {
+      font-size: 14px;
+      font-weight: 500;
+      line-height: 1.43;
+      color: var(--warm-gray-500);
+    }
+
+    /* ─────────────────────────────────────────────────────────────
+       3. NAVIGATION BAR
+       Clean horizontal nav on white, not sticky, logo left, CTA right
+       ───────────────────────────────────────────────────────────── */
+    .nav-header {
+      background: var(--notion-white);
+      border-bottom: var(--whisper-border);
+      padding: var(--sp-12) 0;
+    }
+
+    .nav-container {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--sp-16);
+    }
+
+    .nav-left {
+      display: flex;
+      align-items: center;
+      gap: var(--sp-24);
+    }
+
+    .brand-logo {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--sp-8);
+      text-decoration: none;
+      color: var(--notion-black);
+    }
+
+    .notion-icon-box {
+      width: 32px;
+      height: 32px;
+      border: 1.5px solid var(--notion-black);
+      border-radius: var(--radius-micro);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 18px;
+      background: var(--notion-white);
+      box-shadow: 1px 1px 0 rgba(0,0,0,0.15);
+    }
+
+    .brand-wordmark {
+      font-size: 17px;
+      font-weight: 700;
+      letter-spacing: -0.3px;
+    }
+
+    .nav-menu {
+      display: none;
+      align-items: center;
+      gap: var(--sp-16);
+      list-style: none;
+    }
+
+    @media (min-width: 860px) {
+      .nav-menu {
+        display: flex;
+      }
+    }
+
+    .nav-item-link {
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--notion-black);
+      text-decoration: none;
+      padding: var(--sp-4) var(--sp-8);
+      border-radius: var(--radius-micro);
+      transition: background 150ms ease;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .nav-item-link:hover {
+      background: rgba(0, 0, 0, 0.04);
+      text-decoration: none;
+    }
+
+    .nav-right {
+      display: flex;
+      align-items: center;
+      gap: var(--sp-12);
+    }
+
+    /* ─────────────────────────────────────────────────────────────
+       4. BUTTONS (Exact specifications from DESIGN.md Section 4)
+       ───────────────────────────────────────────────────────────── */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--sp-8);
+      font-size: 15px;
+      font-weight: 600;
+      padding: 8px 16px;
+      border-radius: var(--radius-micro);
+      border: 1px solid transparent;
+      cursor: pointer;
+      text-decoration: none;
+      transition: background-color 150ms ease, transform 150ms ease;
+      line-height: 1.33;
+      user-select: none;
+    }
+
+    .btn:focus-visible {
+      outline: 2px solid var(--color-focus-blue);
+      outline-offset: 1px;
+    }
+
+    /* Primary Blue */
+    .btn-primary {
+      background-color: var(--notion-blue);
+      color: var(--notion-white);
+    }
+
+    .btn-primary:hover {
+      background-color: var(--notion-blue-active);
+      text-decoration: none;
+    }
+
+    .btn-primary:active {
+      transform: scale(0.9);
+    }
+
+    /* Secondary / Tertiary */
+    .btn-secondary {
+      background-color: rgba(0, 0, 0, 0.05);
+      color: var(--notion-black);
+    }
+
+    .btn-secondary:hover {
+      transform: scale(1.05);
+      background-color: rgba(0, 0, 0, 0.08);
+      text-decoration: none;
+    }
+
+    .btn-secondary:active {
+      transform: scale(0.9);
+    }
+
+    /* Ghost Link Button */
+    .btn-ghost {
+      background: transparent;
+      color: var(--notion-black);
+      padding: 8px 12px;
+    }
+
+    .btn-ghost:hover {
+      text-decoration: underline;
+    }
+
+    /* Pill Badge Button */
+    .badge-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--sp-4);
+      background-color: var(--color-badge-blue-bg);
+      color: var(--color-badge-blue-text);
+      padding: 4px 8px;
+      border-radius: var(--radius-pill);
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.125px; /* only positive tracking */
+      text-decoration: none;
+      line-height: 1.33;
+    }
+
+    .badge-pill:hover {
+      background-color: #e5f2fc;
+      text-decoration: none;
+    }
+
+    /* Semantic Tag Badges */
+    .badge-teal { background: #e6f7f6; color: var(--accent-teal); }
+    .badge-green { background: #e9f8ec; color: var(--accent-green); }
+    .badge-orange { background: #fdf0e6; color: var(--accent-orange); }
+    .badge-purple { background: #f3edf9; color: var(--accent-purple); }
+
+    /* ─────────────────────────────────────────────────────────────
+       5. HERO SECTION
+       Generous vertical rhythm (80-120px), centered single column
+       ───────────────────────────────────────────────────────────── */
+    .hero-section {
+      padding-top: var(--sp-80);
+      padding-bottom: var(--sp-80);
+      text-align: center;
+      background: var(--notion-white);
+    }
+
+    .hero-container {
+      max-width: 900px;
+      margin-left: auto;
+      margin-right: auto;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: var(--sp-24);
+    }
+
+    .hero-cta-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--sp-12);
+      justify-content: center;
+      margin-top: var(--sp-8);
+    }
+
+    /* ─────────────────────────────────────────────────────────────
+       6. INTERACTIVE WORKSPACE MOCKUP (Notion Document & DB Canvas)
+       Whisper borders + 4-layer and 5-layer shadow stacks
+       ───────────────────────────────────────────────────────────── */
+    .workspace-wrapper {
+      max-width: 1140px;
+      margin: 0 auto;
+      background: var(--notion-white);
+      border: var(--whisper-border);
+      border-radius: var(--radius-card);
+      box-shadow: var(--shadow-card);
+      overflow: hidden;
+      margin-bottom: var(--sp-80);
+    }
+
+    .workspace-topbar {
+      height: 42px;
+      background: var(--warm-white);
+      border-bottom: var(--whisper-border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 var(--sp-16);
+      font-size: 13px;
+      color: var(--warm-gray-500);
+    }
+
+    .workspace-split {
+      display: grid;
+      grid-template-columns: 240px 1fr;
+      min-height: 540px;
+    }
+
+    @media (max-width: 800px) {
+      .workspace-split {
+        grid-template-columns: 1fr;
+      }
+      .workspace-sidebar {
+        display: none;
+      }
+    }
+
+    /* Left Sidebar */
+    .workspace-sidebar {
+      background: var(--warm-white);
+      border-right: var(--whisper-border);
+      padding: var(--sp-16) var(--sp-12);
+      display: flex;
+      flex-direction: column;
+      gap: var(--sp-16);
+    }
+
+    .sidebar-heading {
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--warm-gray-300);
+      text-transform: uppercase;
+      letter-spacing: 0.125px;
+      padding-left: var(--sp-8);
+    }
+
+    .sidebar-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .sidebar-item {
+      display: flex;
+      align-items: center;
+      gap: var(--sp-8);
+      padding: 6px var(--sp-8);
+      border-radius: var(--radius-subtle);
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--notion-black);
+      cursor: pointer;
+      transition: background 120ms ease;
+    }
+
+    .sidebar-item:hover {
+      background: rgba(0, 0, 0, 0.04);
+    }
+
+    .sidebar-item.active {
+      background: rgba(0, 0, 0, 0.06);
+      font-weight: 600;
+    }
+
+    /* Document Canvas */
+    .workspace-canvas {
+      padding: var(--sp-32) var(--sp-48);
+      background: var(--notion-white);
+      overflow-y: auto;
+    }
+
+    @media (max-width: 600px) {
+      .workspace-canvas {
+        padding: var(--sp-20) var(--sp-16);
+      }
+    }
+
+    .doc-icon {
+      font-size: 40px;
+      line-height: 1;
+      margin-bottom: var(--sp-12);
+    }
+
+    .doc-title {
+      font-size: 34px;
+      font-weight: 700;
+      letter-spacing: -1.0px;
+      margin-bottom: var(--sp-16);
+      outline: none;
+    }
+
+    /* Notion Callout Box */
+    .notion-callout {
+      background: var(--warm-white);
+      border-radius: var(--radius-micro);
+      padding: var(--sp-16);
+      display: flex;
+      gap: var(--sp-12);
+      align-items: flex-start;
+      margin-bottom: var(--sp-24);
+      font-size: 15px;
+      border: var(--whisper-border);
+    }
+
+    /* Interactive To-Do Checklist */
+    .todo-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: var(--sp-8);
+      margin-bottom: var(--sp-24);
+    }
+
+    .todo-item {
+      display: flex;
+      align-items: center;
+      gap: var(--sp-12);
+      font-size: 15px;
+      cursor: pointer;
+    }
+
+    .todo-checkbox {
+      width: 16px;
+      height: 16px;
+      border: 1.5px solid var(--warm-gray-300);
+      border-radius: 3px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 120ms ease;
+    }
+
+    .todo-item.completed .todo-checkbox {
+      background: var(--notion-blue);
+      border-color: var(--notion-blue);
+    }
+
+    .todo-item.completed .todo-text {
+      text-decoration: line-through;
+      color: var(--warm-gray-300);
+    }
+
+    /* Notion Kanban Board Preview */
+    .kanban-board {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: var(--sp-16);
+      margin-top: var(--sp-16);
+    }
+
+    @media (max-width: 700px) {
+      .kanban-board {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .kanban-column {
+      background: var(--warm-white);
+      border-radius: var(--radius-standard);
+      padding: var(--sp-12);
+      display: flex;
+      flex-direction: column;
+      gap: var(--sp-8);
+    }
+
+    .kanban-col-title {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--warm-gray-500);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 4px;
+    }
+
+    .kanban-card {
+      background: var(--notion-white);
+      border: var(--whisper-border);
+      border-radius: var(--radius-micro);
+      padding: var(--sp-12);
+      box-shadow: 0 1px 3px rgba(0,0,0,0.03);
+      font-size: 14px;
+      font-weight: 500;
+      display: flex;
+      flex-direction: column;
+      gap: var(--sp-8);
+      cursor: grab;
+      transition: transform 120ms ease;
+    }
+
+    .kanban-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 3px 6px rgba(0,0,0,0.06);
+    }
+
+    /* ─────────────────────────────────────────────────────────────
+       7. SECTION ALTERNATION: WARM WHITE (#F6F5F4)
+       64-120px vertical padding, 48px heading (-1.5px tracking)
+       ───────────────────────────────────────────────────────────── */
+    .section-warm {
+      background: var(--warm-white);
+      padding-top: var(--sp-80);
+      padding-bottom: var(--sp-80);
+      border-top: var(--whisper-border);
+      border-bottom: var(--whisper-border);
+    }
+
+    .section-white {
+      background: var(--notion-white);
+      padding-top: var(--sp-80);
+      padding-bottom: var(--sp-80);
+    }
+
+    .section-header-block {
+      text-align: center;
+      max-width: 780px;
+      margin-left: auto;
+      margin-right: auto;
+      margin-bottom: var(--sp-64);
+      display: flex;
+      flex-direction: column;
+      gap: var(--sp-16);
+    }
+
+    /* 3-Column Card Grid */
+    .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: var(--sp-24);
+    }
+
+    .card-notion {
+      background: var(--notion-white);
+      border: var(--whisper-border);
+      border-radius: var(--radius-card);
+      box-shadow: var(--shadow-card);
+      padding: var(--sp-32);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: var(--sp-20);
+      transition: box-shadow 180ms ease, transform 180ms ease;
+    }
+
+    .card-notion:hover {
+      box-shadow: var(--shadow-deep);
+      transform: translateY(-2px);
+    }
+
+    .card-icon {
+      font-size: 32px;
+      margin-bottom: var(--sp-8);
+    }
+
+    /* ─────────────────────────────────────────────────────────────
+       8. TRUST BAR & METRIC CARDS
+       Large number display (40px+ 700 weight) + whisper-bordered containers
+       ───────────────────────────────────────────────────────────── */
+    .metrics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: var(--sp-24);
+      margin-top: var(--sp-32);
+    }
+
+    .metric-card {
+      background: var(--notion-white);
+      border: var(--whisper-border);
+      border-radius: var(--radius-card);
+      padding: var(--sp-24);
+      box-shadow: var(--shadow-card);
+    }
+
+    .metric-number {
+      font-size: 44px;
+      font-weight: 700;
+      letter-spacing: -1.2px;
+      line-height: 1.1;
+      color: var(--notion-black);
+      margin-bottom: var(--sp-4);
+    }
+
+    .metric-desc {
+      font-size: 15px;
+      color: var(--warm-gray-500);
+      line-height: 1.4;
+    }
+
+    /* ─────────────────────────────────────────────────────────────
+       9. FORM & INPUT CONTROLS SPEC (Inputs & Forms)
+       1px solid #dddddd, 4px radius, blue outline ring
+       ───────────────────────────────────────────────────────────── */
+    .input-notion {
+      width: 100%;
+      height: 40px;
+      padding: 8px 12px;
+      background: var(--notion-white);
+      color: rgba(0, 0, 0, 0.9);
+      border: 1px solid #dddddd;
+      border-radius: var(--radius-micro);
+      font-family: var(--font-family);
+      font-size: 15px;
+      transition: border-color 150ms ease, box-shadow 150ms ease;
+    }
+
+    .input-notion::placeholder {
+      color: var(--warm-gray-300);
+    }
+
+    .input-notion:focus {
+      outline: none;
+      border-color: var(--color-focus-blue);
+      box-shadow: 0 0 0 2px rgba(9, 127, 232, 0.25);
+    }
+
+    /* ─────────────────────────────────────────────────────────────
+       10. DESIGN SYSTEM TOKENS & ACCENT PALETTE BOARD
+       ───────────────────────────────────────────────────────────── */
+    .token-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+      gap: var(--sp-16);
+    }
+
+    .token-chip {
+      background: var(--notion-white);
+      border: var(--whisper-border);
+      border-radius: var(--radius-standard);
+      padding: var(--sp-12);
+      display: flex;
+      flex-direction: column;
+      gap: var(--sp-8);
+      box-shadow: 0 1px 3px rgba(0,0,0,0.02);
+    }
+
+    .token-color-block {
+      height: 48px;
+      border-radius: var(--radius-micro);
+      border: var(--whisper-border);
+    }
+
+    .token-name-text {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--notion-black);
+    }
+
+    .token-hex-text {
+      font-size: 12px;
+      color: var(--warm-gray-500);
+      font-family: monospace;
+    }
+
+    /* ─────────────────────────────────────────────────────────────
+       11. PRICING TIERS
+       ───────────────────────────────────────────────────────────── */
+    .pricing-table {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: var(--sp-24);
+    }
+
+    .pricing-tier-card {
+      background: var(--notion-white);
+      border: var(--whisper-border);
+      border-radius: var(--radius-card);
+      padding: var(--sp-32);
+      box-shadow: var(--shadow-card);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: var(--sp-24);
+    }
+
+    .pricing-tier-card.featured-tier {
+      border: 1.5px solid var(--notion-blue);
+      box-shadow: var(--shadow-deep);
+      position: relative;
+    }
+
+    .tier-rate {
+      font-size: 38px;
+      font-weight: 700;
+      letter-spacing: -1px;
+      margin-top: var(--sp-8);
+      display: flex;
+      align-items: baseline;
+      gap: 4px;
+    }
+
+    .tier-features {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: var(--sp-12);
+      font-size: 14px;
+      color: var(--warm-gray-500);
+    }
+
+    .tier-features li {
+      display: flex;
+      align-items: center;
+      gap: var(--sp-8);
+    }
+
+    .tier-check {
+      color: var(--accent-green);
+      font-weight: bold;
+    }
+
+    /* ─────────────────────────────────────────────────────────────
+       12. FOOTER
+       Clean multi-column layout on pure white
+       ───────────────────────────────────────────────────────────── */
+    .notion-footer {
+      background: var(--notion-white);
+      border-top: var(--whisper-border);
+      padding: var(--sp-64) 0 var(--sp-48);
+    }
+
+    .footer-columns {
+      display: grid;
+      grid-template-columns: 2fr repeat(4, 1fr);
+      gap: var(--sp-32);
+      margin-bottom: var(--sp-48);
+    }
+
+    @media (max-width: 860px) {
+      .footer-columns {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    .footer-heading {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--notion-black);
+      margin-bottom: var(--sp-16);
+    }
+
+    .footer-nav {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: var(--sp-8);
+      font-size: 14px;
+    }
+
+    .footer-nav a {
+      color: var(--warm-gray-500);
+      text-decoration: none;
+      transition: color 150ms ease;
+    }
+
+    .footer-nav a:hover {
+      color: var(--notion-black);
+      text-decoration: underline;
+    }
+
+    .footer-subline {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-top: var(--sp-24);
+      border-top: var(--whisper-border);
+      font-size: 13px;
+      color: var(--warm-gray-300);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ==================== NAVIGATION ==================== -->
+  <header class="nav-header">
+    <div class="container nav-container">
+      <div class="nav-left">
+        <a href="#hero" class="brand-logo">
+          <div class="notion-icon-box">N</div>
+          <span class="brand-wordmark">Notion</span>
+        </a>
+
+        <ul class="nav-menu">
+          <li><a href="#workspace" class="nav-item-link">Product ▾</a></li>
+          <li><a href="#solutions" class="nav-item-link">Solutions ▾</a></li>
+          <li><a href="#tokens" class="nav-item-link">Design System</a></li>
+          <li><a href="#pricing" class="nav-item-link">Pricing</a></li>
+        </ul>
+      </div>
+
+      <div class="nav-right">
+        <a href="#pricing" class="btn btn-ghost">Log in</a>
+        <a href="#workspace" class="btn btn-primary">Get Notion free</a>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <!-- ==================== HERO SECTION ==================== -->
+    <section id="hero" class="hero-section">
+      <div class="container hero-container">
+        <a href="#tokens" class="badge-pill">
+          <span>Notion 3.0 Design Foundations</span>
+          <span>→</span>
+        </a>
+
+        <h1 class="display-hero">
+          Your connected workspace for wiki, docs, &amp; projects.
+        </h1>
+
+        <p class="body-large" style="max-width: 680px;">
+          A blank canvas that gets out of your way. Built with warm neutrals, compressed display typography, whisper borders, and layered sub-0.05 opacity shadows.
+        </p>
+
+        <div class="hero-cta-group">
+          <a href="#workspace" class="btn btn-primary" style="padding: 10px 20px;">
+            Get Notion free
+          </a>
+          <a href="#tokens" class="btn btn-secondary" style="padding: 10px 20px;">
+            Explore Design System
+          </a>
+        </div>
+
+        <div style="display: flex; gap: var(--sp-16); font-size: 13px; color: var(--warm-gray-500); margin-top: var(--sp-8);">
+          <span>✓ Free for individuals</span>
+          <span>✓ No credit card required</span>
+          <span>✓ Instant cloud sync</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== INTERACTIVE WORKSPACE CANVAS MOCKUP ==================== -->
+    <section id="workspace" class="container" style="padding-bottom: var(--sp-80);">
+      <div class="workspace-wrapper">
+        <!-- Top window chrome -->
+        <div class="workspace-topbar">
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <span style="display: flex; gap: 6px;">
+              <span style="width: 10px; height: 10px; border-radius: 50%; background: #eb5757; display: inline-block;"></span>
+              <span style="width: 10px; height: 10px; border-radius: 50%; background: #f2c94c; display: inline-block;"></span>
+              <span style="width: 10px; height: 10px; border-radius: 50%; background: #27ae60; display: inline-block;"></span>
+            </span>
+            <span style="margin-left: 12px; color: var(--warm-gray-300);">Acme Corp / Engineering /</span>
+            <strong style="color: var(--notion-black);">Product Roadmap 2026</strong>
+          </div>
+          <div style="display: flex; align-items: center; gap: 12px;">
+            <span class="badge-pill" style="font-size: 11px;">Share</span>
+            <span style="cursor: pointer;">•••</span>
+          </div>
+        </div>
+
+        <!-- Split Layout: Sidebar + Document Canvas -->
+        <div class="workspace-split">
+          <!-- Left Sidebar -->
+          <aside class="workspace-sidebar">
+            <div style="display: flex; align-items: center; gap: 8px; padding-left: 8px;">
+              <div style="width: 20px; height: 20px; border-radius: 3px; background: var(--notion-black); color: white; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: bold;">A</div>
+              <strong style="font-size: 14px;">Acme Workspace</strong>
+            </div>
+
+            <div>
+              <div class="sidebar-heading">Favorites</div>
+              <ul class="sidebar-list" style="margin-top: 6px;">
+                <li class="sidebar-item active">🚀 Product Roadmap</li>
+                <li class="sidebar-item">🎨 Design System</li>
+                <li class="sidebar-item">📐 System Architecture</li>
+              </ul>
+            </div>
+
+            <div>
+              <div class="sidebar-heading">Workspace Pages</div>
+              <ul class="sidebar-list" style="margin-top: 6px;">
+                <li class="sidebar-item">📋 Sprint Backlog</li>
+                <li class="sidebar-item">💡 Feature Specs</li>
+                <li class="sidebar-item">👥 Team Directory</li>
+                <li class="sidebar-item">⚙️ Settings &amp; Members</li>
+              </ul>
+            </div>
+
+            <div style="margin-top: auto; padding-top: 12px; border-top: var(--whisper-border);">
+              <button class="btn btn-secondary" style="width: 100%; font-size: 13px; padding: 6px 10px; justify-content: flex-start;" onclick="addNewItem()">
+                + New Page
+              </button>
+            </div>
+          </aside>
+
+          <!-- Document Canvas -->
+          <div class="workspace-canvas">
+            <div class="doc-icon">🚀</div>
+            <h2 class="doc-title" contenteditable="true" spellcheck="false">Product Roadmap 2026</h2>
+
+            <!-- Callout -->
+            <div class="notion-callout">
+              <span style="font-size: 20px;">💡</span>
+              <div>
+                <strong>Notion Design Philosophy:</strong> Elements are bounded by ultra-thin whisper borders (<code style="font-size: 13px;">1px solid rgba(0,0,0,0.1)</code>) and soft 4-layer shadow stacks with cumulative opacity &lt; 0.05.
+              </div>
+            </div>
+
+            <!-- Interactive To-Do List -->
+            <h3 class="card-title" style="margin-bottom: var(--sp-12);">Interactive Task Checklist</h3>
+            <ul class="todo-list" id="todo-container">
+              <li class="todo-item completed" onclick="toggleTodo(this)">
+                <div class="todo-checkbox">✓</div>
+                <span class="todo-text">Align typography with NotionInter (-2.125px tracking at 64px)</span>
+              </li>
+              <li class="todo-item completed" onclick="toggleTodo(this)">
+                <div class="todo-checkbox">✓</div>
+                <span class="todo-text">Enforce warm neutrals: #f6f5f4 warm white &amp; #31302e warm dark</span>
+              </li>
+              <li class="todo-item" onclick="toggleTodo(this)">
+                <div class="todo-checkbox"></div>
+                <span class="todo-text">Ship multi-tier database kanban with whisper borders</span>
+              </li>
+              <li class="todo-item" onclick="toggleTodo(this)">
+                <div class="todo-checkbox"></div>
+                <span class="todo-text">Validate pill badges with positive 0.125px micro-tracking</span>
+              </li>
+            </ul>
+
+            <!-- Kanban Board -->
+            <div style="margin-top: var(--sp-32);">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--sp-12);">
+                <h3 class="card-title">Live Project Database</h3>
+                <span class="badge-pill">Board View ▾</span>
+              </div>
+
+              <div class="kanban-board">
+                <!-- Col 1 -->
+                <div class="kanban-column">
+                  <div class="kanban-col-title">
+                    <span>TO DO (2)</span>
+                    <span>+</span>
+                  </div>
+                  <div class="kanban-card">
+                    <span>Whisper border audit across mobile breakpoints</span>
+                    <span class="badge-pill badge-orange" style="width: fit-content;">Medium</span>
+                  </div>
+                  <div class="kanban-card">
+                    <span>Lining numerals ("lnum") OpenType verification</span>
+                    <span class="badge-pill badge-purple" style="width: fit-content;">Typography</span>
+                  </div>
+                </div>
+
+                <!-- Col 2 -->
+                <div class="kanban-column">
+                  <div class="kanban-col-title">
+                    <span>IN PROGRESS (2)</span>
+                    <span>+</span>
+                  </div>
+                  <div class="kanban-card">
+                    <span>Notion Blue CTA state transitions</span>
+                    <span class="badge-pill" style="width: fit-content;">In Dev</span>
+                  </div>
+                  <div class="kanban-card">
+                    <span>Warm gray palette calibration</span>
+                    <span class="badge-pill badge-teal" style="width: fit-content;">Color</span>
+                  </div>
+                </div>
+
+                <!-- Col 3 -->
+                <div class="kanban-column">
+                  <div class="kanban-col-title">
+                    <span>COMPLETED (2)</span>
+                    <span>+</span>
+                  </div>
+                  <div class="kanban-card">
+                    <span>4-layer shadow stack equation integration</span>
+                    <span class="badge-pill badge-green" style="width: fit-content;">Done</span>
+                  </div>
+                  <div class="kanban-card">
+                    <span>Display compression scale</span>
+                    <span class="badge-pill badge-green" style="width: fit-content;">Done</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== ALTERNATING WARM WHITE SECTION ==================== -->
+    <section id="solutions" class="section-warm">
+      <div class="container">
+        <div class="section-header-block">
+          <span class="badge-pill" style="margin: 0 auto;">Warm Alternation Principle</span>
+          <h2 class="section-heading">
+            Every team, side-by-side.
+          </h2>
+          <p class="body-large">
+            Pure white sections alternate with warm white (<code style="font-size: 16px; color: var(--notion-black);">#f6f5f4</code>) sections, providing soothing visual rhythm without jarring breaks.
+          </p>
+        </div>
+
+        <div class="cards-grid">
+          <!-- Card 1 -->
+          <div class="card-notion">
+            <div>
+              <div class="card-icon">📖</div>
+              <h3 class="card-title">Wikis &amp; Knowledge</h3>
+              <p class="body-standard" style="color: var(--warm-gray-500); margin-top: var(--sp-8);">
+                Centralize your company's knowledge base. Easy to search, effortless to update, and naturally organized with hierarchical pages.
+              </p>
+            </div>
+            <a href="#workspace" class="btn btn-secondary" style="width: fit-content;">Explore Wikis →</a>
+          </div>
+
+          <!-- Card 2 -->
+          <div class="card-notion">
+            <div>
+              <div class="card-icon">⚡</div>
+              <h3 class="card-title">Projects &amp; Tasks</h3>
+              <p class="body-standard" style="color: var(--warm-gray-500); margin-top: var(--sp-8);">
+                Track every detail from brainstorm to launch. Switch fluidly between Kanban boards, Gantt timelines, tables, and lists.
+              </p>
+            </div>
+            <a href="#workspace" class="btn btn-secondary" style="width: fit-content;">Explore Projects →</a>
+          </div>
+
+          <!-- Card 3 -->
+          <div class="card-notion">
+            <div>
+              <div class="card-icon">✍️</div>
+              <h3 class="card-title">Docs &amp; Meeting Notes</h3>
+              <p class="body-standard" style="color: var(--warm-gray-500); margin-top: var(--sp-8);">
+                Simple yet deeply powerful writing environment. Embed interactive Figma frames, live GitHub issues, and automated tables.
+              </p>
+            </div>
+            <a href="#workspace" class="btn btn-secondary" style="width: fit-content;">Explore Docs →</a>
+          </div>
+        </div>
+
+        <!-- Metrics Cards -->
+        <div class="metrics-grid">
+          <div class="metric-card">
+            <div class="metric-number">300k+</div>
+            <div class="metric-desc">Companies run daily operations on Notion.</div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-number">$4,200</div>
+            <div class="metric-desc">Average annual tool consolidation ROI per team.</div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-number">2.3 hrs</div>
+            <div class="metric-desc">Saved weekly per knowledge worker on context switches.</div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-number">99.99%</div>
+            <div class="metric-desc">Enterprise SLA availability with real-time sync.</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== DESIGN SYSTEM TOKENS SPEC ==================== -->
+    <section id="tokens" class="section-white">
+      <div class="container">
+        <div class="section-header-block">
+          <span class="badge-pill" style="margin: 0 auto;">Token Foundation</span>
+          <h2 class="section-heading">Color Palette &amp; Roles</h2>
+          <p class="body-large">
+            Warm neutrals carry yellow-brown undertones, softening pure contrast into tactile analog warmth.
+          </p>
+        </div>
+
+        <!-- Core Colors -->
+        <h3 class="card-title" style="margin-bottom: var(--sp-16);">1. Core Foundations &amp; Warm Neutrals</h3>
+        <div class="token-row" style="margin-bottom: var(--sp-32);">
+          <div class="token-chip">
+            <div class="token-color-block" style="background: rgba(0, 0, 0, 0.95);"></div>
+            <span class="token-name-text">Notion Black</span>
+            <span class="token-hex-text">rgba(0,0,0,0.95)</span>
+          </div>
+
+          <div class="token-chip">
+            <div class="token-color-block" style="background: #ffffff; border: 1px solid #ddd;"></div>
+            <span class="token-name-text">Pure White</span>
+            <span class="token-hex-text">#FFFFFF</span>
+          </div>
+
+          <div class="token-chip">
+            <div class="token-color-block" style="background: #0075de;"></div>
+            <span class="token-name-text">Notion Blue</span>
+            <span class="token-hex-text">#0075DE</span>
+          </div>
+
+          <div class="token-chip">
+            <div class="token-color-block" style="background: #f6f5f4; border: 1px solid #ddd;"></div>
+            <span class="token-name-text">Warm White</span>
+            <span class="token-hex-text">#F6F5F4</span>
+          </div>
+
+          <div class="token-chip">
+            <div class="token-color-block" style="background: #31302e;"></div>
+            <span class="token-name-text">Warm Dark</span>
+            <span class="token-hex-text">#31302E</span>
+          </div>
+
+          <div class="token-chip">
+            <div class="token-color-block" style="background: #615d59;"></div>
+            <span class="token-name-text">Warm Gray 500</span>
+            <span class="token-hex-text">#615D59</span>
+          </div>
+
+          <div class="token-chip">
+            <div class="token-color-block" style="background: #a39e98;"></div>
+            <span class="token-name-text">Warm Gray 300</span>
+            <span class="token-hex-text">#A39E98</span>
+          </div>
+        </div>
+
+        <!-- Semantic Accents -->
+        <h3 class="card-title" style="margin-bottom: var(--sp-16);">2. Semantic Accent Tones</h3>
+        <div class="token-row" style="margin-bottom: var(--sp-32);">
+          <div class="token-chip">
+            <div class="token-color-block" style="background: #2a9d99;"></div>
+            <span class="token-name-text">Teal</span>
+            <span class="token-hex-text">#2A9D99</span>
+          </div>
+
+          <div class="token-chip">
+            <div class="token-color-block" style="background: #1aae39;"></div>
+            <span class="token-name-text">Green</span>
+            <span class="token-hex-text">#1AAE39</span>
+          </div>
+
+          <div class="token-chip">
+            <div class="token-color-block" style="background: #dd5b00;"></div>
+            <span class="token-name-text">Orange</span>
+            <span class="token-hex-text">#DD5B00</span>
+          </div>
+
+          <div class="token-chip">
+            <div class="token-color-block" style="background: #ff64c8;"></div>
+            <span class="token-name-text">Pink</span>
+            <span class="token-hex-text">#FF64C8</span>
+          </div>
+
+          <div class="token-chip">
+            <div class="token-color-block" style="background: #391c57;"></div>
+            <span class="token-name-text">Purple</span>
+            <span class="token-hex-text">#391C57</span>
+          </div>
+
+          <div class="token-chip">
+            <div class="token-color-block" style="background: #523410;"></div>
+            <span class="token-name-text">Brown</span>
+            <span class="token-hex-text">#523410</span>
+          </div>
+        </div>
+
+        <!-- Interactive Input and Button Tester -->
+        <div class="card-notion" style="margin-top: var(--sp-32);">
+          <h3 class="card-title">Interactive Component Specimen</h3>
+          <p class="body-standard" style="color: var(--warm-gray-500);">
+            Test buttons with active <code style="font-size: 13px;">scale(0.9)</code> transitions, form inputs with whisper focus rings, and pill badges with 9999px radius.
+          </p>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: var(--sp-24); margin-top: var(--sp-16);">
+            <div style="display: flex; flex-direction: column; gap: var(--sp-12);">
+              <label class="caption" style="font-weight: 600; color: var(--notion-black);" for="demo-email">
+                Work Email Address
+              </label>
+              <input type="email" id="demo-email" class="input-notion" placeholder="name@company.com">
+              <span class="caption">Focus input to verify 2px solid Focus Blue ring (#097fe8).</span>
+            </div>
+
+            <div style="display: flex; flex-direction: column; gap: var(--sp-12); justify-content: center;">
+              <span class="caption" style="font-weight: 600; color: var(--notion-black);">Interactive Buttons</span>
+              <div style="display: flex; flex-wrap: wrap; gap: var(--sp-8);">
+                <button class="btn btn-primary" onclick="alert('Primary Notion Blue action triggered')">Primary CTA</button>
+                <button class="btn btn-secondary">Secondary Gray</button>
+                <button class="btn btn-ghost">Ghost Link</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== PRICING TIERS ==================== -->
+    <section id="pricing" class="section-warm">
+      <div class="container">
+        <div class="section-header-block">
+          <span class="badge-pill" style="margin: 0 auto;">Predictable Plans</span>
+          <h2 class="section-heading">Pick the right plan for your team.</h2>
+          <p class="body-large">
+            Start free with unlimited blocks for individuals, or collaborate with shared team permissions.
+          </p>
+        </div>
+
+        <div class="pricing-table">
+          <!-- Free -->
+          <div class="pricing-tier-card">
+            <div>
+              <h3 class="card-title">Free</h3>
+              <p class="caption" style="margin-top: 4px;">For individuals organizing life and work.</p>
+              <div class="tier-rate">$0</div>
+
+              <ul class="tier-features" style="margin-top: var(--sp-24);">
+                <li><span class="tier-check">✓</span> Unlimited pages &amp; blocks</li>
+                <li><span class="tier-check">✓</span> Share with up to 10 guests</li>
+                <li><span class="tier-check">✓</span> Basic page analytics</li>
+              </ul>
+            </div>
+            <a href="#workspace" class="btn btn-secondary" style="width: 100%;">Get started</a>
+          </div>
+
+          <!-- Plus (Featured) -->
+          <div class="pricing-tier-card featured-tier">
+            <div>
+              <span class="badge-pill" style="margin-bottom: 8px;">POPULAR FOR TEAMS</span>
+              <h3 class="card-title">Plus</h3>
+              <p class="caption" style="margin-top: 4px;">A shared workspace for small groups.</p>
+              <div class="tier-rate">$10 <span class="caption">/ seat / mo</span></div>
+
+              <ul class="tier-features" style="margin-top: var(--sp-24);">
+                <li><span class="tier-check">✓</span> Unlimited file uploads</li>
+                <li><span class="tier-check">✓</span> Unlimited blocks for teams</li>
+                <li><span class="tier-check">✓</span> 30-day page history</li>
+                <li><span class="tier-check">✓</span> Custom Notion AI add-on</li>
+              </ul>
+            </div>
+            <a href="#workspace" class="btn btn-primary" style="width: 100%;">Try Plus free</a>
+          </div>
+
+          <!-- Business -->
+          <div class="pricing-tier-card">
+            <div>
+              <h3 class="card-title">Business</h3>
+              <p class="caption" style="margin-top: 4px;">For companies connecting multiple teams.</p>
+              <div class="tier-rate">$18 <span class="caption">/ seat / mo</span></div>
+
+              <ul class="tier-features" style="margin-top: var(--sp-24);">
+                <li><span class="tier-check">✓</span> SAML Single Sign-On (SSO)</li>
+                <li><span class="tier-check">✓</span> Private teamspaces</li>
+                <li><span class="tier-check">✓</span> 90-day page history</li>
+              </ul>
+            </div>
+            <a href="#workspace" class="btn btn-secondary" style="width: 100%;">Try Business free</a>
+          </div>
+
+          <!-- Enterprise -->
+          <div class="pricing-tier-card">
+            <div>
+              <h3 class="card-title">Enterprise</h3>
+              <p class="caption" style="margin-top: 4px;">Advanced controls &amp; dedicated support.</p>
+              <div class="tier-rate">Custom</div>
+
+              <ul class="tier-features" style="margin-top: var(--sp-24);">
+                <li><span class="tier-check">✓</span> Enterprise key management</li>
+                <li><span class="tier-check">✓</span> Audit log export</li>
+                <li><span class="tier-check">✓</span> Dedicated customer success</li>
+              </ul>
+            </div>
+            <a href="#workspace" class="btn btn-secondary" style="width: 100%;">Contact Sales</a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ==================== FOOTER ==================== -->
+  <footer class="notion-footer">
+    <div class="container">
+      <div class="footer-columns">
+        <div>
+          <a href="#hero" class="brand-logo" style="margin-bottom: var(--sp-16);">
+            <div class="notion-icon-box">N</div>
+            <span class="brand-wordmark">Notion</span>
+          </a>
+          <p class="caption" style="line-height: 1.6; max-width: 260px;">
+            The all-in-one connected workspace. Where knowledge, projects, and documents collaborate effortlessly.
+          </p>
+        </div>
+
+        <div>
+          <h4 class="footer-heading">Product</h4>
+          <ul class="footer-nav">
+            <li><a href="#workspace">Wikis</a></li>
+            <li><a href="#workspace">Projects</a></li>
+            <li><a href="#workspace">Docs</a></li>
+            <li><a href="#tokens">Notion AI</a></li>
+            <li><a href="#pricing">Template Gallery</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h4 class="footer-heading">Solutions</h4>
+          <ul class="footer-nav">
+            <li><a href="#solutions">Enterprise</a></li>
+            <li><a href="#solutions">Small business</a></li>
+            <li><a href="#solutions">Startups</a></li>
+            <li><a href="#solutions">Education</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h4 class="footer-heading">Design System</h4>
+          <ul class="footer-nav">
+            <li><a href="#tokens">NotionInter Scale</a></li>
+            <li><a href="#tokens">Warm Neutrals</a></li>
+            <li><a href="#tokens">Whisper Borders</a></li>
+            <li><a href="#tokens">Sub-0.05 Shadows</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h4 class="footer-heading">Company</h4>
+          <ul class="footer-nav">
+            <li><a href="#hero">About us</a></li>
+            <li><a href="#hero">Careers</a></li>
+            <li><a href="#hero">Security</a></li>
+            <li><a href="#hero">Privacy policy</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="footer-subline">
+        <div>
+          Notion Design System • Authentic reproduction of open-design/notion/DESIGN.md
+        </div>
+        <div style="display: flex; gap: var(--sp-16);">
+          <span>English (US) ▾</span>
+          <span>Status: All systems normal</span>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Interactive JavaScript for Live Workspace Behavior -->
+  <script>
+    // Checklist Toggle Behavior
+    function toggleTodo(item) {
+      item.classList.toggle('completed');
+      const box = item.querySelector('.todo-checkbox');
+      if (item.classList.contains('completed')) {
+        box.textContent = '✓';
+      } else {
+        box.textContent = '';
+      }
+    }
+
+    // Add new page to sidebar demo
+    let pageIndex = 1;
+    function addNewItem() {
+      const list = document.querySelector('.sidebar-list');
+      const li = document.createElement('li');
+      li.className = 'sidebar-item';
+      li.textContent = `📄 Untitled Page ${pageIndex++}`;
+      li.onclick = function() {
+        document.querySelectorAll('.sidebar-item').forEach(el => el.classList.remove('active'));
+        li.classList.add('active');
+        document.querySelector('.doc-title').textContent = li.textContent.replace('📄 ', '');
+      };
+      list.appendChild(li);
+    }
+  </script>
+</body>
+</html>

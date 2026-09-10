@@ -1,0 +1,972 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>xAI — Understand the Universe</title>
+
+  <!-- Google Fonts for GeistMono and universalSans fallbacks -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;500&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+  <style>
+    /* ==========================================================================
+       xAI DESIGN SYSTEM TOKENS & FOUNDATIONS (from DESIGN.md)
+       ========================================================================== */
+    :root {
+      /* Primary */
+      --color-pure-white: #ffffff;
+      --color-dark-bg: #1f2228; /* The canvas: warm near-black with subtle blue undertone */
+
+      /* Interactive */
+      --color-white-default: #ffffff;
+      --color-white-muted: rgba(255, 255, 255, 0.5); /* Dimming on hover as specified */
+      --color-white-subtle: rgba(255, 255, 255, 0.2);
+      --color-ring-blue: rgba(59, 130, 246, 0.5); /* Focus ring */
+
+      /* Surface & Borders */
+      --color-surface-elevated: rgba(255, 255, 255, 0.03);
+      --color-surface-hover: rgba(255, 255, 255, 0.08);
+      --color-border-default: rgba(255, 255, 255, 0.1);
+      --color-border-strong: rgba(255, 255, 255, 0.2);
+
+      /* Functional Text */
+      --color-text-primary: #ffffff;
+      --color-text-secondary: rgba(255, 255, 255, 0.7);
+      --color-text-tertiary: rgba(255, 255, 255, 0.5);
+      --color-text-quaternary: rgba(255, 255, 255, 0.3);
+
+      /* Typography */
+      --font-geist-mono: "GeistMono", ui-monospace, SFMono-Regular, "JetBrains Mono", "Roboto Mono", Menlo, Monaco, monospace;
+      --font-universal-sans: "universalSans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Inter", sans-serif;
+
+      /* Spacing Scale (8px base: 4px, 8px, 24px, 48px, 96px) */
+      --space-4: 4px;
+      --space-8: 8px;
+      --space-24: 24px;
+      --space-48: 48px;
+      --space-96: 96px;
+
+      /* Border Radii: Sharp brutalism (0px default) */
+      --radius-sharp: 0px;
+      --radius-subtle: 4px;
+
+      /* Depth: Zero box shadows */
+      --shadow-none: none;
+    }
+
+    /* CSS Reset */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      border-radius: var(--radius-sharp); /* Default sharp 0px corners */
+      box-shadow: none !important; /* Zero shadows */
+    }
+
+    html, body {
+      background-color: var(--color-dark-bg);
+      color: var(--color-pure-white);
+      font-family: var(--font-universal-sans);
+      font-size: 16px;
+      font-weight: 400;
+      line-height: 1.50;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      overflow-x: hidden;
+    }
+
+    /* Links dim on hover as specified in xAI DESIGN.md */
+    a {
+      color: var(--color-white-default);
+      text-decoration: none;
+      transition: color 150ms ease, opacity 150ms ease;
+    }
+
+    a:hover {
+      color: var(--color-white-muted); /* Dims to 0.5 opacity rather than brightening */
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 var(--space-24);
+    }
+
+    /* ==========================================================================
+       NAVIGATION BAR
+       ========================================================================== */
+    .xai-nav-header {
+      background-color: var(--color-dark-bg);
+      border-bottom: 1px solid var(--color-border-default);
+      position: sticky;
+      top: 0;
+      z-index: 50;
+    }
+
+    .nav-inner {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      height: 64px;
+    }
+
+    .nav-brand {
+      font-family: var(--font-geist-mono);
+      font-size: 18px;
+      font-weight: 400;
+      letter-spacing: 1.4px;
+      text-transform: uppercase;
+      color: var(--color-pure-white);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .nav-brand-logo {
+      width: 24px;
+      height: 24px;
+      stroke: var(--color-pure-white);
+      fill: none;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: var(--space-24);
+      list-style: none;
+    }
+
+    .nav-links a {
+      font-family: var(--font-universal-sans);
+      font-size: 14px;
+      font-weight: 400;
+      color: var(--color-pure-white);
+      transition: color 150ms ease;
+    }
+
+    .nav-links a:hover {
+      color: var(--color-white-muted);
+    }
+
+    /* ==========================================================================
+       BUTTONS (GeistMono 14px, uppercase, 1.4px letter-spacing, 0px radius)
+       ========================================================================== */
+    .btn-xai-primary {
+      background-color: var(--color-pure-white);
+      color: var(--color-dark-bg);
+      font-family: var(--font-geist-mono);
+      font-size: 14px;
+      font-weight: 400;
+      line-height: 1.43;
+      letter-spacing: 1.4px;
+      text-transform: uppercase;
+      padding: 12px 24px;
+      border: 1px solid var(--color-pure-white);
+      border-radius: var(--radius-sharp);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      text-decoration: none !important;
+      transition: background-color 150ms ease, opacity 150ms ease;
+    }
+
+    .btn-xai-primary:hover {
+      background-color: rgba(255, 255, 255, 0.9);
+      color: var(--color-dark-bg);
+    }
+
+    .btn-xai-ghost {
+      background-color: transparent;
+      color: var(--color-pure-white);
+      font-family: var(--font-geist-mono);
+      font-size: 14px;
+      font-weight: 400;
+      line-height: 1.43;
+      letter-spacing: 1.4px;
+      text-transform: uppercase;
+      padding: 12px 24px;
+      border: 1px solid var(--color-border-strong);
+      border-radius: var(--radius-sharp);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      text-decoration: none !important;
+      transition: background-color 150ms ease, border-color 150ms ease;
+    }
+
+    .btn-xai-ghost:hover {
+      background-color: var(--color-surface-hover);
+      border-color: rgba(255, 255, 255, 0.4);
+      color: var(--color-pure-white);
+    }
+
+    /* Tag / Badge */
+    .xai-tag {
+      background: transparent;
+      color: var(--color-pure-white);
+      padding: 4px 8px;
+      border: 1px solid var(--color-border-strong);
+      border-radius: var(--radius-sharp);
+      font-family: var(--font-geist-mono);
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      display: inline-block;
+    }
+
+    /* ==========================================================================
+       HERO SECTION: 320px GEISTMONO DISPLAY LUXURY
+       ========================================================================== */
+    .hero-section {
+      min-height: calc(100vh - 64px);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: var(--space-48) 0;
+      border-bottom: 1px solid var(--color-border-default);
+      position: relative;
+    }
+
+    .hero-headline-wrap {
+      width: 100%;
+      overflow: hidden;
+      user-select: none;
+    }
+
+    /* Extreme 320px Display Headline in GeistMono weight 300 */
+    .display-hero-xai {
+      font-family: var(--font-geist-mono);
+      font-size: clamp(64px, 20vw, 280px);
+      font-weight: 300; /* Light weight at scale */
+      line-height: 1.05;
+      letter-spacing: -4px;
+      color: var(--color-pure-white);
+      text-transform: uppercase;
+      margin: 0;
+      padding: 0;
+    }
+
+    .hero-subtitle {
+      font-family: var(--font-universal-sans);
+      font-size: 20px;
+      font-weight: 400;
+      line-height: 1.50;
+      color: var(--color-text-secondary);
+      max-width: 680px;
+      margin: var(--space-24) auto var(--space-48) auto;
+    }
+
+    .hero-actions-row {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: var(--space-24);
+      flex-wrap: wrap;
+    }
+
+    .hero-cluster-status {
+      margin-top: var(--space-48);
+      font-family: var(--font-geist-mono);
+      font-size: 12px;
+      color: var(--color-text-tertiary);
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .status-dot-pulse {
+      width: 6px;
+      height: 6px;
+      background-color: var(--color-pure-white);
+      border-radius: 50%;
+      display: inline-block;
+      animation: pulse-light 2s infinite ease-in-out;
+    }
+
+    @keyframes pulse-light {
+      0%, 100% { opacity: 0.2; }
+      50% { opacity: 1; }
+    }
+
+    /* ==========================================================================
+       INTERACTIVE TERMINAL / MODEL PLAYGROUND
+       ========================================================================== */
+    .playground-section {
+      padding: var(--space-96) 0;
+      border-bottom: 1px solid var(--color-border-default);
+    }
+
+    .section-title-xai {
+      font-family: var(--font-universal-sans);
+      font-size: 30px;
+      font-weight: 400;
+      line-height: 1.20;
+      color: var(--color-pure-white);
+      margin-bottom: var(--space-8);
+    }
+
+    .section-description-xai {
+      font-family: var(--font-universal-sans);
+      font-size: 16px;
+      font-weight: 400;
+      color: var(--color-text-secondary);
+      margin-bottom: var(--space-48);
+    }
+
+    .terminal-container {
+      background-color: var(--color-surface-elevated);
+      border: 1px solid var(--color-border-default);
+      border-radius: var(--radius-sharp);
+      padding: var(--space-24);
+      transition: border-color 150ms ease;
+    }
+
+    .terminal-container:hover {
+      border-color: var(--color-border-strong);
+    }
+
+    .terminal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-bottom: 16px;
+      border-bottom: 1px solid var(--color-border-default);
+      font-family: var(--font-geist-mono);
+      font-size: 12px;
+      color: var(--color-text-tertiary);
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+
+    .terminal-body {
+      padding: var(--space-24) 0;
+      font-family: var(--font-geist-mono);
+      font-size: 14px;
+      line-height: 1.6;
+      min-height: 220px;
+    }
+
+    .terminal-prompt-line {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      color: var(--color-text-secondary);
+      margin-bottom: 16px;
+    }
+
+    .terminal-input-wrap {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      width: 100%;
+      border-top: 1px solid var(--color-border-default);
+      padding-top: 16px;
+    }
+
+    .terminal-input {
+      flex: 1;
+      background: transparent;
+      border: 1px solid var(--color-border-strong);
+      color: var(--color-pure-white);
+      font-family: var(--font-geist-mono);
+      font-size: 14px;
+      padding: 10px 16px;
+      outline: none;
+      border-radius: var(--radius-sharp);
+      transition: box-shadow 150ms ease;
+    }
+
+    .terminal-input:focus {
+      box-shadow: 0 0 0 2px var(--color-ring-blue) !important; /* Tailwind focus ring as specified */
+    }
+
+    .terminal-input::placeholder {
+      color: var(--color-text-quaternary);
+    }
+
+    .terminal-response {
+      color: var(--color-pure-white);
+      white-space: pre-wrap;
+      font-family: var(--font-geist-mono);
+      line-height: 1.6;
+    }
+
+    /* ==========================================================================
+       CARDS & CONTAINERS (0px radius, 1px solid border, zero shadows)
+       ========================================================================== */
+    .cards-section {
+      padding: var(--space-96) 0;
+      border-bottom: 1px solid var(--color-border-default);
+    }
+
+    .cards-grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: var(--space-24);
+    }
+
+    .xai-card {
+      background-color: var(--color-surface-elevated);
+      border: 1px solid var(--color-border-default);
+      border-radius: var(--radius-sharp);
+      padding: var(--space-24);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      min-height: 320px;
+      transition: border-color 150ms ease, background-color 150ms ease;
+    }
+
+    .xai-card:hover {
+      border-color: var(--color-border-strong);
+      background-color: var(--color-surface-hover);
+    }
+
+    .card-top {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .card-title {
+      font-family: var(--font-universal-sans);
+      font-size: 22px;
+      font-weight: 400;
+      color: var(--color-pure-white);
+    }
+
+    .card-desc {
+      font-family: var(--font-universal-sans);
+      font-size: 15px;
+      font-weight: 400;
+      line-height: 1.50;
+      color: var(--color-text-secondary);
+    }
+
+    .card-telemetry {
+      font-family: var(--font-geist-mono);
+      font-size: 12px;
+      color: var(--color-text-tertiary);
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      margin-top: 16px;
+      padding-top: 16px;
+      border-top: 1px solid var(--color-border-default);
+    }
+
+    /* ==========================================================================
+       TWO-COLUMN RESEARCH PAPERS / INFRASTRUCTURE
+       ========================================================================== */
+    .research-section {
+      padding: var(--space-96) 0;
+      border-bottom: 1px solid var(--color-border-default);
+    }
+
+    .research-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--space-48);
+    }
+
+    .research-item {
+      border-bottom: 1px solid var(--color-border-default);
+      padding-bottom: var(--space-24);
+      margin-bottom: var(--space-24);
+    }
+
+    .research-item:last-child {
+      border-bottom: none;
+      margin-bottom: 0;
+      padding-bottom: 0;
+    }
+
+    .research-meta {
+      font-family: var(--font-geist-mono);
+      font-size: 12px;
+      color: var(--color-text-tertiary);
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+
+    .research-heading {
+      font-family: var(--font-universal-sans);
+      font-size: 20px;
+      font-weight: 400;
+      line-height: 1.35;
+      margin-bottom: 8px;
+    }
+
+    .research-heading a {
+      color: var(--color-pure-white);
+    }
+
+    .research-summary {
+      font-family: var(--font-universal-sans);
+      font-size: 14px;
+      line-height: 1.5;
+      color: var(--color-text-secondary);
+    }
+
+    /* ==========================================================================
+       API ACCESS / NEWSLETTER FORM
+       ========================================================================== */
+    .api-section {
+      padding: var(--space-96) 0;
+      border-bottom: 1px solid var(--color-border-default);
+    }
+
+    .api-card {
+      border: 1px solid var(--color-border-default);
+      padding: var(--space-48);
+      background-color: var(--color-surface-elevated);
+      display: grid;
+      grid-template-columns: 1.2fr 1fr;
+      gap: var(--space-48);
+      align-items: center;
+    }
+
+    .api-form-row {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .form-label {
+      font-family: var(--font-universal-sans);
+      font-size: 14px;
+      color: var(--color-text-secondary);
+    }
+
+    .form-input {
+      background: transparent;
+      border: 1px solid var(--color-border-strong);
+      color: var(--color-pure-white);
+      font-family: var(--font-universal-sans);
+      font-size: 16px;
+      padding: 12px 16px;
+      border-radius: var(--radius-sharp);
+      outline: none;
+      transition: box-shadow 150ms ease;
+    }
+
+    .form-input:focus {
+      box-shadow: 0 0 0 2px var(--color-ring-blue) !important;
+    }
+
+    .form-input::placeholder {
+      color: var(--color-text-tertiary);
+    }
+
+    /* ==========================================================================
+       FOOTER (Dark background #1f2228, pure white text, dim on hover)
+       ========================================================================== */
+    .xai-footer {
+      background-color: var(--color-dark-bg);
+      padding: var(--space-48) 0;
+    }
+
+    .footer-inner {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: var(--space-24);
+      font-family: var(--font-geist-mono);
+      font-size: 13px;
+      color: var(--color-text-tertiary);
+      letter-spacing: 0.5px;
+    }
+
+    .footer-links-row {
+      display: flex;
+      gap: var(--space-24);
+      list-style: none;
+    }
+
+    .footer-links-row a {
+      color: var(--color-text-secondary);
+      font-family: var(--font-universal-sans);
+      font-size: 14px;
+    }
+
+    .footer-links-row a:hover {
+      color: var(--color-white-muted); /* Dims on hover */
+    }
+
+    /* ==========================================================================
+       RESPONSIVE BEHAVIOR
+       ========================================================================== */
+    @media (max-width: 1024px) {
+      .cards-grid-3 {
+        grid-template-columns: 1fr 1fr;
+      }
+      .research-grid {
+        grid-template-columns: 1fr;
+      }
+      .api-card {
+        grid-template-columns: 1fr;
+        padding: var(--space-24);
+      }
+    }
+
+    @media (max-width: 640px) {
+      .display-hero-xai {
+        font-size: 72px;
+      }
+      .cards-grid-3 {
+        grid-template-columns: 1fr;
+      }
+      .nav-links {
+        display: none;
+      }
+      .terminal-input-wrap {
+        flex-direction: column;
+        align-items: stretch;
+      }
+      .footer-inner {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAVIGATION -->
+  <header class="xai-nav-header">
+    <div class="container">
+      <div class="nav-inner">
+        <a href="#" class="nav-brand" aria-label="xAI Homepage">
+          <svg class="nav-brand-logo" viewBox="0 0 24 24">
+            <path d="M4 4L12 12M20 4L4 20M20 20L12 12" stroke-width="2.5" stroke-linecap="square"/>
+          </svg>
+          <span>xAI</span>
+        </a>
+
+        <nav>
+          <ul class="nav-links">
+            <li><a href="#grok">GROK</a></li>
+            <li><a href="#api">API</a></li>
+            <li><a href="#colossus">COLOSSUS</a></li>
+            <li><a href="#research">RESEARCH</a></li>
+            <li><a href="#company">COMPANY</a></li>
+            <li><a href="#careers">CAREERS</a></li>
+          </ul>
+        </nav>
+
+        <div style="display: flex; gap: 12px; align-items: center;">
+          <a href="#api" class="btn-xai-ghost" style="padding: 8px 16px; font-size: 12px;">DOCS</a>
+          <a href="#try-grok" class="btn-xai-primary" style="padding: 8px 16px; font-size: 12px;">TRY GROK</a>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+    <!-- HERO SECTION (320px GeistMono Display Scale) -->
+    <section class="hero-section">
+      <div class="container">
+        
+        <div style="margin-bottom: var(--space-24);">
+          <span class="xai-tag">FRONTIER INTELLIGENCE</span>
+        </div>
+
+        <div class="hero-headline-wrap">
+          <h1 class="display-hero-xai">GROK 3</h1>
+        </div>
+
+        <p class="hero-subtitle">
+          Understand the universe. Built with maximum truth-seeking alignment and verified against first principles of mathematical and physical reality.
+        </p>
+
+        <div class="hero-actions-row">
+          <a href="#try-grok" class="btn-xai-primary">TRY GROK</a>
+          <a href="#api-console" class="btn-xai-ghost">EXPLORE API</a>
+        </div>
+
+        <div class="hero-cluster-status">
+          <span class="status-dot-pulse"></span>
+          <span>MEMPHIS COLOSSUS CLUSTER: 100,000 H100 GPUS ONLINE // ALL SYSTEMS NOMINAL</span>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- INTERACTIVE TERMINAL / MODEL PLAYGROUND -->
+    <section class="playground-section">
+      <div class="container">
+        <h2 class="section-title-xai">Real-time Inference Playground</h2>
+        <p class="section-description-xai">Direct interaction with grok-3-frontier via streaming websocket telemetry.</p>
+
+        <div class="terminal-container">
+          <div class="terminal-header">
+            <span>MODEL: grok-3-frontier // CONTEXT: 256K // FP8 PRECISION</span>
+            <span id="latencyTag">LATENCY: 14MS // 78 TOKENS/SEC</span>
+          </div>
+
+          <div class="terminal-body">
+            <div class="terminal-prompt-line">
+              <span>$ xai-query --prompt "Explain the cosmological horizon problem and how cosmic inflation resolves it."</span>
+            </div>
+            <div id="terminalOutput" class="terminal-response">
+The cosmological horizon problem arises because standard Big Bang expansion cannot explain why regions of the CMB separated by more than ~1 degree have nearly identical temperatures (within 1 part in 100,000), even though in standard expansion they were causally disconnected at recombination.
+
+Cosmic inflation resolves this by postulating an exponential expansion phase driven by an inflaton scalar field in the early universe (t ~ 10^-36 s). This stretched a microscopic, causally connected patch into our entire observable universe, equalizing temperatures prior to the inflationary epoch.
+            </div>
+          </div>
+
+          <div class="terminal-input-wrap">
+            <input type="text" id="userQueryInput" class="terminal-input" placeholder="Enter query for Grok (e.g. Prove the Riemann sphere topology)..." onkeydown="handleTerminalKey(event)">
+            <button class="btn-xai-primary" onclick="runTerminalQuery()">EXECUTE</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CARDS / PRODUCTS GRID (0px radius, 1px solid white 10%, zero shadows) -->
+    <section class="cards-section">
+      <div class="container">
+        <h2 class="section-title-xai">Frontier Architectures</h2>
+        <p class="section-description-xai">High-throughput models engineered for rigorous scientific and software workflows.</p>
+
+        <div class="cards-grid-3">
+          
+          <div class="xai-card">
+            <div class="card-top">
+              <span class="xai-tag">FOUNDATION</span>
+              <h3 class="card-title">Grok 3</h3>
+              <p class="card-desc">
+                State-of-the-art reasoning, code synthesis, and multidisciplinary inference with zero hedging or ideological filter distortion.
+              </p>
+            </div>
+            <div>
+              <div class="card-telemetry">MMLU: 92.4% // MATH: 89.6%</div>
+              <div style="margin-top: 16px;">
+                <a href="#grok3" class="btn-xai-ghost" style="width: 100%; text-align: center;">MODEL SPECS</a>
+              </div>
+            </div>
+          </div>
+
+          <div class="xai-card">
+            <div class="card-top">
+              <span class="xai-tag">MULTIMODAL</span>
+              <h3 class="card-title">Grok Vision</h3>
+              <p class="card-desc">
+                High-resolution spatial awareness, schematic interpretation, diagram extraction, and real-time physical world understanding.
+              </p>
+            </div>
+            <div>
+              <div class="card-telemetry">SPATIAL-BENCH: 88.1% // OCR: 98.4%</div>
+              <div style="margin-top: 16px;">
+                <a href="#vision" class="btn-xai-ghost" style="width: 100%; text-align: center;">DOCUMENTATION</a>
+              </div>
+            </div>
+          </div>
+
+          <div class="xai-card">
+            <div class="card-top">
+              <span class="xai-tag">INFRASTRUCTURE</span>
+              <h3 class="card-title">PromptIDE</h3>
+              <p class="card-desc">
+                An advanced engineering environment for prompt distillation, synthetic dataset evaluation, and recursive self-correction pipelines.
+              </p>
+            </div>
+            <div>
+              <div class="card-telemetry">LOW LATENCY // RECURSIVE EVAL</div>
+              <div style="margin-top: 16px;">
+                <a href="#ide" class="btn-xai-ghost" style="width: 100%; text-align: center;">LAUNCH IDE</a>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- RESEARCH & DISPATCHES (Two column desktop layout) -->
+    <section class="research-section">
+      <div class="container">
+        <div class="research-grid">
+          
+          <div>
+            <h2 class="section-title-xai">Research &amp; Milestones</h2>
+            <p class="section-description-xai">Technical papers, benchmark evaluations, and architectural disclosures.</p>
+
+            <div class="research-item">
+              <div class="research-meta">PAPER // MARCH 2026</div>
+              <h3 class="research-heading"><a href="#paper-colossus">Colossus: Scaling Distributed Training Across 100,000 Liquid-Cooled H100s in 122 Days</a></h3>
+              <p class="research-summary">
+                Architecture, optical fabric topologies, and failure-recovery algorithms behind the largest contiguous AI supercomputer ever assembled.
+              </p>
+            </div>
+
+            <div class="research-item">
+              <div class="research-meta">BENCHMARK // JANUARY 2026</div>
+              <h3 class="research-heading"><a href="#paper-math">Formal Verification of Olympiad Geometry Proofs via Synthetic Self-Play</a></h3>
+              <p class="research-summary">
+                Combining Monte Carlo tree search with neural theorem provers in Lean 4 to eliminate non-rigorous mathematical leaps.
+              </p>
+            </div>
+
+            <div class="research-item">
+              <div class="research-meta">ANNOUNCEMENT // DECEMBER 2025</div>
+              <h3 class="research-heading"><a href="#paper-multimodal">Native Audio and Visual Spatial Representation in Grok Core</a></h3>
+              <p class="research-summary">
+                Unifying discrete token streams with continuous spatial representations for low-latency robotics interfaces.
+              </p>
+            </div>
+          </div>
+
+          <!-- COLOSSUS CLUSTER TELEMETRY -->
+          <div>
+            <h2 class="section-title-xai">Infrastructure Telemetry</h2>
+            <p class="section-description-xai">Real-time status of Memphis Colossus datacenter operations.</p>
+
+            <div class="terminal-container" style="background-color: transparent;">
+              <div style="display: flex; flex-direction: column; gap: 16px; font-family: var(--font-geist-mono); font-size: 13px;">
+                <div style="display: flex; justify-content: space-between; border-bottom: 1px solid var(--color-border-default); padding-bottom: 8px;">
+                  <span style="color: var(--color-text-secondary);">ACTIVE COMPUTE NODES</span>
+                  <span style="color: var(--color-pure-white);">12,500 SERVERS (100,000 SXM5 GPUs)</span>
+                </div>
+                <div style="display: flex; justify-content: space-between; border-bottom: 1px solid var(--color-border-default); padding-bottom: 8px;">
+                  <span style="color: var(--color-text-secondary);">OPTICAL FABRIC BANDWIDTH</span>
+                  <span style="color: var(--color-pure-white);">3.2 PB/S BI-DIRECTIONAL</span>
+                </div>
+                <div style="display: flex; justify-content: space-between; border-bottom: 1px solid var(--color-border-default); padding-bottom: 8px;">
+                  <span style="color: var(--color-text-secondary);">PUE (POWER EFFICIENCY)</span>
+                  <span style="color: var(--color-pure-white);">1.08 (DIRECT-TO-CHIP LIQUID)</span>
+                </div>
+                <div style="display: flex; justify-content: space-between; border-bottom: 1px solid var(--color-border-default); padding-bottom: 8px;">
+                  <span style="color: var(--color-text-secondary);">TRAINING LOSS (GROK-3.5)</span>
+                  <span style="color: var(--color-pure-white);">1.142 NATS/TOKEN (STEADY CONVERGENCE)</span>
+                </div>
+                <div style="display: flex; justify-content: space-between; padding-top: 4px;">
+                  <span style="color: var(--color-text-secondary);">UPTIME (LAST 90 DAYS)</span>
+                  <span style="color: var(--color-pure-white);">99.98%</span>
+                </div>
+              </div>
+            </div>
+
+            <div style="margin-top: var(--space-24);">
+              <a href="#infrastructure" class="btn-xai-ghost" style="width: 100%; text-align: center;">COLOSSUS WHITE PAPER</a>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- API ACCESS FORM -->
+    <section class="api-section">
+      <div class="container">
+        <div class="api-card">
+          <div>
+            <span class="xai-tag">DEVELOPER PLATFORM</span>
+            <h2 class="section-title-xai" style="margin-top: 12px;">Request API Access</h2>
+            <p class="section-description-xai" style="margin-bottom: 0;">
+              Integrate Grok 3 and Grok Vision into mission-critical software. Full OpenAI API format compatibility with sub-20ms first-token latency.
+            </p>
+          </div>
+
+          <form class="api-form-row" onsubmit="handleApiSubmit(event)">
+            <div class="form-group">
+              <label class="form-label" for="workEmail">Work Email</label>
+              <input type="email" id="workEmail" class="form-input" placeholder="engineer@enterprise.ai" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="orgName">Organization / Research Group</label>
+              <input type="text" id="orgName" class="form-input" placeholder="Autonomous Systems Lab" required>
+            </div>
+            <button type="submit" class="btn-xai-primary" style="margin-top: 8px;">GET API KEY</button>
+            <div id="apiConfirmation" style="display: none; font-family: var(--font-geist-mono); font-size: 12px; color: var(--color-pure-white);">
+              ✓ REQUEST QUEUED. VERIFICATION LINK DISPATCHED.
+            </div>
+          </form>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- FOOTER (Dark background, dim on hover links) -->
+  <footer class="xai-footer">
+    <div class="container">
+      <div class="footer-inner">
+        <div>
+          <span>© 2026 xAI CORP. SAN FRANCISCO // MEMPHIS // PALO ALTO</span>
+        </div>
+
+        <ul class="footer-links-row">
+          <li><a href="#about">About</a></li>
+          <li><a href="#careers">Careers</a></li>
+          <li><a href="#privacy">Privacy Policy</a></li>
+          <li><a href="#terms">Terms of Service</a></li>
+          <li><a href="#security">Security</a></li>
+          <li><a href="#status">Status</a></li>
+        </ul>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Interactive JavaScript -->
+  <script>
+    function handleTerminalKey(event) {
+      if (event.key === 'Enter') {
+        runTerminalQuery();
+      }
+    }
+
+    function runTerminalQuery() {
+      const input = document.getElementById('userQueryInput');
+      const output = document.getElementById('terminalOutput');
+      const latencyTag = document.getElementById('latencyTag');
+      const query = input.value.trim();
+      
+      if (!query) return;
+
+      latencyTag.textContent = 'COMPUTING... // INFERENCE RUNNING';
+      output.textContent = `Querying Grok 3 on Memphis Colossus cluster...\n"${query}"\n\n`;
+
+      setTimeout(() => {
+        output.textContent = `[Inference Complete — 18ms, 94 tokens/sec]\n\nAnalysis for "${query}":\n\nFirst principles evaluation indicates that the underlying mathematical structure conforms to deterministic invariance under gauge transformations. Verified across 10,000 synthetic test vectors with 0.00% contradiction frequency.`;
+        latencyTag.textContent = 'LATENCY: 18MS // 94 TOKENS/SEC';
+        input.value = '';
+      }, 700);
+    }
+
+    function handleApiSubmit(event) {
+      event.preventDefault();
+      const email = document.getElementById('workEmail');
+      const org = document.getElementById('orgName');
+      const confirm = document.getElementById('apiConfirmation');
+      if (email.value && org.value) {
+        confirm.style.display = 'block';
+        setTimeout(() => {
+          confirm.style.display = 'none';
+          email.value = '';
+          org.value = '';
+        }, 5000);
+      }
+    }
+  </script>
+
+</body>
+</html>

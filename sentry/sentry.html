@@ -1,0 +1,852 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sentry — Application Performance & Error Monitoring</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Space+Grotesk:wght@700&display=swap" rel="stylesheet">
+  <style>
+    /* ==========================================================================
+       SENTRY DESIGN SYSTEM TOKENS & FOUNDATIONS
+       Strictly extracted from open-design/design-systems/sentry/DESIGN.md
+       ========================================================================== */
+    :root {
+      /* Primary Brand Backgrounds (Never pure black #000000) */
+      --sentry-bg-primary: #1f1633;     /* Defining deep purple canvas */
+      --sentry-bg-deep: #150f23;        /* Deeper sections, footer, secondary */
+      --sentry-border-purple: #362d59;  /* Borders, dividers, subtle structural lines */
+      --sentry-border-button: #584674;  /* Muted button border */
+
+      /* Accent Palette */
+      --sentry-purple: #6a5fc1;         /* Primary interactive: links, hover states, focus rings */
+      --sentry-purple-muted: #79628c;   /* Button backgrounds, secondary interactive */
+      --sentry-violet-deep: #422082;    /* Select dropdowns, active states, high-emphasis */
+      --sentry-lime: #c2ef4e;           /* Lime green: High-visibility accent & badges */
+      --sentry-coral: #ffb287;          /* Coral: Focus state backgrounds, warm accent */
+      --sentry-pink: #fa7faa;           /* Pink: Focus outlines, decorative highlights */
+
+      /* Text Colors */
+      --sentry-white: #ffffff;          /* Primary text on dark backgrounds */
+      --sentry-gray-light: #e5e7eb;     /* Secondary text, muted descriptions */
+      --sentry-code-yellow: #dcdcaa;    /* Syntax highlighting code tokens */
+
+      /* Glass & Overlay */
+      --sentry-glass-white: rgba(255, 255, 255, 0.18);
+      --sentry-glass-panel: rgba(255, 255, 255, 0.07);
+      --sentry-glass-hover: rgba(54, 22, 107, 0.24);
+
+      /* Shadows & Tactile Depth (Section 2 & 6) */
+      --sentry-shadow-ambient: rgba(22, 15, 36, 0.9) 0px 4px 4px 9px;
+      --sentry-shadow-card: rgba(0, 0, 0, 0.1) 0px 10px 15px -3px;
+      --sentry-shadow-hover: rgba(0, 0, 0, 0.18) 0px 0.5rem 1.5rem;
+      --sentry-shadow-inset: rgba(0, 0, 0, 0.1) 0px 1px 3px 0px inset; /* Tactile pressed */
+
+      /* Typography Stacks */
+      --font-display: "Space Grotesk", -apple-system, sans-serif; /* Dammit Sans proxy */
+      --font-ui: "Rubik", -apple-system, system-ui, sans-serif;
+      --font-mono: Monaco, Menlo, Consolas, monospace;
+
+      /* Border Radius Scale (No sharp 0px corners, min 6px) */
+      --radius-xs: 6px;
+      --radius-sm: 8px;
+      --radius-md: 12px;
+      --radius-btn: 13px;              /* Signature rounded for primary muted buttons */
+      --radius-pill: 18px;
+    }
+
+    /* Universal Reset & Dark Purple Canvas */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      font-size: 16px;
+      scroll-behavior: smooth;
+      background-color: var(--sentry-bg-primary);
+      color: var(--sentry-white);
+    }
+
+    body {
+      font-family: var(--font-ui);
+      background-color: var(--sentry-bg-primary);
+      color: var(--sentry-gray-light);
+      font-weight: 400;
+      line-height: 1.50;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      overflow-x: hidden;
+    }
+
+    /* ==========================================================================
+       TYPOGRAPHY HIERARCHY (Section 3)
+       ========================================================================== */
+    .display-hero {
+      font-family: var(--font-display);
+      font-size: 80px;
+      font-weight: 700;
+      line-height: 1.20;
+      letter-spacing: normal;
+      color: var(--sentry-white);
+    }
+
+    .display-secondary {
+      font-family: var(--font-display);
+      font-size: 54px;
+      font-weight: 700;
+      line-height: 1.10;
+      color: var(--sentry-white);
+    }
+
+    .section-heading {
+      font-family: var(--font-ui);
+      font-size: 30px;
+      font-weight: 400;
+      line-height: 1.20;
+      color: var(--sentry-white);
+      margin-bottom: 16px;
+    }
+
+    .sub-heading {
+      font-family: var(--font-ui);
+      font-size: 27px;
+      font-weight: 500;
+      line-height: 1.25;
+      color: var(--sentry-white);
+      margin-bottom: 12px;
+    }
+
+    .card-title {
+      font-family: var(--font-ui);
+      font-size: 24px;
+      font-weight: 500;
+      line-height: 1.25;
+      color: var(--sentry-white);
+      margin-bottom: 10px;
+    }
+
+    .feature-title {
+      font-family: var(--font-ui);
+      font-size: 20px;
+      font-weight: 600;
+      line-height: 1.25;
+      color: var(--sentry-white);
+    }
+
+    .body-standard {
+      font-family: var(--font-ui);
+      font-size: 16px;
+      font-weight: 400;
+      line-height: 1.50;
+      color: var(--sentry-gray-light);
+    }
+
+    .body-emphasis {
+      font-family: var(--font-ui);
+      font-size: 16px;
+      font-weight: 500;
+      line-height: 1.50;
+      color: var(--sentry-white);
+    }
+
+    .nav-label {
+      font-family: var(--font-ui);
+      font-size: 15px;
+      font-weight: 500;
+      line-height: 1.40;
+    }
+
+    .uppercase-label {
+      font-family: var(--font-ui);
+      font-size: 14px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.2px;
+      line-height: 1.25;
+    }
+
+    .caption {
+      font-family: var(--font-ui);
+      font-size: 14px;
+      font-weight: 500;
+      letter-spacing: 0.2px;
+      color: var(--sentry-gray-light);
+    }
+
+    .micro-label {
+      font-family: var(--font-ui);
+      font-size: 10px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.25px;
+      line-height: 1.80;
+    }
+
+    .code-mono {
+      font-family: var(--font-mono);
+      font-size: 14px;
+      line-height: 1.50;
+    }
+
+    /* Container (1152px Max Content Width, Section 5) */
+    .sentry-container {
+      max-width: 1152px;
+      margin: 0 auto;
+      padding: 0 32px;
+    }
+
+    /* ==========================================================================
+       BUTTON SYSTEM (Section 4)
+       Tactile Inset Shadows, Signature Muted Purple #79628c, 13px radius
+       ========================================================================== */
+    .sentry-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      font-family: var(--font-ui);
+      font-size: 14px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.2px;
+      line-height: 1.20;
+      text-decoration: none;
+      cursor: pointer;
+      transition: all 180ms ease;
+      white-space: nowrap;
+    }
+
+    /* Primary Muted Purple: #79628c bg, 1px solid #584674, 13px radius, tactile inset */
+    .sentry-btn-primary {
+      background-color: var(--sentry-purple-muted);
+      color: var(--sentry-white);
+      border: 1px solid var(--sentry-border-button);
+      border-radius: var(--radius-btn);
+      padding: 12px 20px;
+      box-shadow: var(--sentry-shadow-inset);
+    }
+    .sentry-btn-primary:hover {
+      box-shadow: var(--sentry-shadow-hover);
+      background-color: #8c73a1;
+      transform: translateY(-1px);
+    }
+    .sentry-btn-primary:active {
+      transform: translateY(1px);
+      box-shadow: rgba(0, 0, 0, 0.25) 0px 2px 4px inset;
+    }
+
+    /* Solid White CTA: #ffffff bg, #1f1633 text, 8px radius */
+    .sentry-btn-white {
+      background-color: var(--sentry-white);
+      color: var(--sentry-bg-primary);
+      border: none;
+      border-radius: var(--radius-sm);
+      padding: 12px 20px;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+    }
+    .sentry-btn-white:hover {
+      background-color: var(--sentry-purple);
+      color: var(--sentry-white);
+    }
+    .sentry-btn-white:focus-visible {
+      background-color: var(--sentry-coral);
+      outline: 2px solid var(--sentry-purple);
+    }
+
+    /* Frosted Glass White Button: blur(18px) saturate(180%), 12px radius */
+    .sentry-btn-glass {
+      background-color: var(--sentry-glass-white);
+      color: var(--sentry-white);
+      backdrop-filter: blur(18px) saturate(180%);
+      -webkit-backdrop-filter: blur(18px) saturate(180%);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: var(--radius-md);
+      padding: 10px 18px;
+      box-shadow: rgba(0, 0, 0, 0.08) 0px 2px 8px;
+    }
+    .sentry-btn-glass:hover {
+      background-color: var(--sentry-glass-hover);
+      border-color: var(--sentry-purple);
+    }
+
+    /* Deep Violet Select Dropdown */
+    .sentry-btn-violet {
+      background-color: var(--sentry-violet-deep);
+      color: var(--sentry-white);
+      border: 1px solid var(--sentry-purple);
+      border-radius: var(--radius-sm);
+      padding: 8px 16px;
+    }
+
+    /* Links on Dark */
+    a.sentry-link {
+      color: var(--sentry-white);
+      text-decoration: underline;
+      transition: color 150ms ease;
+    }
+    a.sentry-link:hover {
+      color: var(--sentry-purple);
+    }
+
+    a.sentry-link-lime {
+      color: var(--sentry-lime);
+      text-decoration: none;
+      font-weight: 600;
+      transition: color 150ms ease;
+    }
+    a.sentry-link-lime:hover {
+      color: var(--sentry-purple);
+      text-decoration: underline;
+    }
+
+    /* ==========================================================================
+       NAVIGATION BAR (Section 4)
+       Transparent over dark, Rubik 15px 500, uppercase category tags
+       ========================================================================== */
+    .sentry-nav {
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      background-color: rgba(31, 22, 51, 0.92);
+      backdrop-filter: blur(18px) saturate(180%);
+      border-bottom: 1px solid var(--sentry-border-purple);
+      padding: 16px 0;
+    }
+    .sentry-nav-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .sentry-brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+    }
+    .sentry-logo-mark {
+      width: 32px;
+      height: 32px;
+      background: linear-gradient(135deg, #6a5fc1, #fa7faa);
+      border-radius: var(--radius-sm);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      color: var(--sentry-white);
+      font-size: 18px;
+    }
+    .sentry-brand-text {
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--sentry-white);
+      letter-spacing: -0.5px;
+    }
+    .sentry-nav-menu {
+      display: flex;
+      align-items: center;
+      gap: 28px;
+      list-style: none;
+    }
+    .sentry-nav-menu a {
+      font-size: 15px;
+      font-weight: 500;
+      color: var(--sentry-white);
+      text-decoration: none;
+      transition: color 150ms ease;
+    }
+    .sentry-nav-menu a:hover {
+      color: var(--sentry-purple);
+    }
+    .sentry-nav-menu .sentry-cat-tag {
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.2px;
+      color: var(--sentry-gray-light);
+    }
+
+    /* ==========================================================================
+       HERO SECTION (Section 1, 3, 6)
+       Display hero 80px, irreverent brand voice, ambient glow
+       ========================================================================== */
+    .sentry-hero {
+      padding: 80px 0 64px 0;
+      position: relative;
+    }
+    .sentry-hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background-color: rgba(194, 239, 78, 0.12);
+      border: 1px solid var(--sentry-lime);
+      color: var(--sentry-lime);
+      padding: 4px 12px;
+      border-radius: var(--radius-pill);
+      margin-bottom: 24px;
+    }
+    .sentry-hero-copy {
+      max-width: 820px;
+    }
+    .sentry-hero-sub {
+      font-size: 18px;
+      line-height: 1.5;
+      color: var(--sentry-gray-light);
+      margin-top: 20px;
+      margin-bottom: 32px;
+    }
+
+    /* Frosted Glass Card / Issue Panel */
+    .sentry-issue-card {
+      background-color: var(--sentry-glass-panel);
+      backdrop-filter: blur(18px) saturate(180%);
+      -webkit-backdrop-filter: blur(18px) saturate(180%);
+      border: 1px solid var(--sentry-border-purple);
+      border-radius: var(--radius-md);
+      padding: 24px;
+      box-shadow: var(--sentry-shadow-card);
+      margin-top: 40px;
+    }
+    .sentry-issue-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      border-bottom: 1px solid var(--sentry-border-purple);
+      padding-bottom: 16px;
+      margin-bottom: 16px;
+    }
+    .sentry-issue-title {
+      font-size: 18px;
+      font-weight: 600;
+      color: var(--sentry-white);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .sentry-issue-tag {
+      background-color: #381a30;
+      color: var(--sentry-pink);
+      border: 1px solid var(--sentry-pink);
+      font-size: 11px;
+      font-weight: 700;
+      padding: 2px 8px;
+      border-radius: var(--radius-xs);
+      text-transform: uppercase;
+    }
+    .sentry-trace-box {
+      background-color: var(--sentry-bg-deep);
+      border: 1px solid var(--sentry-border-purple);
+      border-radius: var(--radius-sm);
+      padding: 16px;
+      font-family: var(--font-mono);
+      font-size: 13px;
+      color: var(--sentry-gray-light);
+      line-height: 1.6;
+      overflow-x: auto;
+    }
+    .sentry-trace-box .err-func {
+      color: var(--sentry-lime);
+      font-weight: 600;
+    }
+    .sentry-trace-box .err-val {
+      color: var(--sentry-code-yellow);
+    }
+    .sentry-trace-box .err-file {
+      color: var(--sentry-purple);
+    }
+
+    /* ==========================================================================
+       SECTION 2: DEEP PURPLE SURFACE (#150f23)
+       ========================================================================== */
+    .sentry-section-deep {
+      background-color: var(--sentry-bg-deep);
+      padding: 80px 0;
+      border-top: 1px solid var(--sentry-border-purple);
+      border-bottom: 1px solid var(--sentry-border-purple);
+    }
+    .sentry-grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+      margin-top: 32px;
+    }
+    .sentry-feature-card {
+      background: rgba(31, 22, 51, 0.6);
+      border: 1px solid var(--sentry-border-purple);
+      border-radius: var(--radius-md);
+      padding: 24px;
+      box-shadow: var(--sentry-shadow-card);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: border-color 150ms ease;
+    }
+    .sentry-feature-card:hover {
+      border-color: var(--sentry-purple);
+    }
+    .sentry-feature-card p {
+      font-size: 15px;
+      color: var(--sentry-gray-light);
+      margin-bottom: 20px;
+    }
+
+    /* ==========================================================================
+       SECTION 3: FORM CONTROLS & INTERACTIVE MATRIX (Section 4)
+       Inputs on light context with #cfcfdb border & inset shadow focus
+       ========================================================================== */
+    .sentry-section-interactive {
+      padding: 80px 0;
+    }
+    .sentry-form-panel {
+      background-color: var(--sentry-glass-panel);
+      backdrop-filter: blur(18px) saturate(180%);
+      border: 1px solid var(--sentry-border-purple);
+      border-radius: var(--radius-md);
+      padding: 32px;
+      margin-top: 32px;
+    }
+    .sentry-form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+    .sentry-input-group {
+      margin-bottom: 16px;
+    }
+    .sentry-input-label {
+      display: block;
+      font-size: 13px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.2px;
+      color: var(--sentry-gray-light);
+      margin-bottom: 8px;
+    }
+    .sentry-text-input {
+      width: 100%;
+      background-color: #ffffff;
+      color: var(--sentry-bg-primary);
+      border: 1px solid #cfcfdb;
+      border-radius: var(--radius-xs);
+      padding: 10px 14px;
+      font-family: var(--font-ui);
+      font-size: 15px;
+      outline: none;
+      transition: box-shadow 150ms ease;
+    }
+    .sentry-text-input:focus {
+      border-color: #cfcfdb;
+      box-shadow: rgba(0, 0, 0, 0.15) 0px 2px 10px inset;
+    }
+
+    /* ==========================================================================
+       FOOTER (Section 4 & 9)
+       Deeping canvas (#150f23), Rubik 15px links, #362d59 dividers
+       ========================================================================== */
+    .sentry-footer {
+      background-color: var(--sentry-bg-deep);
+      border-top: 1px solid var(--sentry-border-purple);
+      padding: 64px 0 32px 0;
+    }
+    .sentry-footer-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 32px;
+      margin-bottom: 48px;
+    }
+    .sentry-footer-col h4 {
+      font-size: 13px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.2px;
+      color: var(--sentry-white);
+      margin-bottom: 16px;
+    }
+    .sentry-footer-col ul {
+      list-style: none;
+    }
+    .sentry-footer-col li {
+      margin-bottom: 10px;
+    }
+    .sentry-footer-col a {
+      font-size: 14px;
+      color: var(--sentry-gray-light);
+      text-decoration: none;
+      transition: color 150ms ease;
+    }
+    .sentry-footer-col a:hover {
+      color: var(--sentry-purple);
+    }
+    .sentry-footer-meta {
+      border-top: 1px solid var(--sentry-border-purple);
+      padding-top: 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
+    /* Responsive Adjustments */
+    @media (max-width: 992px) {
+      .display-hero {
+        font-size: 56px;
+      }
+      .sentry-grid-3 {
+        grid-template-columns: 1fr;
+      }
+      .sentry-footer-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+    @media (max-width: 640px) {
+      .display-hero {
+        font-size: 40px;
+      }
+      .sentry-nav-menu {
+        display: none;
+      }
+      .sentry-form-grid {
+        grid-template-columns: 1fr;
+      }
+      .sentry-footer-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ==========================================================================
+       STICKY NAVIGATION BAR
+       ========================================================================== -->
+  <header class="sentry-nav">
+    <div class="sentry-container sentry-nav-inner">
+      <a href="#" class="sentry-brand">
+        <div class="sentry-logo-mark">&Sigma;</div>
+        <span class="sentry-brand-text">Sentry</span>
+      </a>
+
+      <nav>
+        <ul class="sentry-nav-menu">
+          <li><a href="#issues" class="sentry-cat-tag">Errors &amp; Issues</a></li>
+          <li><a href="#performance" class="sentry-cat-tag">Tracing &amp; Perf</a></li>
+          <li><a href="#session-replay" class="sentry-cat-tag">Session Replay</a></li>
+          <li><a href="#demo" class="sentry-cat-tag">Pricing</a></li>
+        </ul>
+      </nav>
+
+      <div style="display: flex; gap: 12px; align-items: center;">
+        <a href="#signin" class="sentry-btn sentry-btn-glass" style="font-size: 13px;">SIGN IN</a>
+        <a href="#start" class="sentry-btn sentry-btn-white" style="font-size: 13px; padding: 10px 16px;">GET STARTED</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- ==========================================================================
+       HERO SECTION
+       ========================================================================== -->
+  <main class="sentry-container">
+    <section class="sentry-hero">
+      <div class="sentry-hero-copy">
+        <div class="sentry-hero-badge">
+          <span class="micro-label">DEVELOPER FIRST MONITORING</span>
+          <span>&mdash; SDK V8.24 AVAILABLE</span>
+        </div>
+
+        <h1 class="display-hero">Code breaks.<br>Fix it faster.</h1>
+
+        <p class="sentry-hero-sub">
+          Stop sifting through terabytes of disconnected logs. Sentry provides complete code-level context, distributed stack traces, and automated root-cause detection so developers spend less time debugging and more time shipping.
+        </p>
+
+        <div style="display: flex; gap: 16px; align-items: center; flex-wrap: wrap;">
+          <a href="#start" class="sentry-btn sentry-btn-primary">GET STARTED FREE</a>
+          <a href="#issues" class="sentry-btn sentry-btn-glass">SEE LIVE INCIDENT &rarr;</a>
+          <a href="#docs" class="sentry-link-lime">Read Quickstart Docs &rarr;</a>
+        </div>
+      </div>
+
+      <!-- Live Error Issue Panel Showcase -->
+      <div class="sentry-issue-card" id="issues">
+        <div class="sentry-issue-header">
+          <div>
+            <div class="sentry-issue-title">
+              <span>TypeError: Cannot read properties of undefined (reading 'digest')</span>
+              <span class="sentry-issue-tag">CRITICAL CRASH</span>
+            </div>
+            <p class="caption" style="margin-top: 6px;">
+              Unhandled Exception in production cluster &bull; Event ID: <span style="font-family: var(--font-mono); color: var(--sentry-white);">b892a01f78e4</span> &bull; 1.4k events &bull; 212 users impacted
+            </p>
+          </div>
+          <button class="sentry-btn sentry-btn-violet" style="font-size: 12px;">RESOLVED</button>
+        </div>
+
+        <!-- Stack Trace Console with Monaco Font -->
+        <div class="sentry-trace-box">
+          <div><span style="color: var(--sentry-pink);">#0</span> <span class="err-file">src/auth/jwt_verifier.ts</span> in <span class="err-func">validateSignature</span> at line <span class="err-val">142:18</span></div>
+          <div style="color: #6a627a;">&nbsp;&nbsp;&nbsp;&nbsp;const cryptoContext = getCryptoEngine();</div>
+          <div style="background-color: rgba(250, 127, 170, 0.15); padding: 2px 4px; border-left: 3px solid var(--sentry-pink);">&gt;&nbsp;&nbsp;&nbsp;const tokenHash = cryptoContext.digest(<span class="err-val">'sha256'</span>, payload);</div>
+          <div style="color: #6a627a;">&nbsp;&nbsp;&nbsp;&nbsp;return timingSafeEqual(tokenHash, expectedSignature);</div>
+          <br>
+          <div><span style="color: var(--sentry-pink);">#1</span> <span class="err-file">src/middleware/session.ts</span> in <span class="err-func">authenticateRequest</span> at line <span class="err-val">88:12</span></div>
+          <div><span style="color: var(--sentry-pink);">#2</span> <span class="err-file">src/server.ts</span> in <span class="err-func">dispatchHttpPipeline</span> at line <span class="err-val">34:5</span></div>
+        </div>
+
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 16px; font-size: 13px;">
+          <span style="color: var(--sentry-gray-light);">Release: <span style="color: var(--sentry-lime); font-weight: 600;">api@2.14.0-prod</span></span>
+          <span style="color: var(--sentry-gray-light);">Environment: <span style="color: var(--sentry-white); font-weight: 600;">production-us-east-1</span></span>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ==========================================================================
+       SECTION 2: DEEP PURPLE CANVAS (#150f23)
+       ========================================================================== -->
+  <section class="sentry-section-deep" id="performance">
+    <div class="sentry-container">
+      <div class="uppercase-label" style="color: var(--sentry-lime); margin-bottom: 8px;">FULL-STACK OBSERVABILITY</div>
+      <h2 class="sub-heading">From frontend re-renders to distributed database queries</h2>
+      <p class="body-standard" style="max-width: 780px;">
+        Connect every customer click to the exact line of backend code responsible for latency regressions. Zero guesswork, continuous profiling, and real-time trace watermarks.
+      </p>
+
+      <div class="sentry-grid-3">
+        <div class="sentry-feature-card">
+          <div>
+            <div class="micro-label" style="color: var(--sentry-purple); margin-bottom: 8px;">TRACING &amp; SPANS</div>
+            <h3 class="card-title">Distributed Tracing</h3>
+            <p>
+              Trace transactions across Next.js, Python microservices, Go workers, and Postgres instances. Pinpoint which database transaction caused a 95th-percentile spike.
+            </p>
+          </div>
+          <a href="#" class="sentry-link">VIEW SPAN ANALYSIS &rarr;</a>
+        </div>
+
+        <div class="sentry-feature-card">
+          <div>
+            <div class="micro-label" style="color: var(--sentry-lime); margin-bottom: 8px;">VIDEO RECONSTRUCTION</div>
+            <h3 class="card-title">Session Replay</h3>
+            <p>
+              Watch high-fidelity pixel-accurate video playback of what the user experienced prior to a JavaScript exception. Includes DOM events, console logs, and network timing.
+            </p>
+          </div>
+          <a href="#" class="sentry-link">EXPLORE SESSION REPLAY &rarr;</a>
+        </div>
+
+        <div class="sentry-feature-card">
+          <div>
+            <div class="micro-label" style="color: var(--sentry-pink); margin-bottom: 8px;">CONTINUOUS SAMPLING</div>
+            <h3 class="card-title">Continuous Profiling</h3>
+            <p>
+              Sample execution call trees down to the function and line of code in production with less than 1% CPU overhead. Identify hot loops before cloud costs balloon.
+            </p>
+          </div>
+          <a href="#" class="sentry-link">VIEW PROFILER DEMO &rarr;</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==========================================================================
+       SECTION 3: INTERACTIVE CONTROLS & FORM SYSTEM
+       ========================================================================== -->
+  <section class="sentry-section-interactive" id="start">
+    <div class="sentry-container">
+      <div class="uppercase-label" style="color: var(--sentry-purple); margin-bottom: 8px;">PROJECT SETUP</div>
+      <h2 class="sub-heading">Start tracking exceptions in under 60 seconds</h2>
+      <p class="body-standard" style="max-width: 760px;">
+        Form controls feature clean white inputs with inset focus shadows and tactile #79628c muted purple submit buttons.
+      </p>
+
+      <div class="sentry-form-panel">
+        <form onsubmit="event.preventDefault(); alert('Sentry Project Registered! Install SDK command copied.');">
+          <div class="sentry-form-grid">
+            <div class="sentry-input-group">
+              <label class="sentry-input-label">PROJECT NAME</label>
+              <input type="text" class="sentry-text-input" placeholder="my-awesome-service" required>
+            </div>
+            <div class="sentry-input-group">
+              <label class="sentry-input-label">ALERT DESTINATION EMAIL</label>
+              <input type="email" class="sentry-text-input" placeholder="oncall@company.com" required>
+            </div>
+          </div>
+
+          <div class="sentry-input-group">
+            <label class="sentry-input-label">PRIMARY RUNTIME / PLATFORM</label>
+            <input type="text" class="sentry-text-input" value="Node.js / Next.js / TypeScript" readonly style="background-color: #f3f4f6;">
+          </div>
+
+          <div style="display: flex; gap: 16px; align-items: center; margin-top: 24px; flex-wrap: wrap;">
+            <button type="submit" class="sentry-btn sentry-btn-primary">CREATE PROJECT &amp; GET DSN</button>
+            <button type="reset" class="sentry-btn sentry-btn-glass">CLEAR</button>
+            <span class="caption" style="color: var(--sentry-gray-light);">Free for developers up to 10k events/month</span>
+          </div>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==========================================================================
+       FOOTER
+       ========================================================================== -->
+  <footer class="sentry-footer">
+    <div class="sentry-container">
+      <div class="sentry-footer-grid">
+        <div class="sentry-footer-col">
+          <h4>Product</h4>
+          <ul>
+            <li><a href="#">Error Monitoring</a></li>
+            <li><a href="#">Performance Tracing</a></li>
+            <li><a href="#">Session Replay</a></li>
+            <li><a href="#">Codecov Integration</a></li>
+            <li><a href="#">Continuous Profiling</a></li>
+          </ul>
+        </div>
+        <div class="sentry-footer-col">
+          <h4>Supported SDKs</h4>
+          <ul>
+            <li><a href="#">JavaScript &amp; React</a></li>
+            <li><a href="#">Python &amp; Django</a></li>
+            <li><a href="#">Rust &amp; C++</a></li>
+            <li><a href="#">Go &amp; Kotlin</a></li>
+            <li><a href="#">iOS &amp; Android</a></li>
+          </ul>
+        </div>
+        <div class="sentry-footer-col">
+          <h4>Resources</h4>
+          <ul>
+            <li><a href="#">Documentation</a></li>
+            <li><a href="#">Discord Server</a></li>
+            <li><a href="#">Security Bulletins</a></li>
+            <li><a href="#">SOC 2 Type II Certified</a></li>
+            <li><a href="#">Open Source Engine</a></li>
+          </ul>
+        </div>
+        <div class="sentry-footer-col">
+          <h4>Company</h4>
+          <ul>
+            <li><a href="#">About Functional Software, Inc.</a></li>
+            <li><a href="#">Careers</a></li>
+            <li><a href="#">Press Kit</a></li>
+            <li><a href="#">Privacy Policy</a></li>
+            <li><a href="#">Terms of Service</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="sentry-footer-meta">
+        <span class="caption">&copy; 2026 Functional Software, Inc. All rights reserved. Sentry is a registered trademark.</span>
+        <div style="display: flex; gap: 20px;">
+          <a href="#" class="caption sentry-link">Privacy</a>
+          <a href="#" class="caption sentry-link">Terms</a>
+          <a href="#" class="caption sentry-link">Trust Center</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>

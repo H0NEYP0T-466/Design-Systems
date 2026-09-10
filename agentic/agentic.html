@@ -1,0 +1,553 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Agentic — Conversational Task Delegation Platform</title>
+  <meta name="description" content="Agentic: A conversational AI-first interface with minimal controls, clear outcomes, and delegated task flows for autonomous multi-agent systems." />
+
+  <!-- Google Fonts: Playfair Display & JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,800;0,900;1,400;1,600;1,700&display=swap" rel="stylesheet">
+
+  <style>
+    /* ─────────────────────────────────────────────────────────────────
+       AGENTIC DESIGN SYSTEM TOKENS
+       Source: open-design/design-systems/agentic/DESIGN.md
+       ───────────────────────────────────────────────────────────────── */
+    :root {
+      --primary: #FF5701;
+      --primary-hover: #e04c00;
+      --primary-active: #c74300;
+      --secondary: #F6F6F1;
+      --secondary-dark: #ebebe5;
+      --surface: #FFFFFF;
+      --text: #111827;
+      --text-muted: #6B7280;
+      --text-light: #9CA3AF;
+      --border: #E5E7EB;
+      --border-dark: #D1D5DB;
+      --success: #16A34A;
+      --warning: #D97706;
+      --danger: #DC2626;
+
+      --font-display: "Playfair Display", Georgia, serif;
+      --font-body: "Playfair Display", Georgia, serif;
+      --font-mono: "JetBrains Mono", ui-monospace, Menlo, monospace;
+
+      --text-14: 14px;
+      --text-16: 16px;
+      --text-18: 18px;
+      --text-24: 24px;
+      --text-32: 32px;
+      --text-40: 40px;
+
+      --space-8: 8px;
+      --space-16: 16px;
+      --space-24: 24px;
+      --space-32: 32px;
+      --space-48: 48px;
+      --space-64: 64px;
+
+      --radius-sm: 6px;
+      --radius-md: 10px;
+      --radius-lg: 16px;
+      --radius-pill: 9999px;
+
+      --shadow-subtle: 0 4px 20px rgba(17, 24, 39, 0.05);
+      --shadow-elevated: 0 12px 36px rgba(17, 24, 39, 0.09);
+      --focus-ring: 0 0 0 3px rgba(255, 87, 1, 0.25);
+
+      --transition-fast: 180ms ease;
+    }
+
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--surface);
+      color: var(--text);
+      font-family: var(--font-body);
+      font-size: var(--text-16);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin-inline: auto;
+      padding-inline: var(--space-24);
+    }
+
+    /* Top Navigation */
+    .agentic-nav {
+      border-bottom: 1px solid var(--border);
+      background: var(--surface);
+      position: sticky;
+      top: 0;
+      z-index: 50;
+    }
+    .agentic-nav-inner {
+      height: 72px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .nav-brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+      color: var(--text);
+    }
+    .brand-beacon {
+      width: 28px;
+      height: 28px;
+      background: var(--primary);
+      border-radius: var(--radius-sm);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #ffffff;
+      font-family: var(--font-mono);
+      font-weight: 700;
+      font-size: 14px;
+    }
+    .brand-name {
+      font-family: var(--font-display);
+      font-size: var(--text-24);
+      font-weight: 800;
+      letter-spacing: -0.02em;
+    }
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: var(--space-32);
+      list-style: none;
+    }
+    @media (max-width: 768px) {
+      .nav-links { display: none; }
+    }
+    .nav-links a {
+      text-decoration: none;
+      color: var(--text);
+      font-weight: 600;
+      font-size: var(--text-16);
+      transition: color var(--transition-fast);
+    }
+    .nav-links a:hover {
+      color: var(--primary);
+    }
+
+    /* Buttons */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--space-8);
+      font-family: var(--font-mono);
+      font-size: var(--text-14);
+      font-weight: 600;
+      padding: 12px 22px;
+      border-radius: var(--radius-sm);
+      border: 1px solid transparent;
+      cursor: pointer;
+      text-decoration: none;
+      transition: all var(--transition-fast);
+    }
+    .btn:focus-visible {
+      outline: none;
+      box-shadow: var(--focus-ring);
+    }
+    .btn-primary {
+      background: var(--primary);
+      color: #ffffff;
+      border-color: var(--primary);
+    }
+    .btn-primary:hover {
+      background: var(--primary-hover);
+      transform: translateY(-1px);
+    }
+    .btn-secondary {
+      background: var(--secondary);
+      color: var(--text);
+      border-color: var(--border-dark);
+    }
+    .btn-secondary:hover {
+      background: var(--secondary-dark);
+    }
+
+    /* Hero Section */
+    .hero-wrap {
+      padding-block: var(--space-64) var(--space-48);
+      border-bottom: 1px solid var(--border);
+      background: linear-gradient(180deg, var(--surface) 0%, var(--secondary) 100%);
+    }
+    .hero-header {
+      text-align: center;
+      max-width: 800px;
+      margin: 0 auto var(--space-48);
+    }
+    .hero-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-8);
+      font-family: var(--font-mono);
+      font-size: var(--text-14);
+      color: var(--primary);
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: var(--space-16);
+    }
+    .hero-title {
+      font-size: clamp(32px, 5vw, 56px);
+      font-weight: 900;
+      line-height: 1.1;
+      letter-spacing: -0.03em;
+      margin-bottom: var(--space-16);
+    }
+    .hero-sub {
+      font-size: var(--text-18);
+      color: var(--text-muted);
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    /* Conversational AI-First Delegation Console */
+    .console-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-elevated);
+      max-width: 900px;
+      margin: 0 auto;
+      overflow: hidden;
+    }
+    .console-head {
+      padding: var(--space-16) var(--space-24);
+      border-bottom: 1px solid var(--border);
+      background: var(--secondary);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .console-status {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-family: var(--font-mono);
+      font-size: var(--text-14);
+      font-weight: 600;
+    }
+    .status-indicator {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--success);
+      box-shadow: 0 0 0 3px rgba(22, 163, 74, 0.2);
+    }
+    .console-body {
+      padding: var(--space-32);
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-24);
+    }
+    .chat-bubble {
+      padding: var(--space-16) var(--space-24);
+      border-radius: var(--radius-md);
+      font-size: var(--text-16);
+      max-width: 85%;
+    }
+    .chat-bubble-user {
+      align-self: flex-end;
+      background: var(--secondary);
+      border: 1px solid var(--border);
+      color: var(--text);
+    }
+    .chat-bubble-agent {
+      align-self: flex-start;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow-subtle);
+    }
+    .agent-header {
+      display: flex;
+      align-items: center;
+      gap: var(--space-8);
+      margin-bottom: var(--space-8);
+      font-family: var(--font-mono);
+      font-size: var(--text-14);
+      font-weight: 700;
+      color: var(--primary);
+    }
+
+    /* Delegated Task Steps (Clear Outcomes) */
+    .task-feed {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-top: var(--space-16);
+      font-family: var(--font-mono);
+      font-size: var(--text-14);
+    }
+    .task-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 14px;
+      background: var(--secondary);
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border);
+    }
+    .task-check {
+      color: var(--success);
+      font-weight: 700;
+    }
+    .task-badge {
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-size: 11px;
+      font-weight: 700;
+      background: #FFFFFF;
+      border: 1px solid var(--border);
+    }
+
+    /* Conversational Input Bar */
+    .prompt-box {
+      display: flex;
+      gap: 12px;
+      padding-top: var(--space-16);
+      border-top: 1px solid var(--border);
+    }
+    .prompt-input {
+      flex: 1;
+      padding: 14px 18px;
+      font-family: var(--font-mono);
+      font-size: var(--text-14);
+      color: var(--text);
+      background: var(--secondary);
+      border: 1px solid var(--border-dark);
+      border-radius: var(--radius-sm);
+      outline: none;
+      transition: all var(--transition-fast);
+    }
+    .prompt-input:focus {
+      background: var(--surface);
+      border-color: var(--primary);
+      box-shadow: var(--focus-ring);
+    }
+
+    /* Feature Grid Section */
+    .section-wrap {
+      padding-block: var(--space-64);
+      border-bottom: 1px solid var(--border);
+    }
+    .section-title {
+      font-size: var(--text-32);
+      font-weight: 800;
+      text-align: center;
+      margin-bottom: var(--space-48);
+      letter-spacing: -0.02em;
+    }
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: var(--space-32);
+    }
+    @media (max-width: 860px) {
+      .features-grid { grid-template-columns: 1fr; }
+    }
+    .feature-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: var(--space-32);
+      box-shadow: var(--shadow-subtle);
+      transition: transform var(--transition-fast), border-color var(--transition-fast);
+    }
+    .feature-card:hover {
+      transform: translateY(-2px);
+      border-color: var(--primary);
+    }
+    .feature-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: var(--radius-sm);
+      background: var(--secondary);
+      border: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--primary);
+      font-family: var(--font-mono);
+      font-weight: 700;
+      font-size: var(--text-18);
+      margin-bottom: var(--space-16);
+    }
+    .feature-name {
+      font-size: var(--text-24);
+      font-weight: 700;
+      margin-bottom: var(--space-8);
+    }
+    .feature-desc {
+      font-size: var(--text-16);
+      color: var(--text-muted);
+    }
+
+    /* Footer */
+    .agentic-footer {
+      padding-block: var(--space-48);
+      border-top: 1px solid var(--border);
+      background: var(--secondary);
+      font-family: var(--font-mono);
+      font-size: var(--text-14);
+      color: var(--text-muted);
+    }
+    .footer-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: var(--space-16);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navigation -->
+  <header class="agentic-nav">
+    <div class="container agentic-nav-inner">
+      <a href="#console" class="nav-brand">
+        <div class="brand-beacon">A</div>
+        <span class="brand-name">Agentic</span>
+      </a>
+      <ul class="nav-links">
+        <li><a href="#console">Task Console</a></li>
+        <li><a href="#capabilities">Capabilities</a></li>
+        <li><a href="#specifications">System Tokens</a></li>
+      </ul>
+      <div style="display: flex; gap: 12px;">
+        <a href="00_Index.md" class="btn btn-secondary">Index</a>
+        <a href="#console" class="btn btn-primary">Launch Agent</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero & Conversational AI-First Delegation Interface -->
+  <section id="console" class="hero-wrap">
+    <div class="container">
+      <div class="hero-header">
+        <div class="hero-tag">Conversational AI-First Interface</div>
+        <h1 class="hero-title">Delegated task flows with clear outcomes.</h1>
+        <p class="hero-sub">
+          Minimal controls and high-autonomy task loops. Designed in Playfair Display and high-signal primary orange #FF5701.
+        </p>
+      </div>
+
+      <!-- Live Delegated Agent Console -->
+      <div class="console-card">
+        <div class="console-head">
+          <div class="console-status">
+            <span class="status-indicator"></span>
+            <span>Autonomous Loop: ACTIVE</span>
+          </div>
+          <div style="font-family: var(--font-mono); font-size: 13px; color: var(--text-muted);">
+            Worker: subagent-7f2a · Model: inherit
+          </div>
+        </div>
+
+        <div class="console-body">
+          <!-- User Delegation Bubble -->
+          <div class="chat-bubble chat-bubble-user">
+            <p><strong>Goal:</strong> Analyze model latency benchmarks, generate typed client bindings, and deploy preview to staging container.</p>
+          </div>
+
+          <!-- Agent Response & Execution Feed -->
+          <div class="chat-bubble chat-bubble-agent">
+            <div class="agent-header">
+              <span>●</span>
+              <span>AGENTIC EXECUTION ENGINE</span>
+            </div>
+            <p>Task scope decomposed into 3 discrete milestones. Executing subagent pipeline now:</p>
+
+            <div class="task-feed">
+              <div class="task-item">
+                <span class="task-check">✓</span>
+                <span style="flex: 1;">Milestone 1: Profiling inference latency on TensorRT backend</span>
+                <span class="task-badge" style="color: var(--success);">DONE (4.2ms)</span>
+              </div>
+              <div class="task-item">
+                <span class="task-check">✓</span>
+                <span style="flex: 1;">Milestone 2: Synthesizing OpenAPI schema to TypeScript interfaces</span>
+                <span class="task-badge" style="color: var(--success);">GENERATED</span>
+              </div>
+              <div class="task-item" style="border-color: var(--primary); background: #FFF9F5;">
+                <span style="color: var(--primary); font-weight: 700;">▶</span>
+                <span style="flex: 1; font-weight: 600;">Milestone 3: Healthcheck verification on edge cluster</span>
+                <span class="task-badge" style="color: var(--primary); font-weight: 700;">IN PROGRESS</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Prompt Delegation Input -->
+          <div class="prompt-box">
+            <input type="text" class="prompt-input" value="Queue follow-up: Send telemetry digest to Slack channel #deployments" />
+            <button class="btn btn-primary">Delegate Task</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Core System Tenets -->
+  <section id="capabilities" class="section-wrap">
+    <div class="container">
+      <h2 class="section-title">Engineered for Agentic Autonomy</h2>
+      
+      <div class="features-grid">
+        <div class="feature-card">
+          <div class="feature-icon">01</div>
+          <h3 class="feature-name">Conversational First</h3>
+          <p class="feature-desc">
+            Replaces bloated dashboard menus with focused conversational delegation loops and structured task feedback.
+          </p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon">02</div>
+          <h3 class="feature-name">Primary Orange #FF5701</h3>
+          <p class="feature-desc">
+            High-contrast visual anchors guide user focus directly to actionable decision moments and active agent tasks.
+          </p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon">03</div>
+          <h3 class="feature-name">Playfair Display Stance</h3>
+          <p class="feature-desc">
+            A bold, editorial serif display family pairs with JetBrains Mono to deliver distinct personality and technical clarity.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="agentic-footer">
+    <div class="container footer-inner">
+      <div>
+        <strong>Agentic Design Language</strong> · Powered by OpenDesign Token Contracts
+      </div>
+      <div>
+        <a href="00_Index.md" style="color: var(--primary); text-decoration: none; font-weight: 600;">← Return to Master Index</a>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>

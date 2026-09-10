@@ -1,0 +1,1204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Figma Design System — Nothing Great Is Made Alone</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      /* Chrome Colors: Strictly Black and White per DESIGN.md */
+      --figma-black: #000000;
+      --figma-white: #ffffff;
+      --figma-glass-dark: rgba(0, 0, 0, 0.08);
+      --figma-glass-white: rgba(255, 255, 255, 0.16);
+
+      /* Typography Families */
+      --font-figma-sans: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      --font-figma-mono: 'JetBrains Mono', SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+
+      /* Variable Font Weights per DESIGN.md: 320, 330, 340, 450, 480, 540, 700 */
+      --fw-320: 300; /* Simulated fine stop */
+      --fw-330: 350;
+      --fw-340: 380;
+      --fw-400: 400;
+      --fw-450: 450;
+      --fw-480: 500;
+      --fw-540: 550;
+      --fw-700: 700;
+
+      /* Radii */
+      --radius-link: 2px;
+      --radius-small: 6px;
+      --radius-card: 8px;
+      --radius-pill: 50px;
+      --radius-circle: 50%;
+
+      /* Spacing Scale */
+      --sp-1: 1px;
+      --sp-2: 2px;
+      --sp-4: 4px;
+      --sp-4-5: 4.5px;
+      --sp-8: 8px;
+      --sp-10: 10px;
+      --sp-12: 12px;
+      --sp-16: 16px;
+      --sp-18: 18px;
+      --sp-24: 24px;
+      --sp-32: 32px;
+      --sp-40: 40px;
+      --sp-46: 46px;
+      --sp-48: 48px;
+      --sp-50: 50px;
+
+      /* Multi-color gradients for Hero & Product Canvas only */
+      --hero-grad: linear-gradient(135deg, #0ACF83 0%, #FFC700 25%, #A259FF 65%, #F24E1E 100%);
+      --dev-mode-grad: linear-gradient(135deg, #10B981 0%, #3B82F6 100%);
+      --figjam-grad: linear-gradient(135deg, #FFC700 0%, #F24E1E 100%);
+      --ai-grad: linear-gradient(135deg, #A259FF 0%, #00C2FF 100%);
+    }
+
+    /* Reset & Base */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      font-size: 16px;
+      background-color: var(--figma-white);
+      color: var(--figma-black);
+      font-family: var(--font-figma-sans);
+      font-feature-settings: "kern" 1; /* OpenType kern enabled globally */
+      -webkit-font-smoothing: antialiased;
+      scroll-behavior: smooth;
+    }
+
+    body {
+      overflow-x: hidden;
+      line-height: 1.45;
+    }
+
+    /* Signature Figma Dashed Focus Outline */
+    :focus-visible {
+      outline: 2px dashed var(--figma-black);
+      outline-offset: 3px;
+    }
+
+    .dark-surface :focus-visible {
+      outline: 2px dashed var(--figma-white);
+      outline-offset: 3px;
+    }
+
+    /* Typography Classes */
+    .hero-display {
+      font-size: clamp(48px, 6vw, 86px);
+      font-weight: 400;
+      line-height: 1.00;
+      letter-spacing: -1.72px;
+    }
+
+    .section-heading {
+      font-size: clamp(36px, 4.5vw, 64px);
+      font-weight: 400;
+      line-height: 1.10;
+      letter-spacing: -0.96px;
+    }
+
+    .sub-heading {
+      font-size: 26px;
+      font-weight: var(--fw-540);
+      line-height: 1.35;
+      letter-spacing: -0.26px;
+    }
+
+    .sub-heading-light {
+      font-size: 26px;
+      font-weight: var(--fw-340);
+      line-height: 1.35;
+      letter-spacing: -0.26px;
+    }
+
+    .feature-title {
+      font-size: 24px;
+      font-weight: 700;
+      line-height: 1.45;
+      letter-spacing: normal;
+    }
+
+    .body-large {
+      font-size: 20px;
+      font-weight: var(--fw-330);
+      line-height: 1.35;
+      letter-spacing: -0.14px;
+    }
+
+    .body-default {
+      font-size: 16px;
+      font-weight: var(--fw-340);
+      line-height: 1.45;
+      letter-spacing: -0.14px;
+    }
+
+    .body-light {
+      font-size: 18px;
+      font-weight: var(--fw-320);
+      line-height: 1.45;
+      letter-spacing: -0.26px;
+    }
+
+    .mono-label {
+      font-family: var(--font-figma-mono);
+      font-size: 18px;
+      font-weight: 400;
+      line-height: 1.30;
+      letter-spacing: 0.54px;
+      text-transform: uppercase;
+    }
+
+    .mono-small {
+      font-family: var(--font-figma-mono);
+      font-size: 12px;
+      font-weight: 400;
+      line-height: 1.00;
+      letter-spacing: 0.6px;
+      text-transform: uppercase;
+    }
+
+    /* Buttons: 50px pill and 50% circle geometry */
+    .btn-black-pill {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background-color: var(--figma-black);
+      color: var(--figma-white);
+      font-size: 16px;
+      font-weight: var(--fw-450);
+      letter-spacing: -0.14px;
+      padding: 10px 24px;
+      border-radius: var(--radius-pill);
+      border: 1px solid var(--figma-black);
+      cursor: pointer;
+      text-decoration: none;
+      transition: transform 0.15s ease, background-color 0.15s ease;
+    }
+
+    .btn-black-pill:hover {
+      transform: scale(1.02);
+    }
+
+    /* Asymmetric vertical padding: 8px 18px 10px per DESIGN.md */
+    .btn-white-pill {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background-color: var(--figma-white);
+      color: var(--figma-black);
+      font-size: 16px;
+      font-weight: var(--fw-480);
+      letter-spacing: -0.14px;
+      padding: 8px 18px 10px;
+      border-radius: var(--radius-pill);
+      border: 1px solid var(--figma-white);
+      cursor: pointer;
+      text-decoration: none;
+      transition: transform 0.15s ease, background-color 0.15s ease;
+    }
+
+    .btn-white-pill:hover {
+      transform: scale(1.02);
+    }
+
+    .btn-glass-dark {
+      width: 44px;
+      height: 44px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background-color: var(--figma-glass-dark);
+      color: var(--figma-black);
+      border-radius: var(--radius-circle);
+      border: none;
+      cursor: pointer;
+      transition: background-color 0.15s ease;
+    }
+
+    .btn-glass-dark:hover {
+      background-color: rgba(0, 0, 0, 0.14);
+    }
+
+    .btn-glass-light {
+      width: 44px;
+      height: 44px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background-color: var(--figma-glass-white);
+      color: var(--figma-white);
+      border-radius: var(--radius-circle);
+      border: none;
+      cursor: pointer;
+      backdrop-filter: blur(10px);
+      transition: background-color 0.15s ease;
+    }
+
+    .btn-glass-light:hover {
+      background-color: rgba(255, 255, 255, 0.28);
+    }
+
+    /* Navigation Bar: Pure Monochrome */
+    header.figma-nav {
+      position: sticky;
+      top: 0;
+      background: var(--figma-white);
+      border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+      z-index: 100;
+      padding: 16px 40px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .nav-left {
+      display: flex;
+      align-items: center;
+      gap: 36px;
+    }
+
+    .figma-logo-svg {
+      width: 32px;
+      height: 48px;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 28px;
+      list-style: none;
+    }
+
+    .nav-links a {
+      font-size: 16px;
+      font-weight: var(--fw-340);
+      color: var(--figma-black);
+      text-decoration: none;
+      letter-spacing: -0.14px;
+      transition: opacity 0.15s ease;
+      position: relative;
+    }
+
+    .nav-links a:hover {
+      text-decoration: underline 1px;
+    }
+
+    .nav-right {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    /* Hero Section: Vibrant Multi-Color Gradient */
+    .hero-banner {
+      background: var(--hero-grad);
+      padding: 100px 40px 140px;
+      color: var(--figma-white);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      text-align: center;
+      position: relative;
+      z-index: 2;
+    }
+
+    .hero-banner .mono-label {
+      color: rgba(255, 255, 255, 0.9);
+      margin-bottom: 24px;
+    }
+
+    .hero-banner .hero-display {
+      max-width: 980px;
+      margin: 0 auto 32px;
+      text-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+    }
+
+    .hero-banner .body-large {
+      max-width: 680px;
+      margin: 0 auto 40px;
+      color: rgba(255, 255, 255, 0.95);
+      font-weight: var(--fw-340);
+    }
+
+    .hero-cta-group {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 20px;
+    }
+
+    /* Multi-user live cursor simulation */
+    .live-cursor {
+      position: absolute;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      pointer-events: none;
+      z-index: 10;
+      transition: transform 0.2s cubic-bezier(0.1, 0.8, 0.2, 1);
+    }
+
+    .cursor-badge {
+      font-size: 11px;
+      font-weight: 600;
+      color: #FFF;
+      padding: 2px 8px;
+      border-radius: var(--radius-pill);
+      white-space: nowrap;
+    }
+
+    /* Product Tab Bar (50px Pill) */
+    .product-tabs-wrapper {
+      margin-top: -36px;
+      position: relative;
+      z-index: 10;
+      display: flex;
+      justify-content: center;
+      padding: 0 20px;
+    }
+
+    .product-tabs {
+      background: var(--figma-white);
+      padding: 6px;
+      border-radius: var(--radius-pill);
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+      display: flex;
+      gap: 6px;
+      border: 1px solid rgba(0, 0, 0, 0.08);
+      max-width: 100%;
+      overflow-x: auto;
+    }
+
+    .product-tab {
+      padding: 10px 24px;
+      border-radius: var(--radius-pill);
+      background: transparent;
+      border: none;
+      font-size: 16px;
+      font-weight: var(--fw-480);
+      color: var(--figma-black);
+      cursor: pointer;
+      transition: all 0.2s ease;
+      white-space: nowrap;
+      letter-spacing: -0.14px;
+    }
+
+    .product-tab.active {
+      background: var(--figma-black);
+      color: var(--figma-white);
+    }
+
+    /* Main Showcase Section */
+    .showcase-container {
+      max-width: 1280px;
+      margin: 80px auto;
+      padding: 0 40px;
+    }
+
+    .showcase-header {
+      margin-bottom: 48px;
+    }
+
+    .showcase-header .mono-label {
+      margin-bottom: 12px;
+      display: block;
+    }
+
+    /* Interactive Product Canvas Card */
+    .figma-canvas-card {
+      background: #F5F5F5;
+      border-radius: var(--radius-card);
+      border: 1px solid rgba(0, 0, 0, 0.1);
+      overflow: hidden;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.06);
+    }
+
+    .canvas-toolbar {
+      background: #EAEAEA;
+      padding: 10px 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+    }
+
+    .canvas-tools-left {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .tool-icon-btn {
+      width: 32px;
+      height: 32px;
+      border-radius: var(--radius-circle);
+      background: transparent;
+      border: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+    }
+
+    .tool-icon-btn.active {
+      background: var(--figma-black);
+      color: var(--figma-white);
+    }
+
+    .canvas-workspace {
+      height: 520px;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: radial-gradient(#D5D5D5 1px, transparent 1px);
+      background-size: 20px 20px;
+      background-color: #FAFAFA;
+      overflow: hidden;
+      user-select: none;
+    }
+
+    /* Interactive Figma Frames on Canvas */
+    .figma-frame {
+      position: absolute;
+      background: var(--figma-white);
+      border-radius: var(--radius-card);
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+      border: 1px solid rgba(0, 0, 0, 0.1);
+      padding: 24px;
+      transition: box-shadow 0.2s ease, transform 0.2s ease;
+      cursor: grab;
+    }
+
+    .figma-frame:hover {
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+    }
+
+    .figma-frame.selected {
+      outline: 2px dashed #0D99FF;
+      outline-offset: 4px;
+    }
+
+    .frame-title-badge {
+      position: absolute;
+      top: -24px;
+      left: 0;
+      font-size: 11px;
+      font-family: var(--font-figma-mono);
+      color: #0D99FF;
+      font-weight: 500;
+    }
+
+    /* Dev Mode Code Inspector Panel */
+    .dev-panel {
+      position: absolute;
+      right: 20px;
+      top: 20px;
+      width: 300px;
+      background: var(--figma-black);
+      color: #FFF;
+      border-radius: var(--radius-card);
+      padding: 16px;
+      font-family: var(--font-figma-mono);
+      font-size: 12px;
+      box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+      z-index: 20;
+    }
+
+    .dev-panel-header {
+      display: flex;
+      justify-content: space-between;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+      padding-bottom: 8px;
+      margin-bottom: 12px;
+      font-weight: 600;
+    }
+
+    .dev-code-block {
+      color: #A5D6A7;
+      line-height: 1.5;
+    }
+
+    /* 3-Column Features Section */
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 40px;
+      margin-top: 80px;
+    }
+
+    .feature-card {
+      background: var(--figma-white);
+      border-radius: var(--radius-card);
+      padding: 32px;
+      border: 1px solid rgba(0, 0, 0, 0.08);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .feature-card .mono-small {
+      margin-bottom: 12px;
+      color: #555;
+    }
+
+    .feature-card .feature-title {
+      margin-bottom: 16px;
+    }
+
+    .feature-card .body-default {
+      color: #222;
+      margin-bottom: 24px;
+    }
+
+    /* White gallery section */
+    .gallery-section {
+      background: #FAFAFA;
+      padding: 100px 40px;
+      border-top: 1px solid rgba(0, 0, 0, 0.06);
+    }
+
+    /* Footer: Dark Full-Width Section per DESIGN.md */
+    footer.figma-footer {
+      background: var(--figma-black);
+      color: var(--figma-white);
+      padding: 80px 40px 40px;
+    }
+
+    .footer-container {
+      max-width: 1280px;
+      margin: 0 auto;
+    }
+
+    .footer-top {
+      display: grid;
+      grid-template-columns: 1.5fr repeat(4, 1fr);
+      gap: 40px;
+      margin-bottom: 60px;
+    }
+
+    .footer-brand p {
+      color: rgba(255, 255, 255, 0.6);
+      font-size: 15px;
+      margin-top: 16px;
+      max-width: 280px;
+      font-weight: var(--fw-320);
+    }
+
+    .footer-col h5 {
+      font-family: var(--font-figma-mono);
+      font-size: 13px;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      margin-bottom: 16px;
+      color: rgba(255, 255, 255, 0.9);
+    }
+
+    .footer-links-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .footer-links-list a {
+      color: rgba(255, 255, 255, 0.7);
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: var(--fw-330);
+      transition: color 0.15s ease;
+    }
+
+    .footer-links-list a:hover {
+      color: var(--figma-white);
+      text-decoration: underline 1px;
+    }
+
+    .footer-bottom {
+      border-top: 1px solid rgba(255, 255, 255, 0.12);
+      padding-top: 30px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 13px;
+      color: rgba(255, 255, 255, 0.5);
+    }
+
+    /* Design System Inspector Drawer */
+    .token-audit-toggle {
+      position: fixed;
+      bottom: 24px;
+      left: 24px;
+      z-index: 999;
+      background: var(--figma-black);
+      color: var(--figma-white);
+      padding: 10px 18px;
+      border-radius: var(--radius-pill);
+      font-size: 12px;
+      font-family: var(--font-figma-mono);
+      cursor: pointer;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.3);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .token-drawer {
+      position: fixed;
+      top: 0;
+      left: -460px;
+      width: 420px;
+      height: 100vh;
+      background: var(--figma-white);
+      border-right: 1px solid rgba(0, 0, 0, 0.1);
+      z-index: 2000;
+      padding: 32px 24px;
+      overflow-y: auto;
+      transition: left 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      box-shadow: 10px 0 40px rgba(0, 0, 0, 0.1);
+    }
+
+    .token-drawer.open {
+      left: 0;
+    }
+
+    .token-drawer-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 24px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+    }
+
+    .token-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 8px 0;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.04);
+      font-size: 13px;
+    }
+
+    /* Responsive */
+    @media (max-width: 960px) {
+      .features-grid {
+        grid-template-columns: 1fr;
+      }
+      .footer-top {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      .hero-banner {
+        padding: 60px 24px 100px;
+      }
+    }
+
+    @media (max-width: 600px) {
+      header.figma-nav {
+        padding: 16px 20px;
+      }
+      .nav-links {
+        display: none;
+      }
+      .footer-top {
+        grid-template-columns: 1fr;
+      }
+      .hero-cta-group {
+        flex-direction: column;
+      }
+      .product-tabs {
+        justify-content: flex-start;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navigation Bar: Strictly Monochrome Chrome (#000000 & #ffffff) -->
+  <header class="figma-nav">
+    <div class="nav-left">
+      <!-- Figma 5-Piece Wordmark / Logo SVG -->
+      <a href="#" aria-label="Figma Home" style="display: flex; align-items: center; gap: 8px; text-decoration: none;">
+        <svg class="figma-logo-svg" viewBox="0 0 38 57" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M19 28.5C19 23.2533 23.2533 19 28.5 19C33.7467 19 38 23.2533 38 28.5C38 33.7467 33.7467 38 28.5 38C23.2533 38 19 33.7467 19 28.5Z" fill="#1ABCFE"/>
+          <path d="M0 47.5C0 42.2533 4.25329 38 9.5 38H19V47.5C19 52.7467 14.7467 57 9.5 57C4.25329 57 0 52.7467 0 47.5Z" fill="#0ACF83"/>
+          <path d="M19 0V19H28.5C33.7467 19 38 14.7467 38 9.5C38 4.25329 33.7467 0 28.5 0H19Z" fill="#FF7262"/>
+          <path d="M0 9.5C0 14.7467 4.25329 19 9.5 19H19V0H9.5C4.25329 0 0 4.25329 0 9.5Z" fill="#F24E1E"/>
+          <path d="M0 28.5C0 33.7467 4.25329 38 9.5 38H19V19H9.5C4.25329 19 0 23.2533 0 28.5Z" fill="#A259FF"/>
+        </svg>
+        <span style="font-size: 20px; font-weight: 700; letter-spacing: -0.5px; color: var(--figma-black);">Figma</span>
+      </a>
+
+      <ul class="nav-links">
+        <li><a href="#products">Products</a></li>
+        <li><a href="#solutions">Solutions</a></li>
+        <li><a href="#community">Community</a></li>
+        <li><a href="#resources">Resources</a></li>
+        <li><a href="#pricing">Pricing</a></li>
+      </ul>
+    </div>
+
+    <div class="nav-right">
+      <a href="#login" class="body-default" style="color: var(--figma-black); text-decoration: none; font-weight: var(--fw-450);">Sign in</a>
+      <a href="#get-started" class="btn-black-pill">Get started for free</a>
+    </div>
+  </header>
+
+  <!-- Hero Section: Vibrant Multi-Color Gradient (Green, Yellow, Purple, Pink) -->
+  <section class="hero-banner" id="hero">
+    <!-- Collaborative live cursor tags -->
+    <div class="live-cursor" style="top: 25%; left: 14%;">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+        <path d="M5.65376 12.3673H5.46026L5.31717 12.4976L0.500002 16.8829L0.500002 1.19841L11.7841 12.3673H5.65376Z" fill="#0ACF83" stroke="#FFF" stroke-width="1.5"/>
+      </svg>
+      <span class="cursor-badge" style="background: #0ACF83;">Maya (Design Lead)</span>
+    </div>
+
+    <div class="live-cursor" style="top: 60%; right: 18%;">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+        <path d="M5.65376 12.3673H5.46026L5.31717 12.4976L0.500002 16.8829L0.500002 1.19841L11.7841 12.3673H5.65376Z" fill="#A259FF" stroke="#FFF" stroke-width="1.5"/>
+      </svg>
+      <span class="cursor-badge" style="background: #A259FF;">Liam (Engineer)</span>
+    </div>
+
+    <div class="hero-inner">
+      <span class="mono-label">COLLABORATIVE DESIGN INFRASTRUCTURE</span>
+      <h1 class="hero-display">Nothing great is made alone.</h1>
+      <p class="body-large">
+        Figma connects everyone in the product design process so teams can build better products, faster. From wireframe to production-ready code.
+      </p>
+
+      <div class="hero-cta-group">
+        <!-- White Pill Button with Asymmetric Padding 8px 18px 10px -->
+        <a href="#try" class="btn-white-pill">Get started for free</a>
+        <!-- Glass Light Circular Button -->
+        <button class="btn-glass-light" aria-label="Watch Introduction Video" id="videoBtn">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+            <polygon points="6 3 20 12 6 21 6 3"></polygon>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Product Tab Bar: 50px Pill Shaped Buttons -->
+  <div class="product-tabs-wrapper" id="products">
+    <div class="product-tabs" role="tablist" aria-label="Figma Products">
+      <button class="product-tab active" role="tab" data-target="design" aria-selected="true">Figma Design</button>
+      <button class="product-tab" role="tab" data-target="devmode" aria-selected="false">Dev Mode</button>
+      <button class="product-tab" role="tab" data-target="figjam" aria-selected="false">FigJam</button>
+      <button class="product-tab" role="tab" data-target="prototyping" aria-selected="false">Prototyping</button>
+      <button class="product-tab" role="tab" data-target="ai" aria-selected="false">Figma AI</button>
+    </div>
+  </div>
+
+  <!-- Main Product Showcase & Interactive Canvas Simulator -->
+  <main class="showcase-container">
+    <div class="showcase-header">
+      <span class="mono-label" id="tabLabel">FIGMA DESIGN · POWERED BY VECTOR NETWORKS</span>
+      <h2 class="section-heading" id="tabHeading">Design with unlimited possibilities</h2>
+      <p class="body-large" id="tabSubheading" style="color: #444; max-width: 800px; margin-top: 16px;">
+        Auto-layout that translates to responsive flexbox, shared component libraries with variants, and multi-player collaboration in real time.
+      </p>
+    </div>
+
+    <!-- Figma Interactive Canvas Workspace -->
+    <div class="figma-canvas-card">
+      <div class="canvas-toolbar">
+        <div class="canvas-tools-left">
+          <button class="tool-icon-btn active" title="Move Tool (V)" id="toolMove">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="m3 3 7 18 3-7 7-3L3 3z"></path>
+            </svg>
+          </button>
+          <button class="tool-icon-btn" title="Frame Tool (F)" id="toolFrame">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="4" y1="4" x2="4" y2="20"></line>
+              <line x1="20" y1="4" x2="20" y2="20"></line>
+              <line x1="2" y1="9" x2="22" y2="9"></line>
+              <line x1="2" y1="15" x2="22" y2="15"></line>
+            </svg>
+          </button>
+          <button class="tool-icon-btn" title="Shape Tool (R)" id="toolShape">
+            <rect x="4" y="4" width="16" height="16" rx="2" stroke="currentColor" stroke-width="2"></rect>
+          </button>
+          <span style="height: 18px; width: 1px; background: rgba(0,0,0,0.15); margin: 0 4px;"></span>
+          <span class="mono-small" style="color: #666;" id="activeToolName">Selection Tool Active</span>
+        </div>
+
+        <div style="display: flex; align-items: center; gap: 12px;">
+          <span class="mono-small" style="color: #444;">100% Zoom</span>
+          <button class="btn-black-pill" style="padding: 6px 14px; font-size: 13px;" id="shareBtn">Share</button>
+        </div>
+      </div>
+
+      <!-- Canvas Area with movable/selectable design elements -->
+      <div class="canvas-workspace" id="canvasWorkspace">
+        <!-- Interactive Frame 1 -->
+        <div class="figma-frame selected" id="frame1" style="width: 340px; top: 70px; left: 80px;">
+          <span class="frame-title-badge">Card / Product Hero #01</span>
+          <div style="height: 120px; background: var(--hero-grad); border-radius: 6px; margin-bottom: 16px; display: flex; align-items: center; justify-content: center; color: #FFF; font-weight: 700;">
+            Auto Layout Frame
+          </div>
+          <h4 style="font-size: 18px; font-weight: 700; margin-bottom: 6px;">Next-gen Cloud Audio</h4>
+          <p style="font-size: 13px; color: #666; margin-bottom: 16px;">Spatial acoustics mapped in real-time browser canvas.</p>
+          <div style="display: flex; gap: 8px;">
+            <button class="btn-black-pill" style="font-size: 13px; padding: 6px 14px;">Explore</button>
+            <button class="btn-glass-dark" style="width: 32px; height: 32px;" title="Bookmark">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path>
+              </svg>
+            </button>
+          </div>
+        </div>
+
+        <!-- Dev Mode Code Inspector Panel (Interactive) -->
+        <div class="dev-panel" id="devPanel">
+          <div class="dev-panel-header">
+            <span>&lt;/&gt; DEV MODE INSPECTOR</span>
+            <span style="color: #10B981;">CONNECTED</span>
+          </div>
+          <div class="mono-small" style="color: #888; margin-bottom: 6px;">CSS PROPERTIES</div>
+          <div class="dev-code-block" id="devCodeContent">
+            border-radius: 50px;<br>
+            font-family: 'figmaSans';<br>
+            font-weight: 480;<br>
+            letter-spacing: -0.14px;<br>
+            outline: 2px dashed #000000;
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 3-Column Features Section with Distinct Weights -->
+    <div class="features-grid">
+      <div class="feature-card">
+        <span class="mono-small">01 · REUSABLE ARCHITECTURE</span>
+        <h3 class="feature-title">Design systems at scale</h3>
+        <p class="body-default">
+          Build modular component systems with variants, booleans, and nested instances that reflect production React, Vue, or iOS codebases effortlessly.
+        </p>
+        <span class="mono-small" style="color: #000; margin-top: auto;">EXPLORE TOKENS &rarr;</span>
+      </div>
+
+      <div class="feature-card">
+        <span class="mono-small">02 · DEVELOPER ALIGNMENT</span>
+        <h3 class="feature-title">Dev Mode code clarity</h3>
+        <p class="body-default">
+          Inspect CSS, Swift, and Jetpack Compose tokens directly from canvas layers. Eliminate ambiguity with side-by-side spec comparisons and git commit history.
+        </p>
+        <span class="mono-small" style="color: #000; margin-top: auto;">INSPECT ASSETS &rarr;</span>
+      </div>
+
+      <div class="feature-card">
+        <span class="mono-small">03 · PROTOTYPING INTELLIGENCE</span>
+        <h3 class="feature-title">Real logic &amp; variables</h3>
+        <p class="body-default">
+          Create interactive realistic prototypes using expressions, conditionals, and state variables. Test authentic user journeys before writing a single line of code.
+        </p>
+        <span class="mono-small" style="color: #000; margin-top: auto;">TEST PROTOTYPES &rarr;</span>
+      </div>
+    </div>
+  </main>
+
+  <!-- White Gallery Section showcasing Variable Typography -->
+  <section class="gallery-section" id="community">
+    <div class="showcase-container" style="margin: 0 auto;">
+      <span class="mono-label">TYPOGRAPHIC SOPHISTICATION</span>
+      <h2 class="section-heading" style="margin-top: 12px; margin-bottom: 24px;">figmaSans weight modulation</h2>
+      <p class="body-light" style="max-width: 840px; margin-bottom: 40px;">
+        Unlike rigid type systems that only support standard weights, figmaSans modulates seamlessly across unusual micro-stops (320, 330, 340, 450, 480, 540, 700) with global OpenType kerning enabled.
+      </p>
+
+      <div style="background: var(--figma-white); padding: 40px; border-radius: var(--radius-card); border: 1px solid rgba(0,0,0,0.08); display: flex; flex-direction: column; gap: 24px;">
+        <div style="display: flex; justify-content: space-between; align-items: baseline; border-bottom: 1px solid rgba(0,0,0,0.06); padding-bottom: 12px;">
+          <span style="font-size: 28px; font-weight: var(--fw-320); letter-spacing: -0.26px;">figmaSans Weight 320 — Ethereal Body Light</span>
+          <span class="mono-small" style="color: #777;">weight: 320 · letter-spacing: -0.26px</span>
+        </div>
+        <div style="display: flex; justify-content: space-between; align-items: baseline; border-bottom: 1px solid rgba(0,0,0,0.06); padding-bottom: 12px;">
+          <span style="font-size: 28px; font-weight: var(--fw-340); letter-spacing: -0.14px;">figmaSans Weight 340 — Default Editorial Voice</span>
+          <span class="mono-small" style="color: #777;">weight: 340 · letter-spacing: -0.14px</span>
+        </div>
+        <div style="display: flex; justify-content: space-between; align-items: baseline; border-bottom: 1px solid rgba(0,0,0,0.06); padding-bottom: 12px;">
+          <span style="font-size: 28px; font-weight: var(--fw-480); letter-spacing: -0.14px;">figmaSans Weight 480 — Button &amp; Navigation UI</span>
+          <span class="mono-small" style="color: #777;">weight: 480 · letter-spacing: -0.14px</span>
+        </div>
+        <div style="display: flex; justify-content: space-between; align-items: baseline; border-bottom: 1px solid rgba(0,0,0,0.06); padding-bottom: 12px;">
+          <span style="font-size: 28px; font-weight: var(--fw-540); letter-spacing: -0.26px;">figmaSans Weight 540 — Sub-heading Emphasis</span>
+          <span class="mono-small" style="color: #777;">weight: 540 · letter-spacing: -0.26px</span>
+        </div>
+        <div style="display: flex; justify-content: space-between; align-items: baseline;">
+          <span style="font-size: 28px; font-weight: var(--fw-700); letter-spacing: normal;">figmaSans Weight 700 — Structural Authority</span>
+          <span class="mono-small" style="color: #777;">weight: 700 · letter-spacing: normal</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer: Dark Full-Width Section per DESIGN.md -->
+  <footer class="figma-footer dark-surface">
+    <div class="footer-container">
+      <div class="footer-top">
+        <div class="footer-brand">
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <svg class="figma-logo-svg" style="width: 24px; height: 36px;" viewBox="0 0 38 57" fill="none">
+              <path d="M19 28.5C19 23.2533 23.2533 19 28.5 19C33.7467 19 38 23.2533 38 28.5C38 33.7467 33.7467 38 28.5 38C23.2533 38 19 33.7467 19 28.5Z" fill="#1ABCFE"/>
+              <path d="M0 47.5C0 42.2533 4.25329 38 9.5 38H19V47.5C19 52.7467 14.7467 57 9.5 57C4.25329 57 0 52.7467 0 47.5Z" fill="#0ACF83"/>
+              <path d="M19 0V19H28.5C33.7467 19 38 14.7467 38 9.5C38 4.25329 33.7467 0 28.5 0H19Z" fill="#FF7262"/>
+              <path d="M0 9.5C0 14.7467 4.25329 19 9.5 19H19V0H9.5C4.25329 0 0 4.25329 0 9.5Z" fill="#F24E1E"/>
+              <path d="M0 28.5C0 33.7467 4.25329 38 9.5 38H19V19H9.5C4.25329 19 0 23.2533 0 28.5Z" fill="#A259FF"/>
+            </svg>
+            <span style="font-size: 20px; font-weight: 700; color: var(--figma-white);">Figma</span>
+          </div>
+          <p>
+            The collaborative interface design tool connecting multidisciplinary teams globally.
+          </p>
+        </div>
+
+        <div class="footer-col">
+          <h5>Use Cases</h5>
+          <ul class="footer-links-list">
+            <li><a href="#">UI Design</a></li>
+            <li><a href="#">UX Prototyping</a></li>
+            <li><a href="#">Design Systems</a></li>
+            <li><a href="#">Diagramming</a></li>
+            <li><a href="#">Brainstorming</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h5>Explore</h5>
+          <ul class="footer-links-list">
+            <li><a href="#">Design features</a></li>
+            <li><a href="#">Dev Mode</a></li>
+            <li><a href="#">FigJam whiteboarding</a></li>
+            <li><a href="#">Plugins &amp; Widgets</a></li>
+            <li><a href="#">Community files</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h5>Resources</h5>
+          <ul class="footer-links-list">
+            <li><a href="#">Blog</a></li>
+            <li><a href="#">Best practices</a></li>
+            <li><a href="#">Support</a></li>
+            <li><a href="#">Developers API</a></li>
+            <li><a href="#">Release notes</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h5>Company</h5>
+          <ul class="footer-links-list">
+            <li><a href="#">About us</a></li>
+            <li><a href="#">Careers</a></li>
+            <li><a href="#">Security</a></li>
+            <li><a href="#">Privacy policy</a></li>
+            <li><a href="#">Contact sales</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <div>&copy; 2026 Figma, Inc. All rights reserved.</div>
+        <div style="display: flex; gap: 24px;">
+          <a href="#" style="color: rgba(255, 255, 255, 0.6); text-decoration: none;">Twitter / X</a>
+          <a href="#" style="color: rgba(255, 255, 255, 0.6); text-decoration: none;">YouTube</a>
+          <a href="#" style="color: rgba(255, 255, 255, 0.6); text-decoration: none;">LinkedIn</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Token Audit Inspector Trigger & Drawer -->
+  <button class="token-audit-toggle" id="tokenAuditBtn" aria-label="Open Token Audit">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <circle cx="12" cy="12" r="10"></circle>
+      <line x1="12" y1="16" x2="12" y2="12"></line>
+      <line x1="12" y1="8" x2="12.01" y2="8"></line>
+    </svg>
+    FIGMA TOKEN AUDITOR
+  </button>
+
+  <div class="token-drawer" id="tokenDrawer">
+    <div class="token-drawer-header">
+      <h3 style="font-size: 16px; font-weight: 700; color: #000;">FIGMA DESIGN AUDIT</h3>
+      <button id="closeDrawerBtn" style="background: none; border: none; font-size: 20px; cursor: pointer;">&times;</button>
+    </div>
+
+    <div style="margin-bottom: 24px;">
+      <span class="mono-small" style="color: #666;">CHROME PALETTE (MONOCHROME)</span>
+      <div class="token-row">
+        <span>Pure Black (All text/borders)</span>
+        <code>#000000</code>
+      </div>
+      <div class="token-row">
+        <span>Pure White (Background/cards)</span>
+        <code>#ffffff</code>
+      </div>
+      <div class="token-row">
+        <span>Glass Dark (Secondary circular)</span>
+        <code>rgba(0, 0, 0, 0.08)</code>
+      </div>
+      <div class="token-row">
+        <span>Glass White (Frosted overlay)</span>
+        <code>rgba(255, 255, 255, 0.16)</code>
+      </div>
+    </div>
+
+    <div style="margin-bottom: 24px;">
+      <span class="mono-small" style="color: #666;">VARIABLE FONT WEIGHT STOPS</span>
+      <div class="token-row">
+        <span>Display Hero (86px)</span>
+        <code>Weight 400 · -1.72px</code>
+      </div>
+      <div class="token-row">
+        <span>Section Heading (64px)</span>
+        <code>Weight 400 · -0.96px</code>
+      </div>
+      <div class="token-row">
+        <span>Sub-heading (26px)</span>
+        <code>Weight 540 / 340 · -0.26px</code>
+      </div>
+      <div class="token-row">
+        <span>Body Large (20px)</span>
+        <code>Weight 330 · -0.14px</code>
+      </div>
+      <div class="token-row">
+        <span>Mono Label (18px)</span>
+        <code>Weight 400 · +0.54px</code>
+      </div>
+      <div class="token-row">
+        <span>Mono Small (12px)</span>
+        <code>Weight 400 · +0.6px</code>
+      </div>
+    </div>
+
+    <div style="margin-bottom: 24px;">
+      <span class="mono-small" style="color: #666;">GEOMETRY &amp; ACCESSIBILITY</span>
+      <div class="token-row">
+        <span>Pill Radius</span>
+        <code>50px (Buttons / Tabs)</code>
+      </div>
+      <div class="token-row">
+        <span>Circle Radius</span>
+        <code>50% (Icon Buttons)</code>
+      </div>
+      <div class="token-row">
+        <span>Focus Outline</span>
+        <code>dashed 2px #000000</code>
+      </div>
+      <div class="token-row">
+        <span>Asymmetric Padding</span>
+        <code>8px 18px 10px (White Pill)</code>
+      </div>
+    </div>
+
+    <div>
+      <span class="mono-small" style="color: #666;">OPENTYPE KERN</span>
+      <p style="font-size: 13px; color: #444; margin-top: 6px; line-height: 1.4;">
+        <code>font-feature-settings: "kern" 1</code> is active globally across all textual elements.
+      </p>
+    </div>
+  </div>
+
+  <script>
+    // Product Tab Switching Logic
+    const productTabs = document.querySelectorAll('.product-tab');
+    const tabLabel = document.getElementById('tabLabel');
+    const tabHeading = document.getElementById('tabHeading');
+    const tabSubheading = document.getElementById('tabSubheading');
+    const devCodeContent = document.getElementById('devCodeContent');
+
+    const tabData = {
+      design: {
+        label: 'FIGMA DESIGN · POWERED BY VECTOR NETWORKS',
+        heading: 'Design with unlimited possibilities',
+        subheading: 'Auto-layout that translates to responsive flexbox, shared component libraries with variants, and multi-player collaboration in real time.',
+        code: 'display: flex;<br>flex-direction: column;<br>gap: 16px;<br>border-radius: 50px;<br>letter-spacing: -0.14px;'
+      },
+      devmode: {
+        label: 'DEV MODE · TRANSLATING DESIGN TO PRODUCTION',
+        heading: 'Bridge the gap between design and code',
+        subheading: 'Inspect design tokens, compare component diffs side-by-side, and generate clean production React, Swift, or Android Jetpack code.',
+        code: '&lt;Button variant="pill" size="default"&gt;<br>&nbsp;&nbsp;Get started<br>&lt;/Button&gt;<br>// Exported from Figma Dev Mode'
+      },
+      figjam: {
+        label: 'FIGJAM · WHITEBOARDING FOR TEAMS',
+        heading: 'Brainstorm, align, and organize ideas',
+        subheading: 'Sticky notes, freehand drawing, vote counters, and interactive timer widgets that get entire cross-functional teams talking.',
+        code: 'type: "sticky-note",<br>color: "#FFC700",<br>author: "Maya",<br>reactions: ["+1", "heart"]'
+      },
+      prototyping: {
+        label: 'ADVANCED PROTOTYPING · STATE & VARIABLES',
+        heading: 'Feel the product before you build it',
+        subheading: 'Test high-fidelity prototypes powered by variables, mathematical expressions, interactive components, and dynamic conditionals.',
+        code: 'onHover: animate(spring);<br>onClick: setVariable("cartTotal", cartTotal + 1);<br>transition: easeInOut(200ms);'
+      },
+      ai: {
+        label: 'FIGMA AI · ACCELERATING CREATIVE FLOW',
+        heading: 'Spend more time on what matters',
+        subheading: 'Generate draft mobile and desktop UI designs from prompts, rename layers semantically, and translate entire screens instantly.',
+        code: 'model: "figma-design-foundation",<br>action: "synthesize-component",<br>context: "responsive-dashboard"'
+      }
+    };
+
+    productTabs.forEach(tab => {
+      tab.addEventListener('click', () => {
+        productTabs.forEach(t => {
+          t.classList.remove('active');
+          t.setAttribute('aria-selected', 'false');
+        });
+        tab.classList.add('active');
+        tab.setAttribute('aria-selected', 'true');
+
+        const key = tab.dataset.target;
+        if (tabData[key]) {
+          tabLabel.textContent = tabData[key].label;
+          tabHeading.textContent = tabData[key].heading;
+          tabSubheading.textContent = tabData[key].subheading;
+          devCodeContent.innerHTML = tabData[key].code;
+        }
+      });
+    });
+
+    // Tool switching simulation
+    const toolBtns = [document.getElementById('toolMove'), document.getElementById('toolFrame'), document.getElementById('toolShape')];
+    const activeToolName = document.getElementById('activeToolName');
+
+    toolBtns.forEach((btn, index) => {
+      btn.addEventListener('click', () => {
+        toolBtns.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        if (index === 0) activeToolName.textContent = 'Selection Tool (V) Active';
+        if (index === 1) activeToolName.textContent = 'Frame Tool (F) Active';
+        if (index === 2) activeToolName.textContent = 'Rectangle Shape Tool (R) Active';
+      });
+    });
+
+    // Token Drawer Toggle
+    const tokenDrawer = document.getElementById('tokenDrawer');
+    document.getElementById('tokenAuditBtn').addEventListener('click', () => {
+      tokenDrawer.classList.toggle('open');
+    });
+    document.getElementById('closeDrawerBtn').addEventListener('click', () => {
+      tokenDrawer.classList.remove('open');
+    });
+  </script>
+</body>
+</html>

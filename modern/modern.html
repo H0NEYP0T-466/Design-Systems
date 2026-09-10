@@ -1,0 +1,729 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Modern — Contemporary Editorial & Typographic Studio</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Serif:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400;1,600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    /* -------------------------------------------------------------
+       MODERN DESIGN SYSTEM TOKENS & FOUNDATIONS
+       ------------------------------------------------------------- */
+    :root {
+      /* Official Color Tokens from DESIGN.md */
+      --color-primary: #553F83;      /* Deep Amethyst - Token from style foundations & CTA emphasis */
+      --color-secondary: #111111;    /* Deep Charcoal Black */
+      --color-success: #16A34A;      /* Token from style foundations */
+      --color-warning: #D97706;      /* Token from style foundations */
+      --color-danger: #DC2626;       /* Token from style foundations */
+      --color-surface: #553F83;      /* Large backgrounds and cards */
+      --color-text: #FFFFFF;         /* Legibility on #553F83 surface */
+      --color-neutral: #553F83;      /* Derived from surface token */
+
+      /* Tint Variations for Rich Editorial Hierarchy */
+      --color-surface-elevated: #483370;
+      --color-surface-card: #5E4691;
+      --color-border-subtle: rgba(255, 255, 255, 0.16);
+      --color-border-strong: rgba(255, 255, 255, 0.3);
+      --color-text-muted: rgba(255, 255, 255, 0.75);
+      --color-text-dim: rgba(255, 255, 255, 0.55);
+
+      /* Typography Families */
+      --font-display: "IBM Plex Serif", Georgia, serif;
+      --font-primary: "IBM Plex Serif", Georgia, serif;
+      --font-mono: "JetBrains Mono", monospace;
+
+      /* Typography Scale: 12/14/16/20/24/32 */
+      --type-12: 12px;
+      --type-14: 14px;
+      --type-16: 16px;
+      --type-20: 20px;
+      --type-24: 24px;
+      --type-32: 32px;
+
+      /* Spacing Scale: 4/8/12/16/24/32 */
+      --space-4: 4px;
+      --space-8: 8px;
+      --space-12: 12px;
+      --space-16: 16px;
+      --space-24: 24px;
+      --space-32: 32px;
+
+      /* Radii */
+      --radius-sm: 4px;
+      --radius-md: 8px;
+      --radius-lg: 12px;
+      --radius-pill: 9999px;
+
+      /* Transitions: 150-250ms stable easing */
+      --transition-standard: all 200ms cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    /* Reset & Deep Amethyst Canvas */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--color-surface);
+      color: var(--color-text);
+      font-family: var(--font-primary);
+      font-size: var(--type-16);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    a {
+      color: #FFFFFF;
+      text-decoration: underline;
+      text-underline-offset: 3px;
+      transition: var(--transition-standard);
+    }
+    a:hover {
+      color: #E2D9F3;
+    }
+
+    .container {
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 0 var(--space-24);
+    }
+
+    /* -------------------------------------------------------------
+       TYPOGRAPHY (SCALE: 12/14/16/20/24/32)
+       ------------------------------------------------------------- */
+    h1, .heading-32 {
+      font-family: var(--font-display);
+      font-size: var(--type-32);
+      font-weight: 600;
+      line-height: 1.25;
+      letter-spacing: -0.4px;
+      color: var(--color-text);
+    }
+
+    h2, .heading-24 {
+      font-family: var(--font-display);
+      font-size: var(--type-24);
+      font-weight: 600;
+      line-height: 1.30;
+      letter-spacing: -0.2px;
+      color: var(--color-text);
+    }
+
+    h3, .heading-20 {
+      font-family: var(--font-display);
+      font-size: var(--type-20);
+      font-weight: 500;
+      line-height: 1.35;
+      color: var(--color-text);
+    }
+
+    .body-16 {
+      font-family: var(--font-primary);
+      font-size: var(--type-16);
+      font-weight: 400;
+      line-height: 1.60;
+      color: var(--color-text);
+    }
+
+    .caption-14 {
+      font-family: var(--font-primary);
+      font-size: var(--type-14);
+      font-weight: 400;
+      line-height: 1.50;
+      color: var(--color-text-muted);
+    }
+
+    .micro-12 {
+      font-family: var(--font-mono);
+      font-size: var(--type-12);
+      font-weight: 500;
+      letter-spacing: -0.2px;
+    }
+
+    /* -------------------------------------------------------------
+       BUTTONS & INTERACTION SIGNALS
+       ------------------------------------------------------------- */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-primary);
+      font-size: var(--type-14);
+      font-weight: 600;
+      border-radius: var(--radius-sm);
+      padding: var(--space-8) var(--space-20);
+      cursor: pointer;
+      text-decoration: none;
+      transition: var(--transition-standard);
+      border: 1px solid transparent;
+      user-select: none;
+    }
+
+    /* Primary action uses #553F83 with crisp contrast border */
+    .btn-primary {
+      background-color: var(--color-primary);
+      color: #FFFFFF;
+      border: 1px solid var(--color-border-strong);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    }
+    .btn-primary:hover {
+      background-color: #634B96;
+      border-color: #FFFFFF;
+      transform: translateY(-1px);
+    }
+    .btn-primary:active {
+      transform: translateY(0);
+      background-color: #483370;
+    }
+    .btn-primary:focus-visible {
+      outline: 2px solid #FFFFFF;
+      outline-offset: 2px;
+    }
+
+    /* Secondary actions stay neutral */
+    .btn-secondary {
+      background-color: var(--color-secondary);
+      color: #FFFFFF;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    .btn-secondary:hover {
+      background-color: #222222;
+      border-color: rgba(255, 255, 255, 0.4);
+    }
+
+    /* -------------------------------------------------------------
+       EDITORIAL CARDS & PANELS ON #553F83
+       ------------------------------------------------------------- */
+    .card {
+      background-color: var(--color-surface-card);
+      border: 1px solid var(--color-border-subtle);
+      border-radius: var(--radius-md);
+      padding: var(--space-24);
+      transition: var(--transition-standard);
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+    }
+    .card:hover {
+      border-color: var(--color-border-strong);
+      transform: translateY(-2px);
+    }
+
+    .badge-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-4);
+      padding: var(--space-4) var(--space-8);
+      border-radius: var(--radius-pill);
+      font-family: var(--font-mono);
+      font-size: var(--type-12);
+      font-weight: 500;
+    }
+    .badge-primary {
+      background: rgba(255, 255, 255, 0.15);
+      color: #FFFFFF;
+      border: 1px solid rgba(255, 255, 255, 0.25);
+    }
+    .badge-success {
+      background: rgba(22, 163, 74, 0.2);
+      color: #86EFAC;
+      border: 1px solid rgba(22, 163, 74, 0.4);
+    }
+
+    /* -------------------------------------------------------------
+       HEADER & NAVIGATION
+       ------------------------------------------------------------- */
+    .site-nav {
+      border-bottom: 1px solid var(--color-border-subtle);
+      background: var(--color-surface-elevated);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .nav-inner {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      height: 64px;
+    }
+    .brand-title {
+      font-family: var(--font-display);
+      font-size: var(--type-24);
+      font-weight: 600;
+      letter-spacing: -0.5px;
+      color: #FFFFFF;
+      text-decoration: none;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: var(--space-24);
+      list-style: none;
+    }
+    .nav-link-item {
+      font-size: var(--type-14);
+      color: var(--color-text-muted);
+      text-decoration: none;
+      transition: var(--transition-standard);
+    }
+    .nav-link-item:hover {
+      color: #FFFFFF;
+    }
+
+    /* -------------------------------------------------------------
+       HERO: CONTEMPORARY EDITORIAL ATMOSPHERE
+       ------------------------------------------------------------- */
+    .hero-section {
+      padding: var(--space-32) 0;
+      border-bottom: 1px solid var(--color-border-subtle);
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--space-32);
+      align-items: center;
+    }
+
+    /* Interactive Editorial Typesetting Studio */
+    .studio-panel {
+      background: var(--color-surface-elevated);
+      border: 1px solid var(--color-border-strong);
+      border-radius: var(--radius-lg);
+      padding: var(--space-24);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+    }
+
+    .studio-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-bottom: var(--space-12);
+      border-bottom: 1px solid var(--color-border-subtle);
+      margin-bottom: var(--space-16);
+    }
+
+    .article-preview-box {
+      background: #412B69;
+      border: 1px solid var(--color-border-subtle);
+      border-radius: var(--radius-md);
+      padding: var(--space-20);
+      margin-bottom: var(--space-16);
+    }
+
+    .studio-controls {
+      display: flex;
+      gap: var(--space-8);
+      flex-wrap: wrap;
+    }
+
+    /* -------------------------------------------------------------
+       SECTION: EDITORIAL ESSAYS & ARCHITECTURE (GRID: 4/8/12/16/24/32)
+       ------------------------------------------------------------- */
+    .section-spacing {
+      padding: 56px 0;
+    }
+
+    .grid-3-col {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: var(--space-24);
+      margin-top: var(--space-32);
+    }
+
+    /* -------------------------------------------------------------
+       SECTION: OFFICIAL DESIGN TOKENS & FOUNDATIONS
+       ------------------------------------------------------------- */
+    .token-sandbox {
+      background: var(--color-surface-elevated);
+      border: 1px solid var(--color-border-subtle);
+      border-radius: var(--radius-lg);
+      padding: var(--space-32);
+      margin-top: var(--space-24);
+    }
+
+    .token-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+      gap: var(--space-16);
+      margin-top: var(--space-24);
+    }
+
+    .token-card {
+      background: var(--color-surface-card);
+      border: 1px solid var(--color-border-subtle);
+      border-radius: var(--radius-sm);
+      padding: var(--space-12);
+      text-align: center;
+    }
+    .token-swatch {
+      height: 40px;
+      border-radius: var(--radius-sm);
+      margin-bottom: var(--space-8);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+    }
+
+    /* -------------------------------------------------------------
+       SECTION: CURATED EDITIONS
+       ------------------------------------------------------------- */
+    .editions-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: var(--space-24);
+      margin-top: var(--space-32);
+    }
+
+    /* -------------------------------------------------------------
+       FOOTER
+       ------------------------------------------------------------- */
+    .site-footer {
+      border-top: 1px solid var(--color-border-subtle);
+      padding: var(--space-32) 0;
+      background: var(--color-surface-elevated);
+      margin-top: var(--space-32);
+    }
+    .footer-inner {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: var(--space-16);
+    }
+
+    /* Responsive */
+    @media (max-width: 900px) {
+      .hero-grid, .grid-3-col, .editions-grid {
+        grid-template-columns: 1fr;
+      }
+      .nav-links {
+        display: none;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAVIGATION -->
+  <nav class="site-nav">
+    <div class="container nav-inner">
+      <a href="#" class="brand-title">MODERN</a>
+
+      <ul class="nav-links">
+        <li><a href="#studio" class="nav-link-item">Typesetting Studio</a></li>
+        <li><a href="#essays" class="nav-link-item">Essays</a></li>
+        <li><a href="#tokens" class="nav-link-item">Design Tokens</a></li>
+        <li><a href="#editions" class="nav-link-item">Editions</a></li>
+      </ul>
+
+      <div style="display: flex; gap: var(--space-12); align-items: center;">
+        <button class="btn btn-secondary">Index</button>
+        <button class="btn btn-primary">Subscribe</button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- HERO SECTION -->
+  <section class="hero-section">
+    <div class="container hero-grid">
+      <div>
+        <div style="margin-bottom: var(--space-16);">
+          <span class="badge-tag badge-primary">Contemporary Editorial Style</span>
+        </div>
+
+        <h1 class="heading-32">The architecture of enduring thought.</h1>
+
+        <p class="body-16" style="margin-top: var(--space-16); color: var(--color-text-muted); max-width: 480px;">
+          Modern pairs IBM Plex Serif typography with deep amethyst #553F83 surfaces to create a serene, uncluttered space for literary criticism, architectural essays, and digital craft.
+        </p>
+
+        <div style="display: flex; gap: var(--space-12); margin-top: var(--space-24); align-items: center; flex-wrap: wrap;">
+          <button class="btn btn-primary" onclick="switchExcerpt('typography')">Examine Typography</button>
+          <button class="btn btn-secondary" onclick="switchExcerpt('architecture')">Architectural Notes</button>
+        </div>
+
+        <div style="margin-top: var(--space-24); display: flex; gap: var(--space-16); font-family: var(--font-mono); font-size: var(--type-12); color: var(--color-text-dim);">
+          <span>PRIMARY: #553F83</span>
+          <span>SURFACE: #553F83</span>
+          <span>SCALE: 12/14/16/20/24/32</span>
+        </div>
+      </div>
+
+      <!-- INTERACTIVE EDITORIAL TYPESETTING STUDIO -->
+      <div class="studio-panel" id="studio">
+        <div class="studio-header">
+          <span class="micro-12" style="color: var(--color-text-dim);">ISSUE NO. 14 // EDITORIAL GAUGES</span>
+          <span class="badge-tag badge-success">● Typographic Harmony</span>
+        </div>
+
+        <div class="article-preview-box">
+          <div class="micro-12" id="excerptDate" style="color: #E2D9F3; margin-bottom: var(--space-4);">ESSAY // OCTOBER 2026</div>
+          <h3 class="heading-20" id="excerptTitle" style="margin-bottom: var(--space-8);">The Weight of White Space</h3>
+          <p class="caption-14" id="excerptBody" style="line-height: 1.65; color: #FFFFFF;">
+            "True luxury in digital publication is not decorative ornament; it is the generous rhythm between thoughts, the deliberate quiet of a dark amethyst canvas where sentences are allowed to breathe."
+          </p>
+        </div>
+
+        <div class="studio-controls">
+          <button class="btn btn-secondary" style="font-size: var(--type-12);" onclick="adjustRhythm('tight')">Compact Spacing</button>
+          <button class="btn btn-secondary" style="font-size: var(--type-12);" onclick="adjustRhythm('relaxed')">Relaxed Line-Height</button>
+          <button class="btn btn-primary" style="font-size: var(--type-12);" onclick="toggleFontWeight()">Toggle Weight (400/600)</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION: ESSAYS & ARCHITECTURE (GRID: 4/8/12/16/24/32) -->
+  <section class="section-spacing" id="essays">
+    <div class="container">
+      <div style="text-align: center; max-width: 600px; margin: 0 auto;">
+        <span class="badge-tag badge-primary">Curated Studies</span>
+        <h2 class="heading-24" style="margin-top: var(--space-8);">Crafted with rigorous symmetry</h2>
+        <p class="caption-14" style="margin-top: var(--space-8);">
+          Each column and section respects the 4/8/12/16/24/32 spatial cadence and high-contrast text on #553F83.
+        </p>
+      </div>
+
+      <div class="grid-3-col">
+        <!-- Essay Card 1 -->
+        <div class="card">
+          <div class="micro-12" style="color: var(--color-text-dim);">VOLUME I // ESSAY 01</div>
+          <h3 class="heading-20" style="margin-top: var(--space-8);">On Digital Quietude</h3>
+          <p class="caption-14" style="margin-top: var(--space-8); color: var(--color-text-muted);">
+            How dark monochromatic amethyst can eliminate cognitive fatigue during extended analytical reading sessions.
+          </p>
+          <div style="margin-top: var(--space-16);">
+            <a href="#studio" class="micro-12" style="color: #FFFFFF;">READ MONOGRAPH →</a>
+          </div>
+        </div>
+
+        <!-- Essay Card 2 -->
+        <div class="card">
+          <div class="micro-12" style="color: var(--color-text-dim);">VOLUME I // ESSAY 02</div>
+          <h3 class="heading-20" style="margin-top: var(--space-8);">Serif Foundations</h3>
+          <p class="caption-14" style="margin-top: var(--space-8); color: var(--color-text-muted);">
+            Why IBM Plex Serif bridges nineteenth-century book design with high-density sub-pixel rendering engines.
+          </p>
+          <div style="margin-top: var(--space-16);">
+            <a href="#studio" class="micro-12" style="color: #FFFFFF;">READ MONOGRAPH →</a>
+          </div>
+        </div>
+
+        <!-- Essay Card 3 -->
+        <div class="card">
+          <div class="micro-12" style="color: var(--color-text-dim);">VOLUME I // ESSAY 03</div>
+          <h3 class="heading-20" style="margin-top: var(--space-8);">Spatial Disciplines</h3>
+          <p class="caption-14" style="margin-top: var(--space-8); color: var(--color-text-muted);">
+            A defense of rigid 4px baseline grids in an era of unpredictable viewport scaling and responsive layouts.
+          </p>
+          <div style="margin-top: var(--space-16);">
+            <a href="#studio" class="micro-12" style="color: #FFFFFF;">READ MONOGRAPH →</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION: DESIGN SYSTEM TOKENS & FOUNDATIONS -->
+  <section class="section-spacing" id="tokens" style="padding-top: 0;">
+    <div class="container">
+      <div class="token-sandbox">
+        <div style="display: flex; justify-content: space-between; align-items: flex-end; flex-wrap: wrap; gap: var(--space-16);">
+          <div>
+            <span class="badge-tag badge-primary">Design Tokens Specification</span>
+            <h2 class="heading-24" style="margin-top: var(--space-8);">Official Color Foundations</h2>
+            <p class="caption-14" style="margin-top: var(--space-4);">Strictly derived from <code>modern/DESIGN.md</code> specification.</p>
+          </div>
+          <span class="micro-12" style="background: rgba(255,255,255,0.1); padding: var(--space-4) var(--space-12); border-radius: var(--radius-sm); border: 1px solid var(--color-border-subtle);">
+            Category: Modern &amp; Minimal
+          </span>
+        </div>
+
+        <div class="token-grid">
+          <!-- Primary -->
+          <div class="token-card">
+            <div class="token-swatch" style="background-color: #553F83;"></div>
+            <div style="font-size: var(--type-14); font-weight: 600;">Primary</div>
+            <div class="micro-12" style="color: var(--color-text-dim);">#553F83</div>
+          </div>
+          <!-- Secondary -->
+          <div class="token-card">
+            <div class="token-swatch" style="background-color: #111111;"></div>
+            <div style="font-size: var(--type-14); font-weight: 600;">Secondary</div>
+            <div class="micro-12" style="color: var(--color-text-dim);">#111111</div>
+          </div>
+          <!-- Success -->
+          <div class="token-card">
+            <div class="token-swatch" style="background-color: #16A34A;"></div>
+            <div style="font-size: var(--type-14); font-weight: 600;">Success</div>
+            <div class="micro-12" style="color: var(--color-text-dim);">#16A34A</div>
+          </div>
+          <!-- Warning -->
+          <div class="token-card">
+            <div class="token-swatch" style="background-color: #D97706;"></div>
+            <div style="font-size: var(--type-14); font-weight: 600;">Warning</div>
+            <div class="micro-12" style="color: var(--color-text-dim);">#D97706</div>
+          </div>
+          <!-- Danger -->
+          <div class="token-card">
+            <div class="token-swatch" style="background-color: #DC2626;"></div>
+            <div style="font-size: var(--type-14); font-weight: 600;">Danger</div>
+            <div class="micro-12" style="color: var(--color-text-dim);">#DC2626</div>
+          </div>
+          <!-- Surface -->
+          <div class="token-card">
+            <div class="token-swatch" style="background-color: #553F83; border: 1px solid #FFF;"></div>
+            <div style="font-size: var(--type-14); font-weight: 600;">Surface</div>
+            <div class="micro-12" style="color: var(--color-text-dim);">#553F83</div>
+          </div>
+          <!-- Text -->
+          <div class="token-card">
+            <div class="token-swatch" style="background-color: #FFFFFF;"></div>
+            <div style="font-size: var(--type-14); font-weight: 600; color:#553F83;">Text</div>
+            <div class="micro-12" style="color: var(--color-text-dim);">#FFFFFF</div>
+          </div>
+        </div>
+
+        <!-- Typography Demo -->
+        <div style="margin-top: var(--space-24); background: #412B69; padding: var(--space-20); border-radius: var(--radius-md); border: 1px solid var(--color-border-subtle);">
+          <span class="micro-12" style="color: var(--color-text-dim); display: block; margin-bottom: var(--space-8);">TYPOGRAPHIC SCALE DEMONSTRATION</span>
+          <div style="font-size: 32px; font-weight: 600;">32px — Display Headline in IBM Plex Serif</div>
+          <div style="font-size: 24px; font-weight: 500; margin-top: 4px;">24px — Chapter Title and Editorial Marker</div>
+          <div style="font-size: 20px; font-weight: 500; margin-top: 4px;">20px — Subheading in Polished Prose</div>
+          <div style="font-size: 16px; margin-top: 4px;">16px — Standard body text on #553F83 surface for effortless legibility</div>
+          <div style="font-size: 14px; color: var(--color-text-muted); margin-top: 4px;">14px — Footnotes and bibliographic reference markers</div>
+          <div class="micro-12" style="color: #E2D9F3; margin-top: 4px;">12px — JetBrains Mono catalog indexing tag: [MOD-EDITORIAL-2026]</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION: CURATED EDITIONS -->
+  <section class="section-spacing" id="editions" style="padding-top: 0;">
+    <div class="container">
+      <div style="text-align: center; max-width: 580px; margin: 0 auto;">
+        <span class="badge-tag badge-primary">Subscription Tiers</span>
+        <h2 class="heading-24" style="margin-top: var(--space-8);">Quarterly Editorial Dispatches</h2>
+        <p class="caption-14" style="margin-top: var(--space-8);">Delivered in bespoke clothbound editions and ad-free digital archives.</p>
+      </div>
+
+      <div class="editions-grid">
+        <!-- Tier 1 -->
+        <div class="card" style="display: flex; flex-direction: column; justify-content: space-between;">
+          <div>
+            <span class="micro-12" style="color: var(--color-text-dim);">DIGITAL ARCHIVE</span>
+            <h3 class="heading-20" style="margin-top: var(--space-8);">Reader</h3>
+            <div style="font-size: var(--type-32); font-weight: 600; margin: var(--space-16) 0 var(--space-4);">$8</div>
+            <div class="caption-14">per month billed annually</div>
+            <ul style="margin: var(--space-20) 0; padding-left: 18px; font-size: var(--type-14); color: var(--color-text-muted); display: flex; flex-direction: column; gap: var(--space-8);">
+              <li>Access to all digital issues</li>
+              <li>Offline typography-first reading</li>
+              <li>Audio essay commentary</li>
+            </ul>
+          </div>
+          <button class="btn btn-secondary" style="width: 100%;">Select Reader</button>
+        </div>
+
+        <!-- Tier 2 (Highlighted) -->
+        <div class="card" style="border-color: #FFFFFF; box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3); display: flex; flex-direction: column; justify-content: space-between;">
+          <div>
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+              <span class="micro-12" style="color: #E2D9F3; font-weight: 600;">RECOMMENDED</span>
+              <span class="badge-tag badge-primary">Clothbound</span>
+            </div>
+            <h3 class="heading-20" style="margin-top: var(--space-8);">Patron</h3>
+            <div style="font-size: var(--type-32); font-weight: 600; margin: var(--space-16) 0 var(--space-4);">$24</div>
+            <div class="caption-14">per quarter with physical release</div>
+            <ul style="margin: var(--space-20) 0; padding-left: 18px; font-size: var(--type-14); color: var(--color-text-muted); display: flex; flex-direction: column; gap: var(--space-8);">
+              <li>All Reader privileges</li>
+              <li>Numbered hardcover edition</li>
+              <li>Heavyweight uncoated archival paper</li>
+              <li>Annual typographic symposium ticket</li>
+            </ul>
+          </div>
+          <button class="btn btn-primary" style="width: 100%;">Become Patron</button>
+        </div>
+
+        <!-- Tier 3 -->
+        <div class="card" style="display: flex; flex-direction: column; justify-content: space-between;">
+          <div>
+            <span class="micro-12" style="color: var(--color-text-dim);">INSTITUTIONAL</span>
+            <h3 class="heading-20" style="margin-top: var(--space-8);">Fellowship</h3>
+            <div style="font-size: var(--type-32); font-weight: 600; margin: var(--space-16) 0 var(--space-4);">$60</div>
+            <div class="caption-14">per quarter for design faculties</div>
+            <ul style="margin: var(--space-20) 0; padding-left: 18px; font-size: var(--type-14); color: var(--color-text-muted); display: flex; flex-direction: column; gap: var(--space-8);">
+              <li>Site-wide campus license</li>
+              <li>Archival vector specimen sheets</li>
+              <li>Direct curatorial correspondence</li>
+            </ul>
+          </div>
+          <button class="btn btn-secondary" style="width: 100%;">Enroll Faculty</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <div style="display: flex; align-items: center; gap: var(--space-12);">
+        <span style="font-family: var(--font-display); font-weight: 600; font-size: var(--type-16);">MODERN</span>
+        <span class="caption-14" style="margin-left: var(--space-8); color: var(--color-text-dim);">
+          © Modern Design System. Contemporary editorial &amp; minimal style on #553F83.
+        </span>
+      </div>
+
+      <div style="display: flex; gap: var(--space-16); align-items: center;">
+        <span class="micro-12" style="color: #FFFFFF;">PRIMARY: #553F83</span>
+        <span class="micro-12" style="color: #FFFFFF;">SURFACE: #553F83</span>
+        <span class="micro-12" style="color: #FFFFFF;">TEXT: #FFFFFF</span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- SCRIPT -->
+  <script>
+    const excerpts = {
+      typography: {
+        date: "ESSAY // OCTOBER 2026",
+        title: "The Weight of White Space",
+        body: "\"True luxury in digital publication is not decorative ornament; it is the generous rhythm between thoughts, the deliberate quiet of a dark amethyst canvas where sentences are allowed to breathe.\""
+      },
+      architecture: {
+        date: "ARCHITECTURE // NOVEMBER 2026",
+        title: "Proportions in Solid Masonry",
+        body: "\"Like stone carved with immutable ratios, a web page achieves lasting gravity when its margins, baselines, and serif contours remain unswayed by fleeting decorative trends.\""
+      }
+    };
+
+    function switchExcerpt(key) {
+      const data = excerpts[key];
+      document.getElementById('excerptDate').textContent = data.date;
+      document.getElementById('excerptTitle').textContent = data.title;
+      document.getElementById('excerptBody').textContent = data.body;
+    }
+
+    let isRelaxed = false;
+    function adjustRhythm(mode) {
+      const body = document.getElementById('excerptBody');
+      if (mode === 'relaxed') {
+        body.style.lineHeight = '2.0';
+        body.style.letterSpacing = '0.3px';
+      } else {
+        body.style.lineHeight = '1.65';
+        body.style.letterSpacing = 'normal';
+      }
+    }
+
+    let isSemiBold = false;
+    function toggleFontWeight() {
+      isSemiBold = !isSemiBold;
+      document.getElementById('excerptBody').style.fontWeight = isSemiBold ? '600' : '400';
+    }
+  </script>
+</body>
+</html>

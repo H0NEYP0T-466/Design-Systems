@@ -1,0 +1,2310 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Trading Terminal Design System — Pro Financial Terminal</title>
+  <meta name="description" content="Authentic Bloomberg-style financial trading terminal built to Trading Terminal Design System specifications: dark-only, data-dense, cyan/coral buy/sell signals, zero rounded corners, zero shadows, flat fills." />
+
+  <!-- Typography: JetBrains Mono and Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+  <style>
+    /* ─────────────────────────────────────────────────────────────────
+       TRADING TERMINAL TOKENS & SYSTEM SPECIFICATION
+       ───────────────────────────────────────────────────────────────── */
+    :root {
+      --color-bg: #0D0D0D;
+      --color-surface: #141414;
+      --color-surface-hover: #1A1A1A;
+      --color-border: #2A2A2A;
+      --color-primary: #00D4AA;
+      --color-gain: #00D4AA;
+      --color-loss: #FF4757;
+      --color-warning: #FFB800;
+      --color-neutral: #808086;
+      --color-text: #FFFFFF;
+      --color-text-secondary: #AAAAAA;
+      --color-text-tertiary: #828282;
+
+      --space-1: 4px;
+      --space-2: 8px;
+      --space-3: 12px;
+      --space-4: 16px;
+      --space-6: 24px;
+      --space-8: 32px;
+      --space-12: 48px;
+
+      --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+      --font-sans: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+    }
+
+    /* STRICT ANTI-PATTERN ENFORCEMENT:
+       - No rounded corners on ANY element (sharp precision aesthetic only)
+       - No shadows (flat design with border-based separation)
+       - No gradients (flat fills only)
+       - Dark mode only
+    */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      border-radius: 0 !important;
+      box-shadow: none !important;
+    }
+
+    body {
+      background-color: var(--color-bg);
+      color: var(--color-text);
+      font-family: var(--font-mono);
+      font-size: 14px;
+      font-weight: 400;
+      line-height: 1.3;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      overflow-x: hidden;
+      min-height: 100vh;
+      font-variant-numeric: tabular-nums;
+    }
+
+    /* Standardized typography hierarchy */
+    .type-display {
+      font-family: var(--font-mono);
+      font-size: 28px;
+      font-weight: 600;
+      line-height: 1.0;
+    }
+
+    .type-heading {
+      font-family: var(--font-sans);
+      font-size: 16px;
+      font-weight: 600;
+      line-height: 1.2;
+    }
+
+    .type-body {
+      font-family: var(--font-mono);
+      font-size: 14px;
+      font-weight: 400;
+      line-height: 1.3;
+    }
+
+    .type-label {
+      font-family: var(--font-sans);
+      font-size: 12px;
+      font-weight: 500;
+      line-height: 1.0;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .type-micro {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      font-weight: 400;
+      line-height: 1.0;
+    }
+
+    /* Color utility helpers */
+    .color-gain { color: var(--color-gain); }
+    .color-loss { color: var(--color-loss); }
+    .color-warning { color: var(--color-warning); }
+    .color-neutral { color: var(--color-neutral); }
+    .color-secondary { color: var(--color-text-secondary); }
+    .color-tertiary { color: var(--color-text-tertiary); }
+
+    /* Transitions specified in guide: 100ms for updates, 150ms for hovers */
+    .btn, .tab-btn, .watchlist-row, .position-row, .order-book-row {
+      transition: background-color 150ms ease, border-color 150ms ease, color 150ms ease;
+    }
+
+    .flash-gain {
+      background-color: rgba(0, 212, 170, 0.25) !important;
+      transition: background-color 100ms ease;
+    }
+    .flash-loss {
+      background-color: rgba(255, 71, 87, 0.25) !important;
+      transition: background-color 100ms ease;
+    }
+
+    /* ─────────────────────────────────────────────────────────────────
+       TERMINAL SHELL & HEADER STATUS
+       ───────────────────────────────────────────────────────────────── */
+    .terminal-header {
+      background-color: var(--color-surface);
+      border-bottom: 1px solid var(--color-border);
+      padding: var(--space-2) var(--space-4);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: var(--space-4);
+      flex-wrap: wrap;
+    }
+
+    .terminal-brand-cluster {
+      display: flex;
+      align-items: center;
+      gap: var(--space-3);
+    }
+
+    .brand-mark {
+      background-color: var(--color-primary);
+      color: #000000;
+      font-family: var(--font-mono);
+      font-size: 12px;
+      font-weight: 600;
+      padding: 2px 6px;
+      letter-spacing: 0.08em;
+    }
+
+    .terminal-title {
+      font-family: var(--font-mono);
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      color: var(--color-text);
+    }
+
+    .system-status-pills {
+      display: flex;
+      align-items: center;
+      gap: var(--space-4);
+      font-size: 11px;
+      font-family: var(--font-mono);
+    }
+
+    .status-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--color-text-secondary);
+    }
+
+    .status-dot {
+      width: 6px;
+      height: 6px;
+      background-color: var(--color-primary);
+      display: inline-block;
+    }
+
+    .cmd-bar {
+      display: flex;
+      align-items: center;
+      background-color: var(--color-bg);
+      border: 1px solid var(--color-border);
+      padding: 3px 10px;
+      gap: var(--space-2);
+      flex: 1;
+      max-width: 480px;
+    }
+
+    .cmd-prefix {
+      color: var(--color-primary);
+      font-family: var(--font-mono);
+      font-size: 11px;
+      font-weight: 600;
+    }
+
+    .cmd-input {
+      background: transparent;
+      border: none;
+      color: var(--color-text);
+      font-family: var(--font-mono);
+      font-size: 12px;
+      outline: none;
+      width: 100%;
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: var(--space-2);
+    }
+
+    .btn {
+      background-color: var(--color-surface);
+      border: 1px solid var(--color-border);
+      color: var(--color-text);
+      font-family: var(--font-sans);
+      font-size: 12px;
+      font-weight: 500;
+      padding: 5px 12px;
+      cursor: pointer;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+
+    .btn:hover {
+      background-color: var(--color-surface-hover);
+      border-color: var(--color-text-secondary);
+    }
+
+    .btn-primary {
+      background-color: var(--color-primary);
+      color: #000000;
+      border-color: var(--color-primary);
+      font-weight: 600;
+    }
+    .btn-primary:hover {
+      background-color: #00be98;
+      border-color: #00be98;
+    }
+
+    .btn-buy {
+      background-color: var(--color-gain);
+      color: #000000;
+      border: 1px solid var(--color-gain);
+      font-weight: 600;
+      padding: 10px;
+      width: 100%;
+    }
+    .btn-buy:hover {
+      background-color: #00be98;
+    }
+
+    .btn-sell {
+      background-color: var(--color-loss);
+      color: #FFFFFF;
+      border: 1px solid var(--color-loss);
+      font-weight: 600;
+      padding: 10px;
+      width: 100%;
+    }
+    .btn-sell:hover {
+      background-color: #e63946;
+    }
+
+    /* ─────────────────────────────────────────────────────────────────
+       COMPONENT SPECIFICATION 1: TICKER BAR
+       ───────────────────────────────────────────────────────────────── */
+    .ticker-bar {
+      display: flex;
+      gap: var(--space-6);
+      overflow-x: auto;
+      padding: var(--space-2) var(--space-4);
+      border-bottom: 1px solid var(--color-border);
+      background-color: var(--color-bg);
+      white-space: nowrap;
+      scrollbar-width: none;
+    }
+    .ticker-bar::-webkit-scrollbar {
+      display: none;
+    }
+
+    .ticker-item {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-2);
+      font-size: 12px;
+      cursor: pointer;
+      padding: 2px 4px;
+    }
+    .ticker-item:hover {
+      background-color: var(--color-surface);
+    }
+
+    .ticker-symbol {
+      color: var(--color-text);
+      font-weight: 600;
+    }
+    .ticker-price {
+      color: var(--color-text);
+      font-weight: 500;
+    }
+    .ticker-change {
+      font-weight: 500;
+      display: inline-flex;
+      align-items: center;
+      gap: 3px;
+    }
+
+    /* ─────────────────────────────────────────────────────────────────
+       COMPONENT SPECIFICATION 2: PRICE CARDS GRID (TOP OVERVIEW)
+       ───────────────────────────────────────────────────────────────── */
+    .price-cards-strip {
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      border-bottom: 1px solid var(--color-border);
+      background-color: var(--color-border);
+      gap: 1px; /* Shared 1px border between panels */
+    }
+
+    .price-card {
+      background: var(--color-surface);
+      padding: var(--space-3) var(--space-4);
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-2);
+      cursor: pointer;
+      position: relative;
+    }
+    .price-card:hover {
+      background: var(--color-surface-hover);
+    }
+    .price-card.active-instrument {
+      background: #181818;
+      outline: 1px solid var(--color-primary);
+      outline-offset: -1px;
+    }
+
+    .price-card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .price-card-label {
+      font-family: var(--font-sans);
+      font-size: 12px;
+      font-weight: 500;
+      text-transform: uppercase;
+      color: var(--color-text-secondary);
+      letter-spacing: 0.05em;
+    }
+
+    .price-card-value {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 28px;
+      font-weight: 600;
+      color: var(--color-text);
+      line-height: 1.0;
+    }
+
+    .price-card-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .price-card-change {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 14px;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .price-card-change.positive { color: var(--color-gain); }
+    .price-card-change.negative { color: var(--color-loss); }
+
+    .price-card-meta {
+      font-size: 10px;
+      color: var(--color-text-tertiary);
+    }
+
+    /* ─────────────────────────────────────────────────────────────────
+       CORE WORKSPACE: DENSE 4-COLUMN FINANCIAL GRID
+       ───────────────────────────────────────────────────────────────── */
+    .terminal-grid {
+      display: grid;
+      grid-template-columns: 240px 1fr 280px 260px;
+      background-color: var(--color-border);
+      gap: 1px; /* Shared border layout principle */
+      border-bottom: 1px solid var(--color-border);
+      min-height: 520px;
+    }
+
+    .panel {
+      background-color: var(--color-surface);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    .panel-header {
+      background-color: #111111;
+      border-bottom: 1px solid var(--color-border);
+      padding: var(--space-2) var(--space-3);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      min-height: 34px;
+    }
+
+    .panel-title {
+      font-family: var(--font-sans);
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--color-text);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      display: flex;
+      align-items: center;
+      gap: var(--space-2);
+    }
+
+    .panel-badge {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      padding: 1px 4px;
+      background-color: #222222;
+      color: var(--color-text-secondary);
+      border: 1px solid var(--color-border);
+    }
+
+    .panel-controls {
+      display: flex;
+      align-items: center;
+      gap: var(--space-1);
+    }
+
+    .icon-btn {
+      background: transparent;
+      border: 1px solid transparent;
+      color: var(--color-text-secondary);
+      font-family: var(--font-mono);
+      font-size: 11px;
+      padding: 2px 6px;
+      cursor: pointer;
+    }
+    .icon-btn:hover {
+      background-color: var(--color-surface-hover);
+      color: var(--color-text);
+      border-color: var(--color-border);
+    }
+    .icon-btn.active {
+      background-color: #222222;
+      color: var(--color-primary);
+      border-color: var(--color-border);
+    }
+
+    /* ─── COLUMN 1: WATCHLIST & SCREENER ─── */
+    .watchlist-search {
+      padding: var(--space-2);
+      border-bottom: 1px solid var(--color-border);
+      background-color: var(--color-bg);
+    }
+
+    .watchlist-input {
+      width: 100%;
+      background-color: #141414;
+      border: 1px solid var(--color-border);
+      padding: 4px 8px;
+      color: var(--color-text);
+      font-family: var(--font-mono);
+      font-size: 11px;
+      outline: none;
+    }
+    .watchlist-input:focus {
+      border-color: var(--color-primary);
+    }
+
+    .tab-strip {
+      display: flex;
+      border-bottom: 1px solid var(--color-border);
+      background-color: #0f0f0f;
+    }
+    .tab-btn {
+      flex: 1;
+      background: transparent;
+      border: none;
+      border-right: 1px solid var(--color-border);
+      color: var(--color-text-secondary);
+      font-family: var(--font-sans);
+      font-size: 10px;
+      font-weight: 600;
+      text-transform: uppercase;
+      padding: 6px 2px;
+      cursor: pointer;
+      text-align: center;
+    }
+    .tab-btn:last-child {
+      border-right: none;
+    }
+    .tab-btn.active {
+      background-color: var(--color-surface);
+      color: var(--color-primary);
+      border-bottom: 2px solid var(--color-primary);
+    }
+
+    .watchlist-table-wrap {
+      flex: 1;
+      overflow-y: auto;
+    }
+
+    .watchlist-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 12px;
+    }
+
+    .watchlist-table th {
+      position: sticky;
+      top: 0;
+      background-color: #101010;
+      color: var(--color-text-secondary);
+      font-family: var(--font-sans);
+      font-size: 10px;
+      font-weight: 500;
+      text-transform: uppercase;
+      padding: 4px 6px;
+      text-align: right;
+      border-bottom: 1px solid var(--color-border);
+    }
+    .watchlist-table th:first-child {
+      text-align: left;
+    }
+
+    .watchlist-row {
+      border-bottom: 1px solid var(--color-border);
+      cursor: pointer;
+    }
+    .watchlist-row:hover {
+      background-color: var(--color-surface-hover);
+    }
+    .watchlist-row.selected {
+      background-color: #1c1c1c;
+      border-left: 2px solid var(--color-primary);
+    }
+
+    .watchlist-row td {
+      padding: 6px 6px;
+      text-align: right;
+      font-size: 12px;
+      white-space: nowrap;
+    }
+    .watchlist-row td:first-child {
+      text-align: left;
+    }
+
+    .ticker-badge-sym {
+      font-weight: 600;
+      color: var(--color-text);
+      display: block;
+    }
+    .ticker-badge-vol {
+      font-size: 10px;
+      color: var(--color-text-tertiary);
+    }
+
+    /* ─── COLUMN 2: CHART & TECHNICAL INSTRUMENT ─── */
+    .chart-panel {
+      position: relative;
+    }
+
+    .chart-subbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: var(--space-2) var(--space-3);
+      border-bottom: 1px solid var(--color-border);
+      background-color: #101010;
+      flex-wrap: wrap;
+      gap: var(--space-2);
+    }
+
+    .instrument-meta-strip {
+      display: flex;
+      align-items: center;
+      gap: var(--space-4);
+      font-size: 12px;
+    }
+
+    .instrument-id {
+      font-family: var(--font-sans);
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--color-text);
+    }
+
+    .metric-group {
+      display: inline-flex;
+      gap: 6px;
+    }
+    .metric-title {
+      color: var(--color-text-secondary);
+      font-family: var(--font-sans);
+      font-size: 11px;
+    }
+    .metric-val {
+      font-family: var(--font-mono);
+      font-weight: 500;
+      color: var(--color-text);
+    }
+
+    .timeframe-group {
+      display: flex;
+      border: 1px solid var(--color-border);
+    }
+
+    .tf-btn {
+      background: #141414;
+      border: none;
+      border-right: 1px solid var(--color-border);
+      color: var(--color-text-secondary);
+      font-family: var(--font-mono);
+      font-size: 11px;
+      padding: 3px 8px;
+      cursor: pointer;
+    }
+    .tf-btn:last-child {
+      border-right: none;
+    }
+    .tf-btn:hover {
+      background: var(--color-surface-hover);
+      color: var(--color-text);
+    }
+    .tf-btn.active {
+      background: #242424;
+      color: var(--color-primary);
+      font-weight: 600;
+    }
+
+    .chart-canvas-container {
+      flex: 1;
+      position: relative;
+      background-color: var(--color-bg);
+      min-height: 380px;
+    }
+
+    #chartCanvas {
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+
+    .chart-legend-overlay {
+      position: absolute;
+      top: 10px;
+      left: 14px;
+      background: rgba(20, 20, 20, 0.85);
+      border: 1px solid var(--color-border);
+      padding: 6px 10px;
+      font-size: 11px;
+      display: flex;
+      gap: var(--space-3);
+      pointer-events: none;
+    }
+
+    .chart-legend-item {
+      display: flex;
+      gap: 4px;
+    }
+
+    /* ─── COLUMN 3: ORDER BOOK & TAPE ─── */
+    .order-book-tabs {
+      display: flex;
+      border-bottom: 1px solid var(--color-border);
+      background-color: #0f0f0f;
+    }
+
+    .order-book-header-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      padding: 4px var(--space-2);
+      font-family: var(--font-sans);
+      font-size: 10px;
+      font-weight: 500;
+      color: var(--color-text-secondary);
+      text-transform: uppercase;
+      border-bottom: 1px solid var(--color-border);
+      background-color: #101010;
+    }
+
+    /* COMPONENT SPECIFICATION: ORDER BOOK ROW */
+    .order-book-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      padding: var(--space-1) var(--space-2);
+      border-bottom: 1px solid var(--color-border);
+      position: relative;
+      font-size: 11px;
+      cursor: pointer;
+    }
+    .order-book-row:hover {
+      background-color: var(--color-surface-hover);
+    }
+
+    .order-book-depth-bar {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      right: 0;
+      pointer-events: none;
+      opacity: 0.15;
+    }
+    .depth-ask { background-color: var(--color-loss); }
+    .depth-bid { background-color: var(--color-gain); }
+
+    .order-book-size {
+      color: var(--color-text-secondary);
+      text-align: right;
+      z-index: 1;
+    }
+    .order-book-bid {
+      color: var(--color-gain);
+      text-align: right;
+      font-weight: 500;
+      z-index: 1;
+    }
+    .order-book-ask {
+      color: var(--color-loss);
+      text-align: right;
+      font-weight: 500;
+      z-index: 1;
+    }
+    .order-book-total {
+      color: var(--color-text-tertiary);
+      text-align: left;
+      z-index: 1;
+    }
+
+    .spread-strip {
+      background-color: #0c0c0c;
+      border-top: 1px solid var(--color-border);
+      border-bottom: 1px solid var(--color-border);
+      padding: 6px var(--space-2);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 12px;
+    }
+    .spread-price {
+      font-size: 14px;
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    /* Time & sales tape subpanel */
+    .tape-container {
+      border-top: 1px solid var(--color-border);
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      max-height: 200px;
+    }
+
+    .tape-header {
+      background-color: #101010;
+      border-bottom: 1px solid var(--color-border);
+      padding: 3px var(--space-2);
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      font-size: 10px;
+      color: var(--color-text-secondary);
+      font-family: var(--font-sans);
+      text-transform: uppercase;
+    }
+
+    .tape-stream {
+      overflow-y: auto;
+      flex: 1;
+    }
+
+    .tape-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      padding: 2px var(--space-2);
+      border-bottom: 1px solid #1a1a1a;
+      font-size: 11px;
+    }
+    .tape-time { color: var(--color-text-tertiary); }
+    .tape-price-buy { color: var(--color-gain); text-align: right; }
+    .tape-price-sell { color: var(--color-loss); text-align: right; }
+    .tape-size { color: var(--color-text-secondary); text-align: right; }
+
+    /* ─── COLUMN 4: ORDER ENTRY & ACCOUNT ─── */
+    .order-entry-panel {
+      padding: var(--space-3);
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-3);
+      overflow-y: auto;
+    }
+
+    .order-type-tabs {
+      display: flex;
+      border: 1px solid var(--color-border);
+    }
+    .order-type-btn {
+      flex: 1;
+      background: #141414;
+      border: none;
+      border-right: 1px solid var(--color-border);
+      color: var(--color-text-secondary);
+      font-family: var(--font-sans);
+      font-size: 11px;
+      padding: 6px 2px;
+      cursor: pointer;
+      text-align: center;
+    }
+    .order-type-btn:last-child {
+      border-right: none;
+    }
+    .order-type-btn.active {
+      background-color: #242424;
+      color: var(--color-text);
+      font-weight: 600;
+    }
+
+    .side-toggle-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--space-2);
+    }
+    .side-btn {
+      padding: 8px;
+      text-align: center;
+      font-family: var(--font-sans);
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      border: 1px solid var(--color-border);
+      background-color: #161616;
+      color: var(--color-text-secondary);
+    }
+    .side-btn.active-buy {
+      background-color: var(--color-gain);
+      color: #000000;
+      border-color: var(--color-gain);
+    }
+    .side-btn.active-sell {
+      background-color: var(--color-loss);
+      color: #FFFFFF;
+      border-color: var(--color-loss);
+    }
+
+    .field-block {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .field-label {
+      font-family: var(--font-sans);
+      font-size: 11px;
+      font-weight: 500;
+      color: var(--color-text-secondary);
+      text-transform: uppercase;
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .input-addon-wrap {
+      display: flex;
+      border: 1px solid var(--color-border);
+      background-color: var(--color-bg);
+    }
+    .field-input {
+      flex: 1;
+      background: transparent;
+      border: none;
+      color: var(--color-text);
+      font-family: var(--font-mono);
+      font-size: 13px;
+      padding: 6px 8px;
+      outline: none;
+    }
+    .field-addon {
+      padding: 6px 8px;
+      color: var(--color-text-secondary);
+      font-size: 11px;
+      background-color: #141414;
+      border-left: 1px solid var(--color-border);
+      display: flex;
+      align-items: center;
+    }
+
+    .percentage-chips {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 4px;
+    }
+    .pct-chip {
+      background-color: #181818;
+      border: 1px solid var(--color-border);
+      color: var(--color-text-secondary);
+      font-size: 10px;
+      padding: 3px;
+      text-align: center;
+      cursor: pointer;
+    }
+    .pct-chip:hover {
+      background-color: #222222;
+      color: var(--color-text);
+    }
+
+    .leverage-box {
+      border: 1px solid var(--color-border);
+      background-color: #111111;
+      padding: var(--space-2);
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .leverage-slider {
+      width: 100%;
+      accent-color: var(--color-primary);
+      cursor: pointer;
+    }
+
+    .order-cost-breakdown {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      font-size: 11px;
+      padding: var(--space-2) 0;
+      border-top: 1px solid var(--color-border);
+      border-bottom: 1px solid var(--color-border);
+    }
+    .breakdown-row {
+      display: flex;
+      justify-content: space-between;
+      color: var(--color-text-secondary);
+    }
+    .breakdown-row span:last-child {
+      color: var(--color-text);
+      font-weight: 500;
+    }
+
+    /* ─────────────────────────────────────────────────────────────────
+       BOTTOM SECTION: POSITIONS, ORDERS & RISK TERMINAL TABLE
+       ───────────────────────────────────────────────────────────────── */
+    .positions-panel {
+      background-color: var(--color-surface);
+      border-top: 1px solid var(--color-border);
+    }
+
+    .positions-tab-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background-color: #111111;
+      border-bottom: 1px solid var(--color-border);
+      padding: 0 var(--space-4);
+    }
+
+    .positions-tabs {
+      display: flex;
+    }
+    .pos-tab {
+      background: transparent;
+      border: none;
+      border-bottom: 2px solid transparent;
+      padding: var(--space-2) var(--space-4);
+      color: var(--color-text-secondary);
+      font-family: var(--font-sans);
+      font-size: 12px;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      cursor: pointer;
+    }
+    .pos-tab.active {
+      color: var(--color-primary);
+      border-bottom-color: var(--color-primary);
+      font-weight: 600;
+      background-color: var(--color-surface);
+    }
+
+    .margin-risk-summary {
+      display: flex;
+      align-items: center;
+      gap: var(--space-6);
+      font-size: 11px;
+    }
+    .risk-stat {
+      display: flex;
+      gap: 6px;
+    }
+
+    .positions-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 12px;
+    }
+
+    .positions-table th {
+      background-color: #101010;
+      color: var(--color-text-secondary);
+      font-family: var(--font-sans);
+      font-size: 11px;
+      font-weight: 500;
+      text-transform: uppercase;
+      padding: 6px var(--space-3);
+      text-align: right;
+      border-bottom: 1px solid var(--color-border);
+    }
+    .positions-table th:first-child,
+    .positions-table th:nth-child(2) {
+      text-align: left;
+    }
+
+    .position-row {
+      border-bottom: 1px solid var(--color-border);
+    }
+    .position-row:hover {
+      background-color: var(--color-surface-hover);
+    }
+
+    .position-row td {
+      padding: 8px var(--space-3);
+      text-align: right;
+      white-space: nowrap;
+    }
+    .position-row td:first-child,
+    .position-row td:nth-child(2) {
+      text-align: left;
+    }
+
+    .side-badge-long {
+      background-color: rgba(0, 212, 170, 0.15);
+      color: var(--color-gain);
+      border: 1px solid var(--color-gain);
+      padding: 1px 6px;
+      font-size: 10px;
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      gap: 3px;
+    }
+
+    .side-badge-short {
+      background-color: rgba(255, 71, 87, 0.15);
+      color: var(--color-loss);
+      border: 1px solid var(--color-loss);
+      padding: 1px 6px;
+      font-size: 10px;
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      gap: 3px;
+    }
+
+    .action-close-btn {
+      background: transparent;
+      border: 1px solid var(--color-border);
+      color: var(--color-text-secondary);
+      font-family: var(--font-mono);
+      font-size: 11px;
+      padding: 2px 8px;
+      cursor: pointer;
+    }
+    .action-close-btn:hover {
+      background: var(--color-loss);
+      color: #ffffff;
+      border-color: var(--color-loss);
+    }
+
+    /* ─────────────────────────────────────────────────────────────────
+       BOTTOM TERMINAL FOOTER & STATUS BAR
+       ───────────────────────────────────────────────────────────────── */
+    .terminal-footer {
+      background-color: #0c0c0c;
+      border-top: 1px solid var(--color-border);
+      padding: 4px var(--space-4);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 11px;
+      color: var(--color-text-tertiary);
+    }
+
+    .footer-left {
+      display: flex;
+      gap: var(--space-4);
+    }
+    .footer-right {
+      display: flex;
+      gap: var(--space-4);
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 1280px) {
+      .price-cards-strip {
+        grid-template-columns: repeat(3, 1fr);
+      }
+      .terminal-grid {
+        grid-template-columns: 220px 1fr 260px;
+      }
+      .order-entry-panel {
+        grid-column: span 3;
+      }
+    }
+
+    @media (max-width: 900px) {
+      .price-cards-strip {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      .terminal-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- 1. TOP TERMINAL NAVIGATION & CONNECTION TELEMETRY -->
+  <header class="terminal-header">
+    <div class="terminal-brand-cluster">
+      <span class="brand-mark">TERMINAL</span>
+      <span class="terminal-title">BLOOMBERG PRO // ASSET DESK</span>
+      <div class="system-status-pills">
+        <span class="status-item"><span class="status-dot"></span> LIVE L3 FEED</span>
+        <span class="status-item">NY4: <strong style="color: var(--color-primary);">2.8ms</strong></span>
+        <span class="status-item">SERVER: <strong style="color: var(--color-text);">ORD-09</strong></span>
+      </div>
+    </div>
+
+    <!-- Interactive Terminal Command Line -->
+    <div class="cmd-bar">
+      <span class="cmd-prefix">CMD&gt;</span>
+      <input type="text" id="cmdInput" class="cmd-input" placeholder="Type ticker or command (e.g. /BTC, /BUY 1.5, /HELP) and press Enter" />
+    </div>
+
+    <div class="header-actions">
+      <span id="utcClock" style="color: var(--color-text); font-weight: 500; margin-right: 8px;">13:54:20 UTC</span>
+      <button class="btn" onclick="triggerAlert('LAYOUT SAVED TO NVRAM')">SAVED</button>
+      <button class="btn btn-primary" onclick="simulateMarketSpike()">SIMULATE VOL</button>
+    </div>
+  </header>
+
+  <!-- 2. STREAMING TICKER BAR -->
+  <div class="ticker-bar" id="tickerBar">
+    <div class="ticker-item" onclick="switchInstrument('BTC/USD', 64821.50, 2.45)">
+      <span class="ticker-symbol">BTC/USD</span>
+      <span class="ticker-price" id="tick-BTC">64,821.50</span>
+      <span class="ticker-change color-gain">▲ +2.45%</span>
+    </div>
+    <div class="ticker-item" onclick="switchInstrument('ETH/USD', 3492.10, 1.82)">
+      <span class="ticker-symbol">ETH/USD</span>
+      <span class="ticker-price" id="tick-ETH">3,492.10</span>
+      <span class="ticker-change color-gain">▲ +1.82%</span>
+    </div>
+    <div class="ticker-item" onclick="switchInstrument('SOL/USD', 148.75, -0.92)">
+      <span class="ticker-symbol">SOL/USD</span>
+      <span class="ticker-price" id="tick-SOL">148.75</span>
+      <span class="ticker-change color-loss">▼ -0.92%</span>
+    </div>
+    <div class="ticker-item" onclick="switchInstrument('NVDA', 128.40, 3.12)">
+      <span class="ticker-symbol">NVDA</span>
+      <span class="ticker-price" id="tick-NVDA">128.40</span>
+      <span class="ticker-change color-gain">▲ +3.12%</span>
+    </div>
+    <div class="ticker-item" onclick="switchInstrument('SPY', 542.80, 0.48)">
+      <span class="ticker-symbol">SPY</span>
+      <span class="ticker-price" id="tick-SPY">542.80</span>
+      <span class="ticker-change color-gain">▲ +0.48%</span>
+    </div>
+    <div class="ticker-item" onclick="switchInstrument('QQQ', 476.15, 0.65)">
+      <span class="ticker-symbol">QQQ</span>
+      <span class="ticker-price" id="tick-QQQ">476.15</span>
+      <span class="ticker-change color-gain">▲ +0.65%</span>
+    </div>
+    <div class="ticker-item" onclick="switchInstrument('US10Y', 4.282, -0.014)">
+      <span class="ticker-symbol">US10Y</span>
+      <span class="ticker-price" id="tick-US10Y">4.282%</span>
+      <span class="ticker-change color-loss">▼ -0.014%</span>
+    </div>
+    <div class="ticker-item" onclick="switchInstrument('XAU/USD', 2412.30, 0.78)">
+      <span class="ticker-symbol">XAU/USD</span>
+      <span class="ticker-price" id="tick-XAU">2,412.30</span>
+      <span class="ticker-change color-gain">▲ +0.78%</span>
+    </div>
+    <div class="ticker-item" onclick="switchInstrument('EUR/USD', 1.0892, 0.22)">
+      <span class="ticker-symbol">EUR/USD</span>
+      <span class="ticker-price" id="tick-EUR">1.0892</span>
+      <span class="ticker-change color-gain">▲ +0.22%</span>
+    </div>
+    <div class="ticker-item" onclick="switchInstrument('BRENT', 84.15, -1.15)">
+      <span class="ticker-symbol">BRENT</span>
+      <span class="ticker-price" id="tick-OIL">84.15</span>
+      <span class="ticker-change color-loss">▼ -1.15%</span>
+    </div>
+  </div>
+
+  <!-- 3. TOP PRICE CARDS (COMPONENT SPECIFICATION) -->
+  <section class="price-cards-strip">
+    <div class="price-card active-instrument" id="card-BTC" onclick="switchInstrument('BTC/USD', 64821.50, 2.45)">
+      <div class="price-card-header">
+        <span class="price-card-label">BTC/USD PERPETUAL</span>
+        <span class="type-micro color-secondary">L3 CME</span>
+      </div>
+      <div class="price-card-value" id="val-BTC">64,821.50</div>
+      <div class="price-card-footer">
+        <div class="price-card-change positive" id="chg-BTC">▲ +2.45%</div>
+        <span class="price-card-meta">VOL $4.82B</span>
+      </div>
+    </div>
+
+    <div class="price-card" id="card-ETH" onclick="switchInstrument('ETH/USD', 3492.10, 1.82)">
+      <div class="price-card-header">
+        <span class="price-card-label">ETH/USD PERPETUAL</span>
+        <span class="type-micro color-secondary">L3 CME</span>
+      </div>
+      <div class="price-card-value" id="val-ETH">3,492.10</div>
+      <div class="price-card-footer">
+        <div class="price-card-change positive" id="chg-ETH">▲ +1.82%</div>
+        <span class="price-card-meta">VOL $2.15B</span>
+      </div>
+    </div>
+
+    <div class="price-card" id="card-NVDA" onclick="switchInstrument('NVDA', 128.40, 3.12)">
+      <div class="price-card-header">
+        <span class="price-card-label">NVDA NASDAQ</span>
+        <span class="type-micro color-secondary">L3 NASDAQ</span>
+      </div>
+      <div class="price-card-value" id="val-NVDA">128.40</div>
+      <div class="price-card-footer">
+        <div class="price-card-change positive" id="chg-NVDA">▲ +3.12%</div>
+        <span class="price-card-meta">VOL $8.91B</span>
+      </div>
+    </div>
+
+    <div class="price-card" id="card-SPY" onclick="switchInstrument('SPY', 542.80, 0.48)">
+      <div class="price-card-header">
+        <span class="price-card-label">S&amp;P 500 ETF (SPY)</span>
+        <span class="type-micro color-secondary">NYSE ARCA</span>
+      </div>
+      <div class="price-card-value" id="val-SPY">542.80</div>
+      <div class="price-card-footer">
+        <div class="price-card-change positive" id="chg-SPY">▲ +0.48%</div>
+        <span class="price-card-meta">VOL $14.2B</span>
+      </div>
+    </div>
+
+    <div class="price-card" id="card-US10Y" onclick="switchInstrument('US10Y', 4.282, -0.014)">
+      <div class="price-card-header">
+        <span class="price-card-label">US 10-YEAR YIELD</span>
+        <span class="type-micro color-secondary">TREASURY</span>
+      </div>
+      <div class="price-card-value" id="val-US10Y">4.282%</div>
+      <div class="price-card-footer">
+        <div class="price-card-change negative" id="chg-US10Y">▼ -0.014%</div>
+        <span class="price-card-meta">BP -1.4</span>
+      </div>
+    </div>
+
+    <div class="price-card" id="card-XAU" onclick="switchInstrument('XAU/USD', 2412.30, 0.78)">
+      <div class="price-card-header">
+        <span class="price-card-label">GOLD SPOT (XAU)</span>
+        <span class="type-micro color-secondary">COMEX</span>
+      </div>
+      <div class="price-card-value" id="val-XAU">2,412.30</div>
+      <div class="price-card-footer">
+        <div class="price-card-change positive" id="chg-XAU">▲ +0.78%</div>
+        <span class="price-card-meta">H 2,420.00</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- 4. CORE 4-COLUMN TRADING ENVIRONMENT -->
+  <main class="terminal-grid">
+
+    <!-- ── COLUMN 1: WATCHLIST & SCREENER ── -->
+    <section class="panel">
+      <div class="panel-header">
+        <span class="panel-title">WATCHLIST</span>
+        <span class="panel-badge">FEED: ON</span>
+      </div>
+
+      <div class="watchlist-search">
+        <input type="text" id="watchFilter" class="watchlist-input" placeholder="FILTER ASSET..." onkeyup="filterWatchlist()" />
+      </div>
+
+      <div class="tab-strip">
+        <button class="tab-btn active" onclick="setWatchCategory('ALL', this)">ALL</button>
+        <button class="tab-btn" onclick="setWatchCategory('CRYPTO', this)">CRYPTO</button>
+        <button class="tab-btn" onclick="setWatchCategory('EQUITY', this)">EQUITY</button>
+        <button class="tab-btn" onclick="setWatchCategory('MACRO', this)">MACRO</button>
+      </div>
+
+      <div class="watchlist-table-wrap">
+        <table class="watchlist-table" id="watchTable">
+          <thead>
+            <tr>
+              <th>SYMBOL</th>
+              <th>LAST</th>
+              <th>24H CHG</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="watchlist-row selected" data-cat="CRYPTO" onclick="switchInstrument('BTC/USD', 64821.50, 2.45)">
+              <td>
+                <span class="ticker-badge-sym">BTC/USD</span>
+                <span class="ticker-badge-vol">VOL 4.82B</span>
+              </td>
+              <td>64,821.50</td>
+              <td class="color-gain">▲ +2.45%</td>
+            </tr>
+            <tr class="watchlist-row" data-cat="CRYPTO" onclick="switchInstrument('ETH/USD', 3492.10, 1.82)">
+              <td>
+                <span class="ticker-badge-sym">ETH/USD</span>
+                <span class="ticker-badge-vol">VOL 2.15B</span>
+              </td>
+              <td>3,492.10</td>
+              <td class="color-gain">▲ +1.82%</td>
+            </tr>
+            <tr class="watchlist-row" data-cat="CRYPTO" onclick="switchInstrument('SOL/USD', 148.75, -0.92)">
+              <td>
+                <span class="ticker-badge-sym">SOL/USD</span>
+                <span class="ticker-badge-vol">VOL 840M</span>
+              </td>
+              <td>148.75</td>
+              <td class="color-loss">▼ -0.92%</td>
+            </tr>
+            <tr class="watchlist-row" data-cat="EQUITY" onclick="switchInstrument('NVDA', 128.40, 3.12)">
+              <td>
+                <span class="ticker-badge-sym">NVDA</span>
+                <span class="ticker-badge-vol">VOL 8.91B</span>
+              </td>
+              <td>128.40</td>
+              <td class="color-gain">▲ +3.12%</td>
+            </tr>
+            <tr class="watchlist-row" data-cat="EQUITY" onclick="switchInstrument('AAPL', 224.20, -0.45)">
+              <td>
+                <span class="ticker-badge-sym">AAPL</span>
+                <span class="ticker-badge-vol">VOL 5.42B</span>
+              </td>
+              <td>224.20</td>
+              <td class="color-loss">▼ -0.45%</td>
+            </tr>
+            <tr class="watchlist-row" data-cat="EQUITY" onclick="switchInstrument('TSLA', 215.80, 4.25)">
+              <td>
+                <span class="ticker-badge-sym">TSLA</span>
+                <span class="ticker-badge-vol">VOL 7.12B</span>
+              </td>
+              <td>215.80</td>
+              <td class="color-gain">▲ +4.25%</td>
+            </tr>
+            <tr class="watchlist-row" data-cat="EQUITY" onclick="switchInstrument('SPY', 542.80, 0.48)">
+              <td>
+                <span class="ticker-badge-sym">SPY</span>
+                <span class="ticker-badge-vol">VOL 14.2B</span>
+              </td>
+              <td>542.80</td>
+              <td class="color-gain">▲ +0.48%</td>
+            </tr>
+            <tr class="watchlist-row" data-cat="MACRO" onclick="switchInstrument('US10Y', 4.282, -0.014)">
+              <td>
+                <span class="ticker-badge-sym">US10Y</span>
+                <span class="ticker-badge-vol">RATE 4.28%</span>
+              </td>
+              <td>4.282%</td>
+              <td class="color-loss">▼ -0.014%</td>
+            </tr>
+            <tr class="watchlist-row" data-cat="MACRO" onclick="switchInstrument('DXY', 104.12, -0.15)">
+              <td>
+                <span class="ticker-badge-sym">DXY</span>
+                <span class="ticker-badge-vol">INDEX</span>
+              </td>
+              <td>104.12</td>
+              <td class="color-loss">▼ -0.15%</td>
+            </tr>
+            <tr class="watchlist-row" data-cat="MACRO" onclick="switchInstrument('XAU/USD', 2412.30, 0.78)">
+              <td>
+                <span class="ticker-badge-sym">XAU/USD</span>
+                <span class="ticker-badge-vol">GOLD</span>
+              </td>
+              <td>2,412.30</td>
+              <td class="color-gain">▲ +0.78%</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ── COLUMN 2: HIGH PRECISION CANDLESTICK CHART ── -->
+    <section class="panel chart-panel">
+      <div class="chart-subbar">
+        <div class="instrument-meta-strip">
+          <span class="instrument-id" id="activeChartTitle">BTC/USD PERP</span>
+          <div class="metric-group">
+            <span class="metric-title">MARK:</span>
+            <span class="metric-val color-gain" id="activeMarkPrice">64,821.50</span>
+          </div>
+          <div class="metric-group">
+            <span class="metric-title">INDEX:</span>
+            <span class="metric-val" id="activeIndexPrice">64,819.10</span>
+          </div>
+          <div class="metric-group">
+            <span class="metric-title">FUNDING:</span>
+            <span class="metric-val color-gain">0.0100% (in 02:41)</span>
+          </div>
+          <div class="metric-group">
+            <span class="metric-title">24H HIGH:</span>
+            <span class="metric-val">65,240.00</span>
+          </div>
+          <div class="metric-group">
+            <span class="metric-title">24H LOW:</span>
+            <span class="metric-val">63,110.00</span>
+          </div>
+        </div>
+
+        <div class="timeframe-group">
+          <button class="tf-btn" onclick="setTimeframe('1m', this)">1M</button>
+          <button class="tf-btn" onclick="setTimeframe('5m', this)">5M</button>
+          <button class="tf-btn active" onclick="setTimeframe('15m', this)">15M</button>
+          <button class="tf-btn" onclick="setTimeframe('1h', this)">1H</button>
+          <button class="tf-btn" onclick="setTimeframe('4h', this)">4H</button>
+          <button class="tf-btn" onclick="setTimeframe('1D', this)">1D</button>
+        </div>
+      </div>
+
+      <div class="chart-canvas-container" id="chartContainer">
+        <canvas id="chartCanvas"></canvas>
+        <div class="chart-legend-overlay">
+          <div class="chart-legend-item"><span class="color-secondary">EMA(20):</span> <span style="color: #00D4AA;">64,710.20</span></div>
+          <div class="chart-legend-item"><span class="color-secondary">EMA(50):</span> <span style="color: #FFB800;">64,480.00</span></div>
+          <div class="chart-legend-item"><span class="color-secondary">RSI(14):</span> <span style="color: #FFFFFF;">61.42</span></div>
+          <div class="chart-legend-item"><span class="color-secondary">VOL:</span> <span style="color: #AAAAAA;">1,842.10</span></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── COLUMN 3: ORDER BOOK & TIME & SALES ── -->
+    <section class="panel">
+      <div class="panel-header">
+        <span class="panel-title">ORDER BOOK (L2)</span>
+        <div class="panel-controls">
+          <button class="icon-btn active">0.1</button>
+          <button class="icon-btn">0.5</button>
+          <button class="icon-btn">1.0</button>
+        </div>
+      </div>
+
+      <div class="order-book-header-row">
+        <span style="text-align: left;">TOTAL (BTC)</span>
+        <span style="text-align: right;">SIZE</span>
+        <span style="text-align: right;">PRICE (USD)</span>
+      </div>
+
+      <!-- ASKS (Coral Red, descending order) -->
+      <div id="asksContainer" style="display: flex; flex-direction: column-reverse;">
+        <div class="order-book-row" onclick="setLimitPrice('64826.50')">
+          <div class="order-book-depth-bar depth-ask" style="width: 85%;"></div>
+          <span class="order-book-total">18.412</span>
+          <span class="order-book-size">4.200</span>
+          <span class="order-book-ask">64,826.50</span>
+        </div>
+        <div class="order-book-row" onclick="setLimitPrice('64825.00')">
+          <div class="order-book-depth-bar depth-ask" style="width: 65%;"></div>
+          <span class="order-book-total">14.212</span>
+          <span class="order-book-size">2.840</span>
+          <span class="order-book-ask">64,825.00</span>
+        </div>
+        <div class="order-book-row" onclick="setLimitPrice('64823.50')">
+          <div class="order-book-depth-bar depth-ask" style="width: 45%;"></div>
+          <span class="order-book-total">11.372</span>
+          <span class="order-book-size">3.120</span>
+          <span class="order-book-ask">64,823.50</span>
+        </div>
+        <div class="order-book-row" onclick="setLimitPrice('64822.50')">
+          <div class="order-book-depth-bar depth-ask" style="width: 30%;"></div>
+          <span class="order-book-total">8.252</span>
+          <span class="order-book-size">1.940</span>
+          <span class="order-book-ask">64,822.50</span>
+        </div>
+        <div class="order-book-row" onclick="setLimitPrice('64822.00')">
+          <div class="order-book-depth-bar depth-ask" style="width: 15%;"></div>
+          <span class="order-book-total">6.312</span>
+          <span class="order-book-size">0.850</span>
+          <span class="order-book-ask">64,822.00</span>
+        </div>
+      </div>
+
+      <!-- SPREAD STRIP -->
+      <div class="spread-strip">
+        <span class="spread-price color-gain" id="spreadDisplay">
+          ▲ 64,821.50
+        </span>
+        <span class="type-micro color-secondary">
+          SPREAD: 0.50 (0.0008%)
+        </span>
+      </div>
+
+      <!-- BIDS (Cyan Green, ascending order) -->
+      <div id="bidsContainer">
+        <div class="order-book-row" onclick="setLimitPrice('64821.00')">
+          <div class="order-book-depth-bar depth-bid" style="width: 20%;"></div>
+          <span class="order-book-total">1.250</span>
+          <span class="order-book-size">1.250</span>
+          <span class="order-book-bid">64,821.00</span>
+        </div>
+        <div class="order-book-row" onclick="setLimitPrice('64820.50')">
+          <div class="order-book-depth-bar depth-bid" style="width: 38%;"></div>
+          <span class="order-book-total">3.410</span>
+          <span class="order-book-size">2.160</span>
+          <span class="order-book-bid">64,820.50</span>
+        </div>
+        <div class="order-book-row" onclick="setLimitPrice('64819.00')">
+          <div class="order-book-depth-bar depth-bid" style="width: 52%;"></div>
+          <span class="order-book-total">6.980</span>
+          <span class="order-book-size">3.570</span>
+          <span class="order-book-bid">64,819.00</span>
+        </div>
+        <div class="order-book-row" onclick="setLimitPrice('64818.00')">
+          <div class="order-book-depth-bar depth-bid" style="width: 70%;"></div>
+          <span class="order-book-total">11.450</span>
+          <span class="order-book-size">4.470</span>
+          <span class="order-book-bid">64,818.00</span>
+        </div>
+        <div class="order-book-row" onclick="setLimitPrice('64816.50')">
+          <div class="order-book-depth-bar depth-bid" style="width: 90%;"></div>
+          <span class="order-book-total">16.820</span>
+          <span class="order-book-size">5.370</span>
+          <span class="order-book-bid">64,816.50</span>
+        </div>
+      </div>
+
+      <!-- TIME & SALES (THE TAPE) -->
+      <div class="tape-container">
+        <div class="panel-header" style="min-height: 26px;">
+          <span class="type-label" style="font-size: 10px;">TIME &amp; SALES</span>
+          <span class="type-micro color-secondary">L3 PRINTS</span>
+        </div>
+        <div class="tape-header">
+          <span>TIME</span>
+          <span style="text-align: right;">PRICE</span>
+          <span style="text-align: right;">SIZE</span>
+        </div>
+        <div class="tape-stream" id="tapeStream">
+          <div class="tape-row"><span class="tape-time">13:54:19</span><span class="tape-price-buy">64,821.50</span><span class="tape-size">0.450</span></div>
+          <div class="tape-row"><span class="tape-time">13:54:18</span><span class="tape-price-buy">64,821.50</span><span class="tape-size">1.200</span></div>
+          <div class="tape-row"><span class="tape-time">13:54:17</span><span class="tape-price-sell">64,821.00</span><span class="tape-size">0.150</span></div>
+          <div class="tape-row"><span class="tape-time">13:54:15</span><span class="tape-price-buy">64,821.50</span><span class="tape-size">0.825</span></div>
+          <div class="tape-row"><span class="tape-time">13:54:14</span><span class="tape-price-sell">64,820.50</span><span class="tape-size">2.100</span></div>
+          <div class="tape-row"><span class="tape-time">13:54:12</span><span class="tape-price-sell">64,820.50</span><span class="tape-size">0.500</span></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── COLUMN 4: ORDER ENTRY & LEVERAGE ── -->
+    <section class="panel">
+      <div class="panel-header">
+        <span class="panel-title">ORDER EXECUTION</span>
+        <span class="panel-badge" id="executionActiveInstrument">BTC/USD</span>
+      </div>
+
+      <div class="order-entry-panel">
+        <div class="order-type-tabs">
+          <button class="order-type-btn active" onclick="setOrderType('LIMIT', this)">LIMIT</button>
+          <button class="order-type-btn" onclick="setOrderType('MARKET', this)">MARKET</button>
+          <button class="order-type-btn" onclick="setOrderType('STOP', this)">STOP</button>
+        </div>
+
+        <div class="side-toggle-grid">
+          <button class="side-btn active-buy" id="sideBuyBtn" onclick="setOrderSide('BUY')">▲ BUY / LONG</button>
+          <button class="side-btn" id="sideSellBtn" onclick="setOrderSide('SELL')">▼ SELL / SHORT</button>
+        </div>
+
+        <!-- Limit Price Input -->
+        <div class="field-block" id="limitPriceBlock">
+          <div class="field-label">
+            <span>ORDER PRICE</span>
+            <span class="color-secondary" style="cursor: pointer;" onclick="setLimitPrice('64821.50')">LAST: 64,821.50</span>
+          </div>
+          <div class="input-addon-wrap">
+            <input type="text" id="orderPriceInput" class="field-input" value="64821.50" onkeyup="calcOrderBreakdown()" />
+            <span class="field-addon">USD</span>
+          </div>
+        </div>
+
+        <!-- Size Input -->
+        <div class="field-block">
+          <div class="field-label">
+            <span>CONTRACT SIZE</span>
+            <span class="color-secondary">MAX: 4.850 BTC</span>
+          </div>
+          <div class="input-addon-wrap">
+            <input type="text" id="orderSizeInput" class="field-input" value="0.500" onkeyup="calcOrderBreakdown()" />
+            <span class="field-addon" id="contractUnitLabel">BTC</span>
+          </div>
+        </div>
+
+        <!-- Percentage quick buttons -->
+        <div class="percentage-chips">
+          <button class="pct-chip" onclick="setQuickSize(0.25)">25%</button>
+          <button class="pct-chip" onclick="setQuickSize(0.50)">50%</button>
+          <button class="pct-chip" onclick="setQuickSize(0.75)">75%</button>
+          <button class="pct-chip" onclick="setQuickSize(1.00)">100%</button>
+        </div>
+
+        <!-- Leverage Selector -->
+        <div class="leverage-box">
+          <div class="field-label">
+            <span>CROSS LEVERAGE</span>
+            <span style="color: var(--color-primary); font-weight: 600;" id="leverageDisplay">10x</span>
+          </div>
+          <input type="range" class="leverage-slider" min="1" max="50" value="10" id="leverageRange" oninput="updateLeverage(this.value)" />
+          <div id="leverageWarning" class="type-micro color-warning" style="display: none;">
+            ⚠ HIGH LEVERAGE MARGIN RISK
+          </div>
+        </div>
+
+        <!-- Breakdown values -->
+        <div class="order-cost-breakdown">
+          <div class="breakdown-row">
+            <span>ORDER VALUE</span>
+            <span id="calcOrderValue">$32,410.75</span>
+          </div>
+          <div class="breakdown-row">
+            <span>REQ. INITIAL MARGIN</span>
+            <span id="calcReqMargin">$3,241.08</span>
+          </div>
+          <div class="breakdown-row">
+            <span>EST. LIQUIDATION PRICE</span>
+            <span class="color-loss" id="calcLiqPrice">58,640.20</span>
+          </div>
+          <div class="breakdown-row">
+            <span>EST. TAKER FEE (0.04%)</span>
+            <span>$12.96</span>
+          </div>
+        </div>
+
+        <!-- Execution Action Button -->
+        <button class="btn btn-buy" id="submitOrderBtn" onclick="submitActiveOrder()">
+          PLACE BUY LIMIT ORDER
+        </button>
+      </div>
+    </section>
+  </main>
+
+  <!-- 5. BOTTOM SECTION: POSITIONS, OPEN ORDERS & RISK MONITOR -->
+  <section class="positions-panel">
+    <div class="positions-tab-bar">
+      <div class="positions-tabs">
+        <button class="pos-tab active" onclick="setPosTab('POS', this)">OPEN POSITIONS (<span id="posCount">3</span>)</button>
+        <button class="pos-tab" onclick="setPosTab('ORDERS', this)">WORKING ORDERS (<span id="ordCount">2</span>)</button>
+        <button class="pos-tab" onclick="setPosTab('LOG', this)">EXECUTION AUDIT LOG</button>
+      </div>
+
+      <div class="margin-risk-summary">
+        <div class="risk-stat">
+          <span class="color-secondary">ACCOUNT EQUITY:</span>
+          <strong>$128,450.80</strong>
+        </div>
+        <div class="risk-stat">
+          <span class="color-secondary">MARGIN USED:</span>
+          <strong style="color: var(--color-warning);">$24,190.20 (18.8%)</strong>
+        </div>
+        <div class="risk-stat">
+          <span class="color-secondary">FREE MARGIN:</span>
+          <strong class="color-gain">$104,260.60</strong>
+        </div>
+        <div class="risk-stat">
+          <span class="color-secondary">UNREALIZED PnL:</span>
+          <strong class="color-gain" id="totalUnrealizedPnl">▲ +$3,842.50 (+3.08%)</strong>
+        </div>
+      </div>
+    </div>
+
+    <!-- POSITIONS TABLE -->
+    <div id="positionsTableWrap" style="overflow-x: auto;">
+      <table class="positions-table" id="positionsTable">
+        <thead>
+          <tr>
+            <th>INSTRUMENT</th>
+            <th>SIDE</th>
+            <th>SIZE</th>
+            <th>ENTRY PRICE</th>
+            <th>MARK PRICE</th>
+            <th>LIQ. PRICE</th>
+            <th>MARGIN</th>
+            <th>UNREALIZED PnL</th>
+            <th>ROE %</th>
+            <th>ACTION</th>
+          </tr>
+        </thead>
+        <tbody id="positionsTbody">
+          <tr class="position-row">
+            <td><strong>BTC/USD PERP</strong></td>
+            <td><span class="side-badge-long">▲ LONG 10x</span></td>
+            <td>1.500 BTC</td>
+            <td>62,450.00</td>
+            <td class="color-gain">64,821.50</td>
+            <td>56,410.00</td>
+            <td>$9,367.50</td>
+            <td class="color-gain">▲ +$3,557.25</td>
+            <td class="color-gain">+37.98%</td>
+            <td><button class="action-close-btn" onclick="closePosition(this, 'BTC/USD')">MARKET CLOSE</button></td>
+          </tr>
+          <tr class="position-row">
+            <td><strong>ETH/USD PERP</strong></td>
+            <td><span class="side-badge-long">▲ LONG 15x</span></td>
+            <td>12.000 ETH</td>
+            <td>3,420.00</td>
+            <td class="color-gain">3,492.10</td>
+            <td>3,190.00</td>
+            <td>$2,736.00</td>
+            <td class="color-gain">▲ +$865.20</td>
+            <td class="color-gain">+31.62%</td>
+            <td><button class="action-close-btn" onclick="closePosition(this, 'ETH/USD')">MARKET CLOSE</button></td>
+          </tr>
+          <tr class="position-row">
+            <td><strong>SOL/USD PERP</strong></td>
+            <td><span class="side-badge-short">▼ SHORT 5x</span></td>
+            <td>80.000 SOL</td>
+            <td>146.50</td>
+            <td class="color-loss">148.75</td>
+            <td>175.20</td>
+            <td>$2,344.00</td>
+            <td class="color-loss">▼ -$180.00</td>
+            <td class="color-loss">-7.68%</td>
+            <td><button class="action-close-btn" onclick="closePosition(this, 'SOL/USD')">MARKET CLOSE</button></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- WORKING ORDERS TABLE (Hidden by default) -->
+    <div id="workingOrdersWrap" style="display: none; overflow-x: auto;">
+      <table class="positions-table">
+        <thead>
+          <tr>
+            <th>ORDER ID</th>
+            <th>TIME</th>
+            <th>SYMBOL</th>
+            <th>TYPE</th>
+            <th>SIDE</th>
+            <th>PRICE</th>
+            <th>AMOUNT</th>
+            <th>FILLED</th>
+            <th>STATUS</th>
+            <th>ACTION</th>
+          </tr>
+        </thead>
+        <tbody id="ordersTbody">
+          <tr class="position-row">
+            <td>#ORD-90214</td>
+            <td>13:42:01</td>
+            <td><strong>BTC/USD</strong></td>
+            <td>LIMIT</td>
+            <td><span class="side-badge-long">▲ BUY</span></td>
+            <td>63,800.00</td>
+            <td>0.750 BTC</td>
+            <td>0.00%</td>
+            <td><span class="color-secondary">WORKING</span></td>
+            <td><button class="action-close-btn" onclick="cancelOrder(this)">CANCEL</button></td>
+          </tr>
+          <tr class="position-row">
+            <td>#ORD-90188</td>
+            <td>13:28:15</td>
+            <td><strong>NVDA</strong></td>
+            <td>STOP LOSS</td>
+            <td><span class="side-badge-short">▼ SELL</span></td>
+            <td>124.00</td>
+            <td>100 SHRS</td>
+            <td>0.00%</td>
+            <td><span class="color-warning">TRIGGERED PENDING</span></td>
+            <td><button class="action-close-btn" onclick="cancelOrder(this)">CANCEL</button></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- AUDIT LOG (Hidden by default) -->
+    <div id="auditLogWrap" style="display: none; padding: var(--space-3) var(--space-4); font-size: 11px; max-height: 180px; overflow-y: auto;">
+      <div style="color: var(--color-text-secondary); margin-bottom: 4px;">[13:54:19] INFO: Websocket heartbeat confirmed. L3 latency NY4 2.8ms.</div>
+      <div style="color: var(--color-primary); margin-bottom: 4px;">[13:52:10] EXECUTION: Limit Order #ORD-89412 filled 0.5 BTC @ 64,820.00.</div>
+      <div style="color: var(--color-text-secondary); margin-bottom: 4px;">[13:49:02] RISK: Margin utilization at 18.8%. Well below 75% liquidation warning limit.</div>
+      <div style="color: var(--color-warning); margin-bottom: 4px;">[13:40:12] NOTICE: CME regular trading hours open. Anticipated volatility in Index futures.</div>
+    </div>
+  </section>
+
+  <!-- 6. BOTTOM TELEMETRY FOOTER -->
+  <footer class="terminal-footer">
+    <div class="footer-left">
+      <span>PROTOCOL: FIX 4.4 / BINARY PROTOCOL</span>
+      <span>CIPHER: AES-GCM-256</span>
+      <span>MEMORY: 142MB</span>
+    </div>
+    <div class="footer-right">
+      <span>TIMEZONE: UTC (UTC+00:00)</span>
+      <span style="color: var(--color-primary);">FEED STATUS: 100% OPERATIONAL</span>
+    </div>
+  </footer>
+
+  <!-- ─────────────────────────────────────────────────────────────────
+       INTERACTIVE CANVAS CANDLESTICK ENGINE & TERMINAL CONTROLLER
+       ───────────────────────────────────────────────────────────────── -->
+  <script>
+    // State management
+    let activeSymbol = 'BTC/USD';
+    let currentPrice = 64821.50;
+    let currentSide = 'BUY';
+    let currentType = 'LIMIT';
+    let leverageVal = 10;
+    let candleData = [];
+
+    // Real-time UTC clock
+    function updateClock() {
+      const now = new Date();
+      const h = String(now.getUTCHours()).padStart(2, '0');
+      const m = String(now.getUTCMinutes()).padStart(2, '0');
+      const s = String(now.getUTCSeconds()).padStart(2, '0');
+      document.getElementById('utcClock').textContent = `${h}:${m}:${s} UTC`;
+    }
+    setInterval(updateClock, 1000);
+    updateClock();
+
+    // Generate initial candlestick history
+    function initCandles(basePrice) {
+      candleData = [];
+      let price = basePrice * 0.985;
+      const count = 48;
+      for (let i = 0; i < count; i++) {
+        const delta = (Math.random() - 0.48) * (basePrice * 0.004);
+        const open = price;
+        const close = price + delta;
+        const high = Math.max(open, close) + Math.random() * (basePrice * 0.002);
+        const low = Math.min(open, close) - Math.random() * (basePrice * 0.002);
+        const vol = Math.random() * 100 + 20;
+        candleData.push({ open, close, high, low, vol });
+        price = close;
+      }
+      // Set last close to current price
+      candleData[candleData.length - 1].close = basePrice;
+    }
+    initCandles(currentPrice);
+
+    // Canvas drawing function for high precision candlesticks
+    function drawChart() {
+      const canvas = document.getElementById('chartCanvas');
+      if (!canvas) return;
+      const container = document.getElementById('chartContainer');
+      const width = container.clientWidth;
+      const height = container.clientHeight;
+
+      canvas.width = width;
+      canvas.height = height;
+
+      const ctx = canvas.getContext('2d');
+      ctx.clearRect(0, 0, width, height);
+
+      // Background flat fill #0D0D0D
+      ctx.fillStyle = '#0D0D0D';
+      ctx.fillRect(0, 0, width, height);
+
+      // Grid boundaries
+      const paddingRight = 70;
+      const paddingBottom = 26;
+      const chartWidth = width - paddingRight;
+      const chartHeight = height - paddingBottom;
+
+      // Find min and max price
+      let minP = Infinity;
+      let maxP = -Infinity;
+      let maxVol = 0;
+      candleData.forEach(c => {
+        if (c.low < minP) minP = c.low;
+        if (c.high > maxP) maxP = c.high;
+        if (c.vol > maxVol) maxVol = c.vol;
+      });
+
+      const range = (maxP - minP) || 1;
+      const priceToY = (p) => chartHeight - ((p - minP) / range) * (chartHeight - 40) - 20;
+
+      // Draw grid lines (Flat #2A2A2A)
+      ctx.strokeStyle = '#222222';
+      ctx.lineWidth = 1;
+      ctx.fillStyle = '#828282';
+      ctx.font = '10px "JetBrains Mono", monospace';
+
+      const priceSteps = 6;
+      for (let i = 0; i <= priceSteps; i++) {
+        const p = minP + (range / priceSteps) * i;
+        const y = priceToY(p);
+        ctx.beginPath();
+        ctx.moveTo(0, y);
+        ctx.lineTo(chartWidth, y);
+        ctx.stroke();
+        ctx.fillText(p.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }), chartWidth + 6, y + 3);
+      }
+
+      // Time grid vertical lines
+      const stepX = chartWidth / candleData.length;
+      for (let i = 0; i < candleData.length; i += 6) {
+        const x = i * stepX + stepX / 2;
+        ctx.beginPath();
+        ctx.moveTo(x, 0);
+        ctx.lineTo(x, chartHeight);
+        ctx.stroke();
+      }
+
+      // Draw Volume Bars at bottom (25% height)
+      const volHeight = chartHeight * 0.22;
+      candleData.forEach((c, i) => {
+        const x = i * stepX + 2;
+        const barW = Math.max(stepX - 4, 2);
+        const vH = (c.vol / maxVol) * volHeight;
+        const y = chartHeight - vH;
+
+        ctx.fillStyle = c.close >= c.open ? 'rgba(0, 212, 170, 0.25)' : 'rgba(255, 71, 87, 0.25)';
+        ctx.fillRect(x, y, barW, vH);
+      });
+
+      // Draw Candlesticks (Cyan #00D4AA for bullish, Coral #FF4757 for bearish)
+      candleData.forEach((c, i) => {
+        const xCenter = i * stepX + stepX / 2;
+        const barW = Math.max(stepX - 4, 3);
+        const xLeft = xCenter - barW / 2;
+
+        const yOpen = priceToY(c.open);
+        const yClose = priceToY(c.close);
+        const yHigh = priceToY(c.high);
+        const yLow = priceToY(c.low);
+
+        const isGain = c.close >= c.open;
+        const candleColor = isGain ? '#00D4AA' : '#FF4757';
+
+        // High-low wick
+        ctx.strokeStyle = candleColor;
+        ctx.lineWidth = 1;
+        ctx.beginPath();
+        ctx.moveTo(xCenter, yHigh);
+        ctx.lineTo(xCenter, yLow);
+        ctx.stroke();
+
+        // Candle Body
+        const topY = Math.min(yOpen, yClose);
+        const bodyH = Math.max(Math.abs(yClose - yOpen), 1);
+        ctx.fillStyle = candleColor;
+        ctx.fillRect(xLeft, topY, barW, bodyH);
+      });
+
+      // Current Price Horizontal Line (Dashed)
+      const lastCandle = candleData[candleData.length - 1];
+      const curY = priceToY(lastCandle.close);
+
+      ctx.strokeStyle = '#00D4AA';
+      ctx.setLineDash([3, 3]);
+      ctx.beginPath();
+      ctx.moveTo(0, curY);
+      ctx.lineTo(chartWidth, curY);
+      ctx.stroke();
+      ctx.setLineDash([]);
+
+      // Current Price Badge on axis
+      ctx.fillStyle = '#00D4AA';
+      ctx.fillRect(chartWidth + 1, curY - 10, 68, 20);
+      ctx.fillStyle = '#000000';
+      ctx.font = 'bold 10px "JetBrains Mono", monospace';
+      ctx.fillText(lastCandle.close.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }), chartWidth + 5, curY + 4);
+    }
+
+    window.addEventListener('resize', drawChart);
+    setTimeout(drawChart, 100);
+
+    // Switch active instrument
+    function switchInstrument(symbol, price, chg) {
+      activeSymbol = symbol;
+      currentPrice = price;
+
+      // Update active title and values
+      document.getElementById('activeChartTitle').textContent = `${symbol} PERP`;
+      document.getElementById('activeMarkPrice').textContent = price.toLocaleString('en-US', { minimumFractionDigits: 2 });
+      document.getElementById('activeIndexPrice').textContent = (price * 0.9998).toLocaleString('en-US', { minimumFractionDigits: 2 });
+      document.getElementById('executionActiveInstrument').textContent = symbol;
+      document.getElementById('orderPriceInput').value = price.toFixed(2);
+      document.getElementById('spreadDisplay').textContent = `${chg >= 0 ? '▲' : '▼'} ${price.toLocaleString('en-US', { minimumFractionDigits: 2 })}`;
+      document.getElementById('spreadDisplay').className = `spread-price ${chg >= 0 ? 'color-gain' : 'color-loss'}`;
+
+      // Update unit label
+      const baseAsset = symbol.split('/')[0];
+      document.getElementById('contractUnitLabel').textContent = baseAsset;
+
+      // Highlight active price card
+      document.querySelectorAll('.price-card').forEach(c => c.classList.remove('active-instrument'));
+      const activeCard = document.getElementById(`card-${baseAsset}`);
+      if (activeCard) activeCard.classList.add('active-instrument');
+
+      // Highlight watchlist row
+      document.querySelectorAll('.watchlist-row').forEach(r => {
+        r.classList.remove('selected');
+        if (r.innerText.includes(symbol)) r.classList.add('selected');
+      });
+
+      // Re-init candles and redraw
+      initCandles(price);
+      drawChart();
+      calcOrderBreakdown();
+    }
+
+    // Interactive order type & side
+    function setOrderType(type, btn) {
+      currentType = type;
+      document.querySelectorAll('.order-type-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+
+      const priceBlock = document.getElementById('limitPriceBlock');
+      if (type === 'MARKET') {
+        priceBlock.style.opacity = '0.5';
+        document.getElementById('orderPriceInput').disabled = true;
+      } else {
+        priceBlock.style.opacity = '1';
+        document.getElementById('orderPriceInput').disabled = false;
+      }
+      calcOrderBreakdown();
+    }
+
+    function setOrderSide(side) {
+      currentSide = side;
+      const buyBtn = document.getElementById('sideBuyBtn');
+      const sellBtn = document.getElementById('sideSellBtn');
+      const submitBtn = document.getElementById('submitOrderBtn');
+
+      if (side === 'BUY') {
+        buyBtn.className = 'side-btn active-buy';
+        sellBtn.className = 'side-btn';
+        submitBtn.className = 'btn btn-buy';
+        submitBtn.textContent = `PLACE BUY ${currentType} ORDER`;
+      } else {
+        buyBtn.className = 'side-btn';
+        sellBtn.className = 'side-btn active-sell';
+        submitBtn.className = 'btn btn-sell';
+        submitBtn.textContent = `PLACE SELL ${currentType} ORDER`;
+      }
+      calcOrderBreakdown();
+    }
+
+    function setLimitPrice(price) {
+      document.getElementById('orderPriceInput').value = price;
+      calcOrderBreakdown();
+    }
+
+    function setQuickSize(fraction) {
+      const maxContract = activeSymbol.includes('BTC') ? 4.85 : 40.0;
+      const size = (maxContract * fraction).toFixed(3);
+      document.getElementById('orderSizeInput').value = size;
+      calcOrderBreakdown();
+    }
+
+    function updateLeverage(val) {
+      leverageVal = parseInt(val);
+      document.getElementById('leverageDisplay').textContent = `${val}x`;
+      const warning = document.getElementById('leverageWarning');
+      if (leverageVal >= 25) {
+        warning.style.display = 'block';
+      } else {
+        warning.style.display = 'none';
+      }
+      calcOrderBreakdown();
+    }
+
+    function calcOrderBreakdown() {
+      const price = parseFloat(document.getElementById('orderPriceInput').value) || currentPrice;
+      const size = parseFloat(document.getElementById('orderSizeInput').value) || 0;
+      const totalVal = price * size;
+      const reqMargin = totalVal / leverageVal;
+
+      document.getElementById('calcOrderValue').textContent = `$${totalVal.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+      document.getElementById('calcReqMargin').textContent = `$${reqMargin.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+
+      // Liq price estimation
+      let liqPrice = 0;
+      if (currentSide === 'BUY') {
+        liqPrice = price * (1 - (1 / leverageVal) * 0.9);
+      } else {
+        liqPrice = price * (1 + (1 / leverageVal) * 0.9);
+      }
+      document.getElementById('calcLiqPrice').textContent = liqPrice.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    }
+
+    // Submit order interactive feedback
+    function submitActiveOrder() {
+      const size = document.getElementById('orderSizeInput').value;
+      const price = document.getElementById('orderPriceInput').value;
+      const sideText = currentSide === 'BUY' ? '▲ LONG' : '▼ SHORT';
+      const badgeClass = currentSide === 'BUY' ? 'side-badge-long' : 'side-badge-short';
+
+      // Add to positions table
+      const tbody = document.getElementById('positionsTbody');
+      const tr = document.createElement('tr');
+      tr.className = 'position-row flash-gain';
+      tr.innerHTML = `
+        <td><strong>${activeSymbol} PERP</strong></td>
+        <td><span class="${badgeClass}">${sideText} ${leverageVal}x</span></td>
+        <td>${size} ${activeSymbol.split('/')[0]}</td>
+        <td>${price}</td>
+        <td class="color-gain">${price}</td>
+        <td>${(price * (currentSide === 'BUY' ? 0.91 : 1.09)).toFixed(2)}</td>
+        <td>$${((price * size) / leverageVal).toFixed(2)}</td>
+        <td class="color-gain">▲ +$0.00</td>
+        <td class="color-gain">+0.00%</td>
+        <td><button class="action-close-btn" onclick="closePosition(this, '${activeSymbol}')">MARKET CLOSE</button></td>
+      `;
+      tbody.prepend(tr);
+
+      // Append to tape stream
+      addTapePrint(price, size, currentSide);
+
+      // Update positions count badge
+      const countElem = document.getElementById('posCount');
+      countElem.textContent = parseInt(countElem.textContent) + 1;
+
+      setTimeout(() => {
+        tr.classList.remove('flash-gain');
+      }, 300);
+
+      triggerAlert(`ORDER EXECUTED: ${currentSide} ${size} ${activeSymbol} @ ${price}`);
+    }
+
+    function addTapePrint(price, size, side) {
+      const stream = document.getElementById('tapeStream');
+      const now = new Date();
+      const timeStr = `${String(now.getUTCHours()).padStart(2,'0')}:${String(now.getUTCMinutes()).padStart(2,'0')}:${String(now.getUTCSeconds()).padStart(2,'0')}`;
+      const div = document.createElement('div');
+      div.className = 'tape-row';
+      div.innerHTML = `
+        <span class="tape-time">${timeStr}</span>
+        <span class="${side === 'BUY' ? 'tape-price-buy' : 'tape-price-sell'}">${price}</span>
+        <span class="tape-size">${size}</span>
+      `;
+      stream.prepend(div);
+      if (stream.children.length > 25) {
+        stream.removeChild(stream.lastChild);
+      }
+    }
+
+    function closePosition(btn, sym) {
+      const row = btn.closest('tr');
+      row.style.backgroundColor = 'rgba(255, 71, 87, 0.2)';
+      setTimeout(() => {
+        row.remove();
+        const countElem = document.getElementById('posCount');
+        countElem.textContent = Math.max(0, parseInt(countElem.textContent) - 1);
+        triggerAlert(`POSITION CLOSED: ${sym}`);
+      }, 150);
+    }
+
+    function cancelOrder(btn) {
+      const row = btn.closest('tr');
+      row.remove();
+      const countElem = document.getElementById('ordCount');
+      countElem.textContent = Math.max(0, parseInt(countElem.textContent) - 1);
+      triggerAlert('ORDER CANCELLED');
+    }
+
+    // Tabs in positions bottom panel
+    function setPosTab(tab, btn) {
+      document.querySelectorAll('.pos-tab').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+
+      document.getElementById('positionsTableWrap').style.display = tab === 'POS' ? 'block' : 'none';
+      document.getElementById('workingOrdersWrap').style.display = tab === 'ORDERS' ? 'block' : 'none';
+      document.getElementById('auditLogWrap').style.display = tab === 'LOG' ? 'block' : 'none';
+    }
+
+    // Watchlist filtering
+    function filterWatchlist() {
+      const q = document.getElementById('watchFilter').value.toUpperCase();
+      const rows = document.querySelectorAll('#watchTable tbody tr');
+      rows.forEach(r => {
+        const text = r.innerText.toUpperCase();
+        r.style.display = text.includes(q) ? '' : 'none';
+      });
+    }
+
+    function setWatchCategory(cat, btn) {
+      document.querySelectorAll('.tab-strip .tab-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      const rows = document.querySelectorAll('#watchTable tbody tr');
+      rows.forEach(r => {
+        if (cat === 'ALL' || r.getAttribute('data-cat') === cat) {
+          r.style.display = '';
+        } else {
+          r.style.display = 'none';
+        }
+      });
+    }
+
+    function setTimeframe(tf, btn) {
+      document.querySelectorAll('.tf-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      initCandles(currentPrice);
+      drawChart();
+    }
+
+    // Terminal command line parser
+    document.getElementById('cmdInput').addEventListener('keydown', function(e) {
+      if (e.key === 'Enter') {
+        const cmd = this.value.trim().toUpperCase();
+        this.value = '';
+        if (cmd === '/BTC') switchInstrument('BTC/USD', 64821.50, 2.45);
+        else if (cmd === '/ETH') switchInstrument('ETH/USD', 3492.10, 1.82);
+        else if (cmd === '/NVDA') switchInstrument('NVDA', 128.40, 3.12);
+        else if (cmd === '/SPY') switchInstrument('SPY', 542.80, 0.48);
+        else if (cmd.startsWith('/BUY')) {
+          setOrderSide('BUY');
+          submitActiveOrder();
+        } else if (cmd.startsWith('/SELL')) {
+          setOrderSide('SELL');
+          submitActiveOrder();
+        } else if (cmd === '/HELP') {
+          alert('TRADING TERMINAL PRO COMMANDS:\n/BTC, /ETH, /NVDA, /SPY - Switch ticker\n/BUY [qty] - Place instant Buy\n/SELL [qty] - Place instant Sell\n/HELP - Show command prompt manual');
+        } else {
+          triggerAlert(`UNKNOWN CMD: ${cmd}. TYPE /HELP FOR SYNTAX.`);
+        }
+      }
+    });
+
+    // Real-time market tick simulator
+    setInterval(() => {
+      if (!candleData.length) return;
+      const last = candleData[candleData.length - 1];
+      const delta = (Math.random() - 0.49) * (currentPrice * 0.0006);
+      const newPrice = last.close + delta;
+      last.close = newPrice;
+      if (newPrice > last.high) last.high = newPrice;
+      if (newPrice < last.low) last.low = newPrice;
+
+      currentPrice = newPrice;
+      const markElem = document.getElementById('activeMarkPrice');
+      if (markElem) markElem.textContent = newPrice.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+
+      // Tick update in ticker & cards
+      const tickBTC = document.getElementById('tick-BTC');
+      const valBTC = document.getElementById('val-BTC');
+      if (activeSymbol === 'BTC/USD' && tickBTC && valBTC) {
+        tickBTC.textContent = newPrice.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+        valBTC.textContent = newPrice.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+      }
+
+      // Random print on the tape
+      if (Math.random() > 0.4) {
+        const side = delta >= 0 ? 'BUY' : 'SELL';
+        const size = (Math.random() * 1.5 + 0.05).toFixed(3);
+        addTapePrint(newPrice.toFixed(2), size, side);
+      }
+
+      drawChart();
+    }, 1800);
+
+    function simulateMarketSpike() {
+      if (!candleData.length) return;
+      const spike = (Math.random() - 0.3) * (currentPrice * 0.015);
+      const last = candleData[candleData.length - 1];
+      last.close += spike;
+      if (last.close > last.high) last.high = last.close;
+      if (last.close < last.low) last.low = last.close;
+      currentPrice = last.close;
+      drawChart();
+      triggerAlert(`VOLATILITY SPIKE INJECTED: ${(spike > 0 ? '+' : '') + spike.toFixed(2)}`);
+    }
+
+    function triggerAlert(msg) {
+      const banner = document.createElement('div');
+      banner.style.position = 'fixed';
+      banner.style.bottom = '30px';
+      banner.style.right = '30px';
+      banner.style.backgroundColor = '#141414';
+      banner.style.border = '1px solid #00D4AA';
+      banner.style.color = '#FFFFFF';
+      banner.style.fontFamily = 'JetBrains Mono, monospace';
+      banner.style.fontSize = '12px';
+      banner.style.padding = '8px 14px';
+      banner.style.zIndex = '9999';
+      banner.textContent = `[TERMINAL] ${msg}`;
+      document.body.appendChild(banner);
+      setTimeout(() => { banner.remove(); }, 2500);
+    }
+  </script>
+</body>
+</html>

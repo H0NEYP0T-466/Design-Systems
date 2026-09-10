@@ -1,0 +1,816 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>shadcn/ui — Beautifully Designed Components That You Can Copy and Paste</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&family=Geist:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    /* ==========================================================================
+       SHADCN DESIGN SYSTEM TOKENS & FOUNDATIONS
+       Strictly extracted from open-design/design-systems/shadcn/DESIGN.md
+       ========================================================================== */
+    :root {
+      /* Foundation Color Tokens */
+      --shad-primary: #000000;       /* Primary CTA & interactive signal */
+      --shad-secondary: #111111;     /* Secondary active states */
+      --shad-success: #16A34A;       /* Success positive feedback */
+      --shad-warning: #D97706;       /* Warning caution signals */
+      --shad-danger: #DC2626;        /* Danger / Destructive actions */
+      --shad-surface: #FFFFFF;       /* Large backgrounds, cards, sheets */
+      --shad-text: #111827;          /* Body copy high legibility */
+      --shad-neutral: #FFFFFF;       /* Neutral derived token */
+
+      /* Subdued Radix / Shadcn System Grays */
+      --shad-muted: #f4f4f5;
+      --shad-muted-foreground: #71717a;
+      --shad-border: #e4e4e7;
+      --shad-input: #e4e4e7;
+      --shad-card-bg: #FFFFFF;
+
+      /* Typography Scale: 12 / 14 / 16 / 20 / 24 / 32 */
+      --font-size-xs: 12px;
+      --font-size-sm: 14px;
+      --font-size-base: 16px;
+      --font-size-lg: 20px;
+      --font-size-xl: 24px;
+      --font-size-2xl: 32px;
+
+      /* Font Families */
+      --font-sans: "Geist", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      --font-display: "Geist", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      --font-mono: "Fira Code", ui-monospace, SFMono-Regular, Menlo, monospace;
+
+      /* Spacing Scale: 4 / 8 / 12 / 16 / 24 / 32 */
+      --space-1: 4px;
+      --space-2: 8px;
+      --space-3: 12px;
+      --space-4: 16px;
+      --space-5: 24px;
+      --space-6: 32px;
+      --space-8: 48px;
+      --space-10: 64px;
+
+      /* Radii & Shadows */
+      --radius-sm: 6px;
+      --radius-md: 8px;
+      --radius-lg: 10px;
+      --radius-pill: 9999px;
+
+      --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+      --shadow-card: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px -1px rgba(0, 0, 0, 0.1);
+      --shadow-modal: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Universal Reset & Clean White Canvas */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      font-size: 16px;
+      scroll-behavior: smooth;
+      background-color: var(--shad-surface);
+      color: var(--shad-text);
+    }
+
+    body {
+      font-family: var(--font-sans);
+      font-size: var(--font-size-base);
+      line-height: 1.5;
+      background-color: var(--shad-surface);
+      color: var(--shad-text);
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      overflow-x: hidden;
+    }
+
+    /* Typography Hierarchy (12 / 14 / 16 / 20 / 24 / 32) */
+    h1, .shad-h1 {
+      font-family: var(--font-display);
+      font-size: var(--font-size-2xl);
+      font-weight: 700;
+      letter-spacing: -0.8px;
+      line-height: 1.2;
+      color: var(--shad-primary);
+      margin-bottom: var(--space-4);
+    }
+
+    h2, .shad-h2 {
+      font-family: var(--font-display);
+      font-size: var(--font-size-xl);
+      font-weight: 600;
+      letter-spacing: -0.5px;
+      line-height: 1.3;
+      color: var(--shad-primary);
+      margin-bottom: var(--space-3);
+    }
+
+    h3, .shad-h3 {
+      font-family: var(--font-display);
+      font-size: var(--font-size-lg);
+      font-weight: 600;
+      letter-spacing: -0.3px;
+      line-height: 1.3;
+      color: var(--shad-primary);
+      margin-bottom: var(--space-2);
+    }
+
+    p, .shad-body {
+      font-family: var(--font-sans);
+      font-size: var(--font-size-base);
+      font-weight: 400;
+      line-height: 1.6;
+      color: var(--shad-text);
+    }
+
+    .shad-muted-text {
+      font-size: var(--font-size-sm);
+      color: var(--shad-muted-foreground);
+    }
+
+    .shad-code {
+      font-family: var(--font-mono);
+      font-size: 13px;
+      background-color: var(--shad-muted);
+      border: 1px solid var(--shad-border);
+      border-radius: var(--radius-sm);
+      padding: 2px 6px;
+    }
+
+    /* Layout Container */
+    .shad-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 var(--space-5);
+    }
+
+    /* ==========================================================================
+       TOP NAVIGATION BAR
+       Minimal, clean border-bottom, utility-first pattern
+       ========================================================================== */
+    .shad-navbar {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background-color: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(8px);
+      border-bottom: 1px solid var(--shad-border);
+      height: 60px;
+      display: flex;
+      align-items: center;
+    }
+    .shad-nav-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+    }
+    .shad-brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+      color: var(--shad-primary);
+      font-weight: 700;
+      font-size: 18px;
+    }
+    .shad-brand-icon {
+      width: 20px;
+      height: 20px;
+      background-color: var(--shad-primary);
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--shad-surface);
+      font-size: 11px;
+      font-weight: bold;
+    }
+    .shad-nav-links {
+      display: flex;
+      align-items: center;
+      gap: var(--space-5);
+      list-style: none;
+    }
+    .shad-nav-links a {
+      font-size: var(--font-size-sm);
+      font-weight: 500;
+      color: var(--shad-muted-foreground);
+      text-decoration: none;
+      transition: color 150ms ease;
+    }
+    .shad-nav-links a:hover {
+      color: var(--shad-primary);
+    }
+
+    /* ==========================================================================
+       BUTTONS & CONTROLS (Section 6)
+       Primary action uses #000000; secondary stay neutral/outline
+       ========================================================================== */
+    .shad-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      font-family: var(--font-sans);
+      font-size: var(--font-size-sm);
+      font-weight: 500;
+      height: 38px;
+      padding: 0 var(--space-4);
+      border-radius: var(--radius-md);
+      text-decoration: none;
+      cursor: pointer;
+      border: 1px solid transparent;
+      transition: all 180ms ease;
+      white-space: nowrap;
+    }
+
+    /* Primary Button: #000000 */
+    .shad-btn-primary {
+      background-color: var(--shad-primary);
+      color: var(--shad-surface);
+      border-color: var(--shad-primary);
+      box-shadow: var(--shadow-sm);
+    }
+    .shad-btn-primary:hover {
+      background-color: var(--shad-secondary);
+      opacity: 0.9;
+    }
+    .shad-btn-primary:focus-visible {
+      outline: 2px solid var(--shad-primary);
+      outline-offset: 2px;
+    }
+
+    /* Secondary / Outline Button */
+    .shad-btn-outline {
+      background-color: var(--shad-surface);
+      color: var(--shad-text);
+      border-color: var(--shad-border);
+      box-shadow: var(--shadow-sm);
+    }
+    .shad-btn-outline:hover {
+      background-color: var(--shad-muted);
+      color: var(--shad-primary);
+    }
+    .shad-btn-outline:focus-visible {
+      outline: 2px solid var(--shad-primary);
+      outline-offset: 2px;
+    }
+
+    /* Ghost Button */
+    .shad-btn-ghost {
+      background-color: transparent;
+      color: var(--shad-muted-foreground);
+    }
+    .shad-btn-ghost:hover {
+      background-color: var(--shad-muted);
+      color: var(--shad-primary);
+    }
+
+    /* Destructive Button: #DC2626 */
+    .shad-btn-danger {
+      background-color: var(--shad-danger);
+      color: var(--shad-surface);
+    }
+    .shad-btn-danger:hover {
+      background-color: #b91c1c;
+    }
+
+    /* Success Button: #16A34A */
+    .shad-btn-success {
+      background-color: var(--shad-success);
+      color: var(--shad-surface);
+    }
+    .shad-btn-success:hover {
+      background-color: #15803d;
+    }
+
+    /* Badge Primitive */
+    .shad-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: var(--font-size-xs);
+      font-weight: 500;
+      padding: 2px 10px;
+      border-radius: var(--radius-pill);
+      line-height: 1.4;
+      border: 1px solid transparent;
+    }
+    .shad-badge-default { background-color: var(--shad-primary); color: var(--shad-surface); }
+    .shad-badge-secondary { background-color: var(--shad-muted); color: var(--shad-text); border-color: var(--shad-border); }
+    .shad-badge-success { background-color: rgba(22, 163, 74, 0.1); color: var(--shad-success); border-color: rgba(22, 163, 74, 0.2); }
+    .shad-badge-warning { background-color: rgba(217, 119, 6, 0.1); color: var(--shad-warning); border-color: rgba(217, 119, 6, 0.2); }
+    .shad-badge-danger { background-color: rgba(220, 38, 38, 0.1); color: var(--shad-danger); border-color: rgba(220, 38, 38, 0.2); }
+
+    /* ==========================================================================
+       HERO SECTION (Minimalist Typography, geist-first)
+       ========================================================================== */
+    .shad-hero {
+      padding: var(--space-10) 0 var(--space-8) 0;
+      text-align: left;
+    }
+    .shad-hero-badge {
+      margin-bottom: var(--space-4);
+    }
+    .shad-hero-title {
+      font-size: 44px;
+      font-weight: 700;
+      letter-spacing: -1.2px;
+      line-height: 1.15;
+      color: var(--shad-primary);
+      max-width: 900px;
+      margin-bottom: var(--space-4);
+    }
+    .shad-hero-desc {
+      font-size: 18px;
+      color: var(--shad-muted-foreground);
+      max-width: 750px;
+      line-height: 1.6;
+      margin-bottom: var(--space-6);
+    }
+
+    /* CLI Code Box */
+    .shad-cli-box {
+      display: inline-flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      background-color: var(--shad-muted);
+      border: 1px solid var(--shad-border);
+      border-radius: var(--radius-md);
+      padding: 10px 16px;
+      font-family: var(--font-mono);
+      font-size: 13px;
+      color: var(--shad-primary);
+      max-width: 480px;
+      margin-top: var(--space-4);
+    }
+    .shad-copy-btn {
+      background: none;
+      border: none;
+      color: var(--shad-muted-foreground);
+      cursor: pointer;
+      font-size: 12px;
+    }
+    .shad-copy-btn:hover {
+      color: var(--shad-primary);
+    }
+
+    /* ==========================================================================
+       COMPONENT PREVIEW CARDS (Section 4 & 5)
+       ========================================================================== */
+    .shad-section {
+      padding: var(--space-8) 0;
+    }
+    .shad-card-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: var(--space-5);
+      margin-top: var(--space-5);
+    }
+    .shad-card {
+      background-color: var(--shad-surface);
+      border: 1px solid var(--shad-border);
+      border-radius: var(--radius-md);
+      padding: var(--space-5);
+      box-shadow: var(--shadow-sm);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: border-color 150ms ease;
+    }
+    .shad-card:hover {
+      border-color: #a1a1aa;
+    }
+    .shad-card-header {
+      margin-bottom: var(--space-4);
+    }
+
+    /* Tabs Component (Preview vs Code) */
+    .shad-tabs {
+      border: 1px solid var(--shad-border);
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      margin-top: var(--space-6);
+    }
+    .shad-tab-bar {
+      display: flex;
+      background-color: var(--shad-muted);
+      border-bottom: 1px solid var(--shad-border);
+      padding: 4px;
+      gap: 4px;
+    }
+    .shad-tab-btn {
+      background: none;
+      border: none;
+      padding: 6px 14px;
+      font-family: var(--font-sans);
+      font-size: var(--font-size-sm);
+      font-weight: 500;
+      color: var(--shad-muted-foreground);
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      transition: all 150ms ease;
+    }
+    .shad-tab-btn.active {
+      background-color: var(--shad-surface);
+      color: var(--shad-primary);
+      box-shadow: var(--shadow-sm);
+    }
+    .shad-tab-content {
+      padding: var(--space-5);
+      background-color: var(--shad-surface);
+    }
+
+    /* Input & Form Control (Section 6) */
+    .shad-input-group {
+      margin-bottom: var(--space-4);
+    }
+    .shad-label {
+      display: block;
+      font-size: var(--font-size-sm);
+      font-weight: 500;
+      color: var(--shad-text);
+      margin-bottom: var(--space-2);
+    }
+    .shad-input {
+      width: 100%;
+      height: 40px;
+      background-color: var(--shad-surface);
+      border: 1px solid var(--shad-input);
+      border-radius: var(--radius-md);
+      padding: 0 var(--space-3);
+      font-family: var(--font-sans);
+      font-size: var(--font-size-sm);
+      color: var(--shad-text);
+      outline: none;
+      transition: border-color 150ms ease, box-shadow 150ms ease;
+    }
+    .shad-input:focus {
+      border-color: var(--shad-primary);
+      box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Accordion Primitive */
+    .shad-accordion {
+      border-top: 1px solid var(--shad-border);
+      margin-top: var(--space-5);
+    }
+    .shad-accordion-item {
+      border-bottom: 1px solid var(--shad-border);
+    }
+    .shad-accordion-trigger {
+      width: 100%;
+      text-align: left;
+      background: none;
+      border: none;
+      padding: var(--space-4) 0;
+      font-family: var(--font-sans);
+      font-size: var(--font-size-base);
+      font-weight: 500;
+      color: var(--shad-primary);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      cursor: pointer;
+    }
+    .shad-accordion-trigger:hover {
+      text-decoration: underline;
+    }
+    .shad-accordion-body {
+      padding-bottom: var(--space-4);
+      font-size: var(--font-size-sm);
+      color: var(--shad-muted-foreground);
+      line-height: 1.6;
+    }
+
+    /* Toast Notification Preview */
+    .shad-toast {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border: 1px solid var(--shad-border);
+      border-radius: var(--radius-md);
+      padding: var(--space-3) var(--space-4);
+      background-color: var(--shad-surface);
+      box-shadow: var(--shadow-card);
+      margin-bottom: var(--space-3);
+    }
+
+    /* ==========================================================================
+       FOOTER
+       ========================================================================== */
+    .shad-footer {
+      border-top: 1px solid var(--shad-border);
+      padding: var(--space-8) 0 var(--space-6) 0;
+      margin-top: var(--space-10);
+    }
+    .shad-footer-inner {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
+    /* Responsive Breakdown */
+    @media (max-width: 900px) {
+      .shad-card-grid {
+        grid-template-columns: 1fr;
+      }
+      .shad-hero-title {
+        font-size: 32px;
+      }
+    }
+    @media (max-width: 640px) {
+      .shad-nav-links {
+        display: none;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ==========================================================================
+       NAVIGATION BAR
+       ========================================================================== -->
+  <header class="shad-navbar">
+    <div class="shad-container shad-nav-inner">
+      <a href="#" class="shad-brand">
+        <div class="shad-brand-icon">&#9650;</div>
+        <span>shadcn/ui</span>
+      </a>
+
+      <nav>
+        <ul class="shad-nav-links">
+          <li><a href="#docs">Documentation</a></li>
+          <li><a href="#components">Components</a></li>
+          <li><a href="#blocks">Blocks</a></li>
+          <li><a href="#themes">Themes</a></li>
+          <li><a href="#examples">Examples</a></li>
+        </ul>
+      </nav>
+
+      <div style="display: flex; gap: 8px; align-items: center;">
+        <a href="#components" class="shad-btn shad-btn-outline">Browse UI</a>
+        <a href="#cli" class="shad-btn shad-btn-primary">Get Started</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- ==========================================================================
+       HERO SECTION
+       ========================================================================== -->
+  <main class="shad-container">
+    <section class="shad-hero" id="docs">
+      <div class="shad-hero-badge">
+        <span class="shad-badge shad-badge-secondary">
+          <span style="width: 6px; height: 6px; border-radius: 50%; background-color: var(--shad-success);"></span>
+          shadcn/ui 2.0 is now available
+        </span>
+      </div>
+
+      <h1 class="shad-hero-title">
+        Build your component library.<br>Copy, paste, and customize.
+      </h1>
+
+      <p class="shad-hero-desc">
+        Accessible and customizable components that you can copy and paste into your apps. Free. Open Source. Built with Radix UI and Tailwind CSS under the hood.
+      </p>
+
+      <div style="display: flex; gap: 12px; align-items: center; flex-wrap: wrap;">
+        <a href="#components" class="shad-btn shad-btn-primary">Browse Components</a>
+        <a href="#cli" class="shad-btn shad-btn-outline">GitHub Repository</a>
+      </div>
+
+      <div class="shad-cli-box" id="cli">
+        <span><span style="color: var(--shad-muted-foreground);">$</span> npx shadcn@latest init</span>
+        <button class="shad-copy-btn" onclick="navigator.clipboard.writeText('npx shadcn@latest init'); alert('Copied CLI init command!');">
+          Copy
+        </button>
+      </div>
+    </section>
+
+    <!-- ==========================================================================
+         INTERACTIVE TABS & COMPONENT PREVIEW
+         ========================================================================== -->
+    <section class="shad-section" id="components">
+      <h2 class="shad-h2">Primitive Showcase</h2>
+      <p class="shad-muted-text">Zero-runtime overhead with maximum keyboard accessibility.</p>
+
+      <div class="shad-tabs">
+        <div class="shad-tab-bar">
+          <button class="shad-tab-btn active" onclick="switchShadTab(event, 'preview-pane')">Preview</button>
+          <button class="shad-tab-btn" onclick="switchShadTab(event, 'code-pane')">Code</button>
+        </div>
+
+        <div id="preview-pane" class="shad-tab-content">
+          <!-- Button Matrix -->
+          <div style="margin-bottom: var(--space-5);">
+            <span class="shad-label">BUTTON MATRIX</span>
+            <div style="display: flex; gap: 12px; align-items: center; flex-wrap: wrap;">
+              <button class="shad-btn shad-btn-primary">Primary (Black)</button>
+              <button class="shad-btn shad-btn-outline">Secondary (Outline)</button>
+              <button class="shad-btn shad-btn-ghost">Ghost</button>
+              <button class="shad-btn shad-btn-danger">Destructive</button>
+              <button class="shad-btn shad-btn-success">Success</button>
+            </div>
+          </div>
+
+          <!-- Badge Matrix -->
+          <div style="margin-bottom: var(--space-5);">
+            <span class="shad-label">BADGE STATUS TOKENS</span>
+            <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
+              <span class="shad-badge shad-badge-default">Primary #000000</span>
+              <span class="shad-badge shad-badge-secondary">Secondary #111111</span>
+              <span class="shad-badge shad-badge-success">Success #16A34A</span>
+              <span class="shad-badge shad-badge-warning">Warning #D97706</span>
+              <span class="shad-badge shad-badge-danger">Danger #DC2626</span>
+            </div>
+          </div>
+
+          <!-- Toast Preview -->
+          <div>
+            <span class="shad-label">TOAST NOTIFICATIONS</span>
+            <div class="shad-toast">
+              <div>
+                <strong style="font-size: 14px; display: block;">Component Installed</strong>
+                <span class="shad-muted-text">button.tsx added to your @/components/ui</span>
+              </div>
+              <button class="shad-btn shad-btn-outline" style="height: 30px; padding: 0 10px; font-size: 12px;">Undo</button>
+            </div>
+          </div>
+        </div>
+
+        <div id="code-pane" class="shad-tab-content" style="display: none; background-color: #fafafa;">
+          <pre class="shad-code" style="display: block; padding: 16px; line-height: 1.6; font-size: 13px;">
+import { Button } from "@/components/ui/button"
+import { Badge } from "@/components/ui/badge"
+
+export function ComponentDemo() {
+  return (
+    &lt;div className="flex gap-4"&gt;
+      &lt;Button variant="default"&gt;Primary&lt;/Button&gt;
+      &lt;Button variant="outline"&gt;Outline&lt;/Button&gt;
+      &lt;Badge variant="success"&gt;Verified&lt;/Badge&gt;
+    &lt;/div&gt;
+  )
+}</pre>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==========================================================================
+         CARD MODULES & FORM INPUTS (Section 4 & 6)
+         ========================================================================== -->
+    <section class="shad-section" id="blocks">
+      <h2 class="shad-h2">Interactive Card Modules</h2>
+      <p class="shad-muted-text">Consistent internal padding, predictable grids, and crisp focus-visible states.</p>
+
+      <div class="shad-card-grid">
+        <!-- Card 1: Create Account Form -->
+        <div class="shad-card">
+          <div>
+            <div class="shad-card-header">
+              <h3 class="shad-h3">Create an account</h3>
+              <p class="shad-muted-text">Enter your work email below to create your organization workspace.</p>
+            </div>
+            <form onsubmit="event.preventDefault(); alert('Account registered!');">
+              <div class="shad-input-group">
+                <label class="shad-label" for="email">Email</label>
+                <input type="email" id="email" class="shad-input" placeholder="name@domain.com" required>
+              </div>
+              <div class="shad-input-group">
+                <label class="shad-label" for="password">Password</label>
+                <input type="password" id="password" class="shad-input" placeholder="••••••••" required>
+              </div>
+              <button type="submit" class="shad-btn shad-btn-primary" style="width: 100%; margin-top: 8px;">
+                Create Account
+              </button>
+            </form>
+          </div>
+        </div>
+
+        <!-- Card 2: Team Members -->
+        <div class="shad-card">
+          <div>
+            <div class="shad-card-header">
+              <h3 class="shad-h3">Team Members</h3>
+              <p class="shad-muted-text">Invite your engineering colleagues to collaborate on design tokens.</p>
+            </div>
+            <div style="display: flex; flex-direction: column; gap: 16px; margin-top: 12px;">
+              <div style="display: flex; justify-content: space-between; align-items: center;">
+                <div>
+                  <strong style="font-size: 14px; display: block;">Sofia Davis</strong>
+                  <span class="shad-muted-text">sofia@example.com</span>
+                </div>
+                <span class="shad-badge shad-badge-secondary">Owner</span>
+              </div>
+              <div style="display: flex; justify-content: space-between; align-items: center;">
+                <div>
+                  <strong style="font-size: 14px; display: block;">Jackson Lee</strong>
+                  <span class="shad-muted-text">jackson@example.com</span>
+                </div>
+                <span class="shad-badge shad-badge-secondary">Developer</span>
+              </div>
+            </div>
+          </div>
+          <button class="shad-btn shad-btn-outline" style="width: 100%; margin-top: 24px;">
+            + Invite Collaborator
+          </button>
+        </div>
+
+        <!-- Card 3: Notifications -->
+        <div class="shad-card">
+          <div>
+            <div class="shad-card-header">
+              <h3 class="shad-h3">Notifications</h3>
+              <p class="shad-muted-text">Choose what triggers security and audit log dispatches.</p>
+            </div>
+            <div style="display: flex; flex-direction: column; gap: 14px;">
+              <div style="display: flex; align-items: flex-start; gap: 10px;">
+                <input type="checkbox" id="n1" checked style="accent-color: var(--shad-primary); margin-top: 4px;">
+                <label for="n1" style="font-size: 14px; line-height: 1.4;">
+                  <strong>Everything</strong><br>
+                  <span class="shad-muted-text">Email alerts on all pull request merges</span>
+                </label>
+              </div>
+              <div style="display: flex; align-items: flex-start; gap: 10px;">
+                <input type="checkbox" id="n2" style="accent-color: var(--shad-primary); margin-top: 4px;">
+                <label for="n2" style="font-size: 14px; line-height: 1.4;">
+                  <strong>Security Only</strong><br>
+                  <span class="shad-muted-text">Dispatches on vulnerability warnings</span>
+                </label>
+              </div>
+            </div>
+          </div>
+          <button class="shad-btn shad-btn-outline" style="width: 100%; margin-top: 24px;">
+            Save Preferences
+          </button>
+        </div>
+      </div>
+
+      <!-- Accordion Module -->
+      <div class="shad-accordion">
+        <div class="shad-accordion-item">
+          <button class="shad-accordion-trigger" onclick="toggleAccordion(this)">
+            <span>Is shadcn/ui an npm package library?</span>
+            <span>&darr;</span>
+          </button>
+          <div class="shad-accordion-body">
+            No. It is not a component library in the traditional sense. It's a collection of re-usable components that you copy and paste into your applications. You own the source code.
+          </div>
+        </div>
+        <div class="shad-accordion-item">
+          <button class="shad-accordion-trigger" onclick="toggleAccordion(this)">
+            <span>Which frameworks and bundlers are supported?</span>
+            <span>&darr;</span>
+          </button>
+          <div class="shad-accordion-body" style="display: none;">
+            You can use shadcn/ui with Next.js, Vite, Remix, Astro, Gatsby, or Laravel. Any framework that supports React and Tailwind CSS works seamlessly.
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ==========================================================================
+       FOOTER
+       ========================================================================== -->
+  <footer class="shad-footer">
+    <div class="shad-container shad-footer-inner">
+      <span class="shad-muted-text">&copy; 2026 shadcn/ui. Built with clean, utility-first design principles.</span>
+      <div style="display: flex; gap: 16px;">
+        <a href="#" class="shad-muted-text" style="text-decoration: underline;">GitHub</a>
+        <a href="#" class="shad-muted-text" style="text-decoration: underline;">Twitter / X</a>
+        <a href="#" class="shad-muted-text" style="text-decoration: underline;">Discord</a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    function switchShadTab(evt, paneId) {
+      document.querySelectorAll('.shad-tab-btn').forEach(b => b.classList.remove('active'));
+      evt.currentTarget.classList.add('active');
+
+      document.querySelectorAll('.shad-tab-content').forEach(p => p.style.display = 'none');
+      document.getElementById(paneId).style.display = 'block';
+    }
+
+    function toggleAccordion(btn) {
+      const body = btn.nextElementSibling;
+      if (body.style.display === 'none') {
+        body.style.display = 'block';
+      } else {
+        body.style.display = 'none';
+      }
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HUD — Combat Avionics Head-Up Display</title>
+  <meta name="description" content="Authentic implementation of the HUD design system with phosphor green avionics telemetry, artificial horizon pitch ladders, airspeed/altitude tapes, and zero ambiguity data readouts.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Inter:wght@600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      /* Surface & Canvas Tokens */
+      --color-bg: #0A0A0A;
+      --color-surface: #111316;
+      --color-border: #1E2328;
+
+      /* Data Palette Tokens */
+      --data-primary: #00FF41;   /* Active readouts, critical data */
+      --data-secondary: #7FFF00; /* Standby/dimmed fields */
+      --data-tertiary: #5A9A5A;  /* Grid lines, pitch ladders, arcs */
+      --data-warning: #FFB800;   /* Caution advisories */
+      --data-alert: #FF3B3B;     /* Critical faults */
+
+      /* Typography */
+      --font-mono: 'JetBrains Mono', monospace;
+      --font-ui: 'Inter', sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      user-select: none;
+    }
+
+    body {
+      background-color: var(--color-bg);
+      color: var(--data-primary);
+      font-family: var(--font-mono);
+      height: 100vh;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* Ambient CRT Scanline Overlay */
+    .hud-crt-lines {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.01), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.01));
+      background-size: 100% 2px, 3px 100%;
+      z-index: 99;
+    }
+
+    /* Top Master Heading Bar */
+    .hud-azimuth-bar {
+      height: 48px;
+      border-bottom: 1px solid var(--color-border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 24px;
+      background: rgba(17, 19, 22, 0.8);
+      z-index: 10;
+    }
+
+    .azimuth-heading-tape {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      font-family: var(--font-mono);
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    .azimuth-caret {
+      color: var(--data-warning);
+      font-size: 18px;
+    }
+
+    .hud-status-strip {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .hud-status-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-family: var(--font-ui);
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--data-tertiary);
+    }
+
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--data-primary);
+    }
+    .status-dot.warning { background: var(--data-warning); }
+    .status-dot.alert { background: var(--data-alert); }
+
+    /* Main HUD Screen Overlay (Glass Cockpit) */
+    .cockpit-viewport {
+      flex: 1;
+      position: relative;
+      display: grid;
+      grid-template-columns: 180px 1fr 180px;
+      padding: 16px;
+      gap: 16px;
+    }
+
+    /* Left: Airspeed Ladder Tape */
+    .tape-ladder {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      border: 1px solid var(--color-border);
+      background: rgba(17, 19, 22, 0.4);
+      padding: 16px;
+      border-radius: 4px;
+    }
+
+    .tape-box {
+      border: 2px solid var(--data-primary);
+      padding: 8px;
+      text-align: center;
+      margin: 12px 0;
+      background: rgba(0, 255, 65, 0.05);
+    }
+
+    .tape-val {
+      font-size: 32px;
+      font-weight: 700;
+      line-height: 1;
+    }
+
+    .tape-unit {
+      font-family: var(--font-ui);
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      color: var(--data-tertiary);
+      letter-spacing: 0.1em;
+      margin-top: 4px;
+    }
+
+    .tick-ladder {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      color: var(--data-tertiary);
+      font-size: 12px;
+    }
+
+    .tick-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .tick-line {
+      height: 1px;
+      width: 16px;
+      background: var(--data-tertiary);
+    }
+
+    /* Center: Pitch Ladder & Crosshair Reticle */
+    .center-reticle-canvas {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .crosshair {
+      position: absolute;
+      width: 60px;
+      height: 60px;
+      border: 1px dashed var(--data-tertiary);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .crosshair::before {
+      content: '';
+      position: absolute;
+      width: 16px;
+      height: 2px;
+      background: var(--data-primary);
+    }
+
+    .crosshair::after {
+      content: '';
+      position: absolute;
+      height: 16px;
+      width: 2px;
+      background: var(--data-primary);
+    }
+
+    .pitch-ladder {
+      display: flex;
+      flex-direction: column;
+      gap: 32px;
+      align-items: center;
+      width: 240px;
+      transition: transform 0.1s linear;
+    }
+
+    .pitch-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+      color: var(--data-tertiary);
+      font-size: 11px;
+      font-weight: 700;
+    }
+
+    .pitch-line {
+      height: 2px;
+      width: 80px;
+      background: var(--data-tertiary);
+    }
+
+    .pitch-bar.horizon {
+      color: var(--data-primary);
+    }
+    .pitch-bar.horizon .pitch-line {
+      background: var(--data-primary);
+      height: 2px;
+      width: 100px;
+    }
+
+    /* Flight Metrics Overlay in Center */
+    .telemetry-row {
+      position: absolute;
+      bottom: 24px;
+      display: flex;
+      gap: 32px;
+      background: rgba(17, 19, 22, 0.85);
+      border: 1px solid var(--color-border);
+      padding: 10px 24px;
+      border-radius: 4px;
+    }
+
+    .metric-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .metric-label {
+      font-family: var(--font-ui);
+      font-size: 10px;
+      font-weight: 700;
+      color: var(--data-tertiary);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+    }
+
+    .metric-val {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--data-primary);
+    }
+
+    /* Bottom Control Cockpit Panel */
+    .cockpit-controls {
+      height: 160px;
+      background: var(--color-surface);
+      border-top: 1px solid var(--color-border);
+      padding: 16px 24px;
+      display: grid;
+      grid-template-columns: 2fr 1.5fr 1fr;
+      gap: 24px;
+      align-items: center;
+      z-index: 10;
+    }
+
+    .control-group-title {
+      font-family: var(--font-ui);
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--data-tertiary);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      margin-bottom: 8px;
+    }
+
+    .control-buttons-row {
+      display: flex;
+      gap: 8px;
+    }
+
+    .hud-btn {
+      background: var(--color-bg);
+      border: 1px solid var(--data-tertiary);
+      color: var(--data-primary);
+      padding: 8px 14px;
+      font-family: var(--font-mono);
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      border-radius: 2px;
+      text-transform: uppercase;
+      transition: all 0.1s ease;
+    }
+
+    .hud-btn:hover {
+      background: rgba(0, 255, 65, 0.1);
+      border-color: var(--data-primary);
+    }
+
+    .hud-btn.active {
+      background: var(--data-primary);
+      color: var(--color-bg);
+      border-color: var(--data-primary);
+    }
+
+    .hud-btn.danger {
+      border-color: var(--data-alert);
+      color: var(--data-alert);
+    }
+    .hud-btn.danger:hover {
+      background: rgba(255, 59, 59, 0.15);
+    }
+
+    .throttle-slider {
+      width: 100%;
+      accent-color: var(--data-primary);
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="hud-crt-lines"></div>
+
+  <!-- Master Azimuth Heading Bar -->
+  <header class="hud-azimuth-bar">
+    <div class="azimuth-heading-tape">
+      <span style="color: var(--data-tertiary);">330</span>
+      <span style="color: var(--data-tertiary);">340</span>
+      <span style="color: var(--data-tertiary);">350</span>
+      <span class="azimuth-caret">▼</span>
+      <span style="color: var(--data-primary); font-size: 16px;" id="headingDisplay">360° N</span>
+      <span style="color: var(--data-tertiary);">010</span>
+      <span style="color: var(--data-tertiary);">020</span>
+      <span style="color: var(--data-tertiary);">030</span>
+    </div>
+
+    <div class="hud-status-strip">
+      <div class="hud-status-item">
+        <span class="status-dot"></span>
+        <span>RADAR: ACQ</span>
+      </div>
+      <div class="hud-status-item">
+        <span class="status-dot"></span>
+        <span>IFF: FRIENDLY</span>
+      </div>
+      <div class="hud-status-item">
+        <span class="status-dot warning"></span>
+        <span>TACAN: STBY</span>
+      </div>
+      <div class="hud-status-item">
+        <span class="status-dot alert" id="masterCaution"></span>
+        <span style="color: var(--data-alert);" id="masterCautionText">MASTER ARM: READY</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- Cockpit Viewport -->
+  <main class="cockpit-viewport">
+    <!-- Airspeed Tape (Left) -->
+    <div class="tape-ladder">
+      <div class="tick-ladder">
+        <div class="tick-row"><span>480</span><div class="tick-line"></div></div>
+        <div class="tick-row"><span>450</span><div class="tick-line"></div></div>
+        <div class="tick-row"><span>420</span><div class="tick-line"></div></div>
+      </div>
+
+      <div class="tape-box">
+        <div class="tape-val" id="speedDisplay">420</div>
+        <div class="tape-unit">KNOTS CALIBRATED</div>
+      </div>
+
+      <div class="tick-ladder">
+        <div class="tick-row"><span>390</span><div class="tick-line"></div></div>
+        <div class="tick-row"><span>360</span><div class="tick-line"></div></div>
+        <div class="tick-row"><span>330</span><div class="tick-line"></div></div>
+      </div>
+    </div>
+
+    <!-- Center Artificial Horizon & Pitch Ladder -->
+    <div class="center-reticle-canvas">
+      <div class="crosshair"></div>
+
+      <div class="pitch-ladder" id="pitchLadder">
+        <div class="pitch-bar">
+          <span>+20</span>
+          <div class="pitch-line"></div>
+          <span>+20</span>
+        </div>
+        <div class="pitch-bar">
+          <span>+10</span>
+          <div class="pitch-line"></div>
+          <span>+10</span>
+        </div>
+        <div class="pitch-bar horizon">
+          <span>00</span>
+          <div class="pitch-line"></div>
+          <span>00</span>
+        </div>
+        <div class="pitch-bar">
+          <span>-10</span>
+          <div class="pitch-line" style="border-top: 1px dashed var(--data-tertiary); background: transparent;"></div>
+          <span>-10</span>
+        </div>
+        <div class="pitch-bar">
+          <span>-20</span>
+          <div class="pitch-line" style="border-top: 1px dashed var(--data-tertiary); background: transparent;"></div>
+          <span>-20</span>
+        </div>
+      </div>
+
+      <!-- Telemetry Status Bar -->
+      <div class="telemetry-row">
+        <div class="metric-item">
+          <span class="metric-label">G-LOAD</span>
+          <span class="metric-val" id="gVal">3.8 G</span>
+        </div>
+        <div class="metric-item">
+          <span class="metric-label">MACH</span>
+          <span class="metric-val" id="machVal">0.72 M</span>
+        </div>
+        <div class="metric-item">
+          <span class="metric-label">WAYPOINT</span>
+          <span class="metric-val" style="color: var(--data-warning);">WP-04</span>
+        </div>
+        <div class="metric-item">
+          <span class="metric-label">RANGE / ETA</span>
+          <span class="metric-val">14.2 NM / 01:42</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Altitude Tape (Right) -->
+    <div class="tape-ladder">
+      <div class="tick-ladder">
+        <div class="tick-row"><div class="tick-line"></div><span>18500</span></div>
+        <div class="tick-row"><div class="tick-line"></div><span>18000</span></div>
+        <div class="tick-row"><div class="tick-line"></div><span>17500</span></div>
+      </div>
+
+      <div class="tape-box">
+        <div class="tape-val" id="altDisplay">17,450</div>
+        <div class="tape-unit">BARO ALT (FT)</div>
+      </div>
+
+      <div class="tick-ladder">
+        <div class="tick-row"><div class="tick-line"></div><span>17000</span></div>
+        <div class="tick-row"><div class="tick-line"></div><span>16500</span></div>
+        <div class="tick-row"><div class="tick-line"></div><span>16000</span></div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Cockpit Control Deck -->
+  <footer class="cockpit-controls">
+    <div>
+      <div class="control-group-title">AVIONICS ENGINE THROTTLE & PITCH</div>
+      <input type="range" class="throttle-slider" min="200" max="850" value="420" oninput="updateAirspeed(this.value)">
+      <div style="display: flex; justify-content: space-between; font-size: 11px; color: var(--data-tertiary); margin-top: 4px;">
+        <span>MILITARY POWER (200 KT)</span>
+        <span>AFTERBURNER (850 KT)</span>
+      </div>
+    </div>
+
+    <div>
+      <div class="control-group-title">FLIGHT MODES</div>
+      <div class="control-buttons-row">
+        <button class="hud-btn active" onclick="setFlightMode('NAV', this)">NAV</button>
+        <button class="hud-btn" onclick="setFlightMode('A-G', this)">AIR-TO-GROUND</button>
+        <button class="hud-btn" onclick="setFlightMode('A-A', this)">AIR-TO-AIR</button>
+      </div>
+    </div>
+
+    <div>
+      <div class="control-group-title">SYSTEM ALERTS</div>
+      <button class="hud-btn danger" style="width: 100%;" onclick="toggleEmergency()">TRIGGER WARNING</button>
+    </div>
+  </footer>
+
+  <script>
+    function updateAirspeed(val) {
+      document.getElementById('speedDisplay').textContent = val;
+      const mach = (val / 580).toFixed(2);
+      document.getElementById('machVal').textContent = `${mach} M`;
+      const g = (2.0 + (val / 300)).toFixed(1);
+      document.getElementById('gVal').textContent = `${g} G`;
+    }
+
+    function setFlightMode(mode, btn) {
+      document.querySelectorAll('.cockpit-controls .hud-btn').forEach(b => {
+        if (!b.classList.contains('danger')) b.classList.remove('active');
+      });
+      btn.classList.add('active');
+    }
+
+    let isAlert = false;
+    function toggleEmergency() {
+      isAlert = !isAlert;
+      const caution = document.getElementById('masterCaution');
+      const text = document.getElementById('masterCautionText');
+      if (isAlert) {
+        caution.className = 'status-dot alert';
+        text.textContent = 'PULL UP • TERRAIN PULL UP';
+        text.style.color = 'var(--data-alert)';
+      } else {
+        caution.className = 'status-dot';
+        text.textContent = 'MASTER ARM: READY';
+        text.style.color = 'var(--data-primary)';
+      }
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vercel — Build and deploy the best Web experiences</title>
+  <meta name="description" content="Frontend deployment. Black and white precision, Geist typography, shadow-as-border architecture, and Develop-Preview-Ship workflow.">
+
+  <!-- Font: Geist Sans & Geist Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@400;500;600&family=Geist:wght@400;500;600&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      /* Colors from vercel/DESIGN.md */
+      --vc-black: #171717;
+      --vc-white: #ffffff;
+      --vc-gray-600: #4d4d4d;
+      --vc-gray-500: #666666;
+      --vc-gray-400: #808080;
+      --vc-gray-100: #ebebeb;
+      --vc-gray-50: #fafafa;
+
+      /* Workflow Specific Accents */
+      --vc-develop-blue: #0a72ef;
+      --vc-preview-pink: #de1d8d;
+      --vc-ship-red: #ff5b4f;
+      --vc-focus-blue: #0072f5;
+
+      /* Shadow-as-Border Technique (Replaces CSS borders) */
+      --vc-border-shadow: 0px 0px 0px 1px rgba(0, 0, 0, 0.08);
+      --vc-card-shadow: 0px 0px 0px 1px rgba(0, 0, 0, 0.08), 0px 2px 2px rgba(0, 0, 0, 0.04), 0px 0px 0px 1px #fafafa;
+      --vc-card-hover: 0px 0px 0px 1px rgba(0, 0, 0, 0.14), 0px 4px 8px rgba(0, 0, 0, 0.06);
+
+      /* Typography */
+      --font-geist: 'Geist', -apple-system, BlinkMacSystemFont, sans-serif;
+      --font-mono: 'Geist Mono', monospace;
+
+      /* Radii: 6px standard buttons, 8px cards, 9999px pills for badges only */
+      --rad-btn: 6px;
+      --rad-card: 8px;
+      --rad-feature: 12px;
+      --rad-pill: 9999px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-feature-settings: "liga" 1; /* OpenType ligatures enabled globally */
+    }
+
+    body {
+      background-color: var(--vc-white);
+      color: var(--vc-black);
+      font-family: var(--font-geist);
+      font-size: 16px;
+      line-height: 1.50;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+
+    /* Navigation */
+    header.vc-header {
+      position: sticky;
+      top: 0;
+      background: rgba(255, 255, 255, 0.85);
+      backdrop-filter: blur(12px);
+      box-shadow: var(--vc-border-shadow);
+      z-index: 1000;
+    }
+    .header-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 16px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .vc-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+      color: var(--vc-black);
+      font-weight: 600;
+      font-size: 18px;
+    }
+    .vc-triangle {
+      width: 0;
+      height: 0;
+      border-left: 10px solid transparent;
+      border-right: 10px solid transparent;
+      border-bottom: 17px solid var(--vc-black);
+    }
+    .vc-nav-links {
+      display: flex;
+      gap: 28px;
+      list-style: none;
+    }
+    .vc-nav-links a {
+      color: var(--vc-black);
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 500;
+      transition: opacity 150ms ease;
+    }
+    .vc-nav-links a:hover {
+      opacity: 0.6;
+    }
+
+    /* Buttons (6px radius, NOT pill for actions) */
+    .btn-vc {
+      font-family: var(--font-geist);
+      font-size: 14px;
+      font-weight: 500;
+      padding: 8px 16px;
+      border-radius: var(--rad-btn);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      text-decoration: none;
+      transition: all 150ms ease;
+      border: none;
+    }
+    .btn-vc-dark {
+      background: var(--vc-black);
+      color: var(--vc-white);
+    }
+    .btn-vc-dark:hover {
+      background: #262626;
+    }
+    .btn-vc-light {
+      background: var(--vc-white);
+      color: var(--vc-black);
+      box-shadow: var(--vc-border-shadow);
+    }
+    .btn-vc-light:hover {
+      box-shadow: 0px 0px 0px 1px rgba(0, 0, 0, 0.2);
+    }
+    .btn-vc:focus-visible {
+      outline: 2px solid var(--vc-focus-blue);
+      outline-offset: 2px;
+    }
+
+    /* Pill Badges (9999px) */
+    .pill-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: #ebf5ff;
+      color: #0068d6;
+      font-size: 12px;
+      font-weight: 500;
+      padding: 3px 12px;
+      border-radius: var(--rad-pill);
+      margin-bottom: 20px;
+    }
+
+    /* Container */
+    .vc-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 96px 24px;
+    }
+
+    /* Hero Section */
+    .hero-center {
+      text-align: center;
+      margin-bottom: 96px;
+    }
+    .hero-headline {
+      font-size: clamp(40px, 6vw, 56px);
+      font-weight: 600;
+      line-height: 1.05;
+      letter-spacing: -2.4px; /* Signature Vercel compression */
+      color: var(--vc-black);
+      max-width: 860px;
+      margin: 0 auto 24px;
+    }
+    .hero-deck {
+      font-size: 20px;
+      color: var(--vc-gray-600);
+      line-height: 1.6;
+      max-width: 680px;
+      margin: 0 auto 36px;
+    }
+    .hero-actions {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+    }
+
+    /* Workflow Pipeline Section */
+    .workflow-section {
+      margin-top: 80px;
+    }
+    .pipeline-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 24px;
+      margin-top: 32px;
+    }
+    .pipeline-card {
+      background: var(--vc-white);
+      box-shadow: var(--vc-card-shadow);
+      border-radius: var(--rad-card);
+      padding: 32px;
+      transition: box-shadow 150ms ease;
+    }
+    .pipeline-card:hover {
+      box-shadow: var(--vc-card-hover);
+    }
+    .step-tag {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 12px;
+      display: inline-block;
+    }
+    .step-blue { color: var(--vc-develop-blue); }
+    .step-pink { color: var(--vc-preview-pink); }
+    .step-red { color: var(--vc-ship-red); }
+
+    .step-title {
+      font-size: 24px;
+      font-weight: 600;
+      letter-spacing: -0.96px;
+      margin-bottom: 10px;
+    }
+    .step-desc {
+      font-size: 15px;
+      color: var(--vc-gray-600);
+      line-height: 1.5;
+    }
+
+    /* Interactive Deployment Terminal Console */
+    .deploy-console {
+      background: #000000;
+      color: #F5F5F5;
+      border-radius: var(--rad-feature);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+      padding: 32px;
+      margin-top: 80px;
+      font-family: var(--font-mono);
+    }
+    .console-header-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid #222222;
+      padding-bottom: 16px;
+      margin-bottom: 20px;
+    }
+    .terminal-dots {
+      display: flex;
+      gap: 8px;
+    }
+    .dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+    }
+    .console-output {
+      font-size: 14px;
+      line-height: 1.8;
+      min-height: 140px;
+    }
+    .btn-deploy {
+      background: #FFFFFF;
+      color: #000000;
+      font-family: var(--font-geist);
+      font-weight: 500;
+      font-size: 13px;
+      padding: 8px 18px;
+      border-radius: var(--rad-btn);
+      border: none;
+      cursor: pointer;
+    }
+    .btn-deploy:hover {
+      background: #EBEBEB;
+    }
+
+    /* Metric Cards Grid */
+    .metrics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 24px;
+      margin-top: 64px;
+    }
+    .metric-box {
+      background: var(--vc-white);
+      box-shadow: var(--vc-card-shadow);
+      border-radius: var(--rad-card);
+      padding: 28px;
+    }
+    .metric-number {
+      font-size: 48px;
+      font-weight: 600;
+      letter-spacing: -2.4px;
+      line-height: 1.0;
+      margin-bottom: 8px;
+    }
+
+    /* Footer */
+    footer.vc-footer {
+      box-shadow: var(--vc-border-shadow);
+      background: var(--vc-white);
+      padding: 64px 24px;
+      margin-top: 96px;
+    }
+    .footer-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 20px;
+      font-size: 14px;
+      color: var(--vc-gray-500);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navigation -->
+  <header class="vc-header">
+    <div class="header-inner">
+      <a href="#" class="vc-logo">
+        <div class="vc-triangle"></div>
+        <span>Vercel</span>
+      </a>
+
+      <ul class="vc-nav-links">
+        <li><a href="#pipeline">Workflow</a></li>
+        <li><a href="#console">Deploy Console</a></li>
+        <li><a href="#metrics">Edge Network</a></li>
+        <li><a href="#pricing">Enterprise</a></li>
+      </ul>
+
+      <div style="display:flex; gap:10px; align-items:center;">
+        <button class="btn-vc btn-vc-light" onclick="openLogin()">Log in</button>
+        <button class="btn-vc btn-vc-dark" onclick="triggerDeploy()">Start Deploying</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="vc-container">
+    <!-- Hero Section -->
+    <section class="hero-center">
+      <div class="pill-badge">
+        <span>▲</span> Vercel Next.js 15 & Fluid Compute Live
+      </div>
+      <h1 class="hero-headline">Build and deploy the best Web experiences.</h1>
+      <p class="hero-deck">
+        Vercel's Frontend Cloud provides developer tools and cloud infrastructure to build, scale, and secure a faster, more personalized web.
+      </p>
+      <div class="hero-actions">
+        <button class="btn-vc btn-vc-dark" onclick="triggerDeploy()">Start Deploying</button>
+        <button class="btn-vc btn-vc-light" onclick="scrollToConsole()">Simulate Git Push</button>
+      </div>
+    </section>
+
+    <!-- Workflow Pipeline: Develop -> Preview -> Ship -->
+    <section class="workflow-section" id="pipeline">
+      <div style="text-align:center;">
+        <span style="font-family:var(--font-mono); font-size:12px; color:var(--vc-gray-500); text-transform:uppercase;">THE VERCEL WORKFLOW</span>
+        <h2 style="font-size:36px; font-weight:600; letter-spacing:-1.28px; margin-top:8px;">From localhost to global edge</h2>
+      </div>
+
+      <div class="pipeline-grid">
+        <!-- Develop -->
+        <div class="pipeline-card">
+          <span class="step-tag step-blue">01 // DEVELOP</span>
+          <h3 class="step-title">Iterate with instant HMR</h3>
+          <p class="step-desc">Turbopack compilation with zero-config local environment mirroring edge runtime behavior exactly.</p>
+        </div>
+
+        <!-- Preview -->
+        <div class="pipeline-card">
+          <span class="step-tag step-pink">02 // PREVIEW</span>
+          <h3 class="step-title">Collaborate on every PR</h3>
+          <p class="step-desc">Every git push generates an automatic, atomic preview URL for instant team feedback and visual regression tests.</p>
+        </div>
+
+        <!-- Ship -->
+        <div class="pipeline-card">
+          <span class="step-tag step-red">03 // SHIP</span>
+          <h3 class="step-title">Global immutable rollouts</h3>
+          <p class="step-desc">Zero-downtime production deployments propagated to 100+ global edge locations in sub-seconds.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Interactive Deployment Console -->
+    <section class="deploy-console" id="console">
+      <div class="console-header-bar">
+        <div class="terminal-dots">
+          <div class="dot" style="background:#ff5f56;"></div>
+          <div class="dot" style="background:#ffbd2e;"></div>
+          <div class="dot" style="background:#27c93f;"></div>
+          <span style="margin-left:8px; font-size:12px; color:#888;">~/workspace/production-app (main)</span>
+        </div>
+        <button class="btn-deploy" onclick="runCliSimulation()">Run `vercel --prod`</button>
+      </div>
+
+      <div class="console-output" id="termOutput">
+        <div>$ vercel --prod</div>
+        <div style="color:#888;">Vercel CLI 39.1.0</div>
+        <div>🔍 Inspecting repository: acme-corp/web-app</div>
+        <div>✅ Production deployment ready at: <span style="color:#0072f5; text-decoration:underline;">https://web-app-gold.vercel.app</span></div>
+        <div style="color:#27c93f;">✓ Speed Insights & Analytics: ENABLED</div>
+      </div>
+    </section>
+
+    <!-- Metric Cards Grid -->
+    <div class="metrics-grid" id="metrics">
+      <div class="metric-box">
+        <div class="metric-number">99.99%</div>
+        <div style="color:var(--vc-gray-600); font-size:14px;">Global Edge Uptime across all sovereign CDN nodes.</div>
+      </div>
+      <div class="metric-box">
+        <div class="metric-number">300ms</div>
+        <div style="color:var(--vc-gray-600); font-size:14px;">Average Time-to-Interactive with Server Components.</div>
+      </div>
+      <div class="metric-box">
+        <div class="metric-number">10×</div>
+        <div style="color:var(--vc-gray-600); font-size:14px;">Faster builds with Next.js Turbopack engine.</div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="vc-footer">
+    <div class="footer-inner">
+      <div style="display:flex; align-items:center; gap:8px;">
+        <div class="vc-triangle" style="border-bottom-width:12px; border-left-width:7px; border-right-width:7px;"></div>
+        <span style="font-weight:600; color:var(--vc-black);">Vercel Inc.</span>
+        <span style="color:var(--vc-gray-400); margin-left:12px;">Conforming to open-design/design-systems/vercel/DESIGN.md</span>
+      </div>
+      <div>
+        Geist Sans (-2.4px display) • Shadow-as-Border • Develop-Preview-Ship
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    function triggerDeploy() {
+      alert('Vercel Git Integration: Connecting repository GitHub/acme/app. Initial deployment building...');
+    }
+
+    function openLogin() {
+      alert('Vercel Authentication Modal initialized.');
+    }
+
+    function scrollToConsole() {
+      document.getElementById('console').scrollIntoView({ behavior: 'smooth' });
+    }
+
+    function runCliSimulation() {
+      const term = document.getElementById('termOutput');
+      term.innerHTML = '<div>$ vercel --prod</div><div>Uploading 48 static files...</div>';
+      setTimeout(() => {
+        term.innerHTML += '<div>Building Next.js route tree...</div>';
+      }, 300);
+      setTimeout(() => {
+        term.innerHTML += '<div style="color:#0a72ef;">Generating Edge SSR bundles...</div>';
+      }, 700);
+      setTimeout(() => {
+        term.innerHTML += '<div style="color:#27c93f;">✅ Production Build Succeeded in 1.42s!</div><div>URL: <span style="color:#0072f5; text-decoration:underline;">https://web-app-' + Math.floor(Math.random()*8999+1000) + '.vercel.app</span></div>';
+      }, 1100);
+    }
+  </script>
+</body>
+</html>

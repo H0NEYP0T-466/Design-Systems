@@ -1,0 +1,463 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>BMW — Sheer Driving Pleasure &amp; German Precision</title>
+  <meta name="description" content="BMW CI2020 design system: BMWTypeNextLatin Light 300 uppercase display, BMW Blue #1c69d4 highlight, zero border radius, showroom lighting, and German engineering precision." />
+
+  <!-- Google Fonts: Inter configured for extreme light (300) vs heavy (900) contrast -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+  <style>
+    /* ─────────────────────────────────────────────────────────────────
+       BMW CI2020 DESIGN SYSTEM TOKENS
+       Source: open-design/design-systems/bmw/DESIGN.md
+       ───────────────────────────────────────────────────────────────── */
+    :root {
+      --site-context-theme-color: #ffffff;
+      --site-context-highlight-color: #1c69d4;
+      --site-context-focus-color: #0653b6;
+      --site-context-metainfo-color: #757575;
+
+      --bmw-black: #0c0c0e;
+      --bmw-dark-surface: #18181b;
+      --near-black: #262626;
+      --silver: #bbbbbb;
+      --hairline: rgba(255, 255, 255, 0.15);
+      --hairline-dark: #e5e5e5;
+
+      --font-bmw: "Inter", -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif;
+      --font-mono: "JetBrains Mono", monospace;
+
+      /* CRITICAL BMW RULE: ZERO BORDER RADIUS THROUGHOUT */
+      --radius-zero: 0px;
+
+      --transition-fast: 0.15s ease;
+    }
+
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      border-radius: var(--radius-zero) !important; /* Uncompromising German industrial geometry */
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      background-color: var(--bmw-black);
+      color: var(--near-black);
+      font-family: var(--font-bmw);
+      font-size: 16px;
+      line-height: 1.15; /* BMW tight line height */
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .container {
+      max-width: 1360px;
+      margin-inline: auto;
+      padding-inline: 36px;
+    }
+
+    /* 1. TOP BMW NAVIGATION (Extreme 900 Weight Contrast) */
+    .bmw-nav {
+      height: 72px;
+      background: rgba(12, 12, 14, 0.95);
+      border-bottom: 1px solid var(--hairline);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .bmw-nav-inner {
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .bmw-brand {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      text-decoration: none;
+      color: #ffffff;
+    }
+    .bmw-roundel {
+      width: 40px;
+      height: 40px;
+      border-radius: 50% !important; /* The only circle: the official roundel */
+      border: 2px solid #ffffff;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      overflow: hidden;
+    }
+    .roundel-blue { background: #1c69d4; }
+    .roundel-white { background: #ffffff; }
+
+    .brand-wordmark {
+      font-size: 20px;
+      font-weight: 900; /* BMW Rule: Weight 900 for navigation emphasis */
+      letter-spacing: 0.08em;
+      color: #ffffff;
+    }
+    .bmw-nav-links {
+      display: flex;
+      align-items: center;
+      gap: 32px;
+      list-style: none;
+    }
+    @media (max-width: 860px) {
+      .bmw-nav-links { display: none; }
+    }
+    .bmw-nav-links a {
+      color: rgba(255, 255, 255, 0.85);
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 14px;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      transition: color var(--transition-fast);
+    }
+    .bmw-nav-links a:hover {
+      color: #ffffff;
+      border-bottom: 2px solid var(--site-context-highlight-color);
+      padding-bottom: 4px;
+    }
+
+    /* BMW Angular Buttons (0px Radius, 700 Weight) */
+    .bmw-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-bmw);
+      font-size: 15px;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      padding: 16px 32px;
+      border: 1px solid transparent;
+      text-decoration: none;
+      cursor: pointer;
+      transition: all var(--transition-fast);
+    }
+    .bmw-btn-primary {
+      background: var(--site-context-highlight-color);
+      color: #ffffff;
+    }
+    .bmw-btn-primary:hover {
+      background: var(--site-context-focus-color);
+    }
+    .bmw-btn-ghost-light {
+      background: transparent;
+      color: #ffffff;
+      border-color: rgba(255, 255, 255, 0.4);
+    }
+    .bmw-btn-ghost-light:hover {
+      border-color: #ffffff;
+      background: rgba(255, 255, 255, 0.05);
+    }
+
+    /* 2. SHOWROOM HERO (Dark Automotive Stage) */
+    .showroom-hero {
+      background: linear-gradient(180deg, var(--bmw-black) 0%, var(--bmw-dark-surface) 100%);
+      color: #ffffff;
+      padding-block: 88px 96px;
+      border-bottom: 1px solid var(--hairline);
+    }
+    .hero-meta-tag {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--site-context-highlight-color);
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      margin-bottom: 18px;
+    }
+    /* Defining Typographic Gesture: 60px Uppercase at Weight 300 (Whispered Authority) */
+    .hero-uppercase-display {
+      font-size: clamp(40px, 6vw, 68px);
+      font-weight: 300; /* BMW Rule: Weight 300 for display */
+      line-height: 1.15;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      color: #ffffff;
+      margin-bottom: 24px;
+      max-width: 960px;
+    }
+    .hero-lead-text {
+      font-size: 18px;
+      font-weight: 400;
+      line-height: 1.35;
+      color: var(--silver);
+      max-width: 640px;
+      margin-bottom: 40px;
+    }
+    .hero-btn-row {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+      margin-bottom: 64px;
+    }
+
+    /* Cinematic Vehicle Silhouette Frame */
+    .vehicle-frame {
+      border: 1px solid var(--hairline);
+      background: radial-gradient(circle at center, #27272a 0%, #0c0c0e 80%);
+      padding: 48px;
+      min-height: 380px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    .vehicle-spec-strip {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 24px;
+      border-top: 1px solid var(--hairline);
+      padding-top: 24px;
+      margin-top: 48px;
+    }
+    @media (max-width: 768px) {
+      .vehicle-spec-strip { grid-template-columns: repeat(2, 1fr); }
+    }
+    .spec-cell-label {
+      font-size: 12px;
+      color: var(--silver);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 6px;
+    }
+    .spec-cell-val {
+      font-size: 26px;
+      font-weight: 700;
+      color: #ffffff;
+      font-family: var(--font-mono);
+    }
+
+    /* 3. LIGHT CONTENT SECTION (German Precision Engineering) */
+    .white-spec-section {
+      background: #ffffff;
+      color: var(--near-black);
+      padding-block: 96px;
+    }
+    .sec-head-bmw {
+      margin-bottom: 48px;
+    }
+    .sec-sub-upper {
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--site-context-highlight-color);
+      margin-bottom: 12px;
+    }
+    .sec-title-bmw {
+      font-size: clamp(30px, 4vw, 44px);
+      font-weight: 300;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: var(--near-black);
+      line-height: 1.15;
+    }
+
+    .engineering-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 32px;
+    }
+    @media (max-width: 860px) {
+      .engineering-grid { grid-template-columns: 1fr; }
+    }
+    .eng-card {
+      border: 1px solid var(--hairline-dark);
+      background: #ffffff;
+      padding: 36px 28px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      min-height: 320px;
+      transition: border-color var(--transition-fast);
+    }
+    .eng-card:hover {
+      border-color: var(--site-context-highlight-color);
+    }
+    .eng-num {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      color: var(--site-context-metainfo-color);
+      margin-bottom: 20px;
+    }
+    .eng-card-title {
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--near-black);
+      margin-bottom: 14px;
+      text-transform: uppercase;
+      letter-spacing: 0.02em;
+    }
+    .eng-card-desc {
+      font-size: 15px;
+      line-height: 1.45;
+      color: var(--site-context-metainfo-color);
+    }
+
+    /* 4. FOOTER */
+    .bmw-footer {
+      background: var(--bmw-black);
+      color: var(--silver);
+      padding-block: 64px 40px;
+      border-top: 1px solid var(--hairline);
+      font-size: 13px;
+    }
+    .footer-flex {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top BMW Navigation -->
+  <header class="bmw-nav">
+    <div class="container bmw-nav-inner">
+      <a href="#hero" class="bmw-brand">
+        <div class="bmw-roundel">
+          <div class="roundel-white"></div>
+          <div class="roundel-blue"></div>
+          <div class="roundel-blue"></div>
+          <div class="roundel-white"></div>
+        </div>
+        <span class="brand-wordmark">BMW</span>
+      </a>
+
+      <ul class="bmw-nav-links">
+        <li><a href="#models">Models</a></li>
+        <li><a href="#electric">BMW i</a></li>
+        <li><a href="#performance">BMW M</a></li>
+        <li><a href="#configurator">Build Your Own</a></li>
+      </ul>
+
+      <div style="display: flex; gap: 12px; align-items: center;">
+        <a href="00_Index.md" class="bmw-btn bmw-btn-ghost-light" style="padding: 10px 18px; font-size: 12px;">Index</a>
+        <a href="#configurator" class="bmw-btn bmw-btn-primary" style="padding: 10px 22px; font-size: 12px;">Configure</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Showroom Hero (Deep Dark Canvas) -->
+  <section id="hero" class="showroom-hero">
+    <div class="container">
+      <div class="hero-meta-tag">The All-New BMW i7 M70 xDrive</div>
+      <!-- Defining 60px uppercase weight 300 display headline -->
+      <h1 class="hero-uppercase-display">
+        Pioneering Electrical Dominance and Monumental Presence.
+      </h1>
+      <p class="hero-lead-text">
+        650 horsepower unleashed through dual BMW M eDrive motors. Aerospace-grade battery density meets hand-stitched Bavarian craftsmanship.
+      </p>
+
+      <div class="hero-btn-row">
+        <a href="#configurator" class="bmw-btn bmw-btn-primary">Discover the Vehicle</a>
+        <a href="#engineering" class="bmw-btn bmw-btn-ghost-light">Technical Specifications</a>
+      </div>
+
+      <!-- Vehicle Silhouette Stage -->
+      <div class="vehicle-frame">
+        <div style="display: flex; justify-content: space-between; align-items: baseline;">
+          <span style="font-size: 18px; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase;">BMW M PERFORMANCE</span>
+          <span style="font-family: var(--font-mono); font-size: 13px; color: var(--site-context-highlight-color);">M eDrive DUAL MOTOR</span>
+        </div>
+
+        <div class="vehicle-spec-strip">
+          <div>
+            <div class="spec-cell-label">Output</div>
+            <div class="spec-cell-val">650 HP</div>
+          </div>
+          <div>
+            <div class="spec-cell-label">0 – 100 km/h</div>
+            <div class="spec-cell-val">3.5 SEC</div>
+          </div>
+          <div>
+            <div class="spec-cell-label">Range (WLTP)</div>
+            <div class="spec-cell-val">560 KM</div>
+          </div>
+          <div>
+            <div class="spec-cell-label">Max Torque</div>
+            <div class="spec-cell-val">1,100 NM</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- White Section: Precision Engineering Specifications -->
+  <section id="engineering" class="white-spec-section">
+    <div class="container">
+      <div class="sec-head-bmw">
+        <div class="sec-sub-upper">CI2020 Architecture</div>
+        <h2 class="sec-title-bmw">The Tenets of Bavarian Industrial Engineering</h2>
+      </div>
+
+      <div class="engineering-grid">
+        <article class="eng-card">
+          <div>
+            <div class="eng-num">01 / GEOMETRY</div>
+            <h3 class="eng-card-title">Zero Border Radius</h3>
+            <p class="eng-card-desc">
+              Every element adheres strictly to sharp, angular 0px geometry. No rounded compromises — reflecting machined automotive metalwork.
+            </p>
+          </div>
+          <div style="margin-top: 24px; font-family: var(--font-mono); font-size: 11px; color: var(--site-context-highlight-color); font-weight: 600;">
+            SPEC: BORDER-RADIUS: 0PX
+          </div>
+        </article>
+
+        <article class="eng-card">
+          <div>
+            <div class="eng-num">02 / TYPOGRAPHY</div>
+            <h3 class="eng-card-title">Whispered Authority</h3>
+            <p class="eng-card-desc">
+              Weight 300 uppercase display headlines contrast against weight 900 navigation anchors, projecting effortless confidence.
+            </p>
+          </div>
+          <div style="margin-top: 24px; font-family: var(--font-mono); font-size: 11px; color: var(--site-context-highlight-color); font-weight: 600;">
+            SPEC: WEIGHT 300 DISPLAY
+          </div>
+        </article>
+
+        <article class="eng-card">
+          <div>
+            <div class="eng-num">03 / HIGHLIGHT</div>
+            <h3 class="eng-card-title">BMW Blue #1C69D4</h3>
+            <p class="eng-card-desc">
+              Singular interactive accent deployed with calculated restraint across primary CTAs, active telemetry, and focus rings.
+            </p>
+          </div>
+          <div style="margin-top: 24px; font-family: var(--font-mono); font-size: 11px; color: var(--site-context-highlight-color); font-weight: 600;">
+            SPEC: --HIGHLIGHT-COLOR
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- BMW Footer -->
+  <footer class="bmw-footer">
+    <div class="container footer-flex">
+      <div>
+        &copy; 2026 Bayerische Motoren Werke AG · BMW CI2020 Design System
+      </div>
+      <div>
+        <a href="00_Index.md" style="color: var(--site-context-highlight-color); text-decoration: none; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em;">← Master Design Index</a>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>

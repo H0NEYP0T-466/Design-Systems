@@ -1,0 +1,703 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Fantasy Design System — Chronicles of Aethelgaard</title>
+  <meta name="description" content="Authentic game-inspired fantasy design system featuring New Rocker display typography, IBM Plex Mono stats, Royal Arcane Blue, Imperial Gold, and quest companion engine.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=New+Rocker&family=IBM+Plex+Mono:wght@400;500;600;700&family=Cinzel:wght@600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      /* Fantasy Palette Tokens */
+      --primary: #0250CC;
+      --primary-hover: #023ea3;
+      --secondary: #FDC800;
+      --secondary-hover: #e0b100;
+      --success: #16A34A;
+      --warning: #D97706;
+      --danger: #DC2626;
+      --surface: #FFFFFF;
+      --surface-subtle: #F8FAFC;
+      --text: #111827;
+      --text-muted: #4B5563;
+      --gold-border: #E5B200;
+      --border: #E2E8F0;
+
+      /* 8pt Baseline Grid */
+      --space-1: 8px;
+      --space-2: 16px;
+      --space-3: 24px;
+      --space-4: 32px;
+      --space-6: 48px;
+      --space-8: 64px;
+
+      /* Typography */
+      --font-display: 'New Rocker', 'Cinzel', serif;
+      --font-mono: 'IBM Plex Mono', monospace;
+      --font-body: 'Inter', sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--surface-subtle);
+      color: var(--text);
+      font-family: var(--font-body);
+      font-size: 16px;
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+      padding-bottom: var(--space-8);
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 var(--space-3);
+    }
+
+    /* Top Lore Ribbon */
+    .top-ribbon {
+      background: #0B1120;
+      color: var(--secondary);
+      font-family: var(--font-mono);
+      font-size: 12px;
+      font-weight: 600;
+      text-align: center;
+      padding: var(--space-1) var(--space-2);
+      border-bottom: 2px solid var(--secondary);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    /* Navigation */
+    .fantasy-nav {
+      background: var(--surface);
+      border-bottom: 2px solid var(--primary);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 4px 12px rgba(2, 80, 204, 0.06);
+    }
+
+    .nav-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 72px;
+    }
+
+    .logo-mark {
+      display: flex;
+      align-items: center;
+      gap: var(--space-1);
+      text-decoration: none;
+      color: var(--primary);
+    }
+
+    .crest {
+      width: 40px;
+      height: 40px;
+      background: var(--primary);
+      border: 2px solid var(--secondary);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--secondary);
+      font-family: var(--font-display);
+      font-size: 24px;
+      box-shadow: 0 0 10px rgba(253, 200, 0, 0.35);
+    }
+
+    .logo-text {
+      font-family: var(--font-display);
+      font-size: 28px;
+      letter-spacing: 0.05em;
+      color: var(--primary);
+      line-height: 1;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: var(--space-3);
+      list-style: none;
+    }
+
+    .nav-links a {
+      color: var(--text);
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 14px;
+      transition: color 0.15s;
+    }
+
+    .nav-links a:hover {
+      color: var(--primary);
+    }
+
+    /* Buttons adhering to Fantasy DESIGN.md */
+    .btn-arcane {
+      background: var(--primary);
+      color: #FFFFFF;
+      border: 2px solid var(--secondary);
+      padding: var(--space-1) var(--space-2);
+      font-family: var(--font-mono);
+      font-size: 14px;
+      font-weight: 700;
+      border-radius: 6px;
+      cursor: pointer;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      transition: all 0.2s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-1);
+      box-shadow: 0 4px 8px rgba(2, 80, 204, 0.25);
+    }
+
+    .btn-arcane:hover {
+      background: var(--primary-hover);
+      box-shadow: 0 0 16px rgba(253, 200, 0, 0.6);
+      transform: translateY(-1px);
+    }
+
+    .btn-secondary {
+      background: var(--surface);
+      color: var(--text);
+      border: 1px solid var(--border);
+      padding: var(--space-1) var(--space-2);
+      font-family: var(--font-mono);
+      font-size: 14px;
+      font-weight: 600;
+      border-radius: 6px;
+      cursor: pointer;
+      text-transform: uppercase;
+      transition: border-color 0.15s;
+    }
+
+    .btn-secondary:hover {
+      border-color: var(--primary);
+      color: var(--primary);
+    }
+
+    /* Hero Section */
+    .hero-section {
+      padding: var(--space-6) 0;
+      text-align: center;
+      position: relative;
+    }
+
+    .hero-tag {
+      display: inline-block;
+      font-family: var(--font-mono);
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--primary);
+      background: rgba(2, 80, 204, 0.08);
+      border: 1px solid var(--primary);
+      padding: 4px 12px;
+      border-radius: 4px;
+      margin-bottom: var(--space-2);
+      letter-spacing: 0.1em;
+    }
+
+    .hero-title {
+      font-family: var(--font-display);
+      font-size: 56px;
+      line-height: 1.1;
+      letter-spacing: 0.04em;
+      color: var(--primary);
+      margin-bottom: var(--space-2);
+      text-shadow: 2px 2px 0px rgba(253, 200, 0, 0.4);
+    }
+
+    .hero-sub {
+      font-size: 18px;
+      color: var(--text-muted);
+      max-width: 640px;
+      margin: 0 auto var(--space-4) auto;
+      line-height: 1.6;
+    }
+
+    .hero-actions {
+      display: flex;
+      justify-content: center;
+      gap: var(--space-2);
+      margin-bottom: var(--space-6);
+    }
+
+    /* Grimoire & Character Grid */
+    .section-title {
+      font-family: var(--font-display);
+      font-size: 32px;
+      letter-spacing: 0.03em;
+      color: var(--primary);
+      margin-bottom: var(--space-1);
+    }
+
+    .section-desc {
+      font-size: 15px;
+      color: var(--text-muted);
+      margin-bottom: var(--space-4);
+    }
+
+    .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: var(--space-3);
+    }
+
+    .class-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-top: 4px solid var(--primary);
+      border-radius: 8px;
+      padding: var(--space-3);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.04);
+      transition: transform 0.2s, border-color 0.2s;
+    }
+
+    .class-card:hover {
+      transform: translateY(-2px);
+      border-color: var(--secondary);
+    }
+
+    .class-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: var(--space-2);
+    }
+
+    .class-icon {
+      font-size: 28px;
+    }
+
+    .class-badge {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--secondary);
+      background: #0B1120;
+      padding: 2px 8px;
+      border-radius: 4px;
+    }
+
+    .class-name {
+      font-family: var(--font-display);
+      font-size: 24px;
+      color: var(--text);
+      margin-bottom: var(--space-1);
+    }
+
+    .class-lore {
+      font-size: 14px;
+      color: var(--text-muted);
+      margin-bottom: var(--space-3);
+      line-height: 1.5;
+    }
+
+    .stats-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-family: var(--font-mono);
+      font-size: 13px;
+    }
+
+    .stats-table td {
+      padding: 6px 0;
+      border-top: 1px solid var(--border);
+    }
+
+    .stat-label {
+      color: var(--text-muted);
+    }
+
+    .stat-val {
+      text-align: right;
+      font-weight: 700;
+      color: var(--primary);
+    }
+
+    /* Interactive Dice Roller & Spell Chamber */
+    .interactive-chamber {
+      background: var(--surface);
+      border: 2px solid var(--secondary);
+      border-radius: 12px;
+      padding: var(--space-4);
+      margin-top: var(--space-6);
+      box-shadow: 0 8px 24px rgba(2, 80, 204, 0.08);
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--space-4);
+      align-items: center;
+    }
+
+    .dice-display-box {
+      background: #0B1120;
+      border: 2px solid var(--secondary);
+      border-radius: 8px;
+      height: 200px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      color: #FFFFFF;
+      position: relative;
+    }
+
+    .dice-number {
+      font-family: var(--font-display);
+      font-size: 72px;
+      color: var(--secondary);
+      text-shadow: 0 0 20px rgba(253, 200, 0, 0.8);
+      transition: transform 0.2s ease;
+    }
+
+    .dice-status {
+      font-family: var(--font-mono);
+      font-size: 14px;
+      color: #94A3B8;
+      margin-top: var(--space-1);
+    }
+
+    .roller-controls {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-2);
+    }
+
+    .dice-buttons {
+      display: flex;
+      gap: var(--space-1);
+    }
+
+    .d-btn {
+      flex: 1;
+      padding: var(--space-1);
+      background: var(--surface-subtle);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      font-family: var(--font-mono);
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+
+    .d-btn:hover {
+      background: var(--primary);
+      color: #FFFFFF;
+      border-color: var(--primary);
+    }
+
+    /* Tokens Table */
+    .tokens-section {
+      margin-top: var(--space-6);
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: var(--space-4);
+    }
+
+    .tokens-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+      margin-top: var(--space-2);
+    }
+
+    .tokens-table th {
+      text-align: left;
+      padding: 8px 12px;
+      border-bottom: 2px solid var(--border);
+      font-family: var(--font-mono);
+      font-size: 12px;
+      text-transform: uppercase;
+      color: var(--text-muted);
+    }
+
+    .tokens-table td {
+      padding: 10px 12px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .color-swatch {
+      display: inline-block;
+      width: 16px;
+      height: 16px;
+      border-radius: 4px;
+      margin-right: 8px;
+      vertical-align: middle;
+      border: 1px solid rgba(0,0,0,0.1);
+    }
+
+    /* Footer */
+    .fantasy-footer {
+      margin-top: var(--space-8);
+      border-top: 2px solid var(--primary);
+      padding: var(--space-4) 0;
+      background: var(--surface);
+      font-size: 14px;
+    }
+
+    .footer-flex {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Ribbon -->
+  <div class="top-ribbon">
+    ⚔️ REALM OF AETHELGAARD • CAMPAIGN ENGINE v4.2 • ADHERING TO FANTASY SPEC
+  </div>
+
+  <!-- Navigation -->
+  <nav class="fantasy-nav">
+    <div class="container nav-inner">
+      <a href="#" class="logo-mark">
+        <div class="crest">F</div>
+        <span class="logo-text">Aethelgaard</span>
+      </a>
+
+      <ul class="nav-links">
+        <li><a href="#classes">Character Archetypes</a></li>
+        <li><a href="#chamber">Chamber of Dice</a></li>
+        <li><a href="#tokens">Design Tokens</a></li>
+      </ul>
+
+      <div style="display: flex; gap: var(--space-1);">
+        <button class="btn-secondary" onclick="alert('Grimoire database loaded')">Spells</button>
+        <button class="btn-arcane" onclick="castSpell()">Cast Spell ⚡</button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <header class="hero-section">
+    <div class="container">
+      <span class="hero-tag">CREATIVE & ARTISTIC DESIGN SYSTEM</span>
+      <h1 class="hero-title">ENTER THE MYTHIC ODYSSEY</h1>
+      <p class="hero-sub">
+        Forged with deep Royal Arcane Blue (#0250CC), Imperial Gold (#FDC800), and the iconic New Rocker gothic display typography for high-fantasy gaming systems.
+      </p>
+
+      <div class="hero-actions">
+        <button class="btn-arcane" onclick="rollDie(20)">Roll D20 Check</button>
+        <button class="btn-secondary" onclick="document.getElementById('chamber').scrollIntoView({behavior: 'smooth'})">Chamber of Dice</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Character Grid -->
+  <main class="container" id="classes">
+    <h2 class="section-title">CHAMPION ARCHETYPES</h2>
+    <p class="section-desc">Class rosters balanced on the 8pt baseline grid with IBM Plex Mono telemetry stats.</p>
+
+    <div class="cards-grid">
+      <!-- Paladin -->
+      <div class="class-card">
+        <div class="class-header">
+          <span class="class-icon">🛡️</span>
+          <span class="class-badge">DEFENDER</span>
+        </div>
+        <h3 class="class-name">Paladin of the Sun</h3>
+        <p class="class-lore">
+          Sworn by imperial solar vows. Channels righteous fury into impenetrable shields and restorative radiant auras.
+        </p>
+        <table class="stats-table">
+          <tr>
+            <td class="stat-label">Hit Points</td>
+            <td class="stat-val">128 HP</td>
+          </tr>
+          <tr>
+            <td class="stat-label">Arcane Will</td>
+            <td class="stat-val">45 AP</td>
+          </tr>
+          <tr>
+            <td class="stat-label">Divine Armor</td>
+            <td class="stat-val">+18 DEF</td>
+          </tr>
+        </table>
+      </div>
+
+      <!-- Sorcerer -->
+      <div class="class-card" style="border-top-color: var(--secondary);">
+        <div class="class-header">
+          <span class="class-icon">🔮</span>
+          <span class="class-badge" style="color: #60A5FA;">MAGE</span>
+        </div>
+        <h3 class="class-name">Arcane Chronomancer</h3>
+        <p class="class-lore">
+          Manipulates the temporal fabric of the cosmos to accelerate friendly actions and freeze enemy battalions in stasis.
+        </p>
+        <table class="stats-table">
+          <tr>
+            <td class="stat-label">Hit Points</td>
+            <td class="stat-val">74 HP</td>
+          </tr>
+          <tr>
+            <td class="stat-label">Arcane Will</td>
+            <td class="stat-val">220 AP</td>
+          </tr>
+          <tr>
+            <td class="stat-label">Temporal Flux</td>
+            <td class="stat-val">+95% SPD</td>
+          </tr>
+        </table>
+      </div>
+
+      <!-- Rogue -->
+      <div class="class-card" style="border-top-color: var(--danger);">
+        <div class="class-header">
+          <span class="class-icon">🗡️</span>
+          <span class="class-badge" style="color: #F87171;">STALKER</span>
+        </div>
+        <h3 class="class-name">Shadow Infiltrator</h3>
+        <p class="class-lore">
+          Silent death lurking in subterranean vaults. Striking with poison-dipped daggers before melting into smoke.
+        </p>
+        <table class="stats-table">
+          <tr>
+            <td class="stat-label">Hit Points</td>
+            <td class="stat-val">92 HP</td>
+          </tr>
+          <tr>
+            <td class="stat-label">Arcane Will</td>
+            <td class="stat-val">80 AP</td>
+          </tr>
+          <tr>
+            <td class="stat-label">Critical Chance</td>
+            <td class="stat-val">42.5% CRT</td>
+          </tr>
+        </table>
+      </div>
+    </div>
+
+    <!-- Interactive Chamber of Dice -->
+    <div class="interactive-chamber" id="chamber">
+      <div class="dice-display-box">
+        <div class="dice-number" id="diceResult">20</div>
+        <div class="dice-status" id="diceStatus">NATURAL 20 — CRITICAL HIT!</div>
+      </div>
+
+      <div class="roller-controls">
+        <h3 style="font-family: var(--font-display); font-size: 24px; color: var(--primary);">CHAMBER OF FORTUNE</h3>
+        <p style="font-size: 14px; color: var(--text-muted);">
+          Roll standard polyhedral gaming dice calibrated to the Fantasy design system tokens.
+        </p>
+        <div class="dice-buttons">
+          <button class="d-btn" onclick="rollDie(4)">D4</button>
+          <button class="d-btn" onclick="rollDie(6)">D6</button>
+          <button class="d-btn" onclick="rollDie(8)">D8</button>
+          <button class="d-btn" onclick="rollDie(10)">D10</button>
+          <button class="d-btn" onclick="rollDie(12)">D12</button>
+          <button class="d-btn" onclick="rollDie(20)" style="border-color: var(--secondary); font-weight: 800;">D20</button>
+          <button class="d-btn" onclick="rollDie(100)">D100</button>
+        </div>
+        <button class="btn-arcane" style="margin-top: var(--space-1);" onclick="rollDie(20)">ROLL RANDOM CHECK</button>
+      </div>
+    </div>
+
+    <!-- Design Tokens Verification -->
+    <section class="tokens-section" id="tokens">
+      <h3 style="font-family: var(--font-display); font-size: 24px; color: var(--primary); margin-bottom: 8px;">
+        FANTASY DESIGN SYSTEM TOKEN SPECIFICATIONS
+      </h3>
+      <table class="tokens-table">
+        <thead>
+          <tr>
+            <th>Role</th>
+            <th>Value</th>
+            <th>Sample</th>
+            <th>Application</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Primary</strong></td>
+            <td><code>#0250CC</code></td>
+            <td><span class="color-swatch" style="background: #0250CC;"></span> Royal Arcane Blue</td>
+            <td>Primary CTA buttons, prominent brand crests, hero headers</td>
+          </tr>
+          <tr>
+            <td><strong>Secondary</strong></td>
+            <td><code>#FDC800</code></td>
+            <td><span class="color-swatch" style="background: #FDC800;"></span> Imperial Gold</td>
+            <td>Accent borders, critical indicators, prestige crest outlines</td>
+          </tr>
+          <tr>
+            <td><strong>Success</strong></td>
+            <td><code>#16A34A</code></td>
+            <td><span class="color-swatch" style="background: #16A34A;"></span> Emerald Green</td>
+            <td>Full health indicators, quest completion flags</td>
+          </tr>
+          <tr>
+            <td><strong>Surface</strong></td>
+            <td><code>#FFFFFF</code></td>
+            <td><span class="color-swatch" style="background: #FFFFFF;"></span> Pure Surface White</td>
+            <td>Character cards, grimoire sheets, interactive containers</td>
+          </tr>
+          <tr>
+            <td><strong>Typography</strong></td>
+            <td><code>New Rocker</code></td>
+            <td>Display & Headings</td>
+            <td>Carries the game-inspired fantasy identity across headers</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer class="fantasy-footer">
+    <div class="container footer-flex">
+      <div style="display: flex; align-items: center; gap: 8px;">
+        <div class="crest" style="width: 28px; height: 28px; font-size: 16px;">F</div>
+        <span style="font-family: var(--font-display); font-size: 18px; color: var(--primary);">Chronicles of Aethelgaard</span>
+      </div>
+      <div style="font-family: var(--font-mono); font-size: 12px; color: var(--text-muted);">
+        Verified against <code>open-design/design-systems/fantasy/DESIGN.md</code>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    function rollDie(sides) {
+      const res = Math.floor(Math.random() * sides) + 1;
+      const numEl = document.getElementById('diceResult');
+      const statEl = document.getElementById('diceStatus');
+      
+      numEl.style.transform = 'scale(1.2)';
+      setTimeout(() => numEl.style.transform = 'scale(1)', 200);
+
+      numEl.textContent = res;
+      if (sides === 20 && res === 20) {
+        statEl.textContent = 'NATURAL 20 — CRITICAL HIT!';
+        statEl.style.color = 'var(--secondary)';
+      } else if (sides === 20 && res === 1) {
+        statEl.textContent = 'NATURAL 1 — CRITICAL FUMBLE!';
+        statEl.style.color = 'var(--danger)';
+      } else {
+        statEl.textContent = `ROLLED D${sides}: RESULT = ${res}`;
+        statEl.style.color = '#94A3B8';
+      }
+    }
+
+    function castSpell() {
+      const spells = ['Arcane Flare 💥', 'Solar Ray ☀️', 'Shadow Veil 🌑', 'Chrono Freeze ❄️'];
+      const pick = spells[Math.floor(Math.random() * spells.length)];
+      alert(`Channeled: ${pick}! Royal Arcane Blue (#0250CC) burst emitted.`);
+    }
+  </script>
+</body>
+</html>

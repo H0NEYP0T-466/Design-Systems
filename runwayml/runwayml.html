@@ -1,0 +1,640 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Runway — Advancing Creativity with Artificial Intelligence</title>
+  <meta name="description" content="AI video generation. Cinematic dark UI, media-rich layout, single typeface precision, tight film-title line-heights, and zero shadows.">
+
+  <!-- Font: DM Sans as authentic high-fidelity substitute for abcNormal -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,450;0,9..40,500;0,9..40,600;1,9..40,400&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      /* Palette Tokens from runwayml/DESIGN.md */
+      --rw-black: #000000;
+      --rw-deep-black: #030303;
+      --rw-dark-surface: #1a1a1a;
+      --rw-white: #ffffff;
+      --rw-near-white: #fefefe;
+      --rw-cool-cloud: #e9ecf2;
+      --rw-border-dark: #27272a;
+      --rw-charcoal: #404040;
+      --rw-near-charcoal: #3f3f3f;
+      --rw-cool-slate: #767d88;
+      --rw-mid-slate: #7d848e;
+      --rw-muted-gray: #a7a7a7;
+      --rw-cool-silver: #c9ccd1;
+      --rw-light-silver: #d0d4d4;
+      --rw-footer-gray: #999999;
+
+      /* Single Typeface System: abcNormal */
+      --font-rw: 'DM Sans', 'abcNormal', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+
+      /* Spacing */
+      --sp-4: 4px;
+      --sp-8: 8px;
+      --sp-12: 12px;
+      --sp-16: 16px;
+      --sp-24: 24px;
+      --sp-32: 32px;
+      --sp-48: 48px;
+      --sp-64: 64px;
+      --sp-78: 78px;
+
+      /* Radii: NOT pill-shaped, subtle 4px–8px */
+      --rad-sm: 4px;
+      --rad-md: 6px;
+      --rad-card: 8px;
+      --rad-alert: 16px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--rw-black);
+      color: var(--rw-white);
+      font-family: var(--font-rw);
+      font-size: 16px;
+      line-height: 1.35;
+      letter-spacing: -0.16px;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+      /* ZERO SHADOWS DETECTED — CINEMATIC RESTRAINT */
+    }
+
+    /* Minimal Floating Top Nav */
+    header.rw-header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      z-index: 999;
+      background: rgba(0, 0, 0, 0.75);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    }
+    .header-inner {
+      max-width: 1600px;
+      margin: 0 auto;
+      padding: 16px 32px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .rw-logo {
+      font-size: 20px;
+      font-weight: 600;
+      letter-spacing: -0.5px;
+      color: var(--rw-white);
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .rw-nav-links {
+      display: flex;
+      gap: 28px;
+      list-style: none;
+    }
+    .rw-nav-links a {
+      color: var(--rw-cool-slate);
+      text-decoration: none;
+      font-size: 15px;
+      font-weight: 500;
+      transition: color 150ms ease;
+    }
+    .rw-nav-links a:hover {
+      color: var(--rw-white);
+    }
+    .header-cta {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    /* Buttons */
+    .btn-rw {
+      font-family: var(--font-rw);
+      font-size: 14px;
+      font-weight: 600;
+      padding: 10px 20px;
+      border-radius: var(--rad-sm);
+      text-decoration: none;
+      border: 1px solid transparent;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 150ms ease;
+    }
+    .btn-rw-white {
+      background: var(--rw-white);
+      color: var(--rw-black);
+    }
+    .btn-rw-white:hover {
+      background: #e2e8f0;
+    }
+    .btn-rw-ghost {
+      background: transparent;
+      color: var(--rw-white);
+      border: 1px solid var(--rw-border-dark);
+    }
+    .btn-rw-ghost:hover {
+      background: rgba(255, 255, 255, 0.06);
+      border-color: #3f3f46;
+    }
+
+    /* Cinematic Full-Bleed Hero */
+    .hero-container {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 120px 32px var(--sp-78);
+      max-width: 1600px;
+      margin: 0 auto;
+      position: relative;
+    }
+    .hero-bg-visual {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      z-index: -1;
+      background: radial-gradient(circle at 70% 30%, #1e293b 0%, #050508 60%, #000000 100%);
+      overflow: hidden;
+    }
+    .hero-bg-visual::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(180deg, rgba(0,0,0,0.2) 0%, rgba(0,0,0,0.85) 85%, #000000 100%);
+    }
+
+    /* Uppercase section labels */
+    .rw-label {
+      font-size: 14px;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.35px;
+      color: var(--rw-cool-slate);
+      margin-bottom: 16px;
+      display: block;
+    }
+    .rw-micro-tag {
+      font-size: 11px;
+      font-weight: 450;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--rw-cool-slate);
+    }
+
+    /* Film-title style headline */
+    .hero-title {
+      font-size: clamp(48px, 6vw, 76px);
+      font-weight: 400;
+      line-height: 1.00;
+      letter-spacing: -1.2px;
+      color: var(--rw-white);
+      max-width: 1100px;
+      margin-bottom: 24px;
+    }
+    .hero-desc {
+      font-size: 20px;
+      line-height: 1.4;
+      letter-spacing: -0.2px;
+      color: var(--rw-cool-slate);
+      max-width: 720px;
+      margin-bottom: 36px;
+    }
+
+    /* Section Wrappers */
+    .section-wrap {
+      max-width: 1600px;
+      margin: 0 auto;
+      padding: var(--sp-78) 32px;
+    }
+
+    /* Trust Logos Bar */
+    .trust-bar {
+      border-top: 1px solid var(--rw-border-dark);
+      border-bottom: 1px solid var(--rw-border-dark);
+      padding: 32px 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 32px;
+    }
+    .trust-item {
+      font-size: 18px;
+      font-weight: 500;
+      letter-spacing: -0.5px;
+      color: var(--rw-cool-slate);
+      opacity: 0.85;
+    }
+
+    /* Interactive Studio Section */
+    .studio-box {
+      background: var(--rw-dark-surface);
+      border: 1px solid var(--rw-border-dark);
+      border-radius: var(--rad-card);
+      padding: 36px;
+      margin-top: 48px;
+    }
+    .studio-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 24px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    }
+    .studio-viewport {
+      background: #0d0e12;
+      border-radius: var(--rad-sm);
+      height: 380px;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 24px;
+      border: 1px solid var(--rw-border-dark);
+      margin-bottom: 24px;
+    }
+    .vp-canvas {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      opacity: 0.85;
+      background: linear-gradient(135deg, #1e1b4b 0%, #090d16 50%, #030712 100%);
+    }
+    .vp-meta {
+      position: relative;
+      z-index: 2;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+    }
+    .vp-badge {
+      background: rgba(0, 0, 0, 0.65);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      backdrop-filter: blur(8px);
+      padding: 6px 12px;
+      border-radius: var(--rad-sm);
+      font-size: 12px;
+      font-weight: 500;
+    }
+
+    /* Prompt Input Toolbar */
+    .prompt-row {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+    .prompt-input {
+      flex: 1;
+      background: #0a0a0c;
+      border: 1px solid var(--rw-border-dark);
+      border-radius: var(--rad-sm);
+      padding: 14px 18px;
+      color: var(--rw-white);
+      font-family: var(--font-rw);
+      font-size: 15px;
+      outline: none;
+      transition: border-color 150ms ease;
+    }
+    .prompt-input:focus {
+      border-color: #52525b;
+    }
+    .studio-controls {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+    .param-pill {
+      background: #111114;
+      border: 1px solid var(--rw-border-dark);
+      padding: 8px 14px;
+      border-radius: var(--rad-sm);
+      font-size: 13px;
+      color: var(--rw-cool-slate);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .param-pill.active {
+      color: var(--rw-white);
+      border-color: #71717a;
+    }
+
+    /* Mixed-Size Editorial Magazine Image Grid */
+    .editorial-grid {
+      display: grid;
+      grid-template-columns: 1.4fr 1fr;
+      gap: 24px;
+      margin-top: 48px;
+    }
+    @media (max-width: 900px) {
+      .editorial-grid { grid-template-columns: 1fr; }
+    }
+    .media-card {
+      background: var(--rw-dark-surface);
+      border: 1px solid var(--rw-border-dark);
+      border-radius: var(--rad-card);
+      overflow: hidden;
+      position: relative;
+    }
+    .media-thumb {
+      width: 100%;
+      height: 300px;
+      background: #18181b;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+    .media-info {
+      padding: 24px;
+    }
+    .media-title {
+      font-size: 24px;
+      font-weight: 400;
+      line-height: 1.1;
+      letter-spacing: -0.5px;
+      margin-bottom: 8px;
+      color: var(--rw-white);
+    }
+    .media-desc {
+      color: var(--rw-cool-slate);
+      font-size: 14px;
+      line-height: 1.45;
+    }
+
+    /* Mission Statement */
+    .mission-section {
+      text-align: center;
+      padding: 120px 32px;
+      background: var(--rw-black);
+      border-top: 1px solid var(--rw-border-dark);
+    }
+    .mission-text {
+      font-size: clamp(32px, 4vw, 44px);
+      font-weight: 400;
+      line-height: 1.15;
+      letter-spacing: -0.9px;
+      color: var(--rw-white);
+      max-width: 1000px;
+      margin: 0 auto 28px;
+    }
+
+    /* Footer */
+    footer.rw-footer {
+      border-top: 1px solid var(--rw-border-dark);
+      background: var(--rw-black);
+      padding: 48px 32px;
+    }
+    .footer-inner {
+      max-width: 1600px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 24px;
+    }
+    .footer-copy {
+      color: var(--rw-footer-gray);
+      font-size: 13px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Floating Nav -->
+  <header class="rw-header">
+    <div class="header-inner">
+      <a href="#" class="rw-logo">RUNWAY</a>
+      <ul class="rw-nav-links">
+        <li><a href="#research">Research</a></li>
+        <li><a href="#gen3">Gen-3 Alpha</a></li>
+        <li><a href="#studios">Studios</a></li>
+        <li><a href="#company">Company</a></li>
+      </ul>
+      <div class="header-cta">
+        <button class="btn-rw btn-rw-ghost" onclick="launchLogin()">Log in</button>
+        <button class="btn-rw btn-rw-white" onclick="openStudio()">Try Runway for free</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <div class="hero-bg-visual"></div>
+  <section class="hero-container">
+    <span class="rw-label">Gen-3 Alpha & World Models</span>
+    <h1 class="hero-title">Advancing creativity through artificial intelligence.</h1>
+    <p class="hero-desc">
+      A new frontier in cinematic video generation. High-fidelity temporal consistency, camera physics, and photorealistic motion control.
+    </p>
+    <div>
+      <button class="btn-rw btn-rw-white" style="padding:14px 28px; font-size:16px;" onclick="generateLiveSample()">Generate in Gen-3</button>
+      <button class="btn-rw btn-rw-ghost" style="padding:14px 28px; font-size:16px; margin-left:12px;" onclick="scrollToStudio()">View Research Paper</button>
+    </div>
+  </section>
+
+  <!-- Trust Bar -->
+  <div class="section-wrap" style="padding-top:0; padding-bottom:0;">
+    <div class="trust-bar">
+      <span class="rw-micro-tag">TRUSTED BY VISIONARY ARTISTS & STUDIOS</span>
+      <span class="trust-item">PARAMOUNT</span>
+      <span class="trust-item">LIONSGATE</span>
+      <span class="trust-item">A24 FILMS</span>
+      <span class="trust-item">CBS INTERACTIVE</span>
+      <span class="trust-item">NEW BALANCE</span>
+    </div>
+  </div>
+
+  <!-- Interactive Studio Section -->
+  <section class="section-wrap" id="gen3">
+    <span class="rw-label">Director Suite</span>
+    <h2 style="font-size:40px; font-weight:400; line-height:1.0; letter-spacing:-1px; margin-bottom:12px;">Interactive Generation Studio</h2>
+    <p style="color:var(--rw-cool-slate); font-size:18px; max-width:680px;">Construct cinematic scenes with precise motion vectors and lens dynamics.</p>
+
+    <div class="studio-box" id="studio">
+      <div class="studio-header">
+        <div style="display:flex; align-items:center; gap:12px;">
+          <span style="font-weight:600;">ACTIVE SESSION: GEN-3-ALPHA</span>
+          <span class="rw-micro-tag" style="background:#27272a; padding:2px 8px; border-radius:4px; color:#a1a1aa;">1080P PRO</span>
+        </div>
+        <div style="font-size:13px; color:var(--rw-cool-slate);" id="render-timer">READY TO RENDER</div>
+      </div>
+
+      <!-- Viewport -->
+      <div class="studio-viewport" id="viewportArea">
+        <div class="vp-canvas" id="canvasBackdrop"></div>
+        <div class="vp-meta">
+          <div>
+            <span class="rw-micro-tag" style="color:#ffffff;">FRAME 001 // SEED 849204</span>
+            <div style="font-size:18px; font-weight:500; margin-top:4px;" id="sceneTitle">Cyberpunk Alleyway - Neon Reflections</div>
+          </div>
+          <div class="vp-badge" id="cameraStatus">Camera: Pan Right 35°</div>
+        </div>
+      </div>
+
+      <!-- Prompt Input -->
+      <div class="prompt-row">
+        <input type="text" id="promptInput" class="prompt-input" value="A cinematic 35mm pan across a rain-slicked boulevard, ambient neon flares, anamorphic lens bokeh.">
+        <button class="btn-rw btn-rw-white" onclick="runGeneration()">Generate 10s</button>
+      </div>
+
+      <!-- Parameter controls -->
+      <div class="studio-controls">
+        <span class="rw-micro-tag">ASPECT RATIO:</span>
+        <div class="param-pill active" onclick="setRatio(this, '16:9 Cinema')">16:9 Cinema</div>
+        <div class="param-pill" onclick="setRatio(this, '9:16 Vertical')">9:16 Vertical</div>
+        <div class="param-pill" onclick="setRatio(this, '2.39:1 Anamorphic')">2.39:1 Anamorphic</div>
+
+        <span class="rw-micro-tag" style="margin-left:16px;">MOTION:</span>
+        <div class="param-pill active" onclick="setMotion(this, 'Dynamic Orbit')">Dynamic Orbit</div>
+        <div class="param-pill" onclick="setMotion(this, 'Linear Zoom')">Linear Zoom</div>
+        <div class="param-pill" onclick="setMotion(this, 'Static Lock')">Static Lock</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Editorial Grid (Mixed sizes) -->
+  <section class="section-wrap" id="research">
+    <span class="rw-label">Research & Foundations</span>
+    <h2 style="font-size:40px; font-weight:400; line-height:1.0; letter-spacing:-1px; margin-bottom:28px;">Recent Publications</h2>
+
+    <div class="editorial-grid">
+      <!-- Feature Large Card -->
+      <div class="media-card">
+        <div class="media-thumb" style="height:360px; background:linear-gradient(180deg, #1e293b 0%, #020617 100%);">
+          <span style="font-size:48px;">🎬</span>
+        </div>
+        <div class="media-info">
+          <span class="rw-micro-tag">WORLD MODEL ARCHITECTURE</span>
+          <h3 class="media-title" style="margin-top:6px;">General World Models for Spatiotemporal Simulation</h3>
+          <p class="media-desc">Representing environmental physics, friction, collision geometry, and light transmission in end-to-end generative transformers.</p>
+        </div>
+      </div>
+
+      <!-- Right Column Stacked -->
+      <div style="display:flex; flex-direction:column; gap:24px;">
+        <div class="media-card">
+          <div class="media-info">
+            <span class="rw-micro-tag">CONTROL SYSTEMS</span>
+            <h3 class="media-title" style="font-size:20px;">Motion Brush 2.0: Decoupled Multi-Trajectory Control</h3>
+            <p class="media-desc">Isolate and direct motion vectors for individual objects within a video frame without retraining.</p>
+          </div>
+        </div>
+
+        <div class="media-card">
+          <div class="media-info">
+            <span class="rw-micro-tag">AUDIO TO SCENE</span>
+            <h3 class="media-title" style="font-size:20px;">Synthesizing Foley & Spatial Acoustic Atmospheres</h3>
+            <p class="media-desc">Generating synchronized, multichannel environmental sound beds conditioned directly on video optic flow.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Mission Statement -->
+  <section class="mission-section" id="company">
+    <p class="mission-text">
+      “We are building AI to simulate the world through imagination, art and aesthetics.”
+    </p>
+    <div style="color:var(--rw-cool-slate); font-size:15px;">Runway Research & AI Systems</div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="rw-footer">
+    <div class="footer-inner">
+      <div class="footer-copy">
+        © 2026 Runway AI, Inc. Built strictly adhering to open-design/design-systems/runwayml/DESIGN.md
+      </div>
+      <div style="color:var(--rw-footer-gray); font-size:13px;">
+        Zero Shadows • Single Typeface (abcNormal) • Tight Film Density
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    function scrollToStudio() {
+      document.getElementById('studio').scrollIntoView({ behavior: 'smooth' });
+    }
+
+    function launchLogin() {
+      alert('Runway Login Modal initialized.');
+    }
+
+    function openStudio() {
+      alert('Welcome to Runway. Free director tier account initialized.');
+    }
+
+    function setRatio(el, val) {
+      document.querySelectorAll('.studio-controls .param-pill').forEach(pill => {
+        if (pill.parentElement === el.parentElement && pill.innerText.includes(':')) {
+          pill.classList.remove('active');
+        }
+      });
+      el.classList.add('active');
+      document.getElementById('sceneTitle').textContent = `Viewport adjusted to ${val}`;
+    }
+
+    function setMotion(el, val) {
+      document.querySelectorAll('.studio-controls .param-pill').forEach(pill => {
+        if (pill.innerText.includes('Zoom') || pill.innerText.includes('Orbit') || pill.innerText.includes('Lock')) {
+          pill.classList.remove('active');
+        }
+      });
+      el.classList.add('active');
+      document.getElementById('cameraStatus').textContent = `Camera: ${val}`;
+    }
+
+    function runGeneration() {
+      const prompt = document.getElementById('promptInput').value;
+      const timer = document.getElementById('render-timer');
+      const backdrop = document.getElementById('canvasBackdrop');
+      
+      timer.textContent = 'RENDERING DIFFUSION STEPS (1/24)...';
+      backdrop.style.filter = 'brightness(1.5) hue-rotate(45deg)';
+      
+      setTimeout(() => {
+        timer.textContent = 'INTERPOLATING TEMPORAL FRAMES...';
+        backdrop.style.filter = 'brightness(1.2) hue-rotate(90deg)';
+      }, 700);
+
+      setTimeout(() => {
+        timer.textContent = 'COMPLETED // 10s AT 60FPS';
+        backdrop.style.filter = 'brightness(1.0)';
+        alert(`Generation complete for prompt:\n"${prompt}"\nRendered at 1080p 60fps with temporal consistency.`);
+      }, 1500);
+    }
+
+    function generateLiveSample() {
+      scrollToStudio();
+      runGeneration();
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,1092 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Coinbase — Buy &amp; Sell Bitcoin, Ethereum, and Cryptocurrencies | Official Platform</title>
+  <meta name="description" content="Coinbase is the trusted, secure crypto exchange platform. Trade Bitcoin, Ethereum, Solana, and digital assets with institutional-grade security and Coinbase Blue reliability." />
+
+  <!-- Fonts: Inter and SF Pro font stack simulating CoinbaseDisplay, CoinbaseSans, CoinbaseText -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+
+  <style>
+    /* ─────────────────────────────────────────────────────────────────
+       COINBASE DESIGN SYSTEM SPECIFICATION & DESIGN TOKENS
+       Directly sourced from /open-design/design-systems/coinbase/DESIGN.md
+       ───────────────────────────────────────────────────────────────── */
+    :root {
+      /* Primary Colors (DESIGN.md §2) */
+      --color-coinbase-blue: #0052ff;
+      --color-pure-white: #ffffff;
+      --color-near-black: #0a0b0d;
+      --color-cool-gray-surface: #eef0f3;
+
+      /* Interactive Colors */
+      --color-hover-blue: #578bfa;
+      --color-link-blue: #0667d0;
+      --color-muted-blue: #5b616e;
+      --color-border-muted: rgba(91, 97, 110, 0.2);
+
+      /* Surface Colors */
+      --color-dark-card: #282b31;
+      --color-light-surface: rgba(247, 247, 247, 0.88);
+
+      /* Semantics */
+      --color-success-green: #098551;
+      --color-danger-red: #cf202f;
+
+      /* Typography Families (DESIGN.md §3) */
+      --font-display: "CoinbaseDisplay", "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      --font-sans: "CoinbaseSans", "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      --font-text: "CoinbaseText", "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      --font-mono: "JetBrains Mono", ui-monospace, Menlo, monospace;
+
+      /* Radii (DESIGN.md §4 & §5) */
+      --radius-small: 8px;
+      --radius-standard: 16px;
+      --radius-large: 24px;
+      --radius-xl: 40px;
+      --radius-pill: 56px; /* Signature Coinbase 56px CTA radius */
+      --radius-full: 100000px;
+
+      /* Spacing Scale */
+      --space-1: 4px;
+      --space-2: 8px;
+      --space-3: 12px;
+      --space-4: 16px;
+      --space-5: 20px;
+      --space-6: 24px;
+      --space-8: 32px;
+      --space-12: 48px;
+      --space-16: 64px;
+      --space-24: 96px;
+
+      /* Transitions */
+      --motion-fast: 150ms cubic-bezier(0.2, 0, 0, 1);
+      --motion-base: 220ms cubic-bezier(0.2, 0, 0, 1);
+      --container-max: 1240px;
+    }
+
+    /* ─── Global Reset & Clean Binary Base ─────────────────────────── */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      background-color: var(--color-pure-white);
+      color: var(--color-near-black);
+    }
+
+    body {
+      background-color: var(--color-pure-white);
+      color: var(--color-near-black);
+      font-family: var(--font-text);
+      font-size: 18px;
+      font-weight: 400;
+      line-height: 1.56;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      overflow-x: hidden;
+    }
+
+    /* Display Headlines: Ultra-tight 1.00 line height (DESIGN.md §1 & §3) */
+    h1, .display-hero {
+      font-family: var(--font-display);
+      font-size: 80px;
+      font-weight: 400;
+      line-height: 1.00;
+      letter-spacing: -0.025em;
+      color: var(--color-near-black);
+    }
+
+    h2, .display-secondary {
+      font-family: var(--font-display);
+      font-size: 64px;
+      font-weight: 400;
+      line-height: 1.00;
+      letter-spacing: -0.02em;
+    }
+
+    h3, .section-heading {
+      font-family: var(--font-sans);
+      font-size: 36px;
+      font-weight: 400;
+      line-height: 1.11;
+      letter-spacing: -0.015em;
+    }
+
+    h4, .card-title {
+      font-family: var(--font-sans);
+      font-size: 32px;
+      font-weight: 400;
+      line-height: 1.13;
+    }
+
+    p {
+      color: var(--color-near-black);
+      line-height: 1.56;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    :focus-visible {
+      outline: 2px solid var(--color-near-black);
+      outline-offset: 2px;
+    }
+
+    /* ─── Buttons (DESIGN.md §4: 56px radius pill CTAs) ────────────── */
+    .btn-pill {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--space-2);
+      height: 56px;
+      padding: 0 32px;
+      border-radius: var(--radius-pill); /* 56px */
+      font-family: var(--font-sans);
+      font-size: 16px;
+      font-weight: 600;
+      letter-spacing: 0.16px;
+      cursor: pointer;
+      border: 1px solid transparent;
+      text-decoration: none;
+      white-space: nowrap;
+      transition: background-color var(--motion-fast), color var(--motion-fast), border-color var(--motion-fast);
+    }
+
+    /* Primary Action with Coinbase Blue */
+    .btn-pill-blue {
+      background-color: var(--color-coinbase-blue);
+      color: var(--color-pure-white);
+      border-color: var(--color-coinbase-blue);
+    }
+
+    .btn-pill-blue:hover {
+      background-color: var(--color-hover-blue);
+      border-color: var(--color-hover-blue);
+    }
+
+    /* Cool Gray Surface Button (#eef0f3) */
+    .btn-pill-cool-gray {
+      background-color: var(--color-cool-gray-surface);
+      color: var(--color-near-black);
+      border-color: var(--color-cool-gray-surface);
+    }
+
+    .btn-pill-cool-gray:hover {
+      background-color: var(--color-hover-blue);
+      color: var(--color-pure-white);
+      border-color: var(--color-hover-blue);
+    }
+
+    /* Dark Pill Button for Dark Sections */
+    .btn-pill-dark {
+      background-color: var(--color-dark-card);
+      color: var(--color-pure-white);
+      border-color: var(--color-dark-card);
+    }
+
+    .btn-pill-dark:hover {
+      background-color: var(--color-hover-blue);
+      border-color: var(--color-hover-blue);
+    }
+
+    /* Blue Bordered Outlined Pill */
+    .btn-pill-outline-blue {
+      background-color: transparent;
+      color: var(--color-coinbase-blue);
+      border: 1px solid var(--color-coinbase-blue);
+    }
+
+    .btn-pill-outline-blue:hover {
+      background-color: rgba(0, 82, 255, 0.05);
+    }
+
+    /* ─── Top Navigation Header ────────────────────────────────────── */
+    .coinbase-header {
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      height: 72px;
+      background-color: rgba(255, 255, 255, 0.96);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--color-border-muted);
+      display: flex;
+      align-items: center;
+    }
+
+    .container {
+      max-width: var(--container-max);
+      margin: 0 auto;
+      padding: 0 var(--space-6);
+      width: 100%;
+    }
+
+    .nav-wrapper {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .brand-wrap {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .coinbase-logo-svg {
+      width: 32px;
+      height: 32px;
+      background-color: var(--color-coinbase-blue);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      font-family: var(--font-display);
+      font-weight: 800;
+      font-size: 20px;
+    }
+
+    .brand-name {
+      font-family: var(--font-sans);
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--color-coinbase-blue);
+      letter-spacing: -0.5px;
+    }
+
+    .nav-menu-list {
+      display: flex;
+      align-items: center;
+      list-style: none;
+      gap: var(--space-8);
+    }
+
+    .nav-menu-list a {
+      font-family: var(--font-sans);
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--color-near-black);
+      transition: color var(--motion-fast);
+    }
+
+    .nav-menu-list a:hover {
+      color: var(--color-coinbase-blue);
+    }
+
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: var(--space-3);
+    }
+
+    /* ─── Hero Section (White Background) ──────────────────────────── */
+    .hero-section {
+      padding: var(--space-20) 0;
+      background-color: var(--color-pure-white);
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: var(--space-12);
+      align-items: center;
+    }
+
+    .hero-h1 {
+      margin-bottom: var(--space-6);
+    }
+
+    .hero-subtitle {
+      font-size: 20px;
+      color: #3b404d;
+      margin-bottom: var(--space-8);
+      max-width: 520px;
+    }
+
+    .hero-form-box {
+      display: flex;
+      gap: var(--space-3);
+      max-width: 480px;
+      margin-bottom: var(--space-4);
+    }
+
+    .email-input-pill {
+      flex: 1;
+      height: 56px;
+      border-radius: var(--radius-pill);
+      border: 1px solid var(--color-border-muted);
+      padding: 0 var(--space-6);
+      font-family: var(--font-sans);
+      font-size: 16px;
+      color: var(--color-near-black);
+      background-color: var(--color-pure-white);
+    }
+
+    .email-input-pill:focus {
+      outline: 2px solid var(--color-coinbase-blue);
+      border-color: var(--color-coinbase-blue);
+    }
+
+    /* Interactive Trading Card (Hero Right) */
+    .trade-preview-card {
+      background-color: var(--color-pure-white);
+      border: 1px solid var(--color-border-muted);
+      border-radius: var(--radius-large);
+      padding: var(--space-8);
+      box-shadow: 0 16px 48px rgba(0, 0, 0, 0.06);
+    }
+
+    .trade-card-tabs {
+      display: flex;
+      border-bottom: 1px solid var(--color-border-muted);
+      padding-bottom: var(--space-4);
+      margin-bottom: var(--space-6);
+      gap: var(--space-6);
+    }
+
+    .trade-tab-btn {
+      background: none;
+      border: none;
+      font-family: var(--font-sans);
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--color-muted-blue);
+      cursor: pointer;
+      position: relative;
+      padding-bottom: 8px;
+    }
+
+    .trade-tab-btn.active {
+      color: var(--color-coinbase-blue);
+    }
+
+    .trade-tab-btn.active::after {
+      content: "";
+      position: absolute;
+      bottom: -17px;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background-color: var(--color-coinbase-blue);
+    }
+
+    .trade-asset-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: var(--space-3) 0;
+      border-bottom: 1px solid rgba(91, 97, 110, 0.1);
+    }
+
+    .asset-meta {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .asset-icon-circle {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 14px;
+      color: #fff;
+    }
+
+    .asset-price-col {
+      text-align: right;
+    }
+
+    .asset-change-green {
+      color: var(--color-success-green);
+      font-family: var(--font-mono);
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    /* ─── Dark Section: Financial Command (DESIGN.md §1: #0a0b0d) ─── */
+    .dark-command-section {
+      background-color: var(--color-near-black);
+      color: var(--color-pure-white);
+      padding: var(--space-24) 0;
+    }
+
+    .dark-command-section h2 {
+      color: #ffffff;
+      margin-bottom: var(--space-4);
+    }
+
+    .dark-command-section p {
+      color: #a2a8b4;
+    }
+
+    .dark-feature-grid-3up {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: var(--space-8);
+      margin-top: var(--space-16);
+    }
+
+    /* Dark Card (#282b31) per DESIGN.md §2 */
+    .dark-card-box {
+      background-color: var(--color-dark-card);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: var(--radius-standard);
+      padding: var(--space-8);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: transform var(--motion-fast);
+    }
+
+    .dark-card-box:hover {
+      transform: translateY(-4px);
+    }
+
+    .dark-card-box h4 {
+      color: #ffffff;
+      margin-bottom: var(--space-3);
+    }
+
+    .dark-card-box p {
+      font-size: 16px;
+      color: #a2a8b4;
+      line-height: 1.5;
+      margin-bottom: var(--space-6);
+      flex: 1;
+    }
+
+    /* ─── White Section: Ecosystem & Advanced Tools ────────────────── */
+    .ecosystem-section {
+      padding: var(--space-24) 0;
+      background-color: var(--color-pure-white);
+    }
+
+    .ecosystem-header {
+      text-align: center;
+      max-width: 720px;
+      margin: 0 auto var(--space-16);
+    }
+
+    .ecosystem-grid-4up {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: var(--space-6);
+    }
+
+    .ecosystem-card {
+      background-color: var(--color-cool-gray-surface);
+      border-radius: var(--radius-standard);
+      padding: var(--space-6);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: background-color var(--motion-fast);
+    }
+
+    .ecosystem-card:hover {
+      background-color: #e2e6eb;
+    }
+
+    .card-num {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--color-coinbase-blue);
+      margin-bottom: var(--space-4);
+    }
+
+    .ecosystem-card h4 {
+      font-size: 22px;
+      font-weight: 600;
+      margin-bottom: var(--space-2);
+    }
+
+    .ecosystem-card p {
+      font-size: 15px;
+      color: #5b616e;
+      line-height: 1.45;
+    }
+
+    /* ─── Dark Section: Security Vault & Cold Storage ──────────────── */
+    .vault-security-section {
+      background-color: #050608;
+      color: #ffffff;
+      padding: var(--space-24) 0;
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .vault-layout {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--space-16);
+      align-items: center;
+    }
+
+    .stat-cluster-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--space-4);
+    }
+
+    .stat-tile-dark {
+      background-color: var(--color-dark-card);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: var(--radius-standard);
+      padding: var(--space-6);
+    }
+
+    .stat-number-blue {
+      font-family: var(--font-display);
+      font-size: 40px;
+      color: var(--color-coinbase-blue);
+      line-height: 1;
+      margin-bottom: 8px;
+    }
+
+    /* ─── Final CTA Band (Coinbase Blue) ───────────────────────────── */
+    .prefooter-cta-band {
+      background-color: var(--color-pure-white);
+      padding: var(--space-20) 0;
+      text-align: center;
+    }
+
+    .prefooter-box {
+      max-width: 680px;
+      margin: 0 auto;
+    }
+
+    /* ─── Footer (Near-Black #0a0b0d) ──────────────────────────────── */
+    .coinbase-footer {
+      background-color: var(--color-near-black);
+      color: #8a919e;
+      padding: var(--space-20) 0 var(--space-12);
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .footer-grid-5up {
+      display: grid;
+      grid-template-columns: 1.5fr repeat(4, 1fr);
+      gap: var(--space-8);
+      margin-bottom: var(--space-16);
+    }
+
+    .footer-heading {
+      font-family: var(--font-sans);
+      font-size: 15px;
+      font-weight: 600;
+      color: #ffffff;
+      margin-bottom: var(--space-4);
+    }
+
+    .footer-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-3);
+    }
+
+    .footer-list a {
+      font-size: 14px;
+      color: #8a919e;
+      transition: color var(--motion-fast);
+    }
+
+    .footer-list a:hover {
+      color: var(--color-hover-blue);
+    }
+
+    .footer-bottom-telemetry {
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+      padding-top: var(--space-8);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 13px;
+      color: #5b616e;
+      flex-wrap: wrap;
+      gap: var(--space-4);
+    }
+
+    /* ─── Responsive Breakpoints (DESIGN.md §8) ────────────────────── */
+    @media (max-width: 1024px) {
+      .hero-grid { grid-template-columns: 1fr; }
+      .dark-feature-grid-3up { grid-template-columns: 1fr; }
+      .ecosystem-grid-4up { grid-template-columns: repeat(2, 1fr); }
+      .vault-layout { grid-template-columns: 1fr; }
+      .footer-grid-5up { grid-template-columns: repeat(2, 1fr); }
+      h1, .display-hero { font-size: 56px; }
+      h2, .display-secondary { font-size: 48px; }
+    }
+
+    @media (max-width: 640px) {
+      .nav-menu-list { display: none; }
+      .ecosystem-grid-4up { grid-template-columns: 1fr; }
+      .footer-grid-5up { grid-template-columns: 1fr; }
+      .hero-form-box { flex-direction: column; }
+      .email-input-pill { width: 100%; }
+      h1, .display-hero { font-size: 42px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Navigation Bar -->
+  <header class="coinbase-header">
+    <div class="container nav-wrapper">
+      <a href="#hero" class="brand-wrap" aria-label="Coinbase Home">
+        <div class="coinbase-logo-svg">C</div>
+        <span class="brand-name">coinbase</span>
+      </a>
+
+      <nav aria-label="Primary Navigation">
+        <ul class="nav-menu-list">
+          <li><a href="#markets">Explore</a></li>
+          <li><a href="#advanced">Advanced</a></li>
+          <li><a href="#ecosystem">Individuals</a></li>
+          <li><a href="#vault">Institutions</a></li>
+          <li><a href="#developer">Developers</a></li>
+        </ul>
+      </nav>
+
+      <div class="nav-actions">
+        <a href="#markets" class="btn-pill btn-pill-cool-gray" style="height: 44px; padding: 0 20px; font-size: 14px;">Sign in</a>
+        <a href="#hero" class="btn-pill btn-pill-blue" style="height: 44px; padding: 0 20px; font-size: 14px;">Sign up</a>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <!-- HERO SECTION: Pure White Canvas with Ultra-Tight 1.00 Display Typography -->
+    <section class="hero-section" id="hero">
+      <div class="container hero-grid">
+        <div>
+          <h1 class="hero-h1">The future of finance is here.</h1>
+          <p class="hero-subtitle">
+            Trade crypto, earn staking yield, and securely custody digital assets with the world's most trusted publicly traded crypto exchange.
+          </p>
+
+          <form class="hero-form-box" id="signupHeroForm">
+            <input type="email" class="email-input-pill" placeholder="satoshi@domain.com" required />
+            <button type="submit" class="btn-pill btn-pill-blue">Sign up</button>
+          </form>
+          <span style="font-size: 13px; color: var(--color-muted-blue);">Get up to $200 in crypto for getting started today. Terms apply.</span>
+        </div>
+
+        <!-- Live Interactive Crypto Preview Card -->
+        <div class="trade-preview-card" id="markets">
+          <div class="trade-card-tabs">
+            <button class="trade-tab-btn active" data-filter="popular">Popular</button>
+            <button class="trade-tab-btn" data-filter="gainers">Top Gainers</button>
+            <button class="trade-tab-btn" data-filter="new">New on Coinbase</button>
+          </div>
+
+          <div class="assets-list" id="assetTable">
+            <!-- Asset 1: Bitcoin -->
+            <div class="trade-asset-row">
+              <div class="asset-meta">
+                <div class="asset-icon-circle" style="background-color: #F7931A;">₿</div>
+                <div>
+                  <div style="font-weight: 600; font-size: 16px;">Bitcoin</div>
+                  <div style="font-size: 13px; color: #5b616e;">BTC</div>
+                </div>
+              </div>
+              <div class="asset-price-col">
+                <div style="font-weight: 600; font-size: 16px;">$67,420.50</div>
+                <div class="asset-change-green">+3.42%</div>
+              </div>
+            </div>
+
+            <!-- Asset 2: Ethereum -->
+            <div class="trade-asset-row">
+              <div class="asset-meta">
+                <div class="asset-icon-circle" style="background-color: #627EEA;">Ξ</div>
+                <div>
+                  <div style="font-weight: 600; font-size: 16px;">Ethereum</div>
+                  <div style="font-size: 13px; color: #5b616e;">ETH</div>
+                </div>
+              </div>
+              <div class="asset-price-col">
+                <div style="font-weight: 600; font-size: 16px;">$3,512.80</div>
+                <div class="asset-change-green">+4.18%</div>
+              </div>
+            </div>
+
+            <!-- Asset 3: Solana -->
+            <div class="trade-asset-row">
+              <div class="asset-meta">
+                <div class="asset-icon-circle" style="background-color: #14F195; color: #000;">S</div>
+                <div>
+                  <div style="font-weight: 600; font-size: 16px;">Solana</div>
+                  <div style="font-size: 13px; color: #5b616e;">SOL</div>
+                </div>
+              </div>
+              <div class="asset-price-col">
+                <div style="font-weight: 600; font-size: 16px;">$154.20</div>
+                <div class="asset-change-green">+8.65%</div>
+              </div>
+            </div>
+
+            <!-- Asset 4: USD Coin -->
+            <div class="trade-asset-row" style="border-bottom: none;">
+              <div class="asset-meta">
+                <div class="asset-icon-circle" style="background-color: #2775CA;">$</div>
+                <div>
+                  <div style="font-weight: 600; font-size: 16px;">USDC</div>
+                  <div style="font-size: 13px; color: #5b616e;">USDC · 5.1% APY</div>
+                </div>
+              </div>
+              <div class="asset-price-col">
+                <div style="font-weight: 600; font-size: 16px;">$1.00</div>
+                <div style="color: #5b616e; font-size: 14px;">0.00%</div>
+              </div>
+            </div>
+          </div>
+
+          <div style="margin-top: 20px;">
+            <a href="#markets" class="btn-pill btn-pill-cool-gray" style="width: 100%;">View all 250+ cryptocurrencies</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- DARK SECTION 1: Financial Command & Advanced Trading (Near-Black #0a0b0d) -->
+    <section class="dark-command-section" id="advanced">
+      <div class="container">
+        <div style="max-width: 760px;">
+          <h2 class="display-secondary">Institutional reliability. Built for active traders.</h2>
+          <p style="font-size: 20px; line-height: 1.5;">
+            Access sub-millisecond execution, deep global order book liquidity, and transparent maker-taker fees on Coinbase Advanced.
+          </p>
+        </div>
+
+        <div class="dark-feature-grid-3up">
+          <!-- Dark Card 1 (#282b31) -->
+          <div class="dark-card-box">
+            <div>
+              <h4>Advanced Order Types</h4>
+              <p>Execute Stop-Limit, Bracket Orders, and TWAP algorithmic strategies with zero slippage across major liquidity pairs.</p>
+            </div>
+            <a href="#advanced" class="btn-pill btn-pill-dark" style="align-self: flex-start;">Explore Advanced</a>
+          </div>
+
+          <!-- Dark Card 2 (#282b31) -->
+          <div class="dark-card-box">
+            <div>
+              <h4>Real-Time TradingView Charts</h4>
+              <p>Analyze market movements with 100+ native technical indicators, multi-timeframe overlays, and depth charts.</p>
+            </div>
+            <a href="#advanced" class="btn-pill btn-pill-dark" style="align-self: flex-start;">Open Terminal</a>
+          </div>
+
+          <!-- Dark Card 3 (#282b31) -->
+          <div class="dark-card-box">
+            <div>
+              <h4>Up to 5.1% APY on USDC</h4>
+              <p>Earn rewards automatically on idle USD Coin balance without lockup periods, paid directly into your wallet monthly.</p>
+            </div>
+            <a href="#advanced" class="btn-pill btn-pill-blue" style="align-self: flex-start;">Start Earning</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- WHITE SECTION 2: Product Ecosystem (White Surface) -->
+    <section class="ecosystem-section" id="ecosystem">
+      <div class="container">
+        <div class="ecosystem-header">
+          <h3 class="section-heading">A comprehensive crypto financial ecosystem.</h3>
+          <p style="font-size: 19px; color: #5b616e; margin-top: 12px;">
+            Designed to support your digital asset journey at every step.
+          </p>
+        </div>
+
+        <div class="ecosystem-grid-4up">
+          <div class="ecosystem-card">
+            <span class="card-num">01 // TRADING</span>
+            <div>
+              <h4>Coinbase App</h4>
+              <p>Buy, sell, and manage crypto effortlessly on iOS and Android.</p>
+            </div>
+          </div>
+
+          <div class="ecosystem-card">
+            <span class="card-num">02 // SELF-CUSTODY</span>
+            <div>
+              <h4>Coinbase Wallet</h4>
+              <p>Explore thousands of dapps, collect NFTs, and retain private keys.</p>
+            </div>
+          </div>
+
+          <div class="ecosystem-card">
+            <span class="card-num">03 // LAYER 2</span>
+            <div>
+              <h4>Base Network</h4>
+              <p>Ethereum L2 scaling gas fees down to pennies with bank-level security.</p>
+            </div>
+          </div>
+
+          <div class="ecosystem-card">
+            <span class="card-num">04 // PAYMENTS</span>
+            <div>
+              <h4>Coinbase Card</h4>
+              <p>Spend crypto globally anywhere Visa is accepted and earn crypto rewards.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- DARK SECTION 2: Institutional Security Vault (#050608 & #282b31) -->
+    <section class="vault-security-section" id="vault">
+      <div class="container vault-layout">
+        <div>
+          <h2 style="font-family: var(--font-display); font-size: 52px; line-height: 1.05; margin-bottom: 20px;">
+            The most secure, regulated vault in digital assets.
+          </h2>
+          <p style="font-size: 19px; color: #9da3af; line-height: 1.5; margin-bottom: 32px;">
+            Coinbase is a publicly traded company (NASDAQ: COIN) subject to quarterly financial audits, strict reserve segregation, and air-gapped cold storage.
+          </p>
+          <a href="#vault" class="btn-pill btn-pill-outline-blue">Learn about Coinbase Prime</a>
+        </div>
+
+        <div class="stat-cluster-grid">
+          <div class="stat-tile-dark">
+            <div class="stat-number-blue">$330B+</div>
+            <div style="font-size: 14px; color: #a2a8b4;">Assets safeguarded under custody</div>
+          </div>
+          <div class="stat-tile-dark">
+            <div class="stat-number-blue">100+</div>
+            <div style="font-size: 14px; color: #a2a8b4;">Countries supported globally</div>
+          </div>
+          <div class="stat-tile-dark">
+            <div class="stat-number-blue">1:1</div>
+            <div style="font-size: 14px; color: #a2a8b4;">Full asset reserve backing</div>
+          </div>
+          <div class="stat-tile-dark">
+            <div class="stat-number-blue">SOC 1 &amp; 2</div>
+            <div style="font-size: 14px; color: #a2a8b4;">Type II security certified</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- PRE-FOOTER CTA SECTION (Pure White) -->
+    <section class="prefooter-cta-band" id="developer">
+      <div class="container prefooter-box">
+        <h2 style="font-size: 48px; line-height: 1.05; margin-bottom: 16px;">
+          Start your crypto journey in minutes.
+        </h2>
+        <p style="font-size: 19px; color: #5b616e; margin-bottom: 32px;">
+          Create an account, link your payment method, and complete your first transaction securely.
+        </p>
+        <div style="display: flex; gap: 16px; justify-content: center; flex-wrap: wrap;">
+          <a href="#hero" class="btn-pill btn-pill-blue">Get started</a>
+          <a href="#advanced" class="btn-pill btn-pill-cool-gray">View exchange prices</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- NEAR-BLACK FOOTER (DESIGN.md §1 & §2: #0a0b0d) -->
+  <footer class="coinbase-footer">
+    <div class="container">
+      <div class="footer-grid-5up">
+        <div>
+          <div class="brand-wrap" style="margin-bottom: 20px;">
+            <div class="coinbase-logo-svg" style="width: 28px; height: 28px; font-size: 16px;">C</div>
+            <span class="brand-name" style="color: #ffffff;">coinbase</span>
+          </div>
+          <p style="font-size: 13px; line-height: 1.6; color: #8a919e;">
+            Coinbase Inc. is licensed to engage in virtual currency business activity by the New York State Department of Financial Services.
+          </p>
+        </div>
+
+        <div>
+          <h4 class="footer-heading">COMPANY</h4>
+          <ul class="footer-list">
+            <li><a href="#about">About Coinbase</a></li>
+            <li><a href="#careers">Careers</a></li>
+            <li><a href="#affiliates">Affiliates</a></li>
+            <li><a href="#press">Press</a></li>
+            <li><a href="#investors">Investor Relations (COIN)</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h4 class="footer-heading">INDIVIDUALS</h4>
+          <ul class="footer-list">
+            <li><a href="#markets">Buy &amp; sell</a></li>
+            <li><a href="#advanced">Earn crypto</a></li>
+            <li><a href="#wallet">Coinbase Wallet</a></li>
+            <li><a href="#card">Coinbase Card</a></li>
+            <li><a href="#prime">Private Client</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h4 class="footer-heading">INSTITUTIONS</h4>
+          <ul class="footer-list">
+            <li><a href="#vault">Prime Custody</a></li>
+            <li><a href="#advanced">Execution Services</a></li>
+            <li><a href="#staking">Institutional Staking</a></li>
+            <li><a href="#derivatives">International Exchange</a></li>
+            <li><a href="#asset-hub">Asset Hub</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h4 class="footer-heading">DEVELOPERS</h4>
+          <ul class="footer-list">
+            <li><a href="#developer">Coinbase Developer Platform</a></li>
+            <li><a href="#base">Base Network Docs</a></li>
+            <li><a href="#api">Commerce API</a></li>
+            <li><a href="#pay">Coinbase Pay SDK</a></li>
+            <li><a href="#node">Cloud Node Infrastructure</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="footer-bottom-telemetry">
+        <span>© 2026 Coinbase · NASDAQ: COIN</span>
+        <div style="display: flex; gap: 24px;">
+          <span>Status: All systems operational</span>
+          <span>Security &amp; Privacy</span>
+          <span>Terms of Service</span>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Interactive JavaScript Logic -->
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      // 1. Tab Switching on Trading Preview
+      const tabs = document.querySelectorAll('.trade-tab-btn');
+      const assetTable = document.getElementById('assetTable');
+
+      const dataSets = {
+        popular: `
+          <div class="trade-asset-row">
+            <div class="asset-meta">
+              <div class="asset-icon-circle" style="background-color: #F7931A;">₿</div>
+              <div>
+                <div style="font-weight: 600; font-size: 16px;">Bitcoin</div>
+                <div style="font-size: 13px; color: #5b616e;">BTC</div>
+              </div>
+            </div>
+            <div class="asset-price-col">
+              <div style="font-weight: 600; font-size: 16px;">$67,420.50</div>
+              <div class="asset-change-green">+3.42%</div>
+            </div>
+          </div>
+          <div class="trade-asset-row">
+            <div class="asset-meta">
+              <div class="asset-icon-circle" style="background-color: #627EEA;">Ξ</div>
+              <div>
+                <div style="font-weight: 600; font-size: 16px;">Ethereum</div>
+                <div style="font-size: 13px; color: #5b616e;">ETH</div>
+              </div>
+            </div>
+            <div class="asset-price-col">
+              <div style="font-weight: 600; font-size: 16px;">$3,512.80</div>
+              <div class="asset-change-green">+4.18%</div>
+            </div>
+          </div>
+          <div class="trade-asset-row">
+            <div class="asset-meta">
+              <div class="asset-icon-circle" style="background-color: #14F195; color: #000;">S</div>
+              <div>
+                <div style="font-weight: 600; font-size: 16px;">Solana</div>
+                <div style="font-size: 13px; color: #5b616e;">SOL</div>
+              </div>
+            </div>
+            <div class="asset-price-col">
+              <div style="font-weight: 600; font-size: 16px;">$154.20</div>
+              <div class="asset-change-green">+8.65%</div>
+            </div>
+          </div>
+        `,
+        gainers: `
+          <div class="trade-asset-row">
+            <div class="asset-meta">
+              <div class="asset-icon-circle" style="background-color: #0052FF;">B</div>
+              <div>
+                <div style="font-weight: 600; font-size: 16px;">Base Protocol</div>
+                <div style="font-size: 13px; color: #5b616e;">BASE</div>
+              </div>
+            </div>
+            <div class="asset-price-col">
+              <div style="font-weight: 600; font-size: 16px;">$14.82</div>
+              <div class="asset-change-green">+24.8%</div>
+            </div>
+          </div>
+          <div class="trade-asset-row">
+            <div class="asset-meta">
+              <div class="asset-icon-circle" style="background-color: #FF0420;">O</div>
+              <div>
+                <div style="font-weight: 600; font-size: 16px;">Optimism</div>
+                <div style="font-size: 13px; color: #5b616e;">OP</div>
+              </div>
+            </div>
+            <div class="asset-price-col">
+              <div style="font-weight: 600; font-size: 16px;">$2.94</div>
+              <div class="asset-change-green">+16.2%</div>
+            </div>
+          </div>
+        `,
+        new: `
+          <div class="trade-asset-row">
+            <div class="asset-meta">
+              <div class="asset-icon-circle" style="background-color: #7B3FE4;">P</div>
+              <div>
+                <div style="font-weight: 600; font-size: 16px;">Polygon POL</div>
+                <div style="font-size: 13px; color: #5b616e;">POL</div>
+              </div>
+            </div>
+            <div class="asset-price-col">
+              <div style="font-weight: 600; font-size: 16px;">$0.42</div>
+              <div class="asset-change-green">+5.12%</div>
+            </div>
+          </div>
+        `
+      };
+
+      tabs.forEach(tab => {
+        tab.addEventListener('click', () => {
+          tabs.forEach(t => t.classList.remove('active'));
+          tab.classList.add('active');
+          const filter = tab.getAttribute('data-filter');
+          if (dataSets[filter]) {
+            assetTable.innerHTML = dataSets[filter];
+          }
+        });
+      });
+
+      // 2. Signup Hero Form
+      const signupForm = document.getElementById('signupHeroForm');
+      if (signupForm) {
+        signupForm.addEventListener('submit', (e) => {
+          e.preventDefault();
+          alert('Welcome to Coinbase! Verification email dispatched to your inbox.');
+          signupForm.reset();
+        });
+      }
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,972 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PAC-MAN — Retro 8-Bit Arcade Design System</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+  <style>
+    /* ==========================================================================
+       PACMAN DESIGN SYSTEM TOKENS & FOUNDATIONS
+       Strictly extracted from open-design/design-systems/pacman/DESIGN.md
+       ========================================================================== */
+    :root {
+      /* Palette Tokens from Style Foundations */
+      --pac-primary: #2A3FE5;      /* Arcade Royal Blue — Maze walls & CTA emphasis */
+      --pac-secondary: #F4B9B0;    /* Pinky Peach — Ghost highlights & secondary accents */
+      --pac-success: #16A34A;      /* Emerald Green — Power pellet & verified state */
+      --pac-warning: #D97706;      /* Pac-Man Gold / Amber — Alerts & high-scores */
+      --pac-danger: #DC2626;       /* Blinky Red — Danger & ghost chase alert */
+      --pac-surface: #000000;      /* Arcade Void Black — Large backgrounds & cards */
+      --pac-text: #111827;         /* Deep neutral text for legibility on light surfaces */
+      --pac-neutral: #000000;      /* Derived surface token for official format compatibility */
+
+      /* Pure Arcade Light Tone for contrast on dark surface */
+      --pac-light-contrast: #F4B9B0;
+      --pac-white: #FFFFFF;
+
+      /* Typography Families */
+      --font-display: 'Press Start 2P', monospace;
+      --font-primary: 'Press Start 2P', monospace;
+      --font-mono: 'Space Mono', monospace;
+
+      /* 8pt Baseline Grid Spacing Scale */
+      --space-1: 8px;
+      --space-2: 16px;
+      --space-3: 24px;
+      --space-4: 32px;
+      --space-6: 48px;
+      --space-8: 64px;
+
+      /* Dotted Border System (Signature Arcade Metaphor) */
+      --border-dotted-primary: 3px dotted var(--pac-primary);
+      --border-dotted-secondary: 3px dotted var(--pac-secondary);
+      --border-dotted-warning: 3px dotted var(--pac-warning);
+    }
+
+    /* Universal Reset & Base Rules */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      font-size: 16px;
+      scroll-behavior: smooth;
+      background-color: var(--pac-surface);
+      color: var(--pac-white);
+    }
+
+    body {
+      font-family: var(--font-mono);
+      font-size: 15px;
+      line-height: 1.6;
+      background-color: var(--pac-surface);
+      color: var(--pac-white);
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+
+    /* Pixel Heading Scale (Press Start 2P) */
+    h1, .pac-h1 {
+      font-family: var(--font-display);
+      font-size: 24px;
+      line-height: 1.6;
+      color: var(--pac-warning);
+      text-transform: uppercase;
+      margin-bottom: var(--space-2);
+    }
+
+    h2, .pac-h2 {
+      font-family: var(--font-display);
+      font-size: 18px;
+      line-height: 1.6;
+      color: var(--pac-primary);
+      text-transform: uppercase;
+      margin-bottom: var(--space-2);
+    }
+
+    h3, .pac-h3 {
+      font-family: var(--font-display);
+      font-size: 14px;
+      line-height: 1.6;
+      color: var(--pac-secondary);
+      text-transform: uppercase;
+      margin-bottom: var(--space-1);
+    }
+
+    /* Scannable Body Typography (Space Mono) */
+    p, .pac-body {
+      font-family: var(--font-mono);
+      font-size: 15px;
+      line-height: 1.6;
+      color: #D1D5DB;
+    }
+
+    .pac-caption {
+      font-family: var(--font-mono);
+      font-size: 13px;
+      line-height: 1.4;
+      color: #9CA3AF;
+    }
+
+    /* Arcade Container */
+    .pac-container {
+      max-width: 1040px;
+      margin: 0 auto;
+      padding: 0 var(--space-3);
+    }
+
+    /* ==========================================================================
+       TOP ARCADE MARQUEE & HUD (Section 1 & 8)
+       ========================================================================== */
+    .pac-hud {
+      background-color: var(--pac-surface);
+      border-bottom: var(--border-dotted-primary);
+      padding: var(--space-2) 0;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+    .pac-hud-inner {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+    .pac-hud-scores {
+      display: flex;
+      gap: var(--space-4);
+      font-family: var(--font-display);
+      font-size: 12px;
+    }
+    .pac-hud-item span {
+      display: block;
+      margin-bottom: 4px;
+    }
+    .pac-hud-label-red { color: var(--pac-danger); }
+    .pac-hud-label-white { color: var(--pac-white); }
+    .pac-hud-val { color: var(--pac-white); font-weight: bold; }
+
+    .pac-hud-nav {
+      display: flex;
+      align-items: center;
+      gap: var(--space-3);
+      list-style: none;
+      font-family: var(--font-display);
+      font-size: 11px;
+    }
+    .pac-hud-nav a {
+      color: var(--pac-white);
+      text-decoration: none;
+      padding-bottom: 4px;
+      border-bottom: 2px dotted transparent;
+      transition: all 180ms ease;
+    }
+    .pac-hud-nav a:hover {
+      color: var(--pac-primary);
+      border-bottom-color: var(--pac-primary);
+    }
+
+    /* ==========================================================================
+       BUTTONS & CONTROLS (Section 6 & 7)
+       Primary action uses #2A3FE5; transitions 150-250ms with stable easing
+       ========================================================================== */
+    .pac-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      font-family: var(--font-display);
+      font-size: 12px;
+      padding: 14px 20px;
+      text-decoration: none;
+      cursor: pointer;
+      text-transform: uppercase;
+      border: 3px solid transparent;
+      border-radius: 0px;
+      transition: transform 180ms ease, background-color 180ms ease, border-color 180ms ease, color 180ms ease;
+    }
+
+    /* Primary CTA Button (#2A3FE5) */
+    .pac-btn-primary {
+      background-color: var(--pac-primary);
+      color: var(--pac-white);
+      border: 3px solid var(--pac-primary);
+      box-shadow: 4px 4px 0px 0px #0D1B8C;
+    }
+    .pac-btn-primary:hover {
+      background-color: #384EFF;
+      transform: translate(-2px, -2px);
+      box-shadow: 6px 6px 0px 0px #0D1B8C;
+    }
+    .pac-btn-primary:active {
+      transform: translate(2px, 2px);
+      box-shadow: 2px 2px 0px 0px #0D1B8C;
+    }
+    .pac-btn-primary:focus-visible {
+      outline: 3px dotted var(--pac-warning);
+      outline-offset: 4px;
+    }
+
+    /* Secondary Button (Neutral with dotted border) */
+    .pac-btn-secondary {
+      background-color: var(--pac-surface);
+      color: var(--pac-secondary);
+      border: var(--border-dotted-secondary);
+    }
+    .pac-btn-secondary:hover {
+      background-color: rgba(244, 185, 176, 0.1);
+      color: var(--pac-white);
+      transform: translate(-2px, -2px);
+    }
+    .pac-btn-secondary:focus-visible {
+      outline: 3px dotted var(--pac-primary);
+      outline-offset: 4px;
+    }
+
+    /* Danger Button */
+    .pac-btn-danger {
+      background-color: var(--pac-danger);
+      color: var(--pac-white);
+      border: 3px solid var(--pac-danger);
+      box-shadow: 4px 4px 0px 0px #700B0B;
+    }
+    .pac-btn-danger:hover {
+      background-color: #EF4444;
+      transform: translate(-2px, -2px);
+      box-shadow: 6px 6px 0px 0px #700B0B;
+    }
+
+    /* Success Button */
+    .pac-btn-success {
+      background-color: var(--pac-success);
+      color: var(--pac-white);
+      border: 3px solid var(--pac-success);
+      box-shadow: 4px 4px 0px 0px #09471E;
+    }
+    .pac-btn-success:hover {
+      background-color: #22C55E;
+      transform: translate(-2px, -2px);
+    }
+
+    /* Disabled State */
+    .pac-btn:disabled, .pac-btn.disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+      pointer-events: none;
+      box-shadow: none !important;
+      transform: none !important;
+    }
+
+    /* ==========================================================================
+       HERO ARCADE SECTION WITH MAZE BORDER & PELLET TRACK
+       ========================================================================== */
+    .pac-hero {
+      padding: var(--space-6) 0;
+      position: relative;
+    }
+    .pac-maze-box {
+      border: var(--border-dotted-primary);
+      padding: var(--space-4);
+      background-color: var(--pac-surface);
+      position: relative;
+      margin-bottom: var(--space-4);
+    }
+    .pac-maze-inner-border {
+      border: 2px solid var(--pac-primary);
+      padding: var(--space-4);
+    }
+
+    .pac-pellet-track {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin: var(--space-3) 0;
+      font-family: var(--font-display);
+      font-size: 14px;
+      color: var(--pac-warning);
+      letter-spacing: 8px;
+      user-select: none;
+      overflow: hidden;
+      white-space: nowrap;
+    }
+    .pac-character {
+      display: inline-block;
+      font-size: 20px;
+    }
+
+    /* ==========================================================================
+       INTERACTIVE PAC-MAN ARCADE BOARD (CANVAS SIMULATION)
+       ========================================================================== */
+    .pac-arcade-cabinet {
+      background: #0a0a14;
+      border: 4px solid var(--pac-primary);
+      padding: 20px;
+      margin: var(--space-4) 0;
+      text-align: center;
+    }
+    .pac-cabinet-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+      font-family: var(--font-display);
+      font-size: 12px;
+      color: var(--pac-warning);
+    }
+    #pacCanvas {
+      background-color: #000000;
+      border: 3px dotted var(--pac-primary);
+      display: block;
+      margin: 0 auto;
+      max-width: 100%;
+      height: auto;
+    }
+    .pac-cabinet-controls {
+      display: flex;
+      justify-content: center;
+      gap: 16px;
+      margin-top: 16px;
+      flex-wrap: wrap;
+    }
+
+    /* ==========================================================================
+       TOKEN GRID: GHOST CARDS (Section 1 & 2)
+       ========================================================================== */
+    .pac-cards-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: var(--space-3);
+      margin: var(--space-4) 0;
+    }
+    .pac-card {
+      background-color: var(--pac-surface);
+      border: var(--border-dotted-primary);
+      padding: var(--space-3);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: transform 180ms ease;
+    }
+    .pac-card:hover {
+      transform: translateY(-4px);
+    }
+    .pac-card-tag {
+      font-family: var(--font-display);
+      font-size: 10px;
+      padding: 4px 8px;
+      display: inline-block;
+      margin-bottom: var(--space-2);
+      border: 1px dotted currentColor;
+    }
+
+    /* ==========================================================================
+       LIGHT PANEL FOR BODY LEGIBILITY (Section 2 & 9)
+       "Keep body copy on Text (#111827) for legibility"
+       ========================================================================== */
+    .pac-light-panel {
+      background-color: #F3F4F6;
+      color: var(--pac-text);
+      border: 4px solid var(--pac-primary);
+      padding: var(--space-4);
+      margin: var(--space-6) 0;
+    }
+    .pac-light-panel h2 {
+      color: var(--pac-primary);
+      margin-bottom: var(--space-2);
+    }
+    .pac-light-panel p {
+      color: var(--pac-text);
+      font-weight: 400;
+      margin-bottom: var(--space-2);
+    }
+    .pac-light-panel strong {
+      font-weight: 700;
+      color: #000000;
+    }
+
+    /* ==========================================================================
+       INPUTS & FORM SYSTEM (Section 6)
+       Strong focus-visible states, clear labels, predictable error messaging
+       ========================================================================== */
+    .pac-form-box {
+      border: var(--border-dotted-warning);
+      padding: var(--space-4);
+      margin: var(--space-4) 0;
+      background: var(--pac-surface);
+    }
+    .pac-input-group {
+      margin-bottom: var(--space-3);
+    }
+    .pac-label {
+      display: block;
+      font-family: var(--font-display);
+      font-size: 11px;
+      color: var(--pac-secondary);
+      margin-bottom: 8px;
+    }
+    .pac-input {
+      width: 100%;
+      background-color: #0c0d12;
+      border: 2px solid var(--pac-primary);
+      color: var(--pac-white);
+      font-family: var(--font-mono);
+      font-size: 16px;
+      padding: 12px 16px;
+      outline: none;
+      transition: all 180ms ease;
+    }
+    .pac-input:focus {
+      border-color: var(--pac-warning);
+      outline: 3px dotted var(--pac-primary);
+      outline-offset: 4px;
+    }
+    .pac-error-msg {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      color: var(--pac-danger);
+      margin-top: 6px;
+      display: block;
+    }
+
+    /* ==========================================================================
+       HIGH SCORE TABLE (Section 4 & 5)
+       ========================================================================== */
+    .pac-leaderboard {
+      width: 100%;
+      border-collapse: collapse;
+      font-family: var(--font-display);
+      font-size: 12px;
+      margin-top: var(--space-3);
+    }
+    .pac-leaderboard th {
+      text-align: left;
+      padding: 12px;
+      color: var(--pac-primary);
+      border-bottom: 2px dotted var(--pac-primary);
+    }
+    .pac-leaderboard td {
+      padding: 14px 12px;
+      border-bottom: 1px dotted #222;
+      color: var(--pac-white);
+    }
+    .pac-leaderboard tr:hover {
+      background-color: rgba(42, 63, 229, 0.15);
+    }
+    .pac-rank-1 { color: var(--pac-warning); }
+    .pac-rank-2 { color: var(--pac-secondary); }
+    .pac-rank-3 { color: var(--pac-success); }
+
+    /* ==========================================================================
+       FOOTER MARQUEE (Section 8)
+       ========================================================================== */
+    .pac-footer {
+      border-top: var(--border-dotted-primary);
+      padding: var(--space-6) 0 var(--space-4) 0;
+      margin-top: var(--space-6);
+      text-align: center;
+    }
+    .pac-footer-pellets {
+      font-family: var(--font-display);
+      color: var(--pac-warning);
+      margin-bottom: var(--space-2);
+      letter-spacing: 6px;
+    }
+
+    /* Responsive Adjustments */
+    @media (max-width: 768px) {
+      .pac-cards-grid {
+        grid-template-columns: 1fr;
+      }
+      .pac-hud-inner {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      .pac-hud-scores {
+        gap: var(--space-2);
+      }
+      h1, .pac-h1 {
+        font-size: 18px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ==========================================================================
+       ARCADE HUD HEADER
+       ========================================================================== -->
+  <header class="pac-hud">
+    <div class="pac-container pac-hud-inner">
+      <div class="pac-hud-scores">
+        <div class="pac-hud-item">
+          <span class="pac-hud-label-red">1UP</span>
+          <span class="pac-hud-val" id="playerScore">004200</span>
+        </div>
+        <div class="pac-hud-item">
+          <span class="pac-hud-label-white">HIGH SCORE</span>
+          <span class="pac-hud-val">033330</span>
+        </div>
+        <div class="pac-hud-item">
+          <span class="pac-hud-label-red">CREDIT</span>
+          <span class="pac-hud-val">02</span>
+        </div>
+      </div>
+
+      <ul class="pac-hud-nav">
+        <li><a href="#maze">MAZE</a></li>
+        <li><a href="#ghosts">GHOSTS</a></li>
+        <li><a href="#typography">TYPE</a></li>
+        <li><a href="#components">CONTROLS</a></li>
+        <li><a href="#scores">RANKS</a></li>
+      </ul>
+
+      <div>
+        <button class="pac-btn pac-btn-primary" onclick="triggerCoinSound()" style="font-size: 10px; padding: 8px 12px;">
+          INSERT COIN
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- ==========================================================================
+       HERO MAZE SECTION
+       ========================================================================== -->
+  <main class="pac-container">
+    <section class="pac-hero" id="maze">
+      <div class="pac-maze-box">
+        <div class="pac-maze-inner-border">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+            <span class="pac-card-tag" style="color: var(--pac-warning); border-color: var(--pac-warning);">ROUND 01 — READY!</span>
+            <span class="pac-caption">8-BIT ARCADE ENGINE</span>
+          </div>
+
+          <h1 class="pac-h1">PAC-MAN DESIGN SYSTEM</h1>
+          <p class="pac-body" style="font-size: 17px; margin-bottom: var(--space-3); color: #E5E7EB;">
+            Authentic retro arcade-inspired architecture engineered with high-contrast foundations, pixel-perfect typefaces, iconic dotted maze borders, and responsive 8-bit component primitives.
+          </p>
+
+          <div class="pac-pellet-track">
+            <span>●</span><span>·</span><span>·</span><span>·</span><span>●</span><span>·</span><span>·</span><span>·</span>
+            <span class="pac-character" style="color: var(--pac-warning);">ᗧ</span>
+            <span>·</span><span>·</span><span>·</span>
+            <span class="pac-character" style="color: var(--pac-danger);">ᗣ</span>
+            <span>·</span><span>·</span>
+            <span class="pac-character" style="color: var(--pac-secondary);">ᗣ</span>
+            <span>·</span><span>·</span>
+            <span class="pac-character" style="color: var(--pac-primary);">ᗣ</span>
+            <span>·</span><span>·</span><span>·</span><span>●</span>
+          </div>
+
+          <div style="display: flex; gap: 16px; align-items: center; flex-wrap: wrap; margin-top: var(--space-4);">
+            <a href="#game" class="pac-btn pac-btn-primary">START GAME [1 PLAYER]</a>
+            <a href="#ghosts" class="pac-btn pac-btn-secondary">INSPECT GHOST ROSTER</a>
+            <button class="pac-btn pac-btn-success" onclick="eatPowerPellet()">EAT POWER PELLET</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==========================================================================
+         INTERACTIVE PLAYABLE ARCADE BOARD
+         ========================================================================== -->
+    <section class="pac-arcade-cabinet" id="game">
+      <div class="pac-cabinet-header">
+        <span>ARCADE RUNTIME // CANVAS 480x240</span>
+        <span id="boardStatus">STATUS: AWAITING INPUT (USE BUTTONS OR ARROW KEYS)</span>
+      </div>
+
+      <canvas id="pacCanvas" width="560" height="200"></canvas>
+
+      <div class="pac-cabinet-controls">
+        <button class="pac-btn pac-btn-secondary" onclick="movePac('left')">&larr; LEFT</button>
+        <button class="pac-btn pac-btn-secondary" onclick="movePac('right')">RIGHT &rarr;</button>
+        <button class="pac-btn pac-btn-primary" onclick="resetGame()">RESET RUN</button>
+      </div>
+    </section>
+
+    <!-- ==========================================================================
+         GHOST SYSTEM CARDS (Token Foundations from Section 2)
+         ========================================================================== -->
+    <section id="ghosts" style="padding: var(--space-4) 0;">
+      <h2 class="pac-h2">CHARACTER TOKENS & ROLES</h2>
+      <p class="pac-body">Each character embodies a core semantic token in the arcade design hierarchy.</p>
+
+      <div class="pac-cards-grid">
+        <!-- Blinky (Danger) -->
+        <div class="pac-card" style="border-color: var(--pac-danger);">
+          <div>
+            <span class="pac-card-tag" style="color: var(--pac-danger); border-color: var(--pac-danger);">DANGER: #DC2626</span>
+            <h3 class="pac-h3" style="color: var(--pac-danger);">BLINKY (SHADOW)</h3>
+            <p class="pac-body" style="font-size: 14px; margin-top: 8px;">
+              Primary antagonist token. Used for critical error notifications, game-over states, and destructive UI warnings. Aggressive pathfinder.
+            </p>
+          </div>
+          <div style="margin-top: 16px;">
+            <button class="pac-btn pac-btn-danger" style="width: 100%; font-size: 10px; padding: 10px;">TEST DANGER STATE</button>
+          </div>
+        </div>
+
+        <!-- Pinky (Secondary) -->
+        <div class="pac-card" style="border-color: var(--pac-secondary);">
+          <div>
+            <span class="pac-card-tag" style="color: var(--pac-secondary); border-color: var(--pac-secondary);">SECONDARY: #F4B9B0</span>
+            <h3 class="pac-h3" style="color: var(--pac-secondary);">PINKY (SPEEDY)</h3>
+            <p class="pac-body" style="font-size: 14px; margin-top: 8px;">
+              Blush secondary token. Anticipates target positioning by targeting 4 tiles ahead. Used for sub-headings, ghost badges, and soft highlights.
+            </p>
+          </div>
+          <div style="margin-top: 16px;">
+            <button class="pac-btn pac-btn-secondary" style="width: 100%; font-size: 10px; padding: 10px;">AMBUSH HOVER</button>
+          </div>
+        </div>
+
+        <!-- Inky (Primary) -->
+        <div class="pac-card" style="border-color: var(--pac-primary);">
+          <div>
+            <span class="pac-card-tag" style="color: var(--pac-primary); border-color: var(--pac-primary);">PRIMARY: #2A3FE5</span>
+            <h3 class="pac-h3" style="color: var(--pac-primary);">INKY (BASHFUL)</h3>
+            <p class="pac-body" style="font-size: 14px; margin-top: 8px;">
+              Signature royal arcade blue. The foundation of the maze perimeter walls and primary CTA emphasis. High interaction signal throughout.
+            </p>
+          </div>
+          <div style="margin-top: 16px;">
+            <button class="pac-btn pac-btn-primary" style="width: 100%; font-size: 10px; padding: 10px;">TRIGGER PRIMARY</button>
+          </div>
+        </div>
+
+        <!-- Clyde (Warning) -->
+        <div class="pac-card" style="border-color: var(--pac-warning);">
+          <div>
+            <span class="pac-card-tag" style="color: var(--pac-warning); border-color: var(--pac-warning);">WARNING: #D97706</span>
+            <h3 class="pac-h3" style="color: var(--pac-warning);">CLYDE (POKEY)</h3>
+            <p class="pac-body" style="font-size: 14px; margin-top: 8px;">
+              Golden amber token. Operates with independent proximity boundaries. Signifies system alerts, high scores, and caution states.
+            </p>
+          </div>
+          <div style="margin-top: 16px;">
+            <span class="pac-caption" style="color: var(--pac-warning);">STATE: PROXIMITY ALERT</span>
+          </div>
+        </div>
+
+        <!-- Power Pellet (Success) -->
+        <div class="pac-card" style="border-color: var(--pac-success);">
+          <div>
+            <span class="pac-card-tag" style="color: var(--pac-success); border-color: var(--pac-success);">SUCCESS: #16A34A</span>
+            <h3 class="pac-h3" style="color: var(--pac-success);">POWER PELLET</h3>
+            <p class="pac-body" style="font-size: 14px; margin-top: 8px;">
+              Invulnerability state token. Emitted when verification succeeds, tasks complete, or tests achieve 100% invariant passes.
+            </p>
+          </div>
+          <div style="margin-top: 16px;">
+            <span class="pac-caption" style="color: var(--pac-success);">STATE: GHOSTS VULNERABLE</span>
+          </div>
+        </div>
+
+        <!-- Pac-Man Core Surface -->
+        <div class="pac-card" style="border-color: var(--pac-primary);">
+          <div>
+            <span class="pac-card-tag" style="color: var(--pac-white); border-color: var(--pac-white);">SURFACE: #000000</span>
+            <h3 class="pac-h3" style="color: var(--pac-white);">ARCADE VOID</h3>
+            <p class="pac-body" style="font-size: 14px; margin-top: 8px;">
+              Deep true surface neutral (#000000) for large canvas backgrounds, maze channels, and card elevation backings.
+            </p>
+          </div>
+          <div style="margin-top: 16px;">
+            <span class="pac-caption" style="color: #6B7280;">CONTRAST RATIO: 21:1</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==========================================================================
+         LIGHT PANEL: VERIFYING RULE 2 FROM DESIGN.MD
+         "Keep body copy on Text (#111827) for legibility"
+         ========================================================================== -->
+    <section class="pac-light-panel" id="typography">
+      <h2>TYPOGRAPHY & READABILITY PRINCIPLES</h2>
+      <p>
+        <strong>Direct Requirement from DESIGN.md:</strong> <em>"Use Surface (#000000) for large backgrounds and cards. Keep body copy on Text (#111827) for legibility."</em>
+      </p>
+      <p>
+        When presenting technical documentation, legal conditions, or dense multi-paragraph walkthroughs, the design system employs high-contrast light panels with <strong>Text: #111827</strong> to ensure optimal human optical scanning while preserving the bold <strong>Primary: #2A3FE5</strong> border styling.
+      </p>
+      <p class="pac-caption" style="color: #4B5563; font-size: 13px;">
+        Headings carry the 8-bit arcade personality via <strong>Press Start 2P</strong>; long-form explanations rely on <strong>Space Mono</strong>.
+      </p>
+    </section>
+
+    <!-- ==========================================================================
+         INTERACTIVE COMPONENTS & FORM CONTROLS (Section 6)
+         ========================================================================== -->
+    <section id="components" style="padding: var(--space-4) 0;">
+      <h2 class="pac-h2">COMPONENTS & FORM PRIMITIVES</h2>
+      <p class="pac-body">Sharp focus-visible rings (3px dotted #2A3FE5), explicit states, and zero non-token intrusions.</p>
+
+      <div class="pac-form-box">
+        <h3 class="pac-h3">HIGH-SCORE INITIALS SUBMISSION</h3>
+        <form onsubmit="handleScoreSubmit(event)">
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+            <div class="pac-input-group">
+              <label class="pac-label" for="playerTag">PLAYER INITIALS (3 CHARACTERS)</label>
+              <input type="text" id="playerTag" class="pac-input" maxlength="3" value="PAC" required>
+              <span class="pac-caption" style="margin-top: 6px; display: block;">Letters A-Z only. Arcade font mapped.</span>
+            </div>
+
+            <div class="pac-input-group">
+              <label class="pac-label" for="playerEmail">PILOT COMM FREQUENCY (EMAIL)</label>
+              <input type="email" id="playerEmail" class="pac-input" placeholder="player@arcade.retro" required>
+              <span class="pac-error-msg" id="emailErr" style="display: none;">INVALID FREQUENCY: Enter valid address</span>
+            </div>
+          </div>
+
+          <div style="display: flex; gap: 16px; align-items: center; margin-top: 16px; flex-wrap: wrap;">
+            <button type="submit" class="pac-btn pac-btn-primary">RECORD TO LEADERBOARD</button>
+            <button type="reset" class="pac-btn pac-btn-secondary">CLEAR FIELDS</button>
+            <button type="button" class="pac-btn pac-btn-secondary disabled" disabled>DISABLED STATE</button>
+          </div>
+        </form>
+      </div>
+    </section>
+
+    <!-- ==========================================================================
+         HIGH SCORE LEADERBOARD TABLE (Section 4)
+         ========================================================================== -->
+    <section id="scores" style="padding: var(--space-4) 0;">
+      <h2 class="pac-h2">GLOBAL ARCADE LEADERBOARD</h2>
+      <p class="pac-body">8pt baseline rhythm with alternating high-contrast arcade scores.</p>
+
+      <table class="pac-leaderboard">
+        <thead>
+          <tr>
+            <th>RANK</th>
+            <th>SCORE</th>
+            <th>INITIALS</th>
+            <th>STAGE</th>
+            <th>FRUIT BONUS</th>
+          </tr>
+        </thead>
+        <tbody id="leaderboardBody">
+          <tr>
+            <td class="pac-rank-1">1ST</td>
+            <td class="pac-rank-1">033330</td>
+            <td>MIT</td>
+            <td>STAGE 256</td>
+            <td>🍒 CHERRY x12</td>
+          </tr>
+          <tr>
+            <td class="pac-rank-2">2ND</td>
+            <td class="pac-rank-2">028940</td>
+            <td>KNG</td>
+            <td>STAGE 198</td>
+            <td>🍓 STRAWBERRY x8</td>
+          </tr>
+          <tr>
+            <td class="pac-rank-3">3RD</td>
+            <td class="pac-rank-3">019450</td>
+            <td>TGM</td>
+            <td>STAGE 142</td>
+            <td>🍊 ORANGE x5</td>
+          </tr>
+          <tr>
+            <td>4TH</td>
+            <td>014820</td>
+            <td>BLI</td>
+            <td>STAGE 88</td>
+            <td>🍎 APPLE x3</td>
+          </tr>
+          <tr>
+            <td>5TH</td>
+            <td>009760</td>
+            <td>PNK</td>
+            <td>STAGE 54</td>
+            <td>🍈 MELON x2</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+  </main>
+
+  <!-- ==========================================================================
+       FOOTER MARQUEE
+       ========================================================================== -->
+  <footer class="pac-footer">
+    <div class="pac-container">
+      <div class="pac-footer-pellets">● · · · ● · · · ● · · · ● · · · ●</div>
+      <p class="pac-body" style="font-size: 13px; color: var(--pac-secondary); margin-bottom: 8px;">
+        PAC-MAN DESIGN SYSTEM SPECIFICATION // THEMED &amp; UNIQUE
+      </p>
+      <p class="pac-caption">
+        Tokens: Primary=#2A3FE5 | Secondary=#F4B9B0 | Success=#16A34A | Warning=#D97706 | Danger=#DC2626 | Surface=#000000 | Text=#111827
+      </p>
+    </div>
+  </footer>
+
+  <!-- ==========================================================================
+       INTERACTIVE ARCADE SCRIPT & MINI CANVAS GAME
+       ========================================================================== -->
+  <script>
+    // Web Audio Chiptune Synthesizer
+    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    function playBeep(freq, duration, type = 'square') {
+      try {
+        if (audioCtx.state === 'suspended') {
+          audioCtx.resume();
+        }
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.type = type;
+        osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+        gain.gain.setValueAtTime(0.05, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duration);
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.start();
+        osc.stop(audioCtx.currentTime + duration);
+      } catch (e) {
+        // audio context fallback
+      }
+    }
+
+    function triggerCoinSound() {
+      playBeep(987.77, 0.08);
+      setTimeout(() => playBeep(1318.51, 0.25), 90);
+      alert("CREDIT +01 // READY PLAYER 1");
+    }
+
+    function eatPowerPellet() {
+      playBeep(440, 0.1);
+      setTimeout(() => playBeep(880, 0.15), 100);
+      document.body.style.backgroundColor = "#070b28";
+      setTimeout(() => { document.body.style.backgroundColor = "#000000"; }, 400);
+      const scoreEl = document.getElementById('playerScore');
+      let score = parseInt(scoreEl.innerText, 10) + 500;
+      scoreEl.innerText = score.toString().padStart(6, '0');
+    }
+
+    // Canvas Mini-Pacman Arcade
+    const canvas = document.getElementById('pacCanvas');
+    const ctx = canvas.getContext('2d');
+    let pacX = 60;
+    let pacY = 100;
+    let pacDir = 1;
+    let mouthOpen = 0.2;
+    let pellets = [];
+
+    for (let i = 40; i < canvas.width - 40; i += 30) {
+      pellets.push({ x: i, y: 100, eaten: false });
+    }
+
+    function drawGame() {
+      ctx.fillStyle = "#000000";
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      // Draw boundary maze lines
+      ctx.strokeStyle = "#2A3FE5";
+      ctx.lineWidth = 4;
+      ctx.setLineDash([4, 6]);
+      ctx.strokeRect(10, 10, canvas.width - 20, canvas.height - 20);
+      ctx.setLineDash([]);
+
+      // Draw Pellets
+      pellets.forEach(p => {
+        if (!p.eaten) {
+          ctx.fillStyle = "#D97706";
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, 4, 0, Math.PI * 2);
+          ctx.fill();
+        }
+      });
+
+      // Draw Pacman
+      ctx.fillStyle = "#D97706";
+      ctx.beginPath();
+      const angleOffset = pacDir === 1 ? 0 : Math.PI;
+      ctx.arc(pacX, pacY, 14, angleOffset + mouthOpen * Math.PI, angleOffset + (2 - mouthOpen) * Math.PI);
+      ctx.lineTo(pacX, pacY);
+      ctx.fill();
+
+      // Draw Ghost
+      ctx.fillStyle = "#DC2626";
+      ctx.beginPath();
+      ctx.arc(canvas.width - 70, pacY - 2, 13, Math.PI, 0, false);
+      ctx.lineTo(canvas.width - 57, pacY + 12);
+      ctx.lineTo(canvas.width - 63, pacY + 8);
+      ctx.lineTo(canvas.width - 70, pacY + 12);
+      ctx.lineTo(canvas.width - 77, pacY + 8);
+      ctx.lineTo(canvas.width - 83, pacY + 12);
+      ctx.closePath();
+      ctx.fill();
+
+      // Ghost eyes
+      ctx.fillStyle = "#FFFFFF";
+      ctx.fillRect(canvas.width - 78, pacY - 5, 4, 6);
+      ctx.fillRect(canvas.width - 68, pacY - 5, 4, 6);
+      ctx.fillStyle = "#2A3FE5";
+      ctx.fillRect(canvas.width - 80, pacY - 3, 2, 4);
+      ctx.fillRect(canvas.width - 70, pacY - 3, 2, 4);
+    }
+
+    function movePac(direction) {
+      if (direction === 'right') {
+        pacDir = 1;
+        pacX = Math.min(pacX + 24, canvas.width - 100);
+      } else {
+        pacDir = -1;
+        pacX = Math.max(pacX - 24, 30);
+      }
+      playBeep(320, 0.04);
+
+      // Check pellet collision
+      pellets.forEach(p => {
+        if (!p.eaten && Math.abs(p.x - pacX) < 16) {
+          p.eaten = true;
+          playBeep(587, 0.05);
+          const scoreEl = document.getElementById('playerScore');
+          let score = parseInt(scoreEl.innerText, 10) + 100;
+          scoreEl.innerText = score.toString().padStart(6, '0');
+        }
+      });
+      drawGame();
+    }
+
+    function resetGame() {
+      pacX = 60;
+      pacDir = 1;
+      pellets.forEach(p => p.eaten = false);
+      drawGame();
+      document.getElementById('boardStatus').innerText = "STATUS: RUN RESET // READY!";
+    }
+
+    window.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowRight') movePac('right');
+      if (e.key === 'ArrowLeft') movePac('left');
+    });
+
+    drawGame();
+
+    function handleScoreSubmit(e) {
+      e.preventDefault();
+      const tag = document.getElementById('playerTag').value.toUpperCase();
+      const score = document.getElementById('playerScore').innerText;
+
+      const tbody = document.getElementById('leaderboardBody');
+      const newRow = document.createElement('tr');
+      newRow.innerHTML = `
+        <td style="color: var(--pac-warning);">NEW</td>
+        <td style="color: var(--pac-warning);">${score}</td>
+        <td>${tag}</td>
+        <td>STAGE 01</td>
+        <td>🍒 CHERRY x1</td>
+      `;
+      tbody.prepend(newRow);
+      alert(`CONGRATULATIONS ${tag}! SCORE ${score} RECORDED.`);
+    }
+  </script>
+</body>
+</html>

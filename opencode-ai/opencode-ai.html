@@ -1,0 +1,846 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>OpenCode — The Open Source AI Coding Agent</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+  <style>
+    /* ==========================================================================
+       OPENCODE DESIGN SYSTEM TOKENS & FOUNDATIONS
+       Strictly extracted from open-design/design-systems/opencode-ai/DESIGN.md
+       ========================================================================== */
+    :root {
+      /* Primary Foundation (Warm Undertones) */
+      --oc-dark: #201d1d;              /* Warm near-black background & button fills (rgb: 32, 29, 29) */
+      --oc-light: #fdfcfc;             /* Warm off-white primary text & button text */
+      --oc-mid-gray: #9a9898;          /* Secondary text, muted links, tab underline */
+
+      /* Secondary Surfaces & Outlines */
+      --oc-dark-surface: #302c2c;      /* Elevated surfaces, code blocks */
+      --oc-border-gray: #646262;       /* Stronger borders, container outlines */
+      --oc-light-surface: #f1eeee;     /* Light surface / form backgrounds */
+      --oc-input-bg: #f8f7f7;          /* Neutral input background */
+
+      /* Accent (Apple HIG Blue Sequence) */
+      --oc-accent: #007aff;            /* Primary accent, links, interactive */
+      --oc-accent-hover: #0056b3;      /* Darker blue hover */
+      --oc-accent-active: #004085;     /* Deep blue pressed */
+
+      /* Semantic Colors (Apple HIG Sequence) */
+      --oc-danger: #ff3b30;
+      --oc-danger-hover: #d70015;
+      --oc-danger-active: #a50011;
+
+      --oc-success: #30d158;
+
+      --oc-warning: #ff9f0a;
+      --oc-warning-hover: #cc7f08;
+      --oc-warning-active: #995f06;
+
+      /* Text Scale */
+      --oc-text-muted: #6e6e73;
+      --oc-text-secondary: #424245;
+
+      /* Borders & Dividers */
+      --oc-border-warm: rgba(15, 0, 0, 0.12); /* Warm transparent black with red tint */
+      --oc-border-tab: #9a9898;               /* 2px solid bottom for active tab */
+      --oc-border-outline: #646262;           /* 1px solid container outline */
+
+      /* Utilitarian Radius Scale */
+      --oc-radius-default: 4px;        /* 4px everywhere: buttons, containers, badges */
+      --oc-radius-input: 6px;          /* 6px for email inputs only */
+
+      /* Typography: Berkeley Mono sole typeface */
+      --oc-font: "Berkeley Mono", "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+
+      /* Depth Philosophy: ZERO SHADOWS (Flat Terminal Aesthetic) */
+      --oc-shadow: none;
+    }
+
+    /* Universal Reset */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      font-size: 16px;
+      scroll-behavior: smooth;
+      background-color: var(--oc-dark);
+      color: var(--oc-light);
+    }
+
+    body {
+      font-family: var(--oc-font);
+      background-color: var(--oc-dark);
+      color: var(--oc-light);
+      line-height: 1.50;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      overflow-x: hidden;
+    }
+
+    /* Typography Hierarchy from Section 3 */
+    h1, .oc-h1 {
+      font-family: var(--oc-font);
+      font-size: 38px;
+      font-weight: 700;
+      line-height: 1.50;
+      color: var(--oc-light);
+      margin-bottom: 24px;
+    }
+
+    h2, .oc-h2 {
+      font-family: var(--oc-font);
+      font-size: 16px;
+      font-weight: 700;
+      line-height: 1.50;
+      color: var(--oc-light);
+      margin-bottom: 12px;
+    }
+
+    p, .oc-body {
+      font-family: var(--oc-font);
+      font-size: 16px;
+      font-weight: 400;
+      line-height: 1.50;
+      color: var(--oc-mid-gray);
+    }
+
+    .oc-body-medium {
+      font-family: var(--oc-font);
+      font-size: 16px;
+      font-weight: 500;
+      line-height: 1.50;
+      color: var(--oc-light);
+    }
+
+    .oc-body-tight {
+      font-family: var(--oc-font);
+      font-size: 16px;
+      font-weight: 500;
+      line-height: 1.00;
+    }
+
+    .oc-caption {
+      font-family: var(--oc-font);
+      font-size: 14px;
+      font-weight: 400;
+      line-height: 2.00;
+      color: var(--oc-text-muted);
+    }
+
+    /* Reading-Optimized Narrow Container (800px - 900px, Section 5) */
+    .oc-container {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    /* ==========================================================================
+       NAVIGATION BAR (Section 4)
+       Sticky #201d1d, solid surfaces only, no blur, no transparency
+       ========================================================================== */
+    .oc-navbar {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background-color: var(--oc-dark);
+      border-bottom: 1px solid var(--oc-border-warm);
+      height: 64px;
+      display: flex;
+      align-items: center;
+    }
+    .oc-navbar-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+    }
+    .oc-brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+      color: var(--oc-light);
+      font-size: 16px;
+      font-weight: 700;
+    }
+    .oc-brand-tag {
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--oc-mid-gray);
+      border: 1px solid var(--oc-border-gray);
+      border-radius: var(--oc-radius-default);
+      padding: 1px 6px;
+    }
+    .oc-nav-links {
+      display: flex;
+      align-items: center;
+      gap: 24px;
+      list-style: none;
+    }
+    .oc-nav-links a {
+      font-size: 16px;
+      font-weight: 500;
+      color: var(--oc-light);
+      text-decoration: underline;
+      text-decoration-thickness: 1px;
+      text-underline-offset: 4px;
+      transition: color 150ms ease;
+    }
+    .oc-nav-links a:hover {
+      color: var(--oc-accent);
+    }
+    .oc-nav-links a.muted {
+      color: var(--oc-mid-gray);
+      text-decoration: none;
+    }
+    .oc-nav-links a.muted:hover {
+      color: var(--oc-light);
+      text-decoration: underline;
+    }
+
+    /* ==========================================================================
+       BUTTONS (Section 4)
+       Dark background #201d1d, light text #fdfcfc, padding 4px 20px, radius 4px
+       ========================================================================== */
+    .oc-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      font-family: var(--oc-font);
+      font-size: 16px;
+      font-weight: 500;
+      line-height: 2.00;
+      padding: 4px 20px;
+      border-radius: var(--oc-radius-default);
+      text-decoration: none;
+      cursor: pointer;
+      border: 1px solid var(--oc-border-outline);
+      background-color: var(--oc-dark);
+      color: var(--oc-light);
+      transition: background-color 150ms ease, border-color 150ms ease, color 150ms ease;
+    }
+    .oc-btn:hover {
+      background-color: var(--oc-dark-surface);
+      border-color: var(--oc-mid-gray);
+    }
+    .oc-btn:active {
+      background-color: #181515;
+      border-color: var(--oc-light);
+    }
+
+    /* Accent Button Variant */
+    .oc-btn-accent {
+      background-color: var(--oc-accent);
+      border-color: var(--oc-accent);
+      color: var(--oc-light);
+    }
+    .oc-btn-accent:hover {
+      background-color: var(--oc-accent-hover);
+      border-color: var(--oc-accent-hover);
+    }
+    .oc-btn-accent:active {
+      background-color: var(--oc-accent-active);
+      border-color: var(--oc-accent-active);
+    }
+
+    /* Danger Button Variant */
+    .oc-btn-danger {
+      background-color: var(--oc-danger);
+      border-color: var(--oc-danger);
+      color: var(--oc-light);
+    }
+    .oc-btn-danger:hover {
+      background-color: var(--oc-danger-hover);
+      border-color: var(--oc-danger-hover);
+    }
+    .oc-btn-danger:active {
+      background-color: var(--oc-danger-active);
+      border-color: var(--oc-danger-active);
+    }
+
+    /* ==========================================================================
+       HERO SECTION WITH TERMINAL & ASCII ART (Section 1, 4)
+       ========================================================================== */
+    .oc-hero {
+      padding: 80px 0 64px 0;
+    }
+    .oc-hero-sub {
+      font-size: 16px;
+      font-weight: 400;
+      line-height: 1.50;
+      color: var(--oc-mid-gray);
+      margin-bottom: 32px;
+      max-width: 720px;
+    }
+
+    /* Terminal Hero Container */
+    .oc-terminal-hero {
+      width: 100%;
+      background-color: var(--oc-dark-surface);
+      border: 1px solid var(--oc-border-outline);
+      border-radius: var(--oc-radius-default);
+      overflow: hidden;
+      margin-bottom: 48px;
+    }
+    .oc-terminal-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 8px 16px;
+      background-color: #272323;
+      border-bottom: 1px solid var(--oc-border-warm);
+      font-size: 13px;
+      color: var(--oc-mid-gray);
+    }
+    .oc-terminal-dots {
+      display: flex;
+      gap: 6px;
+    }
+    .oc-terminal-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+    }
+    .oc-dot-red { background-color: var(--oc-danger); }
+    .oc-dot-yellow { background-color: var(--oc-warning); }
+    .oc-dot-green { background-color: var(--oc-success); }
+
+    .oc-terminal-content {
+      padding: 24px;
+      font-family: var(--oc-font);
+      font-size: 14px;
+      line-height: 1.6;
+      color: var(--oc-light);
+      overflow-x: auto;
+    }
+    .oc-ascii-logo {
+      color: var(--oc-accent);
+      line-height: 1.2;
+      margin-bottom: 20px;
+      user-select: none;
+      font-weight: 700;
+    }
+    .oc-cli-prompt {
+      color: var(--oc-success);
+      margin-right: 8px;
+    }
+    .oc-cli-cmd {
+      color: var(--oc-light);
+    }
+    .oc-cli-response {
+      color: var(--oc-mid-gray);
+      margin-top: 8px;
+      margin-bottom: 16px;
+    }
+    .oc-cli-highlight {
+      color: var(--oc-warning);
+    }
+    .oc-cli-accent {
+      color: var(--oc-accent);
+    }
+
+    /* ==========================================================================
+       TABS COMPONENT (Section 4)
+       border-bottom: 2px solid #9a9898 for active indicator, line-height: 1.00
+       ========================================================================== */
+    .oc-tabs-wrapper {
+      margin-bottom: 48px;
+      border-bottom: 1px solid var(--oc-border-warm);
+    }
+    .oc-tabs-list {
+      display: flex;
+      gap: 24px;
+      list-style: none;
+    }
+    .oc-tab-btn {
+      background: none;
+      border: none;
+      font-family: var(--oc-font);
+      font-size: 16px;
+      font-weight: 500;
+      line-height: 1.00;
+      color: var(--oc-mid-gray);
+      padding: 12px 4px 14px 4px;
+      cursor: pointer;
+      position: relative;
+      transition: color 150ms ease;
+    }
+    .oc-tab-btn:hover {
+      color: var(--oc-light);
+    }
+    .oc-tab-btn.active {
+      color: var(--oc-light);
+      border-bottom: 2px solid var(--oc-border-tab);
+    }
+
+    .oc-tab-panel {
+      display: none;
+      padding: 24px 0;
+    }
+    .oc-tab-panel.active {
+      display: block;
+    }
+
+    /* ==========================================================================
+       FEATURE LIST: PURE TEXT LAYOUT (Section 4, No Cards, No Shadows)
+       ========================================================================== */
+    .oc-feature-section {
+      padding: 48px 0;
+    }
+    .oc-feature-list {
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+      margin-top: 24px;
+    }
+    .oc-feature-item {
+      display: flex;
+      align-items: baseline;
+      gap: 16px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid var(--oc-border-warm);
+    }
+    .oc-feature-bullet {
+      color: var(--oc-accent);
+      font-weight: 700;
+      font-size: 16px;
+    }
+    .oc-feature-name {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--oc-light);
+      min-width: 180px;
+    }
+    .oc-feature-desc {
+      font-size: 16px;
+      font-weight: 400;
+      color: var(--oc-mid-gray);
+      line-height: 1.5;
+    }
+
+    /* ==========================================================================
+       EMAIL CAPTURE FORM (Section 4)
+       Input: #f8f7f7 bg, #201d1d text, 1px solid rgba(15,0,0,0.12), 20px padding, 6px radius
+       ========================================================================== */
+    .oc-email-section {
+      background-color: var(--oc-dark-surface);
+      border: 1px solid var(--oc-border-outline);
+      border-radius: var(--oc-radius-default);
+      padding: 40px 32px;
+      margin: 64px 0;
+    }
+    .oc-email-form {
+      display: flex;
+      gap: 16px;
+      margin-top: 20px;
+      align-items: stretch;
+      flex-wrap: wrap;
+    }
+    .oc-email-input {
+      flex: 1;
+      min-width: 260px;
+      background-color: var(--oc-input-bg);
+      color: var(--oc-dark);
+      border: 1px solid var(--oc-border-warm);
+      padding: 20px;
+      border-radius: var(--oc-radius-input);
+      font-family: var(--oc-font);
+      font-size: 16px;
+      font-weight: 400;
+      outline: none;
+      transition: border-color 150ms ease;
+    }
+    .oc-email-input:focus {
+      border-color: var(--oc-accent);
+    }
+    .oc-email-input::placeholder {
+      color: var(--oc-text-muted);
+    }
+
+    /* ==========================================================================
+       SEMANTIC STATE DEMO (Apple HIG 3-stage interactions, Section 2)
+       ========================================================================== */
+    .oc-semantic-section {
+      padding: 48px 0;
+    }
+    .oc-state-matrix {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      margin-top: 20px;
+    }
+    .oc-state-card {
+      background-color: var(--oc-dark-surface);
+      border: 1px solid var(--oc-border-outline);
+      border-radius: var(--oc-radius-default);
+      padding: 16px;
+    }
+    .oc-state-pill {
+      display: inline-block;
+      font-size: 12px;
+      font-weight: 700;
+      padding: 2px 8px;
+      border-radius: var(--oc-radius-default);
+      margin-bottom: 8px;
+    }
+    .oc-pill-blue { background-color: rgba(0, 122, 255, 0.2); color: var(--oc-accent); }
+    .oc-pill-green { background-color: rgba(48, 209, 88, 0.2); color: var(--oc-success); }
+    .oc-pill-orange { background-color: rgba(255, 159, 10, 0.2); color: var(--oc-warning); }
+    .oc-pill-red { background-color: rgba(255, 59, 48, 0.2); color: var(--oc-danger); }
+
+    /* ==========================================================================
+       FOOTER (Section 4 & 9)
+       #201d1d background, multi-column link grid, links 16px 400 #9a9898,
+       border-top 1px solid rgba(15, 0, 0, 0.12)
+       ========================================================================== */
+    .oc-footer {
+      background-color: var(--oc-dark);
+      border-top: 1px solid var(--oc-border-warm);
+      padding: 64px 0 48px 0;
+      margin-top: 96px;
+    }
+    .oc-footer-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 32px;
+      margin-bottom: 48px;
+    }
+    .oc-footer-col h3 {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--oc-light);
+      margin-bottom: 16px;
+    }
+    .oc-footer-col ul {
+      list-style: none;
+    }
+    .oc-footer-col li {
+      margin-bottom: 12px;
+    }
+    .oc-footer-col a {
+      font-size: 16px;
+      font-weight: 400;
+      color: var(--oc-mid-gray);
+      text-decoration: none;
+      transition: color 150ms ease;
+    }
+    .oc-footer-col a:hover {
+      color: var(--oc-light);
+      text-decoration: underline;
+    }
+    .oc-footer-meta {
+      border-top: 1px solid var(--oc-border-warm);
+      padding-top: 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
+    /* Responsive Breakdown (Section 8) */
+    @media (max-width: 640px) {
+      .oc-navbar-inner {
+        flex-wrap: wrap;
+      }
+      .oc-nav-links {
+        display: none;
+      }
+      h1, .oc-h1 {
+        font-size: 26px;
+      }
+      .oc-state-matrix {
+        grid-template-columns: 1fr 1fr;
+      }
+      .oc-footer-grid {
+        grid-template-columns: 1fr;
+      }
+      .oc-feature-item {
+        flex-direction: column;
+        gap: 4px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ==========================================================================
+       NAVIGATION BAR
+       ========================================================================== -->
+  <nav class="oc-navbar">
+    <div class="oc-container oc-navbar-inner">
+      <a href="#" class="oc-brand">
+        <span>opencode</span>
+        <span class="oc-brand-tag">v1.4.0</span>
+      </a>
+      <ul class="oc-nav-links">
+        <li><a href="#terminal">terminal</a></li>
+        <li><a href="#features">features</a></li>
+        <li><a href="#runtime">runtime</a></li>
+        <li><a href="#status" class="muted">system status</a></li>
+        <li><a href="#newsletter" class="muted">newsletter</a></li>
+      </ul>
+      <div>
+        <a href="#terminal" class="oc-btn">github &rarr;</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ==========================================================================
+       HERO & TERMINAL PRESENTATION
+       ========================================================================== -->
+  <main class="oc-container">
+    <section class="oc-hero" id="terminal">
+      <h1 class="oc-h1">The terminal-native open source AI coding agent</h1>
+      <p class="oc-hero-sub">
+        Built for engineers who live in the CLI. OpenCode executes shell workflows, edits local repositories directly, and runs self-correcting unit test loops with zero telemetry.
+      </p>
+
+      <!-- Terminal Hero Window with ASCII Art & CLI Interaction -->
+      <div class="oc-terminal-hero">
+        <div class="oc-terminal-bar">
+          <div class="oc-terminal-dots">
+            <span class="oc-terminal-dot oc-dot-red"></span>
+            <span class="oc-terminal-dot oc-dot-yellow"></span>
+            <span class="oc-terminal-dot oc-dot-green"></span>
+          </div>
+          <span>opencode-daemon &mdash; bash &mdash; 80x24</span>
+          <span>berkeley-mono</span>
+        </div>
+        <div class="oc-terminal-content">
+          <pre class="oc-ascii-logo">
+   ____                      ______          __
+  / __ \____  ___  ____     / ____/___  ____/ /__
+ / / / / __ \/ _ \/ __ \   / /   / __ \/ __  / _ \
+/ /_/ / /_/ /  __/ / / /  / /___/ /_/ / /_/ /  __/
+\____/ .___/\___/_/ /_/   \____/\____/\__,_/\___/
+    /_/  -- ai pair programmer [v1.4.0-linux-x64]
+          </pre>
+          <div><span class="oc-cli-prompt">honeypot@workstation:~/project$</span> <span class="oc-cli-cmd">opencode "Refactor auth middleware to use zero-copy JWT verification"</span></div>
+          <div class="oc-cli-response">
+            [+] Scanning 124 project files in workspace...<br>
+            [+] Found src/middleware/auth.ts (AST parsed in 18ms)<br>
+            [+] Running test suite before mutation: <span class="oc-cli-accent">42 passed</span>, 0 failed<br>
+            [+] Applying surgical diff: -14 lines, +8 lines (SIMD cryptographic bindings)<br>
+            [+] Re-verifying test suite: <span class="oc-cli-highlight">42 passed in 12ms</span> (2.4x latency reduction)<br>
+            [+] Git commit ready: <span style="color: var(--oc-light);">feat(auth): zero-copy SIMD token parser</span>
+          </div>
+          <div><span class="oc-cli-prompt">honeypot@workstation:~/project$</span> <span class="oc-cli-cmd">opencode test --ci --fail-fast</span></div>
+          <div class="oc-cli-response">
+            <span style="color: var(--oc-success);">SUCCESS: All 42 verification invariants hold. Working tree clean.</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quick Action Group -->
+      <div style="display: flex; gap: 16px; align-items: center; flex-wrap: wrap;">
+        <a href="#install" class="oc-btn oc-btn-accent">curl -sSL opencode.ai/install | bash</a>
+        <a href="#features" class="oc-btn">view documentation &rarr;</a>
+      </div>
+    </section>
+
+    <!-- ==========================================================================
+         TABBED INTERACTION (Section 4)
+         border-bottom: 2px solid #9a9898 (active tab indicator)
+         ========================================================================== -->
+    <section class="oc-tabs-wrapper" id="runtime">
+      <div class="oc-tabs-list">
+        <button class="oc-tab-btn active" onclick="switchTab(event, 'tab-local')">01. local_execution</button>
+        <button class="oc-tab-btn" onclick="switchTab(event, 'tab-multi')">02. multi_agent_loop</button>
+        <button class="oc-tab-btn" onclick="switchTab(event, 'tab-privacy')">03. zero_telemetry</button>
+      </div>
+
+      <div id="tab-local" class="oc-tab-panel active">
+        <h2 class="oc-h2">Zero Cloud Serialization: Runs inside your shell session</h2>
+        <p class="oc-body" style="margin-bottom: 16px;">
+          Unlike SaaS browser copilots that stream your entire proprietary codebase to remote hosted backends, OpenCode runs as a native single binary on Linux and macOS. It reads directly from your filesystem and communicates via your own local API tokens or Ollama inference daemon.
+        </p>
+        <div style="display: flex; gap: 12px; margin-top: 12px;">
+          <a href="#" class="oc-btn">view cli flags</a>
+          <a href="#" class="oc-btn">inspect source</a>
+        </div>
+      </div>
+
+      <div id="tab-multi" class="oc-tab-panel">
+        <h2 class="oc-h2">Multi-agent Planner + Verifier Consensus</h2>
+        <p class="oc-body" style="margin-bottom: 16px;">
+          Every task is divided between a Planner agent that outlines surgical modifications, a Coder agent that writes unified diffs, and an Automated Verifier that runs your project's test suite and typechecker before any code touches disk.
+        </p>
+        <div style="display: flex; gap: 12px; margin-top: 12px;">
+          <a href="#" class="oc-btn">agent protocols</a>
+        </div>
+      </div>
+
+      <div id="tab-privacy" class="oc-tab-panel">
+        <h2 class="oc-h2">100% Deterministic Privacy & Airgap Ready</h2>
+        <p class="oc-body" style="margin-bottom: 16px;">
+          Strict privacy by default. We collect zero tracking analytics, zero crash metrics, and no user inputs. Designed from day one for air-gapped financial institutions, defence contractors, and privacy-conscious hackers.
+        </p>
+        <div style="display: flex; gap: 12px; margin-top: 12px;">
+          <a href="#" class="oc-btn">airgap guide</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==========================================================================
+         FEATURE LIST (Pure Text Layout, No Cards, No Shadows, Section 4)
+         ========================================================================== -->
+    <section class="oc-feature-section" id="features">
+      <h2 class="oc-h2">Core Architecture Invariants</h2>
+      <p class="oc-body">Disciplined engineering principles baked into every line of code.</p>
+
+      <div class="oc-feature-list">
+        <div class="oc-feature-item">
+          <span class="oc-feature-bullet">&gt;</span>
+          <span class="oc-feature-name">AST-Aware Diffs</span>
+          <span class="oc-feature-desc">Treesitter integration prevents invalid syntax before writing changes to disk. Syntactic boundaries are respected on every patch.</span>
+        </div>
+        <div class="oc-feature-item">
+          <span class="oc-feature-bullet">&gt;</span>
+          <span class="oc-feature-name">Sub-process Sandbox</span>
+          <span class="oc-feature-desc">All commands run in an isolated cgroup/chroot environment with bounded memory and disk quotas to protect production environments.</span>
+        </div>
+        <div class="oc-feature-item">
+          <span class="oc-feature-bullet">&gt;</span>
+          <span class="oc-feature-name">Bring Your Own LLM</span>
+          <span class="oc-feature-desc">Pluggable backend support for Claude 3.5 Sonnet, GPT-4o, DeepSeek-V3, or local models running via Ollama and vLLM.</span>
+        </div>
+        <div class="oc-feature-item">
+          <span class="oc-feature-bullet">&gt;</span>
+          <span class="oc-feature-name">Instant Git Rollback</span>
+          <span class="oc-feature-desc">Every automated action creates a recoverable git ref checkpoint. One keypress immediately reverts unwanted refactoring trees.</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==========================================================================
+         SEMANTIC STATES & SIGNALS (Apple HIG 3-Stage Progression, Section 2)
+         ========================================================================== -->
+    <section class="oc-semantic-section" id="status">
+      <h2 class="oc-h2">Interactive State Discipline</h2>
+      <p class="oc-body">
+        Apple HIG-derived signal palette ensuring instantaneous state recognition across interactive developer tooling.
+      </p>
+
+      <div class="oc-state-matrix">
+        <div class="oc-state-card">
+          <span class="oc-state-pill oc-pill-blue">ACCENT BLUE</span>
+          <p class="oc-caption">Default: #007aff<br>Hover: #0056b3<br>Active: #004085</p>
+          <div style="margin-top: 12px;">
+            <button class="oc-btn oc-btn-accent" style="width: 100%;">Inspect</button>
+          </div>
+        </div>
+        <div class="oc-state-card">
+          <span class="oc-state-pill oc-pill-green">SUCCESS GREEN</span>
+          <p class="oc-caption">Status: #30d158<br>Tests Passing: 100%<br>Build Status: Clean</p>
+          <div style="margin-top: 12px;">
+            <button class="oc-btn" style="width: 100%; border-color: var(--oc-success); color: var(--oc-success);">Verified</button>
+          </div>
+        </div>
+        <div class="oc-state-card">
+          <span class="oc-state-pill oc-pill-orange">WARNING ORANGE</span>
+          <p class="oc-caption">Default: #ff9f0a<br>Hover: #cc7f08<br>Active: #995f06</p>
+          <div style="margin-top: 12px;">
+            <button class="oc-btn" style="width: 100%; border-color: var(--oc-warning); color: var(--oc-warning);">Rebase Alert</button>
+          </div>
+        </div>
+        <div class="oc-state-card">
+          <span class="oc-state-pill oc-pill-red">DANGER RED</span>
+          <p class="oc-caption">Default: #ff3b30<br>Hover: #d70015<br>Active: #a50011</p>
+          <div style="margin-top: 12px;">
+            <button class="oc-btn oc-btn-danger" style="width: 100%;">Abort Patch</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==========================================================================
+         EMAIL CAPTURE (Section 4)
+         #f8f7f7 bg, #201d1d text, 20px padding, 6px radius
+         ========================================================================== -->
+    <section class="oc-email-section" id="newsletter">
+      <h2 class="oc-h2">Stay notified on release candidates</h2>
+      <p class="oc-body">
+        Get weekly technical updates on kernel patches, context-window optimizations, and benchmarks. No marketing spam.
+      </p>
+      <form class="oc-email-form" onsubmit="event.preventDefault(); alert('Subscribed to OpenCode technical releases.');">
+        <input type="email" class="oc-email-input" placeholder="developer@workspace.internal" required>
+        <button type="submit" class="oc-btn" style="padding: 16px 28px; height: auto;">subscribe &rarr;</button>
+      </form>
+      <p class="oc-caption" style="margin-top: 12px;">
+        Unsubscribe at any time. Plain text dispatches only.
+      </p>
+    </section>
+  </main>
+
+  <!-- ==========================================================================
+       FOOTER (Section 4)
+       #201d1d background, multi-column link grid, links 16px 400 #9a9898
+       ========================================================================== -->
+  <footer class="oc-footer">
+    <div class="oc-container">
+      <div class="oc-footer-grid">
+        <div class="oc-footer-col">
+          <h3>Documentation</h3>
+          <ul>
+            <li><a href="#">quickstart.md</a></li>
+            <li><a href="#">cli-reference.md</a></li>
+            <li><a href="#">configuration.toml</a></li>
+            <li><a href="#">treesitter-grammar.md</a></li>
+            <li><a href="#">ollama-setup.md</a></li>
+          </ul>
+        </div>
+        <div class="oc-footer-col">
+          <h3>Community</h3>
+          <ul>
+            <li><a href="#">github-discussions</a></li>
+            <li><a href="#">discord-guild</a></li>
+            <li><a href="#">contributing.md</a></li>
+            <li><a href="#">bounty-program</a></li>
+            <li><a href="#">security-hall-of-fame</a></li>
+          </ul>
+        </div>
+        <div class="oc-footer-col">
+          <h3>Integrations</h3>
+          <ul>
+            <li><a href="#">tmux-integration</a></li>
+            <li><a href="#">neovim-plugin</a></li>
+            <li><a href="#">helix-support</a></li>
+            <li><a href="#">fish-completions</a></li>
+            <li><a href="#">zsh-autocomplete</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="oc-footer-meta">
+        <span class="oc-caption">&copy; 2026 OpenCode Contributors. Licensed under Apache 2.0.</span>
+        <div style="display: flex; gap: 16px;">
+          <a href="#" class="oc-caption" style="text-decoration: underline;">privacy</a>
+          <a href="#" class="oc-caption" style="text-decoration: underline;">terms</a>
+          <a href="#" class="oc-caption" style="text-decoration: underline;">pgp-key</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    function switchTab(evt, tabId) {
+      const tabs = document.querySelectorAll('.oc-tab-btn');
+      tabs.forEach(t => t.classList.remove('active'));
+      evt.currentTarget.classList.add('active');
+
+      const panels = document.querySelectorAll('.oc-tab-panel');
+      panels.forEach(p => p.classList.remove('active'));
+      document.getElementById(tabId).classList.add('active');
+    }
+  </script>
+</body>
+</html>

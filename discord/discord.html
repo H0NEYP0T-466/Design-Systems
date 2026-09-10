@@ -1,0 +1,1411 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Discord Design System — Community Hub</title>
+  <meta name="description" content="Authentic implementation of the Discord design system with dark-first 3-column UI, Blurple accents, gg sans typography, morphing avatars, and interactive chat.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      /* Brand & Accents */
+      --blurple: #5865f2;
+      --blurple-hover: #4752c4;
+      --blurple-soft: #7289da;
+      --text-link: #00a8fc;
+      --mention-bg: rgba(88, 101, 242, 0.15);
+      --mention-text: #c9cdfb;
+      --mention-pill-bg: rgba(88, 101, 242, 0.3);
+
+      /* Surfaces (Dark Theme) */
+      --bg-tertiary: #1e1f22;
+      --bg-secondary: #2b2d31;
+      --bg-primary: #313338;
+      --bg-floating: #111214;
+      --bg-input: #383a40;
+      --bg-modifier-hover: rgba(78, 80, 88, 0.3);
+      --bg-modifier-selected: rgba(78, 80, 88, 0.6);
+      --bg-modifier-active: rgba(78, 80, 88, 0.48);
+      --bg-modifier-accent: rgba(255, 255, 255, 0.06);
+      --border-subtle: #3f4147;
+
+      /* Text */
+      --header-primary: #f2f3f5;
+      --header-secondary: #b5bac1;
+      --text-normal: #dbdee1;
+      --text-muted: #949ba4;
+      --channels-default: #80848e;
+
+      /* Status */
+      --status-online: #23a55a;
+      --status-idle: #f0b232;
+      --status-dnd: #f23f43;
+      --status-streaming: #593695;
+      --status-offline: #80848e;
+
+      /* Typography */
+      --font-ui: "gg sans", "Inter", "Helvetica Neue", Helvetica, Arial, sans-serif;
+      --font-mono: "gg mono", "JetBrains Mono", Consolas, monospace;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    body {
+      background-color: var(--bg-tertiary);
+      color: var(--text-normal);
+      font-family: var(--font-ui);
+      font-size: 16px;
+      line-height: 1.375;
+      overflow: hidden;
+      height: 100vh;
+      display: flex;
+      user-select: none;
+    }
+
+    /* Scrollbar */
+    ::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
+    }
+    ::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #1a1b1e;
+      border-radius: 4px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #111214;
+    }
+
+    /* 1. SERVER LIST RAIL (72px) */
+    .server-rail {
+      width: 72px;
+      background-color: var(--bg-tertiary);
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 12px 0;
+      gap: 8px;
+      overflow-y: auto;
+      flex-shrink: 0;
+      z-index: 10;
+    }
+
+    .server-item {
+      position: relative;
+      width: 72px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+    }
+
+    .server-pill {
+      position: absolute;
+      left: 0;
+      width: 4px;
+      height: 0;
+      background-color: #ffffff;
+      border-radius: 0 4px 4px 0;
+      transition: height 0.2s ease, transform 0.2s ease;
+    }
+
+    .server-item:hover .server-pill {
+      height: 20px;
+    }
+
+    .server-item.active .server-pill {
+      height: 40px;
+    }
+
+    .server-icon {
+      width: 48px;
+      height: 48px;
+      background-color: var(--bg-primary);
+      color: var(--text-normal);
+      border-radius: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 15px;
+      transition: border-radius 0.35s cubic-bezier(0.215, 0.61, 0.355, 1), background-color 0.2s ease, color 0.2s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .server-item:hover .server-icon,
+    .server-item.active .server-icon {
+      border-radius: 50%;
+      background-color: var(--blurple);
+      color: #ffffff;
+    }
+
+    .server-icon.discord-home {
+      background-color: var(--blurple);
+      color: #ffffff;
+    }
+
+    .server-icon.discord-home svg {
+      width: 28px;
+      height: 28px;
+      fill: currentColor;
+    }
+
+    .server-divider {
+      width: 32px;
+      height: 2px;
+      background-color: var(--bg-modifier-accent);
+      border-radius: 1px;
+      margin: 2px 0;
+    }
+
+    .badge-mention {
+      position: absolute;
+      bottom: -4px;
+      right: 8px;
+      background-color: var(--status-dnd);
+      color: #ffffff;
+      font-size: 12px;
+      font-weight: 700;
+      height: 18px;
+      min-width: 18px;
+      padding: 0 4px;
+      border-radius: 9px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 3px solid var(--bg-tertiary);
+    }
+
+    /* 2. CHANNELS SIDEBAR (240px) */
+    .channel-sidebar {
+      width: 240px;
+      background-color: var(--bg-secondary);
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      flex-shrink: 0;
+      border-top-left-radius: 8px;
+    }
+
+    .server-header {
+      height: 48px;
+      padding: 0 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid rgba(0,0,0,0.24);
+      cursor: pointer;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.2);
+      transition: background 0.15s ease;
+    }
+
+    .server-header:hover {
+      background: var(--bg-modifier-hover);
+    }
+
+    .server-title {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--header-primary);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .verified-badge {
+      color: #23a55a;
+      display: inline-flex;
+    }
+
+    .channel-list {
+      flex: 1;
+      overflow-y: auto;
+      padding: 12px 8px;
+    }
+
+    .channel-category {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 6px 8px 4px 8px;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      color: var(--channels-default);
+      cursor: pointer;
+    }
+
+    .channel-category:hover {
+      color: var(--text-normal);
+    }
+
+    .channel-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 8px;
+      border-radius: 4px;
+      color: var(--channels-default);
+      cursor: pointer;
+      margin-bottom: 2px;
+      font-size: 15px;
+      font-weight: 500;
+      transition: background 0.15s ease, color 0.15s ease;
+    }
+
+    .channel-row:hover {
+      background-color: var(--bg-modifier-hover);
+      color: var(--text-normal);
+    }
+
+    .channel-row.active {
+      background-color: var(--bg-modifier-selected);
+      color: var(--header-primary);
+    }
+
+    .channel-row.unread {
+      color: var(--header-primary);
+      font-weight: 700;
+      position: relative;
+    }
+
+    .channel-row.unread::before {
+      content: '';
+      position: absolute;
+      left: -8px;
+      width: 4px;
+      height: 8px;
+      background: #ffffff;
+      border-radius: 0 4px 4px 0;
+    }
+
+    .channel-icon {
+      font-size: 18px;
+      opacity: 0.7;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 18px;
+    }
+
+    .user-footer {
+      height: 52px;
+      background-color: #232428;
+      padding: 0 8px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .user-profile-widget {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 4px;
+      border-radius: 4px;
+      cursor: pointer;
+      flex: 1;
+      min-width: 0;
+    }
+
+    .user-profile-widget:hover {
+      background-color: var(--bg-modifier-hover);
+    }
+
+    .avatar-wrapper {
+      position: relative;
+      width: 32px;
+      height: 32px;
+      flex-shrink: 0;
+    }
+
+    .avatar-img {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #5865f2, #eb459e);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 13px;
+      color: #ffffff;
+    }
+
+    .status-dot {
+      position: absolute;
+      bottom: -2px;
+      right: -2px;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      border: 3px solid var(--bg-tertiary);
+    }
+
+    .status-online { background-color: var(--status-online); }
+    .status-idle { background-color: var(--status-idle); }
+    .status-dnd { background-color: var(--status-dnd); }
+
+    .user-text-info {
+      line-height: 1.2;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    }
+
+    .user-name {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--header-primary);
+    }
+
+    .user-status-text {
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    .user-controls {
+      display: flex;
+      gap: 2px;
+    }
+
+    .user-btn {
+      width: 32px;
+      height: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 4px;
+      cursor: pointer;
+      color: var(--header-secondary);
+      border: none;
+      background: transparent;
+    }
+
+    .user-btn:hover {
+      background-color: var(--bg-modifier-hover);
+      color: var(--text-normal);
+    }
+
+    /* 3. MAIN CHAT AREA */
+    .chat-container {
+      flex: 1;
+      background-color: var(--bg-primary);
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+      min-width: 380px;
+    }
+
+    .chat-header {
+      height: 48px;
+      padding: 0 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid rgba(0,0,0,0.2);
+      box-shadow: 0 1px 2px rgba(0,0,0,0.2);
+      z-index: 5;
+    }
+
+    .chat-header-title {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--header-primary);
+    }
+
+    .channel-topic {
+      font-size: 13px;
+      font-weight: 400;
+      color: var(--text-muted);
+      border-left: 1px solid var(--border-subtle);
+      padding-left: 12px;
+      margin-left: 8px;
+    }
+
+    .header-tools {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      color: var(--header-secondary);
+    }
+
+    .header-icon {
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .header-icon:hover {
+      color: var(--text-normal);
+    }
+
+    .search-box {
+      background: var(--bg-tertiary);
+      border-radius: 4px;
+      padding: 4px 8px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 14px;
+      color: var(--text-muted);
+    }
+
+    .search-box input {
+      background: transparent;
+      border: none;
+      color: var(--text-normal);
+      outline: none;
+      width: 120px;
+      font-size: 13px;
+    }
+
+    /* CHAT STREAM */
+    .messages-stream {
+      flex: 1;
+      overflow-y: auto;
+      padding: 16px 16px 24px 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .welcome-header {
+      margin-top: auto;
+      padding-bottom: 16px;
+      border-bottom: 1px solid var(--bg-modifier-accent);
+      margin-bottom: 8px;
+    }
+
+    .welcome-circle {
+      width: 68px;
+      height: 68px;
+      border-radius: 50%;
+      background-color: #404249;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 36px;
+      color: #ffffff;
+      margin-bottom: 12px;
+    }
+
+    .welcome-header h1 {
+      font-size: 32px;
+      font-weight: 700;
+      color: var(--header-primary);
+      line-height: 1.2;
+      margin-bottom: 8px;
+    }
+
+    .welcome-header p {
+      color: var(--text-muted);
+      font-size: 15px;
+    }
+
+    /* Message Item */
+    .message-group {
+      display: flex;
+      gap: 16px;
+      position: relative;
+      padding: 4px 8px;
+      border-radius: 4px;
+      transition: background 0.1s ease;
+      user-select: text;
+    }
+
+    .message-group:hover {
+      background-color: var(--bg-modifier-hover);
+    }
+
+    .message-group.mentioned {
+      background-color: var(--mention-bg);
+      border-left: 2px solid var(--blurple);
+      padding-left: 6px;
+    }
+
+    .msg-avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 15px;
+      color: #ffffff;
+      cursor: pointer;
+    }
+
+    .msg-content-wrapper {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .msg-header {
+      display: flex;
+      align-items: baseline;
+      gap: 8px;
+      margin-bottom: 4px;
+    }
+
+    .msg-username {
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .msg-username:hover {
+      text-decoration: underline;
+    }
+
+    .role-blurple { color: #858cf7; }
+    .role-green { color: #57f287; }
+    .role-gold { color: #fee75c; }
+    .role-fuchsia { color: #eb459e; }
+
+    .bot-tag {
+      background: var(--blurple);
+      color: #ffffff;
+      font-size: 10px;
+      font-weight: 700;
+      padding: 1px 4px;
+      border-radius: 3px;
+      text-transform: uppercase;
+      line-height: 1.2;
+    }
+
+    .msg-timestamp {
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--text-muted);
+    }
+
+    .msg-text {
+      font-size: 15px;
+      line-height: 1.4;
+      color: var(--text-normal);
+      word-break: break-word;
+    }
+
+    .mention-pill {
+      background-color: var(--mention-pill-bg);
+      color: var(--mention-text);
+      padding: 0 4px;
+      border-radius: 3px;
+      font-weight: 500;
+      cursor: pointer;
+    }
+
+    .mention-pill:hover {
+      background-color: var(--blurple);
+      color: #ffffff;
+    }
+
+    /* Code Block */
+    .discord-code-block {
+      background: var(--bg-tertiary);
+      border: 1px solid var(--border-subtle);
+      border-radius: 4px;
+      padding: 10px 12px;
+      font-family: var(--font-mono);
+      font-size: 13px;
+      color: #e3e5e8;
+      margin: 8px 0;
+      overflow-x: auto;
+      line-height: 1.45;
+    }
+
+    /* Embed Card */
+    .discord-embed {
+      background: var(--bg-secondary);
+      border-left: 4px solid var(--blurple);
+      border-radius: 4px;
+      padding: 12px 16px;
+      margin-top: 8px;
+      max-width: 520px;
+    }
+
+    .embed-provider {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-bottom: 4px;
+    }
+
+    .embed-title {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--text-link);
+      margin-bottom: 6px;
+      text-decoration: none;
+      display: block;
+    }
+
+    .embed-title:hover {
+      text-decoration: underline;
+    }
+
+    .embed-description {
+      font-size: 13px;
+      color: var(--text-normal);
+      line-height: 1.35;
+      margin-bottom: 8px;
+    }
+
+    .embed-fields {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      margin-top: 8px;
+    }
+
+    .embed-field-name {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--header-secondary);
+    }
+
+    .embed-field-value {
+      font-size: 13px;
+      color: var(--text-normal);
+    }
+
+    /* Reactions */
+    .reaction-bar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px;
+      margin-top: 6px;
+    }
+
+    .reaction-chip {
+      background-color: var(--bg-secondary);
+      border: 1px solid transparent;
+      border-radius: 8px;
+      padding: 2px 6px;
+      font-size: 13px;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      cursor: pointer;
+      user-select: none;
+      transition: all 0.15s ease;
+    }
+
+    .reaction-chip:hover {
+      background-color: #35373c;
+      border-color: #4e5058;
+    }
+
+    .reaction-chip.reacted {
+      background-color: rgba(88, 101, 242, 0.15);
+      border-color: var(--blurple);
+      color: #c9cdfb;
+    }
+
+    /* Message Floating Hover Bar */
+    .msg-actions-bar {
+      position: absolute;
+      top: -16px;
+      right: 16px;
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-subtle);
+      border-radius: 4px;
+      display: none;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    }
+
+    .message-group:hover .msg-actions-bar {
+      display: flex;
+    }
+
+    .action-btn {
+      padding: 6px 8px;
+      color: var(--header-secondary);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 3px;
+    }
+
+    .action-btn:hover {
+      color: var(--text-normal);
+      background-color: var(--bg-modifier-hover);
+    }
+
+    /* CHAT INPUT AREA */
+    .chat-input-container {
+      padding: 0 16px 24px 16px;
+    }
+
+    .input-box-wrapper {
+      background-color: var(--bg-input);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      padding: 10px 16px;
+      gap: 12px;
+    }
+
+    .attach-btn {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background-color: #4e5058;
+      color: var(--bg-primary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 16px;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+
+    .attach-btn:hover {
+      background-color: var(--text-normal);
+    }
+
+    .chat-input {
+      flex: 1;
+      background: transparent;
+      border: none;
+      outline: none;
+      color: var(--text-normal);
+      font-family: var(--font-ui);
+      font-size: 15px;
+    }
+
+    .chat-input::placeholder {
+      color: var(--text-muted);
+    }
+
+    .input-action-icons {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      color: var(--header-secondary);
+      cursor: pointer;
+    }
+
+    .input-action-icons svg:hover {
+      color: var(--text-normal);
+    }
+
+    /* 4. MEMBER LIST SIDEBAR (240px) */
+    .member-sidebar {
+      width: 240px;
+      background-color: var(--bg-secondary);
+      height: 100vh;
+      overflow-y: auto;
+      padding: 24px 8px 16px 16px;
+      flex-shrink: 0;
+    }
+
+    .member-group-title {
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: var(--channels-default);
+      margin-bottom: 8px;
+      margin-top: 16px;
+    }
+
+    .member-group-title:first-child {
+      margin-top: 0;
+    }
+
+    .member-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 6px 8px;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: background 0.15s;
+      margin-bottom: 2px;
+    }
+
+    .member-item:hover {
+      background-color: var(--bg-modifier-hover);
+    }
+
+    .member-avatar {
+      position: relative;
+      width: 32px;
+      height: 32px;
+    }
+
+    .member-avatar-img {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: #4e5058;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      color: #fff;
+      font-size: 12px;
+    }
+
+    .member-info {
+      line-height: 1.2;
+      overflow: hidden;
+    }
+
+    .member-name {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--header-primary);
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .member-activity {
+      font-size: 12px;
+      color: var(--text-muted);
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    }
+
+    /* BUTTON COMPONENT SPEC DEMO POPUP / BAR */
+    .floating-spec-bar {
+      position: fixed;
+      bottom: 16px;
+      right: 260px;
+      background: var(--bg-floating);
+      border: 1px solid var(--border-subtle);
+      border-radius: 8px;
+      padding: 10px 16px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+      z-index: 100;
+    }
+
+    .btn-discord-primary {
+      background-color: var(--blurple);
+      color: #ffffff;
+      padding: 8px 16px;
+      border-radius: 4px;
+      font-size: 14px;
+      font-weight: 500;
+      border: none;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+
+    .btn-discord-primary:hover {
+      background-color: var(--blurple-hover);
+    }
+
+    .btn-discord-secondary {
+      background-color: #4e5058;
+      color: #ffffff;
+      padding: 8px 16px;
+      border-radius: 4px;
+      font-size: 14px;
+      font-weight: 500;
+      border: none;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+
+    .btn-discord-secondary:hover {
+      background-color: #6d6f78;
+    }
+
+    .btn-discord-danger {
+      background-color: #da373c;
+      color: #ffffff;
+      padding: 8px 16px;
+      border-radius: 4px;
+      font-size: 14px;
+      font-weight: 500;
+      border: none;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+
+    .btn-discord-danger:hover {
+      background-color: #a12d2f;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- 1. SERVER LIST RAIL (72px) -->
+  <aside class="server-rail">
+    <!-- Discord Direct Messages -->
+    <div class="server-item active" title="Direct Messages">
+      <div class="server-pill"></div>
+      <div class="server-icon discord-home">
+        <svg viewBox="0 0 127.14 96.36">
+          <path d="M107.7,8.07A105.15,105.15,0,0,0,81.47,0a72.06,72.06,0,0,0-3.36,6.83A97.68,97.68,0,0,0,49,6.83,72.37,72.37,0,0,0,45.64,0,105.89,105.89,0,0,0,19.39,8.09C2.79,32.65-1.71,56.6.54,80.21h0A105.73,105.73,0,0,0,32.71,96.36,77.7,77.7,0,0,0,39.6,85.25a68.42,68.42,0,0,1-10.85-5.18c.91-.66,1.8-1.34,2.66-2a75.57,75.57,0,0,0,64.32,0c.87.71,1.76,1.39,2.66,2a68.68,68.68,0,0,1-10.87,5.19,77,77,0,0,0,6.89,11.1A105.25,105.25,0,0,0,126.6,80.22h0C129.24,52.84,122.09,29.11,107.7,8.07ZM42.45,65.69C36.18,65.69,31,60,31,53s5-12.74,11.43-12.74S54,45.91,53.89,53,48.84,65.69,42.45,65.69Zm42.24,0C78.41,65.69,73.25,60,73.25,53s5-12.74,11.44-12.74S96.23,45.91,96.12,53,91.08,65.69,84.69,65.69Z"/>
+        </svg>
+      </div>
+    </div>
+
+    <div class="server-divider"></div>
+
+    <!-- Servers -->
+    <div class="server-item" title="Antigravity HQ">
+      <div class="server-pill"></div>
+      <div class="server-icon" style="background: #23a55a; color: #fff;">AG</div>
+      <span class="badge-mention">3</span>
+    </div>
+
+    <div class="server-item" title="Web Dev Collective">
+      <div class="server-pill"></div>
+      <div class="server-icon" style="background: #e22718; color: #fff;">WD</div>
+    </div>
+
+    <div class="server-item" title="Tokyo Night Beats">
+      <div class="server-pill"></div>
+      <div class="server-icon" style="background: #eb459e; color: #fff;">TN</div>
+    </div>
+
+    <div class="server-item" title="Kernel Hackers">
+      <div class="server-pill"></div>
+      <div class="server-icon" style="background: #f0b232; color: #000;">KH</div>
+    </div>
+
+    <div class="server-item" title="Add a Server">
+      <div class="server-pill"></div>
+      <div class="server-icon" style="background: #2b2d31; color: #23a55a; font-size: 22px;">+</div>
+    </div>
+  </aside>
+
+  <!-- 2. CHANNEL SIDEBAR (240px) -->
+  <nav class="channel-sidebar">
+    <div class="server-header">
+      <div class="server-title">
+        <span>Antigravity HQ</span>
+        <svg class="verified-badge" width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+        </svg>
+      </div>
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+        <path d="M7 10l5 5 5-5z"/>
+      </svg>
+    </div>
+
+    <div class="channel-list">
+      <!-- Category 1 -->
+      <div class="channel-category">
+        <span>Information</span>
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M7 10l5 5 5-5z"/></svg>
+      </div>
+      <div class="channel-row">
+        <span class="channel-icon">📢</span>
+        <span>announcements</span>
+      </div>
+      <div class="channel-row">
+        <span class="channel-icon">📜</span>
+        <span>rules-and-faq</span>
+      </div>
+
+      <!-- Category 2 -->
+      <div class="channel-category" style="margin-top: 16px;">
+        <span>Text Channels</span>
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M7 10l5 5 5-5z"/></svg>
+      </div>
+      <div class="channel-row active" onclick="switchChannel(this, 'general', 'General discussion about design systems and engineering.')">
+        <span class="channel-icon">#</span>
+        <span>general</span>
+      </div>
+      <div class="channel-row unread" onclick="switchChannel(this, 'design-system', 'Discussions on token specifications, palettes, and layout rules.')">
+        <span class="channel-icon">#</span>
+        <span>design-system</span>
+      </div>
+      <div class="channel-row" onclick="switchChannel(this, 'code-review', 'Pull request reviews and live demo previews.')">
+        <span class="channel-icon">#</span>
+        <span>code-review</span>
+      </div>
+      <div class="channel-row" onclick="switchChannel(this, 'bot-commands', 'Trigger automation subagents and batch jobs.')">
+        <span class="channel-icon">#</span>
+        <span>bot-commands</span>
+      </div>
+
+      <!-- Category 3 -->
+      <div class="channel-category" style="margin-top: 16px;">
+        <span>Voice Channels</span>
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M7 10l5 5 5-5z"/></svg>
+      </div>
+      <div class="channel-row">
+        <span class="channel-icon">🔊</span>
+        <span>Lounge (2/10)</span>
+      </div>
+      <div class="channel-row">
+        <span class="channel-icon">🔊</span>
+        <span>Pair Programming</span>
+      </div>
+    </div>
+
+    <!-- User Profile Bar -->
+    <div class="user-footer">
+      <div class="user-profile-widget">
+        <div class="avatar-wrapper">
+          <div class="avatar-img">JD</div>
+          <div class="status-dot status-online"></div>
+        </div>
+        <div class="user-text-info">
+          <div class="user-name">JohnDoe</div>
+          <div class="user-status-text">#1337 • Coding</div>
+        </div>
+      </div>
+      <div class="user-controls">
+        <button class="user-btn" title="Mute Mic">🎙️</button>
+        <button class="user-btn" title="Deafen">🎧</button>
+        <button class="user-btn" title="User Settings">⚙️</button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- 3. CHAT MAIN VIEW -->
+  <main class="chat-container">
+    <!-- Channel Header -->
+    <header class="chat-header">
+      <div class="chat-header-title">
+        <span style="color: var(--channels-default); font-size: 22px;">#</span>
+        <span id="channelNameDisplay">general</span>
+        <span class="channel-topic" id="channelTopicDisplay">General discussion about design systems and engineering.</span>
+      </div>
+      <div class="header-tools">
+        <span class="header-icon" title="Threads">🧵</span>
+        <span class="header-icon" title="Notification Settings">🔔</span>
+        <span class="header-icon" title="Pinned Messages">📌</span>
+        <span class="header-icon" title="Member List">👥</span>
+        <div class="search-box">
+          <input type="text" placeholder="Search">
+          <span>🔍</span>
+        </div>
+        <span class="header-icon" title="Inbox">📥</span>
+        <span class="header-icon" title="Help">❓</span>
+      </div>
+    </header>
+
+    <!-- Message Stream -->
+    <div class="messages-stream" id="messagesStream">
+      <div class="welcome-header">
+        <div class="welcome-circle">#</div>
+        <h1>Welcome to #general!</h1>
+        <p>This is the start of the #general channel. Send messages, test embeds, and verify blurple tokens.</p>
+      </div>
+
+      <!-- Message 1 -->
+      <div class="message-group">
+        <div class="msg-avatar" style="background: #5865f2;">AG</div>
+        <div class="msg-content-wrapper">
+          <div class="msg-header">
+            <span class="msg-username role-blurple">Antigravity Bot</span>
+            <span class="bot-tag">BOT</span>
+            <span class="msg-timestamp">Today at 9:15 AM</span>
+          </div>
+          <div class="msg-text">
+            Welcome everyone! The official <strong>Discord Design System</strong> specification is now live in our repository. Key tokens:
+          </div>
+          <pre class="discord-code-block"><code>/* Discord Core Color Tokens */
+--blurple: #5865f2;
+--bg-tertiary: #1e1f22;   /* Server rail */
+--bg-secondary: #2b2d31;  /* Channels sidebar */
+--bg-primary: #313338;    /* Chat background */
+--status-online: #23a55a; /* Presence indicator */</code></pre>
+
+          <!-- Embed -->
+          <div class="discord-embed">
+            <div class="embed-provider">GitHub • open-design</div>
+            <a href="#" class="embed-title">Discord Design Spec v2.4 (Dark-First Theme)</a>
+            <div class="embed-description">
+              Engineered for evenings, raids, and voice chat. Includes 72px server rail with morphing 48px avatars, Whitney/gg sans typography hierarchy, and status dot notch geometry.
+            </div>
+            <div class="embed-fields">
+              <div>
+                <div class="embed-field-name">ACCENT</div>
+                <div class="embed-field-value">Blurple (#5865F2)</div>
+              </div>
+              <div>
+                <div class="embed-field-name">RADIUS</div>
+                <div class="embed-field-value">8px Cards / 4px Buttons</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="reaction-bar">
+            <div class="reaction-chip reacted" onclick="toggleReaction(this)">
+              <span>🚀</span>
+              <span class="rx-count">14</span>
+            </div>
+            <div class="reaction-chip" onclick="toggleReaction(this)">
+              <span>🔥</span>
+              <span class="rx-count">8</span>
+            </div>
+            <div class="reaction-chip" onclick="toggleReaction(this)">
+              <span>💜</span>
+              <span class="rx-count">23</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="msg-actions-bar">
+          <div class="action-btn" title="Add Reaction">😀</div>
+          <div class="action-btn" title="Reply">↩️</div>
+          <div class="action-btn" title="More">•••</div>
+        </div>
+      </div>
+
+      <!-- Message 2 (Mention) -->
+      <div class="message-group mentioned">
+        <div class="msg-avatar" style="background: #23a55a;">CL</div>
+        <div class="msg-content-wrapper">
+          <div class="msg-header">
+            <span class="msg-username role-green">Claire Redfield</span>
+            <span class="msg-timestamp">Today at 9:22 AM</span>
+          </div>
+          <div class="msg-text">
+            Hey <span class="mention-pill">@JohnDoe</span>, did you see the new avatar morph animation? When you hover over any server icon in the left rail, the radius smoothly interpolates from 16px to 50%!
+          </div>
+          <div class="reaction-bar">
+            <div class="reaction-chip" onclick="toggleReaction(this)">
+              <span>💯</span>
+              <span class="rx-count">4</span>
+            </div>
+          </div>
+        </div>
+        <div class="msg-actions-bar">
+          <div class="action-btn" title="Add Reaction">😀</div>
+          <div class="action-btn" title="Reply">↩️</div>
+          <div class="action-btn" title="More">•••</div>
+        </div>
+      </div>
+
+      <!-- Message 3 -->
+      <div class="message-group">
+        <div class="msg-avatar" style="background: #fee75c; color: #000;">MK</div>
+        <div class="msg-content-wrapper">
+          <div class="msg-header">
+            <span class="msg-username role-gold">Makoto Yuki</span>
+            <span class="msg-timestamp">Today at 9:30 AM</span>
+          </div>
+          <div class="msg-text">
+            Looks razor sharp. The 16px body copy with 1.375 line height makes scanning long discussions effortless. Try posting a test message below!
+          </div>
+        </div>
+        <div class="msg-actions-bar">
+          <div class="action-btn" title="Add Reaction">😀</div>
+          <div class="action-btn" title="Reply">↩️</div>
+          <div class="action-btn" title="More">•••</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Chat Input Bar -->
+    <div class="chat-input-container">
+      <div class="input-box-wrapper">
+        <div class="attach-btn" title="Attach file">+</div>
+        <input type="text" id="chatMessageInput" class="chat-input" placeholder="Message #general" onkeydown="handleInputKey(event)">
+        <div class="input-action-icons">
+          <span title="Gift Nitro">🎁</span>
+          <span title="GIF Picker">GIF</span>
+          <span title="Stickers">🏷️</span>
+          <span title="Select Emoji">😀</span>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- 4. MEMBER LIST SIDEBAR (240px) -->
+  <aside class="member-sidebar">
+    <div class="member-group-title">ONLINE — 4</div>
+
+    <div class="member-item">
+      <div class="member-avatar">
+        <div class="member-avatar-img" style="background: #5865f2;">AG</div>
+        <div class="status-dot status-online"></div>
+      </div>
+      <div class="member-info">
+        <div class="member-name role-blurple">Antigravity Bot <span class="bot-tag">BOT</span></div>
+        <div class="member-activity">Building design systems</div>
+      </div>
+    </div>
+
+    <div class="member-item">
+      <div class="member-avatar">
+        <div class="member-avatar-img" style="background: #23a55a;">CL</div>
+        <div class="status-dot status-online"></div>
+      </div>
+      <div class="member-info">
+        <div class="member-name role-green">Claire Redfield</div>
+        <div class="member-activity">Playing Resident Evil 2</div>
+      </div>
+    </div>
+
+    <div class="member-item">
+      <div class="member-avatar">
+        <div class="member-avatar-img" style="background: #fee75c; color: #000;">MK</div>
+        <div class="status-dot status-idle"></div>
+      </div>
+      <div class="member-info">
+        <div class="member-name role-gold">Makoto Yuki</div>
+        <div class="member-activity">Listening to Persona 3 OST</div>
+      </div>
+    </div>
+
+    <div class="member-item">
+      <div class="member-avatar">
+        <div class="member-avatar-img" style="background: #eb459e;">JD</div>
+        <div class="status-dot status-online"></div>
+      </div>
+      <div class="member-info">
+        <div class="member-name role-fuchsia">JohnDoe (You)</div>
+        <div class="member-activity">Coding UI components</div>
+      </div>
+    </div>
+
+    <div class="member-group-title">OFFLINE — 2</div>
+
+    <div class="member-item" style="opacity: 0.6;">
+      <div class="member-avatar">
+        <div class="member-avatar-img">AL</div>
+        <div class="status-dot status-offline"></div>
+      </div>
+      <div class="member-info">
+        <div class="member-name">Alan Wake</div>
+        <div class="member-activity">Writing in the Dark Place</div>
+      </div>
+    </div>
+
+    <div class="member-item" style="opacity: 0.6;">
+      <div class="member-avatar">
+        <div class="member-avatar-img">SP</div>
+        <div class="status-dot status-offline"></div>
+      </div>
+      <div class="member-info">
+        <div class="member-name">Sam Porter</div>
+        <div class="member-activity">Delivering cargo</div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Interactive Controls Widget -->
+  <div class="floating-spec-bar">
+    <span style="font-size: 13px; font-weight: 600; color: var(--text-normal);">Component Showcase:</span>
+    <button class="btn-discord-primary" onclick="triggerNotification()">Blurple CTA</button>
+    <button class="btn-discord-secondary" onclick="alert('Secondary Discord button clicked')">Secondary</button>
+    <button class="btn-discord-danger" onclick="alert('Danger action confirmation')">Danger</button>
+  </div>
+
+  <script>
+    function toggleReaction(el) {
+      const countEl = el.querySelector('.rx-count');
+      let count = parseInt(countEl.textContent, 10);
+      if (el.classList.contains('reacted')) {
+        el.classList.remove('reacted');
+        countEl.textContent = count - 1;
+      } else {
+        el.classList.add('reacted');
+        countEl.textContent = count + 1;
+      }
+    }
+
+    function switchChannel(el, name, topic) {
+      document.querySelectorAll('.channel-row').forEach(row => row.classList.remove('active'));
+      el.classList.add('active');
+      el.classList.remove('unread');
+      document.getElementById('channelNameDisplay').textContent = name;
+      document.getElementById('channelTopicDisplay').textContent = topic;
+      document.getElementById('chatMessageInput').placeholder = 'Message #' + name;
+    }
+
+    function handleInputKey(e) {
+      if (e.key === 'Enter') {
+        const input = document.getElementById('chatMessageInput');
+        const text = input.value.trim();
+        if (!text) return;
+
+        const stream = document.getElementById('messagesStream');
+        const now = new Date();
+        const timeStr = 'Today at ' + now.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' });
+
+        const msgDiv = document.createElement('div');
+        msgDiv.className = 'message-group';
+        msgDiv.innerHTML = `
+          <div class="msg-avatar" style="background: #eb459e;">JD</div>
+          <div class="msg-content-wrapper">
+            <div class="msg-header">
+              <span class="msg-username role-fuchsia">JohnDoe</span>
+              <span class="msg-timestamp">${timeStr}</span>
+            </div>
+            <div class="msg-text">${escapeHtml(text)}</div>
+          </div>
+          <div class="msg-actions-bar">
+            <div class="action-btn" title="Add Reaction">😀</div>
+            <div class="action-btn" title="Reply">↩️</div>
+            <div class="action-btn" title="More">•••</div>
+          </div>
+        `;
+
+        stream.appendChild(msgDiv);
+        stream.scrollTop = stream.scrollHeight;
+        input.value = '';
+      }
+    }
+
+    function escapeHtml(str) {
+      return str.replace(/[&<>"']/g, function(m) {
+        return {
+          '&': '&amp;',
+          '<': '&lt;',
+          '>': '&gt;',
+          '"': '&quot;',
+          "'": '&#039;'
+        }[m];
+      });
+    }
+
+    function triggerNotification() {
+      const stream = document.getElementById('messagesStream');
+      const msgDiv = document.createElement('div');
+      msgDiv.className = 'message-group mentioned';
+      msgDiv.innerHTML = `
+        <div class="msg-avatar" style="background: #5865f2;">AG</div>
+        <div class="msg-content-wrapper">
+          <div class="msg-header">
+            <span class="msg-username role-blurple">Antigravity Bot</span>
+            <span class="bot-tag">BOT</span>
+            <span class="msg-timestamp">Just now</span>
+          </div>
+          <div class="msg-text">
+            <span class="mention-pill">@JohnDoe</span> Blurple primary action fired successfully! All tokens adhere strictly to <code>discord/DESIGN.md</code>.
+          </div>
+        </div>
+      `;
+      stream.appendChild(msgDiv);
+      stream.scrollTop = stream.scrollHeight;
+    }
+  </script>
+</body>
+</html>

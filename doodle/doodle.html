@@ -1,0 +1,993 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>DOODLEPAD // Hand-Drawn Collaborative Canvas &amp; Sketch Studio</title>
+  <meta name="description" content="A playful, hand-drawn design system with doodles, handwritten fonts, imperfect lines, Primary #49B6E5, Secondary #263D5B, Surface #FFFFFF, and Delius Swash Caps." />
+
+  <!-- Google Fonts: Delius Swash Caps, Delius, JetBrains Mono, Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Delius&family=Delius+Swash+Caps&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+  <style>
+    /* ─────────────────────────────────────────────────────────────────
+       DOODLE DESIGN SYSTEM SPECIFICATION & DESIGN TOKENS
+       Directly sourced from /open-design/design-systems/doodle/DESIGN.md
+       ───────────────────────────────────────────────────────────────── */
+    :root {
+      /* Colors (DESIGN.md §2) */
+      --color-primary: #49B6E5;
+      --color-primary-hover: #35a4d4;
+      --color-secondary: #263D5B;
+      --color-secondary-hover: #1b2d45;
+      --color-success: #16A34A;
+      --color-warning: #D97706;
+      --color-danger: #DC2626;
+      --color-surface: #FFFFFF;
+      --color-text: #111827;
+      --color-neutral: #FFFFFF;
+
+      /* Doodle Sketch Accents */
+      --color-sketch-paper: #FFFDF9;
+      --color-sticky-yellow: #FEF08A;
+      --color-sticky-blue: #BAE6FD;
+      --color-sticky-pink: #FBCFE8;
+
+      /* Typography Families (DESIGN.md §3) */
+      --font-display: "Delius Swash Caps", "Delius", cursive, sans-serif;
+      --font-primary: "Delius Swash Caps", "Delius", cursive, sans-serif;
+      --font-body: "Inter", "Delius", system-ui, sans-serif;
+      --font-mono: "JetBrains Mono", monospace;
+
+      /* Typography Scale (DESIGN.md §3: 14/16/18/24/32/40) */
+      --text-xs: 12px;
+      --text-sm: 14px;
+      --text-base: 16px;
+      --text-lg: 18px;
+      --text-xl: 24px;
+      --text-2xl: 32px;
+      --text-3xl: 40px;
+      --text-4xl: 56px;
+
+      /* Spacing Scale (DESIGN.md §4: 4/8/12/16/24/32) */
+      --space-1: 4px;
+      --space-2: 8px;
+      --space-3: 12px;
+      --space-4: 16px;
+      --space-6: 24px;
+      --space-8: 32px;
+      --space-12: 48px;
+      --space-16: 64px;
+
+      /* Hand-drawn Imperfect Radii & Borders */
+      --radius-doodle: 255px 15px 225px 15px/15px 225px 15px 255px;
+      --radius-doodle-alt: 15px 255px 15px 225px/225px 15px 255px 15px;
+      --border-sketch: 2.5px solid #263D5B;
+      --border-dashed-sketch: 2.5px dashed #263D5B;
+      --shadow-doodle: 4px 4px 0 #263D5B;
+
+      /* Motion (150–250ms per DESIGN.md §7) */
+      --motion-fast: 150ms;
+      --motion-base: 220ms;
+      --ease-standard: cubic-bezier(0.16, 1, 0.3, 1);
+
+      --focus-ring: 0 0 0 3px rgba(73, 182, 229, 0.45);
+      --container-max: 1200px;
+    }
+
+    /* ─── Global Reset & Hand-Drawn Base ───────────────────────────── */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      background-color: var(--color-surface);
+      color: var(--color-text);
+    }
+
+    body {
+      background-color: var(--color-sketch-paper);
+      color: var(--color-text);
+      font-family: var(--font-body);
+      font-size: var(--text-base);
+      line-height: 1.55;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      overflow-x: hidden;
+    }
+
+    /* Headings carry Delius Swash Caps playful personality */
+    h1, h2, h3, h4 {
+      font-family: var(--font-display);
+      line-height: 1.2;
+      color: var(--color-secondary);
+      letter-spacing: -0.01em;
+    }
+
+    h1 {
+      font-size: var(--text-4xl);
+      font-weight: 700;
+    }
+
+    h2 {
+      font-size: var(--text-3xl);
+      font-weight: 700;
+    }
+
+    h3 {
+      font-size: var(--text-2xl);
+      font-weight: 600;
+    }
+
+    p {
+      color: var(--color-text);
+      line-height: 1.55;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    :focus-visible {
+      outline: none;
+      box-shadow: var(--focus-ring);
+    }
+
+    /* ─── Hand-Drawn Button Components (DESIGN.md §6) ──────────────── */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--space-2);
+      padding: 10px 26px;
+      font-family: var(--font-display);
+      font-size: 18px;
+      font-weight: 700;
+      border: var(--border-sketch);
+      border-radius: var(--radius-doodle);
+      cursor: pointer;
+      text-decoration: none;
+      white-space: nowrap;
+      box-shadow: var(--shadow-doodle);
+      transition: transform var(--motion-fast) var(--ease-standard),
+                  box-shadow var(--motion-fast) var(--ease-standard),
+                  background-color var(--motion-fast) var(--ease-standard);
+    }
+
+    /* Primary Action uses #49B6E5 per DESIGN.md §6 */
+    .btn-primary {
+      background-color: var(--color-primary);
+      color: #FFFFFF;
+    }
+
+    .btn-primary:hover {
+      background-color: var(--color-primary-hover);
+      transform: translate(2px, 2px);
+      box-shadow: 2px 2px 0 #263D5B;
+    }
+
+    .btn-primary:active {
+      transform: translate(4px, 4px);
+      box-shadow: none;
+    }
+
+    /* Secondary Action stays neutral per DESIGN.md §6 */
+    .btn-neutral {
+      background-color: var(--color-surface);
+      color: var(--color-secondary);
+    }
+
+    .btn-neutral:hover {
+      background-color: #F8FAFC;
+      transform: translate(2px, 2px);
+      box-shadow: 2px 2px 0 #263D5B;
+    }
+
+    /* ─── Layout Primitives ────────────────────────────────────────── */
+    .container {
+      max-width: var(--container-max);
+      margin: 0 auto;
+      padding: 0 var(--space-6);
+    }
+
+    .section-spacing {
+      padding-block: var(--space-16);
+      border-bottom: 2px dashed #CBD5E1;
+    }
+
+    /* ─── Playful Header ───────────────────────────────────────────── */
+    .doodle-header {
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      height: 76px;
+      background-color: rgba(255, 253, 249, 0.95);
+      backdrop-filter: blur(8px);
+      border-bottom: var(--border-sketch);
+      display: flex;
+      align-items: center;
+    }
+
+    .header-inner {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      width: 100%;
+    }
+
+    .brand-group {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .brand-doodle-icon {
+      width: 36px;
+      height: 36px;
+      background-color: var(--color-primary);
+      border: var(--border-sketch);
+      border-radius: var(--radius-doodle);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      font-family: var(--font-display);
+      font-size: 20px;
+      transform: rotate(-3deg);
+      box-shadow: 2px 2px 0 #263D5B;
+    }
+
+    .brand-title {
+      font-family: var(--font-display);
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--color-secondary);
+    }
+
+    .nav-items {
+      display: flex;
+      align-items: center;
+      list-style: none;
+      gap: var(--space-6);
+    }
+
+    .nav-items a {
+      font-family: var(--font-display);
+      font-size: 17px;
+      font-weight: 600;
+      color: var(--color-secondary);
+      position: relative;
+    }
+
+    .nav-items a:hover {
+      color: var(--color-primary);
+      text-decoration: underline wavy var(--color-primary);
+    }
+
+    /* ─── Hero Section ─────────────────────────────────────────────── */
+    .hero-section {
+      padding: var(--space-16) 0;
+      border-bottom: 2px dashed #CBD5E1;
+      position: relative;
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: var(--space-12);
+      align-items: center;
+    }
+
+    .handdrawn-tag {
+      display: inline-block;
+      padding: 4px 12px;
+      background-color: var(--color-sticky-yellow);
+      border: var(--border-sketch);
+      border-radius: var(--radius-doodle);
+      font-family: var(--font-display);
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--color-secondary);
+      transform: rotate(-2deg);
+      box-shadow: 2px 2px 0 #263D5B;
+      margin-bottom: var(--space-4);
+    }
+
+    .hero-h1 {
+      margin-bottom: var(--space-4);
+    }
+
+    .hero-h1 span.scribble {
+      color: var(--color-primary);
+      border-bottom: 4px solid var(--color-primary);
+      border-radius: 4px;
+    }
+
+    .hero-desc {
+      font-size: var(--text-lg);
+      line-height: 1.5;
+      color: #334155;
+      margin-bottom: var(--space-6);
+      max-width: 520px;
+    }
+
+    .hero-cta-cluster {
+      display: flex;
+      gap: var(--space-4);
+      margin-bottom: var(--space-6);
+      flex-wrap: wrap;
+    }
+
+    /* Sticky Note Demo Widget (Hero Right) */
+    .hero-sticky-note {
+      background-color: var(--color-sticky-yellow);
+      border: var(--border-sketch);
+      border-radius: var(--radius-doodle);
+      padding: var(--space-6);
+      box-shadow: var(--shadow-doodle);
+      transform: rotate(2deg);
+      position: relative;
+    }
+
+    .sticky-pin {
+      width: 14px;
+      height: 14px;
+      background-color: var(--color-danger);
+      border-radius: 50%;
+      border: 2px solid #000;
+      position: absolute;
+      top: -6px;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+
+    .sticky-text {
+      font-family: var(--font-display);
+      font-size: 20px;
+      line-height: 1.4;
+      color: var(--color-secondary);
+      margin-bottom: var(--space-4);
+    }
+
+    /* ─── Interactive Whiteboard & Sketch Canvas ───────────────────── */
+    .whiteboard-section {
+      padding: var(--space-16) 0;
+      background-color: var(--color-surface);
+      border-bottom: 2px dashed #CBD5E1;
+    }
+
+    .whiteboard-card {
+      background-color: #FFFFFF;
+      border: var(--border-sketch);
+      border-radius: var(--radius-doodle-alt);
+      box-shadow: var(--shadow-doodle);
+      padding: var(--space-6);
+      display: grid;
+      grid-template-columns: 1fr 300px;
+      gap: var(--space-6);
+    }
+
+    .canvas-frame {
+      border: 2px dashed #94A3B8;
+      border-radius: var(--radius-doodle);
+      background-color: #FAFAFA;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      cursor: crosshair;
+    }
+
+    #sketchCanvas {
+      background: #FFFFFF;
+      width: 100%;
+      height: 380px;
+    }
+
+    .canvas-tools-panel {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: var(--space-2);
+    }
+
+    .color-swatches-row {
+      display: flex;
+      gap: var(--space-2);
+      margin-top: 8px;
+    }
+
+    .color-pick-dot {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      border: 2px solid #263D5B;
+      cursor: pointer;
+      transition: transform var(--motion-fast);
+    }
+
+    .color-pick-dot.active {
+      transform: scale(1.2);
+      box-shadow: 0 0 0 2px var(--color-primary);
+    }
+
+    /* ─── Content Blocks (DESIGN.md §5) ────────────────────────────── */
+    .features-section {
+      padding: var(--space-16) 0;
+      border-bottom: 2px dashed #CBD5E1;
+    }
+
+    .section-head {
+      max-width: 640px;
+      margin-bottom: var(--space-12);
+    }
+
+    .features-grid-3up {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: var(--space-6);
+    }
+
+    /* Cards with consistent radii and elevation per DESIGN.md §6 */
+    .doodle-card {
+      background-color: var(--color-surface);
+      border: var(--border-sketch);
+      border-radius: var(--radius-doodle);
+      padding: var(--space-6);
+      box-shadow: var(--shadow-doodle);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: transform var(--motion-fast);
+    }
+
+    .doodle-card:hover {
+      transform: rotate(1deg) translateY(-3px);
+    }
+
+    .doodle-card.blue-tint {
+      background-color: var(--color-sticky-blue);
+    }
+
+    .doodle-card.pink-tint {
+      background-color: var(--color-sticky-pink);
+    }
+
+    .doodle-card h4 {
+      font-size: var(--text-xl);
+      margin-bottom: var(--space-2);
+    }
+
+    .doodle-card p {
+      font-size: var(--text-sm);
+      color: #334155;
+      margin-bottom: var(--space-4);
+      flex: 1;
+    }
+
+    /* ─── Three Step Doodle Workflow ───────────────────────────────── */
+    .workflow-section {
+      padding: var(--space-16) 0;
+      border-bottom: 2px dashed #CBD5E1;
+      text-align: center;
+    }
+
+    .steps-grid-3up {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: var(--space-6);
+      margin-top: var(--space-12);
+    }
+
+    .step-box {
+      border: var(--border-sketch);
+      border-radius: var(--radius-doodle-alt);
+      padding: var(--space-6);
+      background-color: #FFFFFF;
+      box-shadow: var(--shadow-doodle);
+    }
+
+    .step-number {
+      display: inline-block;
+      font-family: var(--font-display);
+      font-size: 28px;
+      font-weight: 700;
+      color: var(--color-primary);
+      margin-bottom: var(--space-2);
+    }
+
+    /* ─── Newsletter Doodle Box ────────────────────────────────────── */
+    .newsletter-section {
+      padding: var(--space-16) 0;
+      text-align: center;
+    }
+
+    .doodle-newsletter-card {
+      max-width: 600px;
+      margin: 0 auto;
+      background-color: var(--color-sticky-yellow);
+      border: var(--border-sketch);
+      border-radius: var(--radius-doodle);
+      padding: var(--space-8);
+      box-shadow: var(--shadow-doodle);
+      transform: rotate(-1deg);
+    }
+
+    .doodle-input-row {
+      display: flex;
+      gap: var(--space-2);
+      margin-top: var(--space-4);
+    }
+
+    .doodle-input {
+      flex: 1;
+      height: 48px;
+      border: var(--border-sketch);
+      border-radius: var(--radius-doodle);
+      padding: 0 var(--space-4);
+      font-family: var(--font-display);
+      font-size: 16px;
+      background-color: #FFFFFF;
+    }
+
+    .doodle-input:focus {
+      outline: none;
+      box-shadow: var(--focus-ring);
+    }
+
+    /* ─── Footer ───────────────────────────────────────────────────── */
+    .doodle-footer {
+      background-color: var(--color-secondary);
+      color: #CBD5E1;
+      border-top: var(--border-sketch);
+      padding: var(--space-12) 0 var(--space-6);
+    }
+
+    .footer-grid-4up {
+      display: grid;
+      grid-template-columns: 1.5fr repeat(3, 1fr);
+      gap: var(--space-8);
+      margin-bottom: var(--space-8);
+    }
+
+    .footer-title {
+      font-family: var(--font-display);
+      font-size: 18px;
+      color: #FFFFFF;
+      margin-bottom: var(--space-3);
+    }
+
+    .footer-links-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-2);
+    }
+
+    .footer-links-list a {
+      font-family: var(--font-display);
+      font-size: 15px;
+      color: #CBD5E1;
+      transition: color var(--motion-fast);
+    }
+
+    .footer-links-list a:hover {
+      color: var(--color-primary);
+    }
+
+    /* ─── Responsive Adjustments ───────────────────────────────────── */
+    @media (max-width: 1024px) {
+      .hero-grid { grid-template-columns: 1fr; }
+      .whiteboard-card { grid-template-columns: 1fr; }
+      .features-grid-3up { grid-template-columns: 1fr; }
+      .steps-grid-3up { grid-template-columns: 1fr; }
+      .footer-grid-4up { grid-template-columns: repeat(2, 1fr); }
+      h1 { font-size: 42px; }
+    }
+
+    @media (max-width: 640px) {
+      .nav-items { display: none; }
+      .doodle-input-row { flex-direction: column; }
+      .footer-grid-4up { grid-template-columns: 1fr; }
+      h1 { font-size: 34px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Doodle Header -->
+  <header class="doodle-header">
+    <div class="container header-inner">
+      <a href="#hero" class="brand-group" aria-label="DoodlePad Home">
+        <div class="brand-doodle-icon">✎</div>
+        <span class="brand-title">DoodlePad</span>
+      </a>
+
+      <nav aria-label="Playful Navigation">
+        <ul class="nav-items">
+          <li><a href="#canvas">Whiteboard</a></li>
+          <li><a href="#features">Tools</a></li>
+          <li><a href="#workflow">How It Works</a></li>
+          <li><a href="#community">Community</a></li>
+        </ul>
+      </nav>
+
+      <div>
+        <a href="#canvas" class="btn btn-primary" style="padding: 8px 18px; font-size: 16px;">
+          START SKETCHING
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <!-- HERO SECTION: Hand-Drawn, Playful Atmosphere -->
+    <section class="hero-section" id="hero">
+      <div class="container hero-grid">
+        <div>
+          <div class="handdrawn-tag">✨ NO RULES, JUST PURE DOODLES!</div>
+          <h1 class="hero-h1">
+            Think with your hands. <span class="scribble">Scribble ideas</span> together.
+          </h1>
+          <p class="hero-desc">
+            DoodlePad is the playful digital whiteboard for spontaneous thinkers, visual communicators, and teams that think in arrows, circles, and messy brilliant drafts.
+          </p>
+
+          <div class="hero-cta-cluster">
+            <a href="#canvas" class="btn btn-primary" id="openWhiteboardBtn">OPEN FREE CANVAS</a>
+            <a href="#features" class="btn btn-neutral">EXPLORE STICKERS</a>
+          </div>
+
+          <div style="font-family: var(--font-mono); font-size: 12px; color: var(--color-secondary);">
+            <span>PALETTE: #49B6E5 · #263D5B · #16A34A · #D97706 · #DC2626</span>
+          </div>
+        </div>
+
+        <!-- Sticky Note Widget -->
+        <div class="hero-sticky-note">
+          <div class="sticky-pin"></div>
+          <div class="sticky-text">
+            "Every great company started as an imperfect napkin sketch." ☕️<br><br>
+            - Clean lines are boring.<br>
+            - Raw doodles spark innovation.<br>
+            - Ship the napkin draft today!
+          </div>
+          <div style="display: flex; justify-content: space-between; align-items: center; font-family: var(--font-mono); font-size: 11px;">
+            <span>STICKY NOTE #42</span>
+            <span>TAG: INSPIRATION</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- INTERACTIVE WHITEBOARD SKETCH PAD -->
+    <section class="whiteboard-section" id="canvas">
+      <div class="container">
+        <div class="section-head">
+          <div class="handdrawn-tag">INTERACTIVE DRAWING PAD</div>
+          <h2>GRAB A DIGITAL CRAYON</h2>
+          <p style="font-size: var(--text-base); color: #4B5563;">
+            Click and drag below to doodle your signature, sketch a prototype, or draw a quick diagram!
+          </p>
+        </div>
+
+        <div class="whiteboard-card">
+          <!-- Drawing Canvas -->
+          <div class="canvas-frame">
+            <canvas id="sketchCanvas" width="760" height="380"></canvas>
+          </div>
+
+          <!-- Tools Panel -->
+          <div class="canvas-tools-panel">
+            <div>
+              <h4 style="font-size: 18px; margin-bottom: 8px;">INK PALETTE</h4>
+              <div class="color-swatches-row">
+                <div class="color-pick-dot active" style="background-color: #263D5B;" data-color="#263D5B" title="Navy Sketch"></div>
+                <div class="color-pick-dot" style="background-color: #49B6E5;" data-color="#49B6E5" title="Primary Blue"></div>
+                <div class="color-pick-dot" style="background-color: #DC2626;" data-color="#DC2626" title="Red Marker"></div>
+                <div class="color-pick-dot" style="background-color: #16A34A;" data-color="#16A34A" title="Green Grass"></div>
+                <div class="color-pick-dot" style="background-color: #D97706;" data-color="#D97706" title="Amber Highlight"></div>
+              </div>
+
+              <div style="margin-top: 20px;">
+                <label for="penWidth" style="font-family: var(--font-display); font-size: 15px; display: block; margin-bottom: 4px;">
+                  PEN THICKNESS: <span id="penWidthVal">3px</span>
+                </label>
+                <input type="range" min="1" max="14" value="3" id="penWidth" style="width: 100%; accent-color: var(--color-primary);" />
+              </div>
+            </div>
+
+            <div style="display: flex; flex-direction: column; gap: 8px; margin-top: 20px;">
+              <button class="btn btn-neutral" id="clearCanvasBtn">CLEAR CANVAS</button>
+              <button class="btn btn-primary" id="exportDoodleBtn">SAVE DOODLE (PNG)</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CONTENT FEATURE CARDS (DESIGN.md §5) -->
+    <section class="features-section" id="features">
+      <div class="container">
+        <div class="section-head">
+          <div class="handdrawn-tag">PLAYFUL TOOLS</div>
+          <h2>SKETCHING WITHOUT FRICTION</h2>
+          <p style="font-size: var(--text-base); color: #4B5563;">
+            Designed with hand-drawn authenticity so your brain enters a relaxed creative flow state.
+          </p>
+        </div>
+
+        <div class="features-grid-3up">
+          <!-- Card 1 -->
+          <div class="doodle-card">
+            <div>
+              <h4 style="color: var(--color-secondary);">Sticky Notes &amp; Pins</h4>
+              <p>Jot quick ideas on pastel sticky notes, stick them onto virtual corkboards, and reorder spontaneously.</p>
+            </div>
+            <span style="font-family: var(--font-mono); font-size: 12px; color: var(--color-primary);">STICKY_NOTE.SVG</span>
+          </div>
+
+          <!-- Card 2 -->
+          <div class="doodle-card blue-tint">
+            <div>
+              <h4 style="color: var(--color-secondary);">Wobbly Arrows</h4>
+              <p>Dynamic hand-drawn arrows that connect mind maps, user flows, and diagrams with organic curves.</p>
+            </div>
+            <span style="font-family: var(--font-mono); font-size: 12px; color: var(--color-secondary);">ARROW_CURVE.SKETCH</span>
+          </div>
+
+          <!-- Card 3 -->
+          <div class="doodle-card pink-tint">
+            <div>
+              <h4 style="color: var(--color-secondary);">Doodle Sticker Pack</h4>
+              <p>Over 500+ hand-drawn emojis, coffee cups, speech bubbles, and lightbulbs ready to drag and drop.</p>
+            </div>
+            <span style="font-family: var(--font-mono); font-size: 12px; color: var(--color-danger);">STICKERS_V2</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- WORKFLOW SECTION -->
+    <section class="workflow-section" id="workflow">
+      <div class="container">
+        <div class="handdrawn-tag">SIMPLE THREE-STEP FLOW</div>
+        <h2>FROM NAPKIN SKETCH TO PRODUCTION</h2>
+
+        <div class="steps-grid-3up">
+          <div class="step-box">
+            <span class="step-number">01</span>
+            <h4 style="font-size: 20px; margin-bottom: 8px;">Doodle Freely</h4>
+            <p style="font-size: 14px; color: #4B5563;">Open a canvas and let ideas pour out without worrying about neat grid alignment.</p>
+          </div>
+
+          <div class="step-box">
+            <span class="step-number">02</span>
+            <h4 style="font-size: 20px; margin-bottom: 8px;">Invite Teammates</h4>
+            <p style="font-size: 14px; color: #4B5563;">Pass the digital marker around and watch your sketch evolve collaboratively.</p>
+          </div>
+
+          <div class="step-box">
+            <span class="step-number">03</span>
+            <h4 style="font-size: 20px; margin-bottom: 8px;">Export &amp; Build</h4>
+            <p style="font-size: 14px; color: #4B5563;">Export as transparent SVGs, high-res PNGs, or export directly to design tools.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- NEWSLETTER DOODLE BOX -->
+    <section class="newsletter-section" id="community">
+      <div class="container">
+        <div class="doodle-newsletter-card">
+          <h3 style="font-size: 26px; margin-bottom: 8px;">JOIN THE DOODLE CREW</h3>
+          <p style="font-size: 16px; color: #334155;">
+            Get weekly creative drawing prompts, sticker packs, and napkin sketches in your inbox!
+          </p>
+
+          <form class="doodle-input-row" id="newsletterForm">
+            <input type="email" class="doodle-input" placeholder="you@doodler.club" required />
+            <button type="submit" class="btn btn-primary">JOIN CLUB</button>
+          </form>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- DOODLE FOOTER -->
+  <footer class="doodle-footer">
+    <div class="container">
+      <div class="footer-grid-4up">
+        <div>
+          <div class="brand-group" style="margin-bottom: 12px;">
+            <div class="brand-doodle-icon">✎</div>
+            <span class="brand-title" style="color: #FFFFFF;">DoodlePad</span>
+          </div>
+          <p style="font-size: 14px; line-height: 1.6; color: #94A3B8;">
+            The playful, informal design system where raw doodles, sketches, and handwritten ideas thrive.
+          </p>
+        </div>
+
+        <div>
+          <h4 class="footer-title">STUDIO</h4>
+          <ul class="footer-links-list">
+            <li><a href="#canvas">Live Whiteboard</a></li>
+            <li><a href="#features">Sticky Notes</a></li>
+            <li><a href="#features">Sticker Vault</a></li>
+            <li><a href="#features">Crayon Palettes</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h4 class="footer-title">RESOURCES</h4>
+          <ul class="footer-links-list">
+            <li><a href="#workflow">Napkin Guide</a></li>
+            <li><a href="#community">Community Prompts</a></li>
+            <li><a href="#features">Figma Doodle Pack</a></li>
+            <li><a href="#features">SVG Importer</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h4 class="footer-title">DOODLE INC</h4>
+          <ul class="footer-links-list">
+            <li><a href="#hero">About Doodlers</a></li>
+            <li><a href="#hero">Manifesto</a></li>
+            <li><a href="#hero">Privacy Policy</a></li>
+            <li><a href="#hero">Terms of Sketching</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div style="border-top: 1px dashed rgba(255,255,255,0.2); padding-top: 20px; display: flex; justify-content: space-between; font-family: var(--font-mono); font-size: 12px;">
+        <span>© 2026 DOODLEPAD. DRAWN WITH PRIDE.</span>
+        <span>STATUS: 100% INKED</span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Interactive JavaScript Drawing Canvas -->
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const canvas = document.getElementById('sketchCanvas');
+      const ctx = canvas.getContext('2d');
+      const clearBtn = document.getElementById('clearCanvasBtn');
+      const exportBtn = document.getElementById('exportDoodleBtn');
+      const penSlider = document.getElementById('penWidth');
+      const penWidthVal = document.getElementById('penWidthVal');
+      const colorDots = document.querySelectorAll('.color-pick-dot');
+
+      // Adjust canvas resolution
+      canvas.width = canvas.parentElement.clientWidth;
+      canvas.height = 380;
+
+      let drawing = false;
+      let strokeColor = '#263D5B';
+      let strokeWidth = 3;
+
+      // Draw initial welcoming smiley doodle
+      function drawInitialDoodle() {
+        ctx.strokeStyle = '#49B6E5';
+        ctx.lineWidth = 3;
+        ctx.lineCap = 'round';
+        ctx.lineJoin = 'round';
+
+        // Smiley face
+        ctx.beginPath();
+        ctx.arc(canvas.width / 2, 160, 60, 0, Math.PI * 2);
+        ctx.stroke();
+
+        // Eyes
+        ctx.fillStyle = '#263D5B';
+        ctx.beginPath();
+        ctx.arc(canvas.width / 2 - 22, 145, 6, 0, Math.PI * 2);
+        ctx.fill();
+
+        ctx.beginPath();
+        ctx.arc(canvas.width / 2 + 22, 145, 6, 0, Math.PI * 2);
+        ctx.fill();
+
+        // Smile
+        ctx.beginPath();
+        ctx.arc(canvas.width / 2, 165, 34, 0.2 * Math.PI, 0.8 * Math.PI);
+        ctx.stroke();
+
+        // Text
+        ctx.font = '20px "Delius Swash Caps", cursive';
+        ctx.fillStyle = '#263D5B';
+        ctx.textAlign = 'center';
+        ctx.fillText('Draw something awesome here!', canvas.width / 2, 270);
+      }
+
+      drawInitialDoodle();
+
+      function getPos(e) {
+        const rect = canvas.getBoundingClientRect();
+        const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+        const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+        return {
+          x: clientX - rect.left,
+          y: clientY - rect.top
+        };
+      }
+
+      function startDraw(e) {
+        drawing = true;
+        const pos = getPos(e);
+        ctx.beginPath();
+        ctx.moveTo(pos.x, pos.y);
+      }
+
+      function doDraw(e) {
+        if (!drawing) return;
+        e.preventDefault();
+        const pos = getPos(e);
+        ctx.strokeStyle = strokeColor;
+        ctx.lineWidth = strokeWidth;
+        ctx.lineCap = 'round';
+        ctx.lineJoin = 'round';
+        ctx.lineTo(pos.x, pos.y);
+        ctx.stroke();
+      }
+
+      function endDraw() {
+        drawing = false;
+        ctx.closePath();
+      }
+
+      canvas.addEventListener('mousedown', startDraw);
+      canvas.addEventListener('mousemove', doDraw);
+      canvas.addEventListener('mouseup', endDraw);
+      canvas.addEventListener('mouseleave', endDraw);
+
+      canvas.addEventListener('touchstart', startDraw, { passive: false });
+      canvas.addEventListener('touchmove', doDraw, { passive: false });
+      canvas.addEventListener('touchend', endDraw);
+
+      // Color picker
+      colorDots.forEach(dot => {
+        dot.addEventListener('click', () => {
+          colorDots.forEach(d => d.classList.remove('active'));
+          dot.classList.add('active');
+          strokeColor = dot.getAttribute('data-color');
+        });
+      });
+
+      // Pen width slider
+      penSlider.addEventListener('input', (e) => {
+        strokeWidth = e.target.value;
+        penWidthVal.textContent = `${strokeWidth}px`;
+      });
+
+      // Clear button
+      clearBtn.addEventListener('click', () => {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+      });
+
+      // Export button
+      exportBtn.addEventListener('click', () => {
+        const link = document.createElement('a');
+        link.download = 'my-doodle.png';
+        link.href = canvas.toDataURL();
+        link.click();
+      });
+
+      // Newsletter
+      const form = document.getElementById('newsletterForm');
+      if (form) {
+        form.addEventListener('submit', (e) => {
+          e.preventDefault();
+          alert('Welcome to the Doodle Club! Your pencil is ready.');
+          form.reset();
+        });
+      }
+    });
+  </script>
+</body>
+</html>

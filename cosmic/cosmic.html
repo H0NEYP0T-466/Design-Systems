@@ -1,0 +1,740 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Cosmic — Futuristic Sci-Fi Design System</title>
+  <meta name="description" content="Authentic Cosmic design system website. Futuristic sci-fi aesthetic with dark starfield themes, vibrant neon accents, Audiowide typography, and immersive spatial elements." />
+
+  <!-- Google Fonts: Audiowide (Primary & Display) and JetBrains Mono (Code/Telemetry) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Audiowide&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    /* ─────────────────────────────────────────────────────────────────────────
+     * COSMIC DESIGN SYSTEM TOKENS (DESIGN.md & tokens.css verbatim alignment)
+     * ───────────────────────────────────────────────────────────────────────── */
+    :root {
+      /* Background & Starfield Surfaces */
+      --bg: #070711;             /* Cosmic Dark Interface */
+      --surface: #111126;        /* Surface Container */
+      --surface-warm: #1e1540;   /* Elevated Deep Violet Surface */
+      --surface-glass: rgba(17, 17, 38, 0.75);
+
+      /* Inks & Cosmic Foregrounds */
+      --fg: #f8f7ff;             /* Cosmic White */
+      --fg-2: #d6ccff;           /* Pale Lavender Tint */
+      --muted: #9d8ad4;          /* Soft Nebula Violet */
+      --meta: #c084fc;           /* Luminous Violet */
+
+      /* Borders */
+      --border: #34265e;         /* Deep Nebula Border */
+      --border-soft: #241c42;
+      --border-neon: rgba(192, 132, 252, 0.4);
+
+      /* Primary & Secondary from DESIGN.md */
+      --primary: #3B82F6;         /* Primary: Blue signal from style foundations */
+      --secondary: #8B5CF6;       /* Secondary: Violet from style foundations */
+      --accent: #c084fc;          /* Luminous Cosmic Accent */
+      --accent-on: #13051f;
+
+      /* Semantic Indicators */
+      --success: #39ff88;         /* Neon Green / #16A34A */
+      --warn: #fff34d;            /* Neon Gold / #D97706 */
+      --danger: #ff4d8d;          /* Neon Coral-Red / #DC2626 */
+
+      /* Typography Families */
+      --font-display: "Audiowide", "Orbitron", cursive, sans-serif;
+      --font-body: "Audiowide", cursive, sans-serif;
+      --font-mono: "JetBrains Mono", ui-monospace, Menlo, monospace;
+
+      /* Type Scale (DESIGN.md §3: 12/14/16/20/24/32) */
+      --text-xs: 12px;
+      --text-sm: 14px;
+      --text-base: 16px;
+      --text-lg: 20px;
+      --text-xl: 24px;
+      --text-2xl: 32px;
+      --text-3xl: 54px;
+      --text-4xl: 76px;
+
+      --leading-tight: 1.10;
+      --leading-body: 1.60;
+      --tracking-display: 0.04em;
+
+      /* Spacing Scale (DESIGN.md §4: 4/8/12/16/24/32) */
+      --space-1: 4px;
+      --space-2: 8px;
+      --space-3: 12px;
+      --space-4: 16px;
+      --space-6: 24px;
+      --space-8: 32px;
+      --space-12: 48px;
+      --space-16: 64px;
+
+      /* Radii */
+      --radius-sm: 10px;
+      --radius-md: 16px;
+      --radius-lg: 24px;
+      --radius-pill: 9999px;
+
+      /* Luminous Neon Elevation */
+      --elev-raised: 0 24px 80px rgba(192, 132, 252, 0.22);
+      --glow-blue: 0 0 25px rgba(59, 130, 246, 0.4);
+      --glow-violet: 0 0 25px rgba(192, 132, 252, 0.4);
+      --focus-ring: 0 0 0 4px rgba(192, 132, 252, 0.35);
+
+      /* Motion */
+      --motion-fast: 150ms;
+      --motion-base: 240ms;
+      --ease-standard: cubic-bezier(0.2, 0, 0, 1);
+    }
+
+    /* ─────────────────────────────────────────────────────────────────────────
+     * RESET & BASE STYLES
+     * ───────────────────────────────────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--bg);
+      color: var(--fg);
+      font-family: var(--font-body);
+      font-size: var(--text-base);
+      line-height: var(--leading-body);
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    /* Starfield background overlay */
+    #starCanvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      pointer-events: none;
+      z-index: 0;
+      opacity: 0.65;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin-inline: auto;
+      padding-inline: var(--space-4);
+      position: relative;
+      z-index: 2;
+    }
+
+    /* Typography */
+    h1, h2, h3, h4 {
+      font-family: var(--font-display);
+      color: var(--fg);
+      line-height: var(--leading-tight);
+      letter-spacing: var(--tracking-display);
+      text-transform: uppercase;
+    }
+    h1 { font-size: clamp(36px, 5.5vw, var(--text-4xl)); }
+    h2 { font-size: clamp(24px, 3.5vw, var(--text-2xl)); }
+    h3 { font-size: var(--text-xl); }
+    h4 { font-size: var(--text-lg); }
+    p { margin-bottom: 0; }
+    .lead { font-size: var(--text-base); color: var(--fg-2); line-height: 1.65; }
+    .mono { font-family: var(--font-mono); }
+
+    /* ─────────────────────────────────────────────────────────────────────────
+     * BUTTONS & SPATIAL CONTROLS (DESIGN.md §6)
+     * ───────────────────────────────────────────────────────────────────────── */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 12px 26px;
+      border-radius: var(--radius-sm);
+      font-family: var(--font-body);
+      font-size: var(--text-sm);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      text-decoration: none;
+      cursor: pointer;
+      border: 1px solid transparent;
+      white-space: nowrap;
+      transition: all var(--motion-fast) var(--ease-standard);
+    }
+    .btn:focus-visible { outline: none; box-shadow: var(--focus-ring); }
+
+    /* Primary Action: #3B82F6 with luminous neon glow */
+    .btn-primary {
+      background: var(--primary);
+      color: #ffffff;
+      box-shadow: var(--glow-blue);
+      border-color: #60a5fa;
+    }
+    .btn-primary:hover {
+      background: #2563eb;
+      box-shadow: 0 0 35px rgba(59, 130, 246, 0.7);
+      transform: translateY(-2px);
+    }
+
+    /* Secondary Action: #8B5CF6 / Luminous Violet */
+    .btn-secondary {
+      background: var(--secondary);
+      color: #ffffff;
+      box-shadow: var(--glow-violet);
+      border-color: #a78bfa;
+    }
+    .btn-secondary:hover {
+      background: #7c3aed;
+      box-shadow: 0 0 35px rgba(139, 92, 246, 0.7);
+      transform: translateY(-2px);
+    }
+
+    /* Spatial Ghost Button */
+    .btn-ghost {
+      background: rgba(17, 17, 38, 0.6);
+      color: var(--fg);
+      border-color: var(--border);
+      backdrop-filter: blur(8px);
+    }
+    .btn-ghost:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+      box-shadow: 0 0 20px rgba(192, 132, 252, 0.3);
+    }
+
+    /* Spatial Badges */
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 10px;
+      border-radius: var(--radius-pill);
+      font-size: 11px;
+      font-family: var(--font-mono);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .badge-neon-blue { background: rgba(59, 130, 246, 0.15); color: #60a5fa; border: 1px solid rgba(59, 130, 246, 0.4); }
+    .badge-neon-violet { background: rgba(192, 132, 252, 0.15); color: var(--accent); border: 1px solid rgba(192, 132, 252, 0.4); }
+    .badge-success { background: rgba(57, 255, 136, 0.15); color: var(--success); border: 1px solid rgba(57, 255, 136, 0.4); }
+
+    /* ─────────────────────────────────────────────────────────────────────────
+     * NAVIGATION CONSOLE
+     * ───────────────────────────────────────────────────────────────────────── */
+    .cosmic-nav {
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      background: rgba(7, 7, 17, 0.88);
+      backdrop-filter: blur(14px);
+      border-bottom: 1px solid var(--border);
+      height: 72px;
+      display: flex;
+      align-items: center;
+    }
+    .nav-wrapper {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+    }
+    .cosmic-logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+      font-family: var(--font-display);
+      font-size: 20px;
+      color: #ffffff;
+      letter-spacing: 0.08em;
+    }
+    .logo-orb {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 30% 30%, #c084fc, #3b82f6);
+      box-shadow: 0 0 15px rgba(192, 132, 252, 0.6);
+    }
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: var(--space-6);
+      list-style: none;
+    }
+    @media (max-width: 860px) { .nav-links { display: none; } }
+    .nav-link {
+      color: var(--muted);
+      text-decoration: none;
+      font-size: var(--text-xs);
+      letter-spacing: 0.06em;
+      transition: color var(--motion-fast) var(--ease-standard);
+    }
+    .nav-link:hover {
+      color: var(--accent);
+      text-shadow: 0 0 12px rgba(192, 132, 252, 0.6);
+    }
+
+    /* ─────────────────────────────────────────────────────────────────────────
+     * HERO SECTION (Spatial & Sci-Fi Elements)
+     * ───────────────────────────────────────────────────────────────────────── */
+    .cosmic-hero {
+      padding-top: var(--space-16);
+      padding-bottom: var(--space-16);
+      text-align: center;
+      position: relative;
+    }
+    .hero-eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 14px;
+      border-radius: var(--radius-pill);
+      background: rgba(192, 132, 252, 0.1);
+      border: 1px solid var(--border-neon);
+      color: var(--accent);
+      font-size: var(--text-xs);
+      letter-spacing: 0.1em;
+      margin-bottom: var(--space-4);
+      box-shadow: 0 0 20px rgba(192, 132, 252, 0.2);
+    }
+    .hero-title {
+      max-width: 900px;
+      margin-inline: auto;
+      margin-bottom: var(--space-4);
+    }
+    .hero-title span.neon-glow {
+      color: var(--accent);
+      text-shadow: 0 0 20px rgba(192, 132, 252, 0.8);
+    }
+    .hero-lead {
+      max-width: 660px;
+      margin-inline: auto;
+      margin-bottom: var(--space-8);
+    }
+    .hero-actions {
+      display: flex;
+      justify-content: center;
+      gap: var(--space-4);
+      flex-wrap: wrap;
+    }
+
+    /* ─────────────────────────────────────────────────────────────────────────
+     * ORBITAL TELEMETRY CONSOLE
+     * ───────────────────────────────────────────────────────────────────────── */
+    .section-telemetry {
+      padding-block: var(--space-12);
+    }
+    .telemetry-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: var(--space-6);
+      margin-top: var(--space-6);
+    }
+    @media (max-width: 960px) { .telemetry-grid { grid-template-columns: 1fr; } }
+    .spatial-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: var(--space-6);
+      position: relative;
+      overflow: hidden;
+      box-shadow: var(--elev-raised);
+      transition: all var(--motion-fast) var(--ease-standard);
+    }
+    .spatial-card:hover {
+      border-color: var(--accent);
+      transform: translateY(-4px);
+    }
+    .telemetry-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: var(--space-4);
+    }
+    .telemetry-value {
+      font-size: var(--text-2xl);
+      color: #ffffff;
+      margin-block: var(--space-2);
+      font-family: var(--font-display);
+    }
+    .telemetry-sub {
+      font-size: var(--text-xs);
+      color: var(--muted);
+      font-family: var(--font-mono);
+    }
+
+    /* ─────────────────────────────────────────────────────────────────────────
+     * SPATIAL WARP SPEED SIMULATOR
+     * ───────────────────────────────────────────────────────────────────────── */
+    .section-warp {
+      padding-block: var(--space-12);
+    }
+    .warp-box {
+      background: var(--surface-warm);
+      border: 1px solid var(--border-neon);
+      border-radius: var(--radius-lg);
+      padding: var(--space-8);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: var(--space-6);
+      box-shadow: 0 0 50px rgba(139, 92, 246, 0.2);
+    }
+
+    /* ─────────────────────────────────────────────────────────────────────────
+     * DESIGN SYSTEM TOKEN SPECIFICATION (DESIGN.md)
+     * ───────────────────────────────────────────────────────────────────────── */
+    .section-spec {
+      padding-block: var(--space-12);
+      border-top: 1px solid var(--border);
+    }
+    .spec-sheet {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: var(--space-8);
+      box-shadow: var(--elev-raised);
+    }
+    .swatch-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+      gap: var(--space-4);
+      margin-top: var(--space-6);
+    }
+    .swatch-item {
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      overflow: hidden;
+      background: var(--bg);
+    }
+    .swatch-box { height: 60px; width: 100%; }
+    .swatch-meta { padding: 8px 12px; font-size: var(--text-xs); }
+    .swatch-name { font-weight: 600; color: #ffffff; }
+    .swatch-hex { font-family: var(--font-mono); color: var(--muted); }
+
+    /* ─────────────────────────────────────────────────────────────────────────
+     * FOOTER
+     * ───────────────────────────────────────────────────────────────────────── */
+    .cosmic-footer {
+      background: #04040a;
+      border-top: 1px solid var(--border);
+      padding-top: var(--space-12);
+      padding-bottom: var(--space-6);
+      font-size: var(--text-xs);
+    }
+    .footer-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: var(--space-4);
+      border-bottom: 1px solid var(--border);
+      padding-bottom: var(--space-6);
+      margin-bottom: var(--space-4);
+    }
+    .footer-bottom {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: var(--space-4);
+      color: var(--muted);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Background Starfield Canvas -->
+  <canvas id="starCanvas"></canvas>
+
+  <!-- ─────────────────────────────────────────────────────────────────────────
+       NAVIGATION CONSOLE
+       ───────────────────────────────────────────────────────────────────────── -->
+  <header class="cosmic-nav" role="banner">
+    <div class="container nav-wrapper">
+      <a href="#hero" class="cosmic-logo" aria-label="Cosmic Home">
+        <div class="logo-orb"></div>
+        <span>COSMIC</span>
+      </a>
+
+      <nav aria-label="Spatial Directory">
+        <ul class="nav-links">
+          <li><a href="#telemetry" class="nav-link">Orbital Telemetry</a></li>
+          <li><a href="#warp" class="nav-link">Warp Drives</a></li>
+          <li><a href="#spec" class="nav-link">Design Tokens</a></li>
+        </ul>
+      </nav>
+
+      <div style="display: flex; align-items: center; gap: 12px;">
+        <button class="btn btn-ghost" style="padding: 8px 16px;" onclick="accelerateWarp()">
+          Warp Jump
+        </button>
+        <a href="#telemetry" class="btn btn-primary" style="padding: 8px 18px;">
+          Engage Orbit
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- ─────────────────────────────────────────────────────────────────────────
+       HERO SECTION (Futuristic Sci-Fi Spatial Aesthetic)
+       ───────────────────────────────────────────────────────────────────────── -->
+  <section class="cosmic-hero" id="hero">
+    <div class="container">
+      <div class="hero-eyebrow">
+        <span>✦</span> DEEP SPACE EXPEDITION INTERFACE <span>✦</span>
+      </div>
+      <h1 class="hero-title">
+        The frontier of <span class="neon-glow">spatial computing.</span>
+      </h1>
+      <p class="lead hero-lead">
+        Futuristic sci-fi aesthetic with dark themes, vibrant neon accents, and immersive spatial elements. Powered by Audiowide geometry and planetary scale architecture.
+      </p>
+
+      <div class="hero-actions">
+        <a href="#telemetry" class="btn btn-primary">
+          Scan Orbital Grid
+        </a>
+        <a href="#spec" class="btn btn-secondary">
+          Inspect Tokens
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─────────────────────────────────────────────────────────────────────────
+       ORBITAL TELEMETRY CONSOLE
+       ───────────────────────────────────────────────────────────────────────── -->
+  <section class="section-telemetry" id="telemetry">
+    <div class="container">
+      <div style="display: flex; justify-content: space-between; align-items: flex-end; flex-wrap: wrap; gap: 16px;">
+        <div>
+          <h2>Orbital Sensor Telemetry</h2>
+          <p class="lead" style="font-size: 14px; margin-top: 4px;">Real-time quantum entanglement state &amp; solar flux density.</p>
+        </div>
+        <span class="badge badge-success">● ALL BEACONS ONLINE</span>
+      </div>
+
+      <div class="telemetry-grid">
+        
+        <!-- Telemetry 1: Orbital Velocity -->
+        <div class="spatial-card">
+          <div class="telemetry-header">
+            <span class="badge badge-neon-blue">PROPULSION</span>
+            <span class="mono" style="font-size: 11px; color: var(--accent);">NODE-01</span>
+          </div>
+          <div class="telemetry-value" id="velValue">28,450 km/h</div>
+          <div class="telemetry-sub">Escape trajectory locked · Gravitational assist</div>
+        </div>
+
+        <!-- Telemetry 2: Quantum Sync -->
+        <div class="spatial-card" style="border-color: rgba(192, 132, 252, 0.4);">
+          <div class="telemetry-header">
+            <span class="badge badge-neon-violet">QUANTUM RELAY</span>
+            <span class="mono" style="font-size: 11px; color: var(--accent);">ARRAY-A7</span>
+          </div>
+          <div class="telemetry-value" style="color: var(--accent);">99.999%</div>
+          <div class="telemetry-sub">Entanglement synchronization · Zero decoherence</div>
+        </div>
+
+        <!-- Telemetry 3: Solar Radiation -->
+        <div class="spatial-card">
+          <div class="telemetry-header">
+            <span class="badge badge-success">SHIELD INTEGRITY</span>
+            <span class="mono" style="font-size: 11px; color: var(--success);">DEFLECTOR</span>
+          </div>
+          <div class="telemetry-value" style="color: var(--success);">1.42 MW</div>
+          <div class="telemetry-sub">Magnetic deflector grid absorbing corona emissions</div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ─────────────────────────────────────────────────────────────────────────
+       SPATIAL WARP DRIVE CONTROLLER
+       ───────────────────────────────────────────────────────────────────────── -->
+  <section class="section-warp" id="warp">
+    <div class="container">
+      <div class="warp-box">
+        <div>
+          <h3>Hyperspace Transit Vector</h3>
+          <p class="lead" style="font-size: 14px; margin-top: 6px; max-width: 520px;">
+            Targeting Kepler-452b gravitational corridor. Dynamic particle acceleration with zero sub-light friction.
+          </p>
+        </div>
+        <div style="display: flex; gap: 12px; align-items: center;">
+          <button class="btn btn-secondary" onclick="accelerateWarp()">
+            Initiate Warp Sequence
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─────────────────────────────────────────────────────────────────────────
+       DESIGN SYSTEM TOKEN SPECIFICATION (DESIGN.md)
+       ───────────────────────────────────────────────────────────────────────── -->
+  <section class="section-spec" id="spec">
+    <div class="container">
+      <div class="spec-sheet">
+        <h2>Cosmic Token Architecture</h2>
+        <p class="lead" style="font-size: 14px; margin-top: 4px;">Tokens from cosmic/DESIGN.md &amp; tokens.css specification.</p>
+
+        <div class="swatch-grid">
+          <div class="swatch-item">
+            <div class="swatch-box" style="background: #3B82F6;"></div>
+            <div class="swatch-meta">
+              <div class="swatch-name">Primary</div>
+              <div class="swatch-hex">#3B82F6</div>
+            </div>
+          </div>
+
+          <div class="swatch-item">
+            <div class="swatch-box" style="background: #8B5CF6;"></div>
+            <div class="swatch-meta">
+              <div class="swatch-name">Secondary</div>
+              <div class="swatch-hex">#8B5CF6</div>
+            </div>
+          </div>
+
+          <div class="swatch-item">
+            <div class="swatch-box" style="background: #c084fc;"></div>
+            <div class="swatch-meta">
+              <div class="swatch-name">Luminous Accent</div>
+              <div class="swatch-hex">#c084fc</div>
+            </div>
+          </div>
+
+          <div class="swatch-item">
+            <div class="swatch-box" style="background: #070711; border-bottom: 1px solid var(--border);"></div>
+            <div class="swatch-meta">
+              <div class="swatch-name">Starfield Ground</div>
+              <div class="swatch-hex">#070711</div>
+            </div>
+          </div>
+
+          <div class="swatch-item">
+            <div class="swatch-box" style="background: #111126; border-bottom: 1px solid var(--border);"></div>
+            <div class="swatch-meta">
+              <div class="swatch-name">Surface Container</div>
+              <div class="swatch-hex">#111126</div>
+            </div>
+          </div>
+
+          <div class="swatch-item">
+            <div class="swatch-box" style="background: #39ff88;"></div>
+            <div class="swatch-meta">
+              <div class="swatch-name">Success</div>
+              <div class="swatch-hex">#39ff88 / #16A34A</div>
+            </div>
+          </div>
+
+          <div class="swatch-item">
+            <div class="swatch-box" style="background: #ff4d8d;"></div>
+            <div class="swatch-meta">
+              <div class="swatch-name">Danger / Alert</div>
+              <div class="swatch-hex">#ff4d8d / #DC2626</div>
+            </div>
+          </div>
+        </div>
+
+        <div style="margin-top: 24px; padding-top: 20px; border-top: 1px solid var(--border);">
+          <h4>Typography: Audiowide &amp; JetBrains Mono</h4>
+          <p class="mono" style="font-size: 13px; color: var(--muted); margin-top: 6px;">
+            Scale: 12px · 14px · 16px · 20px · 24px · 32px · 54px · 76px
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─────────────────────────────────────────────────────────────────────────
+       FOOTER
+       ───────────────────────────────────────────────────────────────────────── -->
+  <footer class="cosmic-footer" role="contentinfo">
+    <div class="container">
+      <div class="footer-top">
+        <div style="display: flex; align-items: center; gap: 10px;">
+          <div class="logo-orb" style="width: 24px; height: 24px;"></div>
+          <span style="font-family: var(--font-display); color: #ffffff;">COSMIC</span>
+        </div>
+        <div style="display: flex; gap: 20px;">
+          <a href="#telemetry" style="color: var(--muted); text-decoration: none;">Telemetry</a>
+          <a href="#warp" style="color: var(--muted); text-decoration: none;">Warp Drive</a>
+          <a href="#spec" style="color: var(--muted); text-decoration: none;">Token Spec</a>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span>© 2026 Cosmic Sci-Fi Design System. Built to DESIGN.md specification.</span>
+        <span>Dark Starfield #070711 · Luminous Accents #c084fc · Font Audiowide</span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ─────────────────────────────────────────────────────────────────────────
+       STARFIELD CANVAS ANIMATION & INTERACTION
+       ───────────────────────────────────────────────────────────────────────── -->
+  <script>
+    // Dynamic Starfield Animation
+    const canvas = document.getElementById('starCanvas');
+    const ctx = canvas.getContext('2d');
+    let width = (canvas.width = window.innerWidth);
+    let height = (canvas.height = window.innerHeight);
+
+    window.addEventListener('resize', () => {
+      width = canvas.width = window.innerWidth;
+      height = canvas.height = window.innerHeight;
+    });
+
+    const stars = [];
+    const numStars = 140;
+    let warpFactor = 1;
+
+    for (let i = 0; i < numStars; i++) {
+      stars.push({
+        x: Math.random() * width,
+        y: Math.random() * height,
+        radius: Math.random() * 1.5 + 0.5,
+        alpha: Math.random() * 0.8 + 0.2,
+        speed: Math.random() * 0.4 + 0.1
+      });
+    }
+
+    function renderStars() {
+      ctx.clearRect(0, 0, width, height);
+      stars.forEach(star => {
+        ctx.beginPath();
+        ctx.arc(star.x, star.y, star.radius, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(214, 204, 255, ${star.alpha})`;
+        ctx.fill();
+
+        star.y -= star.speed * warpFactor;
+        if (star.y < 0) {
+          star.y = height;
+          star.x = Math.random() * width;
+        }
+      });
+      requestAnimationFrame(renderStars);
+    }
+    renderStars();
+
+    function accelerateWarp() {
+      warpFactor = 14;
+      const vel = document.getElementById('velValue');
+      vel.textContent = "WARP FACTOR 4.2";
+      vel.style.color = "var(--accent)";
+      
+      setTimeout(() => {
+        warpFactor = 1;
+        vel.textContent = "28,450 km/h";
+        vel.style.color = "#ffffff";
+        alert("Warp transit complete. Re-entered standard orbital velocity.");
+      }, 1200);
+    }
+  </script>
+</body>
+</html>

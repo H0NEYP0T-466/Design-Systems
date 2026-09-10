@@ -1,0 +1,942 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Superhuman — The Fastest Email Experience Ever Made</title>
+  <meta name="description" content="Fly through your inbox twice as fast. Beautiful, keyboard-first, and powered by Superhuman AI." />
+
+  <!-- Clean variable font simulation for Super Sans VF (unconventional 460 & 540 weight axis) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+  <style>
+    /* ─────────────────────────────────────────────────────────────────
+       SUPERHUMAN DESIGN SYSTEM TOKENS
+       Strictly adhering to /design-systems/superhuman/DESIGN.md
+       ───────────────────────────────────────────────────────────────── */
+    @font-face {
+      font-family: 'Super Sans VF';
+      src: local('Super Sans VF'), local('Plus Jakarta Sans'), local('Helvetica Neue');
+      font-weight: 100 900;
+      font-style: normal;
+    }
+
+    :root {
+      /* Colors: Extreme Restraint */
+      --sh-mysteria:       #1b1938; /* Hero gradient origin: deep twilight purple */
+      --sh-lavender-glow:   #cbb7fb; /* Singular accent & highlight color */
+      --sh-charcoal-ink:    #292827; /* Primary text on light surfaces (warm near-black) */
+      --sh-amethyst-link:   #714cb6; /* In-content links with underline */
+      --sh-pure-white:      #ffffff; /* Dominant page canvas */
+      --sh-warm-cream:      #e9e5dd; /* Signature button background (understated luxury) */
+      --sh-parchment-border:#dcd7d3; /* Card and divider border (warm neutral) */
+
+      /* Opacity Layers on Dark */
+      --sh-white-95: rgba(255, 255, 255, 0.95);
+      --sh-white-80: rgba(255, 255, 255, 0.80);
+      --sh-white-60: rgba(255, 255, 255, 0.60);
+      --sh-white-20: rgba(255, 255, 255, 0.20);
+
+      /* Typography: Super Sans VF with unconventional weight stops */
+      --font-family-super: "Super Sans VF", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      --font-mono: "JetBrains Mono", ui-monospace, Menlo, monospace;
+
+      /* Non-standard weights as mandated in DESIGN.md */
+      --wt-workhorse: 460;
+      --wt-display:   540;
+      --wt-bold:      700;
+
+      /* Strict Binary Radius Scale (Only 8px and 16px!) */
+      --radius-sm: 8px;   /* Buttons, inputs, inline elements */
+      --radius-lg: 16px;  /* Cards, containers, screenshots */
+    }
+
+    /* Reset & Base Rules */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      background-color: var(--sh-pure-white);
+      color: var(--sh-charcoal-ink);
+      font-family: var(--font-family-super);
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    body {
+      background-color: var(--sh-pure-white);
+      color: var(--sh-charcoal-ink);
+      font-size: 16px;
+      font-weight: var(--wt-workhorse); /* 460 weight workhorse */
+      line-height: 1.50; /* Generous body line-height */
+      letter-spacing: 0px;
+    }
+
+    /* Links: Amethyst Link (#714cb6) with underline decoration */
+    a.sh-link {
+      color: var(--sh-amethyst-link);
+      text-decoration: underline;
+      text-underline-offset: 3px;
+      transition: opacity 0.15s ease;
+    }
+    a.sh-link:hover {
+      opacity: 0.8;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    /* ─────────────────────────────────────────────────────────────────
+       NAVIGATION (Fixed Nav, transparent on hero, white on scroll)
+       ───────────────────────────────────────────────────────────────── */
+    .sh-nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      height: 72px;
+      background: rgba(27, 25, 56, 0.92);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--sh-white-20);
+      transition: background-color 0.3s ease, border-color 0.3s ease;
+    }
+
+    .nav-inner {
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .nav-brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 18px;
+      font-weight: var(--wt-display);
+      color: var(--sh-white-95);
+      letter-spacing: -0.2px;
+      text-decoration: none;
+    }
+
+    .brand-lightning-icon {
+      width: 22px;
+      height: 22px;
+      color: var(--sh-lavender-glow);
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 36px;
+      list-style: none;
+    }
+
+    .nav-link {
+      font-size: 16px;
+      font-weight: var(--wt-workhorse);
+      color: var(--sh-white-80);
+      text-decoration: none;
+      transition: color 0.15s ease;
+    }
+    .nav-link:hover {
+      color: var(--sh-white-95);
+    }
+
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    /* ─────────────────────────────────────────────────────────────────
+       BUTTON SYSTEM (Strict 8px Radius, Warm Cream #e9e5dd)
+       ───────────────────────────────────────────────────────────────── */
+    .btn {
+      font-family: var(--font-family-super);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      font-size: 16px;
+      font-weight: 700;
+      line-height: 1.00;
+      padding: 12px 22px;
+      border-radius: var(--radius-sm); /* 8px only */
+      cursor: pointer;
+      border: none;
+      outline: none;
+      transition: opacity 0.15s ease, background-color 0.15s ease;
+      text-decoration: none;
+      user-select: none;
+    }
+
+    .btn:hover {
+      opacity: 0.88;
+    }
+
+    /* Signature Warm Cream CTA Button (#e9e5dd) */
+    .btn-warm-cream {
+      background-color: var(--sh-warm-cream);
+      color: var(--sh-charcoal-ink);
+    }
+
+    /* Dark Primary Button (For light sections) */
+    .btn-charcoal {
+      background-color: var(--sh-charcoal-ink);
+      color: var(--sh-pure-white);
+    }
+
+    .btn-ghost-dark {
+      background: transparent;
+      color: var(--sh-white-95);
+      border: 1px solid var(--sh-white-20);
+    }
+    .btn-ghost-dark:hover {
+      background: rgba(255, 255, 255, 0.08);
+    }
+
+    /* Keyboard Shortcut Cap */
+    .kbd-shortcut {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2px 6px;
+      background: rgba(255, 255, 255, 0.15);
+      border-radius: 4px;
+      font-family: var(--font-mono);
+      font-size: 12px;
+      color: var(--sh-white-95);
+      margin-left: 6px;
+    }
+
+    /* ─────────────────────────────────────────────────────────────────
+       HERO: CINEMATIC PURPLE GRADIENT (#1b1938)
+       Ultra-tight display line-height (0.96)
+       ───────────────────────────────────────────────────────────────── */
+    .hero-purple {
+      background: linear-gradient(180deg, var(--sh-mysteria) 0%, #25224d 50%, #312c66 80%, #ffffff 100%);
+      padding: 90px 0 60px;
+      position: relative;
+      overflow: hidden;
+      color: var(--sh-pure-white);
+    }
+
+    .hero-inner {
+      text-align: center;
+      max-width: 880px;
+      margin: 0 auto;
+      position: relative;
+      z-index: 2;
+    }
+
+    /* Lavender Glow Accent Badge */
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 14px;
+      border-radius: var(--radius-sm); /* 8px */
+      background: rgba(203, 183, 251, 0.15);
+      border: 1px solid rgba(203, 183, 251, 0.35);
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--sh-lavender-glow);
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      margin-bottom: 24px;
+    }
+
+    /* Display Hero: 64px, weight 540, line-height 0.96 (architectural compression) */
+    .hero-title {
+      font-size: 64px;
+      font-weight: var(--wt-display);
+      line-height: 0.96;
+      letter-spacing: 0px;
+      color: var(--sh-white-95);
+      margin-bottom: 28px;
+    }
+
+    .hero-title span.lavender-accent {
+      color: var(--sh-lavender-glow);
+    }
+
+    .hero-subtitle {
+      font-size: 18px;
+      font-weight: var(--wt-display);
+      line-height: 1.50;
+      color: var(--sh-white-80);
+      max-width: 620px;
+      margin: 0 auto 36px;
+    }
+
+    .hero-cta-group {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      margin-bottom: 48px;
+    }
+
+    /* ─────────────────────────────────────────────────────────────────
+       PRODUCT SCREENSHOT CARD: SPLIT INBOX & KEYBOARD-FIRST UI
+       Level 4 depth: semi-transparent border on purple gradient
+       16px border-radius
+       ───────────────────────────────────────────────────────────────── */
+    .app-preview-card {
+      background: #141328;
+      border: 1px solid var(--sh-white-20);
+      border-radius: var(--radius-lg); /* 16px */
+      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.45);
+      overflow: hidden;
+      margin: 0 auto;
+      max-width: 960px;
+      text-align: left;
+    }
+
+    .app-header-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 20px;
+      background: rgba(27, 25, 56, 0.8);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .split-inbox-tabs {
+      display: flex;
+      gap: 16px;
+    }
+
+    .inbox-tab {
+      font-size: 13px;
+      font-weight: var(--wt-workhorse);
+      color: var(--sh-white-60);
+      cursor: pointer;
+      padding: 4px 8px;
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: color 0.15s, background 0.15s;
+    }
+    .inbox-tab.active {
+      color: var(--sh-white-95);
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    .tab-count {
+      font-size: 11px;
+      background: rgba(203, 183, 251, 0.2);
+      color: var(--sh-lavender-glow);
+      padding: 1px 6px;
+      border-radius: 4px;
+    }
+
+    .command-k-hint {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      color: var(--sh-white-60);
+      background: rgba(255, 255, 255, 0.08);
+      padding: 4px 10px;
+      border-radius: var(--radius-sm);
+    }
+
+    /* Email List Rows */
+    .email-item-row {
+      display: grid;
+      grid-template-columns: 200px 1fr 100px;
+      align-items: center;
+      padding: 12px 20px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      font-size: 14px;
+      color: var(--sh-white-80);
+      cursor: pointer;
+      transition: background 0.1s ease;
+    }
+    .email-item-row:hover, .email-item-row.selected {
+      background: rgba(203, 183, 251, 0.08);
+    }
+    .email-item-row.selected {
+      border-left: 3px solid var(--sh-lavender-glow);
+    }
+
+    .email-sender {
+      font-weight: var(--wt-display);
+      color: var(--sh-white-95);
+    }
+
+    .email-snippet {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      padding-right: 16px;
+    }
+    .email-snippet strong {
+      color: var(--sh-white-95);
+    }
+
+    .email-time {
+      text-align: right;
+      font-size: 12px;
+      color: var(--sh-white-60);
+    }
+
+    .app-status-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 20px;
+      background: rgba(20, 19, 40, 0.95);
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+      font-size: 12px;
+      color: var(--sh-white-60);
+    }
+
+    /* ─────────────────────────────────────────────────────────────────
+       CONTENT SECTIONS (Pure White #ffffff canvas + Charcoal Ink #292827)
+       ───────────────────────────────────────────────────────────────── */
+    .content-section {
+      padding: 80px 0;
+      background-color: var(--sh-pure-white);
+    }
+
+    .section-headline-block {
+      max-width: 800px;
+      margin-bottom: 48px;
+    }
+
+    /* Section Display: 48px, weight 460, line-height 0.96, tracking -1.32px */
+    .section-display-heading {
+      font-size: 48px;
+      font-weight: var(--wt-workhorse);
+      line-height: 0.96;
+      letter-spacing: -1.32px;
+      color: var(--sh-charcoal-ink);
+      margin-bottom: 16px;
+    }
+
+    .section-support-copy {
+      font-size: 18px;
+      line-height: 1.50;
+      color: #666461;
+      max-width: 640px;
+    }
+
+    /* Grid of Content Cards (16px border-radius, #dcd7d3 border) */
+    .feature-cards-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+
+    .sh-card {
+      background: var(--sh-pure-white);
+      border: 1px solid var(--sh-parchment-border);
+      border-radius: var(--radius-lg); /* 16px */
+      padding: 32px;
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      transition: border-color 0.2s ease;
+    }
+    .sh-card:hover {
+      border-color: #b8b1ab;
+    }
+
+    .card-badge {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--sh-amethyst-link);
+      margin-bottom: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    /* Card Heading: 22px, weight 460, line-height 0.76 (extreme compression) */
+    .card-heading {
+      font-size: 22px;
+      font-weight: var(--wt-workhorse);
+      line-height: 1.1;
+      letter-spacing: -0.315px;
+      color: var(--sh-charcoal-ink);
+      margin-bottom: 14px;
+    }
+
+    .card-description {
+      font-size: 16px;
+      font-weight: var(--wt-workhorse);
+      line-height: 1.50;
+      color: #555351;
+      margin-bottom: 24px;
+      flex-grow: 1;
+    }
+
+    .card-action-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-top: 18px;
+      border-top: 1px solid var(--sh-parchment-border);
+    }
+
+    /* ─────────────────────────────────────────────────────────────────
+       TOKEN SPECIFICATION MATRIX TABLE
+       ───────────────────────────────────────────────────────────────── */
+    .token-audit-panel {
+      background: #faf8f5;
+      border: 1px solid var(--sh-parchment-border);
+      border-radius: var(--radius-lg);
+      padding: 36px;
+      margin-top: 56px;
+    }
+
+    .token-table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+      font-size: 14px;
+    }
+
+    .token-table th {
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--sh-parchment-border);
+      font-weight: 700;
+      color: var(--sh-charcoal-ink);
+    }
+
+    .token-table td {
+      padding: 12px 16px;
+      border-bottom: 1px solid #ebe6e2;
+      color: var(--sh-charcoal-ink);
+    }
+
+    .swatch-circle {
+      display: inline-block;
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      vertical-align: middle;
+      margin-right: 8px;
+      border: 1px solid rgba(0, 0, 0, 0.1);
+    }
+
+    /* ─────────────────────────────────────────────────────────────────
+       FOOTER
+       ───────────────────────────────────────────────────────────────── */
+    .sh-footer {
+      border-top: 1px solid var(--sh-parchment-border);
+      padding: 60px 0 30px;
+      background: var(--sh-pure-white);
+    }
+
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1fr;
+      gap: 32px;
+      margin-bottom: 48px;
+    }
+
+    .footer-col h5 {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--sh-charcoal-ink);
+      margin-bottom: 16px;
+    }
+
+    .footer-col ul {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .footer-col a {
+      font-size: 14px;
+      color: #666461;
+      text-decoration: none;
+    }
+    .footer-col a:hover {
+      color: var(--sh-amethyst-link);
+      text-decoration: underline;
+    }
+
+    .footer-legal-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-top: 1px solid #eeebe7;
+      padding-top: 24px;
+      font-size: 12px;
+      color: #888582;
+    }
+
+    @media (max-width: 900px) {
+      .hero-title { font-size: 42px; }
+      .section-display-heading { font-size: 34px; }
+      .feature-cards-grid { grid-template-columns: 1fr; }
+      .footer-grid { grid-template-columns: 1fr 1fr; }
+      .nav-links { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Fixed Top Navigation -->
+  <nav class="sh-nav">
+    <div class="container nav-inner">
+      <a href="#hero" class="nav-brand">
+        <svg class="brand-lightning-icon" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"></path>
+        </svg>
+        <span>Superhuman</span>
+      </a>
+
+      <ul class="nav-links">
+        <li><a href="#suite" class="nav-link">Product Suite</a></li>
+        <li><a href="#speed" class="nav-link">Keyboard Speed</a></li>
+        <li><a href="#ai" class="nav-link">Superhuman AI</a></li>
+        <li><a href="#spec" class="nav-link">Design Spec</a></li>
+      </ul>
+
+      <div class="nav-actions">
+        <a href="#login" class="nav-link" style="font-size: 14px;">Sign In</a>
+        <!-- Warm Cream Button (8px radius) -->
+        <a href="#signup" class="btn btn-warm-cream">
+          Get Superhuman
+        </a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero Section with Deep Purple Gradient (#1b1938) -->
+  <header id="hero" class="hero-purple">
+    <div class="container">
+      <div class="hero-inner">
+        <div class="hero-badge">
+          <span>The Luxury of Velocity</span>
+        </div>
+
+        <!-- 64px, weight 540, line-height 0.96 -->
+        <h1 class="hero-title">
+          Fly through your email.<br>
+          <span class="lavender-accent">Twice as fast.</span>
+        </h1>
+
+        <p class="hero-subtitle">
+          Superhuman is reconstructed from the ground up for speed, visual calm, and effortless triage. Reach Inbox Zero every single day.
+        </p>
+
+        <div class="hero-cta-group">
+          <a href="#signup" class="btn btn-warm-cream" style="padding: 14px 28px; font-size: 16px;">
+            Get Started Now
+          </a>
+          <button class="btn btn-ghost-dark" onclick="toggleInboxZero()">
+            <span>Simulate Inbox Zero</span>
+            <span class="kbd-shortcut">E</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Interactive Email Client Preview (Level 4 Depth on Purple Canvas) -->
+      <div class="app-preview-card">
+        <div class="app-header-bar">
+          <div class="split-inbox-tabs">
+            <div class="inbox-tab active" onclick="switchTab(this, 'important')">
+              <span>Important</span>
+              <span class="tab-count" id="important-count">3</span>
+            </div>
+            <div class="inbox-tab" onclick="switchTab(this, 'vip')">
+              <span>VIP Investors</span>
+              <span class="tab-count">2</span>
+            </div>
+            <div class="inbox-tab" onclick="switchTab(this, 'team')">
+              <span>Team Engineering</span>
+              <span class="tab-count">4</span>
+            </div>
+            <div class="inbox-tab" onclick="switchTab(this, 'news')">
+              <span>Updates</span>
+              <span class="tab-count">1</span>
+            </div>
+          </div>
+
+          <div class="command-k-hint">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+            <span>Command Palette</span>
+            <span class="kbd-shortcut">⌘K</span>
+          </div>
+        </div>
+
+        <div id="email-list-container">
+          <!-- Row 1 -->
+          <div class="email-item-row selected">
+            <div class="email-sender">Rahul Vohra</div>
+            <div class="email-snippet">
+              <strong>Superhuman AI 2.0 Launch</strong> &bull; The new write and instant triage models are now deployed globally...
+            </div>
+            <div class="email-time">10:42 AM</div>
+          </div>
+
+          <!-- Row 2 -->
+          <div class="email-item-row">
+            <div class="email-sender">Stripe Billing</div>
+            <div class="email-snippet">
+              <strong>Monthly Revenue Summary</strong> &bull; Your automated ledger reconciliation for Q3 is complete and verified...
+            </div>
+            <div class="email-time">9:15 AM</div>
+          </div>
+
+          <!-- Row 3 -->
+          <div class="email-item-row">
+            <div class="email-sender">Sam Altman</div>
+            <div class="email-snippet">
+              <strong>Coffee in SF next Thursday?</strong> &bull; Loved the demonstration of the keyboard latency optimizations...
+            </div>
+            <div class="email-time">Yesterday</div>
+          </div>
+        </div>
+
+        <!-- Inbox Zero Overlay Screen (Toggleable) -->
+        <div id="inbox-zero-screen" style="display: none; padding: 60px 20px; text-align: center;">
+          <div style="font-size: 32px; margin-bottom: 12px;">✨</div>
+          <h3 style="font-size: 24px; font-weight: 540; color: var(--sh-white-95); margin-bottom: 8px;">
+            You have reached Inbox Zero.
+          </h3>
+          <p style="font-size: 14px; color: var(--sh-white-80); margin-bottom: 20px;">
+            No unread messages. Enjoy the rest of your productive day.
+          </p>
+          <button class="btn btn-warm-cream" onclick="toggleInboxZero()" style="font-size: 14px; padding: 8px 16px;">
+            Restore Inbox
+          </button>
+        </div>
+
+        <div class="app-status-bar">
+          <div style="display: flex; gap: 18px;">
+            <span><strong style="color: var(--sh-white-95);">E</strong> Archive</span>
+            <span><strong style="color: var(--sh-white-95);">J / K</strong> Next / Prev</span>
+            <span><strong style="color: var(--sh-white-95);">Enter</strong> Open</span>
+            <span><strong style="color: var(--sh-white-95);">Z</strong> Undo</span>
+          </div>
+          <div>
+            <span>100ms Native Engine</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Content Section: Pure White Canvas (#ffffff) + Charcoal Ink (#292827) -->
+  <section id="suite" class="content-section">
+    <div class="container">
+      <div class="section-headline-block">
+        <!-- 48px, weight 460, line-height 0.96, tracking -1.32px -->
+        <h2 class="section-display-heading">
+          Your Superhuman suite.
+        </h2>
+        <p class="section-support-copy">
+          Designed like a bespoke luxury instrument. Clean white surfaces, zero visual noise, and warm cream touchpoints.
+        </p>
+      </div>
+
+      <!-- Feature Grid: 16px border-radius, #dcd7d3 border -->
+      <div class="feature-cards-grid">
+        <!-- Card 1 -->
+        <div class="sh-card">
+          <span class="card-badge">Triage</span>
+          <h3 class="card-heading">Split Inbox &bull; Focus on what matters</h3>
+          <p class="card-description">
+            Automatically separate VIPs, team members, and urgent calendar invites from newsletters and receipts. Never miss high-value conversations.
+          </p>
+          <div class="card-action-row">
+            <a href="#learn" class="sh-link">Explore Split Inbox</a>
+            <span style="font-size: 13px; color: #888;">0.96 Line Height</span>
+          </div>
+        </div>
+
+        <!-- Card 2 -->
+        <div class="sh-card">
+          <span class="card-badge" style="color: var(--sh-amethyst-link);">Intelligence</span>
+          <h3 class="card-heading">Superhuman AI &bull; Turn thoughts into email</h3>
+          <p class="card-description">
+            Write complete, nuanced replies in your authentic voice from a single prompt or one-line bullet point. Instant polish with one keypress.
+          </p>
+          <div class="card-action-row">
+            <a href="#learn" class="sh-link">Learn about AI</a>
+            <span style="font-size: 13px; color: #888;">Context Aware</span>
+          </div>
+        </div>
+
+        <!-- Card 3 -->
+        <div class="sh-card">
+          <span class="card-badge" style="color: #666;">Velocity</span>
+          <h3 class="card-heading">Blazing 100ms &bull; Native keyboard response</h3>
+          <p class="card-description">
+            Every keystroke executes in under 100 milliseconds. Built with an offline-first cache so search and triage never pause for the network.
+          </p>
+          <div class="card-action-row">
+            <a href="#learn" class="sh-link">View Architecture</a>
+            <span style="font-size: 13px; color: #888;">Zero Latency</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Token Specification Audit Table -->
+      <div id="spec" class="token-audit-panel">
+        <h3 style="font-size: 24px; font-weight: 540; margin-bottom: 20px; color: var(--sh-charcoal-ink);">
+          Design System Token Verification &bull; DESIGN.md
+        </h3>
+        <table class="token-table">
+          <thead>
+            <tr>
+              <th>Design Token</th>
+              <th>Exact Value</th>
+              <th>Rule &amp; Application</th>
+              <th>Visual Sample</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Mysteria Purple</strong></td>
+              <td><code>#1b1938</code></td>
+              <td>Hero gradient background, twilight tone that straddles blue-purple</td>
+              <td><span class="swatch-circle" style="background: #1b1938;"></span> Mysteria</td>
+            </tr>
+            <tr>
+              <td><strong>Lavender Glow</strong></td>
+              <td><code>#cbb7fb</code></td>
+              <td>The singular accent color for the entire brand</td>
+              <td><span class="swatch-circle" style="background: #cbb7fb;"></span> Lavender</td>
+            </tr>
+            <tr>
+              <td><strong>Charcoal Ink</strong></td>
+              <td><code>#292827</code></td>
+              <td>Primary text on white canvas (warm near-black with faint brown undertone)</td>
+              <td><span class="swatch-circle" style="background: #292827;"></span> Charcoal</td>
+            </tr>
+            <tr>
+              <td><strong>Warm Cream</strong></td>
+              <td><code>#e9e5dd</code></td>
+              <td>Primary button background — understated luxury rather than saturated CTAs</td>
+              <td><span class="swatch-circle" style="background: #e9e5dd;"></span> Warm Cream</td>
+            </tr>
+            <tr>
+              <td><strong>Parchment Border</strong></td>
+              <td><code>#dcd7d3</code></td>
+              <td>Card and divider borders (1px warm border)</td>
+              <td><span class="swatch-circle" style="background: #dcd7d3;"></span> Parchment</td>
+            </tr>
+            <tr>
+              <td><strong>Amethyst Link</strong></td>
+              <td><code>#714cb6</code></td>
+              <td>Underlined in-content links</td>
+              <td><span class="swatch-circle" style="background: #714cb6;"></span> Amethyst</td>
+            </tr>
+            <tr>
+              <td><strong>Super Sans VF</strong></td>
+              <td>Weights: <code>460</code> / <code>540</code> / <code>700</code></td>
+              <td>Unconventional weights between regular and medium; display line-height 0.96</td>
+              <td>460 / 0.96</td>
+            </tr>
+            <tr>
+              <td><strong>Binary Radii</strong></td>
+              <td><code>8px</code> (buttons) &amp; <code>16px</code> (cards)</td>
+              <td>Strictly two radii in the entire system — no pill shapes or micro-radii</td>
+              <td>8px / 16px</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="sh-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div>
+          <div class="nav-brand" style="color: var(--sh-charcoal-ink); margin-bottom: 12px;">
+            <svg class="brand-lightning-icon" viewBox="0 0 24 24" fill="currentColor" style="color: var(--sh-amethyst-link);">
+              <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"></path>
+            </svg>
+            <span>Superhuman</span>
+          </div>
+          <p style="font-size: 14px; color: #666461; line-height: 1.5; max-width: 300px;">
+            The fastest email experience ever made. Built for executives, founders, and teams who value their time.
+          </p>
+        </div>
+
+        <div class="footer-col">
+          <h5>Product</h5>
+          <ul>
+            <li><a href="#">Superhuman for Mac</a></li>
+            <li><a href="#">Superhuman for Windows</a></li>
+            <li><a href="#">Superhuman AI</a></li>
+            <li><a href="#">Split Inbox</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h5>Company</h5>
+          <ul>
+            <li><a href="#">Our Story</a></li>
+            <li><a href="#">Careers</a></li>
+            <li><a href="#">Press Kit</a></li>
+            <li><a href="#">Security &amp; SOC-2</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h5>Resources</h5>
+          <ul>
+            <li><a href="#">Keyboard Shortcuts</a></li>
+            <li><a href="#">Email Benchmark Report</a></li>
+            <li><a href="#">Customer Stories</a></li>
+            <li><a href="#">Contact Support</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="footer-legal-bar">
+        <div>&copy; 2026 Superhuman Labs, Inc. All rights reserved.</div>
+        <div style="display: flex; gap: 20px;">
+          <a href="#" class="sh-link" style="color: #888582; font-size: 12px;">Privacy Policy</a>
+          <a href="#" class="sh-link" style="color: #888582; font-size: 12px;">Terms of Service</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Interactive Scripts -->
+  <script>
+    function switchTab(el, tabName) {
+      document.querySelectorAll('.inbox-tab').forEach(t => t.classList.remove('active'));
+      el.classList.add('active');
+    }
+
+    function toggleInboxZero() {
+      const list = document.getElementById('email-list-container');
+      const zero = document.getElementById('inbox-zero-screen');
+      const count = document.getElementById('important-count');
+      if (list.style.display === 'none') {
+        list.style.display = 'block';
+        zero.style.display = 'none';
+        count.textContent = '3';
+      } else {
+        list.style.display = 'none';
+        zero.style.display = 'block';
+        count.textContent = '0';
+      }
+    }
+  </script>
+</body>
+</html>

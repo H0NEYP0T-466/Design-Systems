@@ -1,0 +1,1191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Flat Design System — Two-Dimensional Minimalist</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      /* Official Flat Color Tokens per DESIGN.md */
+      --flat-primary: #F2673C;    /* CTA emphasis & interaction signal */
+      --flat-secondary: #8B5CF6;  /* Secondary accent */
+      --flat-success: #16A34A;    /* Positive status */
+      --flat-warning: #D97706;    /* Warning status */
+      --flat-danger: #DC2626;     /* Error / danger */
+      --flat-surface: #FFFFFF;    /* Surface & large cards */
+      --flat-text: #111827;       /* High-contrast legibility */
+      --flat-neutral: #FFFFFF;    /* Neutral surface */
+      --flat-bg: #F9FAFB;         /* Light crisp background */
+      --flat-border: #E5E7EB;     /* Pure 2D border */
+      --flat-muted: #6B7280;      /* Subdued text */
+
+      /* Typography Families */
+      --font-primary: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      --font-display: 'Inter', sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+
+      /* Typography Scale per DESIGN.md: 12 / 14 / 16 / 20 / 24 / 32 */
+      --text-12: 12px;
+      --text-14: 14px;
+      --text-16: 16px;
+      --text-20: 20px;
+      --text-24: 24px;
+      --text-32: 32px;
+
+      /* Spacing Scale per DESIGN.md: 4 / 8 / 12 / 16 / 24 / 32 */
+      --space-4: 4px;
+      --space-8: 8px;
+      --space-12: 12px;
+      --space-16: 16px;
+      --space-24: 24px;
+      --space-32: 32px;
+
+      /* Flat 2D Radii - crisp, no bevels */
+      --radius-sm: 4px;
+      --radius-md: 6px;
+      --radius-lg: 8px;
+
+      /* Motion: 150-250ms stable transitions */
+      --trans-speed: 200ms ease;
+    }
+
+    /* Reset & Base: Pure 2D, NO 3D shadows or emboss */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      font-size: 16px;
+      background-color: var(--flat-bg);
+      color: var(--flat-text);
+      font-family: var(--font-primary);
+      -webkit-font-smoothing: antialiased;
+      scroll-behavior: smooth;
+    }
+
+    body {
+      line-height: 1.5;
+      overflow-x: hidden;
+    }
+
+    /* Typography Hierarchy */
+    h1, .h1-display {
+      font-size: var(--text-32);
+      font-weight: 800;
+      line-height: 1.2;
+      letter-spacing: -0.5px;
+      color: var(--flat-text);
+    }
+
+    h2, .h2-title {
+      font-size: var(--text-24);
+      font-weight: 700;
+      line-height: 1.25;
+      color: var(--flat-text);
+    }
+
+    h3, .h3-subtitle {
+      font-size: var(--text-20);
+      font-weight: 600;
+      line-height: 1.3;
+      color: var(--flat-text);
+    }
+
+    p, .body-regular {
+      font-size: var(--text-16);
+      font-weight: 400;
+      line-height: 1.5;
+      color: var(--flat-text);
+    }
+
+    .body-small {
+      font-size: var(--text-14);
+      font-weight: 400;
+      line-height: 1.45;
+      color: var(--flat-muted);
+    }
+
+    .caption {
+      font-size: var(--text-12);
+      font-weight: 500;
+      line-height: 1.4;
+    }
+
+    .font-mono {
+      font-family: var(--font-mono);
+    }
+
+    /* Layout Containers */
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 var(--space-24);
+    }
+
+    /* Navigation Header */
+    header.flat-nav {
+      background: var(--flat-surface);
+      border-bottom: 2px solid var(--flat-border);
+      padding: var(--space-16) 0;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .nav-content {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .brand-logo {
+      display: flex;
+      align-items: center;
+      gap: var(--space-8);
+      text-decoration: none;
+      color: var(--flat-text);
+      font-weight: 800;
+      font-size: var(--text-20);
+    }
+
+    .brand-badge {
+      width: 24px;
+      height: 24px;
+      background: var(--flat-primary);
+      border-radius: var(--radius-sm);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #FFF;
+      font-weight: 900;
+      font-size: 14px;
+    }
+
+    .nav-menu {
+      display: flex;
+      gap: var(--space-24);
+      list-style: none;
+    }
+
+    .nav-menu a {
+      text-decoration: none;
+      color: var(--flat-text);
+      font-size: var(--text-14);
+      font-weight: 500;
+      transition: color var(--trans-speed);
+    }
+
+    .nav-menu a:hover {
+      color: var(--flat-primary);
+    }
+
+    /* Strict Flat 2D Buttons */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--space-8);
+      padding: var(--space-8) var(--space-16);
+      font-size: var(--text-14);
+      font-weight: 600;
+      border-radius: var(--radius-sm);
+      border: 2px solid transparent;
+      cursor: pointer;
+      text-decoration: none;
+      transition: background-color var(--trans-speed), border-color var(--trans-speed), color var(--trans-speed);
+      box-shadow: none !important; /* Strictly no 3D shadows */
+    }
+
+    .btn:focus-visible {
+      outline: 2px solid var(--flat-text);
+      outline-offset: 2px;
+    }
+
+    .btn-primary {
+      background-color: var(--flat-primary);
+      color: #FFFFFF;
+      border-color: var(--flat-primary);
+    }
+
+    .btn-primary:hover {
+      background-color: #e0552b;
+      border-color: #e0552b;
+    }
+
+    .btn-secondary {
+      background-color: var(--flat-secondary);
+      color: #FFFFFF;
+      border-color: var(--flat-secondary);
+    }
+
+    .btn-secondary:hover {
+      background-color: #7948e6;
+      border-color: #7948e6;
+    }
+
+    .btn-neutral {
+      background-color: var(--flat-surface);
+      color: var(--flat-text);
+      border-color: var(--flat-border);
+    }
+
+    .btn-neutral:hover {
+      border-color: var(--flat-text);
+    }
+
+    .btn-success {
+      background-color: var(--flat-success);
+      color: #FFFFFF;
+      border-color: var(--flat-success);
+    }
+
+    .btn-warning {
+      background-color: var(--flat-warning);
+      color: #FFFFFF;
+      border-color: var(--flat-warning);
+    }
+
+    .btn-danger {
+      background-color: var(--flat-danger);
+      color: #FFFFFF;
+      border-color: var(--flat-danger);
+    }
+
+    .btn-disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      pointer-events: none;
+    }
+
+    /* Hero Section: 2D Minimalist Atmosphere */
+    .hero-section {
+      background-color: var(--flat-surface);
+      border-bottom: 2px solid var(--flat-border);
+      padding: var(--space-32) 0 (calc(var(--space-32) * 2));
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1.2fr 1fr;
+      gap: var(--space-32);
+      align-items: center;
+      margin-top: var(--space-32);
+    }
+
+    .hero-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-8);
+      background: #FFF0EB;
+      color: var(--flat-primary);
+      padding: var(--space-4) var(--space-12);
+      border-radius: var(--radius-sm);
+      font-size: var(--text-12);
+      font-weight: 700;
+      margin-bottom: var(--space-16);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: var(--space-12);
+      margin-top: var(--space-24);
+    }
+
+    /* 2D Flat Vector Illustration Stage */
+    .flat-stage {
+      background: #F3F4F6;
+      border: 2px solid var(--flat-border);
+      border-radius: var(--radius-md);
+      padding: var(--space-24);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 280px;
+    }
+
+    /* Flat Metric / KPI Cards */
+    .metrics-row {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: var(--space-16);
+      margin-top: calc(var(--space-32) * -1);
+      margin-bottom: var(--space-32);
+      position: relative;
+      z-index: 10;
+    }
+
+    .metric-card {
+      background: var(--flat-surface);
+      border: 2px solid var(--flat-border);
+      border-radius: var(--radius-sm);
+      padding: var(--space-20);
+      transition: border-color var(--trans-speed);
+    }
+
+    .metric-card:hover {
+      border-color: var(--flat-primary);
+    }
+
+    .metric-card .caption {
+      color: var(--flat-muted);
+      text-transform: uppercase;
+      font-weight: 700;
+    }
+
+    .metric-card .val {
+      font-size: var(--text-24);
+      font-weight: 800;
+      color: var(--flat-text);
+      margin: var(--space-4) 0;
+    }
+
+    .metric-indicator {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-size: var(--text-12);
+      font-weight: 600;
+    }
+
+    /* Section Headers */
+    .section-header {
+      margin-bottom: var(--space-24);
+      border-bottom: 2px solid var(--flat-border);
+      padding-bottom: var(--space-12);
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+    }
+
+    /* Interactive Component State Laboratory */
+    .lab-section {
+      padding: var(--space-32) 0;
+    }
+
+    .lab-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--space-24);
+    }
+
+    .flat-card {
+      background: var(--flat-surface);
+      border: 2px solid var(--flat-border);
+      border-radius: var(--radius-sm);
+      padding: var(--space-24);
+    }
+
+    /* Flat Form Controls */
+    .form-group {
+      margin-bottom: var(--space-16);
+    }
+
+    .form-label {
+      display: block;
+      font-size: var(--text-14);
+      font-weight: 600;
+      margin-bottom: var(--space-4);
+      color: var(--flat-text);
+    }
+
+    .form-input {
+      width: 100%;
+      padding: var(--space-8) var(--space-12);
+      font-size: var(--text-14);
+      font-family: var(--font-primary);
+      background: var(--flat-surface);
+      color: var(--flat-text);
+      border: 2px solid var(--flat-border);
+      border-radius: var(--radius-sm);
+      transition: border-color var(--trans-speed);
+      box-shadow: none !important;
+    }
+
+    .form-input:focus {
+      outline: none;
+      border-color: var(--flat-primary);
+    }
+
+    .form-input.error {
+      border-color: var(--flat-danger);
+    }
+
+    .form-msg-error {
+      color: var(--flat-danger);
+      font-size: var(--text-12);
+      margin-top: var(--space-4);
+      display: none;
+    }
+
+    .form-msg-error.show {
+      display: block;
+    }
+
+    /* Status Badges */
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      padding: 2px var(--space-8);
+      border-radius: var(--radius-sm);
+      font-size: var(--text-12);
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .badge-primary { background: #FFF0EB; color: var(--flat-primary); }
+    .badge-secondary { background: #F3E8FF; color: var(--flat-secondary); }
+    .badge-success { background: #DCFCE7; color: var(--flat-success); }
+    .badge-warning { background: #FEF3C7; color: var(--flat-warning); }
+    .badge-danger { background: #FEE2E2; color: var(--flat-danger); }
+
+    /* Flat 2D Data Table */
+    .flat-table-wrapper {
+      overflow-x: auto;
+      border: 2px solid var(--flat-border);
+      border-radius: var(--radius-sm);
+      background: var(--flat-surface);
+      margin-top: var(--space-16);
+    }
+
+    table.flat-table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+    }
+
+    table.flat-table th {
+      background: #F9FAFB;
+      padding: var(--space-12) var(--space-16);
+      font-size: var(--text-12);
+      font-weight: 700;
+      color: var(--flat-muted);
+      text-transform: uppercase;
+      border-bottom: 2px solid var(--flat-border);
+    }
+
+    table.flat-table td {
+      padding: var(--space-12) var(--space-16);
+      font-size: var(--text-14);
+      border-bottom: 1px solid var(--flat-border);
+      color: var(--flat-text);
+    }
+
+    table.flat-table tr:last-child td {
+      border-bottom: none;
+    }
+
+    table.flat-table tr:hover td {
+      background: #F9FAFB;
+    }
+
+    /* Color Swatches Grid */
+    .swatches-grid {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: var(--space-12);
+      margin-top: var(--space-16);
+    }
+
+    .swatch-card {
+      background: var(--flat-surface);
+      border: 2px solid var(--flat-border);
+      border-radius: var(--radius-sm);
+      padding: var(--space-8);
+      text-align: center;
+    }
+
+    .swatch-color {
+      height: 48px;
+      border-radius: var(--radius-sm);
+      margin-bottom: var(--space-8);
+      border: 1px solid rgba(0,0,0,0.08);
+    }
+
+    .swatch-name {
+      font-size: var(--text-12);
+      font-weight: 700;
+      margin-bottom: 2px;
+    }
+
+    .swatch-hex {
+      font-size: 11px;
+      font-family: var(--font-mono);
+      color: var(--flat-muted);
+    }
+
+    /* Typography Scale Showcase */
+    .type-scale-list {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-16);
+      margin-top: var(--space-16);
+    }
+
+    .type-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      padding-bottom: var(--space-8);
+      border-bottom: 1px solid var(--flat-border);
+    }
+
+    /* Footer: 2D Minimalist */
+    footer.flat-footer {
+      background: var(--flat-surface);
+      border-top: 2px solid var(--flat-border);
+      padding: var(--space-32) 0;
+      margin-top: var(--space-32);
+    }
+
+    .footer-content {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: var(--text-14);
+      color: var(--flat-muted);
+    }
+
+    /* Design System Token Auditor Drawer */
+    .token-audit-toggle {
+      position: fixed;
+      bottom: 24px;
+      left: 24px;
+      z-index: 999;
+      background: var(--flat-text);
+      color: #FFF;
+      padding: var(--space-8) var(--space-16);
+      border-radius: var(--radius-sm);
+      font-size: var(--text-12);
+      font-weight: 700;
+      cursor: pointer;
+      border: 2px solid var(--flat-text);
+      display: flex;
+      align-items: center;
+      gap: var(--space-8);
+    }
+
+    .token-audit-toggle:hover {
+      background: var(--flat-primary);
+      border-color: var(--flat-primary);
+    }
+
+    .token-drawer {
+      position: fixed;
+      top: 0;
+      left: -440px;
+      width: 400px;
+      height: 100vh;
+      background: var(--flat-surface);
+      border-right: 2px solid var(--flat-border);
+      z-index: 2000;
+      padding: var(--space-24);
+      overflow-y: auto;
+      transition: left var(--trans-speed);
+    }
+
+    .token-drawer.open {
+      left: 0;
+    }
+
+    .token-drawer-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: var(--space-24);
+      padding-bottom: var(--space-8);
+      border-bottom: 2px solid var(--flat-border);
+    }
+
+    .token-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: var(--space-8) 0;
+      border-bottom: 1px solid var(--flat-border);
+      font-size: var(--text-12);
+    }
+
+    /* Toast Notification */
+    .toast-box {
+      position: fixed;
+      top: 24px;
+      right: 24px;
+      background: var(--flat-text);
+      color: #FFF;
+      padding: var(--space-12) var(--space-16);
+      border-radius: var(--radius-sm);
+      border-left: 4px solid var(--flat-primary);
+      font-size: var(--text-14);
+      font-weight: 500;
+      z-index: 3000;
+      opacity: 0;
+      transform: translateY(-10px);
+      transition: all 0.2s ease;
+      pointer-events: none;
+    }
+
+    .toast-box.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Responsive */
+    @media (max-width: 960px) {
+      .hero-grid {
+        grid-template-columns: 1fr;
+      }
+      .metrics-row {
+        grid-template-columns: repeat(2, 1fr);
+        margin-top: var(--space-16);
+      }
+      .lab-grid {
+        grid-template-columns: 1fr;
+      }
+      .swatches-grid {
+        grid-template-columns: repeat(4, 1fr);
+      }
+    }
+
+    @media (max-width: 600px) {
+      .metrics-row {
+        grid-template-columns: 1fr;
+      }
+      .swatches-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      .nav-menu {
+        display: none;
+      }
+      .hero-actions {
+        flex-direction: column;
+      }
+      .footer-content {
+        flex-direction: column;
+        gap: var(--space-12);
+        text-align: center;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navigation: Minimalist Enterprise -->
+  <header class="flat-nav">
+    <div class="container nav-content">
+      <a href="#" class="brand-logo">
+        <div class="brand-badge">F</div>
+        <span>Flat Design System</span>
+      </a>
+
+      <ul class="nav-menu">
+        <li><a href="#foundations">Foundations</a></li>
+        <li><a href="#components">Components</a></li>
+        <li><a href="#laboratory">Component Lab</a></li>
+        <li><a href="#table-data">Data Grids</a></li>
+      </ul>
+
+      <div>
+        <button class="btn btn-primary" id="topCtaBtn">Get Started</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="hero-section">
+    <div class="container hero-grid">
+      <div>
+        <div class="hero-tag">
+          <span>●</span>
+          <span>TWO-DIMENSIONAL MINIMALISM</span>
+        </div>
+        <h1 class="h1-display">Fast, accessible interfaces with zero artificial depth.</h1>
+        <p class="body-regular" style="margin-top: var(--space-16); color: var(--flat-muted); max-width: 520px;">
+          Built strictly on clean geometry, high-contrast vibrant tokens, and mathematical type scales. No skeuomorphic gradients, no fake shadows.
+        </p>
+
+        <div class="hero-actions">
+          <button class="btn btn-primary" id="heroExploreBtn">Explore Components</button>
+          <button class="btn btn-neutral" id="heroTokensBtn">Inspect Tokens</button>
+        </div>
+      </div>
+
+      <!-- 2D Vector Graphic Stage -->
+      <div class="flat-stage">
+        <svg viewBox="0 0 400 240" width="100%" height="220" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <!-- 2D Canvas Modules -->
+          <rect x="20" y="20" width="160" height="90" rx="4" fill="#FFFFFF" stroke="#E5E7EB" stroke-width="2"/>
+          <rect x="36" y="36" width="32" height="8" rx="2" fill="#F2673C"/>
+          <rect x="36" y="52" width="120" height="6" rx="2" fill="#E5E7EB"/>
+          <rect x="36" y="66" width="80" height="6" rx="2" fill="#E5E7EB"/>
+          <circle cx="150" cy="40" r="6" fill="#16A34A"/>
+
+          <rect x="200" y="20" width="180" height="190" rx="4" fill="#FFFFFF" stroke="#E5E7EB" stroke-width="2"/>
+          <rect x="220" y="40" width="140" height="30" rx="4" fill="#8B5CF6"/>
+          <rect x="220" y="85" width="140" height="16" rx="2" fill="#F3F4F6"/>
+          <rect x="220" y="110" width="140" height="16" rx="2" fill="#F3F4F6"/>
+          <rect x="220" y="135" width="140" height="16" rx="2" fill="#F3F4F6"/>
+          <rect x="220" y="165" width="80" height="24" rx="4" fill="#F2673C"/>
+
+          <rect x="20" y="125" width="160" height="85" rx="4" fill="#FFFFFF" stroke="#E5E7EB" stroke-width="2"/>
+          <line x1="36" y1="180" x2="160" y2="180" stroke="#E5E7EB" stroke-width="2"/>
+          <rect x="40" y="145" width="16" height="35" rx="2" fill="#F2673C"/>
+          <rect x="70" y="160" width="16" height="20" rx="2" fill="#8B5CF6"/>
+          <rect x="100" y="135" width="16" height="45" rx="2" fill="#16A34A"/>
+          <rect x="130" y="150" width="16" height="30" rx="2" fill="#D97706"/>
+        </svg>
+      </div>
+    </div>
+  </section>
+
+  <!-- Metrics Row (4-Column) -->
+  <div class="container">
+    <div class="metrics-row">
+      <div class="metric-card">
+        <div class="caption">RENDER PERFORMANCE</div>
+        <div class="val">60 FPS</div>
+        <div class="metric-indicator" style="color: var(--flat-success);">
+          <span>&uarr; 99.8%</span>
+          <span style="color: var(--flat-muted);">Zero paint lag</span>
+        </div>
+      </div>
+
+      <div class="metric-card">
+        <div class="caption">PRIMARY COLOR</div>
+        <div class="val" style="color: var(--flat-primary);">#F2673C</div>
+        <div class="metric-indicator" style="color: var(--flat-muted);">
+          <span>CTA Emphasis Token</span>
+        </div>
+      </div>
+
+      <div class="metric-card">
+        <div class="caption">TYPE HIERARCHY</div>
+        <div class="val">6 STOPS</div>
+        <div class="metric-indicator" style="color: var(--flat-secondary);">
+          <span>12 / 14 / 16 / 20 / 24 / 32</span>
+        </div>
+      </div>
+
+      <div class="metric-card">
+        <div class="caption">SPACING SCALE</div>
+        <div class="val">6 STEPS</div>
+        <div class="metric-indicator" style="color: var(--flat-warning);">
+          <span>4 / 8 / 12 / 16 / 24 / 32</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Foundations Section: Color Swatches & Typography Scale -->
+  <section class="lab-section" id="foundations">
+    <div class="container">
+      <div class="section-header">
+        <div>
+          <span class="caption font-mono" style="color: var(--flat-primary);">01 · COLOR TOKENS</span>
+          <h2 class="h2-title">Official Color Foundations</h2>
+        </div>
+        <span class="body-small">Strict 2D Stance</span>
+      </div>
+
+      <!-- Swatches Grid -->
+      <div class="swatches-grid">
+        <div class="swatch-card">
+          <div class="swatch-color" style="background: #F2673C;"></div>
+          <div class="swatch-name">Primary</div>
+          <div class="swatch-hex">#F2673C</div>
+        </div>
+
+        <div class="swatch-card">
+          <div class="swatch-color" style="background: #8B5CF6;"></div>
+          <div class="swatch-name">Secondary</div>
+          <div class="swatch-hex">#8B5CF6</div>
+        </div>
+
+        <div class="swatch-card">
+          <div class="swatch-color" style="background: #16A34A;"></div>
+          <div class="swatch-name">Success</div>
+          <div class="swatch-hex">#16A34A</div>
+        </div>
+
+        <div class="swatch-card">
+          <div class="swatch-color" style="background: #D97706;"></div>
+          <div class="swatch-name">Warning</div>
+          <div class="swatch-hex">#D97706</div>
+        </div>
+
+        <div class="swatch-card">
+          <div class="swatch-color" style="background: #DC2626;"></div>
+          <div class="swatch-name">Danger</div>
+          <div class="swatch-hex">#DC2626</div>
+        </div>
+
+        <div class="swatch-card">
+          <div class="swatch-color" style="background: #FFFFFF;"></div>
+          <div class="swatch-name">Surface</div>
+          <div class="swatch-hex">#FFFFFF</div>
+        </div>
+
+        <div class="swatch-card">
+          <div class="swatch-color" style="background: #111827;"></div>
+          <div class="swatch-name" style="color: #111827;">Text</div>
+          <div class="swatch-hex">#111827</div>
+        </div>
+      </div>
+
+      <!-- Typography Scale Demonstration -->
+      <div class="flat-card" style="margin-top: var(--space-24);">
+        <h3 class="h3-subtitle" style="margin-bottom: var(--space-12);">Typography Scale: 12 / 14 / 16 / 20 / 24 / 32</h3>
+        <p class="body-small" style="margin-bottom: var(--space-16);">
+          Inter font family configured across weights 100 to 900, paired with JetBrains Mono for code metadata.
+        </p>
+
+        <div class="type-scale-list">
+          <div class="type-row">
+            <span style="font-size: 32px; font-weight: 800;">Display Headline (32px / Weight 800)</span>
+            <span class="caption font-mono" style="color: var(--flat-muted);">32px · 800 · lh 1.2</span>
+          </div>
+          <div class="type-row">
+            <span style="font-size: 24px; font-weight: 700;">Section Heading (24px / Weight 700)</span>
+            <span class="caption font-mono" style="color: var(--flat-muted);">24px · 700 · lh 1.25</span>
+          </div>
+          <div class="type-row">
+            <span style="font-size: 20px; font-weight: 600;">Module Subtitle (20px / Weight 600)</span>
+            <span class="caption font-mono" style="color: var(--flat-muted);">20px · 600 · lh 1.3</span>
+          </div>
+          <div class="type-row">
+            <span style="font-size: 16px; font-weight: 400;">Body Standard Copy (16px / Weight 400)</span>
+            <span class="caption font-mono" style="color: var(--flat-muted);">16px · 400 · lh 1.5</span>
+          </div>
+          <div class="type-row">
+            <span style="font-size: 14px; font-weight: 500;">Interface Label (14px / Weight 500)</span>
+            <span class="caption font-mono" style="color: var(--flat-muted);">14px · 500 · lh 1.45</span>
+          </div>
+          <div class="type-row">
+            <span style="font-size: 12px; font-weight: 600; text-transform: uppercase;">Caption &amp; Badge (12px / Weight 600)</span>
+            <span class="caption font-mono" style="color: var(--flat-muted);">12px · 600 · lh 1.4</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Interactive Component Laboratory -->
+  <section class="lab-section" id="laboratory">
+    <div class="container">
+      <div class="section-header">
+        <div>
+          <span class="caption font-mono" style="color: var(--flat-primary);">02 · COMPONENT STATE LAB</span>
+          <h2 class="h2-title">Interactive Elements &amp; Forms</h2>
+        </div>
+        <span class="body-small">150–250ms Transitions</span>
+      </div>
+
+      <div class="lab-grid">
+        <!-- Buttons & Actions Card -->
+        <div class="flat-card">
+          <h3 class="h3-subtitle" style="margin-bottom: var(--space-8);">Button Matrix</h3>
+          <p class="body-small" style="margin-bottom: var(--space-16);">
+            Primary action uses #F2673C. Secondary actions stay neutral or purple. Strictly flat 2D.
+          </p>
+
+          <div style="display: flex; flex-wrap: wrap; gap: var(--space-12); margin-bottom: var(--space-20);">
+            <button class="btn btn-primary" onclick="triggerToast('Primary Action Fired (#F2673C)')">Primary Action</button>
+            <button class="btn btn-secondary" onclick="triggerToast('Secondary Action Fired (#8B5CF6)')">Secondary</button>
+            <button class="btn btn-neutral" onclick="triggerToast('Neutral Action Fired')">Neutral</button>
+            <button class="btn btn-success" onclick="triggerToast('Success Action (#16A34A)')">Success</button>
+            <button class="btn btn-warning" onclick="triggerToast('Warning Action (#D97706)')">Warning</button>
+            <button class="btn btn-danger" onclick="triggerToast('Danger Action (#DC2626)')">Danger</button>
+            <button class="btn btn-neutral btn-disabled">Disabled State</button>
+          </div>
+
+          <div style="padding-top: var(--space-16); border-top: 1px solid var(--flat-border);">
+            <h4 class="form-label">Semantic Status Badges</h4>
+            <div style="display: flex; gap: var(--space-8); flex-wrap: wrap; margin-top: var(--space-8);">
+              <span class="badge badge-primary">Primary #F2673C</span>
+              <span class="badge badge-secondary">Secondary #8B5CF6</span>
+              <span class="badge badge-success">Success #16A34A</span>
+              <span class="badge badge-warning">Warning #D97706</span>
+              <span class="badge badge-danger">Danger #DC2626</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Interactive Form with Validation -->
+        <div class="flat-card">
+          <h3 class="h3-subtitle" style="margin-bottom: var(--space-8);">Predictable Form Validation</h3>
+          <p class="body-small" style="margin-bottom: var(--space-16);">
+            Crisp 2px borders with explicit focus-visible states and clear error tokens (#DC2626).
+          </p>
+
+          <form id="flatForm" onsubmit="event.preventDefault(); handleFormSubmit();">
+            <div class="form-group">
+              <label class="form-label" for="projectInput">Project Designation</label>
+              <input type="text" class="form-input" id="projectInput" placeholder="e.g. Enterprise Core 2.0" required>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="emailInput">Owner Email</label>
+              <input type="email" class="form-input" id="emailInput" placeholder="engineer@enterprise.io" required>
+              <div class="form-msg-error" id="emailError">Please enter a valid work email address.</div>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="prioritySelect">Priority Level</label>
+              <select class="form-input" id="prioritySelect">
+                <option value="high">Critical Severity (High)</option>
+                <option value="medium" selected>Standard Execution (Medium)</option>
+                <option value="low">Backlog Triage (Low)</option>
+              </select>
+            </div>
+
+            <div style="display: flex; justify-content: flex-end; gap: var(--space-8); margin-top: var(--space-20);">
+              <button type="reset" class="btn btn-neutral" onclick="resetFormState()">Clear</button>
+              <button type="submit" class="btn btn-primary">Submit Record</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Data Grid Section -->
+  <section class="lab-section" id="table-data" style="background: var(--flat-surface); border-top: 2px solid var(--flat-border); border-bottom: 2px solid var(--flat-border);">
+    <div class="container">
+      <div class="section-header">
+        <div>
+          <span class="caption font-mono" style="color: var(--flat-primary);">03 · ENTERPRISE DATA GRID</span>
+          <h2 class="h2-title">Predictable Table Hierarchy</h2>
+        </div>
+        <span class="body-small">Zero shadows, 2px borders</span>
+      </div>
+
+      <div class="flat-table-wrapper">
+        <table class="flat-table">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Task / Pipeline</th>
+              <th>Owner</th>
+              <th>Category</th>
+              <th>Status</th>
+              <th style="text-align: right;">Action</th>
+            </tr>
+          </thead>
+          <tbody id="tableBody">
+            <tr>
+              <td class="font-mono">#TSK-801</td>
+              <td><strong>Enforce 2D Flat Color Stance</strong></td>
+              <td>Alex Mercer</td>
+              <td>Foundations</td>
+              <td><span class="badge badge-success">Completed</span></td>
+              <td style="text-align: right;">
+                <button class="btn btn-neutral" style="padding: 4px 8px; font-size: 12px;" onclick="triggerToast('Viewing #TSK-801')">View</button>
+              </td>
+            </tr>
+            <tr>
+              <td class="font-mono">#TSK-802</td>
+              <td><strong>Validate Strict 4-32 Spacing Scale</strong></td>
+              <td>Sarah Chen</td>
+              <td>Layout</td>
+              <td><span class="badge badge-primary">Active</span></td>
+              <td style="text-align: right;">
+                <button class="btn btn-neutral" style="padding: 4px 8px; font-size: 12px;" onclick="triggerToast('Viewing #TSK-802')">View</button>
+              </td>
+            </tr>
+            <tr>
+              <td class="font-mono">#TSK-803</td>
+              <td><strong>Audit Anti-Pattern: Remove fake shadows</strong></td>
+              <td>Marcus Brody</td>
+              <td>Accessibility</td>
+              <td><span class="badge badge-warning">Review</span></td>
+              <td style="text-align: right;">
+                <button class="btn btn-neutral" style="padding: 4px 8px; font-size: 12px;" onclick="triggerToast('Viewing #TSK-803')">View</button>
+              </td>
+            </tr>
+            <tr>
+              <td class="font-mono">#TSK-804</td>
+              <td><strong>De-escalate Danger Alerts (#DC2626)</strong></td>
+              <td>Elena Rostov</td>
+              <td>Security</td>
+              <td><span class="badge badge-danger">Blocked</span></td>
+              <td style="text-align: right;">
+                <button class="btn btn-neutral" style="padding: 4px 8px; font-size: 12px;" onclick="triggerToast('Viewing #TSK-804')">View</button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="flat-footer">
+    <div class="container footer-content">
+      <div>
+        <strong>Flat Design System</strong> — Minimalist, Two-Dimensional Enterprise Architecture.
+      </div>
+      <div style="display: flex; gap: var(--space-16);">
+        <span class="caption font-mono">PRIMARY: #F2673C</span>
+        <span class="caption font-mono">SURFACE: #FFFFFF</span>
+        <span class="caption font-mono">TEXT: #111827</span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Token Auditor Drawer & Trigger -->
+  <button class="token-audit-toggle" id="tokenDrawerBtn" aria-label="Open Token Drawer">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <circle cx="12" cy="12" r="10"></circle>
+      <line x1="12" y1="16" x2="12" y2="12"></line>
+      <line x1="12" y1="8" x2="12.01" y2="8"></line>
+    </svg>
+    FLAT TOKENS
+  </button>
+
+  <div class="token-drawer" id="tokenDrawer">
+    <div class="token-drawer-header">
+      <h3 style="font-size: var(--text-16); font-weight: 700;">FLAT FOUNDATIONS AUDIT</h3>
+      <button id="closeDrawerBtn" style="background: none; border: none; font-size: 18px; cursor: pointer;">&times;</button>
+    </div>
+
+    <div style="margin-bottom: var(--space-20);">
+      <span class="caption font-mono" style="color: var(--flat-muted);">COLOR PALETTE</span>
+      <div class="token-row">
+        <span>Primary (CTA)</span>
+        <code style="color: #F2673C; font-weight: 700;">#F2673C</code>
+      </div>
+      <div class="token-row">
+        <span>Secondary</span>
+        <code style="color: #8B5CF6; font-weight: 700;">#8B5CF6</code>
+      </div>
+      <div class="token-row">
+        <span>Success</span>
+        <code style="color: #16A34A; font-weight: 700;">#16A34A</code>
+      </div>
+      <div class="token-row">
+        <span>Warning</span>
+        <code style="color: #D97706; font-weight: 700;">#D97706</code>
+      </div>
+      <div class="token-row">
+        <span>Danger</span>
+        <code style="color: #DC2626; font-weight: 700;">#DC2626</code>
+      </div>
+      <div class="token-row">
+        <span>Surface</span>
+        <code>#FFFFFF</code>
+      </div>
+      <div class="token-row">
+        <span>Text</span>
+        <code>#111827</code>
+      </div>
+      <div class="token-row">
+        <span>Neutral</span>
+        <code>#FFFFFF</code>
+      </div>
+    </div>
+
+    <div style="margin-bottom: var(--space-20);">
+      <span class="caption font-mono" style="color: var(--flat-muted);">TYPOGRAPHY SCALE</span>
+      <div class="token-row"><span>Scale</span><code>12 / 14 / 16 / 20 / 24 / 32</code></div>
+      <div class="token-row"><span>Primary Family</span><code>Inter</code></div>
+      <div class="token-row"><span>Mono Family</span><code>JetBrains Mono</code></div>
+      <div class="token-row"><span>Weights Active</span><code>400, 500, 600, 700, 800</code></div>
+    </div>
+
+    <div style="margin-bottom: var(--space-20);">
+      <span class="caption font-mono" style="color: var(--flat-muted);">SPACING SCALE</span>
+      <div class="token-row"><span>Scale Steps</span><code>4 / 8 / 12 / 16 / 24 / 32</code></div>
+    </div>
+
+    <div>
+      <span class="caption font-mono" style="color: var(--flat-muted);">ANTI-PATTERNS</span>
+      <p style="font-size: var(--text-12); color: var(--flat-muted); margin-top: 4px; line-height: 1.4;">
+        Strictly zero drop-shadows, zero 3D embosses, and zero off-palette colors. Clean 2D visual hierarchy only.
+      </p>
+    </div>
+  </div>
+
+  <!-- Toast Notification Box -->
+  <div class="toast-box" id="toastBox">Action completed.</div>
+
+  <script>
+    // Toast Notification System
+    const toastBox = document.getElementById('toastBox');
+    function triggerToast(text) {
+      toastBox.textContent = text;
+      toastBox.classList.add('show');
+      setTimeout(() => {
+        toastBox.classList.remove('show');
+      }, 2500);
+    }
+
+    // Form Handling & Validation
+    function handleFormSubmit() {
+      const emailInput = document.getElementById('emailInput');
+      const emailError = document.getElementById('emailError');
+      const projectInput = document.getElementById('projectInput');
+
+      if (!emailInput.value.includes('@') || !emailInput.value.includes('.')) {
+        emailInput.classList.add('error');
+        emailError.classList.add('show');
+        return;
+      }
+
+      emailInput.classList.remove('error');
+      emailError.classList.remove('show');
+      triggerToast('Task registered: ' + projectInput.value);
+
+      // Add to table
+      const tbody = document.getElementById('tableBody');
+      const newRow = document.createElement('tr');
+      const tskId = '#TSK-' + Math.floor(805 + Math.random() * 50);
+      newRow.innerHTML = `
+        <td class="font-mono">${tskId}</td>
+        <td><strong>${projectInput.value}</strong></td>
+        <td>You</td>
+        <td>Engineering</td>
+        <td><span class="badge badge-primary">Active</span></td>
+        <td style="text-align: right;">
+          <button class="btn btn-neutral" style="padding: 4px 8px; font-size: 12px;" onclick="triggerToast('Viewing ${tskId}')">View</button>
+        </td>
+      `;
+      tbody.prepend(newRow);
+
+      projectInput.value = '';
+      emailInput.value = '';
+    }
+
+    function resetFormState() {
+      document.getElementById('emailInput').classList.remove('error');
+      document.getElementById('emailError').classList.remove('show');
+    }
+
+    // Drawer Logic
+    const tokenDrawer = document.getElementById('tokenDrawer');
+    document.getElementById('tokenDrawerBtn').addEventListener('click', () => {
+      tokenDrawer.classList.toggle('open');
+    });
+    document.getElementById('closeDrawerBtn').addEventListener('click', () => {
+      tokenDrawer.classList.remove('open');
+    });
+
+    // Quick Hero Buttons
+    document.getElementById('heroExploreBtn').addEventListener('click', () => {
+      document.getElementById('laboratory').scrollIntoView({ behavior: 'smooth' });
+    });
+    document.getElementById('heroTokensBtn').addEventListener('click', () => {
+      tokenDrawer.classList.add('open');
+    });
+    document.getElementById('topCtaBtn').addEventListener('click', () => {
+      triggerToast('Flat system initialized.');
+    });
+  </script>
+</body>
+</html>

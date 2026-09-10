@@ -1,0 +1,1568 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Publication — Print-Inspired Editorial Design System</title>
+  <!-- Modern & Editorial Fonts: Oswald (Display), Nunito (Primary Body), JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Nunito:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400;1,600;1,700&family=Oswald:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    /* ==========================================================================
+       PUBLICATION DESIGN SYSTEM FOUNDATIONS & TOKENS
+       Category: Creative & Artistic | Visual Style: Modern, Editorial Print
+       ========================================================================== */
+    :root {
+      /* Official Color Tokens from DESIGN.md */
+      --color-primary: #A855F7;        /* Expressive Electric Purple: CTA Emphasis */
+      --color-primary-hover: #9333EA;
+      --color-primary-active: #7E22CE;
+      --color-primary-subtle: rgba(168, 85, 247, 0.1);
+      --color-primary-ring: rgba(168, 85, 247, 0.35);
+
+      --color-secondary: #0A1829;      /* Deep Oxford / Midnight Navy */
+      --color-secondary-hover: #152438;
+      --color-secondary-subtle: rgba(10, 24, 41, 0.05);
+
+      --color-success: #16A34A;        /* Token from foundations */
+      --color-success-subtle: rgba(22, 163, 74, 0.1);
+
+      --color-warning: #D97706;        /* Token from foundations */
+      --color-warning-subtle: rgba(217, 119, 6, 0.1);
+
+      --color-danger: #DC2626;         /* Token from foundations */
+      --color-danger-subtle: rgba(220, 38, 38, 0.1);
+
+      --color-surface: #FFFFFF;        /* Large backgrounds & cards */
+      --color-surface-paper: #FAF8F5;  /* Warm newsprint canvas */
+      --color-surface-subtle: #F4F2EE; /* Editorial module backing */
+      --color-neutral: #FFFFFF;        /* Official neutral token */
+
+      --color-text: #0A1829;           /* Deep Oxford Navy body copy & titles */
+      --color-text-secondary: #3B4858; /* Secondary editorial copy */
+      --color-text-muted: #64748B;     /* Bylines, dates & metadata */
+      --color-text-inverted: #FFFFFF;
+
+      --color-border: #E2DDD5;         /* Crisp editorial hairline rule */
+      --color-border-strong: #0A1829;  /* Heavy broadsheet separation bar */
+
+      /* Official Typography Families */
+      --font-display: 'Oswald', 'Franklin Gothic', Impact, sans-serif;
+      --font-primary: 'Nunito', -apple-system, BlinkMacSystemFont, Georgia, sans-serif;
+      --font-mono: 'JetBrains Mono', SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+
+      /* Desktop-First Expressive Scale: 12 / 14 / 18 / 24 / 32 / 44 / 60 */
+      --type-scale-12: 12px;
+      --type-scale-14: 14px;
+      --type-scale-18: 18px;
+      --type-scale-24: 24px;
+      --type-scale-32: 32px;
+      --type-scale-44: 44px;
+      --type-scale-60: 60px;
+
+      /* Spacing Scale: 4 / 8 / 12 / 16 / 24 / 32 */
+      --space-4: 4px;
+      --space-8: 8px;
+      --space-12: 12px;
+      --space-16: 16px;
+      --space-24: 24px;
+      --space-32: 32px;
+      --space-48: 48px;
+      --space-64: 64px;
+
+      /* Radii: Restrained print geometry with soft accents */
+      --radius-xs: 2px;
+      --radius-sm: 4px;
+      --radius-md: 8px;
+      --radius-lg: 12px;
+      --radius-pill: 9999px;
+
+      /* Elevation */
+      --shadow-sm: 0 1px 3px rgba(10, 24, 41, 0.06);
+      --shadow-md: 0 4px 12px rgba(10, 24, 41, 0.08);
+      --shadow-lg: 0 16px 36px rgba(10, 24, 41, 0.1);
+
+      /* Transitions: 150–250ms with stable easing */
+      --trans-fast: 150ms cubic-bezier(0.16, 1, 0.3, 1);
+      --trans-normal: 220ms cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    /* Reset */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      background-color: var(--color-surface);
+      color: var(--color-text);
+      font-family: var(--font-primary);
+      font-size: var(--type-scale-18);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    body {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      background-color: var(--color-surface);
+      color: var(--color-text);
+    }
+
+    /* Editorial Broadsheet Masthead */
+    .masthead-topbar {
+      border-bottom: 1px solid var(--color-border);
+      background: var(--color-surface);
+      padding: var(--space-8) 0;
+      font-family: var(--font-mono);
+      font-size: var(--type-scale-12);
+      color: var(--color-text-muted);
+    }
+
+    .masthead-topbar .container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: var(--space-8);
+    }
+
+    .masthead-header {
+      padding-top: var(--space-24);
+      padding-bottom: var(--space-16);
+      text-align: center;
+      background: var(--color-surface);
+      border-bottom: 3px double var(--color-border-strong);
+    }
+
+    .masthead-edition-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-bottom: var(--space-12);
+      border-bottom: 1px solid var(--color-border);
+      margin-bottom: var(--space-16);
+      font-family: var(--font-mono);
+      font-size: var(--type-scale-12);
+      font-weight: 600;
+      color: var(--color-text-secondary);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+    }
+
+    .masthead-title {
+      font-family: var(--font-display);
+      font-size: clamp(38px, 6vw, var(--type-scale-60));
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      line-height: 1;
+      color: var(--color-secondary);
+      margin-bottom: var(--space-8);
+    }
+
+    .masthead-title span {
+      color: var(--color-primary);
+    }
+
+    .masthead-subline {
+      font-family: var(--font-primary);
+      font-size: var(--type-scale-14);
+      font-style: italic;
+      color: var(--color-text-secondary);
+      letter-spacing: 0.05em;
+    }
+
+    /* Broadsheet Section Navigation */
+    .editorial-nav {
+      position: sticky;
+      top: 0;
+      z-index: 90;
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--color-border);
+    }
+
+    .editorial-nav .container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      height: 52px;
+    }
+
+    .nav-folio-list {
+      display: flex;
+      align-items: center;
+      gap: var(--space-24);
+      list-style: none;
+    }
+
+    .nav-folio-link {
+      text-decoration: none;
+      font-family: var(--font-display);
+      font-size: var(--type-scale-14);
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--color-secondary);
+      transition: color var(--trans-fast);
+      position: relative;
+    }
+
+    .nav-folio-link:hover {
+      color: var(--color-primary);
+    }
+
+    .nav-folio-link.active::after {
+      content: '';
+      position: absolute;
+      bottom: -16px;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: var(--color-primary);
+    }
+
+    .container {
+      width: 100%;
+      max-width: 1200px;
+      margin-inline: auto;
+      padding-inline: var(--space-24);
+    }
+
+    /* Buttons: Primary #A855F7, Secondary #0A1829 */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--space-8);
+      height: 42px;
+      padding: 0 var(--space-24);
+      border-radius: var(--radius-sm);
+      font-family: var(--font-display);
+      font-size: var(--type-scale-14);
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      line-height: 1;
+      text-decoration: none;
+      cursor: pointer;
+      border: 1px solid transparent;
+      transition: all var(--trans-fast);
+      user-select: none;
+      white-space: nowrap;
+    }
+
+    .btn:active:not(:disabled) {
+      transform: translateY(1px);
+    }
+
+    .btn:focus-visible {
+      outline: none;
+      box-shadow: 0 0 0 3px var(--color-primary-ring);
+    }
+
+    /* Primary action uses #A855F7 */
+    .btn-primary {
+      background-color: var(--color-primary);
+      color: #FFFFFF;
+      border-color: var(--color-primary);
+      box-shadow: 0 2px 6px rgba(168, 85, 247, 0.3);
+    }
+
+    .btn-primary:hover:not(:disabled) {
+      background-color: var(--color-primary-hover);
+      border-color: var(--color-primary-hover);
+      box-shadow: 0 4px 12px rgba(168, 85, 247, 0.4);
+    }
+
+    .btn-primary:active:not(:disabled) {
+      background-color: var(--color-primary-active);
+    }
+
+    /* Secondary action uses #0A1829 */
+    .btn-secondary {
+      background-color: var(--color-secondary);
+      color: #FFFFFF;
+      border-color: var(--color-secondary);
+    }
+
+    .btn-secondary:hover:not(:disabled) {
+      background-color: var(--color-secondary-hover);
+    }
+
+    .btn-neutral {
+      background-color: var(--color-surface);
+      color: var(--color-secondary);
+      border-color: var(--color-border);
+    }
+
+    .btn-neutral:hover:not(:disabled) {
+      border-color: var(--color-secondary);
+      background-color: var(--color-surface-paper);
+    }
+
+    .btn-sm {
+      height: 32px;
+      padding: 0 var(--space-12);
+      font-size: var(--type-scale-12);
+    }
+
+    .btn-lg {
+      height: 48px;
+      padding: 0 var(--space-32);
+      font-size: var(--type-scale-18);
+    }
+
+    .btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      pointer-events: none;
+    }
+
+    /* Hero Section: Editorial Spread */
+    .editorial-hero {
+      padding-block: var(--space-48);
+      border-bottom: 1px solid var(--color-border);
+      background: var(--color-surface);
+    }
+
+    .hero-spread-grid {
+      display: grid;
+      grid-template-columns: 1.6fr 1fr;
+      gap: var(--space-32);
+    }
+
+    @media (max-width: 900px) {
+      .hero-spread-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .lead-story {
+      padding-right: var(--space-32);
+      border-right: 1px solid var(--color-border);
+    }
+
+    @media (max-width: 900px) {
+      .lead-story {
+        padding-right: 0;
+        border-right: none;
+        padding-bottom: var(--space-32);
+        border-bottom: 1px solid var(--color-border);
+      }
+    }
+
+    .story-kicker {
+      font-family: var(--font-display);
+      font-size: var(--type-scale-14);
+      font-weight: 600;
+      color: var(--color-primary);
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      margin-bottom: var(--space-8);
+      display: block;
+    }
+
+    .lead-headline {
+      font-family: var(--font-display);
+      font-size: clamp(32px, 4vw, var(--type-scale-44));
+      font-weight: 700;
+      line-height: 1.08;
+      text-transform: uppercase;
+      letter-spacing: -0.01em;
+      color: var(--color-secondary);
+      margin-bottom: var(--space-16);
+    }
+
+    .byline-row {
+      display: flex;
+      align-items: center;
+      gap: var(--space-16);
+      padding-block: var(--space-8);
+      border-top: 1px solid var(--color-border);
+      border-bottom: 1px solid var(--color-border);
+      margin-bottom: var(--space-16);
+      font-family: var(--font-mono);
+      font-size: var(--type-scale-12);
+      color: var(--color-text-muted);
+    }
+
+    .dropcap::first-letter {
+      float: left;
+      font-family: var(--font-display);
+      font-size: 56px;
+      line-height: 0.8;
+      font-weight: 700;
+      padding-right: var(--space-8);
+      padding-top: var(--space-4);
+      color: var(--color-primary);
+    }
+
+    .story-body {
+      font-size: var(--type-scale-18);
+      line-height: 1.65;
+      color: var(--color-text);
+      margin-bottom: var(--space-24);
+    }
+
+    .pullquote {
+      font-family: var(--font-display);
+      font-size: var(--type-scale-24);
+      line-height: 1.3;
+      text-transform: uppercase;
+      letter-spacing: 0.02em;
+      color: var(--color-secondary);
+      border-left: 4px solid var(--color-primary);
+      padding-left: var(--space-16);
+      margin-block: var(--space-24);
+      font-weight: 600;
+    }
+
+    /* Side Dispatch Column */
+    .dispatch-column {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-24);
+    }
+
+    .dispatch-card {
+      background: var(--color-surface-paper);
+      border: 1px solid var(--color-border);
+      padding: var(--space-24);
+      border-radius: var(--radius-sm);
+    }
+
+    .dispatch-tag {
+      display: inline-block;
+      font-family: var(--font-mono);
+      font-size: var(--type-scale-12);
+      font-weight: 600;
+      color: var(--color-primary);
+      margin-bottom: var(--space-8);
+      text-transform: uppercase;
+    }
+
+    .dispatch-title {
+      font-family: var(--font-display);
+      font-size: var(--type-scale-24);
+      font-weight: 600;
+      line-height: 1.15;
+      text-transform: uppercase;
+      color: var(--color-secondary);
+      margin-bottom: var(--space-8);
+    }
+
+    .dispatch-desc {
+      font-size: var(--type-scale-14);
+      color: var(--color-text-secondary);
+      line-height: 1.5;
+      margin-bottom: var(--space-16);
+    }
+
+    /* Section Global Headers */
+    section {
+      padding-block: var(--space-64);
+      border-bottom: 1px solid var(--color-border);
+    }
+
+    .sec-masthead {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      border-bottom: 2px solid var(--color-secondary);
+      padding-bottom: var(--space-8);
+      margin-bottom: var(--space-32);
+    }
+
+    .sec-label {
+      font-family: var(--font-display);
+      font-size: var(--type-scale-24);
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--color-secondary);
+    }
+
+    .sec-num {
+      font-family: var(--font-mono);
+      font-size: var(--type-scale-12);
+      color: var(--color-primary);
+      font-weight: 700;
+    }
+
+    /* 1. PALETTE & TOKEN SPECIMEN */
+    .editorial-palette-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: var(--space-16);
+    }
+
+    .print-swatch {
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-sm);
+      overflow: hidden;
+      cursor: pointer;
+      transition: all var(--trans-fast);
+    }
+
+    .print-swatch:hover {
+      border-color: var(--color-primary);
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .swatch-color-box {
+      height: 80px;
+      padding: var(--space-8);
+      display: flex;
+      align-items: flex-end;
+      font-family: var(--font-display);
+      font-size: var(--type-scale-14);
+      font-weight: 600;
+      letter-spacing: 0.05em;
+    }
+
+    .swatch-meta-box {
+      padding: var(--space-12);
+      background: var(--color-surface);
+      border-top: 1px solid var(--color-border);
+    }
+
+    .swatch-title-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-family: var(--font-display);
+      font-size: var(--type-scale-14);
+      font-weight: 700;
+      text-transform: uppercase;
+    }
+
+    .swatch-code {
+      font-family: var(--font-mono);
+      font-size: var(--type-scale-12);
+      color: var(--color-text-muted);
+      margin-top: 2px;
+    }
+
+    /* 2. TYPOGRAPHY (EXPRESSIVE DESKTOP-FIRST SCALE) */
+    .type-specimen-deck {
+      display: flex;
+      flex-direction: column;
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-sm);
+      overflow: hidden;
+    }
+
+    .specimen-item {
+      display: grid;
+      grid-template-columns: 140px 120px 1fr;
+      padding: var(--space-16);
+      border-bottom: 1px solid var(--color-border);
+      align-items: center;
+      gap: var(--space-16);
+      background: var(--color-surface);
+    }
+
+    .specimen-item:last-child {
+      border-bottom: none;
+    }
+
+    .specimen-item:hover {
+      background: var(--color-surface-paper);
+    }
+
+    @media (max-width: 768px) {
+      .specimen-item {
+        grid-template-columns: 1fr;
+        gap: var(--space-8);
+      }
+    }
+
+    /* Spacing Visualizer */
+    .spacing-ruler-deck {
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      gap: var(--space-12);
+      margin-top: var(--space-24);
+    }
+
+    @media (max-width: 768px) {
+      .spacing-ruler-deck {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+
+    .spacing-card {
+      border: 1px solid var(--color-border);
+      padding: var(--space-16);
+      text-align: center;
+      background: var(--color-surface);
+    }
+
+    .spacing-fill-bar {
+      height: 20px;
+      background: var(--color-primary);
+      margin: var(--space-8) auto;
+      border-radius: var(--radius-xs);
+    }
+
+    /* 3. INTERACTIVE EDITORIAL STUDIO */
+    .studio-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--space-32);
+    }
+
+    @media (max-width: 860px) {
+      .studio-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .studio-card {
+      border: 1px solid var(--color-border);
+      padding: var(--space-24);
+      background: var(--color-surface);
+      border-radius: var(--radius-sm);
+    }
+
+    .editorial-input {
+      width: 100%;
+      height: 44px;
+      padding: 0 var(--space-16);
+      font-family: var(--font-primary);
+      font-size: var(--type-scale-16);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-sm);
+      color: var(--color-text);
+      background: var(--color-surface);
+      transition: all var(--trans-fast);
+      margin-top: var(--space-6);
+    }
+
+    /* Inputs: Strong focus-visible states emphasizing Primary #A855F7 */
+    .editorial-input:focus-visible, .editorial-input:focus {
+      outline: none;
+      border-color: var(--color-primary);
+      box-shadow: 0 0 0 3px var(--color-primary-ring);
+    }
+
+    .editorial-input.error {
+      border-color: var(--color-danger);
+    }
+
+    .editorial-input.error:focus-visible {
+      box-shadow: 0 0 0 3px var(--color-danger-subtle);
+    }
+
+    .input-error-msg {
+      font-size: var(--type-scale-12);
+      color: var(--color-danger);
+      font-family: var(--font-mono);
+      margin-top: var(--space-4);
+      display: flex;
+      align-items: center;
+      gap: var(--space-4);
+    }
+
+    /* 4. REAL-WORLD EDITORIAL BROADSHEET CATALOG */
+    .catalog-filters {
+      display: flex;
+      align-items: center;
+      gap: var(--space-8);
+      margin-bottom: var(--space-24);
+      flex-wrap: wrap;
+    }
+
+    .catalog-articles-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: var(--space-24);
+    }
+
+    @media (max-width: 860px) {
+      .catalog-articles-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .article-entry {
+      border: 1px solid var(--color-border);
+      background: var(--color-surface);
+      display: flex;
+      flex-direction: column;
+      padding: var(--space-24);
+      transition: all var(--trans-fast);
+    }
+
+    .article-entry:hover {
+      border-color: var(--color-primary);
+      box-shadow: var(--shadow-sm);
+      transform: translateY(-2px);
+    }
+
+    .article-number {
+      font-family: var(--font-mono);
+      font-size: var(--type-scale-12);
+      color: var(--color-primary);
+      font-weight: 700;
+      margin-bottom: var(--space-8);
+    }
+
+    .article-heading {
+      font-family: var(--font-display);
+      font-size: var(--type-scale-24);
+      font-weight: 600;
+      text-transform: uppercase;
+      line-height: 1.15;
+      color: var(--color-secondary);
+      margin-bottom: var(--space-8);
+    }
+
+    .article-snippet {
+      font-size: var(--type-scale-14);
+      color: var(--color-text-secondary);
+      line-height: 1.5;
+      margin-bottom: var(--space-16);
+      flex: 1;
+    }
+
+    /* 5. PRINCIPLES & ANTI-PATTERNS MATRIX */
+    .matrix-layout {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--space-24);
+    }
+
+    @media (max-width: 768px) {
+      .matrix-layout {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .matrix-panel {
+      padding: var(--space-24);
+      border: 1px solid;
+      background: var(--color-surface);
+    }
+
+    .matrix-panel.do {
+      border-color: var(--color-success);
+    }
+
+    .matrix-panel.dont {
+      border-color: var(--color-danger);
+    }
+
+    .matrix-heading {
+      font-family: var(--font-display);
+      font-size: var(--type-scale-18);
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: var(--space-16);
+      display: flex;
+      align-items: center;
+      gap: var(--space-8);
+    }
+
+    .matrix-panel.do .matrix-heading { color: var(--color-success); }
+    .matrix-panel.dont .matrix-heading { color: var(--color-danger); }
+
+    .matrix-bullet-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-12);
+    }
+
+    .matrix-bullet-list li {
+      font-size: var(--type-scale-14);
+      line-height: 1.5;
+      display: flex;
+      align-items: flex-start;
+      gap: var(--space-8);
+      color: var(--color-text);
+    }
+
+    /* Colophon Footer */
+    .colophon-footer {
+      background: var(--color-secondary);
+      color: #FFFFFF;
+      padding-block: var(--space-48);
+      margin-top: auto;
+      border-top: 4px solid var(--color-primary);
+    }
+
+    .colophon-content {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: var(--space-24);
+    }
+
+    /* Toast */
+    .toast-rack {
+      position: fixed;
+      bottom: var(--space-24);
+      right: var(--space-24);
+      z-index: 200;
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-8);
+      pointer-events: none;
+    }
+
+    .toast-bubble {
+      background: var(--color-secondary);
+      color: #FFFFFF;
+      border-left: 4px solid var(--color-primary);
+      padding: var(--space-12) var(--space-16);
+      border-radius: var(--radius-xs);
+      font-family: var(--font-mono);
+      font-size: var(--type-scale-12);
+      box-shadow: var(--shadow-lg);
+      transform: translateY(20px);
+      opacity: 0;
+      transition: all 200ms cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .toast-bubble.show {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Masthead Top Bar -->
+  <div class="masthead-topbar">
+    <div class="container">
+      <div>VOL. XLII &bull; NO. 308 &bull; LONDON / NEW YORK / BERLIN</div>
+      <div>CURRENT DISPATCH: 10 SEPTEMBER 2026 &bull; EDITORIAL SYSTEM v2.4</div>
+    </div>
+  </div>
+
+  <!-- Broadsheet Header & Masthead -->
+  <header class="masthead-header">
+    <div class="container">
+      <div class="masthead-edition-row">
+        <span>Quarterly Review of Art & Thought</span>
+        <span>ISSN 1042-8819</span>
+        <span>Price: &pound;8.50 / $12.00</span>
+      </div>
+
+      <h1 class="masthead-title">The Chronicle <span>Review</span></h1>
+      <p class="masthead-subline">A Journal of Contemporary Inquiry, Typographic Art, and Editorial Discourse</p>
+    </div>
+  </header>
+
+  <!-- Editorial Navigation Bar -->
+  <nav class="editorial-nav" aria-label="Editorial Sections">
+    <div class="container">
+      <ul class="nav-folio-list">
+        <li><a href="#hero-story" class="nav-folio-link active">Lead Story</a></li>
+        <li><a href="#foundations" class="nav-folio-link">Palette & Tokens</a></li>
+        <li><a href="#typography" class="nav-folio-link">Expressive Type</a></li>
+        <li><a href="#components" class="nav-folio-link">Editorial Studio</a></li>
+        <li><a href="#catalog" class="nav-folio-link">Anthology</a></li>
+        <li><a href="#guidelines" class="nav-folio-link">Anti-Patterns</a></li>
+      </ul>
+
+      <div style="display: flex; gap: var(--space-8); align-items: center;">
+        <button class="btn btn-neutral btn-sm" onclick="exportPublicationTokens()">Copy Spec</button>
+        <button class="btn btn-primary btn-sm" onclick="triggerToast('Subscribed to Autumn Anthology')">Subscribe</button>
+      </div>
+    </div>
+  </nav>
+
+  <main>
+    <!-- HERO SPREAD: LEAD EDITORIAL ESSAY -->
+    <section id="hero-story" class="editorial-hero">
+      <div class="container hero-spread-grid">
+        <!-- Lead Broadside Column -->
+        <article class="lead-story">
+          <span class="story-kicker">Featured Monograph // Vol. XLII</span>
+          <h2 class="lead-headline">The Architecture of Silence: How Typographic Cadence Reshapes Perception</h2>
+          
+          <div class="byline-row">
+            <span>BY HELENA VANCE</span>
+            <span>&bull;</span>
+            <span>SEPTEMBER 10, 2026</span>
+            <span>&bull;</span>
+            <span style="color: var(--color-primary); font-weight: 700;">8 MINUTE READ</span>
+          </div>
+
+          <p class="story-body dropcap">
+            Print design does not simply convey meaning; it constructs the acoustic container within which thought unfolds. When expressive Oswald headlines intersect with the humane warmth of Nunito body text, reading ceases to be an act of transactional data retrieval and returns to an immersive spatial encounter.
+          </p>
+
+          <blockquote class="pullquote">
+            "A page is not an empty vessel. It is an editorial architecture where white space exerts active pressure on the word."
+          </blockquote>
+
+          <p class="story-body">
+            By privileging Primary <code>#A855F7</code> as an intentional focal point against Deep Oxford Navy (<code>#0A1829</code>), the layout establishes high-contrast tension without visual fatigue. The reader’s eye navigates predictable grid divisions while responding to deliberate typographic modulation.
+          </p>
+
+          <div style="display: flex; gap: var(--space-12); align-items: center; margin-top: var(--space-24);">
+            <a href="#catalog" class="btn btn-primary btn-lg">Read Full Monograph</a>
+            <button class="btn btn-neutral btn-lg" onclick="triggerToast('Added Helena Vance essay to reading list')">Bookmark Essay</button>
+          </div>
+        </article>
+
+        <!-- Right Side: Dispatch & Reading Options -->
+        <aside class="dispatch-column">
+          <div class="dispatch-card">
+            <span class="dispatch-tag">ISSUE CURATION</span>
+            <h3 class="dispatch-title">Autumn 2026 Critical Folio</h3>
+            <p class="dispatch-desc">
+              Three essential long-form monographs analyzing algorithmic print, modular typography, and editorial systems design.
+            </p>
+            <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--color-border); padding-top: var(--space-12);">
+              <span class="mono-data" style="font-size: var(--type-scale-12);">ISSUE NO. 142</span>
+              <button class="btn btn-secondary btn-sm" onclick="triggerToast('Downloading PDF broadsheet edition...')">Download Broadside</button>
+            </div>
+          </div>
+
+          <div class="dispatch-card" style="background: var(--color-surface); border: 2px solid var(--color-secondary);">
+            <span class="dispatch-tag" style="color: var(--color-secondary);">INTERACTIVE READING MODE</span>
+            <h4 class="dispatch-title" style="font-size: var(--type-scale-18);">Atmosphere Controller</h4>
+            <p class="dispatch-desc">
+              Switch visual cadence between standard newspaper broadsheet, high-contrast review, and manuscript mode.
+            </p>
+
+            <div style="display: flex; flex-direction: column; gap: var(--space-8);">
+              <button class="btn btn-primary btn-sm" onclick="setReadingAtmosphere(this, 'Standard Editorial')">Standard Editorial</button>
+              <button class="btn btn-neutral btn-sm" onclick="setReadingAtmosphere(this, 'Deep Oxford Contrast')">Deep Oxford Focus</button>
+              <button class="btn btn-neutral btn-sm" onclick="setReadingAtmosphere(this, 'Cream Paper Broadsheet')">Cream Broadside</button>
+            </div>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <!-- SECTION 1: FOUNDATION TOKENS & COLOR PALETTE -->
+    <section id="foundations">
+      <div class="container">
+        <div class="sec-masthead">
+          <h2 class="sec-label">Foundation Tokens & Color Stance</h2>
+          <span class="sec-num">SECTION 01 // PALETTE</span>
+        </div>
+
+        <p class="story-body" style="max-width: 720px; margin-bottom: var(--space-24);">
+          Official colors from <code>DESIGN.md</code>: Primary <code>#A855F7</code> commands CTA emphasis. Secondary <code>#0A1829</code> and Text <code>#0A1829</code> deliver deep midnight legibility on Surface <code>#FFFFFF</code>.
+        </p>
+
+        <div class="editorial-palette-grid">
+          <!-- Primary -->
+          <div class="print-swatch" onclick="copyPubHex('#A855F7', 'Primary')">
+            <div class="swatch-color-box" style="background-color: #A855F7; color: #FFFFFF;">
+              PRIMARY
+            </div>
+            <div class="swatch-meta-box">
+              <div class="swatch-title-row">
+                <span>Primary</span>
+                <span class="mono-data">#A855F7</span>
+              </div>
+              <div class="swatch-code">CTA emphasis, interaction signal</div>
+            </div>
+          </div>
+
+          <!-- Secondary -->
+          <div class="print-swatch" onclick="copyPubHex('#0A1829', 'Secondary')">
+            <div class="swatch-color-box" style="background-color: #0A1829; color: #FFFFFF;">
+              SECONDARY
+            </div>
+            <div class="swatch-meta-box">
+              <div class="swatch-title-row">
+                <span>Secondary</span>
+                <span class="mono-data">#0A1829</span>
+              </div>
+              <div class="swatch-code">Deep Oxford Navy / Structure</div>
+            </div>
+          </div>
+
+          <!-- Surface -->
+          <div class="print-swatch" onclick="copyPubHex('#FFFFFF', 'Surface')">
+            <div class="swatch-color-box" style="background-color: #FFFFFF; color: #0A1829; border-bottom: 1px solid #E2DDD5;">
+              SURFACE
+            </div>
+            <div class="swatch-meta-box">
+              <div class="swatch-title-row">
+                <span>Surface</span>
+                <span class="mono-data">#FFFFFF</span>
+              </div>
+              <div class="swatch-code">Large backgrounds & cards</div>
+            </div>
+          </div>
+
+          <!-- Text -->
+          <div class="print-swatch" onclick="copyPubHex('#0A1829', 'Text')">
+            <div class="swatch-color-box" style="background-color: #0A1829; color: #FFFFFF;">
+              TEXT
+            </div>
+            <div class="swatch-meta-box">
+              <div class="swatch-title-row">
+                <span>Text</span>
+                <span class="mono-data">#0A1829</span>
+              </div>
+              <div class="swatch-code">Deep Oxford legibility body</div>
+            </div>
+          </div>
+
+          <!-- Success -->
+          <div class="print-swatch" onclick="copyPubHex('#16A34A', 'Success')">
+            <div class="swatch-color-box" style="background-color: #16A34A; color: #FFFFFF;">
+              SUCCESS
+            </div>
+            <div class="swatch-meta-box">
+              <div class="swatch-title-row">
+                <span>Success</span>
+                <span class="mono-data">#16A34A</span>
+              </div>
+              <div class="swatch-code">Editorial verification</div>
+            </div>
+          </div>
+
+          <!-- Warning -->
+          <div class="print-swatch" onclick="copyPubHex('#D97706', 'Warning')">
+            <div class="swatch-color-box" style="background-color: #D97706; color: #FFFFFF;">
+              WARNING
+            </div>
+            <div class="swatch-meta-box">
+              <div class="swatch-title-row">
+                <span>Warning</span>
+                <span class="mono-data">#D97706</span>
+              </div>
+              <div class="swatch-code">Editorial advisory alert</div>
+            </div>
+          </div>
+
+          <!-- Danger -->
+          <div class="print-swatch" onclick="copyPubHex('#DC2626', 'Danger')">
+            <div class="swatch-color-box" style="background-color: #DC2626; color: #FFFFFF;">
+              DANGER
+            </div>
+            <div class="swatch-meta-box">
+              <div class="swatch-title-row">
+                <span>Danger</span>
+                <span class="mono-data">#DC2626</span>
+              </div>
+              <div class="swatch-code">Critical correction notices</div>
+            </div>
+          </div>
+
+          <!-- Neutral -->
+          <div class="print-swatch" onclick="copyPubHex('#FFFFFF', 'Neutral')">
+            <div class="swatch-color-box" style="background-color: #FFFFFF; color: #0A1829; border-bottom: 1px solid #E2DDD5;">
+              NEUTRAL
+            </div>
+            <div class="swatch-meta-box">
+              <div class="swatch-title-row">
+                <span>Neutral</span>
+                <span class="mono-data">#FFFFFF</span>
+              </div>
+              <div class="swatch-code">Derived from surface token</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 2: TYPOGRAPHY (EXPRESSIVE DESKTOP-FIRST SCALE) -->
+    <section id="typography">
+      <div class="container">
+        <div class="sec-masthead">
+          <h2 class="sec-label">Desktop-First Expressive Typography Scale</h2>
+          <span class="sec-num">SECTION 02 // TYPOGRAPHY</span>
+        </div>
+
+        <p class="story-body" style="max-width: 760px; margin-bottom: var(--space-24);">
+          Desktop-first expressive scale: 12 / 14 / 18 / 24 / 32 / 44 / 60. Families: <code>Oswald</code> (Display), <code>Nunito</code> (Primary body), <code>JetBrains Mono</code> (Metadata & Bylines).
+        </p>
+
+        <div class="type-specimen-deck">
+          <div class="specimen-item" style="background: var(--color-surface-paper); font-weight: 700;">
+            <span class="mono-data">TOKEN</span>
+            <span class="mono-data">VALUE</span>
+            <span style="font-family: var(--font-display); text-transform: uppercase;">SPECIMEN OUTPUT</span>
+          </div>
+
+          <div class="specimen-item">
+            <span class="mono-data">--type-scale-60</span>
+            <span class="mono-data">60px / 1.05</span>
+            <div style="font-family: var(--font-display); font-size: var(--type-scale-60); font-weight: 700; text-transform: uppercase; line-height: 1; color: var(--color-secondary);" contenteditable="true" spellcheck="false">
+              LITERARY DISPATCH
+            </div>
+          </div>
+
+          <div class="specimen-item">
+            <span class="mono-data">--type-scale-44</span>
+            <span class="mono-data">44px / 1.10</span>
+            <div style="font-family: var(--font-display); font-size: var(--type-scale-44); font-weight: 700; text-transform: uppercase; line-height: 1.1; color: var(--color-secondary);" contenteditable="true" spellcheck="false">
+              CONTEMPORARY AESTHETIC INQUIRY
+            </div>
+          </div>
+
+          <div class="specimen-item">
+            <span class="mono-data">--type-scale-32</span>
+            <span class="mono-data">32px / 1.20</span>
+            <div style="font-family: var(--font-display); font-size: var(--type-scale-32); font-weight: 600; text-transform: uppercase; color: var(--color-secondary);" contenteditable="true" spellcheck="false">
+              The Architecture of Graphic Communication
+            </div>
+          </div>
+
+          <div class="specimen-item">
+            <span class="mono-data">--type-scale-24</span>
+            <span class="mono-data">24px / 1.30</span>
+            <div style="font-family: var(--font-display); font-size: var(--type-scale-24); font-weight: 600; text-transform: uppercase; color: var(--color-secondary);" contenteditable="true" spellcheck="false">
+              Critical Essays on Narrative Pacing and Form
+            </div>
+          </div>
+
+          <div class="specimen-item">
+            <span class="mono-data">--type-scale-18</span>
+            <span class="mono-data">18px / 1.65</span>
+            <div style="font-family: var(--font-primary); font-size: var(--type-scale-18); line-height: 1.6; color: var(--color-text);" contenteditable="true" spellcheck="false">
+              Nunito provides an open, humanistic letterform that optimizes long-form reading comfort across high-density editorial pages.
+            </div>
+          </div>
+
+          <div class="specimen-item">
+            <span class="mono-data">--type-scale-14</span>
+            <span class="mono-data">14px / 1.50</span>
+            <div style="font-family: var(--font-primary); font-size: var(--type-scale-14); color: var(--color-text-secondary);" contenteditable="true" spellcheck="false">
+              Subtitles, author biographies, figure captions, and secondary catalog descriptions.
+            </div>
+          </div>
+
+          <div class="specimen-item">
+            <span class="mono-data">--type-scale-12</span>
+            <span class="mono-data">12px / 1.40</span>
+            <div class="mono-data" contenteditable="true" spellcheck="false">
+              FOLIO REF: CHR-42-8819 // SECTION: ESSAYS &bull; BYLINE: EDITORIAL DESK
+            </div>
+          </div>
+        </div>
+
+        <!-- SPACING SCALE 4/8/12/16/24/32 -->
+        <div style="margin-top: var(--space-48);">
+          <div class="sec-masthead" style="border-bottom-width: 1px;">
+            <h3 style="font-family: var(--font-display); font-size: var(--type-scale-18); text-transform: uppercase;">
+              Editorial Spacing Grid: 4 / 8 / 12 / 16 / 24 / 32
+            </h3>
+            <span class="sec-num">GRID CADENCE</span>
+          </div>
+
+          <div class="spacing-ruler-deck">
+            <div class="spacing-card">
+              <div class="mono-data">4px</div>
+              <div class="spacing-fill-bar" style="width: 4px;"></div>
+              <span class="mono-data" style="font-size: 11px;">--space-4</span>
+            </div>
+            <div class="spacing-card">
+              <div class="mono-data">8px</div>
+              <div class="spacing-fill-bar" style="width: 8px;"></div>
+              <span class="mono-data" style="font-size: 11px;">--space-8</span>
+            </div>
+            <div class="spacing-card">
+              <div class="mono-data">12px</div>
+              <div class="spacing-fill-bar" style="width: 12px;"></div>
+              <span class="mono-data" style="font-size: 11px;">--space-12</span>
+            </div>
+            <div class="spacing-card">
+              <div class="mono-data">16px</div>
+              <div class="spacing-fill-bar" style="width: 16px;"></div>
+              <span class="mono-data" style="font-size: 11px;">--space-16</span>
+            </div>
+            <div class="spacing-card">
+              <div class="mono-data">24px</div>
+              <div class="spacing-fill-bar" style="width: 24px;"></div>
+              <span class="mono-data" style="font-size: 11px;">--space-24</span>
+            </div>
+            <div class="spacing-card">
+              <div class="mono-data">32px</div>
+              <div class="spacing-fill-bar" style="width: 32px;"></div>
+              <span class="mono-data" style="font-size: 11px;">--space-32</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 3: INTERACTIVE EDITORIAL COMPONENT STUDIO -->
+    <section id="components">
+      <div class="container">
+        <div class="sec-masthead">
+          <h2 class="sec-label">Interactive Controls & Manuscript Forms</h2>
+          <span class="sec-num">SECTION 03 // COMPONENTS</span>
+        </div>
+
+        <div class="studio-grid">
+          <!-- Button Suite -->
+          <div class="studio-card">
+            <span class="story-kicker">BUTTON CONTROLS</span>
+            <h3 style="font-family: var(--font-display); font-size: var(--type-scale-24); text-transform: uppercase; margin-bottom: var(--space-8);">
+              Editorial Action Hierarchy
+            </h3>
+            <p style="font-size: var(--type-scale-14); color: var(--color-text-secondary); margin-bottom: var(--space-20);">
+              Primary buttons feature <code>#A855F7</code> with uppercase Oswald styling. Secondary buttons ground on Deep Oxford <code>#0A1829</code>.
+            </p>
+
+            <div style="display: flex; flex-direction: column; gap: var(--space-16);">
+              <div style="display: flex; gap: var(--space-12); flex-wrap: wrap;">
+                <button class="btn btn-primary" onclick="triggerToast('Primary Button #A855F7 clicked')">Primary Action</button>
+                <button class="btn btn-secondary" onclick="triggerToast('Secondary #0A1829 clicked')">Secondary Action</button>
+                <button class="btn btn-neutral" onclick="triggerToast('Neutral Outline clicked')">Neutral Outline</button>
+              </div>
+
+              <div style="display: flex; gap: var(--space-12); flex-wrap: wrap;">
+                <button class="btn btn-primary btn-sm">Compact 32px</button>
+                <button class="btn btn-primary">Standard 42px</button>
+                <button class="btn btn-primary btn-lg">Editorial 48px</button>
+              </div>
+
+              <div style="display: flex; gap: var(--space-12); flex-wrap: wrap; padding-top: var(--space-16); border-top: 1px solid var(--color-border);">
+                <button class="btn btn-primary" disabled>Disabled Primary</button>
+                <button class="btn btn-secondary" disabled>Disabled Secondary</button>
+                <button class="btn btn-primary" id="btn-pub-loader" onclick="togglePubLoading(this)">
+                  <span>Toggle Loading</span>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Form Fields & Validation -->
+          <div class="studio-card">
+            <span class="story-kicker">MANUSCRIPT SUBMISSION</span>
+            <h3 style="font-family: var(--font-display); font-size: var(--type-scale-24); text-transform: uppercase; margin-bottom: var(--space-8);">
+              Input States & Error Logic
+            </h3>
+            <p style="font-size: var(--type-scale-14); color: var(--color-text-secondary); margin-bottom: var(--space-20);">
+              Strong focus-visible states highlighted with #A855F7 ring, accompanied by predictable error messaging.
+            </p>
+
+            <form onsubmit="event.preventDefault(); validatePubInput();">
+              <div style="margin-bottom: var(--space-16);">
+                <label for="author-pen-name" style="font-family: var(--font-display); font-size: var(--type-scale-14); text-transform: uppercase; font-weight: 600; display: block;">
+                  Author / Reviewer Handle
+                </label>
+                <input id="author-pen-name" class="editorial-input" type="text" value="vance.chronicle.author">
+              </div>
+
+              <div style="margin-bottom: var(--space-16);">
+                <label for="manuscript-doi" style="font-family: var(--font-display); font-size: var(--type-scale-14); text-transform: uppercase; font-weight: 600; display: block;">
+                  Manuscript DOI (Must begin with 10.CHRONICLE/)
+                </label>
+                <input id="manuscript-doi" class="editorial-input error" type="text" value="DOI-TEMP-998">
+                <div class="input-error-msg">
+                  <span>&times;</span>
+                  <span>Validation Error: DOI must start with 10.CHRONICLE/</span>
+                </div>
+              </div>
+
+              <div style="display: flex; justify-content: flex-end; gap: var(--space-12);">
+                <button type="button" class="btn btn-neutral" onclick="document.getElementById('manuscript-doi').classList.toggle('error');">Toggle Error</button>
+                <button type="submit" class="btn btn-primary">Submit Manuscript</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 4: REAL-WORLD ANTHOLOGY CATALOG -->
+    <section id="catalog" style="background: var(--color-surface-paper);">
+      <div class="container">
+        <div class="sec-masthead">
+          <h2 class="sec-label">The Autumn Critical Anthology</h2>
+          <span class="sec-num">SECTION 04 // ANTHOLOGY</span>
+        </div>
+
+        <!-- Filter Controls -->
+        <div class="catalog-filters">
+          <button class="btn btn-secondary btn-sm" onclick="filterCatalog('all', this)">All Monographs</button>
+          <button class="btn btn-neutral btn-sm" onclick="filterCatalog('art', this)">Art & Architecture</button>
+          <button class="btn btn-neutral btn-sm" onclick="filterCatalog('philosophy', this)">Philosophical Inquiry</button>
+          <button class="btn btn-neutral btn-sm" onclick="filterCatalog('literary', this)">Literary Review</button>
+          <input type="text" id="catalog-search" class="editorial-input" placeholder="Search essays or bylines..." style="width: 240px; height: 32px; margin-top: 0; margin-left: auto;" onkeyup="searchCatalog(this.value)">
+        </div>
+
+        <!-- Articles 3-Column Grid -->
+        <div class="catalog-articles-grid" id="catalog-list">
+          <article class="article-entry" data-category="art">
+            <span class="article-number">FOLIO #142-01 // ARCHITECTURE</span>
+            <h3 class="article-heading">The Grid as Scaffold: From Bauhaus to Browser</h3>
+            <p class="article-snippet">
+              An inquiry into how print modularity migrated into modern design systems, preserving white space as an active compositional driver.
+            </p>
+            <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--color-border); padding-top: var(--space-12);">
+              <span class="mono-data" style="font-size: var(--type-scale-12);">MARCUS LEVY &bull; 6 MIN</span>
+              <button class="btn btn-primary btn-sm" onclick="triggerToast('Opening Essay: The Grid as Scaffold')">Read</button>
+            </div>
+          </article>
+
+          <article class="article-entry" data-category="philosophy">
+            <span class="article-number">FOLIO #142-02 // PHILOSOPHY</span>
+            <h3 class="article-heading">On Digital Ephemerality & The Printed Record</h3>
+            <p class="article-snippet">
+              Why tactile reading interfaces command deeper cognitive retention than scrolling feeds in an era of saturated media.
+            </p>
+            <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--color-border); padding-top: var(--space-12);">
+              <span class="mono-data" style="font-size: var(--type-scale-12);">CLARA RHODES &bull; 11 MIN</span>
+              <button class="btn btn-primary btn-sm" onclick="triggerToast('Opening Essay: On Digital Ephemerality')">Read</button>
+            </div>
+          </article>
+
+          <article class="article-entry" data-category="literary">
+            <span class="article-number">FOLIO #142-03 // LITERARY</span>
+            <h3 class="article-heading">Poetics of the Marginal Note</h3>
+            <p class="article-snippet">
+              A historical survey of glosses, scholia, and commentary tracks across centuries of print typography and critical editions.
+            </p>
+            <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--color-border); padding-top: var(--space-12);">
+              <span class="mono-data" style="font-size: var(--type-scale-12);">JULIAN THORNE &bull; 9 MIN</span>
+              <button class="btn btn-primary btn-sm" onclick="triggerToast('Opening Essay: Poetics of the Marginal Note')">Read</button>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 5: PRINCIPLES & ANTI-PATTERNS MATRIX -->
+    <section id="guidelines">
+      <div class="container">
+        <div class="sec-masthead">
+          <h2 class="sec-label">Design System Directives & Anti-Patterns</h2>
+          <span class="sec-num">SECTION 05 // COMPLIANCE</span>
+        </div>
+
+        <div class="matrix-layout">
+          <!-- Do's -->
+          <div class="matrix-panel do">
+            <div class="matrix-heading">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+              <span>Editorial Rules (Do)</span>
+            </div>
+            <ul class="matrix-bullet-list">
+              <li>
+                <strong>Favor Primary #A855F7:</strong>
+                <span>Direct attention for primary interactive triggers using electric purple CTA signals.</span>
+              </li>
+              <li>
+                <strong>Deep Oxford Navy #0A1829:</strong>
+                <span>Preserve rich contrast for headlines and body text on #FFFFFF canvas.</span>
+              </li>
+              <li>
+                <strong>Desktop-First Expressive Scale:</strong>
+                <span>Use dramatic scale jumps (12 / 14 / 18 / 24 / 32 / 44 / 60) to maintain print editorial presence.</span>
+              </li>
+              <li>
+                <strong>Disciplined Broadsheet Grid:</strong>
+                <span>Structure columns and margins strictly using the 4 / 8 / 12 / 16 / 24 / 32px spacing tokens.</span>
+              </li>
+              <li>
+                <strong>Explicit 150–250ms Transitions:</strong>
+                <span>Ensure hover, focus-visible, and active interactions resolve deterministically with stable easing.</span>
+              </li>
+            </ul>
+          </div>
+
+          <!-- Don'ts -->
+          <div class="matrix-panel dont">
+            <div class="matrix-heading">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+              <span>Strict Anti-Patterns (Do Not)</span>
+            </div>
+            <ul class="matrix-bullet-list">
+              <li>
+                <strong>No Off-Palette Accents:</strong>
+                <span>Do not introduce extraneous greens, yellows, or oranges when #A855F7 and #0A1829 suffice.</span>
+              </li>
+              <li>
+                <strong>No Flattened Type Rhythm:</strong>
+                <span>Do not reduce headline contrast or equalize paragraph sizes into uniform heights.</span>
+              </li>
+              <li>
+                <strong>No Decorative Gimmicks:</strong>
+                <span>Avoid blurry neon halos, glassy skeuomorphism, or unreadable drop shadows that degrade scanability.</span>
+              </li>
+              <li>
+                <strong>No Metaphor Mixing:</strong>
+                <span>Maintain print broadsheet discipline throughout; avoid SaaS-generic dashboards.</span>
+              </li>
+              <li>
+                <strong>No Missing Focus Rings:</strong>
+                <span>Never omit visible focus states on inputs and interactive elements.</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Colophon Footer -->
+  <footer class="colophon-footer">
+    <div class="container colophon-content">
+      <div>
+        <div style="font-family: var(--font-display); font-size: var(--type-scale-18); font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: var(--space-4);">
+          The Chronicle Review &mdash; Publication Design System
+        </div>
+        <div class="mono-data" style="font-size: var(--type-scale-12); color: #94A3B8;">
+          Category: Creative & Artistic &bull; Tokens: Primary <code>#A855F7</code> &bull; Secondary <code>#0A1829</code> &bull; Text <code>#0A1829</code> &bull; Surface <code>#FFFFFF</code>
+        </div>
+      </div>
+
+      <div style="display: flex; gap: var(--space-8); align-items: center;">
+        <span style="width: 14px; height: 14px; border-radius: 2px; background: #A855F7;" title="Primary #A855F7"></span>
+        <span style="width: 14px; height: 14px; border-radius: 2px; background: #0A1829; border: 1px solid #FFF;" title="Secondary #0A1829"></span>
+        <span style="width: 14px; height: 14px; border-radius: 2px; background: #16A34A;" title="Success #16A34A"></span>
+        <span style="width: 14px; height: 14px; border-radius: 2px; background: #D97706;" title="Warning #D97706"></span>
+        <span style="width: 14px; height: 14px; border-radius: 2px; background: #DC2626;" title="Danger #DC2626"></span>
+        <span style="width: 14px; height: 14px; border-radius: 2px; background: #FFFFFF;" title="Surface #FFFFFF"></span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Toast Rack -->
+  <div class="toast-rack" id="pub-toast-rack"></div>
+
+  <!-- Interactive JavaScript Engine -->
+  <script>
+    function triggerToast(text) {
+      const rack = document.getElementById('pub-toast-rack');
+      const toast = document.createElement('div');
+      toast.className = 'toast-bubble';
+      toast.innerHTML = `<span>&bull;</span> <span>${text}</span>`;
+      rack.appendChild(toast);
+
+      requestAnimationFrame(() => toast.classList.add('show'));
+
+      setTimeout(() => {
+        toast.classList.remove('show');
+        setTimeout(() => toast.remove(), 250);
+      }, 2600);
+    }
+
+    function copyPubHex(hex, name) {
+      navigator.clipboard.writeText(hex).then(() => {
+        triggerToast(`Token ${name} (${hex}) copied to clipboard`);
+      }).catch(() => {
+        triggerToast(`Token ${name}: ${hex}`);
+      });
+    }
+
+    function exportPublicationTokens() {
+      const spec = {
+        name: "Publication Design System",
+        category: "Creative & Artistic",
+        primary: "#A855F7",
+        secondary: "#0A1829",
+        text: "#0A1829",
+        surface: "#FFFFFF",
+        success: "#16A34A",
+        warning: "#D97706",
+        danger: "#DC2626",
+        neutral: "#FFFFFF",
+        typography: {
+          display: "Oswald",
+          primary: "Nunito",
+          mono: "JetBrains Mono",
+          scale: [12, 14, 18, 24, 32, 44, 60]
+        },
+        spacingScale: [4, 8, 12, 16, 24, 32]
+      };
+      navigator.clipboard.writeText(JSON.stringify(spec, null, 2)).then(() => {
+        triggerToast("Publication tokens exported to clipboard");
+      });
+    }
+
+    function togglePubLoading(btn) {
+      if (btn.dataset.loading === "true") {
+        btn.dataset.loading = "false";
+        btn.innerHTML = `<span>Toggle Loading</span>`;
+        btn.disabled = false;
+        triggerToast("Button state restored");
+      } else {
+        btn.dataset.loading = "true";
+        btn.innerHTML = `<span>Processing...</span>`;
+        btn.disabled = true;
+        setTimeout(() => {
+          if (btn.dataset.loading === "true") {
+            togglePubLoading(btn);
+          }
+        }, 2000);
+      }
+    }
+
+    function setReadingAtmosphere(btn, modeName) {
+      const parent = btn.parentElement;
+      parent.querySelectorAll('.btn').forEach(b => {
+        b.classList.remove('btn-primary');
+        b.classList.add('btn-neutral');
+      });
+      btn.classList.remove('btn-neutral');
+      btn.classList.add('btn-primary');
+      triggerToast(`Reading atmosphere set to: ${modeName}`);
+    }
+
+    function filterCatalog(category, btn) {
+      const parent = btn.parentElement;
+      parent.querySelectorAll('.btn').forEach(b => {
+        b.classList.remove('btn-secondary');
+        b.classList.add('btn-neutral');
+      });
+      btn.classList.remove('btn-neutral');
+      btn.classList.add('btn-secondary');
+
+      const articles = document.querySelectorAll('#catalog-list article');
+      articles.forEach(art => {
+        if (category === 'all' || art.dataset.category === category) {
+          art.style.display = '';
+        } else {
+          art.style.display = 'none';
+        }
+      });
+      triggerToast(`Showing monographs for: ${category.toUpperCase()}`);
+    }
+
+    function searchCatalog(query) {
+      const q = query.toLowerCase().trim();
+      const articles = document.querySelectorAll('#catalog-list article');
+      articles.forEach(art => {
+        if (art.innerText.toLowerCase().includes(q)) {
+          art.style.display = '';
+        } else {
+          art.style.display = 'none';
+        }
+      });
+    }
+
+    function validatePubInput() {
+      const input = document.getElementById('manuscript-doi');
+      if (input.value.startsWith('10.CHRONICLE/')) {
+        input.classList.remove('error');
+        const feedback = input.parentElement.querySelector('.input-error-msg');
+        if (feedback) feedback.style.display = 'none';
+        triggerToast("Manuscript DOI verified and cataloged");
+      } else {
+        input.classList.add('error');
+        const feedback = input.parentElement.querySelector('.input-error-msg');
+        if (feedback) feedback.style.display = 'flex';
+        triggerToast("Validation error: DOI must begin with 10.CHRONICLE/");
+      }
+    }
+  </script>
+</body>
+</html>

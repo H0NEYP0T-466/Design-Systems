@@ -1,0 +1,819 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Expo — Universal React Platform</title>
+  <meta name="description" content="Authentic implementation of the Expo design system with Cloud Gray canvas, pure black display typography with negative tracking, pill geometry, and universal app simulator.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      /* Primary & Text */
+      --expo-black: #000000;
+      --near-black: #1c2024;
+      --slate-gray: #60646c;
+      --mid-slate: #555860;
+      --silver: #b0b4ba;
+      
+      /* Accents */
+      --link-cobalt: #0d74ce;
+      --legal-blue: #476cff;
+      --widget-sky: #47c2ff;
+      --preview-purple: #8145b5;
+      --status-green: #23a55a;
+
+      /* Surfaces */
+      --cloud-gray: #f0f0f3;
+      --pure-white: #ffffff;
+      --widget-dark: #1a1a1a;
+      --banner-dark: #171717;
+
+      /* Borders */
+      --border-lavender: #e0e1e6;
+      --input-border: #d9d9e0;
+
+      /* Shadows */
+      --shadow-whisper: rgba(0, 0, 0, 0.08) 0px 3px 6px, rgba(0, 0, 0, 0.07) 0px 2px 4px;
+      --shadow-elevated: rgba(0, 0, 0, 0.1) 0px 10px 20px, rgba(0, 0, 0, 0.05) 0px 3px 6px;
+
+      /* Typography */
+      --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      --font-mono: 'JetBrains Mono', ui-monospace, monospace;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--cloud-gray);
+      color: var(--near-black);
+      font-family: var(--font-sans);
+      line-height: 1.4;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+
+    /* Container */
+    .container {
+      max-width: 1240px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    /* 1. NAVIGATION */
+    .expo-nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(240, 240, 243, 0.85);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(224, 225, 230, 0.7);
+    }
+
+    .nav-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 64px;
+    }
+
+    .nav-left {
+      display: flex;
+      align-items: center;
+      gap: 32px;
+    }
+
+    .expo-logo {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 20px;
+      font-weight: 800;
+      letter-spacing: -0.6px;
+      color: var(--expo-black);
+      text-decoration: none;
+    }
+
+    .expo-logo svg {
+      width: 26px;
+      height: 26px;
+      fill: var(--expo-black);
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 24px;
+      list-style: none;
+    }
+
+    .nav-links a {
+      color: var(--slate-gray);
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 500;
+      transition: color 0.15s;
+    }
+
+    .nav-links a:hover {
+      color: var(--expo-black);
+    }
+
+    .nav-right {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .status-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--pure-white);
+      border: 1px solid var(--border-lavender);
+      border-radius: 9999px;
+      padding: 6px 14px;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--slate-gray);
+      box-shadow: var(--shadow-whisper);
+    }
+
+    .status-indicator-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--status-green);
+    }
+
+    .btn-pill-dark {
+      background: var(--expo-black);
+      color: var(--pure-white);
+      border: none;
+      border-radius: 9999px;
+      padding: 10px 20px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: opacity 0.15s, transform 0.15s;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .btn-pill-dark:hover {
+      opacity: 0.88;
+      transform: translateY(-1px);
+    }
+
+    .btn-pill-light {
+      background: var(--pure-white);
+      color: var(--near-black);
+      border: 1px solid var(--input-border);
+      border-radius: 9999px;
+      padding: 10px 20px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      box-shadow: var(--shadow-whisper);
+      transition: background 0.15s, border-color 0.15s;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .btn-pill-light:hover {
+      border-color: var(--slate-gray);
+    }
+
+    /* 2. HERO SECTION */
+    .hero-section {
+      padding: 96px 0 64px 0;
+      text-align: center;
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--pure-white);
+      border: 1px solid var(--border-lavender);
+      border-radius: 9999px;
+      padding: 6px 16px;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--slate-gray);
+      margin-bottom: 28px;
+      box-shadow: var(--shadow-whisper);
+    }
+
+    .hero-badge .tag {
+      background: var(--preview-purple);
+      color: #fff;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 2px 6px;
+      border-radius: 9999px;
+    }
+
+    .hero-title {
+      font-size: 64px;
+      font-weight: 900;
+      line-height: 1.08;
+      letter-spacing: -2.4px;
+      color: var(--expo-black);
+      max-width: 920px;
+      margin: 0 auto 24px auto;
+    }
+
+    .hero-subtitle {
+      font-size: 20px;
+      font-weight: 400;
+      line-height: 1.4;
+      color: var(--slate-gray);
+      max-width: 680px;
+      margin: 0 auto 40px auto;
+    }
+
+    .hero-actions {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      margin-bottom: 48px;
+    }
+
+    /* Quick Install Box */
+    .quick-cli {
+      display: inline-flex;
+      align-items: center;
+      background: var(--pure-white);
+      border: 1px solid var(--input-border);
+      border-radius: 12px;
+      padding: 10px 18px;
+      font-family: var(--font-mono);
+      font-size: 14px;
+      color: var(--near-black);
+      box-shadow: var(--shadow-whisper);
+      gap: 14px;
+      cursor: pointer;
+      transition: border-color 0.15s;
+    }
+
+    .quick-cli:hover {
+      border-color: var(--slate-gray);
+    }
+
+    .quick-cli code {
+      color: var(--near-black);
+    }
+
+    .copy-pill {
+      background: var(--cloud-gray);
+      color: var(--slate-gray);
+      font-family: var(--font-sans);
+      font-size: 12px;
+      font-weight: 600;
+      padding: 4px 8px;
+      border-radius: 6px;
+    }
+
+    /* 3. SIMULATOR SHOWCASE */
+    .showcase-wrapper {
+      margin-top: 48px;
+      background: var(--pure-white);
+      border: 1px solid var(--border-lavender);
+      border-radius: 24px;
+      box-shadow: var(--shadow-elevated);
+      overflow: hidden;
+      padding: 32px;
+    }
+
+    .showcase-nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid var(--border-lavender);
+      padding-bottom: 20px;
+      margin-bottom: 24px;
+    }
+
+    .platform-tabs {
+      display: flex;
+      background: var(--cloud-gray);
+      padding: 4px;
+      border-radius: 9999px;
+      gap: 4px;
+    }
+
+    .tab-btn {
+      padding: 8px 20px;
+      border-radius: 9999px;
+      border: none;
+      background: transparent;
+      font-family: var(--font-sans);
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--slate-gray);
+      cursor: pointer;
+      transition: background 0.15s, color 0.15s, box-shadow 0.15s;
+    }
+
+    .tab-btn.active {
+      background: var(--pure-white);
+      color: var(--expo-black);
+      box-shadow: var(--shadow-whisper);
+    }
+
+    .showcase-body {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 32px;
+      align-items: center;
+    }
+
+    .code-preview-pane {
+      background: var(--widget-dark);
+      border-radius: 16px;
+      padding: 24px;
+      color: #e3e5e8;
+      font-family: var(--font-mono);
+      font-size: 13px;
+      line-height: 1.5;
+      overflow-x: auto;
+    }
+
+    .code-line-comment { color: #80848e; }
+    .code-keyword { color: #eb459e; }
+    .code-component { color: #47c2ff; }
+    .code-string { color: #57f287; }
+
+    .device-screen-pane {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+
+    .device-mockup {
+      width: 320px;
+      height: 480px;
+      background: #000000;
+      border: 8px solid #2b2d31;
+      border-radius: 36px;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.25);
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .notch-bar {
+      height: 24px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: #000;
+    }
+
+    .notch {
+      width: 80px;
+      height: 14px;
+      background: #1a1a1a;
+      border-radius: 8px;
+    }
+
+    .app-screen-content {
+      flex: 1;
+      background: #ffffff;
+      padding: 24px 16px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+    }
+
+    .app-screen-content h4 {
+      font-size: 18px;
+      font-weight: 700;
+      color: #000;
+      margin-bottom: 8px;
+    }
+
+    .app-screen-content p {
+      font-size: 12px;
+      color: #60646c;
+      margin-bottom: 16px;
+    }
+
+    .app-screen-content .btn-app {
+      background: #000;
+      color: #fff;
+      border: none;
+      border-radius: 9999px;
+      padding: 8px 16px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    /* 4. FEATURE GRID (Gallery pacing) */
+    .features-section {
+      padding: 96px 0;
+    }
+
+    .section-header {
+      margin-bottom: 48px;
+    }
+
+    .section-title {
+      font-size: 48px;
+      font-weight: 800;
+      line-height: 1.1;
+      letter-spacing: -1.6px;
+      color: var(--expo-black);
+      margin-bottom: 16px;
+    }
+
+    .section-subtitle {
+      font-size: 18px;
+      color: var(--slate-gray);
+      max-width: 600px;
+    }
+
+    .feature-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+
+    .feature-card {
+      background: var(--pure-white);
+      border: 1px solid var(--border-lavender);
+      border-radius: 24px;
+      padding: 32px;
+      box-shadow: var(--shadow-whisper);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .feature-card:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-elevated);
+    }
+
+    .feature-icon-box {
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
+      background: var(--cloud-gray);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      margin-bottom: 24px;
+      color: var(--expo-black);
+    }
+
+    .feature-title {
+      font-size: 20px;
+      font-weight: 700;
+      letter-spacing: -0.4px;
+      color: var(--expo-black);
+      margin-bottom: 12px;
+    }
+
+    .feature-desc {
+      font-size: 15px;
+      color: var(--slate-gray);
+      line-height: 1.45;
+      margin-bottom: 20px;
+    }
+
+    .feature-link {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--link-cobalt);
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .feature-link:hover {
+      text-decoration: underline;
+    }
+
+    /* 5. FOOTER */
+    .expo-footer {
+      border-top: 1px solid var(--border-lavender);
+      padding: 64px 0 48px 0;
+      background: var(--pure-white);
+      margin-top: 64px;
+    }
+
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1fr;
+      gap: 48px;
+      margin-bottom: 48px;
+    }
+
+    .footer-col h5 {
+      font-size: 13px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: var(--expo-black);
+      margin-bottom: 16px;
+    }
+
+    .footer-col ul {
+      list-style: none;
+    }
+
+    .footer-col li {
+      margin-bottom: 10px;
+    }
+
+    .footer-col a {
+      font-size: 14px;
+      color: var(--slate-gray);
+      text-decoration: none;
+      transition: color 0.15s;
+    }
+
+    .footer-col a:hover {
+      color: var(--expo-black);
+    }
+
+    .footer-bottom {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-top: 1px solid var(--border-lavender);
+      padding-top: 24px;
+      font-size: 13px;
+      color: var(--silver);
+    }
+
+    .legal-link {
+      color: var(--legal-blue);
+      text-decoration: none;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navigation -->
+  <nav class="expo-nav">
+    <div class="container nav-inner">
+      <div class="nav-left">
+        <a href="#" class="expo-logo">
+          <svg viewBox="0 0 24 24">
+            <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+          </svg>
+          <span>expo</span>
+        </a>
+        <ul class="nav-links">
+          <li><a href="#features">Features</a></li>
+          <li><a href="#simulator">Ecosystem</a></li>
+          <li><a href="#">Docs</a></li>
+          <li><a href="#">Showcase</a></li>
+          <li><a href="#">Pricing</a></li>
+        </ul>
+      </div>
+
+      <div class="nav-right">
+        <div class="status-pill">
+          <span class="status-indicator-dot"></span>
+          <span>All Systems Operational</span>
+        </div>
+        <a href="#" class="btn-pill-light">Log in</a>
+        <a href="#" class="btn-pill-dark">Sign Up</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <section class="hero-section">
+    <div class="container">
+      <div class="hero-badge">
+        <span class="tag">NEW</span>
+        <span>Expo SDK 52 with React Native 0.76 is now available</span>
+      </div>
+
+      <h1 class="hero-title">The platform for universal React applications.</h1>
+      
+      <p class="hero-subtitle">
+        Expo delivers a unified, production-ready framework to build, deploy, and iterate natively across Android, iOS, and the web from a single codebase.
+      </p>
+
+      <div class="hero-actions">
+        <a href="#" class="btn-pill-dark" style="padding: 14px 28px; font-size: 15px;">Get started with Expo</a>
+        <a href="#" class="btn-pill-light" style="padding: 14px 28px; font-size: 15px;">Documentation</a>
+      </div>
+
+      <div class="quick-cli" onclick="copyCli()" title="Click to copy">
+        <code><span style="color: var(--slate-gray);">$</span> npx create-expo-app@latest my-app</code>
+        <span class="copy-pill" id="copyLabel">Copy</span>
+      </div>
+
+      <!-- Simulator Showcase -->
+      <div class="showcase-wrapper" id="simulator">
+        <div class="showcase-nav">
+          <div style="font-size: 16px; font-weight: 700; color: var(--expo-black);">
+            Expo Router & Prebuild
+          </div>
+          <div class="platform-tabs">
+            <button class="tab-btn active" onclick="setPlatform('ios', this)">iOS</button>
+            <button class="tab-btn" onclick="setPlatform('android', this)">Android</button>
+            <button class="tab-btn" onclick="setPlatform('web', this)">Web</button>
+          </div>
+        </div>
+
+        <div class="showcase-body">
+          <div class="code-preview-pane">
+            <span class="code-line-comment">// app/index.tsx — Universal Entry Point</span><br>
+            <span class="code-keyword">import</span> { View, Text, StyleSheet } <span class="code-keyword">from</span> <span class="code-string">'react-native'</span>;<br>
+            <span class="code-keyword">import</span> { Link } <span class="code-keyword">from</span> <span class="code-string">'expo-router'</span>;<br><br>
+            <span class="code-keyword">export default function</span> <span class="code-component">HomeScreen</span>() {<br>
+            &nbsp;&nbsp;<span class="code-keyword">return</span> (<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&lt;<span class="code-component">View</span> style={styles.container}&gt;<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;<span class="code-component">Text</span> style={styles.title}&gt;Hello Expo&lt;/<span class="code-component">Text</span>&gt;<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;<span class="code-component">Link</span> href=<span class="code-string">"/explore"</span> style={styles.btn}&gt;<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Explore Architecture<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;/<span class="code-component">Link</span>&gt;<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&lt;/<span class="code-component">View</span>&gt;<br>
+            &nbsp;&nbsp;);<br>
+            }
+          </div>
+
+          <div class="device-screen-pane">
+            <div class="device-mockup" id="deviceMockup">
+              <div class="notch-bar">
+                <div class="notch"></div>
+              </div>
+              <div class="app-screen-content">
+                <div style="font-size: 36px; margin-bottom: 12px;">📱</div>
+                <h4 id="platformHeader">Running on iOS</h4>
+                <p id="platformSub">Compiled with Hermes engine and New Architecture enabled.</p>
+                <button class="btn-app" onclick="alert('Expo Native Action Triggered!')">Interactive Button</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features Section -->
+  <section class="features-section" id="features">
+    <div class="container">
+      <div class="section-header">
+        <h2 class="section-title">Everything you need to ship faster.</h2>
+        <p class="section-subtitle">
+          Built on years of mobile engineering rigor. Eliminate native build headaches and scale with cloud services.
+        </p>
+      </div>
+
+      <div class="feature-grid">
+        <div class="feature-card">
+          <div>
+            <div class="feature-icon-box">⚡</div>
+            <h3 class="feature-title">EAS Build</h3>
+            <p class="feature-desc">
+              Zero-config native compilation in the cloud. Produce signed iOS IPAs and Android APKs without managing local Xcode or Gradle environments.
+            </p>
+          </div>
+          <a href="#" class="feature-link">Learn about EAS Build →</a>
+        </div>
+
+        <div class="feature-card">
+          <div>
+            <div class="feature-icon-box">🔄</div>
+            <h3 class="feature-title">EAS Update</h3>
+            <p class="feature-desc">
+              Push instant bug fixes and enhancements directly to user devices in seconds with over-the-air deployment channels.
+            </p>
+          </div>
+          <a href="#" class="feature-link">Explore Over-the-air updates →</a>
+        </div>
+
+        <div class="feature-card">
+          <div>
+            <div class="feature-icon-box">🌐</div>
+            <h3 class="feature-title">Expo Router</h3>
+            <p class="feature-desc">
+              File-based routing for native and web. Deep linking, nested tabs, modals, and seamless web SSR out of the box.
+            </p>
+          </div>
+          <a href="#" class="feature-link">Read routing docs →</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="expo-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-col">
+          <div class="expo-logo" style="margin-bottom: 16px;">
+            <span>expo</span>
+          </div>
+          <p style="color: var(--slate-gray); font-size: 14px; max-width: 280px; line-height: 1.5;">
+            The framework for universal applications. Powering production apps for Brex, Pizza Hut, Rapha, and millions of developers worldwide.
+          </p>
+        </div>
+
+        <div class="footer-col">
+          <h5>Product</h5>
+          <ul>
+            <li><a href="#">EAS Build</a></li>
+            <li><a href="#">EAS Submit</a></li>
+            <li><a href="#">EAS Update</a></li>
+            <li><a href="#">Expo Go</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h5>Resources</h5>
+          <ul>
+            <li><a href="#">Documentation</a></li>
+            <li><a href="#">Tutorials</a></li>
+            <li><a href="#">SDK Reference</a></li>
+            <li><a href="#">Status</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h5>Company</h5>
+          <ul>
+            <li><a href="#">About</a></li>
+            <li><a href="#">Blog</a></li>
+            <li><a href="#">Careers</a></li>
+            <li><a href="#" class="legal-link">Privacy Policy</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <div>© 2026 650 Industries, Inc. All rights reserved.</div>
+        <div>Built with authentic Expo design system tokens.</div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    function copyCli() {
+      navigator.clipboard.writeText('npx create-expo-app@latest my-app');
+      const lbl = document.getElementById('copyLabel');
+      lbl.textContent = 'Copied!';
+      lbl.style.background = '#23a55a';
+      lbl.style.color = '#fff';
+      setTimeout(() => {
+        lbl.textContent = 'Copy';
+        lbl.style.background = 'var(--cloud-gray)';
+        lbl.style.color = 'var(--slate-gray)';
+      }, 2000);
+    }
+
+    function setPlatform(p, btn) {
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+
+      const header = document.getElementById('platformHeader');
+      const sub = document.getElementById('platformSub');
+      const mockup = document.getElementById('deviceMockup');
+
+      if (p === 'ios') {
+        header.textContent = 'Running on iOS';
+        sub.textContent = 'Compiled with Hermes engine and New Architecture enabled.';
+        mockup.style.borderRadius = '36px';
+        mockup.style.width = '320px';
+      } else if (p === 'android') {
+        header.textContent = 'Running on Android';
+        sub.textContent = 'Material 3 dynamic theming & edge-to-edge runtime.';
+        mockup.style.borderRadius = '24px';
+        mockup.style.width = '320px';
+      } else if (p === 'web') {
+        header.textContent = 'Running on Web';
+        sub.textContent = 'Server-side rendered with DOM hydration and static exports.';
+        mockup.style.borderRadius = '12px';
+        mockup.style.width = '360px';
+      }
+    }
+  </script>
+</body>
+</html>

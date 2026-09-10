@@ -1,0 +1,836 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ollama — Get up and running with large language models locally</title>
+  
+  <!-- Fonts: System Rounded / Quicksand / Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500;600;700&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+  <style>
+    /* Ollama Design Tokens (from DESIGN.md & tokens.css) */
+    :root {
+      /* Surface & Canvas (Grayscale purity) */
+      --bg: #ffffff;                    /* Pure white — primary canvas */
+      --surface: #fafafa;               /* Snow — subtle container lift */
+      --surface-warm: var(--surface);
+
+      /* Foreground ramp */
+      --fg: #000000;                    /* Pure black — primary headlines, max emphasis */
+      --fg-2: #262626;                  /* Near black — button text, secondary headers */
+      --muted: #737373;                 /* Stone — secondary copy, footer links */
+      --meta: #a3a3a3;                  /* Silver — placeholders, tertiary metadata */
+      --button-text-dark: #404040;
+
+      /* Border (Workhorse containment neutral) */
+      --border: #e5e5e5;                /* Light gray — 1px hairline only */
+      --border-soft: var(--border);
+      --border-light: #d4d4d4;
+
+      /* Accent (Black IS the accent in Ollama) */
+      --accent: #000000;                /* Pure black CTA pill */
+      --accent-on: #ffffff;
+      --accent-hover: #262626;          /* Lightens slightly on hover */
+      --accent-active: #404040;
+
+      /* Typography */
+      --font-display: "SF Pro Rounded", "Quicksand", system-ui, -apple-system, sans-serif;
+      --font-body: ui-sans-serif, system-ui, -apple-system, sans-serif;
+      --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+
+      /* Binary Radius System: 12px for containers, 9999px for interactive */
+      --radius-sm: 9999px;              /* Buttons, inputs, tags, chips */
+      --radius-md: 12px;                /* Sole container radius: cards, code blocks */
+      --radius-lg: 9999px;
+      --radius-pill: 9999px;
+
+      /* Zero Shadows: Depth purely via hairline borders and subtle color shifts */
+      --elev-flat: none;
+      --elev-ring: 0 0 0 1px var(--border);
+      --elev-raised: 0 0 0 1px var(--border);
+      --focus-ring: 0 0 0 3px rgba(59, 130, 246, 0.5); /* Sole chromatic accessibility ring */
+
+      /* Motion */
+      --motion-fast: 100ms;
+      --motion-base: 140ms;
+    }
+
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--bg);
+      color: var(--muted);
+      font-family: var(--font-body);
+      font-size: 16px;
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Top Minimalist Navigation */
+    .ollama-nav {
+      background: var(--bg);
+      padding: 24px 32px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .nav-inner {
+      max-width: 1120px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+    }
+
+    .brand-logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+      color: var(--fg);
+    }
+
+    .llama-icon {
+      width: 32px;
+      height: 32px;
+    }
+
+    .brand-title {
+      font-family: var(--font-display);
+      font-size: 22px;
+      font-weight: 500;
+      letter-spacing: -0.01em;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 28px;
+      list-style: none;
+    }
+
+    .nav-link {
+      font-size: 16px;
+      font-weight: 400;
+      color: var(--fg);
+      text-decoration: none;
+      transition: color var(--motion-fast) ease;
+    }
+
+    .nav-link:hover {
+      color: var(--muted);
+    }
+
+    .nav-search {
+      display: flex;
+      align-items: center;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-pill);
+      padding: 8px 18px;
+      width: 240px;
+      gap: 8px;
+    }
+
+    .nav-search input {
+      border: none;
+      background: transparent;
+      outline: none;
+      font-size: 14px;
+      color: var(--fg-2);
+      width: 100%;
+    }
+
+    .nav-search input::placeholder {
+      color: var(--meta);
+    }
+
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    /* Pill-Shaped Buttons (Binary Radius System: 9999px) */
+    .btn {
+      font-family: var(--font-body);
+      font-size: 16px;
+      font-weight: 500;
+      padding: 10px 24px;
+      border-radius: var(--radius-pill);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      text-decoration: none;
+      transition: all var(--motion-fast) ease;
+      user-select: none;
+      border: 1px solid transparent;
+    }
+
+    .btn:focus-visible {
+      outline: none;
+      box-shadow: var(--focus-ring);
+    }
+
+    /* Black Pill (CTA) */
+    .btn-black {
+      background: var(--fg);
+      color: #ffffff;
+      border-color: var(--fg);
+    }
+
+    .btn-black:hover {
+      background: var(--accent-hover);
+    }
+
+    /* Gray Pill (Primary) */
+    .btn-gray {
+      background: #e5e5e5;
+      color: var(--fg-2);
+      border-color: #e5e5e5;
+    }
+
+    .btn-gray:hover {
+      background: #dcdcdc;
+    }
+
+    /* White Pill (Secondary) */
+    .btn-white {
+      background: #ffffff;
+      color: var(--button-text-dark);
+      border: 1px solid var(--border-light);
+    }
+
+    .btn-white:hover {
+      background: #f7f7f7;
+    }
+
+    /* Hero Section */
+    .hero-wrap {
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 64px 24px 48px 24px;
+      text-align: center;
+    }
+
+    .hero-llama-svg {
+      width: 100px;
+      height: 100px;
+      margin: 0 auto 32px auto;
+      display: block;
+    }
+
+    .hero-headline {
+      font-family: var(--font-display);
+      font-size: 48px;
+      font-weight: 500;
+      line-height: 1.0;
+      color: var(--fg);
+      margin-bottom: 20px;
+    }
+
+    .hero-subtext {
+      font-size: 18px;
+      color: var(--muted);
+      max-width: 620px;
+      margin: 0 auto 36px auto;
+      line-height: 1.5;
+    }
+
+    .hero-btn-row {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      margin-bottom: 48px;
+    }
+
+    /* Container: 12px Radius (Zero Shadow) */
+    .terminal-container {
+      max-width: 680px;
+      margin: 0 auto;
+      background: #ffffff;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      text-align: left;
+    }
+
+    .terminal-header {
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      padding: 12px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-family: var(--font-mono);
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    .terminal-body {
+      padding: 20px 24px;
+      font-family: var(--font-mono);
+      font-size: 15px;
+      color: var(--fg);
+      line-height: 1.6;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .cli-command-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-pill);
+      padding: 8px 18px;
+    }
+
+    .cli-command-row code {
+      color: var(--fg);
+      font-weight: 500;
+    }
+
+    .copy-pill {
+      background: #ffffff;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-pill);
+      padding: 4px 12px;
+      font-size: 12px;
+      font-family: var(--font-body);
+      color: var(--fg-2);
+      cursor: pointer;
+    }
+
+    .copy-pill:hover {
+      background: #f7f7f7;
+    }
+
+    /* Main Content Sections */
+    .main-layout {
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 64px 24px 96px 24px;
+      width: 100%;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 88px;
+    }
+
+    /* Model Library Browser */
+    .section-head {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      margin-bottom: 24px;
+    }
+
+    .section-title {
+      font-family: var(--font-display);
+      font-size: 36px;
+      font-weight: 500;
+      color: var(--fg);
+      line-height: 1.11;
+    }
+
+    .model-pills-row {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-bottom: 24px;
+    }
+
+    .filter-pill {
+      padding: 6px 16px;
+      border-radius: var(--radius-pill);
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--fg-2);
+      font-size: 14px;
+      font-weight: 400;
+      cursor: pointer;
+      transition: all var(--motion-fast) ease;
+    }
+
+    .filter-pill.active, .filter-pill:hover {
+      background: #e5e5e5;
+      color: var(--fg);
+      border-color: #e5e5e5;
+    }
+
+    /* Model Cards: 12px Container Radius */
+    .model-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 20px;
+    }
+
+    .model-card {
+      background: #ffffff;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      transition: border-color var(--motion-fast) ease;
+    }
+
+    .model-card:hover {
+      border-color: var(--muted);
+    }
+
+    .model-card-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .model-name {
+      font-family: var(--font-display);
+      font-size: 22px;
+      font-weight: 500;
+      color: var(--fg);
+    }
+
+    .pull-count {
+      font-size: 13px;
+      color: var(--meta);
+    }
+
+    .model-desc {
+      font-size: 15px;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+
+    .tag-strip {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+      margin-top: 8px;
+    }
+
+    .tag-pill {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-pill);
+      padding: 2px 10px;
+      font-size: 12px;
+      color: var(--muted);
+      font-family: var(--font-mono);
+    }
+
+    /* Integration Grid */
+    .integrations-box {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 36px;
+    }
+
+    .tab-pills-bar {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 28px;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 16px;
+    }
+
+    .tab-btn {
+      padding: 6px 18px;
+      border-radius: var(--radius-pill);
+      font-size: 14px;
+      background: transparent;
+      border: none;
+      color: var(--muted);
+      cursor: pointer;
+    }
+
+    .tab-btn.active {
+      background: #e5e5e5;
+      color: var(--fg);
+      font-weight: 500;
+    }
+
+    .integration-items {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 16px;
+    }
+
+    .integration-chip {
+      background: #ffffff;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-pill);
+      padding: 12px 20px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 15px;
+      font-weight: 500;
+      color: var(--fg);
+    }
+
+    /* Tokens Audit Container */
+    .token-audit-panel {
+      background: #ffffff;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 32px;
+    }
+
+    .token-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 16px;
+      margin-top: 20px;
+    }
+
+    .token-card {
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      background: #ffffff;
+    }
+
+    .token-swatch {
+      height: 54px;
+      display: flex;
+      align-items: flex-end;
+      padding: 8px 12px;
+      font-family: var(--font-mono);
+      font-size: 11px;
+      font-weight: 500;
+    }
+
+    .token-info {
+      padding: 10px 12px;
+      background: var(--surface);
+    }
+
+    .token-var {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      color: var(--fg);
+      font-weight: 500;
+    }
+
+    /* Footer */
+    .ollama-footer {
+      border-top: 1px solid var(--border);
+      padding: 36px 32px;
+      font-size: 14px;
+      color: var(--muted);
+    }
+
+    .footer-inner {
+      max-width: 1120px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .footer-links {
+      display: flex;
+      gap: 24px;
+      list-style: none;
+    }
+
+    .footer-links a {
+      color: var(--muted);
+      text-decoration: none;
+    }
+
+    .footer-links a:hover {
+      color: var(--fg);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Minimalist Navigation Header -->
+  <header class="ollama-nav">
+    <div class="nav-inner">
+      <a href="#" class="brand-logo">
+        <!-- Ollama Llama Black Line Art -->
+        <svg class="llama-icon" viewBox="0 0 100 100" fill="none" stroke="#000000" stroke-width="4">
+          <path d="M35 85 L35 45 L45 25 L45 15 L55 15 L55 25 L55 35 L65 45 L65 85" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M45 85 L45 60 L55 60 L55 85" stroke-linecap="round"/>
+          <circle cx="50" cy="22" r="2" fill="#000000"/>
+        </svg>
+        <span class="brand-title">ollama</span>
+      </a>
+
+      <div class="nav-search">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#737373" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+        <input type="text" placeholder="Search models...">
+      </div>
+
+      <ul class="nav-links">
+        <li><a href="#models" class="nav-link">Models</a></li>
+        <li><a href="#docs" class="nav-link">Docs</a></li>
+        <li><a href="#integrations" class="nav-link">Integrations</a></li>
+        <li><a href="#tokens" class="nav-link">Tokens</a></li>
+      </ul>
+
+      <div class="nav-actions">
+        <a href="#" class="nav-link">Sign in</a>
+        <button class="btn btn-black" onclick="alert('Downloading Ollama binary...')">Download</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="hero-wrap">
+    <!-- Big Llama Mascot Icon -->
+    <svg class="hero-llama-svg" viewBox="0 0 100 100" fill="none" stroke="#000000" stroke-width="3.5">
+      <path d="M30 88 L30 46 L42 22 L42 12 L56 12 L56 22 L56 34 L70 46 L70 88" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M44 88 L44 60 L56 60 L56 88" stroke-linecap="round"/>
+      <circle cx="48" cy="18" r="2.5" fill="#000000"/>
+    </svg>
+
+    <h1 class="hero-headline">Get up and running with large language models.</h1>
+    <p class="hero-subtext">
+      Run Llama 3.3, DeepSeek-R1, Qwen2.5, and other models locally on macOS, Linux, and Windows.
+    </p>
+
+    <div class="hero-btn-row">
+      <button class="btn btn-black" onclick="alert('Starting Ollama download...')">Download for macOS</button>
+      <button class="btn btn-white" onclick="alert('Linux curl command copied!')">Linux / Windows</button>
+    </div>
+
+    <!-- Terminal Command Container (12px radius, zero shadow) -->
+    <div class="terminal-container">
+      <div class="terminal-header">
+        <span>terminal</span>
+        <span>bash</span>
+      </div>
+      <div class="terminal-body">
+        <div class="cli-command-row">
+          <code id="cliCode">ollama run llama3.3</code>
+          <button class="copy-pill" onclick="copyCliCommand()">Copy</button>
+        </div>
+        <div style="font-size: 13px; color: var(--muted); margin-top: 4px;">
+          pulling manifest<br>
+          pulling 8b-instruct-q4_K_M... 100% 4.7 GB<br>
+          verifying sha256 digest: success<br>
+          &gt;&gt;&gt; Send a message (/? for help)
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Main Content Layout -->
+  <main class="main-layout">
+
+    <!-- Model Library Section -->
+    <section id="models">
+      <div class="section-head">
+        <h2 class="section-title">Featured Models</h2>
+        <span style="font-size: 14px; color: var(--muted);">View all 420+ models →</span>
+      </div>
+
+      <div class="model-pills-row">
+        <button class="filter-pill active" onclick="filterModels('all', this)">All</button>
+        <button class="filter-pill" onclick="filterModels('code', this)">Coding</button>
+        <button class="filter-pill" onclick="filterModels('vision', this)">Vision</button>
+        <button class="filter-pill" onclick="filterModels('reasoning', this)">Reasoning</button>
+        <button class="filter-pill" onclick="filterModels('embedding', this)">Embedding</button>
+      </div>
+
+      <div class="model-grid" id="modelGrid">
+        <!-- Model 1 -->
+        <div class="model-card" onclick="runSpecificModel('llama3.3')">
+          <div class="model-card-top">
+            <h3 class="model-name">llama3.3</h3>
+            <span class="pull-count">2.8M pulls</span>
+          </div>
+          <p class="model-desc">
+            Meta's open-weights model delivering high-precision general reasoning and multilingual conversation.
+          </p>
+          <div class="tag-strip">
+            <span class="tag-pill">70b</span>
+            <span class="tag-pill">tools</span>
+            <span class="tag-pill">meta</span>
+          </div>
+        </div>
+
+        <!-- Model 2 -->
+        <div class="model-card" onclick="runSpecificModel('deepseek-r1')">
+          <div class="model-card-top">
+            <h3 class="model-name">deepseek-r1</h3>
+            <span class="pull-count">4.1M pulls</span>
+          </div>
+          <p class="model-desc">
+            First-generation reasoning models trained via reinforcement learning for logic, math, and code.
+          </p>
+          <div class="tag-strip">
+            <span class="tag-pill">1.5b</span>
+            <span class="tag-pill">7b</span>
+            <span class="tag-pill">14b</span>
+            <span class="tag-pill">reasoning</span>
+          </div>
+        </div>
+
+        <!-- Model 3 -->
+        <div class="model-card" onclick="runSpecificModel('qwen2.5-coder')">
+          <div class="model-card-top">
+            <h3 class="model-name">qwen2.5-coder</h3>
+            <span class="pull-count">1.6M pulls</span>
+          </div>
+          <p class="model-desc">
+            High-performance coding model supporting code generation, completion, and bug fixing.
+          </p>
+          <div class="tag-strip">
+            <span class="tag-pill">7b</span>
+            <span class="tag-pill">14b</span>
+            <span class="tag-pill">code</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Integrations Section -->
+    <section id="integrations" class="integrations-box">
+      <div style="margin-bottom: 20px;">
+        <h2 class="section-title" style="font-size: 28px;">Use with your favorite tools</h2>
+        <p style="font-size: 15px; color: var(--muted); margin-top: 4px;">
+          Ollama integrates seamlessly with developer environments, terminal agents, and frameworks.
+        </p>
+      </div>
+
+      <div class="tab-pills-bar">
+        <button class="tab-btn active">Terminal &amp; Coding</button>
+        <button class="tab-btn">Documents &amp; RAG</button>
+        <button class="tab-btn">Agents &amp; Automation</button>
+      </div>
+
+      <div class="integration-items">
+        <div class="integration-chip">
+          <span>⚡</span>
+          <span>OpenCode</span>
+        </div>
+        <div class="integration-chip">
+          <span>🐚</span>
+          <span>Claude Code</span>
+        </div>
+        <div class="integration-chip">
+          <span>🦜</span>
+          <span>LangChain</span>
+        </div>
+        <div class="integration-chip">
+          <span>📚</span>
+          <span>LlamaIndex</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Token Foundations Audit -->
+    <section id="tokens" class="token-audit-panel">
+      <h2 class="section-title" style="font-size: 28px;">Design Tokens &amp; Radical Minimalism</h2>
+      <p style="font-size: 14px; color: var(--muted); margin-top: 4px;">
+        Verified grayscale tokens from open-design/design-systems/ollama/DESIGN.md
+      </p>
+
+      <div class="token-grid">
+        <!-- Token 1 -->
+        <div class="token-card">
+          <div class="token-swatch" style="background-color: #000000; color: #ffffff;">
+            #000000
+          </div>
+          <div class="token-info">
+            <div class="token-var">--fg / --accent</div>
+            <div style="font-size: 11px; color: var(--muted);">Pure Black CTA</div>
+          </div>
+        </div>
+
+        <!-- Token 2 -->
+        <div class="token-card">
+          <div class="token-swatch" style="background-color: #ffffff; color: #000000; border-bottom: 1px solid #e5e5e5;">
+            #ffffff
+          </div>
+          <div class="token-info">
+            <div class="token-var">--bg</div>
+            <div style="font-size: 11px; color: var(--muted);">Pure White Canvas</div>
+          </div>
+        </div>
+
+        <!-- Token 3 -->
+        <div class="token-card">
+          <div class="token-swatch" style="background-color: #e5e5e5; color: #262626;">
+            #e5e5e5
+          </div>
+          <div class="token-info">
+            <div class="token-var">--border</div>
+            <div style="font-size: 11px; color: var(--muted);">Light Gray 1px Line</div>
+          </div>
+        </div>
+
+        <!-- Token 4 -->
+        <div class="token-card">
+          <div class="token-swatch" style="background-color: #737373; color: #ffffff;">
+            #737373
+          </div>
+          <div class="token-info">
+            <div class="token-var">--muted</div>
+            <div style="font-size: 11px; color: var(--muted);">Stone Secondary Text</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Clean Minimalist Footer -->
+  <footer class="ollama-footer">
+    <div class="footer-inner">
+      <div>&copy; 2026 Ollama · Rebuilt for Open Design Systems.</div>
+      <ul class="footer-links">
+        <li><a href="#">GitHub</a></li>
+        <li><a href="#">Discord</a></li>
+        <li><a href="#">Docs</a></li>
+        <li><a href="#">Blog</a></li>
+      </ul>
+    </div>
+  </footer>
+
+  <script>
+    function copyCliCommand() {
+      const code = document.getElementById('cliCode').innerText;
+      navigator.clipboard.writeText(code).then(() => {
+        alert('Copied to clipboard: ' + code);
+      });
+    }
+
+    function runSpecificModel(model) {
+      document.getElementById('cliCode').innerText = `ollama run ${model}`;
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function filterModels(tag, btn) {
+      document.querySelectorAll('.filter-pill').forEach(p => p.classList.remove('active'));
+      btn.classList.add('active');
+    }
+  </script>
+</body>
+</html>

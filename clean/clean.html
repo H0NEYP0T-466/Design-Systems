@@ -1,0 +1,674 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>NEXUS — Clean & Focused Workspace | Official Design System</title>
+  <meta name="description" content="Authentic implementation of Clean design system: ample whitespace, legible typography (Roboto + Poppins + Inconsolata), 8pt baseline grid, and minimal palette (#3B82F6, #8B5CF6, #111827, #FFFFFF)." />
+
+  <!-- Google Fonts: Poppins (display), Roboto (primary/body), Inconsolata (mono) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inconsolata:wght@400;500;600;700&family=Poppins:wght@400;500;600;700&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+
+  <style>
+    /* ─────────────────────────────────────────────────────────────────
+       CLEAN OFFICIAL DESIGN TOKENS (from DESIGN.md)
+       Visual Style: Minimal, clean, simplicity-focused
+       Tokens:
+         Primary: #3B82F6 (Clean Blue)
+         Secondary: #8B5CF6 (Clean Violet)
+         Success: #16A34A
+         Warning: #D97706
+         Danger: #DC2626
+         Surface: #FFFFFF
+         Text: #111827 (Slate Charcoal)
+         Neutral: #FFFFFF
+       Typography: display=Poppins, primary=Roboto, mono=Inconsolata
+       Type Scale: 12 / 14 / 16 / 20 / 24 / 32
+       Grid: 8pt baseline grid (8, 16, 24, 32, 40, 48, 64, 80)
+       Motion: 150-250ms stable easing
+       ───────────────────────────────────────────────────────────────── */
+    :root {
+      --color-primary: #3B82F6;
+      --color-secondary: #8B5CF6;
+      --color-success: #16A34A;
+      --color-warning: #D97706;
+      --color-danger: #DC2626;
+      --color-surface: #FFFFFF;
+      --color-text: #111827;
+      --color-text-secondary: #6B7280;
+      --color-neutral: #FFFFFF;
+      --color-border: #E5E7EB;
+      --color-border-subtle: #F3F4F6;
+      --color-hover-bg: #F9FAFB;
+
+      /* Typography Families */
+      --font-display: "Poppins", -apple-system, BlinkMacSystemFont, sans-serif;
+      --font-primary: "Roboto", -apple-system, BlinkMacSystemFont, sans-serif;
+      --font-mono: "Inconsolata", monospace;
+
+      /* Official Type Scale: 12 / 14 / 16 / 20 / 24 / 32 */
+      --text-12: 12px;
+      --text-14: 14px;
+      --text-16: 16px;
+      --text-20: 20px;
+      --text-24: 24px;
+      --text-32: 32px;
+
+      /* 8pt Baseline Spacing Grid */
+      --space-8: 8px;
+      --space-16: 16px;
+      --space-24: 24px;
+      --space-32: 32px;
+      --space-40: 40px;
+      --space-48: 48px;
+      --space-64: 64px;
+      --space-80: 80px;
+
+      /* Radii */
+      --radius-sm: 6px;
+      --radius-md: 10px;
+      --radius-lg: 16px;
+      --radius-pill: 9999px;
+
+      /* Elevation: Crisp, minimal shadow */
+      --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+      --shadow-card: 0 1px 3px 0 rgba(0, 0, 0, 0.08), 0 1px 2px -1px rgba(0, 0, 0, 0.08);
+      --shadow-hover: 0 4px 12px 0 rgba(0, 0, 0, 0.08);
+
+      /* Motion: 150-250ms stable easing */
+      --transition-base: 180ms cubic-bezier(0.16, 1, 0.3, 1);
+      --container-max: 1140px;
+    }
+
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      background: var(--color-surface);
+      color: var(--color-text);
+      font-size: 16px;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    body {
+      background: var(--color-surface);
+      color: var(--color-text);
+      font-family: var(--font-primary);
+      font-size: var(--text-16);
+      line-height: 1.55;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* ─── TYPOGRAPHY HIERARCHY ─── */
+    h1, h2, h3, h4 {
+      font-family: var(--font-display);
+      color: var(--color-text);
+      line-height: 1.25;
+      font-weight: 600;
+    }
+
+    h1 {
+      font-size: clamp(28px, 4.5vw, 44px);
+      letter-spacing: -0.02em;
+    }
+
+    h2 {
+      font-size: var(--text-32);
+      letter-spacing: -0.015em;
+    }
+
+    h3 {
+      font-size: var(--text-24);
+      letter-spacing: -0.01em;
+    }
+
+    h4 {
+      font-size: var(--text-20);
+    }
+
+    p {
+      color: var(--color-text-secondary);
+      font-size: var(--text-16);
+      line-height: 1.6;
+    }
+
+    .lead {
+      font-size: var(--text-20);
+      font-weight: 300;
+      color: var(--color-text-secondary);
+      line-height: 1.6;
+    }
+
+    .mono-tag {
+      font-family: var(--font-mono);
+      font-size: var(--text-12);
+      font-weight: 600;
+      color: var(--color-primary);
+      background: #EFF6FF;
+      padding: 4px 10px;
+      border-radius: var(--radius-sm);
+      display: inline-block;
+    }
+
+    /* ─── BUTTONS ─── */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--space-8);
+      font-family: var(--font-primary);
+      font-size: var(--text-14);
+      font-weight: 500;
+      padding: 10px 20px;
+      border-radius: var(--radius-sm);
+      text-decoration: none;
+      cursor: pointer;
+      border: 1px solid transparent;
+      transition: background-color var(--transition-base), color var(--transition-base), border-color var(--transition-base), box-shadow var(--transition-base);
+      outline: none;
+    }
+
+    .btn-primary {
+      background-color: var(--color-primary);
+      color: #ffffff;
+    }
+
+    .btn-primary:hover {
+      background-color: #2563EB;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .btn-secondary {
+      background-color: #ffffff;
+      color: var(--color-text);
+      border-color: var(--color-border);
+    }
+
+    .btn-secondary:hover {
+      background-color: var(--color-hover-bg);
+      border-color: #D1D5DB;
+    }
+
+    .btn:focus-visible {
+      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.4);
+    }
+
+    /* ─── STICKY NAVIGATION ─── */
+    .clean-nav {
+      position: sticky;
+      top: 0;
+      width: 100%;
+      background: rgba(255, 255, 255, 0.96);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      border-bottom: 1px solid var(--color-border);
+      z-index: 1000;
+    }
+
+    .nav-inner {
+      max-width: var(--container-max);
+      margin: 0 auto;
+      padding: var(--space-16) var(--space-24);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .brand-title {
+      font-family: var(--font-display);
+      font-size: var(--text-20);
+      font-weight: 700;
+      color: var(--color-text);
+      text-decoration: none;
+      letter-spacing: -0.02em;
+      display: flex;
+      align-items: center;
+      gap: var(--space-8);
+    }
+
+    .brand-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--color-primary);
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: var(--space-24);
+      list-style: none;
+    }
+
+    @media (max-width: 768px) {
+      .nav-links {
+        display: none;
+      }
+    }
+
+    .nav-link {
+      font-size: var(--text-14);
+      font-weight: 500;
+      color: var(--color-text-secondary);
+      text-decoration: none;
+      transition: color var(--transition-base);
+    }
+
+    .nav-link:hover {
+      color: var(--color-text);
+    }
+
+    /* ─── SECTION & CONTAINER (Ample Whitespace) ─── */
+    .container {
+      max-width: var(--container-max);
+      margin: 0 auto;
+      padding-left: var(--space-24);
+      padding-right: var(--space-24);
+    }
+
+    .section-spacing {
+      padding-top: var(--space-80);
+      padding-bottom: var(--space-80);
+    }
+
+    @media (max-width: 768px) {
+      .section-spacing {
+        padding-top: var(--space-48);
+        padding-bottom: var(--space-48);
+      }
+    }
+
+    /* ─── HERO SECTION ─── */
+    .hero-box {
+      max-width: 760px;
+      margin: 0 auto;
+      text-align: center;
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: var(--space-16);
+      margin-top: var(--space-32);
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    /* ─── CLEAN TASK BOARD WORKSPACE ─── */
+    .workspace-stage {
+      margin-top: var(--space-64);
+      background: #ffffff;
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-card);
+      overflow: hidden;
+    }
+
+    .stage-header {
+      padding: var(--space-16) var(--space-24);
+      border-bottom: 1px solid var(--color-border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #fafafa;
+    }
+
+    .stage-title {
+      font-family: var(--font-display);
+      font-size: var(--text-14);
+      font-weight: 600;
+      color: var(--color-text);
+    }
+
+    .task-columns-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: var(--space-24);
+      padding: var(--space-24);
+    }
+
+    @media (max-width: 860px) {
+      .task-columns-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .column-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: var(--space-16);
+    }
+
+    .column-label {
+      font-size: var(--text-12);
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--color-text-secondary);
+    }
+
+    .task-list {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-12);
+    }
+
+    .task-card {
+      background: #ffffff;
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-md);
+      padding: var(--space-16);
+      box-shadow: var(--shadow-sm);
+      transition: border-color var(--transition-base), box-shadow var(--transition-base);
+      cursor: pointer;
+    }
+
+    .task-card:hover {
+      border-color: #CBD5E1;
+      box-shadow: var(--shadow-card);
+    }
+
+    .task-title {
+      font-size: var(--text-14);
+      font-weight: 500;
+      color: var(--color-text);
+      margin-bottom: var(--space-8);
+    }
+
+    .task-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-family: var(--font-mono);
+      font-size: var(--text-12);
+      color: var(--color-text-secondary);
+    }
+
+    /* ─── FEATURE GRID (3 COLUMNS) ─── */
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: var(--space-32);
+      margin-top: var(--space-48);
+    }
+
+    .feature-card {
+      background: #ffffff;
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-md);
+      padding: var(--space-32);
+      transition: border-color var(--transition-base);
+    }
+
+    .feature-card:hover {
+      border-color: var(--color-primary);
+    }
+
+    .feature-card h3 {
+      margin-bottom: var(--space-8);
+      font-size: var(--text-20);
+    }
+
+    /* ─── FOOTER ─── */
+    .clean-footer {
+      border-top: 1px solid var(--color-border);
+      padding: var(--space-48) 0;
+      background: #ffffff;
+    }
+
+    .footer-inner {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: var(--space-16);
+      font-size: var(--text-14);
+      color: var(--color-text-secondary);
+    }
+
+    /* ─── AUDIT DRAWER ─── */
+    .audit-trigger {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      z-index: 1000;
+    }
+
+    .audit-modal {
+      display: none;
+      position: fixed;
+      bottom: 80px;
+      right: 24px;
+      width: 360px;
+      background: #ffffff;
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-md);
+      box-shadow: var(--shadow-hover);
+      padding: var(--space-24);
+      z-index: 1001;
+      font-size: var(--text-12);
+    }
+
+    .audit-modal.open {
+      display: block;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- STICKY TOP NAVIGATION -->
+  <header class="clean-nav">
+    <div class="nav-inner">
+      <a href="#" class="brand-title">
+        <div class="brand-dot"></div>
+        <span>NEXUS</span>
+      </a>
+
+      <ul class="nav-links">
+        <li><a href="#workspace" class="nav-link">Workspace</a></li>
+        <li><a href="#features" class="nav-link">Simplicity</a></li>
+        <li><a href="#docs" class="nav-link">Documentation</a></li>
+      </ul>
+
+      <div style="display: flex; gap: var(--space-12); align-items: center;">
+        <button class="btn btn-secondary" onclick="toggleAuditor()">Token Spec</button>
+        <a href="#workspace" class="btn btn-primary">Try Free</a>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    <!-- HERO SECTION (Ample Whitespace & 8pt Baseline) -->
+    <section class="section-spacing">
+      <div class="hero-box">
+        <span class="mono-tag">MINIMAL & UNCLUTTERED</span>
+        <h1 style="margin-top: var(--space-16); margin-bottom: var(--space-16);">Clarity for modern engineering workflows.</h1>
+        <p class="lead">
+          Ample whitespace, legible typography, and a disciplined palette to eliminate cognitive noise. Spend less time managing tasks and more time shipping.
+        </p>
+
+        <div class="hero-actions">
+          <a href="#workspace" class="btn btn-primary">Open Workspace</a>
+          <button class="btn btn-secondary" onclick="addNewTask()">+ Quick Add Task</button>
+        </div>
+      </div>
+
+      <!-- WORKSPACE BOARD SHOWCASE -->
+      <div class="workspace-stage" id="workspace">
+        <div class="stage-header">
+          <span class="stage-title">Product Sprint Board — 8pt Baseline Grid</span>
+          <div style="display: flex; gap: var(--space-8); align-items: center;">
+            <span style="font-family: var(--font-mono); font-size: var(--text-12); color: var(--color-text-secondary);">Filter: All Items</span>
+          </div>
+        </div>
+
+        <div class="task-columns-grid">
+          <!-- Column 1: In Progress -->
+          <div>
+            <div class="column-header">
+              <span class="column-label">In Progress (2)</span>
+              <span class="mono-tag" style="background: #EFF6FF; color: var(--color-primary);">Active</span>
+            </div>
+            <div class="task-list" id="inProgressList">
+              <div class="task-card">
+                <div class="task-title">Migrate token definitions to v2 spec</div>
+                <div class="task-meta">
+                  <span>#ENG-104</span>
+                  <span style="color: var(--color-primary);">High</span>
+                </div>
+              </div>
+              <div class="task-card">
+                <div class="task-title">Refactor 8pt vertical spacing grid</div>
+                <div class="task-meta">
+                  <span>#ENG-108</span>
+                  <span style="color: var(--color-secondary);">Design</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Column 2: Review -->
+          <div>
+            <div class="column-header">
+              <span class="column-label">In Review (1)</span>
+              <span class="mono-tag" style="background: #FEF3C7; color: var(--color-warning);">Waiting</span>
+            </div>
+            <div class="task-list">
+              <div class="task-card">
+                <div class="task-title">Audit accessibility & WCAG contrast</div>
+                <div class="task-meta">
+                  <span>#QA-402</span>
+                  <span style="color: var(--color-warning);">Review</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Column 3: Completed -->
+          <div>
+            <div class="column-header">
+              <span class="column-label">Done (2)</span>
+              <span class="mono-tag" style="background: #DCFCE7; color: var(--color-success);">Ready</span>
+            </div>
+            <div class="task-list">
+              <div class="task-card">
+                <div class="task-title">Deploy production CDN edge caches</div>
+                <div class="task-meta">
+                  <span>#OPS-321</span>
+                  <span style="color: var(--color-success);">Done</span>
+                </div>
+              </div>
+              <div class="task-card">
+                <div class="task-title">Publish Inconsolata & Roboto font bundles</div>
+                <div class="task-meta">
+                  <span>#WEB-89</span>
+                  <span style="color: var(--color-success);">Done</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FEATURES SECTION -->
+    <section class="section-spacing" id="features" style="padding-top: 0;">
+      <div style="text-align: center; max-width: 600px; margin: 0 auto;">
+        <h2>Simplicity by discipline.</h2>
+        <p style="margin-top: var(--space-8);">Every element earns its right to exist on screen.</p>
+      </div>
+
+      <div class="features-grid">
+        <div class="feature-card">
+          <h3>8pt Baseline Rhythm</h3>
+          <p>
+            Spacing scales across multiples of 8 (8, 16, 24, 32, 40, 48, 64, 80px) ensuring vertical harmony and predictable component alignment.
+          </p>
+        </div>
+
+        <div class="feature-card">
+          <h3>Typography First</h3>
+          <p>
+            Poppins headings deliver subtle personality, while Roboto provides scanability for dense data and Inconsolata powers metadata.
+          </p>
+        </div>
+
+        <div class="feature-card">
+          <h3>Restrained Palette</h3>
+          <p>
+            A pure white `#FFFFFF` surface paired with `#111827` slate text and controlled `#3B82F6` primary blue accents keeps interfaces quiet and focused.
+          </p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="clean-footer" id="docs">
+    <div class="container footer-inner">
+      <span>© 2026 NEXUS WORKSPACE. MINIMAL & CLEAN SYSTEM.</span>
+      <div style="display: flex; gap: var(--space-24);">
+        <a href="#" style="color: inherit; text-decoration: none;">Privacy</a>
+        <a href="#" style="color: inherit; text-decoration: none;">Terms</a>
+        <a href="#" style="color: inherit; text-decoration: none;">Changelog</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- FLOATING AUDIT MODAL -->
+  <div class="audit-trigger">
+    <button class="btn btn-secondary" onclick="toggleAuditor()" style="box-shadow: var(--shadow-card);">
+      <span>Clean Tokens</span>
+    </button>
+  </div>
+
+  <div class="audit-modal" id="auditModal">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; border-bottom: 1px solid var(--color-border); padding-bottom: 6px;">
+      <span style="font-family: var(--font-display); font-weight: 600; color: var(--color-text);">CLEAN DESIGN SYSTEM</span>
+      <button onclick="toggleAuditor()" style="background: none; border: none; cursor: pointer; color: var(--color-text);">✕</button>
+    </div>
+    <div style="display: flex; flex-direction: column; gap: 8px; font-family: var(--font-mono); font-size: var(--text-12);">
+      <div>• Primary: <span style="color: #3B82F6; font-weight: 600;">#3B82F6</span></div>
+      <div>• Secondary: <span style="color: #8B5CF6; font-weight: 600;">#8B5CF6</span></div>
+      <div>• Success: <span style="color: #16A34A; font-weight: 600;">#16A34A</span></div>
+      <div>• Warning: <span style="color: #D97706; font-weight: 600;">#D97706</span></div>
+      <div>• Danger: <span style="color: #DC2626; font-weight: 600;">#DC2626</span></div>
+      <div>• Surface: <span style="font-weight: 600;">#FFFFFF</span></div>
+      <div>• Text: <span style="color: #111827; font-weight: 600;">#111827</span></div>
+      <div>• Fonts: Poppins + Roboto + Inconsolata</div>
+      <div>• Scale: 12 / 14 / 16 / 20 / 24 / 32</div>
+      <div>• Grid: 8pt baseline (8, 16, 24, 32, 40, 48, 64, 80)</div>
+    </div>
+  </div>
+
+  <!-- SCRIPTING -->
+  <script>
+    function toggleAuditor() {
+      document.getElementById('auditModal').classList.toggle('open');
+    }
+
+    let taskIdx = 109;
+    function addNewTask() {
+      const list = document.getElementById('inProgressList');
+      const card = document.createElement('div');
+      card.className = 'task-card';
+      card.innerHTML = `
+        <div class="task-title">Streamline 8pt padding in dialog component</div>
+        <div class="task-meta">
+          <span>#ENG-${taskIdx}</span>
+          <span style="color: var(--color-primary);">Active</span>
+        </div>
+      `;
+      list.appendChild(card);
+      taskIdx++;
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,1417 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>ATELIER BÉTON // Brutalist Architectural & Structural Systems</title>
+  <meta name="description" content="Authentic brutalism design system: raw, anti-design aesthetic inspired by concrete architecture with unadorned elements, jarring layouts, functional minimalism, #DD614C primary, #DAA144 secondary, and heavy structural borders." />
+
+  <!-- Google Fonts: Darker Grotesque, JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Darker+Grotesque:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    /* ─────────────────────────────────────────────────────────────────
+       BRUTALISM DESIGN SYSTEM SPECIFICATION & TOKENS
+       Directly sourced from /open-design/design-systems/brutalism/DESIGN.md
+       ───────────────────────────────────────────────────────────────── */
+    :root {
+      /* Colors (DESIGN.md §2) */
+      --color-primary: #DD614C;
+      --color-primary-hover: #c44d39;
+      --color-secondary: #DAA144;
+      --color-secondary-hover: #c28d34;
+      --color-success: #16A34A;
+      --color-warning: #D97706;
+      --color-danger: #DC2626;
+      --color-surface: #FFFFFF;
+      --color-text: #111827;
+      --color-neutral: #FFFFFF;
+      --color-border: #111827;
+      --color-concrete: #F3F4F6;
+      --color-concrete-dark: #E5E7EB;
+
+      /* Typography Families (DESIGN.md §3) */
+      --font-display: "Darker Grotesque", -apple-system, BlinkMacSystemFont, sans-serif;
+      --font-primary: "Darker Grotesque", -apple-system, BlinkMacSystemFont, sans-serif;
+      --font-mono: "JetBrains Mono", ui-monospace, Menlo, monospace;
+
+      /* Typography Scale */
+      --text-xs: 12px;
+      --text-sm: 15px;
+      --text-base: 18px;
+      --text-lg: 22px;
+      --text-xl: 30px;
+      --text-2xl: 44px;
+      --text-3xl: 68px;
+      --text-4xl: 96px;
+
+      --leading-tight: 0.95;
+      --leading-normal: 1.4;
+
+      /* Spacing Scale (4/8/12/16/24/32) per DESIGN.md §4 */
+      --space-1: 4px;
+      --space-2: 8px;
+      --space-3: 12px;
+      --space-4: 16px;
+      --space-6: 24px;
+      --space-8: 32px;
+      --space-12: 48px;
+      --space-16: 64px;
+      --space-20: 80px;
+
+      /* Brutalist Hard Shadows & Radius (DESIGN.md §6) */
+      --radius-raw: 0px;
+      --border-hard: 3px solid #111827;
+      --border-thick: 4px solid #111827;
+      --shadow-hard: 4px 4px 0 #111827;
+      --shadow-hard-lg: 8px 8px 0 #111827;
+      --shadow-hard-hover: 2px 2px 0 #111827;
+
+      /* Motion (150-250ms per DESIGN.md §7) */
+      --motion-fast: 150ms;
+      --motion-base: 220ms;
+      --ease-standard: cubic-bezier(0.16, 1, 0.3, 1);
+
+      /* Focus Ring */
+      --focus-ring: 0 0 0 3px #111827, 0 0 0 6px var(--color-primary);
+      --container-max: 1260px;
+    }
+
+    /* ─── Global Reset & Anti-Design Base ──────────────────────────── */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      background-color: var(--color-surface);
+      color: var(--color-text);
+    }
+
+    body {
+      background-color: var(--color-surface);
+      color: var(--color-text);
+      font-family: var(--font-display);
+      font-size: var(--text-base);
+      font-weight: 600;
+      line-height: var(--leading-normal);
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      overflow-x: hidden;
+    }
+
+    /* Headings carry Darker Grotesque raw weight */
+    h1, h2, h3, h4 {
+      font-family: var(--font-display);
+      line-height: var(--leading-tight);
+      text-transform: uppercase;
+      letter-spacing: -0.01em;
+      color: var(--color-text);
+    }
+
+    h1 {
+      font-size: var(--text-4xl);
+      font-weight: 900;
+    }
+
+    h2 {
+      font-size: var(--text-3xl);
+      font-weight: 900;
+    }
+
+    h3 {
+      font-size: var(--text-xl);
+      font-weight: 800;
+    }
+
+    p {
+      color: var(--color-text);
+      line-height: 1.45;
+      font-weight: 500;
+      font-size: 19px;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    :focus-visible {
+      outline: none;
+      box-shadow: var(--focus-ring);
+    }
+
+    /* ─── Layout Primitives ────────────────────────────────────────── */
+    .container {
+      max-width: var(--container-max);
+      margin-inline: auto;
+      padding-inline: var(--space-6);
+    }
+
+    .raw-section {
+      padding-block: var(--space-16);
+      border-bottom: var(--border-hard);
+    }
+
+    .concrete-bg {
+      background-color: var(--color-concrete);
+    }
+
+    /* ─── Raw Brutalist Buttons (DESIGN.md §6) ─────────────────────── */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--space-2);
+      padding: var(--space-3) var(--space-6);
+      font-family: var(--font-display);
+      font-size: 20px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      border: var(--border-hard);
+      border-radius: var(--radius-raw);
+      cursor: pointer;
+      box-shadow: var(--shadow-hard);
+      text-decoration: none;
+      white-space: nowrap;
+      transition: background-color var(--motion-fast) var(--ease-standard),
+                  transform var(--motion-fast) var(--ease-standard),
+                  box-shadow var(--motion-fast) var(--ease-standard);
+    }
+
+    /* Primary Action uses #DD614C per DESIGN.md §6 */
+    .btn-primary {
+      background-color: var(--color-primary);
+      color: #FFFFFF;
+    }
+
+    .btn-primary:hover {
+      background-color: var(--color-primary-hover);
+      transform: translate(2px, 2px);
+      box-shadow: var(--shadow-hard-hover);
+    }
+
+    .btn-primary:active {
+      transform: translate(4px, 4px);
+      box-shadow: none;
+    }
+
+    /* Secondary Action stays neutral (#FFFFFF / #111827) per DESIGN.md §6 */
+    .btn-neutral {
+      background-color: var(--color-surface);
+      color: var(--color-text);
+    }
+
+    .btn-neutral:hover {
+      background-color: var(--color-concrete-dark);
+      transform: translate(2px, 2px);
+      box-shadow: var(--shadow-hard-hover);
+    }
+
+    .btn-neutral:active {
+      transform: translate(4px, 4px);
+      box-shadow: none;
+    }
+
+    .btn-secondary {
+      background-color: var(--color-secondary);
+      color: var(--color-text);
+    }
+
+    .btn-secondary:hover {
+      background-color: var(--color-secondary-hover);
+      transform: translate(2px, 2px);
+      box-shadow: var(--shadow-hard-hover);
+    }
+
+    /* ─── Raw Header & Architectural Coordinate Strip ─────────────── */
+    .top-telemetry-bar {
+      background-color: var(--color-text);
+      color: #FFFFFF;
+      padding: 6px var(--space-6);
+      font-family: var(--font-mono);
+      font-size: 11px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: var(--border-hard);
+    }
+
+    .telemetry-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .telemetry-dot {
+      width: 7px;
+      height: 7px;
+      background-color: var(--color-secondary);
+    }
+
+    .main-header {
+      background-color: var(--color-surface);
+      border-bottom: var(--border-hard);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+
+    .nav-container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      height: 72px;
+    }
+
+    .brand-mark {
+      display: flex;
+      align-items: center;
+      gap: var(--space-3);
+    }
+
+    .brand-badge-raw {
+      background-color: var(--color-primary);
+      color: #FFFFFF;
+      font-family: var(--font-mono);
+      font-size: 18px;
+      font-weight: 800;
+      padding: 4px 10px;
+      border: var(--border-hard);
+      box-shadow: 2px 2px 0 #111827;
+    }
+
+    .brand-title {
+      font-size: 32px;
+      font-weight: 900;
+      letter-spacing: -0.02em;
+    }
+
+    .nav-list {
+      display: flex;
+      align-items: center;
+      list-style: none;
+      gap: var(--space-6);
+    }
+
+    .nav-list a {
+      font-family: var(--font-mono);
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--color-text);
+      text-transform: uppercase;
+      padding: 6px 10px;
+      border: 1px solid transparent;
+      transition: all var(--motion-fast) var(--ease-standard);
+    }
+
+    .nav-list a:hover {
+      background-color: var(--color-secondary);
+      border: 1px solid var(--color-border);
+      color: var(--color-text);
+    }
+
+    /* ─── Hero Section: Jarring Layout, Concrete Aesthetic ────────── */
+    .hero-section {
+      padding-top: var(--space-16);
+      padding-bottom: var(--space-16);
+      border-bottom: var(--border-hard);
+      background-color: var(--color-surface);
+      background-image: 
+        linear-gradient(to right, #E5E7EB 1px, transparent 1px),
+        linear-gradient(to bottom, #E5E7EB 1px, transparent 1px);
+      background-size: 40px 40px;
+    }
+
+    .hero-layout-grid {
+      display: grid;
+      grid-template-columns: 1.25fr 0.75fr;
+      gap: var(--space-8);
+      align-items: stretch;
+    }
+
+    .hero-manifesto-box {
+      background-color: #FFFFFF;
+      border: var(--border-thick);
+      padding: var(--space-8);
+      box-shadow: var(--shadow-hard-lg);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .raw-stamp {
+      display: inline-block;
+      align-self: flex-start;
+      font-family: var(--font-mono);
+      font-size: 12px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      background-color: var(--color-secondary);
+      color: var(--color-text);
+      border: 2px solid var(--color-text);
+      padding: 4px 10px;
+      margin-bottom: var(--space-4);
+      box-shadow: 2px 2px 0 #111827;
+    }
+
+    .hero-headline {
+      font-size: 88px;
+      line-height: 0.92;
+      color: var(--color-text);
+      margin-bottom: var(--space-6);
+    }
+
+    .hero-headline span.terracotta {
+      color: var(--color-primary);
+      text-decoration: underline;
+      text-decoration-thickness: 6px;
+    }
+
+    .hero-subtext {
+      font-size: 22px;
+      line-height: 1.35;
+      color: var(--color-text);
+      max-width: 600px;
+      margin-bottom: var(--space-8);
+    }
+
+    .hero-action-cluster {
+      display: flex;
+      gap: var(--space-4);
+      flex-wrap: wrap;
+    }
+
+    /* Monolithic Right Visual Card */
+    .hero-blueprint-panel {
+      background-color: var(--color-concrete);
+      border: var(--border-thick);
+      padding: var(--space-6);
+      box-shadow: var(--shadow-hard-lg);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .blueprint-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 2px solid var(--color-text);
+      padding-bottom: var(--space-3);
+      margin-bottom: var(--space-4);
+      font-family: var(--font-mono);
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .blueprint-ascii-diagram {
+      background-color: #FFFFFF;
+      border: 2px solid var(--color-text);
+      padding: var(--space-4);
+      font-family: var(--font-mono);
+      font-size: 11px;
+      line-height: 1.4;
+      white-space: pre;
+      overflow-x: auto;
+      margin-bottom: var(--space-4);
+    }
+
+    .stress-readout-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--space-3);
+    }
+
+    .stress-readout-cell {
+      background-color: #FFFFFF;
+      border: 2px solid var(--color-text);
+      padding: var(--space-3);
+    }
+
+    .stress-label {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      font-weight: 700;
+      color: #6B7280;
+      text-transform: uppercase;
+    }
+
+    .stress-value {
+      font-family: var(--font-display);
+      font-size: 32px;
+      font-weight: 900;
+      line-height: 1;
+      margin-top: 4px;
+    }
+
+    /* ─── Raw Structural Marquee Banner ────────────────────────────── */
+    .brutalist-ticker {
+      background-color: var(--color-primary);
+      color: #FFFFFF;
+      border-bottom: var(--border-hard);
+      padding: var(--space-3) 0;
+      overflow: hidden;
+      white-space: nowrap;
+      user-select: none;
+    }
+
+    .ticker-content {
+      display: inline-block;
+      font-family: var(--font-mono);
+      font-size: 14px;
+      font-weight: 800;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    /* ─── Monolithic Project Grid ──────────────────────────────────── */
+    .projects-section {
+      background-color: var(--color-surface);
+      padding-block: var(--space-16);
+      border-bottom: var(--border-hard);
+    }
+
+    .section-raw-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      border-bottom: var(--border-hard);
+      padding-bottom: var(--space-4);
+      margin-bottom: var(--space-8);
+      flex-wrap: wrap;
+      gap: var(--space-4);
+    }
+
+    .monolith-grid-2up {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--space-8);
+    }
+
+    /* Unadorned clear content blocks per DESIGN.md §5 */
+    .monolith-card {
+      background-color: #FFFFFF;
+      border: var(--border-thick);
+      box-shadow: var(--shadow-hard);
+      display: flex;
+      flex-direction: column;
+      transition: transform var(--motion-fast) var(--ease-standard),
+                  box-shadow var(--motion-fast) var(--ease-standard);
+    }
+
+    .monolith-card:hover {
+      transform: translate(-3px, -3px);
+      box-shadow: 10px 10px 0 #111827;
+    }
+
+    .card-meta-bar {
+      background-color: var(--color-concrete);
+      border-bottom: 2px solid var(--color-text);
+      padding: var(--space-3) var(--space-4);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-family: var(--font-mono);
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .card-media-raw {
+      width: 100%;
+      height: 260px;
+      background-color: #E5E7EB;
+      border-bottom: 2px solid var(--color-text);
+      overflow: hidden;
+      position: relative;
+    }
+
+    .card-media-raw img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      filter: grayscale(100%) contrast(125%);
+      transition: filter var(--motion-base) var(--ease-standard);
+    }
+
+    .monolith-card:hover .card-media-raw img {
+      filter: grayscale(40%) contrast(110%);
+    }
+
+    .card-body-raw {
+      padding: var(--space-6);
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .card-title-raw {
+      font-size: 34px;
+      font-weight: 900;
+      margin-bottom: var(--space-2);
+    }
+
+    .card-desc-raw {
+      font-size: 18px;
+      color: var(--color-text);
+      margin-bottom: var(--space-6);
+    }
+
+    .card-footer-raw {
+      border-top: 2px solid var(--color-text);
+      padding-top: var(--space-4);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    /* ─── Concrete Specifications Table ───────────────────────────── */
+    .specs-section {
+      background-color: var(--color-concrete);
+      padding-block: var(--space-16);
+      border-bottom: var(--border-hard);
+    }
+
+    .specs-table-wrapper {
+      background-color: #FFFFFF;
+      border: var(--border-thick);
+      box-shadow: var(--shadow-hard-lg);
+      overflow-x: auto;
+    }
+
+    .brutalist-table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+    }
+
+    .brutalist-table th, .brutalist-table td {
+      border: 2px solid var(--color-text);
+      padding: var(--space-4);
+      font-family: var(--font-mono);
+      font-size: 14px;
+    }
+
+    .brutalist-table th {
+      background-color: var(--color-text);
+      color: #FFFFFF;
+      font-family: var(--font-display);
+      font-size: 20px;
+      font-weight: 900;
+      letter-spacing: 0.05em;
+    }
+
+    .brutalist-table tr:hover td {
+      background-color: #FEF3C7;
+    }
+
+    .tag-badge {
+      display: inline-block;
+      padding: 2px 8px;
+      font-weight: 700;
+      font-size: 11px;
+      border: 1px solid var(--color-text);
+    }
+
+    .tag-primary { background-color: var(--color-primary); color: #FFF; }
+    .tag-secondary { background-color: var(--color-secondary); color: var(--color-text); }
+    .tag-success { background-color: var(--color-success); color: #FFF; }
+
+    /* ─── Interactive Load Simulator ───────────────────────────────── */
+    .simulator-section {
+      padding-block: var(--space-16);
+      background-color: var(--color-surface);
+      border-bottom: var(--border-hard);
+    }
+
+    .simulator-box {
+      border: var(--border-thick);
+      box-shadow: var(--shadow-hard-lg);
+      background-color: #FFFFFF;
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+    }
+
+    .sim-controls-pane {
+      padding: var(--space-8);
+      border-right: var(--border-thick);
+    }
+
+    .sim-readout-pane {
+      padding: var(--space-8);
+      background-color: var(--color-concrete);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .raw-form-control {
+      margin-bottom: var(--space-6);
+    }
+
+    .raw-label {
+      display: block;
+      font-family: var(--font-mono);
+      font-size: 13px;
+      font-weight: 800;
+      text-transform: uppercase;
+      margin-bottom: var(--space-2);
+    }
+
+    .raw-select {
+      width: 100%;
+      height: 48px;
+      border: var(--border-hard);
+      font-family: var(--font-display);
+      font-size: 20px;
+      font-weight: 800;
+      padding: 0 var(--space-3);
+      background-color: #FFFFFF;
+      cursor: pointer;
+    }
+
+    .raw-range {
+      width: 100%;
+      height: 12px;
+      accent-color: var(--color-primary);
+      cursor: pointer;
+    }
+
+    .sensor-dial-box {
+      background-color: #FFFFFF;
+      border: var(--border-hard);
+      padding: var(--space-6);
+      box-shadow: var(--shadow-hard);
+      text-align: center;
+    }
+
+    .sensor-dial-value {
+      font-size: 64px;
+      font-weight: 900;
+      line-height: 1;
+      color: var(--color-primary);
+    }
+
+    /* ─── The Brutalist Manifesto ──────────────────────────────────── */
+    .manifesto-section {
+      background-color: var(--color-surface);
+      padding-block: var(--space-16);
+      border-bottom: var(--border-hard);
+    }
+
+    .manifesto-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: var(--space-8);
+    }
+
+    .manifesto-card {
+      border: var(--border-thick);
+      padding: var(--space-6);
+      box-shadow: var(--shadow-hard);
+      background-color: #FFFFFF;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .manifesto-number {
+      font-family: var(--font-mono);
+      font-size: 40px;
+      font-weight: 900;
+      color: var(--color-primary);
+      line-height: 1;
+      margin-bottom: var(--space-2);
+    }
+
+    .manifesto-title {
+      font-size: 28px;
+      font-weight: 900;
+      margin-bottom: var(--space-3);
+    }
+
+    .manifesto-body {
+      font-size: 18px;
+      line-height: 1.4;
+      flex: 1;
+    }
+
+    /* ─── Project Intake Form (DESIGN.md §6) ────────────────────────── */
+    .intake-section {
+      background-color: var(--color-concrete);
+      padding-block: var(--space-16);
+      border-bottom: var(--border-hard);
+    }
+
+    .intake-card {
+      max-width: 800px;
+      margin-inline: auto;
+      background-color: #FFFFFF;
+      border: var(--border-thick);
+      padding: var(--space-8);
+      box-shadow: var(--shadow-hard-lg);
+    }
+
+    .raw-input-text {
+      width: 100%;
+      height: 52px;
+      border: var(--border-hard);
+      padding: 0 var(--space-4);
+      font-family: var(--font-mono);
+      font-size: 15px;
+      margin-bottom: var(--space-4);
+    }
+
+    .raw-input-text:focus {
+      outline: none;
+      box-shadow: var(--focus-ring);
+    }
+
+    .raw-textarea {
+      width: 100%;
+      height: 120px;
+      border: var(--border-hard);
+      padding: var(--space-3) var(--space-4);
+      font-family: var(--font-mono);
+      font-size: 15px;
+      margin-bottom: var(--space-4);
+      resize: vertical;
+    }
+
+    .raw-textarea:focus {
+      outline: none;
+      box-shadow: var(--focus-ring);
+    }
+
+    /* ─── Raw Architectural Footer ─────────────────────────────────── */
+    .brutalist-footer {
+      background-color: var(--color-text);
+      color: #FFFFFF;
+      padding-top: var(--space-16);
+      padding-bottom: var(--space-8);
+    }
+
+    .footer-columns-grid {
+      display: grid;
+      grid-template-columns: 1.4fr 1fr 1fr 1fr;
+      gap: var(--space-8);
+      margin-bottom: var(--space-12);
+    }
+
+    .footer-col-title {
+      font-family: var(--font-mono);
+      font-size: 14px;
+      font-weight: 800;
+      color: var(--color-secondary);
+      margin-bottom: var(--space-4);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .footer-nav-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-2);
+      font-family: var(--font-mono);
+      font-size: 13px;
+    }
+
+    .footer-nav-list a {
+      color: #D1D5DB;
+      transition: color var(--motion-fast) var(--ease-standard);
+    }
+
+    .footer-nav-list a:hover {
+      color: var(--color-primary);
+    }
+
+    .footer-bottom-telemetry {
+      border-top: 1px solid #374151;
+      padding-top: var(--space-6);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-family: var(--font-mono);
+      font-size: 12px;
+      color: #9CA3AF;
+      flex-wrap: wrap;
+      gap: var(--space-4);
+    }
+
+    /* ─── Responsive Adjustments ───────────────────────────────────── */
+    @media (max-width: 1024px) {
+      .hero-layout-grid { grid-template-columns: 1fr; }
+      .monolith-grid-2up { grid-template-columns: 1fr; }
+      .simulator-box { grid-template-columns: 1fr; }
+      .manifesto-grid { grid-template-columns: 1fr; }
+      .footer-columns-grid { grid-template-columns: repeat(2, 1fr); }
+      .hero-headline { font-size: 64px; }
+    }
+
+    @media (max-width: 768px) {
+      .nav-list { display: none; }
+      .hero-headline { font-size: 48px; }
+      .footer-columns-grid { grid-template-columns: 1fr; }
+      .top-telemetry-bar { flex-direction: column; gap: 4px; align-items: flex-start; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Telemetry Strip -->
+  <div class="top-telemetry-bar">
+    <div class="telemetry-tag">
+      <span class="telemetry-dot"></span>
+      <span>LAT 51.5200° N, LON 0.0950° W · STRUCTURAL CORE BÉTON 400</span>
+    </div>
+    <div>
+      <span>COMPRESSIVE THRESHOLD: 60.4 MPa · ZERO ORNAMENT</span>
+    </div>
+  </div>
+
+  <!-- Main Architectural Header -->
+  <header class="main-header">
+    <div class="container nav-container">
+      <a href="#hero" class="brand-mark" aria-label="Atelier Béton Home">
+        <div class="brand-badge-raw">BÉTON</div>
+        <span class="brand-title">ATELIER BÉTON</span>
+      </a>
+
+      <nav aria-label="Primary Architectural Navigation">
+        <ul class="nav-list">
+          <li><a href="#monoliths">[01] MONOLITHS</a></li>
+          <li><a href="#specs">[02] SPECIFICATIONS</a></li>
+          <li><a href="#simulator">[03] SIMULATOR</a></li>
+          <li><a href="#manifesto">[04] MANIFESTO</a></li>
+          <li><a href="#intake">[05] COMMISSION</a></li>
+        </ul>
+      </nav>
+
+      <div>
+        <a href="#intake" class="btn btn-primary" style="padding: 8px 18px; font-size: 16px;">
+          REQUEST AUDIT
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Marquee Ticker -->
+  <div class="brutalist-ticker">
+    <div class="ticker-content">
+      RAW CONCRETE &nbsp;·&nbsp; FUNCTIONAL MINIMALISM &nbsp;·&nbsp; UNADORNED TRUTH TO MATERIALS &nbsp;·&nbsp; JARRING GEOMETRY &nbsp;·&nbsp; MONOLITHIC LOAD REPARTITION &nbsp;·&nbsp; RAW CONCRETE &nbsp;·&nbsp; FUNCTIONAL MINIMALISM &nbsp;·&nbsp; UNADORNED TRUTH TO MATERIALS
+    </div>
+  </div>
+
+  <main>
+    <!-- HERO SECTION: Jarring, Unadorned, Concrete Architecture -->
+    <section class="hero-section" id="hero">
+      <div class="container hero-layout-grid">
+        <!-- Left Manifesto Box -->
+        <div class="hero-manifesto-box">
+          <div>
+            <div class="raw-stamp">STRUCTURAL PURITY // ARCHETYPE 01</div>
+            <h1 class="hero-headline">
+              FUNCTION OVER <span class="terracotta">ORNAMENT</span>.<br>RAW BÉTON.
+            </h1>
+            <p class="hero-subtext">
+              We reject stylistic vanity, deceptive cladding, and superficial decoration. We engineer monolithic concrete architecture and unapologetic spatial frameworks designed to endure millennia.
+            </p>
+          </div>
+
+          <div class="hero-action-cluster">
+            <a href="#intake" class="btn btn-primary" id="heroIntakeBtn">COMMISSION BLUEPRINT</a>
+            <a href="#specs" class="btn btn-neutral">VIEW STRUCTURAL SPECS</a>
+            <button class="btn btn-secondary" id="rawAudioBtn" title="Acoustic echo of concrete hall">
+              ACOUSTIC RESONANCE
+            </button>
+          </div>
+        </div>
+
+        <!-- Right Blueprint & Stress Readout Panel -->
+        <div class="hero-blueprint-panel">
+          <div>
+            <div class="blueprint-header">
+              <span>ELEVATION // SECT-08</span>
+              <span style="color: var(--color-primary);">GRID LOCKED</span>
+            </div>
+
+            <div class="blueprint-ascii-diagram">
++---------------------------------------------+
+| [ROOF SLAB: 450mm PRECAST REINFORCED]       |
++------+-------------------------------+------+
+|      |                               |      |
+| CORE |      CENTRAL ATRIUM VOID      | CORE |
+| [01] |      BÉTON BRUT FINISH        | [02] |
+|      |                               |      |
++------+-------------------------------+------+
+| [TRANSFER GIRDER: C60/75 SHEAR RESISTANCE]  |
++---------------------------------------------+
+| \\\\\\\\\\ FOUNDATION PILES /////////// |
++---------------------------------------------+
+            </div>
+          </div>
+
+          <div class="stress-readout-grid">
+            <div class="stress-readout-cell">
+              <div class="stress-label">COMPRESSIVE STRENGTH</div>
+              <div class="stress-value" id="compStrength">65.8 MPa</div>
+            </div>
+            <div class="stress-readout-cell">
+              <div class="stress-label">SLAG REPLACEMENT</div>
+              <div class="stress-value" style="color: var(--color-primary);">42.0%</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- MONOLITHS SECTION: Projects Grid -->
+    <section class="projects-section" id="monoliths">
+      <div class="container">
+        <div class="section-raw-header">
+          <div>
+            <span class="raw-stamp">CATALOGUE OF WORKS</span>
+            <h2>CANONICAL MONOLITHS</h2>
+          </div>
+          <p style="max-width: 480px;">
+            Documenting authentic cast-in-place concrete structures exhibiting unabashed honesty in form and tectonic expression.
+          </p>
+        </div>
+
+        <div class="monolith-grid-2up">
+          <!-- Monolith 1 -->
+          <article class="monolith-card">
+            <div class="card-meta-bar">
+              <span>PROJECT 01 // LONDON</span>
+              <span class="tag-badge tag-primary">COMPLETED</span>
+            </div>
+            <div class="card-media-raw">
+              <img src="https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&w=1000&q=80" alt="Brutalist Concrete Barbican Architecture" loading="lazy" />
+            </div>
+            <div class="card-body-raw">
+              <h3 class="card-title-raw">THE BARBICAN PODIUM ENCLAVE</h3>
+              <p class="card-desc-raw">
+                Bush-hammered aggregate facades with soaring pilotis and interconnected elevated walkways, shielding residents from ground-level vehicular chaos.
+              </p>
+              <div class="card-footer-raw">
+                <span style="font-family: var(--font-mono); font-size: 13px;">MASS: 42,000 TONNES</span>
+                <a href="#specs" class="btn btn-neutral" style="padding: 6px 14px; font-size: 14px;">DETAILS →</a>
+              </div>
+            </div>
+          </article>
+
+          <!-- Monolith 2 -->
+          <article class="monolith-card">
+            <div class="card-meta-bar">
+              <span>PROJECT 02 // MONTREAL</span>
+              <span class="tag-badge tag-secondary">MODULAR</span>
+            </div>
+            <div class="card-media-raw">
+              <img src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=1000&q=80" alt="Habitat Modular Precast Boxes" loading="lazy" />
+            </div>
+            <div class="card-body-raw">
+              <h3 class="card-title-raw">HABITAT CANTILEVER COMPLEX</h3>
+              <p class="card-desc-raw">
+                354 prefabricated monolithic concrete box modules interlocking in stepped configurations up to 12 storeys, each roof acting as the terrace for the unit above.
+              </p>
+              <div class="card-footer-raw">
+                <span style="font-family: var(--font-mono); font-size: 13px;">MODULES: 354 PRECAST</span>
+                <a href="#specs" class="btn btn-neutral" style="padding: 6px 14px; font-size: 14px;">DETAILS →</a>
+              </div>
+            </div>
+          </article>
+
+          <!-- Monolith 3 -->
+          <article class="monolith-card">
+            <div class="card-meta-bar">
+              <span>PROJECT 03 // BOSTON</span>
+              <span class="tag-badge tag-primary">MUNICIPAL</span>
+            </div>
+            <div class="card-media-raw">
+              <img src="https://images.unsplash.com/photo-1541888946425-d0fbb186c5f7?auto=format&fit=crop&w=1000&q=80" alt="Boston City Hall Structural Trusses" loading="lazy" />
+            </div>
+            <div class="card-body-raw">
+              <h3 class="card-title-raw">BOSTON CIVIC SPATIAL GRID</h3>
+              <p class="card-desc-raw">
+                Tripartite concrete expression: heavy brick base for public access, poured-in-place concrete intermediate tier for administrative offices, and cantilevered upper council chambers.
+              </p>
+              <div class="card-footer-raw">
+                <span style="font-family: var(--font-mono); font-size: 13px;">SPAN: 88 METERS</span>
+                <a href="#specs" class="btn btn-neutral" style="padding: 6px 14px; font-size: 14px;">DETAILS →</a>
+              </div>
+            </div>
+          </article>
+
+          <!-- Monolith 4 -->
+          <article class="monolith-card">
+            <div class="card-meta-bar">
+              <span>PROJECT 04 // VIENNA</span>
+              <span class="tag-badge tag-success">ASYMMETRIC</span>
+            </div>
+            <div class="card-media-raw">
+              <img src="https://images.unsplash.com/photo-1506157786151-b8491531f063?auto=format&fit=crop&w=1000&q=80" alt="Wotruba Block Monolith Assembly" loading="lazy" />
+            </div>
+            <div class="card-body-raw">
+              <h3 class="card-title-raw">WOTRUBA BLOCK MONOLITH</h3>
+              <p class="card-desc-raw">
+                152 asymmetrical concrete blocks cast on site and arranged in an apparent chaotic tumble, creating a cathedral of shadows, raw light slits, and unpolished aggregate faces.
+              </p>
+              <div class="card-footer-raw">
+                <span style="font-family: var(--font-mono); font-size: 13px;">BLOCKS: 152 QUARRIED</span>
+                <a href="#specs" class="btn btn-neutral" style="padding: 6px 14px; font-size: 14px;">DETAILS →</a>
+              </div>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- TECHNICAL SPECIFICATIONS TABLE -->
+    <section class="specs-section" id="specs">
+      <div class="container">
+        <div class="section-raw-header">
+          <div>
+            <span class="raw-stamp">MATERIAL DATA</span>
+            <h2>CONCRETE MIX FORMULATIONS</h2>
+          </div>
+          <p style="max-width: 500px;">
+            Standardized chemical and physical properties of our structural béton mixes under ISO 1920 testing protocols.
+          </p>
+        </div>
+
+        <div class="specs-table-wrapper">
+          <table class="brutalist-table">
+            <thead>
+              <tr>
+                <th>GRADE</th>
+                <th>CHARACTERISTIC COMPRESSION (fck)</th>
+                <th>DENSITY (kg/m³)</th>
+                <th>CURING DURATION</th>
+                <th>PRIMARY STRUCTURAL USE</th>
+                <th>STATUS</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>C30/37 BÉTON</strong></td>
+                <td>37.0 MPa</td>
+                <td>2,380</td>
+                <td>28 Days</td>
+                <td>Retaining Walls, Foundation Slabs</td>
+                <td><span class="tag-badge tag-secondary">STANDARD</span></td>
+              </tr>
+              <tr>
+                <td><strong>C50/60 ULTRA-HIGH</strong></td>
+                <td>60.0 MPa</td>
+                <td>2,450</td>
+                <td>56 Days</td>
+                <td>Exposed Columns, Shear Cores</td>
+                <td><span class="tag-badge tag-primary">HEAVY LOAD</span></td>
+              </tr>
+              <tr>
+                <td><strong>UHPC-120 TITAN</strong></td>
+                <td>120.0 MPa</td>
+                <td>2,620</td>
+                <td>14 Days (Steam)</td>
+                <td>Slender Cantilevers, Vault Ribs</td>
+                <td><span class="tag-badge tag-success">SPECIALIZED</span></td>
+              </tr>
+              <tr>
+                <td><strong>FOAMED CELLULAR</strong></td>
+                <td>12.5 MPa</td>
+                <td>1,150</td>
+                <td>21 Days</td>
+                <td>Thermal Envelope, Parapet Mass</td>
+                <td><span class="tag-badge">NON-STRUCT</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- INTERACTIVE STRUCTURAL SIMULATOR -->
+    <section class="simulator-section" id="simulator">
+      <div class="container">
+        <div class="section-raw-header">
+          <div>
+            <span class="raw-stamp" style="background-color: var(--color-primary); color: #FFF;">CALCULATION CORE</span>
+            <h2>STRUCTURAL LOAD SIMULATOR</h2>
+          </div>
+          <p style="max-width: 500px;">
+            Dynamically adjust deadweight span loads and observe instantaneous beam deflection and compressive safety margins.
+          </p>
+        </div>
+
+        <div class="simulator-box">
+          <!-- Controls -->
+          <div class="sim-controls-pane">
+            <div class="raw-form-control">
+              <label for="beamSelect" class="raw-label">ARCHITECTURAL TYPOLOGY</label>
+              <select id="beamSelect" class="raw-select">
+                <option value="cantilever">CANTILEVER BEAM [FREE END]</option>
+                <option value="portal">PORTAL FRAME [MOMENT RESISTANT]</option>
+                <option value="shear">VERTICAL SHEAR WALL [CORE]</option>
+              </select>
+            </div>
+
+            <div class="raw-form-control">
+              <label for="spanSlider" class="raw-label">
+                CLEAR SPAN LENGTH: <span id="spanValue" style="color: var(--color-primary);">12 METERS</span>
+              </label>
+              <input type="range" id="spanSlider" class="raw-range" min="4" max="40" value="12" />
+            </div>
+
+            <div class="raw-form-control">
+              <label for="loadSlider" class="raw-label">
+                UNIFORM DEAD LOAD: <span id="loadValue" style="color: var(--color-primary);">180 kN/m</span>
+              </label>
+              <input type="range" id="loadSlider" class="raw-range" min="50" max="600" step="10" value="180" />
+            </div>
+
+            <button class="btn btn-primary" id="recalcBtn" style="width: 100%;">
+              EXECUTE FINITE ELEMENT AUDIT
+            </button>
+          </div>
+
+          <!-- Readout Panel -->
+          <div class="sim-readout-pane">
+            <div class="sensor-dial-box">
+              <div class="stress-label">CALCULATED MID-SPAN DEFLECTION</div>
+              <div class="sensor-dial-value" id="deflectionVal">3.4 mm</div>
+              <div style="font-family: var(--font-mono); font-size: 13px; margin-top: 8px;" id="deflectionStatus">
+                STATUS: COMPLIANT WITH SPAN/350 LIMIT
+              </div>
+            </div>
+
+            <div style="background-color: #FFFFFF; border: var(--border-hard); padding: var(--space-4); margin-top: var(--space-6);">
+              <div class="stress-label">SAFETY MARGIN FACTOR</div>
+              <div style="font-family: var(--font-display); font-size: 32px; font-weight: 900;" id="safetyFactor">
+                2.84 γm
+              </div>
+              <p style="font-size: 14px; margin-top: 4px;">
+                Safety margin against brittle compressive rupture exceeds Eurocode 2 mandate.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- THE BRUTALIST MANIFESTO: Unadorned Tenets -->
+    <section class="manifesto-section" id="manifesto">
+      <div class="container">
+        <div class="section-raw-header">
+          <div>
+            <span class="raw-stamp">PHILOSOPHICAL TENETS</span>
+            <h2>THE BRUTALIST CODE</h2>
+          </div>
+          <p style="max-width: 500px;">
+            Strict uncompromising axioms that guide every structural intervention and digital artifact created by Atelier Béton.
+          </p>
+        </div>
+
+        <div class="manifesto-grid">
+          <!-- Tenet 1 -->
+          <div class="manifesto-card">
+            <div class="manifesto-number">01</div>
+            <h3 class="manifesto-title">NO FACADE CLADDING</h3>
+            <p class="manifesto-body">
+              Never conceal the true load-bearing material. If the structure is poured concrete, the surface must show the grain of timber formwork and the marks of tie-rods.
+            </p>
+          </div>
+
+          <!-- Tenet 2 -->
+          <div class="manifesto-card">
+            <div class="manifesto-number">02</div>
+            <h3 class="manifesto-title">EXPOSED MECHANICAL SYSTEMS</h3>
+            <p class="manifesto-body">
+              Air ducts, conduit paths, structural joints, and expansion gaps are not eyesores to be hidden; they are the vital organs of the building.
+            </p>
+          </div>
+
+          <!-- Tenet 3 -->
+          <div class="manifesto-card">
+            <div class="manifesto-number">03</div>
+            <h3 class="manifesto-title">WEIGHT & MASS INTEGRITY</h3>
+            <p class="manifesto-body">
+              A structure must convey the visceral gravity of its mass. Thin veneer mimics of monumental weight are an insult to genuine architecture.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- INTAKE & COMMISSION TERMINAL -->
+    <section class="intake-section" id="intake">
+      <div class="container">
+        <div class="intake-card">
+          <div style="border-bottom: var(--border-hard); padding-bottom: var(--space-4); margin-bottom: var(--space-6);">
+            <span class="raw-stamp">PROJECT BRIEF INGESTION</span>
+            <h2>COMMISSION STRUCTURAL AUDIT</h2>
+            <p style="font-size: 16px;">
+              Submit your architectural brief or site specifications for rigorous structural review by our engineering fellows.
+            </p>
+          </div>
+
+          <form id="intakeForm">
+            <label for="clientName" class="raw-label">PROJECT DIRECTOR / FIRM</label>
+            <input type="text" id="clientName" class="raw-input-text" placeholder="e.g. OMA Structural Division" required />
+
+            <label for="clientEmail" class="raw-label">DIRECT COMM PROTOCOL (EMAIL)</label>
+            <input type="email" id="clientEmail" class="raw-input-text" placeholder="director@firm.arch" required />
+
+            <label for="projectBrief" class="raw-label">STRUCTURAL TYPOLOGY & SCOPE DESCRIPTION</label>
+            <textarea id="projectBrief" class="raw-textarea" placeholder="Detail required spans, seismic parameters, and aggregate preferences..." required></textarea>
+
+            <button type="submit" class="btn btn-primary" style="width: 100%; height: 56px; font-size: 22px;">
+              TRANSMIT SPECIFICATION DOSSIER
+            </button>
+            <div id="formSuccessMsg" style="display: none; margin-top: var(--space-4); padding: var(--space-4); background-color: #DCFCE7; border: 2px solid var(--color-success); font-family: var(--font-mono); font-size: 14px; font-weight: 700;">
+              ✔ DOSSIER INGESTED: Structural verification dispatched to queue within 24 hours.
+            </div>
+          </form>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- BRUTALIST FOOTER -->
+  <footer class="brutalist-footer">
+    <div class="container">
+      <div class="footer-columns-grid">
+        <div>
+          <div style="font-size: 28px; font-weight: 900; margin-bottom: var(--space-3); color: #FFFFFF;">
+            ATELIER BÉTON
+          </div>
+          <p style="font-size: 15px; color: #9CA3AF; line-height: 1.5; font-family: var(--font-mono);">
+            Monolithic concrete engineering, raw structural geometry, and unapologetic spatial frameworks.
+          </p>
+        </div>
+
+        <div>
+          <h4 class="footer-col-title">PROJECTS</h4>
+          <ul class="footer-nav-list">
+            <li><a href="#monoliths">Barbican Enclave</a></li>
+            <li><a href="#monoliths">Habitat 67 Pods</a></li>
+            <li><a href="#monoliths">Boston Civic Grid</a></li>
+            <li><a href="#monoliths">Wotruba Assembly</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h4 class="footer-col-title">MATERIAL CODES</h4>
+          <ul class="footer-nav-list">
+            <li><a href="#specs">ISO 1920 Concrete Standards</a></li>
+            <li><a href="#specs">Eurocode 2 Shear Design</a></li>
+            <li><a href="#specs">UHPC Aggregate Matrix</a></li>
+            <li><a href="#specs">Pozzolanic Slag Mixes</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h4 class="footer-col-title">COMMISSIONS</h4>
+          <ul class="footer-nav-list">
+            <li><a href="#intake">Request Structural Audit</a></li>
+            <li><a href="#simulator">Deflection Calculator</a></li>
+            <li><a href="#manifesto">Download Manifesto PDF</a></li>
+            <li><a href="#hero">Acoustic Resonance Lab</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="footer-bottom-telemetry">
+        <span>© 2026 ATELIER BÉTON COLLECTIVE. STRICTLY MONOLITHIC.</span>
+        <span>LAT: 51°31'12" N, LON: 0°05'42" W · ELEVATION: 42M</span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Interactive Simulator & Application Scripts -->
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      // 1. Structural Simulator Slider Logic
+      const spanSlider = document.getElementById('spanSlider');
+      const spanValue = document.getElementById('spanValue');
+      const loadSlider = document.getElementById('loadSlider');
+      const loadValue = document.getElementById('loadValue');
+      const beamSelect = document.getElementById('beamSelect');
+      const deflectionVal = document.getElementById('deflectionVal');
+      const deflectionStatus = document.getElementById('deflectionStatus');
+      const safetyFactor = document.getElementById('safetyFactor');
+      const recalcBtn = document.getElementById('recalcBtn');
+
+      function calculatePhysics() {
+        const span = parseFloat(spanSlider.value);
+        const load = parseFloat(loadSlider.value);
+        const type = beamSelect.value;
+
+        spanValue.textContent = `${span} METERS`;
+        loadValue.textContent = `${load} kN/m`;
+
+        let deflection = 0;
+        let sf = 0;
+
+        if (type === 'cantilever') {
+          deflection = (load * Math.pow(span, 4)) / (8 * 30000 * 0.4);
+          sf = Math.max(1.1, 4.2 - (span * 0.08) - (load * 0.003));
+        } else if (type === 'portal') {
+          deflection = (5 * load * Math.pow(span, 4)) / (384 * 35000 * 0.8);
+          sf = Math.max(1.2, 5.0 - (span * 0.06) - (load * 0.002));
+        } else { // shear wall
+          deflection = (load * span) / (120000 * 0.5);
+          sf = Math.max(1.5, 6.2 - (span * 0.04) - (load * 0.001));
+        }
+
+        const dFormatted = deflection.toFixed(1);
+        deflectionVal.textContent = `${dFormatted} mm`;
+        safetyFactor.textContent = `${sf.toFixed(2)} γm`;
+
+        if (deflection > 25.0) {
+          deflectionVal.style.color = 'var(--color-danger)';
+          deflectionStatus.textContent = 'WARNING: EXCESSIVE DEFLECTION. INCREASE BÉTON THICKNESS.';
+          deflectionStatus.style.color = 'var(--color-danger)';
+        } else {
+          deflectionVal.style.color = 'var(--color-primary)';
+          deflectionStatus.textContent = 'STATUS: COMPLIANT WITH SPAN/350 LIMIT';
+          deflectionStatus.style.color = 'var(--color-text)';
+        }
+      }
+
+      spanSlider.addEventListener('input', calculatePhysics);
+      loadSlider.addEventListener('input', calculatePhysics);
+      beamSelect.addEventListener('change', calculatePhysics);
+      recalcBtn.addEventListener('click', () => {
+        calculatePhysics();
+        alert('Finite element simulation complete: All stiffness matrices converged in 4 iterations.');
+      });
+
+      // 2. Audio Acoustic Resonance Button
+      const audioBtn = document.getElementById('rawAudioBtn');
+      if (audioBtn) {
+        audioBtn.addEventListener('click', () => {
+          alert('Acoustic measurement: Central Concrete Atrium exhibits 3.8s reverberation decay at 500Hz.');
+        });
+      }
+
+      // 3. Intake Form Submission
+      const intakeForm = document.getElementById('intakeForm');
+      const formSuccessMsg = document.getElementById('formSuccessMsg');
+      if (intakeForm) {
+        intakeForm.addEventListener('submit', (e) => {
+          e.preventDefault();
+          formSuccessMsg.style.display = 'block';
+          intakeForm.reset();
+        });
+      }
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,457 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Cursor — The AI Code Editor</title>
+  <meta name="description" content="Cursor design system: warm off-white canvas #f2f1ed, warm near-black #26251e, brand accent orange #f54e00, compressed display gothic, literary serif body, and agentic timeline colors." />
+
+  <!-- Google Fonts: Space Grotesk (Gothic display proxy), Newsreader/Lora (jjannon serif proxy), JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400;1,6..72,500&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    /* ─────────────────────────────────────────────────────────────────
+       CURSOR DESIGN SYSTEM TOKENS
+       Source: open-design/design-systems/cursor/DESIGN.md
+       ───────────────────────────────────────────────────────────────── */
+    :root {
+      --cursor-dark: #26251e;
+      --cursor-cream: #f2f1ed;
+      --cursor-light: #e6e5e0;
+      --cursor-surface-300: #ebeae5;
+      --cursor-surface-500: #e1e0db;
+      --cursor-orange: #f54e00;
+      --cursor-gold: #c08532;
+
+      --color-error: #cf2d56;
+      --color-success: #1f8a65;
+
+      /* Timeline / Feature Colors */
+      --timeline-thinking: #dfa88f;
+      --timeline-grep: #9fc9a2;
+      --timeline-read: #9fbbe0;
+      --timeline-edit: #c0a8dd;
+
+      /* Perceptually Uniform oklab border */
+      --border-oklab-10: oklab(0.263084 -0.00230259 0.0124794 / 0.1);
+      --border-oklab-20: oklab(0.263084 -0.00230259 0.0124794 / 0.2);
+
+      --font-gothic: "Space Grotesk", -apple-system, BlinkMacSystemFont, sans-serif;
+      --font-serif: "Newsreader", "Iowan Old Style", Palatino, serif;
+      --font-mono: "JetBrains Mono", Menlo, Consolas, monospace;
+
+      --radius-pill: 9999px;
+      --radius-sm: 6px;
+      --radius-md: 12px;
+      --radius-card: 16px;
+
+      --card-shadow: rgba(0,0,0,0.14) 0px 28px 70px, rgba(0,0,0,0.1) 0px 14px 32px, oklab(0.263084 -0.00230259 0.0124794 / 0.1) 0px 0px 0px 1px;
+      --transition-fast: 0.16s ease;
+    }
+
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      background-color: var(--cursor-cream);
+      color: var(--cursor-dark);
+      font-family: var(--font-serif);
+      font-size: 17.5px;
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .container {
+      max-width: 1220px;
+      margin-inline: auto;
+      padding-inline: 28px;
+    }
+
+    /* Top Navigation */
+    .cursor-nav {
+      height: 76px;
+      border-bottom: 1px solid var(--border-oklab-10);
+      background: var(--cursor-cream);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .nav-inner {
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .brand-cursor {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+      color: var(--cursor-dark);
+    }
+    .brand-cursor-mark {
+      width: 24px;
+      height: 24px;
+      background: var(--cursor-dark);
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--cursor-cream);
+      font-family: var(--font-mono);
+      font-size: 13px;
+      font-weight: 700;
+    }
+    .brand-title {
+      font-family: var(--font-gothic);
+      font-size: 18px;
+      font-weight: 600;
+      letter-spacing: -0.5px;
+    }
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 32px;
+      list-style: none;
+    }
+    @media (max-width: 768px) {
+      .nav-links { display: none; }
+    }
+    .nav-links a {
+      color: var(--cursor-dark);
+      text-decoration: none;
+      font-family: var(--font-gothic);
+      font-size: 14px;
+      font-weight: 500;
+      transition: color var(--transition-fast);
+    }
+    .nav-links a:hover {
+      color: var(--cursor-orange);
+    }
+
+    /* Cursor Buttons (Full-Pill) */
+    .btn-pill {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 10px 22px;
+      border-radius: var(--radius-pill);
+      font-family: var(--font-gothic);
+      font-size: 14px;
+      font-weight: 500;
+      text-decoration: none;
+      border: 1px solid transparent;
+      cursor: pointer;
+      transition: all var(--transition-fast);
+    }
+    .btn-dark {
+      background: var(--cursor-dark);
+      color: var(--cursor-cream);
+      border-color: var(--cursor-dark);
+    }
+    .btn-dark:hover {
+      background: #38362d;
+      transform: translateY(-1px);
+    }
+    .btn-cream {
+      background: var(--cursor-surface-300);
+      color: var(--cursor-dark);
+      border-color: var(--border-oklab-10);
+    }
+    .btn-cream:hover {
+      background: var(--cursor-light);
+      border-color: var(--border-oklab-20);
+    }
+
+    /* Hero Section */
+    .hero-wrap {
+      padding-block: 88px 64px;
+      text-align: center;
+    }
+    .hero-overline {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--cursor-orange);
+      margin-bottom: 20px;
+    }
+    /* Compressed Gothic Display (-2.16px at 72px) */
+    .hero-headline-compressed {
+      font-family: var(--font-gothic);
+      font-size: clamp(40px, 6.5vw, 76px);
+      font-weight: 500;
+      line-height: 1.05;
+      letter-spacing: -2.16px; /* Aggressive negative tracking */
+      color: var(--cursor-dark);
+      max-width: 900px;
+      margin: 0 auto 24px;
+    }
+    .hero-prose {
+      font-family: var(--font-serif);
+      font-size: 21px;
+      line-height: 1.5;
+      color: #525046;
+      max-width: 640px;
+      margin: 0 auto 40px;
+    }
+
+    /* Interactive Agent Timeline Studio Card */
+    .editor-studio-card {
+      background: #FFFFFF;
+      border: 1px solid var(--border-oklab-10);
+      border-radius: var(--radius-card);
+      box-shadow: var(--card-shadow);
+      max-width: 960px;
+      margin: 0 auto 64px;
+      overflow: hidden;
+      text-align: left;
+    }
+    .studio-head {
+      background: var(--cursor-surface-300);
+      border-bottom: 1px solid var(--border-oklab-10);
+      padding: 12px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-family: var(--font-mono);
+      font-size: 12px;
+    }
+    .studio-body {
+      padding: 28px;
+    }
+
+    /* Agent Execution Timeline Steps */
+    .timeline-steps-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-bottom: 28px;
+      font-family: var(--font-mono);
+      font-size: 13px;
+    }
+    .timeline-step {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 14px;
+      border-radius: var(--radius-sm);
+      background: var(--cursor-cream);
+      border: 1px solid var(--border-oklab-10);
+    }
+    .badge-op {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-weight: 600;
+      font-size: 11px;
+    }
+    .badge-thinking { background: var(--timeline-thinking); color: #432212; }
+    .badge-grep { background: var(--timeline-grep); color: #163e18; }
+    .badge-read { background: var(--timeline-read); color: #142e50; }
+    .badge-edit { background: var(--timeline-edit); color: #351c54; }
+
+    /* Code Pane */
+    .code-diff-pane {
+      background: #181714;
+      color: #edebe6;
+      border-radius: var(--radius-sm);
+      padding: 20px;
+      font-family: var(--font-mono);
+      font-size: 13px;
+      line-height: 1.6;
+    }
+    .diff-del { color: #f87171; background: rgba(248, 113, 113, 0.1); display: block; }
+    .diff-add { color: #4ade80; background: rgba(74, 222, 128, 0.1); display: block; }
+
+    /* Features Grid */
+    .features-grid-cursor {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+      margin-block: 48px;
+    }
+    @media (max-width: 860px) {
+      .features-grid-cursor { grid-template-columns: 1fr; }
+    }
+    .cursor-feat-card {
+      background: var(--cursor-surface-300);
+      border: 1px solid var(--border-oklab-10);
+      border-radius: var(--radius-card);
+      padding: 32px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      min-height: 280px;
+      transition: all var(--transition-fast);
+    }
+    .cursor-feat-card:hover {
+      border-color: var(--cursor-dark);
+      transform: translateY(-2px);
+    }
+    .feat-card-title {
+      font-family: var(--font-gothic);
+      font-size: 22px;
+      font-weight: 600;
+      letter-spacing: -0.5px;
+      color: var(--cursor-dark);
+      margin-bottom: 12px;
+    }
+    .feat-card-prose {
+      font-family: var(--font-serif);
+      font-size: 16px;
+      color: #555348;
+      line-height: 1.55;
+    }
+
+    /* Footer */
+    .cursor-footer {
+      border-top: 1px solid var(--border-oklab-10);
+      padding-block: 48px;
+      font-family: var(--font-gothic);
+      font-size: 13px;
+      color: #636154;
+    }
+    .footer-flex {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navigation -->
+  <header class="cursor-nav">
+    <div class="container nav-inner">
+      <a href="#hero" class="brand-cursor">
+        <div class="brand-cursor-mark">▶</div>
+        <span class="brand-title">Cursor</span>
+      </a>
+
+      <ul class="nav-links">
+        <li><a href="#features">Features</a></li>
+        <li><a href="#studio">Timeline</a></li>
+        <li><a href="#pricing">Pricing</a></li>
+        <li><a href="#changelog">Changelog</a></li>
+      </ul>
+
+      <div style="display: flex; gap: 12px; align-items: center;">
+        <a href="00_Index.md" class="btn-pill btn-cream">Index</a>
+        <a href="#download" class="btn-pill btn-dark">Download for macOS</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section id="hero" class="hero-wrap">
+    <div class="container">
+      <div class="hero-overline">The AI-First Code Editor</div>
+      <h1 class="hero-headline-compressed">
+        Built to make you extraordinarily productive.
+      </h1>
+      <p class="hero-prose">
+        Cursor is an evolutionary fork of VS Code engineered from the ground up for pair-programming with autonomous models. Warm minimalism meets code-editor elegance.
+      </p>
+
+      <div style="display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; margin-bottom: 56px;">
+        <a href="#download" class="btn-pill btn-dark">Download Cursor Free</a>
+        <a href="#studio" class="btn-pill btn-cream">Explore Agent Workflow</a>
+      </div>
+
+      <!-- Interactive Agent Timeline Studio Card -->
+      <div id="studio" class="editor-studio-card">
+        <div class="studio-head">
+          <span>● Agent Session: refactor_auth_pipeline.ts</span>
+          <span style="color: var(--cursor-orange); font-weight: 600;">STATUS: COMPLETED</span>
+        </div>
+
+        <div class="studio-body">
+          <!-- Timeline Steps -->
+          <div class="timeline-steps-list">
+            <div class="timeline-step">
+              <span class="badge-op badge-thinking">THINKING</span>
+              <span>Analyzing JWT expiration semantics and token refresh rotation race conditions</span>
+            </div>
+            <div class="timeline-step">
+              <span class="badge-op badge-grep">GREP</span>
+              <span>grep "verifyBearerToken" in src/middleware/*.ts (found 3 matches)</span>
+            </div>
+            <div class="timeline-step">
+              <span class="badge-op badge-read">READ</span>
+              <span>read src/auth/session_manager.ts:40-92</span>
+            </div>
+            <div class="timeline-step" style="border-color: var(--cursor-orange);">
+              <span class="badge-op badge-edit">EDIT</span>
+              <span>Replaced synchronous token verification with atomic redis lock mutex</span>
+            </div>
+          </div>
+
+          <!-- Code Diff Pane -->
+          <div class="code-diff-pane">
+            <span style="color: #8c897e;">// src/auth/session_manager.ts</span><br>
+            <span class="diff-del">- const isValid = await jwt.verify(token, secret);</span>
+            <span class="diff-add">+ const sessionLock = await redis.set(`lock:session:${userId}`, 1, "NX", "EX", 5);</span>
+            <span class="diff-add">+ const isValid = sessionLock &amp;&amp; await jwt.verify(token, secret);</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Feature Cards -->
+      <div id="features" class="features-grid-cursor">
+        <article class="cursor-feat-card">
+          <div>
+            <h3 class="feat-card-title">Copilot++ Next Edit</h3>
+            <p class="feat-card-prose">Predicts your next cursor position and code intent across multiple files before you finish typing.</p>
+          </div>
+          <div style="font-family: var(--font-mono); font-size: 11px; color: var(--cursor-orange); margin-top: 20px;">
+            AGENTIC INTENT
+          </div>
+        </article>
+
+        <article class="cursor-feat-card">
+          <div>
+            <h3 class="feat-card-title">Codebase Indexing</h3>
+            <p class="feat-card-prose">Embeds your repository in a local vector database for instant sub-millisecond semantic retrieval.</p>
+          </div>
+          <div style="font-family: var(--font-mono); font-size: 11px; color: var(--cursor-orange); margin-top: 20px;">
+            SEMANTIC GRAPH
+          </div>
+        </article>
+
+        <article class="cursor-feat-card">
+          <div>
+            <h3 class="feat-card-title">Warm Typographic Craft</h3>
+            <p class="feat-card-prose">Cursor Cream #f2f1ed canvas, oklab-space borders, and literary serif body text for tireless reading.</p>
+          </div>
+          <div style="font-family: var(--font-mono); font-size: 11px; color: var(--cursor-orange); margin-top: 20px;">
+            OKLAB BORDERS
+          </div>
+        </article>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="cursor-footer">
+    <div class="container footer-flex">
+      <div>Cursor Design Language &copy; 2026. Anysphere Inc. · Warm Cream #f2f1ed</div>
+      <div><a href="00_Index.md" style="color: var(--cursor-dark); font-weight: 600; text-decoration: none;">← Master Index</a></div>
+    </div>
+  </footer>
+
+</body>
+</html>

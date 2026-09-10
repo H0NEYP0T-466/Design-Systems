@@ -1,0 +1,910 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Friendly — Thoughtful Workspaces & Team Rituals</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+Display:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400;1,600&family=Space+Mono:wght@400;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    /* -------------------------------------------------------------
+       FRIENDLY DESIGN SYSTEM TOKENS & FOUNDATIONS
+       ------------------------------------------------------------- */
+    :root {
+      /* Official Color Tokens from DESIGN.md */
+      --color-primary: #F2D9DC;      /* Soft Rose Pastel - CTA emphasis */
+      --color-secondary: #D9F2D8;    /* Soft Mint/Sage Pastel */
+      --color-success: #16A34A;      /* Token from style foundations */
+      --color-warning: #D97706;      /* Token from style foundations */
+      --color-danger: #DC2626;       /* Token from style foundations */
+      --color-surface: #FFFFFF;      /* Token from style foundations */
+      --color-text: #111827;         /* Token from style foundations */
+      --color-neutral: #FFFFFF;      /* Derived from surface token */
+      
+      /* Subtle Tint Supports for Friendly Atmosphere */
+      --color-surface-tint: #FAF9F8;
+      --color-border-subtle: #E8E5E5;
+      --color-primary-hover: #E8C9CD;
+      --color-secondary-hover: #CBE8CA;
+
+      /* Typography Families */
+      --font-primary: "Noto Serif Display", Georgia, serif;
+      --font-display: "Noto Serif Display", Georgia, serif;
+      --font-mono: "Space Mono", monospace;
+      --font-body: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+
+      /* Typography Scale: 14/16/18/24/32/40 */
+      --type-14: 14px;
+      --type-16: 16px;
+      --type-18: 18px;
+      --type-24: 24px;
+      --type-32: 32px;
+      --type-40: 40px;
+
+      /* Radii & Density (Compact Density Mode) */
+      --radius-sm: 8px;
+      --radius-md: 14px;
+      --radius-lg: 20px;
+      --radius-pill: 9999px;
+
+      /* Transitions: 150-250ms stable easing */
+      --transition-standard: all 200ms cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    /* Reset & Base Canvas */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--color-surface);
+      color: var(--color-text);
+      font-family: var(--font-body);
+      font-size: var(--type-16);
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    /* Clear Content Blocks & Predictable Grid */
+    .container {
+      max-width: 1140px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    /* -------------------------------------------------------------
+       TYPOGRAPHY RULES (NOTO SERIF DISPLAY & SPACE MONO)
+       ------------------------------------------------------------- */
+    h1, .h1-display {
+      font-family: var(--font-display);
+      font-size: var(--type-40);
+      font-weight: 700;
+      line-height: 1.15;
+      letter-spacing: -0.5px;
+      color: var(--color-text);
+    }
+
+    h2, .h2-heading {
+      font-family: var(--font-display);
+      font-size: var(--type-32);
+      font-weight: 600;
+      line-height: 1.25;
+      letter-spacing: -0.3px;
+      color: var(--color-text);
+    }
+
+    h3, .h3-subheading {
+      font-family: var(--font-display);
+      font-size: var(--type-24);
+      font-weight: 600;
+      line-height: 1.30;
+      color: var(--color-text);
+    }
+
+    .lead-text {
+      font-family: var(--font-body);
+      font-size: var(--type-18);
+      line-height: 1.55;
+      color: #374151;
+    }
+
+    .body-copy {
+      font-family: var(--font-body);
+      font-size: var(--type-16);
+      line-height: 1.50;
+      color: var(--color-text);
+    }
+
+    .caption-copy {
+      font-family: var(--font-body);
+      font-size: var(--type-14);
+      line-height: 1.45;
+      color: #6B7280;
+    }
+
+    .mono-tag {
+      font-family: var(--font-mono);
+      font-size: var(--type-14);
+      letter-spacing: -0.2px;
+    }
+
+    /* -------------------------------------------------------------
+       BUTTONS & INTERACTION SIGNALS
+       ------------------------------------------------------------- */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-body);
+      font-size: var(--type-16);
+      font-weight: 600;
+      border-radius: var(--radius-pill);
+      padding: 10px 22px;
+      cursor: pointer;
+      text-decoration: none;
+      transition: var(--transition-standard);
+      border: 1px solid transparent;
+      user-select: none;
+    }
+
+    /* Primary action uses #F2D9DC (Soft Rose Pastel) */
+    .btn-primary {
+      background-color: var(--color-primary);
+      color: var(--color-text);
+      border-color: #E2C2C6;
+      box-shadow: 0 2px 4px rgba(17, 24, 39, 0.05);
+    }
+    .btn-primary:hover {
+      background-color: var(--color-primary-hover);
+      transform: translateY(-1px);
+      box-shadow: 0 4px 10px rgba(17, 24, 39, 0.08);
+    }
+    .btn-primary:active {
+      transform: translateY(0);
+      background-color: #DDB2B7;
+    }
+    .btn-primary:focus-visible {
+      outline: 2px solid var(--color-text);
+      outline-offset: 2px;
+    }
+
+    /* Secondary actions stay neutral */
+    .btn-secondary {
+      background-color: var(--color-surface);
+      color: var(--color-text);
+      border-color: var(--color-border-subtle);
+    }
+    .btn-secondary:hover {
+      background-color: var(--color-surface-tint);
+      border-color: #D1D5DB;
+    }
+    .btn-secondary:focus-visible {
+      outline: 2px solid var(--color-text);
+      outline-offset: 2px;
+    }
+
+    .btn-mint {
+      background-color: var(--color-secondary);
+      color: var(--color-text);
+      border-color: #C3E6C2;
+    }
+    .btn-mint:hover {
+      background-color: var(--color-secondary-hover);
+    }
+
+    /* -------------------------------------------------------------
+       CARDS & COMPACT DENSITY SECTIONS
+       ------------------------------------------------------------- */
+    .card {
+      background-color: var(--color-surface);
+      border: 1px solid var(--color-border-subtle);
+      border-radius: var(--radius-lg);
+      padding: 24px;
+      box-shadow: 0 4px 16px rgba(17, 24, 39, 0.03);
+      transition: var(--transition-standard);
+    }
+    .card:hover {
+      box-shadow: 0 8px 24px rgba(17, 24, 39, 0.06);
+      border-color: #D9D6D6;
+    }
+
+    .pill-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 12px;
+      border-radius: var(--radius-pill);
+      font-family: var(--font-mono);
+      font-size: var(--type-14);
+      font-weight: 700;
+    }
+    .badge-rose {
+      background-color: var(--color-primary);
+      color: var(--color-text);
+    }
+    .badge-mint {
+      background-color: var(--color-secondary);
+      color: var(--color-text);
+    }
+    .badge-success {
+      background-color: #DCFCE7;
+      color: var(--color-success);
+    }
+    .badge-warning {
+      background-color: #FEF3C7;
+      color: var(--color-warning);
+    }
+    .badge-danger {
+      background-color: #FEE2E2;
+      color: var(--color-danger);
+    }
+
+    /* -------------------------------------------------------------
+       HEADER & NAVIGATION
+       ------------------------------------------------------------- */
+    .site-header {
+      padding: 18px 0;
+      border-bottom: 1px solid var(--color-border-subtle);
+      background: var(--color-surface);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .header-nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+      color: var(--color-text);
+    }
+    .brand-mark {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: var(--color-primary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-display);
+      font-size: 18px;
+      font-weight: bold;
+    }
+    .brand-title {
+      font-family: var(--font-display);
+      font-size: var(--type-24);
+      font-weight: 700;
+      letter-spacing: -0.4px;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 24px;
+      align-items: center;
+      list-style: none;
+    }
+    .nav-link {
+      color: var(--color-text);
+      text-decoration: none;
+      font-size: var(--type-16);
+      font-weight: 500;
+      transition: var(--transition-standard);
+    }
+    .nav-link:hover {
+      color: #4B5563;
+    }
+
+    /* -------------------------------------------------------------
+       HERO SECTION: SOFT & APPROACHABLE
+       ------------------------------------------------------------- */
+    .hero-section {
+      padding: 56px 0 40px;
+      background: linear-gradient(180deg, #FAF7F7 0%, var(--color-surface) 100%);
+      border-bottom: 1px solid var(--color-border-subtle);
+    }
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: 40px;
+      align-items: center;
+    }
+
+    /* Interactive Team Rituals Hub */
+    .hub-card {
+      background: var(--color-surface);
+      border: 1px solid var(--color-border-subtle);
+      border-radius: var(--radius-lg);
+      padding: 26px;
+      box-shadow: 0 10px 30px rgba(17, 24, 39, 0.05);
+    }
+
+    .hub-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 18px;
+    }
+
+    /* Micro-Break Breathing Orb */
+    .breathing-box {
+      background: #FAF9F8;
+      border-radius: var(--radius-md);
+      padding: 20px;
+      text-align: center;
+      margin-bottom: 20px;
+      border: 1px solid var(--color-border-subtle);
+    }
+
+    .pacer-orb {
+      width: 70px;
+      height: 70px;
+      border-radius: 50%;
+      background: var(--color-primary);
+      margin: 14px auto;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: var(--type-14);
+      font-family: var(--font-mono);
+      font-weight: 700;
+      color: var(--color-text);
+      box-shadow: 0 4px 14px rgba(242, 217, 220, 0.8);
+      transition: transform 3.5s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .pacer-orb.inhale {
+      transform: scale(1.4);
+      background: var(--color-secondary);
+      box-shadow: 0 4px 20px rgba(217, 242, 216, 0.9);
+    }
+
+    /* Live Gratitude Board */
+    .gratitude-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      max-height: 180px;
+      overflow-y: auto;
+      margin-top: 14px;
+    }
+
+    .gratitude-item {
+      background: var(--color-surface-tint);
+      border-left: 4px solid var(--color-primary);
+      padding: 10px 14px;
+      border-radius: var(--radius-sm);
+      font-size: var(--type-14);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      animation: fadeIn 200ms ease;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-4px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .gratitude-input-row {
+      display: flex;
+      gap: 8px;
+      margin-top: 14px;
+    }
+    .friendly-input {
+      flex: 1;
+      padding: 9px 14px;
+      border-radius: var(--radius-pill);
+      border: 1px solid #D1D5DB;
+      font-family: var(--font-body);
+      font-size: var(--type-14);
+      color: var(--color-text);
+      outline: none;
+      transition: var(--transition-standard);
+    }
+    .friendly-input:focus {
+      border-color: var(--color-text);
+      box-shadow: 0 0 0 2px var(--color-primary);
+    }
+
+    /* -------------------------------------------------------------
+       SECTION: COMPACT DENSITY PILLARS
+       ------------------------------------------------------------- */
+    .section-spacing {
+      padding: 60px 0;
+    }
+
+    .feature-grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+      margin-top: 36px;
+    }
+
+    /* -------------------------------------------------------------
+       SECTION: DESIGN SYSTEM TOKEN INSPECTOR
+       ------------------------------------------------------------- */
+    .token-sandbox {
+      background: #FAF9F8;
+      border-radius: var(--radius-lg);
+      padding: 36px;
+      border: 1px solid var(--color-border-subtle);
+    }
+
+    .palette-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+      gap: 14px;
+      margin-top: 20px;
+    }
+
+    .swatch-card {
+      background: var(--color-surface);
+      border: 1px solid var(--color-border-subtle);
+      border-radius: var(--radius-md);
+      padding: 12px;
+      text-align: center;
+    }
+    .swatch-block {
+      height: 48px;
+      border-radius: var(--radius-sm);
+      margin-bottom: 8px;
+      border: 1px solid rgba(0,0,0,0.06);
+    }
+
+    /* -------------------------------------------------------------
+       SECTION: MEMBERSHIP PLANS
+       ------------------------------------------------------------- */
+    .plans-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+      margin-top: 36px;
+    }
+
+    /* -------------------------------------------------------------
+       FOOTER
+       ------------------------------------------------------------- */
+    .site-footer {
+      border-top: 1px solid var(--color-border-subtle);
+      padding: 40px 0;
+      background: var(--color-surface);
+      margin-top: 40px;
+    }
+    .footer-flex {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+
+    /* Responsive Queries */
+    @media (max-width: 900px) {
+      .hero-grid {
+        grid-template-columns: 1fr;
+      }
+      .feature-grid-3, .plans-grid {
+        grid-template-columns: 1fr;
+      }
+      .nav-links {
+        display: none;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header class="site-header">
+    <div class="container header-nav">
+      <a href="#" class="brand">
+        <div class="brand-mark">✿</div>
+        <span class="brand-title">friendly</span>
+      </a>
+
+      <ul class="nav-links">
+        <li><a href="#rituals" class="nav-link">Rituals</a></li>
+        <li><a href="#principles" class="nav-link">Principles</a></li>
+        <li><a href="#tokens" class="nav-link">Tokens</a></li>
+        <li><a href="#plans" class="nav-link">Memberships</a></li>
+      </ul>
+
+      <div style="display: flex; gap: 10px; align-items: center;">
+        <button class="btn btn-secondary" style="padding: 7px 16px; font-size: 14px;">Sign In</button>
+        <button class="btn btn-primary" style="padding: 7px 18px; font-size: 14px;">Get Started</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- HERO SECTION -->
+  <section class="hero-section">
+    <div class="container hero-grid">
+      <div>
+        <div style="margin-bottom: 16px;">
+          <span class="pill-badge badge-rose">✿ Approachable, Intuitive, Calm</span>
+        </div>
+        <h1 class="h1-display">Workplaces that feel like a breath of fresh air.</h1>
+        <p class="lead-text" style="margin-top: 18px; max-width: 520px;">
+          Friendly connects distributed product teams with gentle rituals, mindful pacing, and soft pastel simplicity. No hyper-caffeinated pressure.
+        </p>
+
+        <div style="display: flex; gap: 12px; margin-top: 28px; align-items: center; flex-wrap: wrap;">
+          <button class="btn btn-primary" onclick="triggerPacer()">Try 60s Breathing Ritual</button>
+          <button class="btn btn-secondary">Explore Design Tokens</button>
+          <span class="mono-tag" style="color: #6B7280;">primary: #F2D9DC</span>
+        </div>
+      </div>
+
+      <!-- INTERACTIVE HUB: RITUALS & GRATITUDE -->
+      <div class="hub-card" id="rituals">
+        <div class="hub-header">
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <span class="pill-badge badge-mint">Live Ritual</span>
+            <span style="font-weight: 600; font-size: 15px;">Team Alignment</span>
+          </div>
+          <span class="mono-tag" style="color: var(--color-success);">● Synchronized</span>
+        </div>
+
+        <!-- Breathing Pacer Widget -->
+        <div class="breathing-box">
+          <span class="caption-copy" style="font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px;">Micro-Break Pacer</span>
+          <div class="pacer-orb" id="pacerOrb">Pace</div>
+          <div style="font-size: 13px; color: #4B5563;" id="pacerStateText">Tap below to begin a calm cycle</div>
+          <button class="btn btn-mint" style="margin-top: 10px; padding: 6px 14px; font-size: 13px;" onclick="triggerPacer()">
+            Start Mindful Cycle
+          </button>
+        </div>
+
+        <!-- Gratitude Board -->
+        <div>
+          <div style="display: flex; justify-content: space-between; align-items: center;">
+            <span style="font-weight: 600; font-size: 14px;">Team Gratitude Wall</span>
+            <span class="mono-tag" style="font-size: 12px; color: #6B7280;" id="gratitudeCount">3 notes</span>
+          </div>
+
+          <div class="gratitude-list" id="gratitudeList">
+            <div class="gratitude-item">
+              <span>"Thanks Sarah for pairing on the color scale!"</span>
+              <span class="pill-badge badge-rose" style="font-size: 11px;">Rose</span>
+            </div>
+            <div class="gratitude-item" style="border-color: var(--color-secondary);">
+              <span>"Loved the asynchronous Monday recap."</span>
+              <span class="pill-badge badge-mint" style="font-size: 11px;">Mint</span>
+            </div>
+            <div class="gratitude-item">
+              <span>"Gentle reminders kept me focused today."</span>
+              <span class="pill-badge badge-rose" style="font-size: 11px;">Rose</span>
+            </div>
+          </div>
+
+          <div class="gratitude-input-row">
+            <input type="text" id="gratitudeInput" class="friendly-input" placeholder="Add a gentle note of appreciation..." onkeydown="if(event.key==='Enter') addGratitude()">
+            <button class="btn btn-primary" style="padding: 7px 16px; font-size: 14px;" onclick="addGratitude()">Send</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION: DESIGN PRINCIPLES & COMPACT DENSITY -->
+  <section class="section-spacing" id="principles">
+    <div class="container">
+      <div style="text-align: center; max-width: 620px; margin: 0 auto;">
+        <span class="pill-badge badge-mint">Core Tenets</span>
+        <h2 class="h2-heading" style="margin-top: 12px;">Crafted for human comfort</h2>
+        <p class="body-copy" style="margin-top: 8px; color: #4B5563;">
+          Compact density without the anxiety. Soft pastel cards, ample whitespace, and clear typographic hierarchy.
+        </p>
+      </div>
+
+      <div class="feature-grid-3">
+        <!-- Card 1 -->
+        <div class="card">
+          <div style="width: 38px; height: 38px; border-radius: 50%; background: var(--color-primary); display: flex; align-items: center; justify-content: center; font-size: 18px; margin-bottom: 14px;">
+            ☕
+          </div>
+          <h3 class="h3-subheading">Thoughtful Pacing</h3>
+          <p class="body-copy" style="margin-top: 8px; color: #4B5563;">
+            Built-in micro-breaks and gentle transition states (150–250ms) to ensure continuous peace of mind throughout collaborative sessions.
+          </p>
+          <div style="margin-top: 16px;">
+            <span class="mono-tag" style="color: #6B7280;">easing: cubic-bezier(0.16, 1, 0.3, 1)</span>
+          </div>
+        </div>
+
+        <!-- Card 2 -->
+        <div class="card">
+          <div style="width: 38px; height: 38px; border-radius: 50%; background: var(--color-secondary); display: flex; align-items: center; justify-content: center; font-size: 18px; margin-bottom: 14px;">
+            🌿
+          </div>
+          <h3 class="h3-subheading">Soft Pastel Palette</h3>
+          <p class="body-copy" style="margin-top: 8px; color: #4B5563;">
+            Primary #F2D9DC sets an inviting, approachable tone for primary actions, while #D9F2D8 provides soothing mint balance.
+          </p>
+          <div style="margin-top: 16px;">
+            <span class="pill-badge badge-mint">Secondary: #D9F2D8</span>
+          </div>
+        </div>
+
+        <!-- Card 3 -->
+        <div class="card">
+          <div style="width: 38px; height: 38px; border-radius: 50%; background: #E0E7FF; display: flex; align-items: center; justify-content: center; font-size: 18px; margin-bottom: 14px;">
+            📖
+          </div>
+          <h3 class="h3-subheading">Noto Serif Display</h3>
+          <p class="body-copy" style="margin-top: 8px; color: #4B5563;">
+            Editorial elegance across 6 distinct scale steps: 14px, 16px, 18px, 24px, 32px, and 40px. High legibility, zero fatigue.
+          </p>
+          <div style="margin-top: 16px;">
+            <span class="mono-tag" style="color: #6B7280;">Scale: 14/16/18/24/32/40</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION: DESIGN TOKENS SANDBOX -->
+  <section class="section-spacing" id="tokens" style="padding-top: 0;">
+    <div class="container">
+      <div class="token-sandbox">
+        <div style="display: flex; justify-content: space-between; align-items: flex-end; flex-wrap: wrap; gap: 14px;">
+          <div>
+            <span class="pill-badge badge-rose">Design Tokens</span>
+            <h2 class="h2-heading" style="margin-top: 8px;">Official Color Foundations</h2>
+            <p class="caption-copy" style="margin-top: 4px;">Directly implemented from <code>friendly/DESIGN.md</code> specification.</p>
+          </div>
+          <span class="mono-tag" style="background: #fff; padding: 4px 10px; border-radius: 6px; border: 1px solid #E5E7EB;">
+            Style Family: Creative & Artistic
+          </span>
+        </div>
+
+        <div class="palette-grid">
+          <!-- Primary -->
+          <div class="swatch-card">
+            <div class="swatch-block" style="background-color: #F2D9DC;"></div>
+            <div style="font-weight: 700; font-size: 13px;">Primary</div>
+            <div class="mono-tag" style="font-size: 11px; color: #6B7280;">#F2D9DC</div>
+          </div>
+          <!-- Secondary -->
+          <div class="swatch-card">
+            <div class="swatch-block" style="background-color: #D9F2D8;"></div>
+            <div style="font-weight: 700; font-size: 13px;">Secondary</div>
+            <div class="mono-tag" style="font-size: 11px; color: #6B7280;">#D9F2D8</div>
+          </div>
+          <!-- Success -->
+          <div class="swatch-card">
+            <div class="swatch-block" style="background-color: #16A34A;"></div>
+            <div style="font-weight: 700; font-size: 13px;">Success</div>
+            <div class="mono-tag" style="font-size: 11px; color: #6B7280;">#16A34A</div>
+          </div>
+          <!-- Warning -->
+          <div class="swatch-card">
+            <div class="swatch-block" style="background-color: #D97706;"></div>
+            <div style="font-weight: 700; font-size: 13px;">Warning</div>
+            <div class="mono-tag" style="font-size: 11px; color: #6B7280;">#D97706</div>
+          </div>
+          <!-- Danger -->
+          <div class="swatch-card">
+            <div class="swatch-block" style="background-color: #DC2626;"></div>
+            <div style="font-weight: 700; font-size: 13px;">Danger</div>
+            <div class="mono-tag" style="font-size: 11px; color: #6B7280;">#DC2626</div>
+          </div>
+          <!-- Surface -->
+          <div class="swatch-card">
+            <div class="swatch-block" style="background-color: #FFFFFF; border: 1px solid #ddd;"></div>
+            <div style="font-weight: 700; font-size: 13px;">Surface</div>
+            <div class="mono-tag" style="font-size: 11px; color: #6B7280;">#FFFFFF</div>
+          </div>
+          <!-- Text -->
+          <div class="swatch-card">
+            <div class="swatch-block" style="background-color: #111827;"></div>
+            <div style="font-weight: 700; font-size: 13px;">Text</div>
+            <div class="mono-tag" style="font-size: 11px; color: #6B7280;">#111827</div>
+          </div>
+        </div>
+
+        <!-- Typography Scale Sample -->
+        <div style="margin-top: 30px; background: #fff; border-radius: var(--radius-md); padding: 20px; border: 1px solid var(--color-border-subtle);">
+          <span class="mono-tag" style="color: #6B7280; display: block; margin-bottom: 12px;">TYPOGRAPHIC SCALE DEMO</span>
+          <div style="display: flex; flex-direction: column; gap: 8px;">
+            <div style="font-family: var(--font-display); font-size: 40px; font-weight:700;">40px — Noto Serif Display</div>
+            <div style="font-family: var(--font-display); font-size: 32px; font-weight:600;">32px — Sub-headline Structure</div>
+            <div style="font-family: var(--font-display); font-size: 24px; font-weight:600;">24px — Component Header</div>
+            <div style="font-family: var(--font-body); font-size: 18px;">18px — Lead supportive paragraph</div>
+            <div style="font-family: var(--font-body); font-size: 16px;">16px — Standard accessible body copy on #111827</div>
+            <div style="font-family: var(--font-mono); font-size: 14px; color: #6B7280;">14px — Space Mono technical labels</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION: PLANS & MEMBERSHIP -->
+  <section class="section-spacing" id="plans" style="padding-top: 0;">
+    <div class="container">
+      <div style="text-align: center; max-width: 580px; margin: 0 auto;">
+        <span class="pill-badge badge-rose">Honest Pricing</span>
+        <h2 class="h2-heading" style="margin-top: 10px;">Plans that respect your boundaries</h2>
+        <p class="body-copy" style="margin-top: 6px; color: #4B5563;">Straightforward tiers with zero deceptive upsells.</p>
+      </div>
+
+      <div class="plans-grid">
+        <!-- Tier 1 -->
+        <div class="card" style="display: flex; flex-direction: column; justify-content: space-between;">
+          <div>
+            <span class="mono-tag" style="color: #6B7280;">Individual</span>
+            <h3 class="h3-subheading" style="margin-top: 6px;">Solitary</h3>
+            <div style="font-size: 36px; font-family: var(--font-display); font-weight: 700; margin: 14px 0 6px;">$0</div>
+            <div class="caption-copy">Free forever for personal focus rituals.</div>
+            <ul style="margin: 20px 0; padding-left: 18px; font-size: 14px; color: #374151; display: flex; flex-direction: column; gap: 8px;">
+              <li>Breathing pacing timer</li>
+              <li>Personal gratitude journal</li>
+              <li>Daily mood check-ins</li>
+            </ul>
+          </div>
+          <button class="btn btn-secondary" style="width: 100%;">Choose Free</button>
+        </div>
+
+        <!-- Tier 2 (Highlighted) -->
+        <div class="card" style="border: 2px solid var(--color-primary); background: #FFFCFC; display: flex; flex-direction: column; justify-content: space-between;">
+          <div>
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+              <span class="mono-tag" style="color: #9C4D58;">Team Favorite</span>
+              <span class="pill-badge badge-rose">Popular</span>
+            </div>
+            <h3 class="h3-subheading" style="margin-top: 6px;">Collaborative</h3>
+            <div style="font-size: 36px; font-family: var(--font-display); font-weight: 700; margin: 14px 0 6px;">$12</div>
+            <div class="caption-copy">Per teammate / month billed annually.</div>
+            <ul style="margin: 20px 0; padding-left: 18px; font-size: 14px; color: #374151; display: flex; flex-direction: column; gap: 8px;">
+              <li>All Solitary features</li>
+              <li>Synchronous team rituals</li>
+              <li>Shared gratitude board</li>
+              <li>Quiet hour guardrails</li>
+            </ul>
+          </div>
+          <button class="btn btn-primary" style="width: 100%;">Start 14-Day Trial</button>
+        </div>
+
+        <!-- Tier 3 -->
+        <div class="card" style="display: flex; flex-direction: column; justify-content: space-between;">
+          <div>
+            <span class="mono-tag" style="color: #6B7280;">Organization</span>
+            <h3 class="h3-subheading" style="margin-top: 6px;">Sanctuary</h3>
+            <div style="font-size: 36px; font-family: var(--font-display); font-weight: 700; margin: 14px 0 6px;">$28</div>
+            <div class="caption-copy">For entire enterprises prioritizing wellness.</div>
+            <ul style="margin: 20px 0; padding-left: 18px; font-size: 14px; color: #374151; display: flex; flex-direction: column; gap: 8px;">
+              <li>Unlimited teams & rooms</li>
+              <li>Custom mindfulness rituals</li>
+              <li>SSO & SOC2 Type II compliance</li>
+              <li>Dedicated wellness facilitator</li>
+            </ul>
+          </div>
+          <button class="btn btn-secondary" style="width: 100%;">Talk with Team</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="site-footer">
+    <div class="container footer-flex">
+      <div style="display: flex; align-items: center; gap: 10px;">
+        <div class="brand-mark" style="width: 24px; height: 24px; font-size: 14px;">✿</div>
+        <span style="font-family: var(--font-display); font-weight: 700; font-size: 16px;">friendly</span>
+        <span class="caption-copy" style="margin-left: 10px;">© Friendly Design System. Soft Pastel & Approachable Atmosphere.</span>
+      </div>
+
+      <div style="display: flex; gap: 14px; align-items: center;">
+        <span class="mono-tag" style="color: #4B5563;">PRIMARY: #F2D9DC</span>
+        <span class="mono-tag" style="color: #4B5563;">SECONDARY: #D9F2D8</span>
+        <span class="mono-tag" style="color: #4B5563;">TEXT: #111827</span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- INTERACTIVE JAVASCRIPT -->
+  <script>
+    // Pacer Breathing Audio / Visual Engine
+    let isPacerRunning = false;
+    let pacerInterval;
+
+    function playSoftChime(freq = 440) {
+      try {
+        const AudioContext = window.AudioContext || window.webkitAudioContext;
+        if (!AudioContext) return;
+        const ctx = new AudioContext();
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(freq, ctx.currentTime);
+        gain.gain.setValueAtTime(0.06, ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + 1.2);
+
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.start();
+        osc.stop(ctx.currentTime + 1.2);
+      } catch (e) {
+        // AudioContext disabled or blocked
+      }
+    }
+
+    function triggerPacer() {
+      const orb = document.getElementById('pacerOrb');
+      const text = document.getElementById('pacerStateText');
+
+      if (isPacerRunning) {
+        clearInterval(pacerInterval);
+        isPacerRunning = false;
+        orb.classList.remove('inhale');
+        orb.textContent = 'Pace';
+        text.textContent = 'Pacer paused. Tap to restart.';
+        return;
+      }
+
+      isPacerRunning = true;
+      let phase = 'inhale';
+
+      function cycle() {
+        if (phase === 'inhale') {
+          orb.classList.add('inhale');
+          orb.textContent = 'Inhale';
+          text.textContent = 'Breathe in gently (4 seconds)...';
+          playSoftChime(523.25); // C5
+          phase = 'exhale';
+        } else {
+          orb.classList.remove('inhale');
+          orb.textContent = 'Exhale';
+          text.textContent = 'Release and let go (4 seconds)...';
+          playSoftChime(392.00); // G4
+          phase = 'inhale';
+        }
+      }
+
+      cycle();
+      pacerInterval = setInterval(cycle, 3500);
+    }
+
+    // Gratitude Wall Handler
+    function addGratitude() {
+      const input = document.getElementById('gratitudeInput');
+      const text = input.value.trim();
+      if (!text) return;
+
+      const list = document.getElementById('gratitudeList');
+      const item = document.createElement('div');
+      item.className = 'gratitude-item';
+      
+      const isMint = Math.random() > 0.5;
+      if (isMint) {
+        item.style.borderColor = 'var(--color-secondary)';
+      }
+
+      item.innerHTML = `
+        <span>"${escapeHtml(text)}"</span>
+        <span class="pill-badge ${isMint ? 'badge-mint' : 'badge-rose'}" style="font-size: 11px;">
+          ${isMint ? 'Mint' : 'Rose'}
+        </span>
+      `;
+
+      list.prepend(item);
+      input.value = '';
+
+      const countSpan = document.getElementById('gratitudeCount');
+      countSpan.textContent = `${list.children.length} notes`;
+      playSoftChime(659.25); // E5
+    }
+
+    function escapeHtml(str) {
+      return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+    }
+  </script>
+</body>
+</html>

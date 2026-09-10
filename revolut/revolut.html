@@ -1,0 +1,630 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Revolut — One App, All Things Money</title>
+  <meta name="description" content="Digital banking. Sleek interface, universal pill buttons, fintech precision, zero shadows, and pure contrast.">
+  
+  <!-- Fonts: Inter for crisp body typography, Plus Jakarta Sans / Inter fallback for geometric Aeonik aesthetic -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      /* Revolut UI Color Tokens (--rui-*) */
+      --rui-color-dark: #191c1f;
+      --rui-color-white: #ffffff;
+      --rui-color-surface-light: #f4f4f4;
+      --rui-color-blue: #494fdf;
+      --rui-color-blue-action: #4f55f1;
+      --rui-color-blue-text: #376cd5;
+      --rui-color-teal: #00a87e;
+      --rui-color-danger: #e23b4a;
+      --rui-color-deep-pink: #e61e49;
+      --rui-color-warning: #ec7e00;
+      --rui-color-yellow: #b09000;
+      --rui-color-light-green: #428619;
+      --rui-color-light-blue: #007bc2;
+      --rui-color-brown: #936d62;
+      
+      /* Neutrals */
+      --rui-text-secondary: #505a63;
+      --rui-text-muted: #8d969e;
+      --rui-border-divider: #c9c9cd;
+
+      /* Typography */
+      --font-display: 'Plus Jakarta Sans', 'Aeonik Pro', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      --font-body: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+
+      /* Spacing Scale */
+      --sp-4: 4px;
+      --sp-6: 6px;
+      --sp-8: 8px;
+      --sp-14: 14px;
+      --sp-16: 16px;
+      --sp-20: 20px;
+      --sp-24: 24px;
+      --sp-32: 32px;
+      --sp-40: 40px;
+      --sp-48: 48px;
+      --sp-80: 80px;
+      --sp-120: 120px;
+
+      /* Border Radii */
+      --rad-sm: 12px;
+      --rad-card: 20px;
+      --rad-pill: 9999px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--rui-color-white);
+      color: var(--rui-color-dark);
+      font-family: var(--font-body);
+      font-size: 16px;
+      line-height: 1.50;
+      letter-spacing: 0.24px;
+      -webkit-font-smoothing: antialiased;
+      /* ZERO SHADOWS DETECTED ACROSS REVOLUT DESIGN SYSTEM */
+    }
+
+    /* Navigation */
+    header.rui-nav {
+      position: sticky;
+      top: 0;
+      background: var(--rui-color-white);
+      border-bottom: 1px solid #EDEDEE;
+      z-index: 1000;
+    }
+    .nav-inner {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 20px 32px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .brand-logo {
+      font-family: var(--font-display);
+      font-size: 26px;
+      font-weight: 500;
+      letter-spacing: -0.8px;
+      color: var(--rui-color-dark);
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .brand-mark {
+      width: 32px;
+      height: 32px;
+      background: var(--rui-color-dark);
+      color: var(--rui-color-white);
+      border-radius: var(--rad-sm);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 16px;
+    }
+    .nav-menu {
+      display: flex;
+      gap: 32px;
+      list-style: none;
+    }
+    .nav-menu a {
+      font-family: var(--font-display);
+      font-size: 17px;
+      font-weight: 500;
+      color: var(--rui-color-dark);
+      text-decoration: none;
+      transition: color 150ms ease;
+    }
+    .nav-menu a:hover {
+      color: var(--rui-color-blue);
+    }
+    .nav-ctas {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+    }
+
+    /* Revolut Universal Pill Button System */
+    .btn-pill {
+      font-family: var(--font-display);
+      font-size: 16px;
+      font-weight: 500;
+      padding: 14px 32px;
+      border-radius: var(--rad-pill);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      text-decoration: none;
+      border: none;
+      cursor: pointer;
+      transition: opacity 150ms ease;
+    }
+    .btn-pill:hover {
+      opacity: 0.85;
+    }
+    .btn-pill:focus-visible {
+      outline: none;
+      box-shadow: 0 0 0 0.125rem var(--rui-color-blue);
+    }
+
+    .btn-primary-dark {
+      background: var(--rui-color-dark);
+      color: var(--rui-color-white);
+    }
+    .btn-secondary-light {
+      background: var(--rui-color-surface-light);
+      color: #000000;
+      padding: 14px 34px;
+    }
+    .btn-outline {
+      background: transparent;
+      color: var(--rui-color-dark);
+      border: 2px solid var(--rui-color-dark);
+    }
+    .btn-ghost-dark {
+      background: rgba(244, 244, 244, 0.1);
+      color: var(--rui-color-surface-light);
+      border: 2px solid var(--rui-color-surface-light);
+    }
+    .btn-blue {
+      background: var(--rui-color-blue);
+      color: var(--rui-color-white);
+    }
+
+    /* Main Container */
+    .main-wrap {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 0 32px;
+    }
+
+    /* Hero Section */
+    .hero-section {
+      padding-top: var(--sp-80);
+      padding-bottom: var(--sp-80);
+    }
+    .hero-heading {
+      font-family: var(--font-display);
+      font-size: clamp(48px, 8vw, 110px);
+      font-weight: 500;
+      line-height: 1.00;
+      letter-spacing: -2.5px;
+      color: var(--rui-color-dark);
+      margin-bottom: 28px;
+      max-width: 1080px;
+    }
+    .hero-subhead {
+      font-family: var(--font-body);
+      font-size: 20px;
+      font-weight: 400;
+      line-height: 1.56;
+      letter-spacing: -0.09px;
+      color: var(--rui-text-secondary);
+      max-width: 680px;
+      margin-bottom: 40px;
+    }
+    .hero-cta-group {
+      display: flex;
+      gap: 16px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    /* Alternating Dark / Light Sections */
+    .section-dark {
+      background: var(--rui-color-dark);
+      color: var(--rui-color-white);
+      padding: var(--sp-80) 0;
+    }
+    .section-light {
+      background: var(--rui-color-white);
+      color: var(--rui-color-dark);
+      padding: var(--sp-80) 0;
+    }
+
+    /* Product App Interface (Interactive Banking Console) */
+    .banking-board {
+      background: #FFFFFF;
+      border: 1px solid #E5E7EB;
+      border-radius: var(--rad-card);
+      padding: 36px;
+      margin-top: 48px;
+    }
+    .board-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-bottom: 24px;
+      border-bottom: 1px solid #F1F5F9;
+      margin-bottom: 32px;
+    }
+    .balance-display {
+      font-family: var(--font-display);
+      font-size: 48px;
+      font-weight: 500;
+      letter-spacing: -1px;
+      color: var(--rui-color-dark);
+      margin-top: 6px;
+    }
+    .rate-tag {
+      font-family: var(--font-body);
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--rui-color-teal);
+      background: #E6F6F2;
+      padding: 4px 12px;
+      border-radius: var(--rad-pill);
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    /* Cards Grid */
+    .cards-3 {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 24px;
+    }
+    .fin-card {
+      background: var(--rui-color-surface-light);
+      border-radius: var(--rad-card);
+      padding: 32px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    .fin-card.dark-card {
+      background: #24282D;
+      color: #FFFFFF;
+    }
+    .fin-card-title {
+      font-family: var(--font-display);
+      font-size: 26px;
+      font-weight: 500;
+      letter-spacing: -0.32px;
+      margin-bottom: 12px;
+    }
+    .fin-card-desc {
+      color: var(--rui-text-secondary);
+      font-size: 16px;
+      margin-bottom: 24px;
+    }
+    .dark-card .fin-card-desc {
+      color: var(--rui-text-muted);
+    }
+
+    /* Interactive Currency Converter */
+    .converter-row {
+      display: flex;
+      gap: 16px;
+      align-items: center;
+      margin-bottom: 16px;
+    }
+    .input-box {
+      flex: 1;
+      background: #FFFFFF;
+      border: 1px solid var(--rui-border-divider);
+      border-radius: var(--rad-sm);
+      padding: 12px 16px;
+      font-family: var(--font-body);
+      font-size: 16px;
+      outline: none;
+      color: var(--rui-color-dark);
+    }
+    .input-box:focus {
+      border-color: var(--rui-color-blue);
+      box-shadow: 0 0 0 0.125rem rgba(73, 79, 223, 0.2);
+    }
+    .currency-select {
+      background: #FFFFFF;
+      border: 1px solid var(--rui-border-divider);
+      border-radius: var(--rad-sm);
+      padding: 12px 16px;
+      font-family: var(--font-display);
+      font-weight: 500;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    /* Semantic Token Palette Strip */
+    .token-showcase {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 36px;
+    }
+    .token-chip {
+      padding: 8px 16px;
+      border-radius: var(--rad-pill);
+      font-size: 13px;
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+    }
+
+    /* Virtual Card Preview Widget */
+    .card-graphic {
+      width: 100%;
+      height: 180px;
+      background: linear-gradient(135deg, #191C1F 0%, #30363D 100%);
+      border-radius: 16px;
+      padding: 24px;
+      color: #FFFFFF;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      margin-bottom: 24px;
+    }
+    .card-graphic.gradient-teal {
+      background: linear-gradient(135deg, #00A87E 0%, #191C1F 100%);
+    }
+
+    footer.revolut-footer {
+      background: var(--rui-color-dark);
+      color: #FFFFFF;
+      padding: 60px 0;
+      border-top: 1px solid #30363D;
+    }
+    .footer-inner {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 24px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navigation -->
+  <header class="rui-nav">
+    <div class="nav-inner">
+      <a href="#" class="brand-logo">
+        <div class="brand-mark">R</div>
+        <span>Revolut</span>
+      </a>
+      <ul class="nav-menu">
+        <li><a href="#personal">Personal</a></li>
+        <li><a href="#business">Business</a></li>
+        <li><a href="#crypto">Crypto & Stocks</a></li>
+        <li><a href="#tokens">RUI Tokens</a></li>
+      </ul>
+      <div class="nav-ctas">
+        <button class="btn-pill btn-secondary-light" onclick="showModal('Login')">Log in</button>
+        <button class="btn-pill btn-primary-dark" onclick="showModal('Signup')">Get the app</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="main-wrap hero-section" id="personal">
+    <h1 class="hero-heading">One app, all things money.</h1>
+    <p class="hero-subhead">
+      From everyday spending to investing and seamless global transfers. Experience banking distilled into fintech precision with Aeonik Pro typography and universal pill interactions.
+    </p>
+    <div class="hero-cta-group">
+      <button class="btn-pill btn-primary-dark" onclick="simulateAccountOpen()">Open a free account</button>
+      <button class="btn-pill btn-outline" onclick="scrollToBoard()">Explore features</button>
+    </div>
+
+    <!-- Product Interface Live Dashboard -->
+    <div class="banking-board" id="board">
+      <div class="board-header">
+        <div>
+          <span style="font-size:14px; color:var(--rui-text-secondary); text-transform:uppercase; letter-spacing:0.5px; font-weight:600;">Total Net Balance</span>
+          <div class="balance-display" id="total-balance">€ 38,420.50</div>
+        </div>
+        <div>
+          <span class="rate-tag">▲ +4.2% interest yield</span>
+        </div>
+      </div>
+
+      <!-- Currency Conversion Bar -->
+      <div style="margin-bottom: 32px;">
+        <h3 style="font-family: var(--font-display); font-size:20px; font-weight:500; margin-bottom: 16px;">Live Currency Exchange</h3>
+        <div class="converter-row">
+          <input type="number" id="fromAmount" class="input-box" value="1000" oninput="calculateExchange()">
+          <select id="fromCurrency" class="currency-select" onchange="calculateExchange()">
+            <option value="EUR">EUR (€)</option>
+            <option value="USD">USD ($)</option>
+            <option value="GBP">GBP (£)</option>
+            <option value="JPY">JPY (¥)</option>
+          </select>
+          <span style="font-size:20px; color:var(--rui-text-secondary);">➔</span>
+          <input type="text" id="toAmount" class="input-box" readonly value="1,085.00">
+          <select id="toCurrency" class="currency-select" onchange="calculateExchange()">
+            <option value="USD">USD ($)</option>
+            <option value="EUR">EUR (€)</option>
+            <option value="GBP">GBP (£)</option>
+            <option value="JPY">JPY (¥)</option>
+          </select>
+          <button class="btn-pill btn-blue" onclick="executeTransfer()">Exchange Now</button>
+        </div>
+        <p style="font-size: 14px; color: var(--rui-text-muted);">Real-time interbank rate with zero hidden transaction markup.</p>
+      </div>
+
+      <!-- Cards Grid -->
+      <div class="cards-3">
+        <!-- Card 1: Virtual Card -->
+        <div class="fin-card">
+          <div>
+            <div class="card-graphic">
+              <div style="display:flex; justify-content:space-between; font-weight:600;">
+                <span>Revolut Metal</span>
+                <span>VISA</span>
+              </div>
+              <div style="font-family: monospace; font-size:18px; letter-spacing:2px;">•••• •••• •••• 9204</div>
+              <div style="display:flex; justify-content:space-between; font-size:12px;">
+                <span>CARDHOLDER</span>
+                <span>EXP 08/29</span>
+              </div>
+            </div>
+            <h4 class="fin-card-title">Disposable Virtual Cards</h4>
+            <p class="fin-card-desc">Generate single-use cards for secure online checkouts that automatically self-destruct once charged.</p>
+          </div>
+          <button class="btn-pill btn-secondary-light" style="width:100%;" onclick="freezeCard()">Freeze Card</button>
+        </div>
+
+        <!-- Card 2: Vaults -->
+        <div class="fin-card">
+          <div>
+            <div class="card-graphic gradient-teal">
+              <div style="display:flex; justify-content:space-between; font-weight:600;">
+                <span>Savings Vault</span>
+                <span style="background:rgba(255,255,255,0.2); padding:2px 8px; border-radius:10px;">4.5% AER</span>
+              </div>
+              <div style="font-family: var(--font-display); font-size:32px; font-weight:500;">€ 14,250.00</div>
+              <div style="font-size:12px;">Daily payout deposited directly</div>
+            </div>
+            <h4 class="fin-card-title">Automated Spare Change</h4>
+            <p class="fin-card-desc">Round up everyday purchases to the nearest integer and stash the difference into high-yield vaults.</p>
+          </div>
+          <button class="btn-pill btn-primary-dark" style="width:100%;" onclick="addSpareChange()">Round Up +€5.20</button>
+        </div>
+
+        <!-- Card 3: Global Transfers -->
+        <div class="fin-card">
+          <div>
+            <div style="height:180px; background:#ECEEF2; border-radius:16px; display:flex; flex-direction:column; justify-content:center; align-items:center; margin-bottom:24px; text-align:center; padding:16px;">
+              <span style="font-size:32px; margin-bottom:8px;">🌍</span>
+              <span style="font-weight:600; font-size:18px;">Instant Borderless Transfers</span>
+              <span style="font-size:13px; color:var(--rui-text-secondary); margin-top:4px;">160+ countries in 29 currencies</span>
+            </div>
+            <h4 class="fin-card-title">Zero Friction Send</h4>
+            <p class="fin-card-desc">Send money to anyone on Revolut globally in seconds with just their phone number or Revtag.</p>
+          </div>
+          <button class="btn-pill btn-outline" style="width:100%;" onclick="sendPrompt()">Send with Revtag</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Dark Showcase Section -->
+  <section class="section-dark" id="tokens">
+    <div class="main-wrap">
+      <h2 style="font-family: var(--font-display); font-size:48px; font-weight:500; letter-spacing:-0.48px; margin-bottom:16px;">
+        The --rui Token Architecture
+      </h2>
+      <p style="color:var(--rui-text-muted); font-size:18px; max-width:720px; margin-bottom:32px;">
+        Disciplined near-black (#191c1f) and white (#ffffff) binary for marketing, coupled with comprehensive semantic tokens for the banking product state.
+      </p>
+
+      <div class="token-showcase">
+        <span class="token-chip" style="background:#191C1F; border:1px solid #383E45; color:#FFF;">
+          <span class="dot" style="background:#FFF;"></span> Revolut Dark: #191c1f
+        </span>
+        <span class="token-chip" style="background:#494FDF; color:#FFF;">
+          <span class="dot" style="background:#FFF;"></span> Blue: #494fdf
+        </span>
+        <span class="token-chip" style="background:#00A87E; color:#FFF;">
+          <span class="dot" style="background:#FFF;"></span> Teal: #00a87e
+        </span>
+        <span class="token-chip" style="background:#E23B4A; color:#FFF;">
+          <span class="dot" style="background:#FFF;"></span> Danger: #e23b4a
+        </span>
+        <span class="token-chip" style="background:#EC7E00; color:#FFF;">
+          <span class="dot" style="background:#FFF;"></span> Warning: #ec7e00
+        </span>
+        <span class="token-chip" style="background:#E61E49; color:#FFF;">
+          <span class="dot" style="background:#FFF;"></span> Deep Pink: #e61e49
+        </span>
+        <span class="token-chip" style="background:#B09000; color:#FFF;">
+          <span class="dot" style="background:#FFF;"></span> Yellow: #b09000
+        </span>
+        <span class="token-chip" style="background:#428619; color:#FFF;">
+          <span class="dot" style="background:#FFF;"></span> Light Green: #428619
+        </span>
+      </div>
+
+      <div style="margin-top: 48px; display:flex; gap:16px; flex-wrap:wrap;">
+        <button class="btn-pill btn-ghost-dark" onclick="alert('Pill button with ghost on dark aesthetic.')">Ghost Pill Button</button>
+        <button class="btn-pill btn-secondary-light" onclick="alert('Secondary light pill on dark surface.')">Secondary Light Pill</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="revolut-footer">
+    <div class="main-wrap footer-inner">
+      <div>
+        <div style="font-family: var(--font-display); font-size:22px; font-weight:500; margin-bottom:8px;">Revolut Ltd</div>
+        <p style="font-size:14px; color:var(--rui-text-muted);">Crafted strictly according to open-design/design-systems/revolut/DESIGN.md</p>
+      </div>
+      <div style="font-size:14px; color:var(--rui-text-muted);">
+        Zero Shadows • Universal 9999px Pills • Aeonik Pro 500 Medium
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    const rates = {
+      EUR: { USD: 1.085, GBP: 0.855, JPY: 165.20, EUR: 1.0 },
+      USD: { EUR: 0.921, GBP: 0.788, JPY: 152.25, USD: 1.0 },
+      GBP: { EUR: 1.169, USD: 1.269, JPY: 193.10, GBP: 1.0 },
+      JPY: { EUR: 0.006, USD: 0.0065, GBP: 0.0051, JPY: 1.0 }
+    };
+
+    function calculateExchange() {
+      const from = document.getElementById('fromCurrency').value;
+      const to = document.getElementById('toCurrency').value;
+      const amount = parseFloat(document.getElementById('fromAmount').value) || 0;
+      const rate = rates[from][to];
+      const result = (amount * rate).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+      document.getElementById('toAmount').value = result;
+    }
+
+    function executeTransfer() {
+      const from = document.getElementById('fromCurrency').value;
+      const to = document.getElementById('toCurrency').value;
+      const amount = document.getElementById('fromAmount').value;
+      const result = document.getElementById('toAmount').value;
+      alert(`Converted ${amount} ${from} ➔ ${result} ${to} at live interbank rates.`);
+    }
+
+    function freezeCard() {
+      alert('Card status toggled: Card #9204 frozen instantly in real time.');
+    }
+
+    function addSpareChange() {
+      alert('Spare change rounded up and €5.20 deposited into Savings Vault.');
+    }
+
+    function sendPrompt() {
+      const tag = prompt('Enter recipient Revtag (e.g. @alexmoney):', '@sarah');
+      if (tag) {
+        alert(`Transferred funds seamlessly to ${tag} with zero fees.`);
+      }
+    }
+
+    function simulateAccountOpen() {
+      alert('Revolut onboarding initialized. Enter your phone number on mobile to begin verification.');
+    }
+
+    function scrollToBoard() {
+      document.getElementById('board').scrollIntoView({ behavior: 'smooth' });
+    }
+
+    function showModal(action) {
+      alert(`${action} flow opened.`);
+    }
+  </script>
+</body>
+</html>

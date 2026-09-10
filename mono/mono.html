@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mono — Hacker-Chic Monospace Architecture</title>
+  <meta name="description" content="Authentic implementation of the Mono design system featuring matrix electric green (#37F712), electric cyan (#00A6F4), Space Mono typography, and compact density cyberdeck.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      /* Mono Palette Tokens */
+      --primary: #37F712;
+      --primary-dim: #2ec410;
+      --secondary: #00A6F4;
+      --success: #00A63D;
+      --warning: #FE9900;
+      --danger: #FF2157;
+      --surface: #E7E5E4;
+      --surface-elevated: #D6D3D1;
+      --surface-dark: #1C1917;
+      --text: #78716B;
+      --text-dark: #1C1917;
+      --border: #D6D3D1;
+      --border-dark: #292524;
+
+      /* Typography */
+      --font-display: 'Space Mono', monospace;
+      --font-mono: 'JetBrains Mono', monospace;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--surface);
+      color: var(--text-dark);
+      font-family: var(--font-display);
+      font-size: 14px;
+      line-height: 1.45;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 16px;
+    }
+
+    /* Top Matrix Stream Ribbon */
+    .matrix-ribbon {
+      background: var(--surface-dark);
+      color: var(--primary);
+      padding: 4px 16px;
+      font-family: var(--font-mono);
+      font-size: 11px;
+      display: flex;
+      justify-content: space-between;
+      border-bottom: 2px solid var(--primary);
+    }
+
+    /* Navigation (Compact Density) */
+    .mono-nav {
+      background: var(--surface);
+      border-bottom: 2px solid var(--text-dark);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .nav-inner {
+      height: 56px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .brand-mark {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      text-decoration: none;
+      color: var(--text-dark);
+      font-size: 18px;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+    }
+
+    .badge-term {
+      background: var(--primary);
+      color: var(--surface-dark);
+      padding: 2px 6px;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 20px;
+      list-style: none;
+    }
+
+    .nav-links a {
+      color: var(--text-dark);
+      text-decoration: none;
+      font-size: 13px;
+      font-weight: 700;
+      transition: color 0.15s;
+    }
+
+    .nav-links a:hover {
+      color: var(--secondary);
+    }
+
+    /* Buttons adhering strictly to Mono DESIGN.md */
+    .btn-mono-primary {
+      background-color: var(--primary);
+      color: var(--surface-dark);
+      border: 2px solid var(--surface-dark);
+      padding: 6px 14px;
+      font-family: var(--font-display);
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 2px 2px 0px var(--surface-dark);
+      transition: all 0.15s ease;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .btn-mono-primary:hover {
+      background-color: var(--primary-dim);
+      transform: translate(-1px, -1px);
+      box-shadow: 3px 3px 0px var(--surface-dark);
+    }
+
+    .btn-mono-secondary {
+      background-color: var(--surface);
+      color: var(--text-dark);
+      border: 2px solid var(--surface-dark);
+      padding: 6px 14px;
+      font-family: var(--font-display);
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 2px 2px 0px var(--surface-dark);
+      transition: all 0.15s ease;
+      text-decoration: none;
+    }
+
+    .btn-mono-secondary:hover {
+      background-color: var(--surface-elevated);
+      color: var(--secondary);
+    }
+
+    /* Hero Section (Compact Density) */
+    .hero-section {
+      padding: 48px 0;
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: 32px;
+      align-items: center;
+    }
+
+    .tag-category {
+      display: inline-block;
+      font-size: 11px;
+      font-weight: 700;
+      background: var(--surface-dark);
+      color: var(--primary);
+      padding: 3px 8px;
+      margin-bottom: 16px;
+    }
+
+    .hero-title {
+      font-size: 42px;
+      font-weight: 700;
+      line-height: 1.15;
+      letter-spacing: -1px;
+      margin-bottom: 16px;
+    }
+
+    .hero-title span {
+      background: var(--primary);
+      color: var(--surface-dark);
+      padding: 0 4px;
+    }
+
+    .hero-desc {
+      color: var(--text);
+      font-size: 15px;
+      margin-bottom: 24px;
+      line-height: 1.5;
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: 12px;
+    }
+
+    /* Interactive Cyber Terminal */
+    .cyber-terminal {
+      background: var(--surface-dark);
+      border: 2px solid var(--surface-dark);
+      box-shadow: 6px 6px 0px var(--surface-dark);
+      color: #F5F5F4;
+    }
+
+    .terminal-topbar {
+      background: #292524;
+      padding: 8px 12px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 11px;
+      color: var(--primary);
+    }
+
+    .term-controls {
+      display: flex;
+      gap: 6px;
+    }
+
+    .term-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #78716B;
+    }
+
+    .terminal-output {
+      padding: 16px;
+      font-family: var(--font-mono);
+      font-size: 12px;
+      line-height: 1.6;
+      height: 220px;
+      overflow-y: auto;
+      color: #A8A29E;
+    }
+
+    .term-prompt-line {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 16px;
+      background: #0C0A09;
+      border-top: 1px solid var(--border-dark);
+    }
+
+    .term-input {
+      background: transparent;
+      border: none;
+      outline: none;
+      color: var(--primary);
+      font-family: var(--font-mono);
+      font-size: 12px;
+      flex: 1;
+    }
+
+    /* Grid & Cards */
+    .matrix-grid-section {
+      padding: 32px 0 64px 0;
+    }
+
+    .section-headline {
+      font-size: 24px;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+
+    .cards-row {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      margin-top: 16px;
+    }
+
+    .mono-card {
+      background: var(--surface);
+      border: 2px solid var(--surface-dark);
+      padding: 20px;
+      box-shadow: 4px 4px 0px var(--surface-dark);
+    }
+
+    .card-num {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--secondary);
+      margin-bottom: 6px;
+    }
+
+    .card-title {
+      font-size: 18px;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+
+    .card-body {
+      font-size: 13px;
+      color: var(--text);
+      line-height: 1.4;
+    }
+
+    /* Footer */
+    .mono-footer {
+      border-top: 2px solid var(--surface-dark);
+      padding: 24px 0;
+      font-size: 12px;
+      color: var(--text);
+      display: flex;
+      justify-content: space-between;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Matrix Stream Ribbon -->
+  <div class="matrix-ribbon">
+    <span>SYSTEM STATUS: ONLINE // PROTOCOL v4.9</span>
+    <span>ENCRYPTED MEMORY BUFFER [OK]</span>
+    <span>NODE: us-west-kernel-01</span>
+  </div>
+
+  <!-- Navigation -->
+  <nav class="mono-nav">
+    <div class="container nav-inner">
+      <a href="#" class="brand-mark">
+        <span class="badge-term">>_</span>
+        <span>MONO.DEV</span>
+      </a>
+
+      <ul class="nav-links">
+        <li><a href="#matrix">Telemetries</a></li>
+        <li><a href="#term">Terminal</a></li>
+        <li><a href="#">Security</a></li>
+        <li><a href="#">Nodes</a></li>
+      </ul>
+
+      <div style="display: flex; gap: 8px;">
+        <button class="btn-mono-secondary" onclick="runPing()">Ping Gateway</button>
+        <a href="#term" class="btn-mono-primary">Launch Deck</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <section class="container hero-section">
+    <div>
+      <span class="tag-category">HACKER-CHIC MONOSPACE INFRASTRUCTURE</span>
+      <h1 class="hero-title">
+        Strict character <span>geometry</span> for high-density systems.
+      </h1>
+      <p class="hero-desc">
+        Engineered for rapid cognition under operational pressure. Electric terminal green (#37F712), electric cyan (#00A6F4), and pure Space Mono rhythm.
+      </p>
+
+      <div class="hero-actions">
+        <button class="btn-mono-primary" onclick="injectTelemetry()">Send Packet Burst</button>
+        <button class="btn-mono-secondary" onclick="document.getElementById('term').scrollIntoView({behavior: 'smooth'})">Inspect Console</button>
+      </div>
+    </div>
+
+    <!-- Cyber Terminal Widget -->
+    <div class="cyber-terminal" id="term">
+      <div class="terminal-topbar">
+        <div class="term-controls">
+          <div class="term-dot"></div>
+          <div class="term-dot"></div>
+          <div class="term-dot"></div>
+        </div>
+        <span>SHELL: zsh - 80x24</span>
+        <span>PID: 88412</span>
+      </div>
+
+      <div class="terminal-output" id="termOutput">
+[00:00:01] INITIALIZING KERNEL DAEMON...<br>
+[00:00:02] RESOLVED GATEWAY: 192.168.1.1 (0.84ms)<br>
+[00:00:03] AUTHENTICATED KEY: SHA256:7f3b...<br>
+<span style="color: var(--primary);">[OK] SUBSYSTEM READY. AWAITING USER COMMANDS.</span>
+      </div>
+
+      <div class="term-prompt-line">
+        <span style="color: var(--primary); font-weight: 700;">$</span>
+        <input type="text" class="term-input" id="termInput" placeholder="Type command (e.g. status, scan, clear)..." onkeydown="handleTermKey(event)">
+      </div>
+    </div>
+  </section>
+
+  <!-- Modular Cards -->
+  <section class="container matrix-grid-section" id="matrix">
+    <h2 class="section-headline">> SUBSYSTEM METRICS</h2>
+    <p style="color: var(--text); font-size: 13px;">Compact density units adhering strictly to the Mono design foundations.</p>
+
+    <div class="cards-row">
+      <div class="mono-card">
+        <div class="card-num">MODULE // 01</div>
+        <h3 class="card-title">Packet Inspection</h3>
+        <p class="card-body">Zero-overhead byte inspection pipeline built directly on eBPF telemetry hooks.</p>
+      </div>
+
+      <div class="mono-card">
+        <div class="card-num" style="color: var(--primary);">MODULE // 02</div>
+        <h3 class="card-title">Memory Allocation</h3>
+        <p class="card-body">High-speed slab allocators designed for microsecond transaction buffers.</p>
+      </div>
+
+      <div class="mono-card">
+        <div class="card-num" style="color: var(--warning);">MODULE // 03</div>
+        <h3 class="card-title">Fault Isolation</h3>
+        <p class="card-body">Sub-millisecond automated quarantine for misbehaving nodes.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="container mono-footer">
+    <div>© 2026 MONO DESIGN SPECIFICATION. ALL TOKENS VERIFIED.</div>
+    <div>CHAR WIDTH: 8.4PX • BASELINE: 16PX</div>
+  </footer>
+
+  <script>
+    function handleTermKey(e) {
+      if (e.key === 'Enter') {
+        const input = document.getElementById('termInput');
+        const cmd = input.value.trim().toLowerCase();
+        const out = document.getElementById('termOutput');
+        
+        out.innerHTML += `<br><span style="color: var(--primary);">$ ${escapeHtml(input.value)}</span>`;
+
+        if (cmd === 'clear') {
+          out.innerHTML = '';
+        } else if (cmd === 'status') {
+          out.innerHTML += `<br><span style="color: #38bdf8;">All 12 microservices reporting healthy (99.99% uptime).</span>`;
+        } else if (cmd === 'scan') {
+          out.innerHTML += `<br><span style="color: var(--warning);">Scanning port range 1-65535... 0 vulnerabilities found.</span>`;
+        } else {
+          out.innerHTML += `<br>Executed: ${escapeHtml(input.value)} (exit code 0)`;
+        }
+
+        input.value = '';
+        out.scrollTop = out.scrollHeight;
+      }
+    }
+
+    function injectTelemetry() {
+      const out = document.getElementById('termOutput');
+      out.innerHTML += `<br><span style="color: var(--primary);">[BURST] Transmitted 1,024 KB payload over encrypted socket.</span>`;
+      out.scrollTop = out.scrollHeight;
+    }
+
+    function runPing() {
+      alert('PING: 64 bytes from 1.1.1.1: icmp_seq=1 ttl=58 time=3.41 ms');
+    }
+
+    function escapeHtml(str) {
+      return str.replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]));
+    }
+  </script>
+</body>
+</html>

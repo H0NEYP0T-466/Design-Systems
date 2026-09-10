@@ -1,0 +1,1266 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Cal.com — Open Scheduling Infrastructure | Official Design System</title>
+  <meta name="description" content="Authentic implementation of Cal.com's design system: pure white canvas, Charcoal (#242424) headings, Cal Sans typography, multi-layered shadow stack, lavish 96px section rhythm, and developer-first simplicity." />
+
+  <!-- Fonts: Inter + Roboto Mono from Google Fonts, and Cal Sans @font-face -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Roboto+Mono:wght@600&display=swap" rel="stylesheet">
+
+  <style>
+    /* ─────────────────────────────────────────────────────────────────
+       CAL.COM EMBEDDED CAL SANS FONT-FACE
+       Open-source geometric display face by Mark Davis for Cal.com
+       ───────────────────────────────────────────────────────────────── */
+    @font-face {
+      font-family: 'Cal Sans';
+      font-style: normal;
+      font-weight: 600;
+      font-display: swap;
+      src: url('https://cdn.jsdelivr.net/gh/calcom/font@main/fonts/CalSans-SemiBold.woff2') format('woff2');
+    }
+
+    /* ─────────────────────────────────────────────────────────────────
+       CAL.COM OFFICIAL DESIGN TOKENS (from DESIGN.md)
+       Grayscale minimalism, pure white surfaces, Charcoal text,
+       Link Blue accent, multi-layer ring shadows, lavish 96px rhythm.
+       ───────────────────────────────────────────────────────────────── */
+    :root {
+      /* Primary Surfaces */
+      --bg: #ffffff;
+      --surface: #ffffff;
+      --surface-warm: var(--surface);
+
+      /* Foreground / Grayscale Tiers */
+      --fg: #242424;         /* Charcoal — primary text & button bg */
+      --fg-2: #111111;       /* Midnight — deepest nav text */
+      --muted: #898989;      /* Mid Gray — descriptions & secondary text */
+      --meta: var(--muted);
+
+      /* Accent & Focus */
+      --accent: #0099ff;     /* Link Blue — strictly reserved for hyperlinks */
+      --accent-on: #ffffff;
+      --focus-ring-color: rgba(59, 130, 246, 0.5);
+
+      /* Hairline Ring Borders */
+      --border: rgba(34, 42, 53, 0.08);
+      --border-soft: rgba(34, 42, 53, 0.05);
+
+      /* Typography */
+      --font-display: "Cal Sans", "Inter", -apple-system, "Segoe UI", Arial, sans-serif;
+      --font-body: "Inter", -apple-system, "Segoe UI", Arial, sans-serif;
+      --font-mono: "Roboto Mono", ui-monospace, Menlo, Monaco, monospace;
+
+      /* Type Scale (px) */
+      --text-xs: 12px;
+      --text-sm: 14px;
+      --text-base: 16px;
+      --text-lg: 20px;
+      --text-xl: 24px;
+      --text-2xl: 32px;
+      --text-3xl: 48px;
+      --text-4xl: 64px;
+
+      --leading-tight: 1.10;
+      --leading-body: 1.50;
+      --tracking-display: 0px;
+
+      /* Spacing Scale (Tokens: 4, 8, 12, 16, 20, 24, 32, 48) */
+      --space-1: 4px;
+      --space-2: 8px;
+      --space-3: 12px;
+      --space-4: 16px;
+      --space-5: 20px;
+      --space-6: 24px;
+      --space-8: 32px;
+      --space-12: 48px;
+
+      /* Lavish Section Rhythm (80px–96px) */
+      --section-y-desktop: 96px;
+      --section-y-tablet: 64px;
+      --section-y-phone: 48px;
+
+      /* Border Radii (2px to 9999px) */
+      --radius-sm: 8px;
+      --radius-md: 12px;
+      --radius-lg: 16px;
+      --radius-pill: 9999px;
+
+      /* Multi-Layer Shadow System (DESIGN.md Level 2 Workhorse) */
+      --elev-flat: none;
+      --elev-ring: 0 0 0 1px var(--border);
+      --elev-raised:
+        0 1px 5px -4px rgba(19, 19, 22, 0.7),
+        0 0 0 1px rgba(34, 42, 53, 0.08),
+        0 4px 8px rgba(34, 42, 53, 0.05);
+
+      --elev-raised-hover:
+        0 2px 10px -4px rgba(19, 19, 22, 0.8),
+        0 0 0 1px rgba(34, 42, 53, 0.12),
+        0 8px 16px rgba(34, 42, 53, 0.08);
+
+      --inset-highlight: rgba(255, 255, 255, 0.15) 0px 2px 0px inset;
+
+      /* Motion */
+      --motion-fast: 150ms;
+      --motion-base: 200ms;
+      --ease-standard: cubic-bezier(0.2, 0, 0, 1);
+
+      /* Max Container */
+      --container-max: 1200px;
+      --container-gutter: 24px;
+    }
+
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      background: var(--bg);
+      color: var(--fg);
+      font-size: 16px;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--fg);
+      font-family: var(--font-body);
+      font-weight: 400;
+      line-height: var(--leading-body);
+      overflow-x: hidden;
+    }
+
+    /* ─── TYPOGRAPHY RULES ─── */
+    /* Cal Sans is strictly for Headings (weight 600, tight 1.10 line height) */
+    h1, h2, h3, h4, .cal-display {
+      font-family: var(--font-display);
+      font-weight: 600;
+      line-height: var(--leading-tight);
+      color: var(--fg);
+      letter-spacing: var(--tracking-display);
+    }
+
+    h1 {
+      font-size: clamp(38px, 6vw, var(--text-4xl));
+      letter-spacing: -0.02em;
+    }
+
+    h2 {
+      font-size: clamp(28px, 4vw, var(--text-3xl));
+      letter-spacing: -0.015em;
+    }
+
+    h3 {
+      font-size: var(--text-xl);
+      line-height: 1.30;
+    }
+
+    h4 {
+      font-size: var(--text-lg);
+      line-height: 1.20;
+      letter-spacing: 0.2px; /* Cal Sans below 24px receives +0.2px positive tracking */
+    }
+
+    p {
+      color: var(--muted);
+      font-size: var(--text-base);
+      font-weight: 400;
+      line-height: var(--leading-body);
+    }
+
+    .lead-text {
+      font-size: 18px;
+      font-weight: 300;
+      color: var(--muted);
+      line-height: 1.5;
+      letter-spacing: -0.2px;
+    }
+
+    /* Reserved In-Text Links */
+    a.link-blue {
+      color: var(--accent);
+      text-decoration: underline;
+      text-underline-offset: 3px;
+      transition: opacity var(--motion-fast);
+    }
+
+    a.link-blue:hover {
+      opacity: 0.8;
+    }
+
+    /* ─── BUTTONS ─── */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      font-family: var(--font-body);
+      font-size: 14px;
+      font-weight: 500;
+      padding: 10px 18px;
+      border-radius: var(--radius-sm);
+      text-decoration: none;
+      cursor: pointer;
+      border: none;
+      transition: opacity var(--motion-fast), box-shadow var(--motion-fast), transform var(--motion-fast);
+      outline: none;
+      white-space: nowrap;
+    }
+
+    .btn:active {
+      transform: scale(0.985);
+    }
+
+    .btn:focus-visible {
+      box-shadow: 0 0 0 3px var(--focus-ring-color);
+    }
+
+    /* Dark Primary: Charcoal background, white text, 3D inset highlight */
+    .btn-primary {
+      background: var(--fg);
+      color: #ffffff;
+      box-shadow: var(--inset-highlight);
+    }
+
+    .btn-primary:hover {
+      opacity: 0.85;
+    }
+
+    /* White / Ghost: White background with signature ring-shadow */
+    .btn-white {
+      background: #ffffff;
+      color: var(--fg);
+      box-shadow:
+        0 1px 2px rgba(0, 0, 0, 0.05),
+        0 0 0 1px var(--border);
+    }
+
+    .btn-white:hover {
+      background: #fafafa;
+      box-shadow:
+        0 2px 4px rgba(0, 0, 0, 0.06),
+        0 0 0 1px rgba(34, 42, 53, 0.14);
+    }
+
+    .badge-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: #ffffff;
+      box-shadow: 0 0 0 1px var(--border), 0 2px 5px rgba(0,0,0,0.03);
+      padding: 6px 14px;
+      border-radius: var(--radius-pill);
+      font-size: 13px;
+      color: var(--fg);
+      text-decoration: none;
+      transition: box-shadow var(--motion-fast);
+    }
+
+    .badge-pill:hover {
+      box-shadow: 0 0 0 1px rgba(34, 42, 53, 0.16), 0 3px 8px rgba(0,0,0,0.06);
+    }
+
+    .badge-indicator {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: #16a34a;
+    }
+
+    /* ─── STICKY NAVIGATION ─── */
+    .cal-nav {
+      position: sticky;
+      top: 0;
+      width: 100%;
+      background: rgba(255, 255, 255, 0.92);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      z-index: 1000;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .nav-inner {
+      max-width: var(--container-max);
+      margin: 0 auto;
+      padding: 14px var(--container-gutter);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .nav-brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+      color: var(--fg);
+      font-family: var(--font-display);
+      font-size: 20px;
+      font-weight: 600;
+      letter-spacing: -0.01em;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 28px;
+      list-style: none;
+    }
+
+    @media (max-width: 820px) {
+      .nav-links {
+        display: none;
+      }
+    }
+
+    .nav-link {
+      font-family: var(--font-body);
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--fg-2);
+      text-decoration: none;
+      transition: opacity var(--motion-fast);
+    }
+
+    .nav-link:hover {
+      opacity: 0.7;
+    }
+
+    .nav-ctas {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    /* ─── CONTAINER & SECTION SPACING (Lavish 96px) ─── */
+    .container {
+      max-width: var(--container-max);
+      margin: 0 auto;
+      padding-left: var(--container-gutter);
+      padding-right: var(--container-gutter);
+    }
+
+    .section-y {
+      padding-top: var(--section-y-desktop);
+      padding-bottom: var(--section-y-desktop);
+    }
+
+    @media (max-width: 1024px) {
+      .section-y {
+        padding-top: var(--section-y-tablet);
+        padding-bottom: var(--section-y-tablet);
+      }
+    }
+
+    @media (max-width: 640px) {
+      .section-y {
+        padding-top: var(--section-y-phone);
+        padding-bottom: var(--section-y-phone);
+      }
+    }
+
+    /* ─── HERO SECTION ─── */
+    .hero-container {
+      text-align: center;
+      max-width: 880px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .hero-container h1 {
+      margin: 24px 0 18px;
+    }
+
+    .hero-ctas {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      margin-top: 32px;
+      margin-bottom: 24px;
+      flex-wrap: wrap;
+    }
+
+    .hero-footnote {
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    /* ─── SCHEDULING CARD (The Signature Product UI) ─── */
+    .product-stage {
+      margin-top: 56px;
+      width: 100%;
+      max-width: 1060px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .cal-card {
+      background: var(--surface);
+      border-radius: var(--radius-md);
+      box-shadow: var(--elev-raised);
+      overflow: hidden;
+      display: grid;
+      grid-template-columns: 320px 1fr;
+      transition: box-shadow var(--motion-base);
+    }
+
+    @media (max-width: 860px) {
+      .cal-card {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* Host Sidebar */
+    .cal-sidebar {
+      padding: 32px 28px;
+      border-right: 1px solid var(--border-soft);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      background: #fafafa;
+    }
+
+    .host-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+
+    .host-avatar {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: #242424;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-display);
+      font-weight: 600;
+      font-size: 16px;
+    }
+
+    .cal-details {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-top: 16px;
+    }
+
+    .cal-meta-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 14px;
+      color: var(--fg);
+    }
+
+    .cal-meta-row svg {
+      width: 16px;
+      height: 16px;
+      color: var(--muted);
+    }
+
+    /* Interactive Calendar + Slots Area */
+    .cal-workspace {
+      display: grid;
+      grid-template-columns: 1fr 280px;
+      padding: 32px 28px;
+      gap: 28px;
+      background: #ffffff;
+    }
+
+    @media (max-width: 680px) {
+      .cal-workspace {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* Date Picker Grid */
+    .calendar-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 20px;
+    }
+
+    .cal-month-title {
+      font-family: var(--font-display);
+      font-size: 18px;
+      font-weight: 600;
+    }
+
+    .month-nav-btn {
+      background: none;
+      border: 1px solid var(--border);
+      width: 28px;
+      height: 28px;
+      border-radius: 6px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--fg);
+    }
+
+    .calendar-grid {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 6px;
+      text-align: center;
+    }
+
+    .day-name {
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--muted);
+      padding-bottom: 8px;
+    }
+
+    .day-btn {
+      background: none;
+      border: none;
+      height: 38px;
+      border-radius: 8px;
+      font-family: var(--font-body);
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--fg);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background-color var(--motion-fast);
+    }
+
+    .day-btn:hover:not(.disabled) {
+      background: #f1f1f1;
+    }
+
+    .day-btn.active {
+      background: var(--fg);
+      color: #ffffff;
+      box-shadow: var(--inset-highlight);
+    }
+
+    .day-btn.disabled {
+      color: #d1d1d1;
+      cursor: not-allowed;
+    }
+
+    /* Time Slots Column */
+    .slots-column {
+      display: flex;
+      flex-direction: column;
+      border-left: 1px solid var(--border-soft);
+      padding-left: 24px;
+    }
+
+    @media (max-width: 680px) {
+      .slots-column {
+        border-left: none;
+        padding-left: 0;
+        border-top: 1px solid var(--border-soft);
+        padding-top: 24px;
+      }
+    }
+
+    .slots-header {
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--fg);
+      margin-bottom: 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .slots-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      max-height: 290px;
+      overflow-y: auto;
+      padding-right: 4px;
+    }
+
+    .time-slot-btn {
+      width: 100%;
+      background: #ffffff;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 10px;
+      font-family: var(--font-body);
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--fg);
+      cursor: pointer;
+      text-align: center;
+      transition: all var(--motion-fast);
+    }
+
+    .time-slot-btn:hover {
+      border-color: var(--fg);
+      background: #fafafa;
+    }
+
+    .time-slot-btn.selected {
+      background: var(--fg);
+      color: #ffffff;
+      border-color: var(--fg);
+      box-shadow: var(--inset-highlight);
+    }
+
+    /* ─── TRUST BAR (Grayscale Logos) ─── */
+    .trust-bar {
+      padding: 48px 0;
+      border-top: 1px solid var(--border-soft);
+      border-bottom: 1px solid var(--border-soft);
+      text-align: center;
+    }
+
+    .trust-label {
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--muted);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-bottom: 24px;
+    }
+
+    .trust-logos {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 48px;
+      opacity: 0.65;
+    }
+
+    .trust-logo-text {
+      font-family: var(--font-display);
+      font-size: 18px;
+      font-weight: 600;
+      letter-spacing: -0.02em;
+      color: var(--fg);
+    }
+
+    /* ─── FEATURES GRID ─── */
+    .feature-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 32px;
+      margin-top: 56px;
+    }
+
+    .feature-card {
+      background: var(--surface);
+      border-radius: var(--radius-md);
+      box-shadow: var(--elev-raised);
+      padding: 32px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: box-shadow var(--motion-base);
+    }
+
+    .feature-card:hover {
+      box-shadow: var(--elev-raised-hover);
+    }
+
+    .feature-icon-box {
+      width: 40px;
+      height: 40px;
+      border-radius: 8px;
+      background: #fafafa;
+      box-shadow: 0 0 0 1px var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 20px;
+    }
+
+    /* ─── DEVELOPER CODE BLOCK SECTION ─── */
+    .code-section {
+      background: #fafafa;
+      border-radius: var(--radius-lg);
+      box-shadow: var(--elev-raised);
+      padding: 48px;
+      margin-top: 56px;
+    }
+
+    @media (max-width: 768px) {
+      .code-section {
+        padding: 24px;
+      }
+    }
+
+    .code-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 16px;
+      margin-bottom: 20px;
+    }
+
+    .code-tabs {
+      display: flex;
+      gap: 12px;
+    }
+
+    .code-tab {
+      background: none;
+      border: none;
+      font-family: var(--font-body);
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--muted);
+      cursor: pointer;
+      padding: 4px 8px;
+      border-radius: 4px;
+    }
+
+    .code-tab.active {
+      color: var(--fg);
+      background: #ffffff;
+      box-shadow: 0 0 0 1px var(--border);
+    }
+
+    pre code {
+      font-family: var(--font-mono);
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--fg);
+      line-height: 1.6;
+      display: block;
+      overflow-x: auto;
+    }
+
+    /* ─── FOOTER ─── */
+    .cal-footer {
+      border-top: 1px solid var(--border-soft);
+      padding: 64px 0 48px;
+      background: #ffffff;
+    }
+
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 2fr repeat(3, 1fr);
+      gap: 48px;
+    }
+
+    @media (max-width: 768px) {
+      .footer-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    .footer-col h5 {
+      font-family: var(--font-display);
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 16px;
+      color: var(--fg);
+    }
+
+    .footer-links {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .footer-links a {
+      color: var(--muted);
+      font-size: 14px;
+      text-decoration: none;
+      transition: color var(--motion-fast);
+    }
+
+    .footer-links a:hover {
+      color: var(--fg);
+    }
+
+    /* ─── TOKEN INSPECTOR DRAWER ─── */
+    .token-inspect-btn {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      z-index: 1000;
+    }
+
+    .token-inspect-modal {
+      display: none;
+      position: fixed;
+      bottom: 80px;
+      right: 24px;
+      width: 360px;
+      background: #ffffff;
+      border-radius: var(--radius-md);
+      box-shadow: var(--elev-raised-hover);
+      padding: 24px;
+      z-index: 1001;
+      font-size: 13px;
+    }
+
+    .token-inspect-modal.open {
+      display: block;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- STICKY TOP NAVIGATION -->
+  <header class="cal-nav">
+    <div class="nav-inner">
+      <a href="#" class="nav-brand" aria-label="Cal.com Homepage">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+          <line x1="16" y1="2" x2="16" y2="6"></line>
+          <line x1="8" y1="2" x2="8" y2="6"></line>
+          <line x1="3" y1="10" x2="21" y2="10"></line>
+        </svg>
+        <span>Cal.com</span>
+      </a>
+
+      <ul class="nav-links">
+        <li><a href="#features" class="nav-link">Product</a></li>
+        <li><a href="#demo" class="nav-link">Interactive Booking</a></li>
+        <li><a href="#developers" class="nav-link">Developers</a></li>
+        <li><a href="https://cal.com/docs" class="link-blue" style="font-size: 14px; font-weight: 500;">Documentation</a></li>
+      </ul>
+
+      <div class="nav-ctas">
+        <a href="#demo" class="btn btn-white">Sign In</a>
+        <a href="#demo" class="btn btn-primary">Get Started</a>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <!-- HERO SECTION (Lavish 96px Section Rhythm) -->
+    <section class="section-y" style="padding-bottom: 48px;">
+      <div class="container hero-container">
+        <a href="#demo" class="badge-pill">
+          <span class="badge-indicator"></span>
+          <span>Cal.com v4.0 is now live</span>
+          <span style="color: var(--muted);">→</span>
+        </a>
+
+        <h1>Scheduling infrastructure for everyone.</h1>
+
+        <p class="lead-text" style="max-width: 640px;">
+          Meet Cal.com: the event collection, routing, and scheduling platform built for modern teams. 100% open-source, customizable, and developer-friendly.
+        </p>
+
+        <div class="hero-ctas">
+          <a href="#demo" class="btn btn-primary" style="padding: 12px 24px; font-size: 15px;">Claim Your Cal Link</a>
+          <a href="#developers" class="btn btn-white" style="padding: 12px 24px; font-size: 15px;">Read the Docs</a>
+        </div>
+
+        <span class="hero-footnote">No credit card required. Free for individuals forever.</span>
+
+        <!-- INTERACTIVE PRODUCT SHOWCASE STAGE -->
+        <div class="product-stage" id="demo">
+          <div class="cal-card">
+            <!-- Left Host Profile -->
+            <div class="cal-sidebar">
+              <div>
+                <div class="host-header">
+                  <div class="host-avatar">PR</div>
+                  <div>
+                    <div style="font-size: 13px; color: var(--muted); font-weight: 500;">Peer Richelsen</div>
+                    <div style="font-family: var(--font-display); font-size: 17px; font-weight: 600;">30 Min Product Strategy</div>
+                  </div>
+                </div>
+
+                <div class="cal-details">
+                  <div class="cal-meta-row">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <circle cx="12" cy="12" r="10"></circle>
+                      <polyline points="12 6 12 12 16 14"></polyline>
+                    </svg>
+                    <span>30 minutes</span>
+                  </div>
+                  <div class="cal-meta-row">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <polygon points="23 7 16 12 23 17 23 7"></polygon>
+                      <rect x="1" y="5" width="15" height="14" rx="2" ry="2"></rect>
+                    </svg>
+                    <span>Cal Video (Encrypted HD)</span>
+                  </div>
+                  <div class="cal-meta-row">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <circle cx="12" cy="12" r="10"></circle>
+                      <line x1="2" y1="12" x2="22" y2="12"></line>
+                      <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+                    </svg>
+                    <span>Europe/London (GMT+1)</span>
+                  </div>
+                </div>
+              </div>
+
+              <div style="font-size: 13px; color: var(--muted); border-top: 1px solid var(--border-soft); padding-top: 16px; margin-top: 24px;">
+                Cal.com enterprise scheduling preview. Book a direct test meeting.
+              </div>
+            </div>
+
+            <!-- Right Interactive Calendar + Time Slots -->
+            <div class="cal-workspace">
+              <div>
+                <div class="calendar-header">
+                  <span class="cal-month-title" id="calendarMonth">September 2026</span>
+                  <div style="display: flex; gap: 6px;">
+                    <button class="month-nav-btn" onclick="prevMonth()">‹</button>
+                    <button class="month-nav-btn" onclick="nextMonth()">›</button>
+                  </div>
+                </div>
+
+                <div class="calendar-grid">
+                  <div class="day-name">M</div>
+                  <div class="day-name">T</div>
+                  <div class="day-name">W</div>
+                  <div class="day-name">T</div>
+                  <div class="day-name">F</div>
+                  <div class="day-name">S</div>
+                  <div class="day-name">S</div>
+
+                  <div class="day-btn disabled">31</div>
+                  <div class="day-btn disabled">1</div>
+                  <div class="day-btn disabled">2</div>
+                  <div class="day-btn disabled">3</div>
+                  <div class="day-btn disabled">4</div>
+                  <div class="day-btn disabled">5</div>
+                  <div class="day-btn disabled">6</div>
+
+                  <div class="day-btn disabled">7</div>
+                  <div class="day-btn disabled">8</div>
+                  <div class="day-btn active" onclick="selectDay(this, 'Wednesday, Sep 9')">9</div>
+                  <div class="day-btn" onclick="selectDay(this, 'Thursday, Sep 10')">10</div>
+                  <div class="day-btn" onclick="selectDay(this, 'Friday, Sep 11')">11</div>
+                  <div class="day-btn disabled">12</div>
+                  <div class="day-btn disabled">13</div>
+
+                  <div class="day-btn" onclick="selectDay(this, 'Monday, Sep 14')">14</div>
+                  <div class="day-btn" onclick="selectDay(this, 'Tuesday, Sep 15')">15</div>
+                  <div class="day-btn" onclick="selectDay(this, 'Wednesday, Sep 16')">16</div>
+                  <div class="day-btn" onclick="selectDay(this, 'Thursday, Sep 17')">17</div>
+                  <div class="day-btn" onclick="selectDay(this, 'Friday, Sep 18')">18</div>
+                  <div class="day-btn disabled">19</div>
+                  <div class="day-btn disabled">20</div>
+                </div>
+              </div>
+
+              <!-- Time Slots Panel -->
+              <div class="slots-column">
+                <div class="slots-header">
+                  <span id="selectedDateLabel">Wed 9 Sep</span>
+                  <span style="font-size: 12px; color: var(--muted);">12h / 24h</span>
+                </div>
+
+                <div class="slots-list">
+                  <button class="time-slot-btn" onclick="confirmSlot('09:00 AM')">09:00 AM</button>
+                  <button class="time-slot-btn" onclick="confirmSlot('09:30 AM')">09:30 AM</button>
+                  <button class="time-slot-btn" onclick="confirmSlot('10:30 AM')">10:30 AM</button>
+                  <button class="time-slot-btn" onclick="confirmSlot('01:00 PM')">01:00 PM</button>
+                  <button class="time-slot-btn" onclick="confirmSlot('02:30 PM')">02:30 PM</button>
+                  <button class="time-slot-btn" onclick="confirmSlot('04:00 PM')">04:00 PM</button>
+                  <button class="time-slot-btn" onclick="confirmSlot('05:00 PM')">05:00 PM</button>
+                </div>
+
+                <div id="bookingResult" style="margin-top: 16px; font-size: 13px; font-weight: 500; color: #16a34a; text-align: center; min-height: 20px;"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TRUST LOGOS BAR -->
+    <section class="trust-bar">
+      <div class="container">
+        <div class="trust-label">TRUSTED BY DEVELOPERS AND INNOVATIVE ORGANIZATIONS WORLDWIDE</div>
+        <div class="trust-logos">
+          <span class="trust-logo-text">VERCEL</span>
+          <span class="trust-logo-text">SUPABASE</span>
+          <span class="trust-logo-text">DEEL</span>
+          <span class="trust-logo-text">MERCURY</span>
+          <span class="trust-logo-text">REMOTE</span>
+          <span class="trust-logo-text">RETOOL</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- FEATURES SECTION -->
+    <section class="section-y" id="features">
+      <div class="container">
+        <div style="text-align: center; max-width: 600px; margin: 0 auto;">
+          <h2>Built for speed. Built for scale.</h2>
+          <p style="margin-top: 12px;">Everything you need to orchestrate meetings across distributed teams, clients, and custom pipelines.</p>
+        </div>
+
+        <div class="feature-grid">
+          <!-- Feature 1 -->
+          <div class="feature-card">
+            <div>
+              <div class="feature-icon-box">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                  <circle cx="9" cy="7" r="4"></circle>
+                  <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                  <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                </svg>
+              </div>
+              <h3>Round-Robin Team Routing</h3>
+              <p style="margin-top: 8px;">
+                Distribute incoming sales discovery or customer support calls evenly among team members based on territory, availability, or priority weighting.
+              </p>
+            </div>
+            <div style="margin-top: 24px;">
+              <a href="https://cal.com/routing" class="link-blue" style="font-size: 14px;">Learn about routing forms →</a>
+            </div>
+          </div>
+
+          <!-- Feature 2 -->
+          <div class="feature-card">
+            <div>
+              <div class="feature-icon-box">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <polyline points="16 18 22 12 16 6"></polyline>
+                  <polyline points="8 6 2 12 8 18"></polyline>
+                </svg>
+              </div>
+              <h3>Embed Anywhere via SDK</h3>
+              <p style="margin-top: 8px;">
+                Embed your scheduler into React, Next.js, Vue, or vanilla HTML with three lines of code. Style every token to match your brand seamlessly.
+              </p>
+            </div>
+            <div style="margin-top: 24px;">
+              <a href="#developers" class="link-blue" style="font-size: 14px;">Explore developer quickstart →</a>
+            </div>
+          </div>
+
+          <!-- Feature 3 -->
+          <div class="feature-card">
+            <div>
+              <div class="feature-icon-box">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                  <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                </svg>
+              </div>
+              <h3>Self-Hosted & SOC2 Certified</h3>
+              <p style="margin-top: 8px;">
+                Keep your customer data on your own cloud. Cal.com supports Docker, Kubernetes, and enterprise air-gapped deployments with full audit trails.
+              </p>
+            </div>
+            <div style="margin-top: 24px;">
+              <a href="https://github.com/calcom/cal.com" class="link-blue" style="font-size: 14px;">View GitHub repository →</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- DEVELOPER CODE EMBED SECTION -->
+    <section class="section-y" id="developers" style="padding-top: 0;">
+      <div class="container">
+        <div class="code-section">
+          <div class="code-header">
+            <div>
+              <div style="font-size: 12px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: 0.08em;">DEVELOPER INTEGRATION</div>
+              <h3 style="font-size: 20px; margin-top: 4px;">Embed with the official React SDK</h3>
+            </div>
+            <div class="code-tabs">
+              <button class="code-tab active" onclick="showSnippet('react')">React</button>
+              <button class="code-tab" onclick="showSnippet('html')">Vanilla JS</button>
+              <button class="code-tab" onclick="showSnippet('api')">REST API</button>
+            </div>
+          </div>
+
+          <pre><code id="codeSnippet">import Cal, { getCalApi } from "@calcom/embed-react";
+import { useEffect } from "react";
+
+export default function BookingPage() {
+  useEffect(() => {
+    (async function () {
+      const cal = await getCalApi();
+      cal("ui", { theme: "light", styles: { branding: { brandColor: "#242424" } } });
+    })();
+  }, []);
+
+  return &lt;Cal calLink="peer/30min" style={{ width: "100%", height: "100%", overflow: "scroll" }} /&gt;;
+}</code></pre>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- OFFICIAL CAL.COM FOOTER -->
+  <footer class="cal-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div>
+          <a href="#" class="nav-brand" style="margin-bottom: 12px;">
+            <span>Cal.com</span>
+          </a>
+          <p style="font-size: 14px; max-width: 280px; margin-bottom: 20px;">
+            Open scheduling infrastructure. Built in public with contributors worldwide.
+          </p>
+          <span style="font-size: 13px; color: var(--muted);">© 2026 Cal.com, Inc.</span>
+        </div>
+
+        <div class="footer-col">
+          <h5>Product</h5>
+          <ul class="footer-links">
+            <li><a href="#features">Routing Forms</a></li>
+            <li><a href="#features">Team Scheduling</a></li>
+            <li><a href="#features">Workflows & SMS</a></li>
+            <li><a href="#features">App Store</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h5>Developers</h5>
+          <ul class="footer-links">
+            <li><a href="#developers">API Reference</a></li>
+            <li><a href="#developers">React Embed SDK</a></li>
+            <li><a href="https://github.com/calcom/cal.com">GitHub Repository</a></li>
+            <li><a href="#developers">Self-hosting Guide</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h5>Company</h5>
+          <ul class="footer-links">
+            <li><a href="#">About Us</a></li>
+            <li><a href="#">Careers</a></li>
+            <li><a href="#">Security & Privacy</a></li>
+            <li><a href="#">Status Page</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- FLOATING TOKEN VERIFICATION PANEL -->
+  <div class="token-inspect-btn">
+    <button class="btn btn-white" onclick="toggleTokenInspect()" style="box-shadow: var(--elev-raised);">
+      <span>Cal Tokens</span>
+    </button>
+  </div>
+
+  <div class="token-inspect-modal" id="tokenInspectModal">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; border-bottom: 1px solid var(--border); padding-bottom: 6px;">
+      <span style="font-family: var(--font-display); font-weight: 600; font-size: 15px;">CAL.COM TOKEN AUDIT</span>
+      <button onclick="toggleTokenInspect()" style="background: none; border: none; cursor: pointer;">✕</button>
+    </div>
+    <div style="display: flex; flex-direction: column; gap: 8px; font-family: var(--font-mono); font-size: 12px; color: var(--fg);">
+      <div>• Canvas: <span style="font-weight: 600;">#ffffff (Pure White)</span></div>
+      <div>• Charcoal: <span style="font-weight: 600;">#242424 (Signature)</span></div>
+      <div>• Midnight: <span style="font-weight: 600;">#111111 (Nav Links)</span></div>
+      <div>• Mid Gray: <span style="font-weight: 600;">#898989 (Muted Text)</span></div>
+      <div>• Link Blue: <span style="font-weight: 600; color: #0099ff;">#0099ff (Links Only)</span></div>
+      <div>• Ring Border: <span style="font-weight: 600;">rgba(34, 42, 53, 0.08)</span></div>
+      <div>• Multi-layer Shadow: <span style="font-weight: 600;">Contact + Ring + Diffused</span></div>
+      <div>• Display Font: <span style="font-weight: 600;">Cal Sans (wt 600, lh 1.10)</span></div>
+      <div>• Body Font: <span style="font-weight: 600;">Inter (wt 300/400/500/600)</span></div>
+      <div>• Section Rhythm: <span style="font-weight: 600;">96px Lavish Desktop</span></div>
+    </div>
+  </div>
+
+  <!-- INTERACTIVE SCRIPTS -->
+  <script>
+    // Token Modal Toggle
+    function toggleTokenInspect() {
+      document.getElementById('tokenInspectModal').classList.toggle('open');
+    }
+
+    // Calendar Day Selection
+    function selectDay(element, dateString) {
+      if (element.classList.contains('disabled')) return;
+      document.querySelectorAll('.day-btn').forEach(btn => btn.classList.remove('active'));
+      element.classList.add('active');
+      document.getElementById('selectedDateLabel').textContent = dateString;
+      document.getElementById('bookingResult').textContent = '';
+      document.querySelectorAll('.time-slot-btn').forEach(btn => btn.classList.remove('selected'));
+    }
+
+    // Time Slot Booking Confirmation
+    function confirmSlot(time) {
+      document.querySelectorAll('.time-slot-btn').forEach(btn => btn.classList.remove('selected'));
+      event.currentTarget.classList.add('selected');
+
+      const date = document.getElementById('selectedDateLabel').textContent;
+      const result = document.getElementById('bookingResult');
+      result.textContent = `✓ Selected: ${date} at ${time}`;
+    }
+
+    function prevMonth() {
+      alert("Viewing available slots for September 2026.");
+    }
+
+    function nextMonth() {
+      alert("October 2026 slots open on the 15th.");
+    }
+
+    // Code Snippet Switcher
+    const snippets = {
+      react: `import Cal, { getCalApi } from "@calcom/embed-react";
+import { useEffect } from "react";
+
+export default function BookingPage() {
+  useEffect(() => {
+    (async function () {
+      const cal = await getCalApi();
+      cal("ui", { theme: "light", styles: { branding: { brandColor: "#242424" } } });
+    })();
+  }, []);
+
+  return <Cal calLink="peer/30min" style={{ width: "100%", height: "100%", overflow: "scroll" }} />;
+}`,
+      html: `<!-- Cal inline embed code begins -->
+<div style="width:100%;height:100%;overflow:scroll" id="my-cal-inline"></div>
+<script type="text/javascript">
+  (function (C, A, L) { let p = function (a, ar) { a.q.push(ar); }; let d = C.document; C.Cal = C.Cal || function () { let cal = C.Cal; let ar = arguments; if (!cal.loaded) { cal.ns = {}; cal.q = cal.q || []; d.head.appendChild(d.createElement("script")).src = A; cal.loaded = true; } if (ar[0] === L) { const api = function () { p(api, arguments); }; const namespace = ar[1]; api.q = api.q || []; if(typeof namespace === "string"){cal.ns[namespace] = cal.ns[namespace] || api;p(cal.ns[namespace], ar);p(cal, ["initNamespace", namespace]);} else p(cal, ar); return; } p(cal, ar); }; })(window, "https://app.cal.com/embed/embed.js", "init");
+  Cal("init", {origin:"https://cal.com"});
+  Cal("inline", {
+    elementOrSelector:"#my-cal-inline",
+    calLink: "peer/30min",
+    layout: "month_view"
+  });
+<\/script>`,
+      api: `// POST /api/v1/bookings
+curl -X POST https://api.cal.com/v1/bookings \\
+  -H "Content-Type: application/json" \\
+  -d '{
+    "eventTypeId": 42190,
+    "start": "2026-09-09T09:00:00.000Z",
+    "name": "Alex Rivera",
+    "email": "alex@example.com",
+    "timeZone": "Europe/London"
+  }'`
+    };
+
+    function showSnippet(tab) {
+      document.querySelectorAll('.code-tab').forEach(t => t.classList.remove('active'));
+      event.currentTarget.classList.add('active');
+      document.getElementById('codeSnippet').textContent = snippets[tab];
+    }
+  </script>
+</body>
+</html>

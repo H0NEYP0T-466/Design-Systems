@@ -1,0 +1,1078 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Skeuomorphism — Tactile Physical Metaphors</title>
+  <meta name="description" content="Authentic living website built strictly with the Skeuomorphism design system. Real-world mimicry with textured surfaces, 3D gel buttons, brass rivets, and Germania One display typography.">
+
+  <!-- Google Fonts: Germania One (display), Roboto (primary), JetBrains Mono (mono) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Germania+One&family=JetBrains+Mono:wght@400;500;600;700&family=Roboto:ital,wght@0,300;0,400;0,500;0,700;0,900;1,400&display=swap" rel="stylesheet">
+
+  <style>
+    /* ─────────────────────────────────────────────────────────────
+       1. EXACT TOKENS FROM skeumorphism/DESIGN.md
+       ───────────────────────────────────────────────────────────── */
+    :root {
+      /* Foundations */
+      --color-primary: #FA3C00;      /* Vibrant tactile red-orange CTA */
+      --color-primary-dark: #C93000;
+      --color-primary-light: #FF6633;
+      --color-secondary: #F08321;    /* Warm amber-orange */
+      --color-success: #16A34A;      /* Success token */
+      --color-warning: #D97706;      /* Warning token */
+      --color-danger: #DC2626;       /* Danger token */
+      --color-surface: #FFFFFF;      /* Clean surface base */
+      --color-text: #111827;         /* Deep body text */
+      --color-neutral: #FFFFFF;      /* Derived neutral token */
+
+      /* Physical Skeuomorphic Materials (Parched Paper, Leather & Brass) */
+      --material-desk: #F5EFEB;
+      --material-paper: #FFFDF9;
+      --material-stitch: #C8B9A6;
+      --material-brass: #D4AF37;
+      --material-groove: rgba(0, 0, 0, 0.12);
+
+      /* Typography Families */
+      --font-display: 'Germania One', cursive, serif;
+      --font-primary: 'Roboto', -apple-system, BlinkMacSystemFont, sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+
+      /* Typographic Scale (12/14/16/20/24/32) */
+      --text-12: 12px;
+      --text-14: 14px;
+      --text-16: 16px;
+      --text-20: 20px;
+      --text-24: 24px;
+      --text-32: 32px;
+
+      /* Spacing Scale (4/8/12/16/24/32) */
+      --space-4: 4px;
+      --space-8: 8px;
+      --space-12: 12px;
+      --space-16: 16px;
+      --space-24: 24px;
+      --space-32: 32px;
+      --space-48: 48px;
+
+      /* Radii */
+      --radius-sm: 4px;
+      --radius-md: 8px;
+      --radius-lg: 14px;
+      --radius-pill: 9999px;
+
+      /* Physical 3D Skeuomorphic Shadows & Bevels */
+      --bevel-3d-btn: inset 0 1px 0 rgba(255, 255, 255, 0.65), 
+                      inset 0 -2px 0 rgba(0, 0, 0, 0.35),
+                      0 4px 8px rgba(0, 0, 0, 0.22),
+                      0 1px 2px rgba(0, 0, 0, 0.15);
+
+      --bevel-3d-pressed: inset 0 3px 6px rgba(0, 0, 0, 0.45),
+                          0 1px 1px rgba(255, 255, 255, 0.5);
+
+      --paper-shadow: 0 4px 12px rgba(0, 0, 0, 0.08),
+                      0 12px 28px rgba(90, 60, 30, 0.12),
+                      inset 0 0 0 1px rgba(255, 255, 255, 0.85);
+
+      --groove-inset: inset 0 2px 5px rgba(0, 0, 0, 0.18),
+                      0 1px 0 #FFFFFF;
+
+      --focus-visible-ring: 0 0 0 3px rgba(250, 60, 0, 0.35);
+
+      /* Motion (150-250ms with stable easing) */
+      --transition-fast: 160ms cubic-bezier(0.2, 0, 0, 1);
+      --transition-base: 220ms cubic-bezier(0.2, 0, 0, 1);
+    }
+
+    /* Reset & Real-world Desk Texture Background */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      font-size: 16px;
+      background-color: var(--material-desk);
+      color: var(--color-text);
+      font-family: var(--font-primary);
+      scroll-behavior: smooth;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    body {
+      background: 
+        radial-gradient(circle at 50% 0%, rgba(255,255,255,0.8) 0%, transparent 60%),
+        linear-gradient(180deg, #FAF6F2 0%, #EFE7DE 100%);
+      color: var(--color-text);
+      line-height: 1.5;
+      overflow-x: hidden;
+      min-height: 100vh;
+    }
+
+    ::selection {
+      background: var(--color-primary);
+      color: #FFFFFF;
+    }
+
+    .container {
+      max-width: 1160px;
+      margin-left: auto;
+      margin-right: auto;
+      padding-left: var(--space-24);
+      padding-right: var(--space-24);
+    }
+
+    /* ─────────────────────────────────────────────────────────────
+       2. TYPOGRAPHY (Germania One Display & Roboto Body)
+       ───────────────────────────────────────────────────────────── */
+    h1, h2, h3, .font-display {
+      font-family: var(--font-display);
+      color: var(--color-text);
+      letter-spacing: 0.01em;
+      text-shadow: 0 1px 0 rgba(255, 255, 255, 0.9);
+    }
+
+    h1 {
+      font-size: clamp(34px, 5.5vw, 56px);
+      line-height: 1.1;
+    }
+
+    h2 {
+      font-size: clamp(26px, 4vw, 36px);
+      line-height: 1.2;
+    }
+
+    h3 {
+      font-size: var(--text-24);
+      line-height: 1.3;
+    }
+
+    p {
+      font-family: var(--font-primary);
+      font-size: var(--text-16);
+      color: #374151;
+      line-height: 1.6;
+    }
+
+    .mono {
+      font-family: var(--font-mono);
+    }
+
+    /* ─────────────────────────────────────────────────────────────
+       3. NAVIGATION BAR (Stitched Leather / Parchment Trim)
+       ───────────────────────────────────────────────────────────── */
+    .nav-header {
+      background: linear-gradient(180deg, #FFFFFF 0%, #F5EFEB 100%);
+      border-bottom: 2px solid #E2D7CB;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .nav-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 68px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: var(--space-12);
+      text-decoration: none;
+      color: var(--color-text);
+    }
+
+    .brand-wax-seal {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 35% 35%, #FF5A26, #C42600);
+      box-shadow: inset 0 1px 1px rgba(255,255,255,0.7), 0 3px 6px rgba(0,0,0,0.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #FFFFFF;
+      font-family: var(--font-display);
+      font-size: 18px;
+      border: 1px solid #A81C00;
+    }
+
+    .brand-title {
+      font-family: var(--font-display);
+      font-size: 24px;
+    }
+
+    .nav-links {
+      display: none;
+      align-items: center;
+      gap: var(--space-24);
+      list-style: none;
+    }
+
+    @media (min-width: 820px) {
+      .nav-links {
+        display: flex;
+      }
+    }
+
+    .nav-link {
+      font-size: var(--text-14);
+      font-weight: 600;
+      color: #4B5563;
+      text-decoration: none;
+      text-shadow: 0 1px 0 #FFFFFF;
+      transition: color var(--transition-fast);
+    }
+
+    .nav-link:hover {
+      color: var(--color-primary);
+      text-decoration: none;
+    }
+
+    /* ─────────────────────────────────────────────────────────────
+       4. GLOSSY 3D BUTTONS & SKEUOMORPHIC CONTROLS
+       Primary action uses #FA3C00; secondary actions stay neutral.
+       ───────────────────────────────────────────────────────────── */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--space-8);
+      font-family: var(--font-primary);
+      font-size: var(--text-14);
+      font-weight: 700;
+      padding: 10px 22px;
+      border-radius: var(--radius-md);
+      cursor: pointer;
+      text-decoration: none;
+      transition: all var(--transition-fast);
+      user-select: none;
+      text-shadow: 0 1px 1px rgba(0, 0, 0, 0.3);
+      border: 1px solid rgba(0, 0, 0, 0.25);
+    }
+
+    .btn:focus-visible {
+      outline: none;
+      box-shadow: var(--focus-visible-ring);
+    }
+
+    /* Primary Glossy 3D Button (#FA3C00) */
+    .btn-primary {
+      background: linear-gradient(180deg, #FF6633 0%, #FA3C00 45%, #D42D00 100%);
+      color: #FFFFFF;
+      box-shadow: var(--bevel-3d-btn);
+      border-color: #A81C00;
+    }
+
+    .btn-primary:hover {
+      background: linear-gradient(180deg, #FF7744 0%, #FF4D14 45%, #E63500 100%);
+      transform: translateY(-1px);
+    }
+
+    .btn-primary:active, .btn-primary.is-active {
+      background: linear-gradient(180deg, #C42600 0%, #FA3C00 100%);
+      box-shadow: var(--bevel-3d-pressed);
+      transform: translateY(1px);
+    }
+
+    /* Secondary Tactile Neutral Button */
+    .btn-secondary {
+      background: linear-gradient(180deg, #FFFFFF 0%, #ECE5DE 100%);
+      color: var(--color-text);
+      box-shadow: inset 0 1px 0 #FFFFFF, inset 0 -1px 0 rgba(0,0,0,0.15), 0 3px 6px rgba(0,0,0,0.12);
+      border-color: #C8BCAD;
+      text-shadow: 0 1px 0 #FFFFFF;
+    }
+
+    .btn-secondary:hover {
+      background: linear-gradient(180deg, #FFFFFF 0%, #F5EDE6 100%);
+      transform: translateY(-1px);
+    }
+
+    .btn-secondary:active, .btn-secondary.is-active {
+      background: #E5DDD4;
+      box-shadow: inset 0 2px 4px rgba(0,0,0,0.2);
+      transform: translateY(1px);
+    }
+
+    /* Secondary Accent Amber Button (#F08321) */
+    .btn-amber {
+      background: linear-gradient(180deg, #FFA34D 0%, #F08321 45%, #C7640A 100%);
+      color: #FFFFFF;
+      box-shadow: var(--bevel-3d-btn);
+      border-color: #A35004;
+    }
+
+    .btn-amber:hover {
+      background: linear-gradient(180deg, #FFB266 0%, #FF9233 45%, #D96E0D 100%);
+      transform: translateY(-1px);
+    }
+
+    /* Stitched Paper Cards with Brass Rivets */
+    .stitched-card {
+      background: var(--material-paper);
+      border: 2px dashed var(--material-stitch);
+      border-radius: var(--radius-lg);
+      padding: var(--space-32);
+      box-shadow: var(--paper-shadow);
+      position: relative;
+    }
+
+    /* Brass Screw Rivets in 4 corners */
+    .brass-rivet {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 35% 35%, #F0D785, #A07820);
+      box-shadow: inset 0 1px 1px #FFF, 0 1px 2px rgba(0,0,0,0.35);
+      border: 1px solid #735310;
+      position: absolute;
+    }
+    .rivet-tl { top: 12px; left: 12px; }
+    .rivet-tr { top: 12px; right: 12px; }
+    .rivet-bl { bottom: 12px; left: 12px; }
+    .rivet-br { bottom: 12px; right: 12px; }
+
+    /* ─────────────────────────────────────────────────────────────
+       5. HERO SECTION
+       ───────────────────────────────────────────────────────────── */
+    .hero-section {
+      padding-top: var(--space-48);
+      padding-bottom: var(--space-48);
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: var(--space-32);
+      align-items: center;
+    }
+
+    @media (min-width: 900px) {
+      .hero-grid {
+        grid-template-columns: 1.1fr 0.9fr;
+      }
+    }
+
+    .hero-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-8);
+      background: linear-gradient(180deg, #FFF9F0 0%, #F5E8D8 100%);
+      border: 1px solid #CDBFA8;
+      border-radius: var(--radius-sm);
+      padding: 4px 10px;
+      box-shadow: inset 0 1px 0 #FFF, 0 1px 2px rgba(0,0,0,0.1);
+      font-size: var(--text-12);
+      font-weight: 700;
+      color: #7A4E1D;
+      text-transform: uppercase;
+    }
+
+    .hero-ctas {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-16);
+      margin-top: var(--space-24);
+    }
+
+    /* Physical Instrument Console Specimen */
+    .analog-console {
+      background: linear-gradient(180deg, #4A4036 0%, #2E2721 100%);
+      border-radius: var(--radius-lg);
+      padding: var(--space-24);
+      box-shadow: inset 0 2px 3px rgba(255,255,255,0.15), 0 10px 25px rgba(0,0,0,0.4);
+      border: 4px solid #1F1914;
+      color: #EDE4D8;
+    }
+
+    .vu-meter-glass {
+      background: radial-gradient(ellipse at 50% 120%, #FFF9C4 0%, #E8DF99 60%, #C4B968 100%);
+      border-radius: var(--radius-md);
+      padding: var(--space-16);
+      box-shadow: inset 0 3px 8px rgba(0,0,0,0.5), 0 1px 0 rgba(255,255,255,0.2);
+      border: 2px solid #1A1512;
+      color: #262118;
+      height: 110px;
+      position: relative;
+      overflow: hidden;
+      margin-bottom: var(--space-16);
+    }
+
+    .needle {
+      position: absolute;
+      bottom: -15px;
+      left: 50%;
+      width: 2px;
+      height: 85px;
+      background: #D42D00;
+      transform-origin: bottom center;
+      transform: rotate(-15deg);
+      transition: transform 180ms ease;
+      box-shadow: 1px 0 3px rgba(0,0,0,0.4);
+    }
+
+    .needle-hub {
+      position: absolute;
+      bottom: -10px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: #111;
+      border: 2px solid #555;
+    }
+
+    /* Rotary Knobs */
+    .dials-row {
+      display: flex;
+      justify-content: space-around;
+      padding-top: var(--space-8);
+    }
+
+    .knob-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      font-size: var(--text-12);
+      font-family: var(--font-mono);
+    }
+
+    .knob {
+      width: 46px;
+      height: 46px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 40% 40%, #70685E, #332D26);
+      box-shadow: inset 0 2px 2px rgba(255,255,255,0.4), 0 4px 8px rgba(0,0,0,0.5);
+      border: 2px solid #1A1612;
+      position: relative;
+      cursor: pointer;
+      transition: transform 180ms ease;
+    }
+
+    .knob-notch {
+      width: 4px;
+      height: 12px;
+      background: #FA3C00;
+      border-radius: 2px;
+      position: absolute;
+      top: 4px;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+
+    /* ─────────────────────────────────────────────────────────────
+       6. SKEUOMORPHIC COMPONENT LAB & GROOVED INPUTS
+       ───────────────────────────────────────────────────────────── */
+    .section {
+      padding-top: var(--space-48);
+      padding-bottom: var(--space-48);
+    }
+
+    .section-head {
+      margin-bottom: var(--space-32);
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-8);
+    }
+
+    .controls-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: var(--space-24);
+    }
+
+    @media (min-width: 860px) {
+      .controls-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    /* Sunken Grooved Inputs */
+    .grooved-input {
+      width: 100%;
+      height: 44px;
+      padding: 0 var(--space-16);
+      background: #FFFFFF;
+      border: 1px solid #C8B9A6;
+      border-radius: var(--radius-sm);
+      box-shadow: var(--groove-inset);
+      font-family: var(--font-primary);
+      font-size: var(--text-14);
+      color: var(--color-text);
+      outline: none;
+      transition: all var(--transition-fast);
+    }
+
+    /* Strong focus-visible state in #FA3C00 */
+    .grooved-input:focus, .grooved-input:focus-visible {
+      border-color: var(--color-primary);
+      box-shadow: inset 0 2px 5px rgba(0,0,0,0.15), 0 0 0 3px rgba(250, 60, 0, 0.25);
+    }
+
+    .grooved-input.has-error {
+      border-color: var(--color-danger);
+      box-shadow: inset 0 2px 5px rgba(220, 38, 38, 0.2), 0 0 0 3px rgba(220, 38, 38, 0.25);
+    }
+
+    /* Embossed Ribbons / Badges */
+    .embossed-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-6);
+      padding: 4px 10px;
+      border-radius: var(--radius-sm);
+      font-size: var(--text-12);
+      font-weight: 700;
+      text-transform: uppercase;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.7), 0 2px 4px rgba(0,0,0,0.15);
+      border: 1px solid rgba(0,0,0,0.2);
+    }
+
+    .badge-seal-red {
+      background: linear-gradient(180deg, #FF5522 0%, #FA3C00 100%);
+      color: #FFFFFF;
+      border-color: #A81C00;
+    }
+
+    .badge-seal-amber {
+      background: linear-gradient(180deg, #FFA043 0%, #F08321 100%);
+      color: #FFFFFF;
+      border-color: #A35004;
+    }
+
+    .badge-seal-leather {
+      background: linear-gradient(180deg, #FAF4ED 0%, #E8D9C8 100%);
+      color: #5C452D;
+      border-color: #C0B09C;
+      text-shadow: 0 1px 0 #FFF;
+    }
+
+    /* ─────────────────────────────────────────────────────────────
+       7. DESIGN SYSTEM TOKENS SPECIFICATION
+       ───────────────────────────────────────────────────────────── */
+    .token-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: var(--space-16);
+    }
+
+    .token-tag {
+      background: var(--material-paper);
+      border: 1px solid var(--material-stitch);
+      border-radius: var(--radius-md);
+      padding: var(--space-16);
+      box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+    }
+
+    .token-swatch-3d {
+      height: 48px;
+      border-radius: var(--radius-sm);
+      margin-bottom: var(--space-12);
+      box-shadow: inset 0 1px 1px rgba(255,255,255,0.6), inset 0 -1px 2px rgba(0,0,0,0.3), 0 2px 4px rgba(0,0,0,0.15);
+      border: 1px solid rgba(0,0,0,0.15);
+    }
+
+    /* ─────────────────────────────────────────────────────────────
+       8. PRICING TICKETS (Embossed Luggage Tag Metaphor)
+       ───────────────────────────────────────────────────────────── */
+    .pricing-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: var(--space-24);
+      margin-top: var(--space-32);
+    }
+
+    .ticket-card {
+      background: #FFFDF9;
+      border: 2px dashed #C8B9A6;
+      border-radius: var(--radius-lg);
+      padding: var(--space-32);
+      box-shadow: var(--paper-shadow);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      position: relative;
+    }
+
+    .ticket-card.featured {
+      border: 2px solid var(--color-primary);
+      box-shadow: 0 8px 24px rgba(250, 60, 0, 0.15), var(--paper-shadow);
+    }
+
+    .eyelet {
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: radial-gradient(circle, #EBE1D5 40%, #7A5F35 80%, #3D2B14 100%);
+      box-shadow: inset 0 2px 3px rgba(0,0,0,0.5), 0 1px 0 #FFF;
+      position: absolute;
+      top: 14px;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+
+    /* ─────────────────────────────────────────────────────────────
+       9. FOOTER
+       ───────────────────────────────────────────────────────────── */
+    .footer {
+      background: linear-gradient(180deg, #F3ECE4 0%, #E5DDD3 100%);
+      border-top: 2px solid #D6C8B8;
+      padding-top: var(--space-48);
+      padding-bottom: var(--space-32);
+      box-shadow: inset 0 2px 4px rgba(0,0,0,0.05);
+    }
+
+    .footer-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: var(--space-32);
+      margin-bottom: var(--space-32);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ==================== HEADER ==================== -->
+  <header class="nav-header">
+    <div class="container nav-inner">
+      <a href="#hero" class="brand">
+        <div class="brand-wax-seal">S</div>
+        <span class="brand-title">Skeuomorphism</span>
+      </a>
+
+      <ul class="nav-links">
+        <li><a href="#tokens" class="nav-link">Foundations</a></li>
+        <li><a href="#console" class="nav-link">Analog Matrix</a></li>
+        <li><a href="#components" class="nav-link">Controls Lab</a></li>
+        <li><a href="#pricing" class="nav-link">Pricing Tickets</a></li>
+      </ul>
+
+      <div style="display: flex; align-items: center; gap: var(--space-12);">
+        <span class="embossed-badge badge-seal-leather">VERIFIED 3D</span>
+        <button class="btn btn-primary" onclick="triggerPrimaryBevel(this)">Engage Valve</button>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <!-- ==================== HERO SECTION ==================== -->
+    <section id="hero" class="hero-section">
+      <div class="container hero-grid">
+        <div>
+          <span class="hero-tag">Morphism &amp; Effects Family</span>
+          <h1 style="margin-top: var(--space-12);">Real-world mimicry with tactile physical metaphors.</h1>
+          <p style="margin-top: var(--space-16);">
+            Authentic recreation of real-world materials: stitched parchment papers, brass eyelets, glossy 3D gel buttons powered by <code class="mono" style="color: var(--color-primary);">#FA3C00</code>, and vintage display typography in <code class="mono">Germania One</code>.
+          </p>
+
+          <div class="hero-ctas">
+            <button class="btn btn-primary" onclick="triggerPrimaryBevel(this)">
+              Primary CTA (#FA3C00)
+            </button>
+            <button class="btn btn-amber" onclick="triggerPrimaryBevel(this)">
+              Secondary (#F08321)
+            </button>
+            <a href="#tokens" class="btn btn-secondary">
+              Inspect Tokens
+            </a>
+          </div>
+
+          <div style="display: flex; gap: var(--space-16); margin-top: var(--space-24); font-size: var(--text-12); font-weight: 600; color: #5C452D;">
+            <span>✓ Primary: #FA3C00</span>
+            <span>✓ Secondary: #F08321</span>
+            <span>✓ Germania One Type</span>
+            <span>✓ 3D Gel Bevels</span>
+          </div>
+        </div>
+
+        <!-- Physical Analog Console -->
+        <div class="analog-console" id="console">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--space-12);">
+            <strong style="font-family: var(--font-display); font-size: var(--text-16); color: #FFF;">ANALOG TELEMETRY MK-IV</strong>
+            <span class="embossed-badge badge-seal-red" id="vu-status">ACTIVE</span>
+          </div>
+
+          <!-- VU Meter -->
+          <div class="vu-meter-glass">
+            <div style="display: flex; justify-content: space-between; font-family: monospace; font-size: 10px; font-weight: bold;">
+              <span>-20dB</span>
+              <span>-7dB</span>
+              <span>0dB</span>
+              <span style="color: #D42D00;">+3dB</span>
+            </div>
+            <div class="needle" id="vu-needle"></div>
+            <div class="needle-hub"></div>
+          </div>
+
+          <!-- Rotary Dials & Tactile Switches -->
+          <div class="dials-row">
+            <div class="knob-container">
+              <div class="knob" id="knob-1" onclick="rotateKnob(this)">
+                <div class="knob-notch"></div>
+              </div>
+              <span>RESONANCE</span>
+            </div>
+
+            <div class="knob-container">
+              <div class="knob" id="knob-2" onclick="rotateKnob(this)">
+                <div class="knob-notch"></div>
+              </div>
+              <span>DRIVE</span>
+            </div>
+
+            <div class="knob-container">
+              <button class="btn btn-primary" style="padding: 8px 12px; font-size: 11px;" onclick="pulseNeedle()">
+                PULSE
+              </button>
+              <span>NEEDLE TEST</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== TOKENS FOUNDATION SHOWCASE ==================== -->
+    <section id="tokens" class="section">
+      <div class="container">
+        <div class="section-head">
+          <span class="hero-tag" style="width: fit-content;">Color Foundations</span>
+          <h2>Exact Foundation Color Palette</h2>
+          <p>The 8 declared foundation tokens specified in <code class="mono">skeumorphism/DESIGN.md</code>.</p>
+        </div>
+
+        <div class="token-grid">
+          <!-- Primary -->
+          <div class="token-tag">
+            <div class="token-swatch-3d" style="background: linear-gradient(180deg, #FF6633 0%, #FA3C00 100%);"></div>
+            <strong style="font-size: var(--text-14);">Primary (#FA3C00)</strong>
+            <p style="font-size: var(--text-12); margin-top: 4px;">Tactile red-orange CTA emphasis.</p>
+          </div>
+
+          <!-- Secondary -->
+          <div class="token-tag">
+            <div class="token-swatch-3d" style="background: linear-gradient(180deg, #FFA34D 0%, #F08321 100%);"></div>
+            <strong style="font-size: var(--text-14);">Secondary (#F08321)</strong>
+            <p style="font-size: var(--text-12); margin-top: 4px;">Warm amber-orange highlights.</p>
+          </div>
+
+          <!-- Surface -->
+          <div class="token-tag">
+            <div class="token-swatch-3d" style="background: var(--color-surface); border: 1px solid #D1C4B4;"></div>
+            <strong style="font-size: var(--text-14);">Surface (#FFFFFF)</strong>
+            <p style="font-size: var(--text-12); margin-top: 4px;">White canvas for large surfaces and cards.</p>
+          </div>
+
+          <!-- Text -->
+          <div class="token-tag">
+            <div class="token-swatch-3d" style="background: var(--color-text);"></div>
+            <strong style="font-size: var(--text-14);">Text (#111827)</strong>
+            <p style="font-size: var(--text-12); margin-top: 4px;">Crisp body copy for optimal legibility.</p>
+          </div>
+
+          <!-- Success -->
+          <div class="token-tag">
+            <div class="token-swatch-3d" style="background: linear-gradient(180deg, #34D399 0%, #16A34A 100%);"></div>
+            <strong style="font-size: var(--text-14);">Success (#16A34A)</strong>
+            <p style="font-size: var(--text-12); margin-top: 4px;">Calibrated gauges and signals.</p>
+          </div>
+
+          <!-- Warning -->
+          <div class="token-tag">
+            <div class="token-swatch-3d" style="background: linear-gradient(180deg, #FBBF24 0%, #D97706 100%);"></div>
+            <strong style="font-size: var(--text-14);">Warning (#D97706)</strong>
+            <p style="font-size: var(--text-12); margin-top: 4px;">Thermal threshold warnings.</p>
+          </div>
+
+          <!-- Danger -->
+          <div class="token-tag">
+            <div class="token-swatch-3d" style="background: linear-gradient(180deg, #F87171 0%, #DC2626 100%);"></div>
+            <strong style="font-size: var(--text-14);">Danger (#DC2626)</strong>
+            <p style="font-size: var(--text-12); margin-top: 4px;">Critical disengagement valves.</p>
+          </div>
+
+          <!-- Neutral -->
+          <div class="token-tag">
+            <div class="token-swatch-3d" style="background: var(--color-neutral); border: 1px dashed #C8B9A6;"></div>
+            <strong style="font-size: var(--text-14);">Neutral (#FFFFFF)</strong>
+            <p style="font-size: var(--text-12); margin-top: 4px;">Derived from surface token.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== COMPONENT LABORATORY & GROOVED FORMS ==================== -->
+    <section id="components" class="section">
+      <div class="container">
+        <div class="section-head">
+          <span class="hero-tag" style="width: fit-content;">Physical Controls</span>
+          <h2>Component Laboratory</h2>
+          <p>Test 3D buttons, grooved inputs with strong focus-visible rings, and brass rivets.</p>
+        </div>
+
+        <div class="controls-grid">
+          <!-- Stitched Card Form -->
+          <div class="stitched-card">
+            <div class="brass-rivet rivet-tl"></div>
+            <div class="brass-rivet rivet-tr"></div>
+            <div class="brass-rivet rivet-bl"></div>
+            <div class="brass-rivet rivet-br"></div>
+
+            <h3 style="margin-bottom: var(--space-16);">Sunken Grooved Form</h3>
+            <p style="font-size: var(--text-14); margin-bottom: var(--space-16);">
+              Embedded with realistic inner shadows mimicking engraved parchment slots.
+            </p>
+
+            <form onsubmit="event.preventDefault(); validateSkeuoForm();">
+              <div style="display: flex; flex-direction: column; gap: 6px; margin-bottom: var(--space-16);">
+                <label style="font-size: var(--text-14); font-weight: 700;">Valve Identification Tag</label>
+                <input type="text" id="valve-id" class="grooved-input" value="VALVE-SECTOR-7G">
+                <span style="font-size: var(--text-12); color: #6B7280;">Click to verify the vivid #FA3C00 focus aura.</span>
+              </div>
+
+              <div style="display: flex; flex-direction: column; gap: 6px; margin-bottom: var(--space-20);">
+                <label style="font-size: var(--text-14); font-weight: 700; display: flex; justify-content: space-between;">
+                  <span>Mechanical Seal Code</span>
+                  <span class="embossed-badge badge-seal-red" id="skeuo-badge" style="display:none;">FAULT</span>
+                </label>
+                <input type="password" id="valve-code" class="grooved-input" placeholder="Enter 6-digit key...">
+                <span style="font-size: var(--text-12); color: #6B7280;" id="skeuo-helper">Must be at least 6 characters.</span>
+              </div>
+
+              <div style="display: flex; gap: var(--space-8);">
+                <button type="submit" class="btn btn-primary">Depress Lever</button>
+                <button type="button" class="btn btn-secondary" onclick="resetSkeuoForm()">Reset</button>
+              </div>
+            </form>
+          </div>
+
+          <!-- Stitched Card Badges & Buttons -->
+          <div class="stitched-card">
+            <div class="brass-rivet rivet-tl"></div>
+            <div class="brass-rivet rivet-tr"></div>
+            <div class="brass-rivet rivet-bl"></div>
+            <div class="brass-rivet rivet-br"></div>
+
+            <h3 style="margin-bottom: var(--space-16);">Tactile Gel Specimens</h3>
+            <p style="font-size: var(--text-14); margin-bottom: var(--space-16);">
+              Buttons feature specular glossy highlights and physical depressed state on click.
+            </p>
+
+            <div style="display: flex; flex-wrap: wrap; gap: var(--space-12); align-items: center;">
+              <button class="btn btn-primary" onclick="triggerPrimaryBevel(this)">Primary Gel</button>
+              <button class="btn btn-amber" onclick="triggerPrimaryBevel(this)">Amber Gel</button>
+              <button class="btn btn-secondary" onclick="triggerPrimaryBevel(this)">Parchment</button>
+            </div>
+
+            <div style="margin-top: var(--space-24); padding-top: var(--space-16); border-top: 1px dashed #C8B9A6;">
+              <strong style="font-size: var(--text-14);">Embossed Badges:</strong>
+              <div style="display: flex; flex-wrap: wrap; gap: var(--space-8); margin-top: 8px;">
+                <span class="embossed-badge badge-seal-red">PRIORITY #FA3C00</span>
+                <span class="embossed-badge badge-seal-amber">SECONDARY #F08321</span>
+                <span class="embossed-badge badge-seal-leather">CALIBRATED</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== PRICING TICKETS ==================== -->
+    <section id="pricing" class="section">
+      <div class="container">
+        <div class="section-head" style="text-align: center; align-items: center;">
+          <span class="hero-tag">Physical Passports</span>
+          <h2>Embossed Pricing Tickets</h2>
+          <p>Each ticket stamped with brass eyelets and physical borders.</p>
+        </div>
+
+        <div class="pricing-grid">
+          <!-- Standard -->
+          <div class="ticket-card">
+            <div class="eyelet"></div>
+            <div>
+              <span class="hero-tag" style="margin-top: 12px;">APPRENTICE PASS</span>
+              <h3 style="margin-top: 8px;">Workshop Standard</h3>
+              <p style="font-size: var(--text-14); margin-top: 4px;">For individual craftsmen testing physical tactile mechanics.</p>
+              <div style="font-size: var(--text-32); font-family: var(--font-display); margin-top: var(--space-12);">$0 <span style="font-size: 14px; font-family: var(--font-primary); color: #6B7280;">/ mo</span></div>
+
+              <ul style="list-style: none; margin-top: var(--space-24); display: flex; flex-direction: column; gap: 8px; font-size: var(--text-14);">
+                <li>✓ 3 Physical consoles</li>
+                <li>✓ Germania One display stack</li>
+                <li>✓ Standard brass rivets</li>
+              </ul>
+            </div>
+            <button class="btn btn-secondary" style="width: 100%; margin-top: var(--space-24);" onclick="triggerPrimaryBevel(this)">Claim Free Pass</button>
+          </div>
+
+          <!-- Featured Red -->
+          <div class="ticket-card featured">
+            <div class="eyelet"></div>
+            <div>
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 12px;">
+                <span class="embossed-badge badge-seal-red">RECOMMENDED</span>
+              </div>
+              <h3 style="margin-top: 8px;">Master Guild</h3>
+              <p style="font-size: var(--text-14); margin-top: 4px;">Full-throttle physical valve automation with priority #FA3C00 levers.</p>
+              <div style="font-size: var(--text-32); font-family: var(--font-display); color: var(--color-primary); margin-top: var(--space-12);">$49 <span style="font-size: 14px; font-family: var(--font-primary); color: #6B7280;">/ mo</span></div>
+
+              <ul style="list-style: none; margin-top: var(--space-24); display: flex; flex-direction: column; gap: 8px; font-size: var(--text-14);">
+                <li>✓ Unlimited tactile consoles</li>
+                <li>✓ Dedicated #FA3C00 primary levers</li>
+                <li>✓ Sub-200ms haptic response</li>
+                <li>✓ 24/7 master guild inspection</li>
+              </ul>
+            </div>
+            <button class="btn btn-primary" style="width: 100%; margin-top: var(--space-24);" onclick="triggerPrimaryBevel(this)">Stamp Guild Pass</button>
+          </div>
+
+          <!-- Custom -->
+          <div class="ticket-card">
+            <div class="eyelet"></div>
+            <div>
+              <span class="hero-tag" style="margin-top: 12px;">INDUSTRIAL GUILD</span>
+              <h3 style="margin-top: 8px;">Grand Foundry</h3>
+              <p style="font-size: var(--text-14); margin-top: 4px;">Bespoke physical installations with forged brass and leather fittings.</p>
+              <div style="font-size: var(--text-32); font-family: var(--font-display); margin-top: var(--space-12);">Custom</div>
+
+              <ul style="list-style: none; margin-top: var(--space-24); display: flex; flex-direction: column; gap: 8px; font-size: var(--text-14);">
+                <li>✓ Custom analog meters</li>
+                <li>✓ Aerospace skeuomorphism</li>
+                <li>✓ Dedicated foundry engineers</li>
+              </ul>
+            </div>
+            <button class="btn btn-secondary" style="width: 100%; margin-top: var(--space-24);" onclick="triggerPrimaryBevel(this)">Inquire Foundry</button>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ==================== FOOTER ==================== -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div>
+          <div class="brand" style="margin-bottom: var(--space-12);">
+            <div class="brand-wax-seal">S</div>
+            <span class="brand-title">Skeuomorphism</span>
+          </div>
+          <p style="font-size: var(--text-14); color: #5C452D; line-height: 1.6;">
+            Real-world mimicry with textured surfaces, 3D gel buttons, and physical metaphors.
+          </p>
+        </div>
+
+        <div>
+          <strong style="font-size: var(--text-14);">Foundations</strong>
+          <ul style="list-style: none; display: flex; flex-direction: column; gap: 8px; margin-top: 12px; font-size: var(--text-14);">
+            <li><a href="#tokens" class="nav-link">Primary (#FA3C00)</a></li>
+            <li><a href="#tokens" class="nav-link">Secondary (#F08321)</a></li>
+            <li><a href="#tokens" class="nav-link">Surface (#FFFFFF)</a></li>
+            <li><a href="#tokens" class="nav-link">Text (#111827)</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <strong style="font-size: var(--text-14);">Tactile Elements</strong>
+          <ul style="list-style: none; display: flex; flex-direction: column; gap: 8px; margin-top: 12px; font-size: var(--text-14);">
+            <li><a href="#components" class="nav-link">3D Gel Buttons</a></li>
+            <li><a href="#components" class="nav-link">Grooved Inputs</a></li>
+            <li><a href="#console" class="nav-link">Analog VU Meter</a></li>
+            <li><a href="#pricing" class="nav-link">Pricing Tickets</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <strong style="font-size: var(--text-14);">Typography</strong>
+          <ul style="list-style: none; display: flex; flex-direction: column; gap: 8px; margin-top: 12px; font-size: var(--text-14);">
+            <li><a href="#hero" class="nav-link">Germania One Display</a></li>
+            <li><a href="#hero" class="nav-link">Roboto Body Text</a></li>
+            <li><a href="#hero" class="nav-link">Section 9 Rules</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div style="border-top: 1px dashed #C8B9A6; padding-top: var(--space-20); display: flex; justify-content: space-between; align-items: center; font-size: var(--text-12); color: #6B7280;">
+        <div>Skeuomorphism Design System • Complies with open-design/skeumorphism/DESIGN.md</div>
+        <div style="display: flex; gap: var(--space-16); align-items: center;">
+          <span class="embossed-badge badge-seal-red">PHYSICAL TOKENS VERIFIED</span>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Interactive JavaScript -->
+  <script>
+    function triggerPrimaryBevel(btn) {
+      btn.classList.add('is-active');
+      setTimeout(() => {
+        btn.classList.remove('is-active');
+      }, 160);
+    }
+
+    // VU Meter Needle Pulsing
+    function pulseNeedle() {
+      const needle = document.getElementById('vu-needle');
+      needle.style.transform = 'rotate(24deg)';
+      setTimeout(() => {
+        needle.style.transform = 'rotate(-10deg)';
+        setTimeout(() => {
+          needle.style.transform = 'rotate(-15deg)';
+        }, 200);
+      }, 250);
+    }
+
+    // Rotary knob rotation
+    let angle = 0;
+    function rotateKnob(knob) {
+      angle = (angle + 45) % 360;
+      knob.style.transform = `rotate(${angle}deg)`;
+      const needle = document.getElementById('vu-needle');
+      const needleAngle = -20 + (angle / 360) * 45;
+      needle.style.transform = `rotate(${needleAngle}deg)`;
+    }
+
+    // Form Validation
+    function validateSkeuoForm() {
+      const input = document.getElementById('valve-code');
+      const helper = document.getElementById('skeuo-helper');
+      const badge = document.getElementById('skeuo-badge');
+
+      if (!input.value || input.value.length < 6) {
+        input.classList.add('has-error');
+        helper.style.color = 'var(--color-danger)';
+        helper.textContent = 'Error: Seal code must be at least 6 characters.';
+        badge.style.display = 'inline-flex';
+        badge.textContent = 'SEAL BROKEN';
+      } else {
+        input.classList.remove('has-error');
+        helper.style.color = 'var(--color-success)';
+        helper.textContent = '✓ Seal verified. Valve engaged.';
+        badge.style.display = 'inline-flex';
+        badge.className = 'embossed-badge badge-seal-amber';
+        badge.textContent = 'ENGAGED';
+        pulseNeedle();
+      }
+    }
+
+    function resetSkeuoForm() {
+      const input = document.getElementById('valve-code');
+      const helper = document.getElementById('skeuo-helper');
+      const badge = document.getElementById('skeuo-badge');
+      input.value = '';
+      input.classList.remove('has-error');
+      helper.style.color = '#6B7280';
+      helper.textContent = 'Must be at least 6 characters.';
+      badge.style.display = 'none';
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,1636 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Professional — Business-Ready Enterprise Design System</title>
+  <!-- Modern Typography: Poppins (Primary & Display) & IBM Plex Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&family=Poppins:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,600&display=swap" rel="stylesheet">
+
+  <style>
+    /* ==========================================================================
+       PROFESSIONAL DESIGN SYSTEM FOUNDATIONS & TOKENS
+       Category: Professional & Corporate | Visual Style: Modern Business-Ready
+       ========================================================================== */
+    :root {
+      /* Official Color Tokens from DESIGN.md */
+      --color-primary: #FECE14;        /* Signature Amber / Gold: CTA Emphasis */
+      --color-primary-hover: #E5B80B;
+      --color-primary-active: #CC9F00;
+      --color-primary-subtle: rgba(254, 206, 20, 0.12);
+      --color-primary-ring: rgba(254, 206, 20, 0.4);
+
+      --color-secondary: #000000;      /* Pure Black: Authoritative Contrast */
+      --color-secondary-hover: #1F2937;
+      --color-secondary-subtle: rgba(0, 0, 0, 0.05);
+
+      --color-success: #16A34A;        /* Token from foundations */
+      --color-success-subtle: rgba(22, 163, 74, 0.1);
+
+      --color-warning: #D97706;        /* Token from foundations */
+      --color-warning-subtle: rgba(217, 119, 6, 0.1);
+
+      --color-danger: #DC2626;         /* Token from foundations */
+      --color-danger-subtle: rgba(220, 38, 38, 0.1);
+
+      --color-surface: #FFFFFF;        /* Large backgrounds & cards */
+      --color-surface-subtle: #F8FAFC; /* Slate tint canvas */
+      --color-surface-elevated: #FFFFFF;
+      --color-neutral: #FFFFFF;        /* Derived from surface token */
+
+      --color-text: #111827;           /* Body copy & titles for contrast */
+      --color-text-secondary: #4B5563; /* Supporting subtext */
+      --color-text-muted: #6B7280;     /* Captions & metadata */
+      --color-text-on-primary: #111827;/* High-contrast dark text on yellow */
+      --color-text-on-secondary: #FFFFFF;
+
+      --color-border: #E2E8F0;         /* Structured hairline border */
+      --color-border-strong: #CBD5E1;
+      --color-border-dark: #000000;
+
+      /* Official Typography Families */
+      --font-primary: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      --font-display: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      --font-mono: 'IBM Plex Mono', Menlo, Monaco, Consolas, monospace;
+
+      /* Mobile-First Compact Scale: 12 / 14 / 16 / 18 / 22 / 28 / 34 */
+      --type-scale-12: 12px;
+      --type-scale-14: 14px;
+      --type-scale-16: 16px;
+      --type-scale-18: 18px;
+      --type-scale-22: 22px;
+      --type-scale-28: 28px;
+      --type-scale-34: 34px;
+
+      /* Spacing Scale: 4 / 8 / 12 / 16 / 24 / 32 */
+      --space-4: 4px;
+      --space-8: 8px;
+      --space-12: 12px;
+      --space-16: 16px;
+      --space-24: 24px;
+      --space-32: 32px;
+      --space-48: 48px;
+      --space-64: 64px;
+
+      /* Structured Business Radii */
+      --radius-sm: 4px;
+      --radius-md: 8px;
+      --radius-lg: 12px;
+      --radius-pill: 9999px;
+
+      /* Elevation: Restrained & Crisp */
+      --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+      --shadow-md: 0 4px 12px -2px rgba(0, 0, 0, 0.08), 0 2px 4px -2px rgba(0, 0, 0, 0.04);
+      --shadow-lg: 0 16px 32px -4px rgba(0, 0, 0, 0.09);
+
+      /* Motion: 150–250ms with stable easing */
+      --trans-fast: 150ms cubic-bezier(0.2, 0, 0, 1);
+      --trans-normal: 220ms cubic-bezier(0.2, 0, 0, 1);
+    }
+
+    /* Baseline Reset */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      background-color: var(--color-surface);
+      color: var(--color-text);
+      font-family: var(--font-primary);
+      font-size: var(--type-scale-16);
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    body {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      background-color: var(--color-surface);
+    }
+
+    /* Typography Hierarchy */
+    h1, .h1-title {
+      font-family: var(--font-display);
+      font-size: var(--type-scale-34);
+      font-weight: 700;
+      line-height: 1.2;
+      letter-spacing: -0.02em;
+      color: var(--color-text);
+    }
+
+    h2, .h2-title {
+      font-family: var(--font-display);
+      font-size: var(--type-scale-28);
+      font-weight: 700;
+      line-height: 1.25;
+      letter-spacing: -0.015em;
+      color: var(--color-text);
+    }
+
+    h3, .h3-title {
+      font-family: var(--font-display);
+      font-size: var(--type-scale-22);
+      font-weight: 600;
+      line-height: 1.3;
+      letter-spacing: -0.01em;
+      color: var(--color-text);
+    }
+
+    h4, .h4-title {
+      font-family: var(--font-display);
+      font-size: var(--type-scale-18);
+      font-weight: 600;
+      line-height: 1.35;
+      color: var(--color-text);
+    }
+
+    p, .body-regular {
+      font-size: var(--type-scale-16);
+      color: var(--color-text);
+      line-height: 1.58;
+    }
+
+    .body-compact {
+      font-size: var(--type-scale-14);
+      color: var(--color-text-secondary);
+      line-height: 1.5;
+    }
+
+    .caption-meta {
+      font-size: var(--type-scale-12);
+      color: var(--color-text-muted);
+      line-height: 1.4;
+    }
+
+    .mono-data {
+      font-family: var(--font-mono);
+      font-size: var(--type-scale-12);
+    }
+
+    .container {
+      width: 100%;
+      max-width: 1180px;
+      margin-inline: auto;
+      padding-inline: var(--space-24);
+    }
+
+    /* Navigation Bar */
+    .top-navbar {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: var(--color-surface);
+      border-bottom: 2px solid var(--color-border);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .nav-wrapper {
+      height: 60px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--space-16);
+    }
+
+    .brand-block {
+      display: flex;
+      align-items: center;
+      gap: var(--space-12);
+      text-decoration: none;
+      color: var(--color-text);
+    }
+
+    .brand-accent-box {
+      width: 28px;
+      height: 28px;
+      background: var(--color-primary);
+      border: 2px solid var(--color-secondary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: var(--type-scale-16);
+      color: var(--color-secondary);
+      border-radius: var(--radius-sm);
+      box-shadow: 2px 2px 0px var(--color-secondary);
+    }
+
+    .brand-name {
+      font-size: var(--type-scale-18);
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      text-transform: uppercase;
+    }
+
+    .brand-tagline {
+      font-family: var(--font-mono);
+      font-size: var(--type-scale-12);
+      font-weight: 600;
+      background: var(--color-secondary);
+      color: #FFFFFF;
+      padding: 2px var(--space-8);
+      border-radius: var(--radius-sm);
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: var(--space-24);
+      list-style: none;
+    }
+
+    .nav-item a {
+      text-decoration: none;
+      font-size: var(--type-scale-14);
+      font-weight: 600;
+      color: var(--color-text-secondary);
+      transition: color var(--trans-fast);
+    }
+
+    .nav-item a:hover {
+      color: var(--color-secondary);
+      text-decoration: underline;
+      text-underline-offset: 4px;
+    }
+
+    .nav-item a.active {
+      color: var(--color-secondary);
+    }
+
+    /* Buttons: Primary #FECE14, Secondary Neutral / #000000 */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--space-8);
+      height: 42px;
+      padding: 0 var(--space-16);
+      border-radius: var(--radius-md);
+      font-family: var(--font-primary);
+      font-size: var(--type-scale-14);
+      font-weight: 600;
+      line-height: 1;
+      text-decoration: none;
+      cursor: pointer;
+      border: 2px solid transparent;
+      transition: all var(--trans-fast);
+      user-select: none;
+      white-space: nowrap;
+    }
+
+    .btn:active:not(:disabled) {
+      transform: translateY(1px);
+    }
+
+    .btn:focus-visible {
+      outline: none;
+      box-shadow: 0 0 0 3px var(--color-primary-ring);
+    }
+
+    /* Primary action uses #FECE14 */
+    .btn-primary {
+      background-color: var(--color-primary);
+      color: var(--color-text-on-primary);
+      border-color: var(--color-secondary);
+      box-shadow: 2px 2px 0px var(--color-secondary);
+    }
+
+    .btn-primary:hover:not(:disabled) {
+      background-color: var(--color-primary-hover);
+      box-shadow: 3px 3px 0px var(--color-secondary);
+      transform: translate(-1px, -1px);
+    }
+
+    .btn-primary:active:not(:disabled) {
+      box-shadow: 0px 0px 0px var(--color-secondary);
+      transform: translate(2px, 2px);
+    }
+
+    /* Secondary actions stay neutral */
+    .btn-secondary {
+      background-color: var(--color-secondary);
+      color: var(--color-text-on-secondary);
+      border-color: var(--color-secondary);
+      box-shadow: 2px 2px 0px rgba(0, 0, 0, 0.2);
+    }
+
+    .btn-secondary:hover:not(:disabled) {
+      background-color: #1F2937;
+      border-color: #1F2937;
+      transform: translate(-1px, -1px);
+      box-shadow: 3px 3px 0px rgba(0, 0, 0, 0.25);
+    }
+
+    .btn-outline {
+      background-color: var(--color-surface);
+      color: var(--color-text);
+      border-color: var(--color-border-strong);
+    }
+
+    .btn-outline:hover:not(:disabled) {
+      border-color: var(--color-secondary);
+      background-color: var(--color-surface-subtle);
+    }
+
+    .btn-sm {
+      height: 32px;
+      padding: 0 var(--space-12);
+      font-size: var(--type-scale-12);
+      border-radius: var(--radius-sm);
+    }
+
+    .btn-lg {
+      height: 48px;
+      padding: 0 var(--space-24);
+      font-size: var(--type-scale-16);
+      font-weight: 700;
+    }
+
+    .btn:disabled {
+      opacity: 0.45;
+      cursor: not-allowed;
+      box-shadow: none;
+      pointer-events: none;
+    }
+
+    /* Hero Section */
+    .hero-banner {
+      background-color: var(--color-surface);
+      padding-top: var(--space-64);
+      padding-bottom: var(--space-64);
+      border-bottom: 2px solid var(--color-border);
+    }
+
+    .badge-eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-8);
+      font-family: var(--font-mono);
+      font-size: var(--type-scale-12);
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      padding: var(--space-4) var(--space-12);
+      background: var(--color-primary-subtle);
+      color: #92400E;
+      border-left: 3px solid var(--color-primary);
+      margin-bottom: var(--space-16);
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1.15fr 0.85fr;
+      gap: var(--space-48);
+      align-items: center;
+    }
+
+    @media (max-width: 900px) {
+      .hero-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .hero-content h1 {
+      margin-bottom: var(--space-16);
+    }
+
+    .hero-content p {
+      color: var(--color-text-secondary);
+      margin-bottom: var(--space-24);
+      max-width: 580px;
+    }
+
+    .hero-cta-group {
+      display: flex;
+      align-items: center;
+      gap: var(--space-12);
+      flex-wrap: wrap;
+    }
+
+    /* Executive KPI Console */
+    .kpi-console {
+      background: var(--color-surface);
+      border: 2px solid var(--color-secondary);
+      border-radius: var(--radius-lg);
+      box-shadow: 6px 6px 0px var(--color-secondary);
+      overflow: hidden;
+    }
+
+    .console-header {
+      background: var(--color-secondary);
+      color: #FFFFFF;
+      padding: var(--space-12) var(--space-16);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-family: var(--font-mono);
+      font-size: var(--type-scale-12);
+      font-weight: 600;
+    }
+
+    .console-pill {
+      background: var(--color-primary);
+      color: var(--color-secondary);
+      padding: 2px var(--space-8);
+      border-radius: var(--radius-sm);
+      font-weight: 700;
+    }
+
+    .console-body {
+      padding: var(--space-24);
+    }
+
+    .metric-duo {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--space-16);
+      margin-bottom: var(--space-24);
+    }
+
+    .metric-box {
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-md);
+      padding: var(--space-16);
+      background: var(--color-surface-subtle);
+    }
+
+    .metric-label {
+      font-size: var(--type-scale-12);
+      font-weight: 600;
+      color: var(--color-text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: var(--space-4);
+    }
+
+    .metric-value {
+      font-size: var(--type-scale-28);
+      font-weight: 800;
+      color: var(--color-text);
+      letter-spacing: -0.03em;
+    }
+
+    .metric-delta {
+      font-size: var(--type-scale-12);
+      font-weight: 600;
+      color: var(--color-success);
+      display: flex;
+      align-items: center;
+      gap: var(--space-4);
+      margin-top: var(--space-4);
+    }
+
+    /* Section Structure */
+    section {
+      padding-block: var(--space-64);
+      border-bottom: 2px solid var(--color-border);
+    }
+
+    .section-headline {
+      margin-bottom: var(--space-32);
+      max-width: 640px;
+    }
+
+    .section-kicker {
+      font-family: var(--font-mono);
+      font-size: var(--type-scale-12);
+      font-weight: 700;
+      color: var(--color-secondary);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: var(--space-8);
+      display: block;
+    }
+
+    /* Swatches & Foundations */
+    .palette-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: var(--space-16);
+    }
+
+    .palette-card {
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      background: var(--color-surface);
+      cursor: pointer;
+      box-shadow: var(--shadow-sm);
+      transition: all var(--trans-fast);
+    }
+
+    .palette-card:hover {
+      border-color: var(--color-secondary);
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-md);
+    }
+
+    .palette-strip {
+      height: 72px;
+      display: flex;
+      align-items: flex-end;
+      padding: var(--space-8);
+      font-family: var(--font-mono);
+      font-size: var(--type-scale-12);
+      font-weight: 700;
+    }
+
+    .palette-content {
+      padding: var(--space-12) var(--space-16);
+    }
+
+    .palette-title {
+      font-size: var(--type-scale-14);
+      font-weight: 700;
+      color: var(--color-text);
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .palette-sub {
+      font-size: var(--type-scale-12);
+      color: var(--color-text-muted);
+      margin-top: 2px;
+    }
+
+    /* Compact Typography Ladder */
+    .type-ladder {
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      background: var(--color-surface);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .ladder-row {
+      display: grid;
+      grid-template-columns: 140px 140px 1fr;
+      padding: var(--space-16);
+      border-bottom: 1px solid var(--color-border);
+      align-items: center;
+      gap: var(--space-16);
+    }
+
+    .ladder-row:last-child {
+      border-bottom: none;
+    }
+
+    .ladder-row:hover {
+      background: var(--color-surface-subtle);
+    }
+
+    @media (max-width: 700px) {
+      .ladder-row {
+        grid-template-columns: 1fr;
+        gap: var(--space-8);
+      }
+    }
+
+    /* Spacing Grid Blocks */
+    .space-scale-grid {
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      gap: var(--space-12);
+      margin-top: var(--space-24);
+    }
+
+    @media (max-width: 768px) {
+      .space-scale-grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+
+    .space-scale-box {
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-md);
+      padding: var(--space-16);
+      text-align: center;
+      background: var(--color-surface);
+    }
+
+    .space-indicator {
+      background: var(--color-primary);
+      border: 1px solid var(--color-secondary);
+      margin: var(--space-8) auto;
+      border-radius: 2px;
+    }
+
+    /* Interactive Component Studio */
+    .component-workbench {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--space-24);
+    }
+
+    @media (max-width: 860px) {
+      .component-workbench {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .panel-box {
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-lg);
+      padding: var(--space-24);
+      background: var(--color-surface);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .field-row {
+      margin-bottom: var(--space-20);
+    }
+
+    .field-label {
+      font-size: var(--type-scale-14);
+      font-weight: 600;
+      color: var(--color-text);
+      display: block;
+      margin-bottom: var(--space-6);
+    }
+
+    .input-field {
+      width: 100%;
+      height: 42px;
+      padding: 0 var(--space-16);
+      font-family: var(--font-primary);
+      font-size: var(--type-scale-14);
+      border: 1px solid var(--color-border-strong);
+      border-radius: var(--radius-md);
+      background: var(--color-surface);
+      color: var(--color-text);
+      transition: all var(--trans-fast);
+    }
+
+    /* Strong focus-visible states highlighting with #FECE14 */
+    .input-field:focus-visible, .input-field:focus {
+      outline: none;
+      border-color: var(--color-secondary);
+      box-shadow: 0 0 0 3px var(--color-primary-ring);
+    }
+
+    .input-field.input-error {
+      border-color: var(--color-danger);
+    }
+
+    .input-field.input-error:focus-visible {
+      box-shadow: 0 0 0 3px var(--color-danger-subtle);
+    }
+
+    .feedback-error {
+      font-size: var(--type-scale-12);
+      color: var(--color-danger);
+      font-weight: 500;
+      margin-top: var(--space-4);
+      display: flex;
+      align-items: center;
+      gap: var(--space-4);
+    }
+
+    /* Executive Table */
+    .ledger-table-wrap {
+      border: 2px solid var(--color-secondary);
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      box-shadow: 4px 4px 0px var(--color-secondary);
+      margin-top: var(--space-16);
+    }
+
+    .ledger-table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+    }
+
+    .ledger-table th {
+      background: var(--color-secondary);
+      color: #FFFFFF;
+      padding: var(--space-12) var(--space-16);
+      font-size: var(--type-scale-12);
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .ledger-table td {
+      padding: var(--space-16);
+      border-bottom: 1px solid var(--color-border);
+      font-size: var(--type-scale-14);
+      color: var(--color-text);
+      vertical-align: middle;
+    }
+
+    .ledger-table tr:last-child td {
+      border-bottom: none;
+    }
+
+    .ledger-table tr:hover td {
+      background: #FFFBEB;
+    }
+
+    .tag-status {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-4);
+      font-family: var(--font-mono);
+      font-size: var(--type-scale-12);
+      font-weight: 600;
+      padding: 2px var(--space-8);
+      border-radius: var(--radius-sm);
+    }
+
+    .tag-pass {
+      background: var(--color-success-subtle);
+      color: var(--color-success);
+      border: 1px solid rgba(22, 163, 74, 0.3);
+    }
+
+    .tag-audit {
+      background: var(--color-warning-subtle);
+      color: var(--color-warning);
+      border: 1px solid rgba(217, 119, 6, 0.3);
+    }
+
+    .tag-flag {
+      background: var(--color-danger-subtle);
+      color: var(--color-danger);
+      border: 1px solid rgba(220, 38, 38, 0.3);
+    }
+
+    /* Anti-Patterns Comparison */
+    .guidelines-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--space-24);
+    }
+
+    @media (max-width: 768px) {
+      .guidelines-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .rule-card {
+      border: 2px solid;
+      border-radius: var(--radius-lg);
+      padding: var(--space-24);
+      background: var(--color-surface);
+    }
+
+    .rule-card.do {
+      border-color: var(--color-success);
+      box-shadow: 4px 4px 0px rgba(22, 163, 74, 0.2);
+    }
+
+    .rule-card.dont {
+      border-color: var(--color-danger);
+      box-shadow: 4px 4px 0px rgba(220, 38, 38, 0.2);
+    }
+
+    .rule-header {
+      font-size: var(--type-scale-18);
+      font-weight: 700;
+      margin-bottom: var(--space-16);
+      display: flex;
+      align-items: center;
+      gap: var(--space-8);
+    }
+
+    .rule-card.do .rule-header { color: var(--color-success); }
+    .rule-card.dont .rule-header { color: var(--color-danger); }
+
+    .rule-item-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-12);
+    }
+
+    .rule-item-list li {
+      font-size: var(--type-scale-14);
+      line-height: 1.5;
+      display: flex;
+      align-items: flex-start;
+      gap: var(--space-8);
+      color: var(--color-text);
+    }
+
+    /* Footer */
+    .site-footer {
+      background: var(--color-secondary);
+      color: #FFFFFF;
+      padding-block: var(--space-48);
+      margin-top: auto;
+    }
+
+    .footer-flex {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: var(--space-24);
+    }
+
+    .footer-chip-rack {
+      display: flex;
+      gap: var(--space-8);
+      align-items: center;
+    }
+
+    .chip-sq {
+      width: 14px;
+      height: 14px;
+      border-radius: 2px;
+      border: 1px solid rgba(255, 255, 255, 0.3);
+    }
+
+    /* Toast */
+    .toast-tray {
+      position: fixed;
+      bottom: var(--space-24);
+      right: var(--space-24);
+      z-index: 250;
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-8);
+      pointer-events: none;
+    }
+
+    .toast-msg {
+      background: var(--color-secondary);
+      color: #FFFFFF;
+      border: 1px solid var(--color-primary);
+      box-shadow: 4px 4px 0px var(--color-primary);
+      padding: var(--space-12) var(--space-16);
+      border-radius: var(--radius-sm);
+      font-size: var(--type-scale-14);
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: var(--space-12);
+      transform: translateY(20px);
+      opacity: 0;
+      transition: all 200ms cubic-bezier(0.2, 0, 0, 1);
+    }
+
+    .toast-msg.show {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Navigation -->
+  <header class="top-navbar">
+    <div class="container nav-wrapper">
+      <a href="#" class="brand-block">
+        <div class="brand-accent-box">V</div>
+        <span class="brand-name">Vanguard</span>
+        <span class="brand-tagline">Professional DS</span>
+      </a>
+
+      <nav aria-label="Main Navigation">
+        <ul class="nav-links">
+          <li class="nav-item"><a href="#foundations">Foundations</a></li>
+          <li class="nav-item"><a href="#typography">Typography</a></li>
+          <li class="nav-item"><a href="#components">Controls</a></li>
+          <li class="nav-item"><a href="#application">Enterprise Suite</a></li>
+          <li class="nav-item"><a href="#guidelines">Anti-Patterns</a></li>
+        </ul>
+      </nav>
+
+      <div style="display: flex; align-items: center; gap: var(--space-12);">
+        <button class="btn btn-outline btn-sm" onclick="exportProfessionalTokens()">
+          <span>Copy Tokens</span>
+        </button>
+        <a href="#application" class="btn btn-primary btn-sm">Portal Access</a>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <!-- Hero Section -->
+    <section class="hero-banner">
+      <div class="container hero-grid">
+        <div class="hero-content">
+          <div class="badge-eyebrow">
+            <span>●</span> Business-Ready Visual Stance // High Trust
+          </div>
+          <h1>Decisive Intelligence for Global Enterprise.</h1>
+          <p>
+            Structured advisory, board-level risk modeling, and institutional governance powered by Poppins typography, Primary <code>#FECE14</code> CTA authority, and pure black <code>#000000</code> structure.
+          </p>
+          <div class="hero-cta-group">
+            <a href="#application" class="btn btn-primary btn-lg">Launch Enterprise Portal</a>
+            <a href="#foundations" class="btn btn-secondary btn-lg">Explore Token System</a>
+          </div>
+        </div>
+
+        <!-- Executive KPI Console -->
+        <div class="kpi-console">
+          <div class="console-header">
+            <span>VANGUARD RISK LEDGER v4.2</span>
+            <span class="console-pill">AUDIT: ACTIVE</span>
+          </div>
+
+          <div class="console-body">
+            <div class="metric-duo">
+              <div class="metric-box">
+                <div class="metric-label">Capital Under Gov</div>
+                <div class="metric-value" style="color: var(--color-secondary);">$4.82B</div>
+                <div class="metric-delta">
+                  <span>&uarr; 14.8%</span>
+                  <span class="caption-meta">vs Q3 target</span>
+                </div>
+              </div>
+
+              <div class="metric-box">
+                <div class="metric-label">Composite Risk Index</div>
+                <div class="metric-value" style="color: #92400E;">0.12</div>
+                <div class="metric-delta" style="color: var(--color-success);">
+                  <span>Stable</span>
+                  <span class="caption-meta">Institutional AAA</span>
+                </div>
+              </div>
+            </div>
+
+            <div style="background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-md); padding: var(--space-16); margin-bottom: var(--space-16);">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--space-8);">
+                <span class="caption-meta mono-data" style="font-weight: 700; color: var(--color-text);">COMPLIANCE VERIFICATION</span>
+                <span class="tag-status tag-pass">100% VERIFIED</span>
+              </div>
+              <!-- Progress bar with #FECE14 fill -->
+              <div style="height: 10px; background: #E2E8F0; border-radius: var(--radius-pill); overflow: hidden; border: 1px solid var(--color-border);">
+                <div style="height: 100%; width: 100%; background: var(--color-primary);"></div>
+              </div>
+            </div>
+
+            <div style="display: flex; gap: var(--space-8);">
+              <button class="btn btn-primary btn-sm" style="flex: 1;" onclick="triggerToast('Executing institutional solvency test...')">Run Solvency Audit</button>
+              <button class="btn btn-outline btn-sm" onclick="triggerToast('Exporting Q4 ledger...')">Export CSV</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 1: FOUNDATIONS (COLORS, TOKEN BINDINGS) -->
+    <section id="foundations">
+      <div class="container">
+        <div class="section-headline">
+          <span class="section-kicker">Section 01 // Foundation Tokens</span>
+          <h2 class="h2-title">Official Color Stance & Palette</h2>
+          <p class="body-compact">
+            Tokens from style foundations: Primary <code>#FECE14</code> for punchy CTA emphasis, Secondary <code>#000000</code> for structured grounding, and Surface <code>#FFFFFF</code> for legible workspaces.
+          </p>
+        </div>
+
+        <div class="palette-grid">
+          <!-- Primary -->
+          <div class="palette-card" onclick="copyTokenHex('#FECE14', 'Primary')">
+            <div class="palette-strip" style="background-color: #FECE14; color: #111827;">
+              PRIMARY
+            </div>
+            <div class="palette-content">
+              <div class="palette-title">
+                <span>Primary</span>
+                <span class="mono-data">#FECE14</span>
+              </div>
+              <div class="palette-sub">CTA emphasis & interaction signal</div>
+            </div>
+          </div>
+
+          <!-- Secondary -->
+          <div class="palette-card" onclick="copyTokenHex('#000000', 'Secondary')">
+            <div class="palette-strip" style="background-color: #000000; color: #FFFFFF;">
+              SECONDARY
+            </div>
+            <div class="palette-content">
+              <div class="palette-title">
+                <span>Secondary</span>
+                <span class="mono-data">#000000</span>
+              </div>
+              <div class="palette-sub">Pure Black: contrast & structure</div>
+            </div>
+          </div>
+
+          <!-- Surface -->
+          <div class="palette-card" onclick="copyTokenHex('#FFFFFF', 'Surface')">
+            <div class="palette-strip" style="background-color: #FFFFFF; color: #111827; border-bottom: 1px solid #E2E8F0;">
+              SURFACE
+            </div>
+            <div class="palette-content">
+              <div class="palette-title">
+                <span>Surface</span>
+                <span class="mono-data">#FFFFFF</span>
+              </div>
+              <div class="palette-sub">Large backgrounds & cards</div>
+            </div>
+          </div>
+
+          <!-- Text -->
+          <div class="palette-card" onclick="copyTokenHex('#111827', 'Text')">
+            <div class="palette-strip" style="background-color: #111827; color: #FFFFFF;">
+              TEXT
+            </div>
+            <div class="palette-content">
+              <div class="palette-title">
+                <span>Text</span>
+                <span class="mono-data">#111827</span>
+              </div>
+              <div class="palette-sub">Body copy on Surface for legibility</div>
+            </div>
+          </div>
+
+          <!-- Success -->
+          <div class="palette-card" onclick="copyTokenHex('#16A34A', 'Success')">
+            <div class="palette-strip" style="background-color: #16A34A; color: #FFFFFF;">
+              SUCCESS
+            </div>
+            <div class="palette-content">
+              <div class="palette-title">
+                <span>Success</span>
+                <span class="mono-data">#16A34A</span>
+              </div>
+              <div class="palette-sub">Positive audit verification</div>
+            </div>
+          </div>
+
+          <!-- Warning -->
+          <div class="palette-card" onclick="copyTokenHex('#D97706', 'Warning')">
+            <div class="palette-strip" style="background-color: #D97706; color: #FFFFFF;">
+              WARNING
+            </div>
+            <div class="palette-content">
+              <div class="palette-title">
+                <span>Warning</span>
+                <span class="mono-data">#D97706</span>
+              </div>
+              <div class="palette-sub">Precautionary risk alerts</div>
+            </div>
+          </div>
+
+          <!-- Danger -->
+          <div class="palette-card" onclick="copyTokenHex('#DC2626', 'Danger')">
+            <div class="palette-strip" style="background-color: #DC2626; color: #FFFFFF;">
+              DANGER
+            </div>
+            <div class="palette-content">
+              <div class="palette-title">
+                <span>Danger</span>
+                <span class="mono-data">#DC2626</span>
+              </div>
+              <div class="palette-sub">Flagged compliance breaches</div>
+            </div>
+          </div>
+
+          <!-- Neutral -->
+          <div class="palette-card" onclick="copyTokenHex('#FFFFFF', 'Neutral')">
+            <div class="palette-strip" style="background-color: #FFFFFF; color: #111827; border-bottom: 1px solid #E2E8F0;">
+              NEUTRAL
+            </div>
+            <div class="palette-content">
+              <div class="palette-title">
+                <span>Neutral</span>
+                <span class="mono-data">#FFFFFF</span>
+              </div>
+              <div class="palette-sub">Derived from surface token</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 2: TYPOGRAPHY (MOBILE-FIRST COMPACT SCALE) -->
+    <section id="typography">
+      <div class="container">
+        <div class="section-headline">
+          <span class="section-kicker">Section 02 // Typography Engine</span>
+          <h2 class="h2-title">Mobile-First Compact Scale: 12 / 14 / 16 / 18 / 22 / 28 / 34</h2>
+          <p class="body-compact">
+            Families: <code>Poppins</code> (Primary & Display) across weights 100–900, with <code>IBM Plex Mono</code> for financial ledger & audit data.
+          </p>
+        </div>
+
+        <div class="type-ladder">
+          <div class="ladder-row" style="background: var(--color-surface-subtle); font-weight: 700;">
+            <span class="mono-data">SCALE TOKEN</span>
+            <span class="mono-data">PIXEL VALUE</span>
+            <span>SPECIMEN HIERARCHY</span>
+          </div>
+
+          <div class="ladder-row">
+            <span class="mono-data">--type-scale-34</span>
+            <span class="mono-data">34px / 1.20</span>
+            <div class="h1-title" contenteditable="true" spellcheck="false">Institutional Governance & Integrity</div>
+          </div>
+
+          <div class="ladder-row">
+            <span class="mono-data">--type-scale-28</span>
+            <span class="mono-data">28px / 1.25</span>
+            <div class="h2-title" contenteditable="true" spellcheck="false">Authoritative Business Leadership</div>
+          </div>
+
+          <div class="ladder-row">
+            <span class="mono-data">--type-scale-22</span>
+            <span class="mono-data">22px / 1.30</span>
+            <div class="h3-title" contenteditable="true" spellcheck="false">Risk Management Framework & Compliance</div>
+          </div>
+
+          <div class="ladder-row">
+            <span class="mono-data">--type-scale-18</span>
+            <span class="mono-data">18px / 1.35</span>
+            <div class="h4-title" contenteditable="true" spellcheck="false">Deterministic execution with zero latency drift</div>
+          </div>
+
+          <div class="ladder-row">
+            <span class="mono-data">--type-scale-16</span>
+            <span class="mono-data">16px / 1.58</span>
+            <div class="body-regular" contenteditable="true" spellcheck="false">Poppins provides geometric confidence and high scannability across enterprise dashboards and executive reports.</div>
+          </div>
+
+          <div class="ladder-row">
+            <span class="mono-data">--type-scale-14</span>
+            <span class="mono-data">14px / 1.50</span>
+            <div class="body-compact" contenteditable="true" spellcheck="false">Standard UI labels, form controls, tabular cell entries, and secondary navigational items.</div>
+          </div>
+
+          <div class="ladder-row">
+            <span class="mono-data">--type-scale-12</span>
+            <span class="mono-data">12px / 1.40</span>
+            <div class="mono-data" contenteditable="true" spellcheck="false">LEDGER: ACC-9940 // AUDIT_HASH: 0x850b611e // TIMESTAMP: 2026-09-10</div>
+          </div>
+        </div>
+
+        <!-- Spacing Scale 4/8/12/16/24/32 -->
+        <div style="margin-top: var(--space-48);">
+          <div class="section-headline" style="margin-bottom: var(--space-16);">
+            <span class="section-kicker">Grid & Spacing Scale</span>
+            <h3 class="h3-title">Structured Cadence: 4 / 8 / 12 / 16 / 24 / 32</h3>
+            <p class="body-compact">Keep vertical rhythm consistent across sections and components. Align modules to a predictable grid.</p>
+          </div>
+
+          <div class="space-scale-grid">
+            <div class="space-scale-box">
+              <div class="mono-data" style="font-weight: 700;">4px</div>
+              <div class="space-indicator" style="width: 4px; height: 16px;"></div>
+              <span class="caption-meta">--space-4</span>
+            </div>
+            <div class="space-scale-box">
+              <div class="mono-data" style="font-weight: 700;">8px</div>
+              <div class="space-indicator" style="width: 8px; height: 16px;"></div>
+              <span class="caption-meta">--space-8</span>
+            </div>
+            <div class="space-scale-box">
+              <div class="mono-data" style="font-weight: 700;">12px</div>
+              <div class="space-indicator" style="width: 12px; height: 16px;"></div>
+              <span class="caption-meta">--space-12</span>
+            </div>
+            <div class="space-scale-box">
+              <div class="mono-data" style="font-weight: 700;">16px</div>
+              <div class="space-indicator" style="width: 16px; height: 16px;"></div>
+              <span class="caption-meta">--space-16</span>
+            </div>
+            <div class="space-scale-box">
+              <div class="mono-data" style="font-weight: 700;">24px</div>
+              <div class="space-indicator" style="width: 24px; height: 16px;"></div>
+              <span class="caption-meta">--space-24</span>
+            </div>
+            <div class="space-scale-box">
+              <div class="mono-data" style="font-weight: 700;">32px</div>
+              <div class="space-indicator" style="width: 32px; height: 16px;"></div>
+              <span class="caption-meta">--space-32</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 3: INTERACTIVE CONTROLS BENCHMARK -->
+    <section id="components">
+      <div class="container">
+        <div class="section-headline">
+          <span class="section-kicker">Section 03 // Component Specimen</span>
+          <h2 class="h2-title">Interactive Buttons & Form Fields</h2>
+          <p class="body-compact">
+            Buttons: primary action uses <code>#FECE14</code>; secondary actions stay neutral. Inputs: strong focus-visible states with predictable error messaging.
+          </p>
+        </div>
+
+        <div class="component-workbench">
+          <!-- Button Set -->
+          <div class="panel-box">
+            <h3 class="h3-title" style="margin-bottom: var(--space-8);">Button Archetypes</h3>
+            <p class="body-compact" style="margin-bottom: var(--space-20);">
+              Primary CTA #FECE14 ensures prominent visual hierarchy without ambiguity.
+            </p>
+
+            <div style="display: flex; flex-direction: column; gap: var(--space-16);">
+              <div style="display: flex; align-items: center; gap: var(--space-12); flex-wrap: wrap;">
+                <button class="btn btn-primary" onclick="triggerToast('Primary Action #FECE14 engaged')">Primary Action</button>
+                <button class="btn btn-secondary" onclick="triggerToast('Secondary #000000 engaged')">Secondary #000</button>
+                <button class="btn btn-outline" onclick="triggerToast('Neutral Outline engaged')">Outline Neutral</button>
+              </div>
+
+              <div style="display: flex; align-items: center; gap: var(--space-12); flex-wrap: wrap;">
+                <button class="btn btn-primary btn-sm">Compact (32px)</button>
+                <button class="btn btn-primary">Default (42px)</button>
+                <button class="btn btn-primary btn-lg">Executive (48px)</button>
+              </div>
+
+              <div style="display: flex; align-items: center; gap: var(--space-12); flex-wrap: wrap; padding-top: var(--space-12); border-top: 1px solid var(--color-border);">
+                <button class="btn btn-primary" disabled>Disabled Primary</button>
+                <button class="btn btn-secondary" disabled>Disabled Black</button>
+                <button class="btn btn-primary" id="btn-prof-toggle" onclick="toggleProfLoading(this)">
+                  <span>Toggle Loading</span>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Input Form Controls -->
+          <div class="panel-box">
+            <h3 class="h3-title" style="margin-bottom: var(--space-8);">Input Validation & Focus</h3>
+            <p class="body-compact" style="margin-bottom: var(--space-20);">
+              Inputs deliver clear labels, #FECE14 focus indicators, and deterministic error alerts.
+            </p>
+
+            <form onsubmit="event.preventDefault(); validateProfInput();">
+              <div class="field-row">
+                <label class="field-label" for="org-account">
+                  Corporate Registration Number
+                </label>
+                <input id="org-account" class="input-field" type="text" value="GB-850B611E-CORP">
+              </div>
+
+              <div class="field-row">
+                <label class="field-label" for="compliance-code">
+                  Audit Key (Must begin with VGD-)
+                </label>
+                <input id="compliance-code" class="input-field input-error" type="text" value="TEMP-KEY-99">
+                <div class="feedback-error">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                  <span>Validation Error: Format must match VGD-XXXXXX</span>
+                </div>
+              </div>
+
+              <div style="display: flex; justify-content: flex-end; gap: var(--space-12);">
+                <button type="button" class="btn btn-outline" onclick="document.getElementById('compliance-code').classList.toggle('input-error');">Toggle Error</button>
+                <button type="submit" class="btn btn-primary">Verify Credentials</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 4: REAL-WORLD APPLICATION (VANGUARD ENTERPRISE LEDGER) -->
+    <section id="application" style="background: var(--color-surface-subtle);">
+      <div class="container">
+        <div class="section-headline">
+          <span class="section-kicker">Section 04 // Enterprise Production Suite</span>
+          <h2 class="h2-title">Institutional Portfolio & Governance Console</h2>
+          <p class="body-compact">
+            Structured business layouts with multi-column financial ledgers, audit badges, interactive filtering, and real-time risk calculations.
+          </p>
+        </div>
+
+        <div style="background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-lg); padding: var(--space-24); box-shadow: var(--shadow-sm);">
+          <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: var(--space-16); margin-bottom: var(--space-16);">
+            <div style="display: flex; gap: var(--space-8); align-items: center;">
+              <button class="btn btn-secondary btn-sm" onclick="filterHoldings('all', this)">All Holdings</button>
+              <button class="btn btn-outline btn-sm" onclick="filterHoldings('sovereign', this)">Sovereign Funds</button>
+              <button class="btn btn-outline btn-sm" onclick="filterHoldings('private', this)">Private Equity</button>
+              <button class="btn btn-outline btn-sm" onclick="filterHoldings('esg', this)">ESG Assets</button>
+            </div>
+
+            <div style="display: flex; gap: var(--space-8); align-items: center;">
+              <input type="text" id="holding-search" class="input-field" placeholder="Search asset or ticker..." style="height: 34px; width: 220px;" onkeyup="searchHoldings(this.value)">
+              <button class="btn btn-primary btn-sm" onclick="triggerToast('Creating new mandate...')">+ New Mandate</button>
+            </div>
+          </div>
+
+          <!-- Institutional Ledger Table -->
+          <div class="ledger-table-wrap">
+            <table class="ledger-table">
+              <thead>
+                <tr>
+                  <th>ASSET / MANDATE</th>
+                  <th>CLASSIFICATION</th>
+                  <th>ALLOCATION</th>
+                  <th>AUDIT STATUS</th>
+                  <th>RISK RATING</th>
+                  <th style="text-align: right;">ACTION</th>
+                </tr>
+              </thead>
+              <tbody id="holding-table-body">
+                <tr data-type="sovereign">
+                  <td>
+                    <div style="font-weight: 700;">Nordic Sovereign Reserve Fund</div>
+                    <span class="caption-meta mono-data">TICKER: NSRF-EU-01</span>
+                  </td>
+                  <td class="body-compact">Sovereign Debt</td>
+                  <td style="font-weight: 700;">$1,840,000,000</td>
+                  <td>
+                    <span class="tag-status tag-pass">
+                      <span>✓</span> VERIFIED
+                    </span>
+                  </td>
+                  <td>
+                    <span class="mono-data" style="font-weight: 700; color: var(--color-success);">AAA (0.04)</span>
+                  </td>
+                  <td style="text-align: right;">
+                    <button class="btn btn-outline btn-sm" onclick="triggerToast('Auditing NSRF mandate...')">Review</button>
+                  </td>
+                </tr>
+
+                <tr data-type="private">
+                  <td>
+                    <div style="font-weight: 700;">Global Infrastructure Tier-1</div>
+                    <span class="caption-meta mono-data">TICKER: GIT1-US-08</span>
+                  </td>
+                  <td class="body-compact">Private Equity</td>
+                  <td style="font-weight: 700;">$940,500,000</td>
+                  <td>
+                    <span class="tag-status tag-pass">
+                      <span>✓</span> VERIFIED
+                    </span>
+                  </td>
+                  <td>
+                    <span class="mono-data" style="font-weight: 700; color: var(--color-success);">AA+ (0.11)</span>
+                  </td>
+                  <td style="text-align: right;">
+                    <button class="btn btn-outline btn-sm" onclick="triggerToast('Auditing GIT1 mandate...')">Review</button>
+                  </td>
+                </tr>
+
+                <tr data-type="esg">
+                  <td>
+                    <div style="font-weight: 700;">Pacific Clean Transition Fund</div>
+                    <span class="caption-meta mono-data">TICKER: PCTF-AP-14</span>
+                  </td>
+                  <td class="body-compact">ESG Sustainable</td>
+                  <td style="font-weight: 700;">$620,000,000</td>
+                  <td>
+                    <span class="tag-status tag-audit">
+                      <span>!</span> IN AUDIT
+                    </span>
+                  </td>
+                  <td>
+                    <span class="mono-data" style="font-weight: 700; color: var(--color-warning);">BBB+ (0.28)</span>
+                  </td>
+                  <td style="text-align: right;">
+                    <button class="btn btn-primary btn-sm" onclick="triggerToast('Fast-tracking ESG compliance audit...')">Re-certify</button>
+                  </td>
+                </tr>
+
+                <tr data-type="private">
+                  <td>
+                    <div style="font-weight: 700;">Apex Liquid Secondary Facility</div>
+                    <span class="caption-meta mono-data">TICKER: ALSF-GLOBAL</span>
+                  </td>
+                  <td class="body-compact">Private Liquidity</td>
+                  <td style="font-weight: 700;">$410,200,000</td>
+                  <td>
+                    <span class="tag-status tag-pass">
+                      <span>✓</span> VERIFIED
+                    </span>
+                  </td>
+                  <td>
+                    <span class="mono-data" style="font-weight: 700; color: var(--color-success);">AA- (0.15)</span>
+                  </td>
+                  <td style="text-align: right;">
+                    <button class="btn btn-outline btn-sm" onclick="triggerToast('Auditing ALSF mandate...')">Review</button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 5: GUIDELINES & ANTI-PATTERNS -->
+    <section id="guidelines">
+      <div class="container">
+        <div class="section-headline">
+          <span class="section-kicker">Section 05 // Specification Matrix</span>
+          <h2 class="h2-title">Design System Principles & Anti-Patterns</h2>
+          <p class="body-compact">
+            Directly derived from Section 9 of the official <code>DESIGN.md</code> specification for Professional.
+          </p>
+        </div>
+
+        <div class="guidelines-grid">
+          <!-- Do's -->
+          <div class="rule-card do">
+            <div class="rule-header">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+              <span>Design System Directives (Do)</span>
+            </div>
+            <ul class="rule-item-list">
+              <li>
+                <strong>Favor Primary #FECE14:</strong>
+                <span>Command attention for the primary CTA using bold amber/gold contrast.</span>
+              </li>
+              <li>
+                <strong>Authoritative Secondary #000000:</strong>
+                <span>Anchor headers, table titles, and secondary actions with high-contrast pure black.</span>
+              </li>
+              <li>
+                <strong>Compact Mobile-First Typography:</strong>
+                <span>Scale cleanly across 12 / 14 / 16 / 18 / 22 / 28 / 34px using Poppins.</span>
+              </li>
+              <li>
+                <strong>Consistent Vertical Cadence:</strong>
+                <span>Align modules exclusively with the 4 / 8 / 12 / 16 / 24 / 32px spacing scale.</span>
+              </li>
+              <li>
+                <strong>Crisp, Predictable Elevation:</strong>
+                <span>Use sharp hairline borders and structured offsets over blurry diffuse shadows.</span>
+              </li>
+            </ul>
+          </div>
+
+          <!-- Don'ts -->
+          <div class="rule-card dont">
+            <div class="rule-header">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+              <span>Explicit Anti-Patterns (Do Not)</span>
+            </div>
+            <ul class="rule-item-list">
+              <li>
+                <strong>No Off-Palette Accents:</strong>
+                <span>Do not introduce random teals, purples, or blues when #FECE14 and #000000 solve the hierarchy.</span>
+              </li>
+              <li>
+                <strong>No Low Contrast Text on Primary:</strong>
+                <span>Never place white text directly on #FECE14; always use dark text (#111827 or #000000) for legibility.</span>
+              </li>
+              <li>
+                <strong>No Flattened Type Scale:</strong>
+                <span>Do not collapse headers and captions into uniform sizes.</span>
+              </li>
+              <li>
+                <strong>No Decorative Gimmicks:</strong>
+                <span>Avoid ornate neon glows, floating badges without semantic value, or ambiguous iconography.</span>
+              </li>
+              <li>
+                <strong>No Undefined Interaction States:</strong>
+                <span>Hover, focus-visible, active, and disabled states must be distinctly declared.</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Business Footer -->
+  <footer class="site-footer">
+    <div class="container footer-flex">
+      <div>
+        <div style="font-weight: 800; font-size: var(--type-scale-16); margin-bottom: var(--space-4);">
+          Vanguard Global Advisory &mdash; Professional Design System
+        </div>
+        <div class="caption-meta" style="color: #94A3B8;">
+          Category: Professional & Corporate &bull; Tokens: Primary <code>#FECE14</code> &bull; Secondary <code>#000000</code> &bull; Surface <code>#FFFFFF</code> &bull; Text <code>#111827</code>
+        </div>
+      </div>
+
+      <div class="footer-chip-rack">
+        <span class="chip-sq" style="background: #FECE14;" title="Primary #FECE14"></span>
+        <span class="chip-sq" style="background: #000000;" title="Secondary #000000"></span>
+        <span class="chip-sq" style="background: #16A34A;" title="Success #16A34A"></span>
+        <span class="chip-sq" style="background: #D97706;" title="Warning #D97706"></span>
+        <span class="chip-sq" style="background: #DC2626;" title="Danger #DC2626"></span>
+        <span class="chip-sq" style="background: #111827;" title="Text #111827"></span>
+        <span class="chip-sq" style="background: #FFFFFF;" title="Surface #FFFFFF"></span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Toast Notification Tray -->
+  <div class="toast-tray" id="toast-tray"></div>
+
+  <!-- Interactive JavaScript Engine -->
+  <script>
+    function triggerToast(text) {
+      const tray = document.getElementById('toast-tray');
+      const toast = document.createElement('div');
+      toast.className = 'toast-msg';
+      toast.innerHTML = `
+        <span style="display:inline-block;width:8px;height:8px;background:#FECE14;border:1px solid #000;"></span>
+        <span>${text}</span>
+      `;
+      tray.appendChild(toast);
+
+      requestAnimationFrame(() => toast.classList.add('show'));
+
+      setTimeout(() => {
+        toast.classList.remove('show');
+        setTimeout(() => toast.remove(), 250);
+      }, 2600);
+    }
+
+    function copyTokenHex(hex, name) {
+      navigator.clipboard.writeText(hex).then(() => {
+        triggerToast(`Token ${name} (${hex}) copied to clipboard`);
+      }).catch(() => {
+        triggerToast(`Token ${name}: ${hex}`);
+      });
+    }
+
+    function exportProfessionalTokens() {
+      const tokens = {
+        primary: "#FECE14",
+        secondary: "#000000",
+        success: "#16A34A",
+        warning: "#D97706",
+        danger: "#DC2626",
+        surface: "#FFFFFF",
+        text: "#111827",
+        neutral: "#FFFFFF",
+        typography: "Poppins",
+        typographyMono: "IBM Plex Mono",
+        scale: [12, 14, 16, 18, 22, 28, 34],
+        spacing: [4, 8, 12, 16, 24, 32]
+      };
+      navigator.clipboard.writeText(JSON.stringify(tokens, null, 2)).then(() => {
+        triggerToast("Professional tokens JSON exported to clipboard");
+      });
+    }
+
+    function toggleProfLoading(btn) {
+      if (btn.dataset.loading === "true") {
+        btn.dataset.loading = "false";
+        btn.innerHTML = `<span>Toggle Loading</span>`;
+        btn.disabled = false;
+        triggerToast("Button state restored");
+      } else {
+        btn.dataset.loading = "true";
+        btn.innerHTML = `<span>Executing...</span>`;
+        btn.disabled = true;
+        setTimeout(() => {
+          if (btn.dataset.loading === "true") {
+            toggleProfLoading(btn);
+          }
+        }, 2000);
+      }
+    }
+
+    function filterHoldings(type, btn) {
+      const buttons = btn.parentElement.querySelectorAll('.btn');
+      buttons.forEach(b => {
+        b.classList.remove('btn-secondary');
+        b.classList.add('btn-outline');
+      });
+      btn.classList.remove('btn-outline');
+      btn.classList.add('btn-secondary');
+
+      const rows = document.querySelectorAll('#holding-table-body tr');
+      rows.forEach(r => {
+        if (type === 'all' || r.dataset.type === type) {
+          r.style.display = '';
+        } else {
+          r.style.display = 'none';
+        }
+      });
+      triggerToast(`Filtering portfolio by: ${type.toUpperCase()}`);
+    }
+
+    function searchHoldings(val) {
+      const q = val.toLowerCase().trim();
+      const rows = document.querySelectorAll('#holding-table-body tr');
+      rows.forEach(r => {
+        if (r.innerText.toLowerCase().includes(q)) {
+          r.style.display = '';
+        } else {
+          r.style.display = 'none';
+        }
+      });
+    }
+
+    function validateProfInput() {
+      const input = document.getElementById('compliance-code');
+      if (input.value.startsWith('VGD-')) {
+        input.classList.remove('input-error');
+        const feedback = input.parentElement.querySelector('.feedback-error');
+        if (feedback) feedback.style.display = 'none';
+        triggerToast("Compliance code verified successfully");
+      } else {
+        input.classList.add('input-error');
+        const feedback = input.parentElement.querySelector('.feedback-error');
+        if (feedback) feedback.style.display = 'flex';
+        triggerToast("Validation error: Code must begin with VGD-");
+      }
+    }
+  </script>
+</body>
+</html>

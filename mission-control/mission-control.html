@@ -1,0 +1,751 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mission Control — Orbital Flight Operations</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    /* -------------------------------------------------------------
+       MISSION CONTROL DESIGN SYSTEM TOKENS & FOUNDATIONS
+       ------------------------------------------------------------- */
+    :root {
+      /* Surface Palette */
+      --bg-default: #0B1120;           /* Deep space navy, primary canvas */
+      --bg-surface: #111827;           /* Panels, cards, elevated areas */
+      --bg-surface-hover: #1A2535;     /* Interactive surface state */
+      --bg-surface-active: #1E3A5F;    /* Selected, active panel */
+      --border-default: #1E3A5F;       /* Panel dividers, grid lines */
+      --border-subtle: #162035;        /* Inner dividers, minor separation */
+
+      /* Data Palette (Telemetry Values) */
+      --data-primary: #FFB800;         /* Primary telemetry values, key metrics (Amber) */
+      --data-secondary: #00D4FF;       /* Healthy/active indicators, links (Cyan) */
+      --data-alert-critical: #FF4757;  /* Errors, critical alerts, abort states (Red) */
+      --data-alert-warning: #FF9F43;   /* Warnings, degraded performance (Amber-Orange) */
+      --data-success: #26DE81;         /* Nominal status, completed actions (Green) */
+
+      /* Text Palette */
+      --fg-primary: #E8F0FE;           /* Readable at distance, primary content */
+      --fg-secondary: #8BA3C7;         /* Labels, descriptors */
+      --fg-tertiary: #4A6080;          /* Timestamps, metadata, grid labels */
+
+      /* Typography Families */
+      --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      --font-sans: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+
+      /* Spacing Scale */
+      --space-1: 4px;
+      --space-2: 8px;
+      --space-3: 12px;
+      --space-4: 16px;
+      --space-5: 20px;
+      --space-6: 24px;
+      --space-8: 32px;
+      --space-12: 48px;
+      --space-16: 64px;
+      --space-20: 80px;
+
+      /* Panel Radius */
+      --radius-panel: 4px;
+      --radius-badge: 2px;
+    }
+
+    /* Reset & Deep Space Navy Canvas */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--bg-default);
+      color: var(--fg-primary);
+      font-family: var(--font-sans);
+      font-size: 14px;
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      padding: var(--space-4);
+      min-height: 100vh;
+    }
+
+    /* -------------------------------------------------------------
+       TYPOGRAPHY HIERARCHY
+       ------------------------------------------------------------- */
+    .display-mono {
+      font-family: var(--font-mono);
+      font-size: 48px;
+      font-weight: 700;
+      line-height: 1.0;
+      letter-spacing: -0.02em;
+    }
+
+    h1, .h1-title {
+      font-family: var(--font-sans);
+      font-size: 18px;
+      font-weight: 600;
+      line-height: 1.2;
+      color: var(--fg-primary);
+    }
+
+    h2, .panel-title {
+      font-family: var(--font-sans);
+      font-size: 13px;
+      font-weight: 600;
+      line-height: 1.2;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--fg-secondary);
+    }
+
+    .body-copy {
+      font-size: 14px;
+      font-weight: 400;
+      color: var(--fg-secondary);
+    }
+
+    .caption {
+      font-size: 12px;
+      font-weight: 400;
+      color: var(--fg-secondary);
+    }
+
+    .micro {
+      font-size: 10px;
+      font-weight: 600;
+      line-height: 1.0;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .data-readout {
+      font-family: var(--font-mono);
+      font-weight: 700;
+      color: var(--data-primary);
+    }
+
+    /* -------------------------------------------------------------
+       PANEL & GRID SYSTEM (12-COLUMN, 4px BASELINE)
+       ------------------------------------------------------------- */
+    .control-grid {
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap: var(--space-2);
+      margin-top: var(--space-3);
+    }
+
+    .panel {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-default);
+      border-radius: var(--radius-panel);
+      padding: var(--space-4);
+    }
+
+    .panel-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: var(--space-3);
+      padding-bottom: var(--space-2);
+      border-bottom: 1px solid var(--border-subtle);
+    }
+
+    .col-3 { grid-column: span 3; }
+    .col-4 { grid-column: span 4; }
+    .col-6 { grid-column: span 6; }
+    .col-8 { grid-column: span 8; }
+    .col-12 { grid-column: span 12; }
+
+    /* -------------------------------------------------------------
+       STATUS BADGES
+       ------------------------------------------------------------- */
+    .badge-nominal {
+      background: rgba(38, 222, 129, 0.15);
+      color: var(--data-success);
+      border: 1px solid rgba(38, 222, 129, 0.3);
+      font-size: 10px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      padding: 2px 8px;
+      border-radius: var(--radius-badge);
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .badge-warning {
+      background: rgba(255, 159, 67, 0.15);
+      color: var(--data-alert-warning);
+      border: 1px solid rgba(255, 159, 67, 0.3);
+      font-size: 10px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      padding: 2px 8px;
+      border-radius: var(--radius-badge);
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .badge-critical {
+      background: rgba(255, 71, 87, 0.15);
+      color: var(--data-alert-critical);
+      border: 1px solid rgba(255, 71, 87, 0.3);
+      font-size: 10px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      padding: 2px 8px;
+      border-radius: var(--radius-badge);
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    /* -------------------------------------------------------------
+       DATA TILES & TELEMETRY STRIPS
+       ------------------------------------------------------------- */
+    .telemetry-strip {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: var(--space-2);
+      margin-bottom: var(--space-3);
+    }
+
+    .data-tile {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-default);
+      border-radius: var(--radius-panel);
+      padding: var(--space-3);
+    }
+
+    .data-tile-label {
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--fg-secondary);
+      margin-bottom: var(--space-1);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .data-tile-value {
+      font-family: var(--font-mono);
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--data-primary);
+      line-height: 1.0;
+    }
+
+    .data-tile-unit {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      font-weight: 400;
+      color: var(--fg-tertiary);
+      margin-left: 4px;
+    }
+
+    /* -------------------------------------------------------------
+       COUNTDOWN TIMER & ALERT BANNER
+       ------------------------------------------------------------- */
+    .countdown {
+      font-family: var(--font-mono);
+      font-size: 48px;
+      font-weight: 700;
+      color: var(--data-primary);
+      line-height: 1.0;
+      letter-spacing: -0.02em;
+    }
+    .countdown.positive { color: var(--data-success); }
+    .countdown.zero {
+      color: var(--data-secondary);
+      animation: pulse-glow 2s ease-in-out infinite;
+    }
+
+    @keyframes pulse-glow {
+      0%, 100% { text-shadow: 0 0 8px currentColor; }
+      50% { text-shadow: 0 0 20px currentColor, 0 0 40px currentColor; }
+    }
+
+    .countdown-label {
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--fg-tertiary);
+    }
+
+    .alert-banner {
+      display: flex;
+      align-items: center;
+      gap: var(--space-3);
+      background: rgba(255, 71, 87, 0.1);
+      border: 1px solid rgba(255, 71, 87, 0.4);
+      border-left: 4px solid var(--data-alert-critical);
+      border-radius: var(--radius-panel);
+      padding: var(--space-3) var(--space-4);
+      margin-bottom: var(--space-3);
+    }
+    .alert-banner-text {
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--data-alert-critical);
+    }
+    .alert-banner-time {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--fg-tertiary);
+      margin-left: auto;
+    }
+
+    /* Signal Strength Bars */
+    .signal-bars {
+      display: flex;
+      align-items: flex-end;
+      gap: 2px;
+      height: 20px;
+    }
+    .signal-bar {
+      width: 4px;
+      background: var(--border-default);
+      border-radius: 1px;
+    }
+    .signal-bar.active.strong { background: var(--data-secondary); }
+    .signal-bar.active.moderate { background: var(--data-primary); }
+    .signal-bar:nth-child(1) { height: 5px; }
+    .signal-bar:nth-child(2) { height: 8px; }
+    .signal-bar:nth-child(3) { height: 12px; }
+    .signal-bar:nth-child(4) { height: 16px; }
+
+    /* Progress Bar */
+    .progress-bar {
+      height: 4px;
+      background: var(--border-default);
+      border-radius: 2px;
+      overflow: hidden;
+    }
+    .progress-bar-fill {
+      height: 100%;
+      background: var(--data-secondary);
+      border-radius: 2px;
+      transition: width 300ms ease-out;
+    }
+
+    /* Console Buttons */
+    .cmd-btn {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+      padding: var(--space-2) var(--space-4);
+      border-radius: var(--radius-panel);
+      border: 1px solid var(--border-default);
+      background: var(--bg-surface);
+      color: var(--fg-primary);
+      cursor: pointer;
+      transition: all 150ms ease;
+    }
+    .cmd-btn:hover {
+      background: var(--bg-surface-hover);
+      border-color: var(--data-secondary);
+      color: var(--data-secondary);
+    }
+    .cmd-btn-primary {
+      background: var(--data-primary);
+      color: #000000;
+      border-color: var(--data-primary);
+    }
+    .cmd-btn-primary:hover {
+      background: #E5A600;
+      color: #000000;
+    }
+    .cmd-btn-critical {
+      background: var(--data-alert-critical);
+      color: #ffffff;
+      border-color: var(--data-alert-critical);
+    }
+
+    /* Responsive */
+    @media (max-width: 1024px) {
+      .col-3, .col-4, .col-6, .col-8 {
+        grid-column: span 12;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- TOP CONSOLE HEADER -->
+  <header style="display: flex; justify-content: space-between; align-items: center; padding-bottom: var(--space-3); border-bottom: 1px solid var(--border-default); margin-bottom: var(--space-3);">
+    <div style="display: flex; align-items: center; gap: var(--space-4);">
+      <div style="width: 12px; height: 12px; background: var(--data-primary); border-radius: 2px;"></div>
+      <h1 class="h1-title">MISSION OPERATIONS COMPLEX // SECTOR 04</h1>
+      <span class="badge-nominal">FLIGHT NOMINAL</span>
+    </div>
+
+    <div style="display: flex; align-items: center; gap: var(--space-6);">
+      <div style="display: flex; align-items: center; gap: var(--space-2);">
+        <span class="micro" style="color: var(--fg-tertiary);">DSN LINK:</span>
+        <div class="signal-bars">
+          <div class="signal-bar active strong"></div>
+          <div class="signal-bar active strong"></div>
+          <div class="signal-bar active strong"></div>
+          <div class="signal-bar active strong"></div>
+        </div>
+        <span class="micro" style="color: var(--data-secondary); font-family: var(--font-mono);">+38 dBm</span>
+      </div>
+
+      <div style="display: flex; align-items: center; gap: var(--space-2);">
+        <span class="micro" style="color: var(--fg-tertiary);">UTC TIME:</span>
+        <span class="micro" id="utcClock" style="font-family: var(--font-mono); color: var(--fg-primary);">16:52:08 Z</span>
+      </div>
+
+      <button class="cmd-btn" onclick="toggleSimState()">Toggle Sequence</button>
+      <button class="cmd-btn cmd-btn-critical" onclick="triggerAbort()">ABORT</button>
+    </div>
+  </header>
+
+  <!-- CRITICAL ALERT BANNER -->
+  <div class="alert-banner" id="alertBanner">
+    <div class="alert-banner-icon">⚠</div>
+    <div class="alert-banner-text">STAGE 2 CRYOGENIC BOOSTER: TANK RE-PRESSURIZATION WITHIN NOMINAL MARGINS</div>
+    <div class="alert-banner-time">MET +00:02:14</div>
+  </div>
+
+  <!-- TELEMETRY STRIP (5 DATA TILES) -->
+  <div class="telemetry-strip">
+    <div class="data-tile">
+      <div class="data-tile-label">
+        <span>ORBITAL ALTITUDE</span>
+        <span class="badge-nominal">NOM</span>
+      </div>
+      <div class="data-tile-value" id="altVal">418.4<span class="data-tile-unit">KM</span></div>
+    </div>
+
+    <div class="data-tile">
+      <div class="data-tile-label">
+        <span>INERTIAL VELOCITY</span>
+        <span class="badge-nominal">NOM</span>
+      </div>
+      <div class="data-tile-value" id="velVal">7,764<span class="data-tile-unit">M/S</span></div>
+    </div>
+
+    <div class="data-tile">
+      <div class="data-tile-label">
+        <span>APOGEE / PERIGEE</span>
+        <span class="micro" style="color: var(--data-secondary);">LEO</span>
+      </div>
+      <div class="data-tile-value" style="font-size: 20px;" id="apoVal">422 <span class="data-tile-unit">/</span> 414<span class="data-tile-unit">KM</span></div>
+    </div>
+
+    <div class="data-tile">
+      <div class="data-tile-label">
+        <span>CHAMBER PRESSURE</span>
+        <span class="badge-warning">WARM</span>
+      </div>
+      <div class="data-tile-value" id="pressVal" style="color: var(--data-alert-warning);">20.4<span class="data-tile-unit">MPA</span></div>
+    </div>
+
+    <div class="data-tile">
+      <div class="data-tile-label">
+        <span>DOWN-RANGE DIST</span>
+        <span class="micro" style="color: var(--fg-tertiary);">AZ: 042°</span>
+      </div>
+      <div class="data-tile-value" id="rangeVal">1,248<span class="data-tile-unit">KM</span></div>
+    </div>
+  </div>
+
+  <!-- MAIN OPERATIONAL GRID (12 COLUMNS) -->
+  <div class="control-grid">
+    <!-- PANEL 1: COUNTDOWN & SEQUENCE CLOCK (COL 4) -->
+    <div class="panel col-4">
+      <div class="panel-header">
+        <span class="panel-title">MISSION ELAPSED TIME</span>
+        <span class="micro" style="color: var(--data-primary);">TERMINAL COUNT</span>
+      </div>
+
+      <div style="text-align: center; padding: var(--space-4) 0;">
+        <div class="countdown-label" id="timerLabel">T-MINUS COUNTDOWN</div>
+        <div class="countdown" id="mainCountdown" style="margin: var(--space-2) 0;">T-00:04:12</div>
+        <span class="caption" style="color: var(--fg-tertiary);">PRIMARY GROUND STATION: CANBERRA 43</span>
+      </div>
+
+      <div style="margin-top: var(--space-4);">
+        <div style="display: flex; justify-content: space-between; margin-bottom: var(--space-1);">
+          <span class="micro" style="color: var(--fg-secondary);">SEQUENCE PROGRESSION</span>
+          <span class="micro" id="seqPct" style="font-family: var(--font-mono); color: var(--data-secondary);">68%</span>
+        </div>
+        <div class="progress-bar">
+          <div class="progress-bar-fill" id="seqProgressBar" style="width: 68%;"></div>
+        </div>
+      </div>
+
+      <div style="display: flex; gap: var(--space-2); margin-top: var(--space-4);">
+        <button class="cmd-btn cmd-btn-primary" style="flex: 1;" onclick="stepCount()">Advance Step</button>
+        <button class="cmd-btn" style="flex: 1;" onclick="holdCount()">Hold Count</button>
+      </div>
+    </div>
+
+    <!-- PANEL 2: ORBITAL TRAJECTORY RADAR & COORDINATES (COL 8) -->
+    <div class="panel col-8">
+      <div class="panel-header">
+        <span class="panel-title">ORBITAL TRAJECTORY // SUB-SATELLITE GROUND TRACK</span>
+        <span class="badge-nominal">EPHEMERIS SYNCED</span>
+      </div>
+
+      <canvas id="radarCanvas" width="700" height="170" style="width: 100%; height: 170px; background: #080D18; border: 1px solid var(--border-subtle); border-radius: 2px;"></canvas>
+
+      <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--space-2); margin-top: var(--space-3);">
+        <div>
+          <div class="micro" style="color: var(--fg-tertiary);">LATITUDE</div>
+          <div class="data-readout" style="color: var(--data-secondary); font-size: 14px;" id="latRead">28.5721° N</div>
+        </div>
+        <div>
+          <div class="micro" style="color: var(--fg-tertiary);">LONGITUDE</div>
+          <div class="data-readout" style="color: var(--data-secondary); font-size: 14px;" id="lonRead">80.6480° W</div>
+        </div>
+        <div>
+          <div class="micro" style="color: var(--fg-tertiary);">INCLINATION</div>
+          <div class="data-readout" style="color: var(--data-primary); font-size: 14px;">51.64°</div>
+        </div>
+        <div>
+          <div class="micro" style="color: var(--fg-tertiary);">BETA ANGLE</div>
+          <div class="data-readout" style="color: var(--data-success); font-size: 14px;">+24.18°</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PANEL 3: SUBSYSTEM STATUS MATRIX (COL 6) -->
+    <div class="panel col-6">
+      <div class="panel-header">
+        <span class="panel-title">AVIONICS &amp; HARDWARE BUS STATUS</span>
+        <span class="micro" style="color: var(--data-success);">ALL BUSES GO</span>
+      </div>
+
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-2);">
+        <div style="background: #080D18; padding: var(--space-2); border: 1px solid var(--border-subtle); border-radius: 2px;">
+          <div style="display: flex; justify-content: space-between; align-items: center;">
+            <span class="micro" style="color: var(--fg-secondary);">FLIGHT COMPUTER A</span>
+            <span class="badge-nominal">NOMINAL</span>
+          </div>
+          <div class="data-readout" style="font-size: 14px; margin-top: 4px;">CPU 12% | 0.00ms JITTER</div>
+        </div>
+
+        <div style="background: #080D18; padding: var(--space-2); border: 1px solid var(--border-subtle); border-radius: 2px;">
+          <div style="display: flex; justify-content: space-between; align-items: center;">
+            <span class="micro" style="color: var(--fg-secondary);">RCS THRUSTERS (QUAD 1-4)</span>
+            <span class="badge-nominal">ACTIVE</span>
+          </div>
+          <div class="data-readout" style="font-size: 14px; margin-top: 4px;">HE: 24.2 MPA | GO</div>
+        </div>
+
+        <div style="background: #080D18; padding: var(--space-2); border: 1px solid var(--border-subtle); border-radius: 2px;">
+          <div style="display: flex; justify-content: space-between; align-items: center;">
+            <span class="micro" style="color: var(--fg-secondary);">SOLAR ARRAY WING 1</span>
+            <span class="badge-nominal">TRACKING</span>
+          </div>
+          <div class="data-readout" style="font-size: 14px; margin-top: 4px; color: var(--data-secondary);">32.4 KW GENERATION</div>
+        </div>
+
+        <div style="background: #080D18; padding: var(--space-2); border: 1px solid var(--border-subtle); border-radius: 2px;">
+          <div style="display: flex; justify-content: space-between; align-items: center;">
+            <span class="micro" style="color: var(--fg-secondary);">THERMAL RADIATOR LOOP</span>
+            <span class="badge-warning">ELEVATED</span>
+          </div>
+          <div class="data-readout" style="font-size: 14px; margin-top: 4px; color: var(--data-alert-warning);">+18.4°C / LIMIT +22°C</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PANEL 4: OFFICIAL DESIGN TOKENS MATRIX (COL 6) -->
+    <div class="panel col-6">
+      <div class="panel-header">
+        <span class="panel-title">MISSION CONTROL COLOR TOKENS FOUNDATION</span>
+        <span class="micro" style="color: var(--fg-tertiary);">SPEC 1.0</span>
+      </div>
+
+      <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--space-2);">
+        <div style="background: #0B1120; padding: var(--space-2); border: 1px solid #1E3A5F; border-radius: 2px; text-align: center;">
+          <div style="height: 24px; background: #0B1120; border: 1px solid #1E3A5F; margin-bottom: 4px;"></div>
+          <div class="micro" style="color: var(--fg-secondary);">BG CANVAS</div>
+          <div class="micro" style="font-family: var(--font-mono); color: var(--fg-tertiary);">#0B1120</div>
+        </div>
+
+        <div style="background: #111827; padding: var(--space-2); border: 1px solid #1E3A5F; border-radius: 2px; text-align: center;">
+          <div style="height: 24px; background: #111827; border: 1px solid #1E3A5F; margin-bottom: 4px;"></div>
+          <div class="micro" style="color: var(--fg-secondary);">SURFACE</div>
+          <div class="micro" style="font-family: var(--font-mono); color: var(--fg-tertiary);">#111827</div>
+        </div>
+
+        <div style="background: #111827; padding: var(--space-2); border: 1px solid #1E3A5F; border-radius: 2px; text-align: center;">
+          <div style="height: 24px; background: #FFB800; margin-bottom: 4px;"></div>
+          <div class="micro" style="color: var(--data-primary);">DATA AMBER</div>
+          <div class="micro" style="font-family: var(--font-mono); color: var(--fg-tertiary);">#FFB800</div>
+        </div>
+
+        <div style="background: #111827; padding: var(--space-2); border: 1px solid #1E3A5F; border-radius: 2px; text-align: center;">
+          <div style="height: 24px; background: #00D4FF; margin-bottom: 4px;"></div>
+          <div class="micro" style="color: var(--data-secondary);">ACTIVE CYAN</div>
+          <div class="micro" style="font-family: var(--font-mono); color: var(--fg-tertiary);">#00D4FF</div>
+        </div>
+
+        <div style="background: #111827; padding: var(--space-2); border: 1px solid #1E3A5F; border-radius: 2px; text-align: center;">
+          <div style="height: 24px; background: #FF4757; margin-bottom: 4px;"></div>
+          <div class="micro" style="color: var(--data-alert-critical);">CRITICAL RED</div>
+          <div class="micro" style="font-family: var(--font-mono); color: var(--fg-tertiary);">#FF4757</div>
+        </div>
+
+        <div style="background: #111827; padding: var(--space-2); border: 1px solid #1E3A5F; border-radius: 2px; text-align: center;">
+          <div style="height: 24px; background: #FF9F43; margin-bottom: 4px;"></div>
+          <div class="micro" style="color: var(--data-alert-warning);">WARNING</div>
+          <div class="micro" style="font-family: var(--font-mono); color: var(--fg-tertiary);">#FF9F43</div>
+        </div>
+
+        <div style="background: #111827; padding: var(--space-2); border: 1px solid #1E3A5F; border-radius: 2px; text-align: center;">
+          <div style="height: 24px; background: #26DE81; margin-bottom: 4px;"></div>
+          <div class="micro" style="color: var(--data-success);">SUCCESS</div>
+          <div class="micro" style="font-family: var(--font-mono); color: var(--fg-tertiary);">#26DE81</div>
+        </div>
+
+        <div style="background: #111827; padding: var(--space-2); border: 1px solid #1E3A5F; border-radius: 2px; text-align: center;">
+          <div style="height: 24px; background: #1E3A5F; margin-bottom: 4px;"></div>
+          <div class="micro" style="color: var(--fg-secondary);">BORDER</div>
+          <div class="micro" style="font-family: var(--font-mono); color: var(--fg-tertiary);">#1E3A5F</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- INTERACTIVE SIMULATION ENGINE -->
+  <script>
+    // Live UTC Clock
+    setInterval(() => {
+      const now = new Date();
+      document.getElementById('utcClock').textContent = 
+        now.toISOString().substring(11, 19) + ' Z';
+    }, 1000);
+
+    // Audio Chime Feedback
+    function playConsoleTone(freq, type = 'sine') {
+      try {
+        const AudioCtx = window.AudioContext || window.webkitAudioContext;
+        if (!AudioCtx) return;
+        const ctx = new AudioCtx();
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+
+        osc.type = type;
+        osc.frequency.setValueAtTime(freq, ctx.currentTime);
+        gain.gain.setValueAtTime(0.05, ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + 0.18);
+
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.start();
+        osc.stop(ctx.currentTime + 0.18);
+      } catch(e) {}
+    }
+
+    // Countdown Engine
+    let secondsLeft = 252; // 4m 12s
+    let isCounting = true;
+
+    setInterval(() => {
+      if (!isCounting) return;
+      if (secondsLeft > 0) {
+        secondsLeft--;
+        const m = Math.floor(secondsLeft / 60).toString().padStart(2, '0');
+        const s = (secondsLeft % 60).toString().padStart(2, '0');
+        document.getElementById('mainCountdown').textContent = `T-00:${m}:${s}`;
+        document.getElementById('timerLabel').textContent = 'T-MINUS COUNTDOWN';
+      } else {
+        document.getElementById('mainCountdown').textContent = 'T-00:00:00';
+        document.getElementById('mainCountdown').className = 'countdown zero';
+      }
+    }, 1000);
+
+    function holdCount() {
+      isCounting = !isCounting;
+      playConsoleTone(640);
+      document.getElementById('timerLabel').textContent = isCounting ? 'T-MINUS COUNTDOWN' : 'HOLD ACTIVE';
+    }
+
+    function stepCount() {
+      secondsLeft = Math.max(0, secondsLeft - 15);
+      playConsoleTone(880);
+    }
+
+    function triggerAbort() {
+      isCounting = false;
+      playConsoleTone(440, 'square');
+      document.getElementById('mainCountdown').textContent = 'ABORT EXEC';
+      document.getElementById('mainCountdown').style.color = 'var(--data-alert-critical)';
+      const alert = document.getElementById('alertBanner');
+      alert.style.borderColor = 'var(--data-alert-critical)';
+      alert.querySelector('.alert-banner-text').textContent = 'MANUAL ABORT CALLED: AUTOMATED FLIGHT TERMINATION SYSTEM ARMED';
+    }
+
+    // Radar Canvas Orbit Animator
+    const radar = document.getElementById('radarCanvas');
+    const rctx = radar.getContext('2d');
+    let orbAngle = 0;
+
+    function drawRadar() {
+      rctx.clearRect(0, 0, radar.width, radar.height);
+      const w = radar.width;
+      const h = radar.height;
+
+      // Coordinate Grid Lines
+      rctx.strokeStyle = '#122035';
+      rctx.lineWidth = 1;
+      for (let x = 0; x < w; x += 50) {
+        rctx.beginPath(); rctx.moveTo(x, 0); rctx.lineTo(x, h); rctx.stroke();
+      }
+      for (let y = 0; y < h; y += 30) {
+        rctx.beginPath(); rctx.moveTo(0, y); rctx.lineTo(w, y); rctx.stroke();
+      }
+
+      // Ground Track Sinusoidal Wave
+      rctx.beginPath();
+      rctx.strokeStyle = 'rgba(0, 212, 255, 0.4)';
+      rctx.lineWidth = 2;
+      for (let x = 0; x < w; x++) {
+        const y = h / 2 + Math.sin((x / w) * Math.PI * 2) * 50;
+        if (x === 0) rctx.moveTo(x, y);
+        else rctx.lineTo(x, y);
+      }
+      rctx.stroke();
+
+      // Satellite position
+      orbAngle = (orbAngle + 0.003) % (Math.PI * 2);
+      const satX = (orbAngle / (Math.PI * 2)) * w;
+      const satY = h / 2 + Math.sin((satX / w) * Math.PI * 2) * 50;
+
+      rctx.beginPath();
+      rctx.arc(satX, satY, 5, 0, Math.PI * 2);
+      rctx.fillStyle = '#FFB800';
+      rctx.shadowBlur = 10;
+      rctx.shadowColor = '#FFB800';
+      rctx.fill();
+      rctx.shadowBlur = 0;
+
+      // Coordinate jitter
+      const lat = (28.5 + Math.sin(orbAngle) * 23).toFixed(4);
+      const lon = ((satX / w) * 360 - 180).toFixed(4);
+      document.getElementById('latRead').textContent = `${lat}° N`;
+      document.getElementById('lonRead').textContent = `${Math.abs(lon)}° ${lon >= 0 ? 'E' : 'W'}`;
+
+      requestAnimationFrame(drawRadar);
+    }
+
+    drawRadar();
+  </script>
+</body>
+</html>

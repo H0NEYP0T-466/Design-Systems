@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Together AI — The AI-Native Cloud</title>
+  <meta name="description" content="Open-source AI infrastructure. Soft pastel gradients against pure white canvas, deep midnight blue #010120 research section, sharp 4px/8px geometry.">
+
+  <!-- Fonts: Plus Jakarta Sans (for geometric "The Future" aesthetic), Space Mono (for PP Neue Montreal Mono) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600&family=Space+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      /* Brand Tokens from together-ai/DESIGN.md */
+      --tg-magenta: #ef2cc1;
+      --tg-orange: #fc4c02;
+      --tg-lavender: #bdbbff;
+      --tg-midnight-blue: #010120;
+      --tg-white: #ffffff;
+      --tg-black: #000000;
+      
+      /* Surface & Borders */
+      --tg-border-light: rgba(0, 0, 0, 0.08);
+      --tg-border-dark: rgba(255, 255, 255, 0.12);
+      --tg-glass-dark: rgba(255, 255, 255, 0.12);
+      --tg-glass-light: rgba(0, 0, 0, 0.04);
+      --tg-shadow-blue: 0px 4px 10px rgba(1, 1, 32, 0.1);
+
+      /* Typography */
+      --font-future: 'Plus Jakarta Sans', 'The Future', -apple-system, sans-serif;
+      --font-mono: 'Space Mono', 'PP Neue Montreal Mono', monospace;
+
+      /* Restrained Radii: Sharp 4px and 8px (NO PILLS) */
+      --rad-sharp: 4px;
+      --rad-card: 8px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--tg-white);
+      color: var(--tg-black);
+      font-family: var(--font-future);
+      font-size: 16px;
+      line-height: 1.30;
+      letter-spacing: -0.16px;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* Top Nav */
+    header.tg-header {
+      background: rgba(255, 255, 255, 0.85);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--tg-border-light);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+    .header-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 16px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .tg-logo {
+      font-family: var(--font-future);
+      font-size: 22px;
+      font-weight: 500;
+      letter-spacing: -0.5px;
+      color: var(--tg-black);
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .tg-mark {
+      width: 18px;
+      height: 18px;
+      background: linear-gradient(135deg, var(--tg-magenta), var(--tg-orange));
+      border-radius: 2px;
+    }
+    .tg-nav-links {
+      display: flex;
+      gap: 28px;
+      list-style: none;
+    }
+    .tg-nav-links a {
+      color: var(--tg-black);
+      text-decoration: none;
+      font-size: 15px;
+      font-weight: 400;
+      letter-spacing: -0.16px;
+    }
+    .tg-nav-links a:hover {
+      opacity: 0.7;
+    }
+
+    /* Sharp Button System (4px Radius) */
+    .btn-tg {
+      font-family: var(--font-future);
+      font-size: 15px;
+      font-weight: 500;
+      letter-spacing: -0.16px;
+      padding: 10px 20px;
+      border-radius: var(--rad-sharp);
+      border: 1px solid transparent;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      text-decoration: none;
+      transition: all 150ms ease;
+    }
+    .btn-tg-dark {
+      background: var(--tg-midnight-blue);
+      color: var(--tg-white);
+    }
+    .btn-tg-dark:hover {
+      background: #0b0b3b;
+    }
+    .btn-tg-outline {
+      background: transparent;
+      border: 1px solid var(--tg-border-light);
+      color: var(--tg-black);
+    }
+    .btn-tg-outline:hover {
+      background: var(--tg-glass-light);
+    }
+    .btn-tg-glass {
+      background: var(--tg-glass-dark);
+      color: var(--tg-white);
+      border: 1px solid var(--tg-border-dark);
+    }
+    .btn-tg-glass:hover {
+      background: rgba(255, 255, 255, 0.2);
+    }
+
+    /* Badges & Mono Labels */
+    .tg-badge {
+      background: var(--tg-glass-light);
+      border: 1px solid var(--tg-border-light);
+      padding: 4px 10px;
+      border-radius: var(--rad-sharp);
+      font-family: var(--font-mono);
+      font-size: 11px;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.055px;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      margin-bottom: 20px;
+    }
+    .tg-label {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.055px;
+      color: #64748b;
+      margin-bottom: 12px;
+      display: block;
+    }
+
+    /* Layout Wrap */
+    .tg-wrap {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 80px 24px;
+    }
+
+    /* Hero Section with Pastel Cloud Gradient */
+    .hero-wrap {
+      position: relative;
+      padding-top: 60px;
+      padding-bottom: 90px;
+      overflow: hidden;
+    }
+    .hero-pastel-glow {
+      position: absolute;
+      top: -10%;
+      left: 20%;
+      width: 700px;
+      height: 450px;
+      background: radial-gradient(circle, rgba(239, 44, 193, 0.15) 0%, rgba(189, 187, 255, 0.25) 45%, rgba(252, 76, 2, 0.1) 75%, transparent 100%);
+      filter: blur(60px);
+      z-index: -1;
+      pointer-events: none;
+    }
+    .hero-title {
+      font-size: clamp(42px, 6vw, 64px);
+      font-weight: 500;
+      line-height: 1.05;
+      letter-spacing: -1.92px;
+      max-width: 920px;
+      margin-bottom: 24px;
+    }
+    .hero-lead {
+      font-size: 20px;
+      line-height: 1.4;
+      letter-spacing: -0.18px;
+      color: #334155;
+      max-width: 680px;
+      margin-bottom: 36px;
+    }
+
+    /* Stats Bar (Large performance numbers) */
+    .stats-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 20px;
+      margin-top: 50px;
+    }
+    .stat-card {
+      background: var(--tg-white);
+      border: 1px solid var(--tg-border-light);
+      border-radius: var(--rad-card);
+      padding: 32px 28px;
+      box-shadow: var(--tg-shadow-blue);
+    }
+    .stat-num {
+      font-size: 56px;
+      font-weight: 500;
+      line-height: 1.0;
+      letter-spacing: -1.5px;
+      margin-bottom: 8px;
+    }
+    .stat-desc {
+      font-size: 14px;
+      color: #475569;
+      line-height: 1.35;
+    }
+
+    /* Interactive Benchmark Console */
+    .console-card {
+      background: var(--tg-white);
+      border: 1px solid var(--tg-border-light);
+      border-radius: var(--rad-card);
+      padding: 36px;
+      box-shadow: var(--tg-shadow-blue);
+      margin-top: 48px;
+    }
+    .console-flex {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 32px;
+    }
+    @media (max-width: 768px) {
+      .console-flex { grid-template-columns: 1fr; }
+    }
+    .interactive-input {
+      width: 100%;
+      background: #FFFFFF;
+      border: 1px solid var(--tg-border-light);
+      border-radius: var(--rad-sharp);
+      padding: 12px 16px;
+      font-family: var(--font-future);
+      font-size: 15px;
+      outline: none;
+      margin-bottom: 16px;
+    }
+    .interactive-input:focus {
+      border-color: var(--tg-midnight-blue);
+    }
+
+    /* Dark Zone: Academic & Research Section (#010120) */
+    .dark-zone {
+      background: var(--tg-midnight-blue);
+      color: var(--tg-white);
+      padding: 100px 0;
+      margin-top: 80px;
+    }
+    .dark-zone-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+    .dark-title {
+      font-size: 40px;
+      font-weight: 500;
+      letter-spacing: -0.8px;
+      line-height: 1.2;
+      margin-bottom: 16px;
+    }
+    .dark-cards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 24px;
+      margin-top: 40px;
+    }
+    .dark-card {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid var(--tg-border-dark);
+      border-radius: var(--rad-card);
+      padding: 28px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    .paper-title {
+      font-size: 20px;
+      font-weight: 500;
+      letter-spacing: -0.3px;
+      margin-bottom: 12px;
+      color: var(--tg-white);
+    }
+    .paper-abstract {
+      font-size: 14px;
+      color: #94a3b8;
+      line-height: 1.45;
+      margin-bottom: 24px;
+    }
+
+    /* Giant Wordmark Footer */
+    footer.tg-footer {
+      background: var(--tg-midnight-blue);
+      border-top: 1px solid var(--tg-border-dark);
+      padding: 80px 24px 40px;
+      color: var(--tg-white);
+    }
+    .footer-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    .giant-wordmark {
+      font-family: var(--font-future);
+      font-size: clamp(60px, 12vw, 150px);
+      font-weight: 500;
+      letter-spacing: -3px;
+      color: rgba(255, 255, 255, 0.12);
+      line-height: 0.9;
+      margin-bottom: 40px;
+      user-select: none;
+    }
+    .footer-bottom {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 20px;
+      font-family: var(--font-mono);
+      font-size: 12px;
+      color: #64748b;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Navigation -->
+  <header class="tg-header">
+    <div class="header-inner">
+      <a href="#" class="tg-logo">
+        <div class="tg-mark"></div>
+        <span>together.ai</span>
+      </a>
+      <ul class="tg-nav-links">
+        <li><a href="#platform">Platform</a></li>
+        <li><a href="#models">Models</a></li>
+        <li><a href="#research">Research</a></li>
+        <li><a href="#enterprise">Enterprise</a></li>
+      </ul>
+      <div style="display:flex; gap:12px;">
+        <button class="btn-tg btn-tg-outline" onclick="openLogin()">Log in</button>
+        <button class="btn-tg btn-tg-dark" onclick="openConsole()">Start Building</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <main class="tg-wrap hero-wrap" id="platform">
+    <div class="hero-pastel-glow"></div>
+    <div class="tg-badge">
+      <span>●</span> TOGETHER INFERENCE ENGINE 3.0 RELEASED
+    </div>
+    <h1 class="hero-title">The AI-Native Cloud for building and running generative AI models.</h1>
+    <p class="hero-lead">
+      Sub-millisecond token latency with leading open-source foundation models. Scaled on sovereign GPU clusters with enterprise reliability.
+    </p>
+    <div style="display:flex; gap:16px; flex-wrap:wrap;">
+      <button class="btn-tg btn-tg-dark" onclick="openConsole()">Deploy Cluster</button>
+      <button class="btn-tg btn-tg-outline" onclick="scrollToBenchmark()">Benchmark Speeds</button>
+    </div>
+
+    <!-- Stats Bar -->
+    <div class="stats-row">
+      <div class="stat-card">
+        <div class="stat-num">4×</div>
+        <div class="stat-desc">Faster token generation over standard Hugging Face endpoints.</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num">65%</div>
+        <div class="stat-desc">Lower compute inference expenditure compared to legacy hyperscalers.</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num">99.9%</div>
+        <div class="stat-desc">Enterprise guaranteed SLA with global redundant clusters.</div>
+      </div>
+    </div>
+
+    <!-- Interactive GPU Benchmark Console -->
+    <section class="console-card" id="benchmark">
+      <span class="tg-label">LIVE INFERENCE BENCHMARK SIMULATOR</span>
+      <h2 style="font-size:28px; font-weight:500; letter-spacing:-0.42px; margin-bottom:20px;">Test Model Throughput</h2>
+      
+      <div class="console-flex">
+        <div>
+          <label style="font-size:14px; font-weight:500; display:block; margin-bottom:6px;">Select Model Architecture</label>
+          <select id="modelSelect" class="interactive-input" onchange="runBenchmark()">
+            <option value="Llama-3.3-70B-Instruct">Llama 3.3 70B Instruct (Together Turbo)</option>
+            <option value="Mixtral-8x22B">Mixtral 8x22B MoE</option>
+            <option value="DeepSeek-R1-Distill">DeepSeek R1 Distill 70B</option>
+            <option value="Qwen-2.5-Coder-32B">Qwen 2.5 Coder 32B</option>
+          </select>
+
+          <label style="font-size:14px; font-weight:500; display:block; margin-bottom:6px;">Test Query Prompt</label>
+          <input type="text" id="testPrompt" class="interactive-input" value="Generate an optimized CUDA kernel for FlashAttention-3 forward pass.">
+
+          <button class="btn-tg btn-tg-dark" style="width:100%; justify-content:center;" onclick="runBenchmark()">Execute Test Run</button>
+        </div>
+
+        <div style="background:#F8FAFC; border:1px solid var(--tg-border-light); border-radius:var(--rad-sharp); padding:20px; font-family:var(--font-mono); font-size:13px;">
+          <div style="color:#64748B; margin-bottom:12px;">// REAL-TIME BENCHMARK TELEMETRY</div>
+          <div id="stat1" style="margin-bottom:8px;">Model: Llama-3.3-70B-Instruct</div>
+          <div id="stat2" style="margin-bottom:8px;">TTFT (Time to First Token): 18.4ms</div>
+          <div id="stat3" style="margin-bottom:8px; color:#16A34A; font-weight:700;">Throughput: 142 tokens/sec</div>
+          <div id="stat4" style="color:#64748B;">Hardware: 8x NVIDIA H100 SXM5 Tensor Core</div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Dark Zone: Research Section (#010120) -->
+  <section class="dark-zone" id="research">
+    <div class="dark-zone-inner">
+      <span class="tg-label" style="color:#818cf8;">TOGETHER RESEARCH INITIATIVES</span>
+      <h2 class="dark-title">Pioneering Efficient AI Algorithms</h2>
+      <p style="color:#94a3b8; font-size:18px; max-width:640px; margin-bottom:20px;">
+        Our team publishes state-of-the-art research papers on speculative decoding, sub-quadratic architectures, and distributed training.
+      </p>
+
+      <div class="dark-cards-grid">
+        <!-- Paper 1 -->
+        <div class="dark-card">
+          <div>
+            <span class="tg-badge" style="background:rgba(255,255,255,0.06); border-color:var(--tg-border-dark); color:#FFF; margin-bottom:12px;">SPECULATIVE DECODING</span>
+            <h3 class="paper-title">Medusa: Simple LLM Inference Acceleration with Multiple Heads</h3>
+            <p class="paper-abstract">Decoding multiple tokens simultaneously without auxiliary draft models, speeding up inference by 2.2× to 3.6×.</p>
+          </div>
+          <button class="btn-tg btn-tg-glass" onclick="alert('Opening Medusa research paper archive.')">Read Paper (arXiv)</button>
+        </div>
+
+        <!-- Paper 2 -->
+        <div class="dark-card">
+          <div>
+            <span class="tg-badge" style="background:rgba(255,255,255,0.06); border-color:var(--tg-border-dark); color:#FFF; margin-bottom:12px;">LONG CONTEXT</span>
+            <h3 class="paper-title">RingAttention: Blockwise Transformers for Million-Token Sequences</h3>
+            <p class="paper-abstract">Scaling transformers across distributed devices without memory bottlenecks via circular communication.</p>
+          </div>
+          <button class="btn-tg btn-tg-glass" onclick="alert('Opening RingAttention paper archive.')">Read Paper (arXiv)</button>
+        </div>
+
+        <!-- Paper 3 -->
+        <div class="dark-card">
+          <div>
+            <span class="tg-badge" style="background:rgba(255,255,255,0.06); border-color:var(--tg-border-dark); color:#FFF; margin-bottom:12px;">QUANTIZATION</span>
+            <h3 class="paper-title">Flash-Decoding for Fast Autoregressive Inference</h3>
+            <p class="paper-abstract">Parallelizing across sequence dimensions to unlock 8× faster generation on variable prompt batch sizes.</p>
+          </div>
+          <button class="btn-tg btn-tg-glass" onclick="alert('Opening Flash-Decoding paper archive.')">Read Paper (arXiv)</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Large Footer with Giant Brand Wordmark -->
+  <footer class="tg-footer">
+    <div class="footer-inner">
+      <div class="giant-wordmark">together</div>
+      <div class="footer-bottom">
+        <div>© 2026 Together Computer, Inc. Built according to open-design/design-systems/together-ai/DESIGN.md</div>
+        <div>Dark Blue #010120 • Sharp 4px Geometry • Negative Tracking The Future</div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    function openLogin() {
+      alert('Together AI Login Modal initialized.');
+    }
+
+    function openConsole() {
+      alert('Together Compute Console activated.');
+    }
+
+    function scrollToBenchmark() {
+      document.getElementById('benchmark').scrollIntoView({ behavior: 'smooth' });
+    }
+
+    function runBenchmark() {
+      const model = document.getElementById('modelSelect').value;
+      const stat1 = document.getElementById('stat1');
+      const stat2 = document.getElementById('stat2');
+      const stat3 = document.getElementById('stat3');
+      
+      stat2.textContent = 'TTFT: Measuring...';
+      stat3.textContent = 'Throughput: Benchmarking...';
+
+      setTimeout(() => {
+        stat1.textContent = `Model: ${model}`;
+        const speeds = {
+          'Llama-3.3-70B-Instruct': { ttft: '18.4ms', tps: '142 tokens/sec' },
+          'Mixtral-8x22B': { ttft: '14.2ms', tps: '168 tokens/sec' },
+          'DeepSeek-R1-Distill': { ttft: '21.0ms', tps: '135 tokens/sec' },
+          'Qwen-2.5-Coder-32B': { ttft: '11.5ms', tps: '210 tokens/sec' }
+        };
+        const s = speeds[model] || { ttft: '16.0ms', tps: '150 tokens/sec' };
+        stat2.textContent = `TTFT (Time to First Token): ${s.ttft}`;
+        stat3.textContent = `Throughput: ${s.tps}`;
+      }, 400);
+    }
+  </script>
+</body>
+</html>

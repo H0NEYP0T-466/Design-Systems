@@ -1,0 +1,1714 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>BMW M — The Ultimate Driving Machine | Official Performance Portal</title>
+  <meta name="description" content="BMW M motorsport performance sub-brand portal. Near-black cockpit surfaces, BMW M tricolor accents, sharp engineering geometry, full-bleed automotive photography." />
+
+  <!-- Fonts: Inter fallback for BMW Type Next Latin -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+
+  <style>
+    /* ─────────────────────────────────────────────────────────────────
+       BMW M DESIGN SYSTEM SPECIFICATION & DESIGN TOKENS
+       Directly sourced from /open-design/design-systems/bmw-m/DESIGN.md
+       ───────────────────────────────────────────────────────────────── */
+    :root {
+      /* Brand & Accent Tokens */
+      --colors-primary: #ffffff;
+      --colors-m-blue-light: #0066b1;
+      --colors-m-blue-dark: #1c69d4;
+      --colors-m-red: #e22718;
+      --colors-electric-blue: #0653b6;
+
+      /* Surface Tokens */
+      --colors-canvas: #000000;
+      --colors-surface-soft: #0d0d0d;
+      --colors-surface-card: #1a1a1a;
+      --colors-surface-elevated: #262626;
+      --colors-carbon-gray: #2b2b2b;
+
+      /* Hairlines & Borders */
+      --colors-hairline: #3c3c3c;
+      --colors-hairline-strong: #262626;
+
+      /* Text Tokens */
+      --colors-on-dark: #ffffff;
+      --colors-body: #bbbbbb;
+      --colors-body-strong: #e6e6e6;
+      --colors-muted: #7e7e7e;
+
+      /* Semantic Tokens */
+      --colors-warning: #f4b400;
+      --colors-success: #0fa336;
+
+      /* Typography Tokens */
+      --font-family-display: "BMWTypeNextLatin", "BMW Type Next Latin", "Inter", "Helvetica Neue", Arial, sans-serif;
+      --font-family-body: "BMWTypeNextLatin", "BMW Type Next Latin", "Inter", "Helvetica Neue", Arial, sans-serif;
+      --font-family-mono: "SF Mono", "JetBrains Mono", Menlo, Consolas, monospace;
+
+      --typography-display-xl: 300 80px/1.0 var(--font-family-display);
+      --typography-display-lg: 300 56px/1.05 var(--font-family-display);
+      --typography-display-md: 300 40px/1.1 var(--font-family-display);
+      --typography-display-sm: 400 32px/1.15 var(--font-family-display);
+      --typography-title-lg: 700 24px/1.3 var(--font-family-display);
+      --typography-title-md: 400 20px/1.4 var(--font-family-display);
+      --typography-title-sm: 400 18px/1.4 var(--font-family-display);
+      --typography-label-uppercase: 700 14px/1.3 var(--font-family-display);
+      --typography-body-md: 400 16px/1.5 var(--font-family-body);
+      --typography-body-sm: 400 14px/1.5 var(--font-family-body);
+      --typography-caption: 400 12px/1.4 var(--font-family-body);
+      --typography-button: 700 14px/1.0 var(--font-family-display);
+      --typography-nav-link: 400 14px/1.4 var(--font-family-body);
+
+      /* Spacing Scale (4px base) */
+      --spacing-xxs: 4px;
+      --spacing-xs: 8px;
+      --spacing-sm: 12px;
+      --spacing-md: 16px;
+      --spacing-lg: 24px;
+      --spacing-xl: 40px;
+      --spacing-xxl: 64px;
+      --spacing-section: 96px;
+
+      /* Layout */
+      --container-max: 1440px;
+      --radius-default: 0px;
+      --radius-circle: 50%;
+    }
+
+    /* ─── Base & Global Reset ──────────────────────────────────────── */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      background-color: var(--colors-canvas);
+      color: var(--colors-on-dark);
+    }
+
+    body {
+      background-color: var(--colors-canvas);
+      color: var(--colors-body);
+      font-family: var(--font-family-body);
+      font-size: 16px;
+      font-weight: 400;
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      overflow-x: hidden;
+    }
+
+    /* Headlines in confident UPPERCASE per DESIGN.md §1 & §3 */
+    h1, h2, h3, h4, .uppercase-heading {
+      text-transform: uppercase;
+      color: var(--colors-on-dark);
+      letter-spacing: 0;
+    }
+
+    h1 {
+      font: var(--typography-display-xl);
+      font-weight: 300;
+      letter-spacing: 0;
+    }
+
+    h2 {
+      font: var(--typography-display-lg);
+      font-weight: 300;
+      letter-spacing: 0;
+    }
+
+    h3 {
+      font: var(--typography-display-md);
+      font-weight: 300;
+      letter-spacing: 0;
+    }
+
+    p {
+      color: var(--colors-body);
+      font-size: 16px;
+      line-height: 1.5;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+      transition: color 0.15s ease;
+    }
+
+    /* Focus visibility strictly follows DESIGN.md §8 */
+    :focus-visible {
+      outline: 2px solid #ffffff;
+      outline-offset: 2px;
+      box-shadow: 0 0 0 4px var(--colors-electric-blue);
+    }
+
+    /* ─── Signature M Components ───────────────────────────────────── */
+    /* m-stripe-divider: 4px horizontal stripe with the M tricolor */
+    .m-stripe-divider {
+      display: flex;
+      width: 100%;
+      height: 4px;
+      line-height: 0;
+      overflow: hidden;
+      flex-shrink: 0;
+    }
+
+    .m-stripe-divider span {
+      flex: 1;
+      height: 100%;
+    }
+
+    .m-stripe-divider .stop-1 { background-color: var(--colors-m-blue-light); }
+    .m-stripe-divider .stop-2 { background-color: var(--colors-m-blue-dark); }
+    .m-stripe-divider .stop-3 { background-color: var(--colors-m-red); }
+
+    /* M Brand Badge Slanted Graphic */
+    .m-badge-slant {
+      display: inline-flex;
+      align-items: center;
+      gap: 3px;
+      transform: skewX(-20deg);
+      height: 18px;
+    }
+    .m-badge-slant .bar {
+      width: 7px;
+      height: 100%;
+    }
+    .m-badge-slant .bar-1 { background-color: var(--colors-m-blue-light); }
+    .m-badge-slant .bar-2 { background-color: var(--colors-m-blue-dark); }
+    .m-badge-slant .bar-3 { background-color: var(--colors-m-red); }
+
+    /* ─── Button Stylings (DESIGN.md §4) ───────────────────────────── */
+    /* Rectangular silhouette, 0px radius, uppercase letterspaced 1.5px */
+    .button-primary {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      height: 48px;
+      padding: 0 32px;
+      background-color: var(--colors-canvas);
+      color: var(--colors-on-dark);
+      border: 1px solid var(--colors-primary);
+      border-radius: var(--radius-default);
+      font: var(--typography-button);
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+      white-space: nowrap;
+    }
+
+    .button-primary:hover {
+      background-color: var(--colors-primary);
+      color: var(--colors-canvas);
+    }
+
+    .button-primary:active {
+      background-color: var(--colors-body-strong);
+      color: var(--colors-canvas);
+    }
+
+    .button-primary-outline {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      height: 48px;
+      padding: 0 32px;
+      background-color: transparent;
+      color: var(--colors-on-dark);
+      border: 1px solid var(--colors-primary);
+      border-radius: var(--radius-default);
+      font: var(--typography-button);
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      cursor: pointer;
+      backdrop-filter: blur(8px);
+      transition: background-color 0.2s ease, color 0.2s ease;
+      white-space: nowrap;
+    }
+
+    .button-primary-outline:hover {
+      background-color: rgba(255, 255, 255, 0.15);
+      border-color: #ffffff;
+    }
+
+    /* Circular icon button (the only circular button in the system) */
+    .button-icon, .carousel-arrow {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 48px;
+      height: 48px;
+      border-radius: var(--radius-circle);
+      background-color: var(--colors-surface-card);
+      border: 1px solid var(--colors-hairline);
+      color: var(--colors-on-dark);
+      cursor: pointer;
+      transition: background-color 0.2s ease, border-color 0.2s ease, transform 0.15s ease;
+    }
+
+    .button-icon:hover, .carousel-arrow:hover {
+      background-color: var(--colors-surface-elevated);
+      border-color: var(--colors-body);
+      transform: scale(1.04);
+    }
+
+    /* Text link: inline uppercase letterspaced with arrow */
+    .text-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font: var(--typography-label-uppercase);
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--colors-on-dark);
+      border-bottom: 1px solid transparent;
+      transition: border-color 0.2s ease, gap 0.2s ease;
+      cursor: pointer;
+    }
+
+    .text-link:hover {
+      border-bottom-color: var(--colors-primary);
+      gap: 12px;
+    }
+
+    /* ─── Top Navigation (DESIGN.md §4) ────────────────────────────── */
+    .top-nav {
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      height: 64px;
+      background-color: var(--colors-canvas);
+      border-bottom: 1px solid var(--colors-hairline);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 var(--spacing-xl);
+    }
+
+    .nav-left {
+      display: flex;
+      align-items: center;
+      gap: var(--spacing-xl);
+    }
+
+    .brand-logo {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      text-decoration: none;
+    }
+
+    .bmw-roundel {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      border: 1.5px solid #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      background: #000;
+      overflow: hidden;
+    }
+
+    .bmw-roundel-inner {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      grid-template-rows: 1fr 1fr;
+      overflow: hidden;
+      border: 1px solid #fff;
+    }
+    .bmw-quad-1 { background: #0066b1; }
+    .bmw-quad-2 { background: #ffffff; }
+    .bmw-quad-3 { background: #ffffff; }
+    .bmw-quad-4 { background: #0066b1; }
+
+    .brand-m-wordmark {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .brand-m-wordmark .m-text {
+      font-family: var(--font-family-display);
+      font-size: 26px;
+      font-weight: 800;
+      font-style: italic;
+      color: #ffffff;
+      line-height: 1;
+      letter-spacing: -1px;
+    }
+
+    .nav-menu {
+      display: flex;
+      align-items: center;
+      list-style: none;
+      gap: var(--spacing-lg);
+    }
+
+    .nav-menu a {
+      font: var(--typography-nav-link);
+      color: var(--colors-body);
+      letter-spacing: 0.5px;
+      padding: 8px 0;
+      position: relative;
+    }
+
+    .nav-menu a:hover, .nav-menu a.active {
+      color: var(--colors-on-dark);
+    }
+
+    .nav-menu a.active::after {
+      content: "";
+      position: absolute;
+      bottom: -18px;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background-color: var(--colors-primary);
+    }
+
+    .nav-right {
+      display: flex;
+      align-items: center;
+      gap: var(--spacing-md);
+    }
+
+    .nav-tool-btn {
+      background: none;
+      border: none;
+      color: var(--colors-on-dark);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 13px;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      padding: 6px 10px;
+    }
+
+    .nav-tool-btn:hover {
+      color: var(--colors-primary);
+    }
+
+    .mobile-menu-toggle {
+      display: none;
+      background: none;
+      border: none;
+      color: #fff;
+      cursor: pointer;
+      padding: 8px;
+    }
+
+    /* ─── Hero Photo Band (DESIGN.md §4) ───────────────────────────── */
+    /* Rhythm #1: Photo Band */
+    .hero-photo-band {
+      position: relative;
+      width: 100%;
+      min-height: 88vh;
+      display: flex;
+      align-items: flex-end;
+      padding: var(--spacing-xxl) var(--spacing-xl);
+      background-color: var(--colors-canvas);
+      background-image: 
+        linear-gradient(to top, rgba(0, 0, 0, 0.92) 0%, rgba(0, 0, 0, 0.45) 45%, rgba(0, 0, 0, 0.25) 100%),
+        url('https://images.unsplash.com/photo-1555215695-3004980ad54e?auto=format&fit=crop&w=2400&q=85');
+      background-size: cover;
+      background-position: center 58%;
+      background-repeat: no-repeat;
+    }
+
+    .hero-content {
+      max-width: 900px;
+      z-index: 2;
+    }
+
+    .hero-tagline {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: var(--spacing-md);
+    }
+
+    .hero-tagline span {
+      font: var(--typography-label-uppercase);
+      color: var(--colors-on-dark);
+      letter-spacing: 1.5px;
+    }
+
+    .hero-h1 {
+      font: var(--typography-display-xl);
+      margin-bottom: var(--spacing-md);
+      line-height: 0.96;
+      color: #ffffff;
+      text-shadow: 0 4px 24px rgba(0, 0, 0, 0.85);
+    }
+
+    .hero-subtitle {
+      font: var(--typography-title-md);
+      color: var(--colors-body-strong);
+      max-width: 680px;
+      margin-bottom: var(--spacing-lg);
+      line-height: 1.4;
+    }
+
+    .hero-actions {
+      display: flex;
+      align-items: center;
+      gap: var(--spacing-md);
+      flex-wrap: wrap;
+    }
+
+    /* ─── Spec Table Section (DESIGN.md §4 & §5) ───────────────────── */
+    /* Rhythm #2: Spec Table Band (Surface Soft #0d0d0d) */
+    .spec-table-band {
+      background-color: var(--colors-surface-soft);
+      border-top: 1px solid var(--colors-hairline);
+      border-bottom: 1px solid var(--colors-hairline);
+      padding: var(--spacing-section) var(--spacing-xl);
+    }
+
+    .section-container {
+      max-width: var(--container-max);
+      margin: 0 auto;
+    }
+
+    .section-header-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      margin-bottom: var(--spacing-xl);
+      gap: var(--spacing-lg);
+      flex-wrap: wrap;
+    }
+
+    .section-headline-group {
+      max-width: 700px;
+    }
+
+    .section-label {
+      font: var(--typography-label-uppercase);
+      color: var(--colors-m-blue-light);
+      letter-spacing: 1.5px;
+      margin-bottom: var(--spacing-xs);
+      display: block;
+    }
+
+    .section-title {
+      font: var(--typography-display-lg);
+      margin-bottom: var(--spacing-xs);
+    }
+
+    .spec-controls {
+      display: flex;
+      align-items: center;
+      gap: var(--spacing-sm);
+      border: 1px solid var(--colors-hairline);
+      padding: 4px;
+      background-color: var(--colors-canvas);
+    }
+
+    .spec-toggle-btn {
+      background: none;
+      border: none;
+      color: var(--colors-muted);
+      font: var(--typography-label-uppercase);
+      letter-spacing: 1.5px;
+      padding: 8px 16px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .spec-toggle-btn.active {
+      background-color: var(--colors-surface-elevated);
+      color: var(--colors-on-dark);
+    }
+
+    .spec-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1px;
+      background-color: var(--colors-hairline);
+      border: 1px solid var(--colors-hairline);
+    }
+
+    .spec-cell {
+      background-color: var(--colors-surface-soft);
+      padding: var(--spacing-xl) var(--spacing-lg);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      min-height: 180px;
+      transition: background-color 0.2s ease;
+    }
+
+    .spec-cell:hover {
+      background-color: #141414;
+    }
+
+    .spec-cell-value {
+      font: var(--typography-display-sm);
+      color: var(--colors-on-dark);
+      font-weight: 400;
+      margin-bottom: var(--spacing-xs);
+    }
+
+    .spec-cell-label {
+      font: var(--typography-label-uppercase);
+      color: var(--colors-muted);
+      letter-spacing: 1.5px;
+    }
+
+    .spec-cell-sub {
+      font-size: 12px;
+      color: var(--colors-body);
+      margin-top: 6px;
+    }
+
+    /* ─── Rhythm #3: Photo Band (Motorsport Pit Lane & Circuit) ────── */
+    .motorsport-band {
+      position: relative;
+      width: 100%;
+      min-height: 70vh;
+      display: flex;
+      align-items: flex-end;
+      padding: var(--spacing-xxl) var(--spacing-xl);
+      background-color: var(--colors-canvas);
+      background-image: 
+        linear-gradient(to right, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.5) 45%, rgba(0,0,0,0.2) 100%),
+        url('https://images.unsplash.com/photo-1568605117036-5fe5e7bab0b7?auto=format&fit=crop&w=2400&q=85');
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+    }
+
+    .motorsport-content {
+      max-width: 650px;
+      z-index: 2;
+    }
+
+    .motorsport-caption {
+      font: var(--typography-caption);
+      color: var(--colors-muted);
+      letter-spacing: 0.5px;
+      margin-top: var(--spacing-md);
+    }
+
+    /* ─── Rhythm #4: Magazine & Topics Grid (Surface Card #1a1a1a) ── */
+    .magazine-band {
+      background-color: var(--colors-canvas);
+      padding: var(--spacing-section) var(--spacing-xl);
+      border-top: 1px solid var(--colors-hairline);
+    }
+
+    /* Category Tab Navigation (DESIGN.md §4) */
+    .category-tabs-nav {
+      display: flex;
+      align-items: center;
+      gap: var(--spacing-xl);
+      border-bottom: 1px solid var(--colors-hairline);
+      margin-bottom: var(--spacing-xl);
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+
+    .category-tabs-nav::-webkit-scrollbar {
+      display: none;
+    }
+
+    .category-tab {
+      background: none;
+      border: none;
+      padding: 16px 0;
+      font: var(--typography-label-uppercase);
+      color: var(--colors-body);
+      letter-spacing: 1.5px;
+      cursor: pointer;
+      position: relative;
+      white-space: nowrap;
+      transition: color 0.2s ease;
+    }
+
+    .category-tab:hover {
+      color: var(--colors-on-dark);
+    }
+
+    .category-tab.active {
+      color: var(--colors-on-dark);
+    }
+
+    .category-tab.active::after {
+      content: "";
+      position: absolute;
+      bottom: -1px;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background-color: var(--colors-primary);
+    }
+
+    /* 3-Up Feature Photo Cards */
+    .cards-grid-3up {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: var(--spacing-lg);
+    }
+
+    .feature-photo-card {
+      background-color: var(--colors-surface-card);
+      border: 1px solid var(--colors-hairline-strong);
+      border-radius: var(--radius-default);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      transition: transform 0.2s ease, border-color 0.2s ease;
+    }
+
+    .feature-photo-card:hover {
+      border-color: var(--colors-hairline);
+      transform: translateY(-4px);
+    }
+
+    .feature-card-media {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      overflow: hidden;
+      background-color: #0d0d0d;
+    }
+
+    .feature-card-media img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.4s ease;
+    }
+
+    .feature-photo-card:hover .feature-card-media img {
+      transform: scale(1.05);
+    }
+
+    .feature-card-body {
+      padding: var(--spacing-lg);
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+    }
+
+    .card-category-tag {
+      font: var(--typography-label-uppercase);
+      color: var(--colors-m-blue-light);
+      letter-spacing: 1.5px;
+      margin-bottom: var(--spacing-xs);
+    }
+
+    .feature-card-title {
+      font: var(--typography-title-lg);
+      color: var(--colors-on-dark);
+      margin-bottom: var(--spacing-sm);
+      line-height: 1.25;
+    }
+
+    .feature-card-text {
+      font: var(--typography-body-md);
+      color: var(--colors-body);
+      margin-bottom: var(--spacing-lg);
+      flex: 1;
+    }
+
+    /* ─── Model Showcase Grid ──────────────────────────────────────── */
+    .models-section {
+      background-color: var(--colors-canvas);
+      padding: var(--spacing-section) var(--spacing-xl);
+      border-top: 1px solid var(--colors-hairline);
+    }
+
+    .models-grid-3up {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: var(--spacing-lg);
+    }
+
+    .model-card {
+      background-color: var(--colors-canvas);
+      border: 1px solid var(--colors-hairline);
+      padding: var(--spacing-lg);
+      display: flex;
+      flex-direction: column;
+      transition: border-color 0.2s ease, background-color 0.2s ease;
+    }
+
+    .model-card:hover {
+      border-color: var(--colors-body);
+      background-color: #070707;
+    }
+
+    .model-card-media {
+      width: 100%;
+      aspect-ratio: 16 / 10;
+      background-color: #111;
+      overflow: hidden;
+      margin-bottom: var(--spacing-lg);
+    }
+
+    .model-card-media img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.4s ease;
+    }
+
+    .model-card:hover .model-card-media img {
+      transform: scale(1.04);
+    }
+
+    .model-name {
+      font: var(--typography-display-md);
+      color: var(--colors-on-dark);
+      margin-bottom: var(--spacing-xs);
+    }
+
+    .model-specs-line {
+      font: var(--typography-body-sm);
+      color: var(--colors-body);
+      margin-bottom: var(--spacing-lg);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .electric-tag {
+      color: var(--colors-electric-blue);
+      font-weight: 700;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    /* ─── Technical Carbon-Fiber Section ───────────────────────────── */
+    .carbon-tech-section {
+      background-color: var(--colors-carbon-gray);
+      background-image: radial-gradient(#3a3a3a 1px, transparent 1px);
+      background-size: 8px 8px;
+      padding: var(--spacing-section) var(--spacing-xl);
+      border-top: 1px solid var(--colors-hairline);
+      border-bottom: 1px solid var(--colors-hairline);
+    }
+
+    .tech-cards-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: var(--spacing-lg);
+    }
+
+    .tech-card {
+      background-color: var(--colors-surface-soft);
+      border: 1px solid var(--colors-hairline);
+      padding: var(--spacing-xl);
+    }
+
+    .tech-card-badge {
+      display: inline-block;
+      font: var(--typography-label-uppercase);
+      letter-spacing: 1.5px;
+      color: var(--colors-m-red);
+      margin-bottom: var(--spacing-xs);
+    }
+
+    /* ─── Rhythm #5: Full-Bleed CTA Photo Band ─────────────────────── */
+    .cta-band-photo {
+      position: relative;
+      width: 100%;
+      min-height: 480px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 80px var(--spacing-xl);
+      background-color: var(--colors-canvas);
+      background-image: 
+        linear-gradient(rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0.75)),
+        url('https://images.unsplash.com/photo-1617814076367-b759c7d7e738?auto=format&fit=crop&w=2400&q=85');
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+    }
+
+    .cta-band-inner {
+      max-width: 800px;
+      z-index: 2;
+    }
+
+    .cta-band-title {
+      font: var(--typography-display-md);
+      color: #ffffff;
+      margin-bottom: var(--spacing-md);
+    }
+
+    .cta-band-subtitle {
+      font: var(--typography-body-md);
+      color: var(--colors-body-strong);
+      margin-bottom: var(--spacing-xl);
+      max-width: 580px;
+      margin-inline: auto;
+    }
+
+    /* ─── Chatbot Launcher Card (DESIGN.md §4) ─────────────────────── */
+    .chatbot-launcher-fixed {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      z-index: 990;
+    }
+
+    .chatbot-launcher-card {
+      background-color: var(--colors-surface-card);
+      border: 1px solid var(--colors-hairline);
+      padding: var(--spacing-lg);
+      width: 320px;
+      box-shadow: 0 16px 36px rgba(0, 0, 0, 0.6);
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .chatbot-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .chatbot-title {
+      font: var(--typography-label-uppercase);
+      color: #fff;
+      letter-spacing: 1.5px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .chatbot-close-btn {
+      background: none;
+      border: none;
+      color: var(--colors-muted);
+      cursor: pointer;
+      font-size: 18px;
+      line-height: 1;
+    }
+
+    /* Chatbot Modal Drawer */
+    .chatbot-drawer {
+      display: none;
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      width: 380px;
+      height: 520px;
+      background-color: var(--colors-surface-card);
+      border: 1px solid var(--colors-hairline);
+      z-index: 1001;
+      box-shadow: 0 24px 60px rgba(0, 0, 0, 0.9);
+      flex-direction: column;
+    }
+
+    .chatbot-drawer.open {
+      display: flex;
+    }
+
+    .chat-header-bar {
+      padding: 16px;
+      background-color: var(--colors-surface-soft);
+      border-bottom: 1px solid var(--colors-hairline);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .chat-messages-container {
+      flex: 1;
+      padding: 16px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .chat-bubble {
+      padding: 12px 16px;
+      font-size: 14px;
+      line-height: 1.4;
+      max-width: 85%;
+    }
+
+    .chat-bubble.bot {
+      background-color: var(--colors-surface-elevated);
+      color: var(--colors-on-dark);
+      align-self: flex-start;
+      border-left: 3px solid var(--colors-m-blue-light);
+    }
+
+    .chat-bubble.user {
+      background-color: var(--colors-hairline);
+      color: #fff;
+      align-self: flex-end;
+    }
+
+    .chat-input-bar {
+      padding: 12px;
+      border-top: 1px solid var(--colors-hairline);
+      display: flex;
+      gap: 8px;
+      background-color: var(--colors-surface-soft);
+    }
+
+    .text-input {
+      flex: 1;
+      height: 44px;
+      background-color: var(--colors-surface-card);
+      border: 1px solid var(--colors-hairline);
+      color: var(--colors-on-dark);
+      padding: 0 12px;
+      font-size: 14px;
+      font-family: inherit;
+    }
+
+    .text-input:focus {
+      outline: none;
+      border-color: #ffffff;
+    }
+
+    /* ─── Cookie Consent Card (DESIGN.md §4) ───────────────────────── */
+    .cookie-consent-card {
+      position: fixed;
+      bottom: 24px;
+      left: 24px;
+      z-index: 980;
+      width: 360px;
+      background-color: var(--colors-canvas);
+      border: 1px solid var(--colors-hairline);
+      padding: var(--spacing-lg);
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.7);
+    }
+
+    .cookie-text {
+      font: var(--typography-body-sm);
+      color: var(--colors-body);
+      line-height: 1.4;
+    }
+
+    .cookie-actions {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    /* ─── Footer (DESIGN.md §4) ────────────────────────────────────── */
+    .site-footer {
+      background-color: var(--colors-canvas);
+      border-top: 1px solid var(--colors-hairline);
+      padding: var(--spacing-xxl) var(--spacing-xl) var(--spacing-xl);
+      color: var(--colors-body);
+    }
+
+    .footer-grid-4col {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: var(--spacing-xl);
+      margin-bottom: var(--spacing-xxl);
+    }
+
+    .footer-col-title {
+      font: var(--typography-label-uppercase);
+      color: var(--colors-on-dark);
+      letter-spacing: 1.5px;
+      margin-bottom: var(--spacing-lg);
+    }
+
+    .footer-links-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: var(--spacing-sm);
+    }
+
+    .footer-links-list a {
+      font: var(--typography-body-sm);
+      color: var(--colors-body);
+    }
+
+    .footer-links-list a:hover {
+      color: var(--colors-on-dark);
+    }
+
+    .footer-bottom-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-top: var(--spacing-xl);
+      border-top: 1px solid var(--colors-hairline);
+      flex-wrap: wrap;
+      gap: var(--spacing-md);
+    }
+
+    .footer-disclaimer {
+      font: var(--typography-caption);
+      color: var(--colors-muted);
+      max-width: 800px;
+    }
+
+    /* ─── Responsive Breakpoints (DESIGN.md §8) ────────────────────── */
+    @media (max-width: 1024px) {
+      .spec-grid { grid-template-columns: repeat(2, 1fr); }
+      .cards-grid-3up { grid-template-columns: repeat(2, 1fr); }
+      .models-grid-3up { grid-template-columns: repeat(2, 1fr); }
+      .footer-grid-4col { grid-template-columns: repeat(2, 1fr); }
+      .hero-h1 { font-size: 56px; }
+    }
+
+    @media (max-width: 768px) {
+      .top-nav { padding: 0 var(--spacing-md); }
+      .nav-menu { display: none; }
+      .mobile-menu-toggle { display: block; }
+      .hero-photo-band { min-height: 80vh; padding: var(--spacing-xl) var(--spacing-md); }
+      .hero-h1 { font-size: 42px; }
+      .spec-table-band { padding: var(--spacing-xl) var(--spacing-md); }
+      .spec-grid { grid-template-columns: 1fr; }
+      .cards-grid-3up { grid-template-columns: 1fr; }
+      .models-grid-3up { grid-template-columns: 1fr; }
+      .tech-cards-grid { grid-template-columns: 1fr; }
+      .footer-grid-4col { grid-template-columns: 1fr; }
+      .cookie-consent-card { left: 16px; right: 16px; width: auto; }
+      .chatbot-launcher-fixed { bottom: 16px; right: 16px; }
+      .chatbot-launcher-card { width: 280px; }
+      .chatbot-drawer { width: calc(100vw - 32px); right: 16px; bottom: 16px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top M Tricolor Brand Divider -->
+  <div class="m-stripe-divider">
+    <span class="stop-1"></span>
+    <span class="stop-2"></span>
+    <span class="stop-3"></span>
+  </div>
+
+  <!-- Top Navigation (DESIGN.md §4: top-nav) -->
+  <header class="top-nav">
+    <div class="nav-left">
+      <a href="#hero" class="brand-logo" aria-label="BMW M Home">
+        <div class="bmw-roundel" title="BMW">
+          <div class="bmw-roundel-inner">
+            <div class="bmw-quad-1"></div>
+            <div class="bmw-quad-2"></div>
+            <div class="bmw-quad-3"></div>
+            <div class="bmw-quad-4"></div>
+          </div>
+        </div>
+        <div class="brand-m-wordmark">
+          <div class="m-badge-slant">
+            <span class="bar bar-1"></span>
+            <span class="bar bar-2"></span>
+            <span class="bar bar-3"></span>
+          </div>
+          <span class="m-text">M</span>
+        </div>
+      </a>
+
+      <nav aria-label="Primary Navigation">
+        <ul class="nav-menu">
+          <li><a href="#models" class="active">Models</a></li>
+          <li><a href="#specs">Engineering</a></li>
+          <li><a href="#motorsport">Motorsport</a></li>
+          <li><a href="#magazine">Magazine</a></li>
+          <li><a href="#configurator">Configurator</a></li>
+          <li><a href="#fastlane">Fastlane</a></li>
+        </ul>
+      </nav>
+    </div>
+
+    <div class="nav-right">
+      <button class="nav-tool-btn" title="Search">
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"></circle><path d="m21 21-4.35-4.35"></path></svg>
+        <span>Search</span>
+      </button>
+      <button class="nav-tool-btn" title="Select Region">
+        <span>EN / Global</span>
+      </button>
+      <button class="mobile-menu-toggle" id="mobileMenuBtn" aria-label="Open Mobile Menu">
+        <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+      </button>
+    </div>
+  </header>
+
+  <!-- Main Content Sequence: Strict Editorial Rhythm -->
+  <main>
+    <!-- RHYTHM 1: Full-Bleed Hero Photo Band (DESIGN.md §4: hero-photo-band) -->
+    <section class="hero-photo-band" id="hero">
+      <div class="hero-content">
+        <div class="hero-tagline">
+          <div class="m-badge-slant">
+            <span class="bar bar-1"></span>
+            <span class="bar bar-2"></span>
+            <span class="bar bar-3"></span>
+          </div>
+          <span>THE ULTIMATE DRIVING MACHINE</span>
+        </div>
+        <h1 class="hero-h1">MORE BMW M.<br>MORE PERFORMANCE.</h1>
+        <p class="hero-subtitle">
+          Engineered without compromise. Experience heart-stopping twin-turbo dynamics, motorsport-honed chassis agility, and pure aerodynamic adrenaline.
+        </p>
+        <div class="hero-actions">
+          <a href="#models" class="button-primary">EXPLORE M LINEUP</a>
+          <button class="button-primary-outline" id="playFilmBtn">WATCH THE FILM</button>
+          <button class="button-icon" title="Sound Profile" id="soundToggleBtn">
+            <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path></svg>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- M Tricolor Accent Ribbon -->
+    <div class="m-stripe-divider">
+      <span class="stop-1"></span>
+      <span class="stop-2"></span>
+      <span class="stop-3"></span>
+    </div>
+
+    <!-- RHYTHM 2: Technical Engineering Spec Cells (DESIGN.md §4: spec-cell) -->
+    <section class="spec-table-band" id="specs">
+      <div class="section-container">
+        <div class="section-header-row">
+          <div class="section-headline-group">
+            <span class="section-label">BENCHMARK POWERTRAIN</span>
+            <h2 class="section-title">ENGINEERED FOR THE LIMIT</h2>
+            <p>Precise telemetry from the latest M TwinPower Turbo high-revving architectures.</p>
+          </div>
+          <div class="spec-controls">
+            <button class="spec-toggle-btn active" id="metricToggle">METRIC</button>
+            <button class="spec-toggle-btn" id="imperialToggle">IMPERIAL</button>
+          </div>
+        </div>
+
+        <div class="spec-grid">
+          <div class="spec-cell">
+            <div>
+              <div class="spec-cell-value" id="specHp">727 HP</div>
+              <div class="spec-cell-label">SYSTEM POWER</div>
+            </div>
+            <div class="spec-cell-sub">535 kW Electrified M xDrive System</div>
+          </div>
+          <div class="spec-cell">
+            <div>
+              <div class="spec-cell-value" id="specTorque">1,000 NM</div>
+              <div class="spec-cell-label">MAXIMUM TORQUE</div>
+            </div>
+            <div class="spec-cell-sub">737 lb-ft from 1,800 to 5,400 RPM</div>
+          </div>
+          <div class="spec-cell">
+            <div>
+              <div class="spec-cell-value" id="specAccel">3.5 SEC</div>
+              <div class="spec-cell-label">0 – 100 KM/H ACCELERATION</div>
+            </div>
+            <div class="spec-cell-sub">Launch Control & Track Calibration</div>
+          </div>
+          <div class="spec-cell">
+            <div>
+              <div class="spec-cell-value" id="specTopSpeed">305 KM/H</div>
+              <div class="spec-cell-label">V-MAX TOP SPEED</div>
+            </div>
+            <div class="spec-cell-sub">With optional M Driver's Package</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- RHYTHM 3: Motorsport Track & Pit Lane Band (DESIGN.md §4: motorsport-photo-card) -->
+    <section class="motorsport-band" id="motorsport">
+      <div class="motorsport-content">
+        <span class="section-label" style="color: #ffffff;">BMW M MOTORSPORT</span>
+        <h2 style="color: #ffffff; margin-bottom: 16px;">BORN ON THE TRACK.<br>TESTED IN 24H COMPETITION.</h2>
+        <p style="color: #e6e6e6; margin-bottom: 24px;">
+          From the Nürburgring Nordschleife to the Circuit de la Sarthe, every millimeter of BMW M road engineering is validated under brutal endurance racing conditions.
+        </p>
+        <a href="#magazine" class="button-primary-outline">MOTORSPORT CAMPAIGN</a>
+        <p class="motorsport-caption">BMW M HYBRID V8 LMDH · FIA WORLD ENDURANCE CHAMPIONSHIP · SPA-FRANCORCHAMPS</p>
+      </div>
+    </section>
+
+    <!-- M Tricolor Accent Ribbon -->
+    <div class="m-stripe-divider">
+      <span class="stop-1"></span>
+      <span class="stop-2"></span>
+      <span class="stop-3"></span>
+    </div>
+
+    <!-- RHYTHM 4: Model Showcase (DESIGN.md §4: model-card) -->
+    <section class="models-section" id="models">
+      <div class="section-container">
+        <div class="section-header-row">
+          <div>
+            <span class="section-label">LINEUP SELECTION</span>
+            <h2 class="section-title">MORE NEW M MODELS</h2>
+          </div>
+          <a href="#configurator" class="text-link">VIEW ALL HIGH-PERFORMANCE CARS →</a>
+        </div>
+
+        <div class="models-grid-3up">
+          <!-- Model Card 1: BMW M3 CS -->
+          <article class="model-card">
+            <div class="model-card-media">
+              <img src="https://images.unsplash.com/photo-1580273916550-e323be2ae537?auto=format&fit=crop&w=1000&q=80" alt="BMW M3 CS Competition Sport" loading="lazy" />
+            </div>
+            <h3 class="model-name">BMW M3 CS</h3>
+            <div class="model-specs-line">
+              <span>405 kW / 550 HP</span>
+              <span>·</span>
+              <span>0-100 in 3.4s</span>
+              <span>·</span>
+              <span>M xDrive</span>
+            </div>
+            <p style="margin-bottom: 24px; font-size: 14px;">
+              Intelligent lightweight construction with carbon-fibre-reinforced plastic (CFRP) components and extreme circuit precision.
+            </p>
+            <a href="#specs" class="text-link">EXPLORE THIS MODEL →</a>
+          </article>
+
+          <!-- Model Card 2: BMW M4 CSL -->
+          <article class="model-card">
+            <div class="model-card-media">
+              <img src="https://images.unsplash.com/photo-1607860108855-64acf2078ed9?auto=format&fit=crop&w=1000&q=80" alt="BMW M4 CSL Track Coupe" loading="lazy" />
+            </div>
+            <h3 class="model-name">BMW M4 CSL</h3>
+            <div class="model-specs-line">
+              <span>405 kW / 550 HP</span>
+              <span>·</span>
+              <span>Nürburgring 7:15.677</span>
+            </div>
+            <p style="margin-bottom: 24px; font-size: 14px;">
+              Coupe Sport Leichtbau. Strict two-seater configuration, titanium rear silencer, and laser-lit tail light optics.
+            </p>
+            <a href="#specs" class="text-link">EXPLORE THIS MODEL →</a>
+          </article>
+
+          <!-- Model Card 3: BMW XM Label Red (Electric Blue Accents) -->
+          <article class="model-card">
+            <div class="model-card-media">
+              <img src="https://images.unsplash.com/photo-1552519507-da3b142c6e3d?auto=format&fit=crop&w=1000&q=80" alt="BMW XM Label Red Electrified Performance" loading="lazy" />
+            </div>
+            <h3 class="model-name">BMW XM LABEL RED</h3>
+            <div class="model-specs-line">
+              <span class="electric-tag">⚡ M HYBRID ELECTRIC</span>
+              <span>·</span>
+              <span>550 kW / 748 HP</span>
+            </div>
+            <p style="margin-bottom: 24px; font-size: 14px;">
+              The most powerful BMW M production model in history. V8 high-revving muscle paired with next-generation e-drive tech.
+            </p>
+            <a href="#specs" class="text-link">EXPLORE THIS MODEL →</a>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- Technical Carbon-Fiber Detail Section (DESIGN.md §2 & §6: carbon-gray) -->
+    <section class="carbon-tech-section" id="carbon-tech">
+      <div class="section-container">
+        <div class="section-header-row">
+          <div>
+            <span class="tech-card-badge">CFRP ARCHITECTURE</span>
+            <h2 class="section-title">CARBON-FIBER AERODYNAMICS</h2>
+          </div>
+          <p style="max-width: 500px; color: var(--colors-body-strong);">
+            Ultra-rigid motorsport composites engineered in Dingolfing for ruthless downforce and minimum unsprung mass.
+          </p>
+        </div>
+
+        <div class="tech-cards-grid">
+          <div class="tech-card">
+            <h3 style="font-size: 24px; margin-bottom: 12px; color: #fff;">CARBON CERAMIC BRAKING SYSTEM</h3>
+            <p style="font-size: 15px; margin-bottom: 20px;">
+              Featuring massive 400mm front ventilated discs with 6-piston fixed calipers finished in M Gold. Immune to thermal fade across grueling 20-minute track heats.
+            </p>
+            <div style="font: var(--typography-label-uppercase); color: var(--colors-on-dark);">WEIGHT SAVING: -14.3 KG</div>
+          </div>
+
+          <div class="tech-card">
+            <h3 style="font-size: 24px; margin-bottom: 12px; color: #fff;">DOUBLE-STRUT CARBON STRUT BRACE</h3>
+            <p style="font-size: 15px; margin-bottom: 20px;">
+              Triangulated engine bay bracing delivering razor-sharp turn-in feedback and immediate torsional rigidity across aggressive curb strikes.
+            </p>
+            <div style="font: var(--typography-label-uppercase); color: var(--colors-on-dark);">LATERAL STIFFNESS: +32%</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- RHYTHM 5: Magazine & Editorial 3-Up Grid (DESIGN.md §4: feature-photo-card) -->
+    <section class="magazine-band" id="magazine">
+      <div class="section-container">
+        <div class="section-header-row">
+          <div>
+            <span class="section-label">EDITORIAL DISPATCHES</span>
+            <h2 class="section-title">MORE FROM BMW M MAGAZINE</h2>
+          </div>
+          <a href="#magazine" class="text-link">EXPLORE ALL STORIES →</a>
+        </div>
+
+        <!-- Category Selector Tabs (DESIGN.md §4: category-tab) -->
+        <div class="category-tabs-nav" role="tablist">
+          <button class="category-tab active" data-filter="all">ALL</button>
+          <button class="category-tab" data-filter="magazine">MAGAZINE</button>
+          <button class="category-tab" data-filter="models">MODELS</button>
+          <button class="category-tab" data-filter="lifestyle">LIFESTYLE</button>
+          <button class="category-tab" data-filter="motorsport">MOTORSPORT</button>
+        </div>
+
+        <div class="cards-grid-3up" id="magazineGrid">
+          <!-- Editorial Card 1 -->
+          <article class="feature-photo-card" data-category="magazine">
+            <div class="feature-card-media">
+              <img src="https://images.unsplash.com/photo-1542282088-72c9c27ed0cd?auto=format&fit=crop&w=800&q=80" alt="M Sound calibration chamber" loading="lazy" />
+            </div>
+            <div class="feature-card-body">
+              <span class="card-category-tag">SOUND ARCHITECTURE</span>
+              <h3 class="feature-card-title">THE ACOUSTIC CALIBRATION OF THE STRAIGHT-SIX</h3>
+              <p class="feature-card-text">
+                Inside the acoustic test chambers of Aschheim: How engineers tune the twin-pipe active exhaust flaps for unfiltered mechanical timbre.
+              </p>
+              <a href="#magazine" class="text-link">READ FULL STORY →</a>
+            </div>
+          </article>
+
+          <!-- Editorial Card 2 -->
+          <article class="feature-photo-card" data-category="motorsport">
+            <div class="feature-card-media">
+              <img src="https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&w=800&q=80" alt="Cockpit of the BMW M Hybrid V8" loading="lazy" />
+            </div>
+            <div class="feature-card-body">
+              <span class="card-category-tag">MOTORSPORT DISPATCH</span>
+              <h3 class="feature-card-title">24 HOURS AT SPA: THE TELEMETRY BEHIND VICTORY</h3>
+              <p class="feature-card-text">
+                Analyzing 14,000 real-time sensor streams per lap through Eau Rouge. Why battery thermal management dictates the final podium sprint.
+              </p>
+              <a href="#magazine" class="text-link">READ FULL STORY →</a>
+            </div>
+          </article>
+
+          <!-- Editorial Card 3 -->
+          <article class="feature-photo-card" data-category="lifestyle">
+            <div class="feature-card-media">
+              <img src="https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?auto=format&fit=crop&w=800&q=80" alt="Drifting on ice in Arjeplog" loading="lazy" />
+            </div>
+            <div class="feature-card-body">
+              <span class="card-category-tag">M DRIVING EXPERIENCE</span>
+              <h3 class="feature-card-title">ICE DRIFT AT -28°C: THE WINTER TEST IN ARJEPLOG</h3>
+              <p class="feature-card-text">
+                Near the Arctic Circle, test drivers slide prototype M cars across frozen Swedish lakes to calibrate dynamic stability software.
+              </p>
+              <a href="#magazine" class="text-link">READ FULL STORY →</a>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- RHYTHM 6: Pre-Footer Full-Bleed Photo CTA Band (DESIGN.md §4: cta-band-photo) -->
+    <section class="cta-band-photo" id="configurator">
+      <div class="cta-band-inner">
+        <span class="section-label" style="color: #ffffff; letter-spacing: 2px;">THE APEX AWAITS</span>
+        <h2 class="cta-band-title">CONFIGURE YOUR BMW M</h2>
+        <p class="cta-band-subtitle">
+          Personalize your lightweight composite selections, forged wheel offsets, bespoke Merino leather cockpits, and track telemetry packs.
+        </p>
+        <div style="display: flex; gap: 16px; justify-content: center; flex-wrap: wrap;">
+          <a href="#configurator" class="button-primary">LAUNCH 3D CONFIGURATOR</a>
+          <button class="button-primary-outline" id="locateDealerBtn">LOCATE M CERTIFIED DEALER</button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Bottom M Tricolor Stripe -->
+  <div class="m-stripe-divider">
+    <span class="stop-1"></span>
+    <span class="stop-2"></span>
+    <span class="stop-3"></span>
+  </div>
+
+  <!-- Chatbot Launcher Card (DESIGN.md §4: chatbot-launcher) -->
+  <div class="chatbot-launcher-fixed" id="chatbotLauncher">
+    <div class="chatbot-launcher-card">
+      <div class="chatbot-header">
+        <div class="chatbot-title">
+          <div class="m-badge-slant">
+            <span class="bar bar-1"></span>
+            <span class="bar bar-2"></span>
+            <span class="bar bar-3"></span>
+          </div>
+          <span>BMW M INTELLIGENCE</span>
+        </div>
+        <button class="chatbot-close-btn" id="minimizeChatBtn" title="Dismiss Assistant">✕</button>
+      </div>
+      <p style="font-size: 13px; color: var(--colors-body-strong);">
+        Have questions regarding M specs, racetrack setups, or delivery timelines?
+      </p>
+      <button class="button-primary" id="openChatBtn" style="height: 40px; font-size: 12px;">
+        START CONVERSATION
+      </button>
+    </div>
+  </div>
+
+  <!-- Interactive Chatbot Drawer -->
+  <div class="chatbot-drawer" id="chatbotDrawer" role="dialog" aria-modal="true" aria-label="BMW M Assistant">
+    <div class="m-stripe-divider">
+      <span class="stop-1"></span>
+      <span class="stop-2"></span>
+      <span class="stop-3"></span>
+    </div>
+    <div class="chat-header-bar">
+      <div style="display: flex; align-items: center; gap: 8px;">
+        <span style="font: var(--typography-label-uppercase); color: #fff;">M PERFORMANCE ASSISTANT</span>
+      </div>
+      <button class="chatbot-close-btn" id="closeDrawerBtn">✕</button>
+    </div>
+    <div class="chat-messages-container" id="chatMessages">
+      <div class="chat-bubble bot">
+        Welcome to BMW M. I can help you configure your track setup, compare engine torque curves, or locate your nearest M Certified Center. What model are you exploring?
+      </div>
+    </div>
+    <form class="chat-input-bar" id="chatForm">
+      <input type="text" class="text-input" id="chatInput" placeholder="Ask about M3 CS, telemetry, track modes..." autocomplete="off" />
+      <button type="submit" class="button-primary" style="height: 44px; padding: 0 16px;">SEND</button>
+    </form>
+  </div>
+
+  <!-- Cookie Consent Card (DESIGN.md §4: cookie-consent-card) -->
+  <div class="cookie-consent-card" id="cookieCard">
+    <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+      <span style="font: var(--typography-label-uppercase); color: #fff;">DATA & TELEMETRY NOTICE</span>
+      <button class="chatbot-close-btn" id="dismissCookieX">✕</button>
+    </div>
+    <p class="cookie-text">
+      We use cookies and motorsport performance telemetry to optimize your browser experience, analyze visitor traffic, and deliver tailored M vehicle content.
+    </p>
+    <div class="cookie-actions">
+      <button class="button-primary" id="acceptCookiesBtn" style="height: 40px; font-size: 13px;">ACCEPT ALL COOKIES</button>
+      <a href="#privacy" class="text-link" style="font-size: 12px; justify-content: center;">MANAGE PREFERENCES →</a>
+    </div>
+  </div>
+
+  <!-- Footer (DESIGN.md §4: footer) -->
+  <footer class="site-footer">
+    <div class="section-container">
+      <div class="footer-grid-4col">
+        <!-- Col 1: BMW M Models -->
+        <div>
+          <h4 class="footer-col-title">BMW M MODELS</h4>
+          <ul class="footer-links-list">
+            <li><a href="#models">BMW M2 Coupé</a></li>
+            <li><a href="#models">BMW M3 Sedan & Touring</a></li>
+            <li><a href="#models">BMW M3 CS</a></li>
+            <li><a href="#models">BMW M4 Coupé & Convertible</a></li>
+            <li><a href="#models">BMW M5 Sedan & Touring</a></li>
+            <li><a href="#models">BMW M8 Gran Coupé</a></li>
+            <li><a href="#models">BMW XM Label Red</a></li>
+          </ul>
+        </div>
+
+        <!-- Col 2: BMW M Lifestyle -->
+        <div>
+          <h4 class="footer-col-title">BMW M LIFESTYLE</h4>
+          <ul class="footer-links-list">
+            <li><a href="#magazine">BMW M Magazine</a></li>
+            <li><a href="#lifestyle">M Driving Experience</a></li>
+            <li><a href="#lifestyle">Nürburgring Track Days</a></li>
+            <li><a href="#lifestyle">BMW M Motorsport Collection</a></li>
+            <li><a href="#lifestyle">M Heritage Archives</a></li>
+          </ul>
+        </div>
+
+        <!-- Col 3: Owners & Technology -->
+        <div>
+          <h4 class="footer-col-title">OWNERS & TECHNOLOGY</h4>
+          <ul class="footer-links-list">
+            <li><a href="#specs">M TwinPower Turbo Engines</a></li>
+            <li><a href="#specs">M xDrive All-Wheel Drive</a></li>
+            <li><a href="#specs">M Carbon Ceramic Brakes</a></li>
+            <li><a href="#specs">M Track Mode Telemetry</a></li>
+            <li><a href="#owners">BMW M Certified Service</a></li>
+          </ul>
+        </div>
+
+        <!-- Col 4: Company & Compliance -->
+        <div>
+          <h4 class="footer-col-title">COMPANY</h4>
+          <ul class="footer-links-list">
+            <li><a href="#about">About BMW M GmbH</a></li>
+            <li><a href="#contact">Contact Performance Concierge</a></li>
+            <li><a href="#dealers">Dealer Locator</a></li>
+            <li><a href="#careers">Motorsport Careers</a></li>
+            <li><a href="#press">Press & Media Dispatches</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="footer-bottom-row">
+        <p class="footer-disclaimer">
+          Official fuel consumption and specific CO2 emission values are determined in accordance with the prescribed WLTP measurement procedure. Vehicles depicted may reflect optional motorsport equipment and accessories not available in all markets.
+        </p>
+        <div style="display: flex; gap: 24px; align-items: center;">
+          <span style="font-size: 13px; color: var(--colors-muted);">© 2026 BMW M GmbH, Garching. All rights reserved.</span>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Interactive JavaScript Application Logic -->
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      // 1. Metric / Imperial Unit Toggle for Spec Table
+      const metricBtn = document.getElementById('metricToggle');
+      const imperialBtn = document.getElementById('imperialToggle');
+      const specHp = document.getElementById('specHp');
+      const specTorque = document.getElementById('specTorque');
+      const specAccel = document.getElementById('specAccel');
+      const specTopSpeed = document.getElementById('specTopSpeed');
+
+      metricBtn.addEventListener('click', () => {
+        metricBtn.classList.add('active');
+        imperialBtn.classList.remove('active');
+        specHp.textContent = '727 HP';
+        specTorque.textContent = '1,000 NM';
+        specAccel.textContent = '3.5 SEC';
+        specTopSpeed.textContent = '305 KM/H';
+      });
+
+      imperialBtn.addEventListener('click', () => {
+        imperialBtn.classList.add('active');
+        metricBtn.classList.remove('active');
+        specHp.textContent = '717 BHP';
+        specTorque.textContent = '737 LB-FT';
+        specAccel.textContent = '3.4 SEC';
+        specTopSpeed.textContent = '190 MPH';
+      });
+
+      // 2. Magazine Category Filter Tabs
+      const categoryTabs = document.querySelectorAll('.category-tab');
+      const featureCards = document.querySelectorAll('.feature-photo-card');
+
+      categoryTabs.forEach(tab => {
+        tab.addEventListener('click', () => {
+          categoryTabs.forEach(t => t.classList.remove('active'));
+          tab.classList.add('active');
+
+          const filter = tab.getAttribute('data-filter');
+          featureCards.forEach(card => {
+            const cardCat = card.getAttribute('data-category');
+            if (filter === 'all' || cardCat === filter) {
+              card.style.display = 'flex';
+            } else {
+              card.style.display = 'none';
+            }
+          });
+        });
+      });
+
+      // 3. Interactive Chatbot Drawer
+      const openChatBtn = document.getElementById('openChatBtn');
+      const closeDrawerBtn = document.getElementById('closeDrawerBtn');
+      const chatbotDrawer = document.getElementById('chatbotDrawer');
+      const chatbotLauncher = document.getElementById('chatbotLauncher');
+      const minimizeChatBtn = document.getElementById('minimizeChatBtn');
+      const chatForm = document.getElementById('chatForm');
+      const chatInput = document.getElementById('chatInput');
+      const chatMessages = document.getElementById('chatMessages');
+
+      openChatBtn.addEventListener('click', () => {
+        chatbotDrawer.classList.add('open');
+        chatbotLauncher.style.display = 'none';
+        chatInput.focus();
+      });
+
+      closeDrawerBtn.addEventListener('click', () => {
+        chatbotDrawer.classList.remove('open');
+        chatbotLauncher.style.display = 'block';
+      });
+
+      minimizeChatBtn.addEventListener('click', () => {
+        chatbotLauncher.style.display = 'none';
+      });
+
+      chatForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const query = chatInput.value.trim();
+        if (!query) return;
+
+        // Append User Bubble
+        const userBubble = document.createElement('div');
+        userBubble.className = 'chat-bubble user';
+        userBubble.textContent = query;
+        chatMessages.appendChild(userBubble);
+        chatInput.value = '';
+
+        // Simulate M Technical Concierge Response
+        setTimeout(() => {
+          const botBubble = document.createElement('div');
+          botBubble.className = 'chat-bubble bot';
+          const qLower = query.toLowerCase();
+          if (qLower.includes('m3') || qLower.includes('cs')) {
+            botBubble.textContent = "The BMW M3 CS features a 405 kW (550 hp) S58 twin-turbo inline 6-cylinder engine with a 0-100 km/h acceleration of 3.4 seconds and standard M xDrive with active M differential.";
+          } else if (qLower.includes('brake') || qLower.includes('carbon')) {
+            botBubble.textContent = "M Carbon Ceramic brakes reduce unsprung rotating mass by 14.3 kg compared to compound steel brakes, providing absolute fade-resistance at circuit temperatures above 800°C.";
+          } else if (qLower.includes('price') || qLower.includes('order')) {
+            botBubble.textContent = "M allocations can be customized through the M 3D Configurator or secured directly via your local M Certified center. Would you like me to connect you with an M specialist?";
+          } else {
+            botBubble.textContent = `The telemetry for "${query}" is calibrated for maximum dynamic response. You can view full technical diagrams in our engineering section.`;
+          }
+          chatMessages.appendChild(botBubble);
+          chatMessages.scrollTop = chatMessages.scrollHeight;
+        }, 400);
+      });
+
+      // 4. Cookie Notice Dismissal
+      const cookieCard = document.getElementById('cookieCard');
+      const acceptCookiesBtn = document.getElementById('acceptCookiesBtn');
+      const dismissCookieX = document.getElementById('dismissCookieX');
+
+      const hideCookie = () => { cookieCard.style.display = 'none'; };
+      acceptCookiesBtn.addEventListener('click', hideCookie);
+      dismissCookieX.addEventListener('click', hideCookie);
+
+      // 5. Sound Profile Button Feedback
+      const soundBtn = document.getElementById('soundToggleBtn');
+      let soundActive = false;
+      soundBtn.addEventListener('click', () => {
+        soundActive = !soundActive;
+        soundBtn.style.color = soundActive ? 'var(--colors-m-red)' : 'var(--colors-on-dark)';
+        soundBtn.title = soundActive ? 'Exhaust Active (Sport Plus)' : 'Exhaust Efficient';
+      });
+
+      // 6. Watch Film Button Feedback
+      const playFilmBtn = document.getElementById('playFilmBtn');
+      playFilmBtn.addEventListener('click', () => {
+        alert('BMW M Film: "THE SOUND OF PERFORMANCE" is now streaming in Full HD with M TwinPower Acoustic Soundstage.');
+      });
+    });
+  </script>
+</body>
+</html>

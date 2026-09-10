@@ -1,0 +1,1207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Slack — Workplace Communication Platform &amp; Design System</title>
+  <meta name="description" content="Slack design system featuring aubergine-primary sidebar, multi-accent logo palette, light content surfaces, 15px base typography, and authentic messaging UI.">
+
+  <!-- Font styling: System-UI / Lato for UI, Monaco/Menlo for Code, Larsseit styling for headings -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,300;0,400;0,700;0,900;1,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+  <style>
+    /* ==========================================================================
+       SLACK DESIGN SYSTEM TOKENS — Exactly matching slack/DESIGN.md
+       ========================================================================== */
+    :root {
+      /* Brand Primary Aubergine */
+      --color-aubergine: #4A154B;
+      --color-aubergine-dark: #350d36;
+      --color-aubergine-light: #611f69;
+
+      /* Logo Accent Colors (used sparingly for highlights & semantics) */
+      --color-blue: #36C5F0;    /* Sky Blue: links, info states */
+      --color-green: #2EB67D;   /* Teal Green: online status, success */
+      --color-yellow: #ECB22E;  /* Gold: away status, warning */
+      --color-red: #E01E5A;     /* Ruby: notifications, errors, mentions */
+
+      /* Surface & Background */
+      --bg-primary: #FFFFFF;
+      --bg-secondary: #F8F8F8;
+      --bg-tertiary: #F1F1F1;
+      --bg-sidebar: #4A154B;
+      --bg-sidebar-hover: rgba(255, 255, 255, 0.1);
+      --bg-sidebar-active: rgba(255, 255, 255, 0.2);
+      --bg-message-hover: #F8F8F8;
+
+      /* Text Colors */
+      --text-primary: #1D1C1D;  /* Primary body text (near-black, NOT pure black) */
+      --text-secondary: #616061; /* Timestamps, muted labels */
+      --text-sidebar: rgba(255, 255, 255, 0.9);
+      --text-sidebar-muted: rgba(255, 255, 255, 0.6);
+      --text-link: #1264A3;
+      --text-mention: #1264A3;
+
+      /* Semantic Colors */
+      --color-success: #2EB67D;
+      --color-warning: #ECB22E;
+      --color-danger: #E01E5A;
+      --color-info: #36C5F0;
+
+      /* Border & Divider */
+      --border-default: #DDDDDD;
+      --border-subtle: #F1F1F1;
+      --border-focus: #1264A3;
+
+      /* Typography Families */
+      --font-ui: "Lato", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      --font-code: 'Monaco', 'Menlo', 'JetBrains Mono', 'Courier New', monospace;
+
+      /* Slack Spacing Scale (4px base) */
+      --space-1: 4px;
+      --space-2: 8px;
+      --space-3: 12px;
+      --space-4: 16px;
+      --space-6: 24px;
+      --space-8: 32px;
+
+      /* Border Radii */
+      --radius-xs: 2px;
+      --radius-sm: 4px;
+      --radius-md: 6px;
+      --radius-lg: 8px;
+      --radius-full: 9999px;
+
+      /* Shadows (Elevation on light surface) */
+      --shadow-low: 0 1px 3px rgba(0, 0, 0, 0.08);
+      --shadow-medium: 0 4px 12px rgba(0, 0, 0, 0.12);
+      --shadow-high: 0 8px 24px rgba(0, 0, 0, 0.15);
+    }
+
+    /* Reset & Base Setup */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--bg-primary);
+      color: var(--text-primary);
+      font-family: var(--font-ui);
+      font-size: 15px; /* Base 15px rule */
+      line-height: 1.46667;
+      font-weight: 400;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    /* Full Window Three-Column Layout */
+    .slack-window {
+      display: flex;
+      height: 100vh;
+      width: 100vw;
+      overflow: hidden;
+    }
+
+    /* Column 1: Left Aubergine Sidebar (240px) */
+    .slack-sidebar {
+      width: 240px;
+      background-color: var(--bg-sidebar);
+      color: var(--text-sidebar);
+      display: flex;
+      flex-direction: column;
+      flex-shrink: 0;
+      user-select: none;
+      border-right: 1px solid rgba(0,0,0,0.15);
+    }
+
+    .workspace-header {
+      height: 52px;
+      padding: 0 var(--space-4);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      cursor: pointer;
+      transition: background 150ms ease;
+    }
+
+    .workspace-header:hover {
+      background: var(--bg-sidebar-hover);
+    }
+
+    .workspace-name {
+      font-size: 17px;
+      font-weight: 900;
+      color: #FFFFFF;
+      letter-spacing: -0.01em;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .workspace-chevron {
+      font-size: 11px;
+      opacity: 0.7;
+    }
+
+    .sidebar-scroll {
+      flex: 1;
+      overflow-y: auto;
+      padding: var(--space-3) var(--space-2);
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .sidebar-scroll::-webkit-scrollbar {
+      width: 6px;
+    }
+    .sidebar-scroll::-webkit-scrollbar-thumb {
+      background: rgba(255, 255, 255, 0.2);
+      border-radius: 3px;
+    }
+
+    .sidebar-section-title {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--text-sidebar-muted);
+      padding: 10px var(--space-2) 4px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      cursor: pointer;
+    }
+
+    .sidebar-section-title:hover {
+      color: #FFFFFF;
+    }
+
+    /* Channel Item Token */
+    .channel-item {
+      height: 28px;
+      padding: 0 var(--space-2);
+      border-radius: var(--radius-md);
+      color: rgba(255, 255, 255, 0.7);
+      font-size: 15px;
+      font-weight: 400;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      text-decoration: none;
+      cursor: pointer;
+      transition: background 120ms ease;
+    }
+
+    .channel-item:hover {
+      background: var(--bg-sidebar-hover);
+      color: #FFFFFF;
+    }
+
+    .channel-item.active {
+      background: var(--color-aubergine-light);
+      color: #FFFFFF;
+      font-weight: 700;
+    }
+
+    .channel-item.unread {
+      color: #FFFFFF;
+      font-weight: 700; /* Bold is unread indicator rule */
+    }
+
+    .channel-prefix {
+      margin-right: 6px;
+      font-size: 16px;
+      opacity: 0.7;
+    }
+
+    /* Unread Badge Token */
+    .badge {
+      background: var(--color-red);
+      color: #FFFFFF;
+      border-radius: var(--radius-lg);
+      font-size: 11px;
+      font-weight: 700;
+      padding: 1px 6px;
+      min-width: 18px;
+      text-align: center;
+    }
+
+    .user-item {
+      display: flex;
+      align-items: center;
+      gap: var(--space-2);
+    }
+
+    .status-dot-sm {
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+    .status-online { background-color: var(--color-green); }
+    .status-away {
+      background-color: transparent;
+      border: 2px solid var(--color-yellow);
+    }
+
+    /* Column 2: Central Message Area (flex: 1, #FFFFFF) */
+    .slack-main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      background-color: var(--bg-primary);
+      min-width: 0;
+      position: relative;
+    }
+
+    /* Channel Header Bar */
+    .channel-header {
+      height: 52px;
+      border-bottom: 1px solid var(--border-default);
+      padding: 0 var(--space-4);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-shrink: 0;
+    }
+
+    .channel-info-group {
+      display: flex;
+      align-items: baseline;
+      gap: var(--space-2);
+    }
+
+    .channel-name-title {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+
+    .channel-topic {
+      font-size: 13px;
+      color: var(--text-secondary);
+      max-width: 420px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: var(--space-3);
+    }
+
+    /* Message Stream */
+    .message-stream {
+      flex: 1;
+      overflow-y: auto;
+      padding: var(--space-4) 0;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .message-stream::-webkit-scrollbar {
+      width: 8px;
+    }
+    .message-stream::-webkit-scrollbar-thumb {
+      background: var(--border-default);
+      border-radius: 4px;
+    }
+
+    /* Date Divider */
+    .date-divider {
+      display: flex;
+      align-items: center;
+      margin: var(--space-4) var(--space-4);
+      position: relative;
+      text-align: center;
+    }
+
+    .date-divider::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      right: 0;
+      height: 1px;
+      background: var(--border-default);
+    }
+
+    .date-badge {
+      background: var(--bg-primary);
+      border: 1px solid var(--border-default);
+      border-radius: 20px;
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--text-primary);
+      padding: 2px 14px;
+      margin: 0 auto;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* Flat Message Row (No speech bubbles rule) */
+    .message-row {
+      display: flex;
+      padding: 8px var(--space-4);
+      gap: var(--space-3);
+      position: relative;
+      transition: background 100ms ease;
+    }
+
+    .message-row:hover {
+      background-color: var(--bg-message-hover);
+    }
+
+    .message-avatar {
+      width: 36px;
+      height: 36px;
+      border-radius: var(--radius-sm);
+      background-color: var(--color-aubergine);
+      color: #FFFFFF;
+      font-weight: 700;
+      font-size: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      user-select: none;
+    }
+
+    .message-content {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .message-meta {
+      display: flex;
+      align-items: baseline;
+      gap: var(--space-2);
+      margin-bottom: 2px;
+    }
+
+    .message-sender {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+
+    .message-timestamp {
+      font-size: 12px;
+      color: var(--text-secondary);
+      opacity: 0; /* Hover-only rule from DESIGN.md */
+      transition: opacity 120ms ease;
+    }
+
+    .message-row:hover .message-timestamp {
+      opacity: 1;
+    }
+
+    .message-body {
+      font-size: 15px;
+      color: var(--text-primary);
+      line-height: 1.46667;
+    }
+
+    .mention-tag {
+      background: rgba(18, 100, 163, 0.1);
+      color: var(--text-mention);
+      padding: 1px 4px;
+      border-radius: 3px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .mention-tag:hover {
+      background: rgba(18, 100, 163, 0.2);
+    }
+
+    /* Attachment token: 4px left border */
+    .attachment {
+      border-left: 4px solid var(--color-aubergine);
+      background: var(--bg-secondary);
+      border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+      padding: 8px var(--space-3);
+      margin: 6px 0;
+      border-top: 1px solid var(--border-default);
+      border-right: 1px solid var(--border-default);
+      border-bottom: 1px solid var(--border-default);
+      max-width: 580px;
+    }
+
+    .attachment-title {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text-link);
+      margin-bottom: 2px;
+    }
+
+    .attachment-desc {
+      font-size: 13px;
+      color: var(--text-secondary);
+    }
+
+    /* Code Block token */
+    .inline-code-block {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-default);
+      border-radius: var(--radius-sm);
+      font-family: var(--font-code);
+      font-size: 12px;
+      padding: 8px 12px;
+      margin: 6px 0;
+      color: var(--text-primary);
+      line-height: 1.5;
+      overflow-x: auto;
+    }
+
+    /* Reactions token */
+    .reactions-bar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px;
+      margin-top: 6px;
+    }
+
+    .reaction {
+      border: 1px solid var(--border-default);
+      border-radius: 24px; /* pill radius rule */
+      background: var(--bg-secondary);
+      padding: 2px 8px;
+      font-size: 13px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      user-select: none;
+      transition: background 120ms ease;
+    }
+
+    .reaction:hover {
+      background: var(--bg-tertiary);
+    }
+
+    .reaction.active {
+      background: rgba(18, 100, 163, 0.1);
+      border-color: var(--border-focus);
+    }
+
+    .reaction-count {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+
+    /* Message Action Hover Bar */
+    .message-hover-actions {
+      position: absolute;
+      top: -12px;
+      right: var(--space-4);
+      background: var(--bg-primary);
+      border: 1px solid var(--border-default);
+      border-radius: var(--radius-md);
+      box-shadow: var(--shadow-low);
+      display: none;
+      align-items: center;
+      padding: 2px;
+    }
+
+    .message-row:hover .message-hover-actions {
+      display: flex;
+    }
+
+    .action-icon-btn {
+      background: transparent;
+      border: none;
+      padding: 4px 6px;
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      font-size: 13px;
+    }
+
+    .action-icon-btn:hover {
+      background: var(--bg-tertiary);
+    }
+
+    /* Message Composer Token */
+    .composer-container {
+      margin: 0 var(--space-4) var(--space-4);
+      border: 1px solid var(--border-default);
+      border-radius: var(--radius-lg);
+      background: var(--bg-primary);
+      overflow: hidden;
+      box-shadow: var(--shadow-low);
+    }
+
+    .composer-container:focus-within {
+      border-color: var(--border-focus);
+      box-shadow: 0 0 0 2px rgba(18, 100, 163, 0.25);
+    }
+
+    .composer-toolbar-top {
+      padding: 6px 10px;
+      background: var(--bg-secondary);
+      border-bottom: 1px solid var(--border-default);
+      display: flex;
+      gap: 4px;
+    }
+
+    .toolbar-btn {
+      background: transparent;
+      border: none;
+      padding: 3px 6px;
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      font-size: 13px;
+      color: var(--text-secondary);
+      font-weight: 700;
+    }
+
+    .toolbar-btn:hover {
+      background: var(--bg-tertiary);
+      color: var(--text-primary);
+    }
+
+    .composer-textarea {
+      width: 100%;
+      min-height: 48px;
+      padding: 10px 12px;
+      border: none;
+      outline: none;
+      font-family: var(--font-ui);
+      font-size: 15px;
+      color: var(--text-primary);
+      resize: none;
+    }
+
+    .composer-bottom {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 4px 10px 8px;
+    }
+
+    /* Buttons: Primary 4px radius, 36px height aubergine rule */
+    .btn-primary {
+      background: var(--color-aubergine);
+      color: #FFFFFF;
+      border-radius: var(--radius-sm);
+      padding: 0 var(--space-4);
+      height: 36px;
+      font-size: 15px;
+      font-weight: 700;
+      border: none;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      transition: background 150ms ease;
+    }
+
+    .btn-primary:hover {
+      background: var(--color-aubergine-light);
+    }
+
+    .btn-secondary {
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      border: 1px solid var(--border-default);
+      border-radius: var(--radius-sm);
+      padding: 0 var(--space-4);
+      height: 36px;
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 150ms ease;
+    }
+
+    .btn-secondary:hover {
+      background: var(--bg-secondary);
+    }
+
+    .btn-danger {
+      background: var(--color-danger);
+      color: #FFFFFF;
+      border-radius: var(--radius-sm);
+      height: 36px;
+      padding: 0 var(--space-4);
+      font-weight: 700;
+      border: none;
+      cursor: pointer;
+    }
+    .btn-danger:hover {
+      background: #B3114A;
+    }
+
+    /* Column 3: Thread & Design System Inspector Panel (400px) */
+    .slack-thread-panel {
+      width: 380px;
+      background: var(--bg-secondary);
+      border-left: 1px solid var(--border-default);
+      display: flex;
+      flex-direction: column;
+      flex-shrink: 0;
+      overflow-y: auto;
+    }
+
+    .thread-header {
+      height: 52px;
+      border-bottom: 1px solid var(--border-default);
+      padding: 0 var(--space-4);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: var(--bg-primary);
+      flex-shrink: 0;
+    }
+
+    .thread-content {
+      padding: var(--space-4);
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-4);
+    }
+
+    .spec-card {
+      background: var(--bg-primary);
+      border: 1px solid var(--border-default);
+      border-radius: var(--radius-lg);
+      padding: var(--space-4);
+      box-shadow: var(--shadow-low);
+    }
+
+    .spec-card h3 {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: var(--space-2);
+    }
+
+    .palette-swatches {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: var(--space-2);
+      margin-top: var(--space-2);
+    }
+
+    .swatch-pill {
+      padding: 6px 8px;
+      border-radius: var(--radius-sm);
+      font-size: 12px;
+      font-family: var(--font-code);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      border: 1px solid var(--border-default);
+      background: var(--bg-primary);
+      cursor: pointer;
+    }
+
+    .swatch-color-dot {
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    /* Toast Notification */
+    .slack-toast {
+      position: fixed;
+      bottom: var(--space-6);
+      right: var(--space-6);
+      background: var(--text-primary);
+      color: #FFFFFF;
+      padding: 10px 16px;
+      border-radius: var(--radius-md);
+      font-size: 14px;
+      box-shadow: var(--shadow-medium);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: all 180ms ease;
+      z-index: 1000;
+    }
+
+    .slack-toast.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Responsive */
+    @media (max-width: 1024px) {
+      .slack-thread-panel {
+        display: none;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .slack-sidebar {
+        display: none;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="slack-window">
+    <!-- Column 1: Deep Aubergine Sidebar (#4A154B) -->
+    <aside class="slack-sidebar">
+      <div class="workspace-header" onclick="showToast('Workspace: Acme Global Design Studio')">
+        <div class="workspace-name">
+          Acme Studio <span class="workspace-chevron">▼</span>
+        </div>
+        <button style="background: rgba(255,255,255,0.15); border: none; border-radius: 4px; width: 28px; height: 28px; color: #fff; cursor: pointer;">✎</button>
+      </div>
+
+      <div class="sidebar-scroll">
+        <!-- Quick Nav -->
+        <a class="channel-item" href="#threads" onclick="showToast('Opened Threads')">
+          <span>💬 Threads</span>
+        </a>
+        <a class="channel-item" href="#dms" onclick="showToast('Opened Direct Messages')">
+          <span>✉️ All DMs</span>
+        </a>
+        <a class="channel-item" href="#drafts" onclick="showToast('Drafts & Sent')">
+          <span>📝 Drafts &amp; Sent</span>
+        </a>
+        <a class="channel-item" href="#canvas" onclick="showToast('Design System Canvas')">
+          <span>🎨 System Canvas</span>
+        </a>
+
+        <!-- Channels Header -->
+        <div class="sidebar-section-title">
+          <span>▼ Channels</span>
+          <span style="font-size: 16px; cursor: pointer;">+</span>
+        </div>
+
+        <a class="channel-item" href="#general" onclick="selectChannel(this, 'general', 'Company-wide announcements and general topics')">
+          <span><span class="channel-prefix">#</span>general</span>
+        </a>
+        
+        <a class="channel-item active unread" href="#design-systems" onclick="selectChannel(this, 'design-systems', 'Workplace tokens, Larsseit typography, and component standards')">
+          <span><span class="channel-prefix">#</span>design-systems</span>
+          <span class="badge">3</span>
+        </a>
+
+        <a class="channel-item unread" href="#releases" onclick="selectChannel(this, 'releases', 'Production release notes and weekly sprint changelog')">
+          <span><span class="channel-prefix">#</span>releases</span>
+          <span class="badge">1</span>
+        </a>
+
+        <a class="channel-item" href="#frontend" onclick="selectChannel(this, 'frontend', 'Web platform engineering and component libraries')">
+          <span><span class="channel-prefix">#</span>frontend</span>
+        </a>
+
+        <a class="channel-item" href="#random" onclick="selectChannel(this, 'random', 'Coffee chats, weekend links, and pet photos')">
+          <span><span class="channel-prefix">#</span>random</span>
+        </a>
+
+        <!-- Direct Messages Header -->
+        <div class="sidebar-section-title">
+          <span>▼ Direct Messages</span>
+          <span style="font-size: 16px; cursor: pointer;">+</span>
+        </div>
+
+        <a class="channel-item" href="#sophia" onclick="showToast('Chat with Sophia Chen')">
+          <span class="user-item">
+            <span class="status-dot-sm status-online"></span>
+            <span>Sophia Chen</span>
+          </span>
+        </a>
+
+        <a class="channel-item unread" href="#marcus" onclick="showToast('Chat with Marcus Vance')">
+          <span class="user-item">
+            <span class="status-dot-sm status-online"></span>
+            <span>Marcus Vance</span>
+          </span>
+          <span class="badge">1</span>
+        </a>
+
+        <a class="channel-item" href="#elena" onclick="showToast('Chat with Elena Rostova')">
+          <span class="user-item">
+            <span class="status-dot-sm status-away"></span>
+            <span>Elena Rostova</span>
+          </span>
+        </a>
+
+        <a class="channel-item" href="#slackbot" onclick="showToast('Slackbot Help')">
+          <span class="user-item">
+            <span style="font-size: 13px;">🤖</span>
+            <span>Slackbot</span>
+          </span>
+        </a>
+      </div>
+    </aside>
+
+    <!-- Column 2: Central Message Area (flex: 1, #FFFFFF) -->
+    <main class="slack-main">
+      <!-- Channel Header -->
+      <header class="channel-header">
+        <div class="channel-info-group">
+          <span class="channel-name-title" id="currentChannelTitle"># design-systems</span>
+          <span style="font-size: 13px; color: var(--text-secondary);">&bull; 42 members &bull;</span>
+          <span class="channel-topic" id="currentChannelTopic">
+            Workplace tokens, Larsseit typography, and component standards
+          </span>
+        </div>
+
+        <div class="header-actions">
+          <button class="btn-secondary" style="height: 30px; padding: 0 12px; font-size: 13px;" onclick="toggleThreadPanel()">
+            Design Tokens
+          </button>
+          <button class="btn-primary" style="height: 30px; padding: 0 12px; font-size: 13px;" onclick="showToast('Channel canvas opened')">
+            Canvas
+          </button>
+        </div>
+      </header>
+
+      <!-- Message Stream -->
+      <div class="message-stream" id="messageStream">
+        <!-- Date Divider -->
+        <div class="date-divider">
+          <div class="date-badge">Today, September 10th</div>
+        </div>
+
+        <!-- Message 1 -->
+        <div class="message-row">
+          <div class="message-avatar" style="background-color: var(--color-aubergine);">SC</div>
+          <div class="message-content">
+            <div class="message-meta">
+              <span class="message-sender">Sophia Chen</span>
+              <span class="message-timestamp">10:14 AM</span>
+            </div>
+            <div class="message-body">
+              Team, we just finalized the Slack design system foundations in <span class="mention-tag">@channel</span>. Notice our canonical light-first content area paired with the iconic deep aubergine sidebar (<span class="inline-code-block" style="display:inline; padding: 2px 4px;">#4A154B</span>).
+            </div>
+            <!-- Message Attachment -->
+            <div class="attachment">
+              <div class="attachment-title">Slack Token Specification v4.2</div>
+              <div class="attachment-desc">
+                Primary body text set to near-black (#1D1C1D), 15px base size, and 4px button radius.
+              </div>
+            </div>
+            <!-- Reactions -->
+            <div class="reactions-bar">
+              <span class="reaction active" onclick="toggleReaction(this)">
+                <span>🚀</span> <span class="reaction-count">5</span>
+              </span>
+              <span class="reaction" onclick="toggleReaction(this)">
+                <span>🎉</span> <span class="reaction-count">3</span>
+              </span>
+              <span class="reaction" onclick="toggleReaction(this)">
+                <span>💜</span> <span class="reaction-count">8</span>
+              </span>
+            </div>
+          </div>
+          <!-- Action Buttons on Hover -->
+          <div class="message-hover-actions">
+            <button class="action-icon-btn" onclick="addEmoji('🙌')">🙌</button>
+            <button class="action-icon-btn" onclick="addEmoji('👀')">👀</button>
+            <button class="action-icon-btn" onclick="toggleThreadPanel()">💬 Reply in thread</button>
+          </div>
+        </div>
+
+        <!-- Message 2 -->
+        <div class="message-row">
+          <div class="message-avatar" style="background-color: var(--color-blue); color: #0f172a;">MV</div>
+          <div class="message-content">
+            <div class="message-meta">
+              <span class="message-sender">Marcus Vance</span>
+              <span class="message-timestamp">10:28 AM</span>
+            </div>
+            <div class="message-body">
+              Confirmed! We've strictly audited the four logo accent colors: Sky Blue (<span style="color: #36C5F0; font-weight: 700;">#36C5F0</span>), Teal Green (<span style="color: #2EB67D; font-weight: 700;">#2EB67D</span>), Gold (<span style="color: #ECB22E; font-weight: 700;">#ECB22E</span>), and Ruby (<span style="color: #E01E5A; font-weight: 700;">#E01E5A</span>).
+            </div>
+            <div class="inline-code-block">
+/* Exact button token binding */
+.btn-primary {
+  background: #4A154B;
+  color: #FFFFFF;
+  border-radius: 4px;
+  height: 36px;
+  font-size: 15px;
+  font-weight: 700;
+}</div>
+            <div class="reactions-bar">
+              <span class="reaction active" onclick="toggleReaction(this)">
+                <span>✅</span> <span class="reaction-count">4</span>
+              </span>
+            </div>
+          </div>
+          <div class="message-hover-actions">
+            <button class="action-icon-btn" onclick="addEmoji('👍')">👍</button>
+            <button class="action-icon-btn" onclick="toggleThreadPanel()">💬 Reply</button>
+          </div>
+        </div>
+
+        <!-- Message 3 -->
+        <div class="message-row">
+          <div class="message-avatar" style="background-color: var(--color-green);">ER</div>
+          <div class="message-content">
+            <div class="message-meta">
+              <span class="message-sender">Elena Rostova</span>
+              <span class="message-timestamp">10:45 AM</span>
+            </div>
+            <div class="message-body">
+              Notice also that unread channels in the sidebar use weight 700 as the primary indicator, timestamps appear strictly on message hover, and all links use <span style="color: var(--text-link); text-decoration: underline;">#1264A3</span>.
+            </div>
+            <div class="reactions-bar">
+              <span class="reaction" onclick="toggleReaction(this)">
+                <span>🎯</span> <span class="reaction-count">6</span>
+              </span>
+            </div>
+          </div>
+          <div class="message-hover-actions">
+            <button class="action-icon-btn" onclick="addEmoji('💯')">💯</button>
+            <button class="action-icon-btn" onclick="toggleThreadPanel()">💬 Reply</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Message Composer (Pinned Bottom) -->
+      <div class="composer-container">
+        <div class="composer-toolbar-top">
+          <button class="toolbar-btn" title="Bold" onclick="formatText('**')">B</button>
+          <button class="toolbar-btn" title="Italic" onclick="formatText('_')">I</button>
+          <button class="toolbar-btn" title="Strikethrough" onclick="formatText('~')">S</button>
+          <button class="toolbar-btn" title="Link" onclick="formatText('https://')">🔗</button>
+          <button class="toolbar-btn" title="Code" onclick="formatText('`')">&lt;/&gt;</button>
+          <button class="toolbar-btn" title="Bullet List" onclick="formatText('• ')">•—</button>
+        </div>
+
+        <textarea id="composerInput" class="composer-textarea" placeholder="Message #design-systems..." onkeydown="handleComposerKey(event)"></textarea>
+
+        <div class="composer-bottom">
+          <div style="display: flex; gap: 6px;">
+            <button class="toolbar-btn" onclick="insertEmoji('😀')">😀</button>
+            <button class="toolbar-btn" onclick="insertEmoji('@')">@</button>
+            <button class="toolbar-btn" onclick="showToast('Attachment dialog')">📎</button>
+          </div>
+          <button class="btn-primary" style="height: 32px; padding: 0 14px;" onclick="sendLiveMessage()">
+            Send
+          </button>
+        </div>
+      </div>
+    </main>
+
+    <!-- Column 3: Thread & Design System Inspector Panel (400px) -->
+    <aside class="slack-thread-panel" id="threadPanel">
+      <div class="thread-header">
+        <span style="font-weight: 700; font-size: 16px;">Design System Spec</span>
+        <button style="background: transparent; border: none; font-size: 18px; cursor: pointer;" onclick="toggleThreadPanel()">&times;</button>
+      </div>
+
+      <div class="thread-content">
+        <!-- Token Palette Card -->
+        <div class="spec-card">
+          <h3>Slack Color Palette</h3>
+          <p style="font-size: 13px; color: var(--text-secondary); margin-bottom: 8px;">
+            Aubergine brand anchor with restrained 4-accent logo highlights.
+          </p>
+
+          <div class="palette-swatches">
+            <div class="swatch-pill" onclick="copyToken('#4A154B', 'Aubergine')">
+              <div class="swatch-color-dot" style="background: #4A154B;"></div>
+              <span>#4A154B</span>
+            </div>
+            <div class="swatch-pill" onclick="copyToken('#350d36', 'Aubergine Dark')">
+              <div class="swatch-color-dot" style="background: #350d36;"></div>
+              <span>#350d36</span>
+            </div>
+            <div class="swatch-pill" onclick="copyToken('#611f69', 'Aubergine Light')">
+              <div class="swatch-color-dot" style="background: #611f69;"></div>
+              <span>#611f69</span>
+            </div>
+            <div class="swatch-pill" onclick="copyToken('#1D1C1D', 'Text Primary')">
+              <div class="swatch-color-dot" style="background: #1D1C1D;"></div>
+              <span>#1D1C1D</span>
+            </div>
+            <div class="swatch-pill" onclick="copyToken('#36C5F0', 'Sky Blue')">
+              <div class="swatch-color-dot" style="background: #36C5F0;"></div>
+              <span>#36C5F0</span>
+            </div>
+            <div class="swatch-pill" onclick="copyToken('#2EB67D', 'Teal Green')">
+              <div class="swatch-color-dot" style="background: #2EB67D;"></div>
+              <span>#2EB67D</span>
+            </div>
+            <div class="swatch-pill" onclick="copyToken('#ECB22E', 'Gold Warning')">
+              <div class="swatch-color-dot" style="background: #ECB22E;"></div>
+              <span>#ECB22E</span>
+            </div>
+            <div class="swatch-pill" onclick="copyToken('#E01E5A', 'Ruby Red')">
+              <div class="swatch-color-dot" style="background: #E01E5A;"></div>
+              <span>#E01E5A</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Component Button Suite Card -->
+        <div class="spec-card">
+          <h3>Component Buttons</h3>
+          <p style="font-size: 13px; color: var(--text-secondary); margin-bottom: 12px;">
+            Strict 4px border-radius, 36px height, 15px bold font.
+          </p>
+          <div style="display: flex; flex-direction: column; gap: 8px;">
+            <button class="btn-primary" onclick="showToast('Aubergine Primary Button Triggered')">
+              Primary Button (#4A154B)
+            </button>
+            <button class="btn-secondary" onclick="showToast('Secondary Button Triggered')">
+              Secondary Button (#FFFFFF)
+            </button>
+            <button class="btn-danger" onclick="showToast('Danger Button Triggered')">
+              Danger Button (#E01E5A)
+            </button>
+          </div>
+        </div>
+
+        <!-- Typography Rules Card -->
+        <div class="spec-card">
+          <h3>Typography Scale</h3>
+          <ul style="list-style: none; font-size: 13px; line-height: 1.8; color: var(--text-secondary);">
+            <li><strong style="color: var(--text-primary);">Base UI:</strong> 15px (Slack standard)</li>
+            <li><strong style="color: var(--text-primary);">Secondary:</strong> 13px metadata</li>
+            <li><strong style="color: var(--text-primary);">Timestamps:</strong> 12px (hover-only)</li>
+            <li><strong style="color: var(--text-primary);">Code:</strong> 12px Monaco / Menlo</li>
+            <li><strong style="color: var(--text-primary);">Headings:</strong> 18px / 22px / 28px</li>
+          </ul>
+        </div>
+      </div>
+    </aside>
+  </div>
+
+  <!-- Toast Box -->
+  <div class="slack-toast" id="slackToast">
+    <span>✓</span> <span id="toastMsg">Action confirmed</span>
+  </div>
+
+  <script>
+    // Live Message Sending
+    function sendLiveMessage() {
+      const textarea = document.getElementById('composerInput');
+      const text = textarea.value.trim();
+      if (!text) return;
+
+      const stream = document.getElementById('messageStream');
+      const newRow = document.createElement('div');
+      newRow.className = 'message-row';
+      const now = new Date();
+      const timeStr = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+      newRow.innerHTML = `
+        <div class="message-avatar" style="background-color: var(--color-green);">ME</div>
+        <div class="message-content">
+          <div class="message-meta">
+            <span class="message-sender">You</span>
+            <span class="message-timestamp">${timeStr}</span>
+          </div>
+          <div class="message-body">${escapeHTML(text)}</div>
+          <div class="reactions-bar">
+            <span class="reaction" onclick="toggleReaction(this)">
+              <span>💜</span> <span class="reaction-count">1</span>
+            </span>
+          </div>
+        </div>
+        <div class="message-hover-actions">
+          <button class="action-icon-btn" onclick="addEmoji('👍')">👍</button>
+          <button class="action-icon-btn" onclick="toggleThreadPanel()">💬 Reply</button>
+        </div>
+      `;
+
+      stream.appendChild(newRow);
+      textarea.value = '';
+      stream.scrollTop = stream.scrollHeight;
+      showToast('Message sent to #design-systems');
+    }
+
+    function handleComposerKey(e) {
+      if (e.key === 'Enter' && !e.shiftKey) {
+        e.preventDefault();
+        sendLiveMessage();
+      }
+    }
+
+    function escapeHTML(str) {
+      return str.replace(/[&<>'"]/g, 
+        tag => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[tag] || tag)
+      );
+    }
+
+    // Reaction toggling
+    function toggleReaction(el) {
+      el.classList.toggle('active');
+      const countEl = el.querySelector('.reaction-count');
+      let count = parseInt(countEl.textContent, 10);
+      count = el.classList.contains('active') ? count + 1 : count - 1;
+      countEl.textContent = count;
+    }
+
+    // Channel switcher
+    function selectChannel(el, name, topic) {
+      document.querySelectorAll('.channel-item').forEach(c => c.classList.remove('active'));
+      el.classList.add('active');
+      el.classList.remove('unread');
+      const badge = el.querySelector('.badge');
+      if (badge) badge.remove();
+
+      document.getElementById('currentChannelTitle').textContent = `# ${name}`;
+      document.getElementById('currentChannelTopic').textContent = topic;
+      document.getElementById('composerInput').placeholder = `Message #${name}...`;
+      showToast(`Switched to #${name}`);
+    }
+
+    // Toggle Thread panel
+    function toggleThreadPanel() {
+      const panel = document.getElementById('threadPanel');
+      panel.style.display = (panel.style.display === 'none') ? 'flex' : 'none';
+    }
+
+    // Composer quick helpers
+    function formatText(wrapper) {
+      const ta = document.getElementById('composerInput');
+      ta.value += wrapper + 'sample' + wrapper;
+      ta.focus();
+    }
+
+    function insertEmoji(emoji) {
+      const ta = document.getElementById('composerInput');
+      ta.value += ' ' + emoji + ' ';
+      ta.focus();
+    }
+
+    function addEmoji(emoji) {
+      showToast(`Reaction added: ${emoji}`);
+    }
+
+    // Copy token
+    function copyToken(hex, name) {
+      navigator.clipboard.writeText(hex).then(() => {
+        showToast(`${name} token (${hex}) copied!`);
+      }).catch(() => {
+        showToast(`${name}: ${hex}`);
+      });
+    }
+
+    // Toast
+    function showToast(msg) {
+      const toast = document.getElementById('slackToast');
+      document.getElementById('toastMsg').textContent = msg;
+      toast.classList.add('show');
+      setTimeout(() => {
+        toast.classList.remove('show');
+      }, 2400);
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,1456 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>小红书 (RED) — 你的生活兴趣社区 | 标记我的生活</title>
+
+  <!-- Typography: PingFang SC system fallbacks & tabular digits -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    /* ==========================================================================
+       XIAOHONGSHU DESIGN SYSTEM TOKENS & FOUNDATIONS (from DESIGN.md)
+       ========================================================================== */
+    :root {
+      /* Primary Brand */
+      --primary: #FF2442;                 /* Token Brand Red (Design system source of truth) */
+      --color-red: #FF2442;
+      --primary-component: #FF2E4D;       /* Component Brand Red (Buttons & active bar replica) */
+      --color-yellow-star: #FDBC5F;       /* Star yellow (collected / bookmarks only) */
+
+      /* Neutrals: Translucent Overlays */
+      --bg: #FFFFFF;                      /* Surface: Cards, modals */
+      --bg0: #F5F5F5;                     /* Canvas: Page background */
+      --bg0-lighter: #FAFAFA;             /* Subtle info backgrounds */
+      --fill1: rgba(48, 48, 52, 0.05);   /* Lightest hover, group lines */
+      --fill2: rgba(48, 48, 52, 0.10);   /* Hover surface, disabled, following btn bg */
+      --fill3: rgba(48, 48, 52, 0.20);   /* Pressed */
+      --separator: rgba(0, 0, 0, 0.08);   /* Hairline border */
+      --separator2: rgba(0, 0, 0, 0.20);  /* Strong separator */
+      --opaque-separator: #EAEAEA;
+
+      /* Text Colors (Soft black, never pure #000) */
+      --title: rgba(0, 0, 0, 0.80);       /* Headings, primary text */
+      --paragraph: rgba(0, 0, 0, 0.62);   /* Body, secondary text */
+      --description: rgba(0, 0, 0, 0.45); /* Captions, tertiary */
+      --disabled: rgba(0, 0, 0, 0.27);    /* Disabled, placeholders */
+      --placeholder: rgba(0, 0, 0, 0.27);
+
+      /* Semantic (Token level) */
+      --success: #02B940;
+      --success2: #EAF8EF;
+      --warning: #FF7D03;
+      --warning2: #FFF2E6;
+      --info: #3D8AF5;
+      --link: #133667;
+
+      /* Functional Gradients (The only gradients permitted in RED) */
+      --search-hotspot-hint: linear-gradient(90deg, #FF2543 0%, #FF5225 100%);
+      --mask-video-player-mask: linear-gradient(180deg, rgba(0,0,0,0.25), rgba(0,0,0,0) 50%, rgba(0,0,0,0.75));
+
+      /* Typography Font Families */
+      --font-family-base: "PingFang SC", -apple-system, "Helvetica Neue", "Hiragino Sans GB", "Microsoft Yahei", "Noto Sans SC", Arial, sans-serif;
+      --font-family-number: "RED Number", "PingFang SC", -apple-system, "Helvetica Neue", Arial, sans-serif;
+
+      /* Typographic Hierarchy (PC Web Tokens) */
+      --h1-size: 32px; --h1-weight: 600; --h1-line: 40px;
+      --h2-size: 24px; --h2-weight: 600; --h2-line: 32px;
+      --h3-size: 20px; --h3-weight: 600; --h3-line: 28px;
+      --t1-size: 18px; --t1-weight: 600; --t1-line: 26px;
+      --t2-size: 16px; --t2-weight: 500; --t2-line: 24px;
+      --t3-size: 14px; --t3-weight: 500; --t3-line: 20px;
+      --b1-size: 16px; --b1-weight: 400; --b1-line: 24px;
+      --b2-size: 14px; --b2-weight: 400; --b2-line: 20px;
+      --c1-size: 13px; --c1-weight: 400; --c1-line: 20px;
+      --c2-size: 12px; --c2-weight: 400; --c2-line: 18px;
+      --c3-size: 10px; --c3-weight: 400; --c3-line: 14px;
+
+      /* Border Radii: Generous rounding everywhere */
+      --radius-card: 12px;
+      --radius-card-lg: 16px;
+      --radius-pill: 9999px;
+      --radius-sheet-top: 16px 16px 0 0;
+      --radius-circle: 50%;
+
+      /* Elevation: Flat by default; shadows are the rare exception */
+      --shadow-flat: none;
+      --shadow-hover: 0 4px 12px rgba(0, 0, 0, 0.08);
+      --shadow-modal: 0 8px 32px rgba(0, 0, 0, 0.12);
+
+      /* Spacing */
+      --space-4: 4px;
+      --space-8: 8px;
+      --space-10: 10px;
+      --space-12: 12px;
+      --space-16: 16px;
+      --space-20: 20px;
+      --space-24: 24px;
+      --space-32: 32px;
+      --space-48: 48px;
+    }
+
+    /* CSS Reset */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--bg0);
+      color: var(--paragraph);
+      font-family: var(--font-family-base);
+      font-size: var(--b2-size);
+      line-height: var(--b2-line);
+      letter-spacing: 0; /* Base tracking is strictly 0 */
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      overflow-x: hidden;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    /* Tabular Red Numbers */
+    .red-number {
+      font-family: var(--font-family-number);
+      font-variant-numeric: tabular-nums;
+    }
+
+    /* Outer Wrapper */
+    .app-shell {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ==========================================================================
+       TOP NAVIGATION HEADER
+       ========================================================================== */
+    .red-header {
+      background-color: var(--bg);
+      border-bottom: 1px solid var(--separator);
+      position: sticky;
+      top: 0;
+      z-index: 80;
+    }
+
+    .header-inner {
+      max-width: 1440px;
+      margin: 0 auto;
+      height: 72px;
+      padding: 0 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+    }
+
+    /* Brand Logo / Identifier */
+    .brand-wrap {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+      user-select: none;
+    }
+
+    .brand-badge {
+      background-color: var(--primary);
+      color: #FFFFFF;
+      font-family: var(--font-family-base);
+      font-weight: 700;
+      font-size: 15px;
+      letter-spacing: 0.5px;
+      padding: 4px 12px;
+      border-radius: var(--radius-pill);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .brand-slogan {
+      font-size: 13px;
+      color: var(--description);
+      font-weight: 500;
+    }
+
+    /* Search Bar (Pill 9999px, #F5F5F5, no border) */
+    .search-container {
+      flex: 1;
+      max-width: 520px;
+      position: relative;
+    }
+
+    .search-box {
+      width: 100%;
+      height: 40px;
+      background-color: var(--bg0);
+      border-radius: var(--radius-pill);
+      border: 1px solid transparent;
+      padding: 0 16px 0 42px;
+      font-family: var(--font-family-base);
+      font-size: 14px;
+      color: var(--title);
+      outline: none;
+      transition: all 180ms ease;
+    }
+
+    .search-box:focus {
+      background-color: var(--bg);
+      border-color: var(--separator2);
+      box-shadow: 0 0 0 1px var(--separator2);
+    }
+
+    .search-box::placeholder {
+      color: var(--placeholder);
+    }
+
+    .search-icon {
+      position: absolute;
+      left: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--description);
+      pointer-events: none;
+    }
+
+    .hotspot-tag {
+      position: absolute;
+      right: 8px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: var(--search-hotspot-hint);
+      color: #FFFFFF;
+      font-size: 11px;
+      font-weight: 600;
+      padding: 2px 8px;
+      border-radius: var(--radius-pill);
+    }
+
+    /* Right Action Bar */
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    /* Primary Pill Button */
+    .btn-red-primary {
+      background-color: var(--primary);
+      color: #FFFFFF;
+      font-family: var(--font-family-base);
+      font-size: 14px;
+      font-weight: 500;
+      border-radius: var(--radius-pill);
+      padding: 8px 20px;
+      border: none;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: opacity 150ms ease;
+      user-select: none;
+    }
+
+    .btn-red-primary:hover {
+      opacity: 0.92;
+    }
+
+    .btn-red-primary:active {
+      background-color: var(--primary-component);
+    }
+
+    .icon-action-btn {
+      background: transparent;
+      border: none;
+      width: 40px;
+      height: 40px;
+      border-radius: var(--radius-circle);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--paragraph);
+      cursor: pointer;
+      position: relative;
+      transition: background-color 150ms ease;
+    }
+
+    .icon-action-btn:hover {
+      background-color: var(--fill1);
+    }
+
+    .numeric-badge {
+      position: absolute;
+      top: 4px;
+      right: 4px;
+      background-color: var(--primary);
+      color: #FFFFFF;
+      font-size: 10px;
+      font-weight: 600;
+      min-width: 16px;
+      height: 16px;
+      border-radius: var(--radius-pill);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0 4px;
+      border: 1.5px solid #FFFFFF;
+    }
+
+    /* User Profile Avatar (Circular 50% with Red Creator V Badge) */
+    .user-avatar-wrap {
+      position: relative;
+      cursor: pointer;
+    }
+
+    .avatar-img {
+      width: 36px;
+      height: 36px;
+      border-radius: var(--radius-circle);
+      object-fit: cover;
+      display: block;
+    }
+
+    .creator-v-badge {
+      position: absolute;
+      bottom: -2px;
+      right: -2px;
+      width: 14px;
+      height: 14px;
+      background-color: var(--primary);
+      border: 1.5px solid #FFFFFF;
+      border-radius: var(--radius-circle);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #FFFFFF;
+      font-size: 8px;
+      font-weight: 800;
+    }
+
+    /* ==========================================================================
+       CATEGORY CHANNEL TABS (2px Underline Bar #FF2E4D, never chip)
+       ========================================================================== */
+    .channel-nav-strip {
+      background-color: var(--bg);
+      border-bottom: 1px solid var(--separator);
+    }
+
+    .channel-nav-inner {
+      max-width: 1440px;
+      margin: 0 auto;
+      padding: 0 24px;
+      display: flex;
+      align-items: center;
+      gap: 36px;
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+
+    .channel-nav-inner::-webkit-scrollbar {
+      display: none;
+    }
+
+    .channel-tab {
+      position: relative;
+      padding: 14px 0;
+      font-family: var(--font-family-base);
+      font-size: 16px;
+      font-weight: 400;
+      color: var(--description);
+      cursor: pointer;
+      white-space: nowrap;
+      transition: color 150ms ease;
+    }
+
+    .channel-tab:hover {
+      color: var(--title);
+    }
+
+    .channel-tab.active {
+      color: var(--title);
+      font-weight: 600;
+    }
+
+    /* 2px Underline bar in Component Red (#FF2E4D) */
+    .channel-tab.active::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 2px;
+      background-color: var(--primary-component);
+      border-radius: 1px;
+    }
+
+    /* Trending Topics Sub-strip */
+    .topics-strip {
+      max-width: 1440px;
+      margin: 0 auto;
+      padding: 14px 24px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+
+    .topic-pill {
+      background-color: var(--fill2);
+      color: var(--paragraph);
+      font-size: 12px;
+      font-weight: 500;
+      padding: 5px 14px;
+      border-radius: var(--radius-pill);
+      cursor: pointer;
+      white-space: nowrap;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      transition: background-color 150ms ease;
+    }
+
+    .topic-pill:hover {
+      background-color: var(--fill3);
+    }
+
+    .topic-pill.hot {
+      background-color: var(--primary);
+      color: #FFFFFF;
+    }
+
+    /* ==========================================================================
+       WATERFALL MASONRY FEED (5 Columns Desktop, 10px Gap)
+       ========================================================================== */
+    .feed-container {
+      max-width: 1440px;
+      margin: 0 auto;
+      padding: 16px 24px 64px 24px;
+      flex: 1;
+    }
+
+    .masonry-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: var(--space-10);
+      align-items: start;
+    }
+
+    .masonry-column {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-10);
+    }
+
+    /* Note Card: Radius 12px, Flat, White on #F5F5F5 Canvas */
+    .note-card {
+      background-color: var(--bg);
+      border-radius: var(--radius-card);
+      overflow: hidden;
+      box-shadow: var(--shadow-flat); /* No shadow by default */
+      cursor: pointer;
+      transition: transform 180ms ease, box-shadow 180ms ease;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .note-card:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-hover); /* Subtle PC hover shadow */
+    }
+
+    .note-cover-wrap {
+      width: 100%;
+      position: relative;
+      background-color: #EFEFEF;
+    }
+
+    .note-cover-svg {
+      width: 100%;
+      height: 100%;
+      display: block;
+      border-top-left-radius: var(--radius-card);
+      border-top-right-radius: var(--radius-card);
+      object-fit: cover;
+    }
+
+    .note-tag-badge {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      background: rgba(0, 0, 0, 0.45);
+      backdrop-filter: blur(4px);
+      color: #FFFFFF;
+      font-size: 11px;
+      padding: 3px 8px;
+      border-radius: var(--radius-pill);
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .note-content-body {
+      padding: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .note-title {
+      font-family: var(--font-family-base);
+      font-size: 14px;
+      font-weight: 500;
+      line-height: 20px;
+      color: var(--title);
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .note-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+    }
+
+    .creator-info {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      overflow: hidden;
+    }
+
+    .creator-avatar {
+      width: 22px;
+      height: 22px;
+      border-radius: var(--radius-circle);
+      flex-shrink: 0;
+    }
+
+    .creator-name {
+      font-size: 12px;
+      color: var(--description);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 110px;
+    }
+
+    /* Interactive Heart / Like Button */
+    .like-btn {
+      background: transparent;
+      border: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      color: var(--description);
+      cursor: pointer;
+      font-size: 12px;
+      padding: 2px;
+      transition: color 120ms ease;
+    }
+
+    .like-btn.liked {
+      color: var(--primary);
+    }
+
+    .like-btn.liked svg {
+      fill: var(--primary);
+      stroke: var(--primary);
+    }
+
+    /* ==========================================================================
+       THREE-STATE FOLLOW BUTTON (Highest-recognition component)
+       ========================================================================== */
+    .btn-follow {
+      font-family: var(--font-family-base);
+      font-size: 12px;
+      font-weight: 500;
+      border-radius: var(--radius-pill);
+      padding: 5px 14px;
+      border: none;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 150ms ease;
+      white-space: nowrap;
+    }
+
+    /* State 1: Not Following */
+    .btn-follow.not-following {
+      background-color: var(--primary);
+      color: #FFFFFF;
+    }
+
+    /* State 2: Following */
+    .btn-follow.following {
+      background-color: var(--fill2);
+      color: var(--description);
+    }
+
+    /* State 3: Mutual */
+    .btn-follow.mutual {
+      background-color: var(--fill2);
+      color: var(--paragraph);
+    }
+
+    /* ==========================================================================
+       NOTE DETAIL MODAL (PC: 2-Pane Left Media / Right Comments)
+       ========================================================================== */
+    .modal-backdrop {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(0, 0, 0, 0.5);
+      z-index: 100;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      backdrop-filter: blur(2px);
+    }
+
+    .modal-backdrop.open {
+      display: flex;
+    }
+
+    .note-modal-card {
+      background: var(--bg);
+      border-radius: var(--radius-card); /* 12px */
+      box-shadow: var(--shadow-modal);
+      width: 960px;
+      max-width: 92vw;
+      height: 680px;
+      max-height: 90vh;
+      display: grid;
+      grid-template-columns: 520px 1fr;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .modal-close-btn {
+      position: absolute;
+      top: 14px;
+      right: 14px;
+      width: 32px;
+      height: 32px;
+      border-radius: var(--radius-circle);
+      background: rgba(0, 0, 0, 0.06);
+      border: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      z-index: 10;
+      color: var(--paragraph);
+      transition: background-color 150ms ease;
+    }
+
+    .modal-close-btn:hover {
+      background: rgba(0, 0, 0, 0.12);
+    }
+
+    .modal-media-pane {
+      background-color: #0E0E11;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+
+    .modal-content-pane {
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      background: var(--bg);
+    }
+
+    .modal-creator-header {
+      padding: 16px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid var(--separator);
+    }
+
+    .modal-creator-profile {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .modal-creator-avatar {
+      width: 42px;
+      height: 42px;
+      border-radius: var(--radius-circle);
+    }
+
+    .modal-body-scroll {
+      flex: 1;
+      padding: 20px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .modal-note-title {
+      font-size: 18px;
+      font-weight: 600;
+      color: var(--title);
+      line-height: 1.4;
+    }
+
+    .modal-note-text {
+      font-size: 14px;
+      line-height: 1.6;
+      color: var(--paragraph);
+      white-space: pre-line;
+    }
+
+    .modal-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 8px;
+    }
+
+    .tag-link {
+      color: var(--link);
+      font-size: 13px;
+      cursor: pointer;
+    }
+
+    .tag-link:hover {
+      color: var(--primary);
+    }
+
+    .comment-list-title {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--title);
+      padding-top: 14px;
+      border-top: 1px solid var(--separator);
+    }
+
+    .comment-item {
+      display: flex;
+      gap: 10px;
+      font-size: 13px;
+    }
+
+    .comment-avatar {
+      width: 28px;
+      height: 28px;
+      border-radius: var(--radius-circle);
+      flex-shrink: 0;
+    }
+
+    .comment-user {
+      font-weight: 500;
+      color: var(--description);
+      margin-bottom: 2px;
+    }
+
+    .comment-text {
+      color: var(--paragraph);
+      line-height: 1.4;
+    }
+
+    .modal-action-footer {
+      padding: 14px 20px;
+      border-top: 1px solid var(--separator);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: var(--bg);
+    }
+
+    .action-icons-group {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .action-counter-btn {
+      background: transparent;
+      border: none;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 13px;
+      color: var(--title);
+      cursor: pointer;
+      font-weight: 500;
+    }
+
+    .action-counter-btn.collected {
+      color: var(--color-yellow-star);
+    }
+
+    .action-counter-btn.collected svg {
+      fill: var(--color-yellow-star);
+      stroke: var(--color-yellow-star);
+    }
+
+    /* ==========================================================================
+       BOTTOM SHEET (Mobile only demonstration)
+       ========================================================================== */
+    .mobile-bottom-sheet {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      background: var(--bg);
+      border-radius: var(--radius-sheet-top); /* 16px 16px 0 0 */
+      padding: 16px 20px 32px 20px;
+      box-shadow: 0 -4px 16px rgba(0,0,0,0.1);
+      z-index: 90;
+      display: none;
+    }
+
+    .sheet-drag-handle {
+      width: 36px;
+      height: 4px;
+      background-color: #E0E0E0;
+      border-radius: 2px;
+      margin: 0 auto 16px auto;
+    }
+
+    /* ==========================================================================
+       RESPONSIVE WATERFALL BREAKPOINTS (from DESIGN.md)
+       >=960px: 5 cols
+       690-960px: 4 cols
+       500-690px: 3 cols
+       <500px: 2 cols
+       ========================================================================== */
+    @media (max-width: 960px) {
+      .masonry-grid {
+        grid-template-columns: repeat(4, 1fr);
+      }
+      .masonry-column:nth-child(5) {
+        display: none;
+      }
+      .note-modal-card {
+        grid-template-columns: 1fr;
+        height: auto;
+        max-height: 85vh;
+        overflow-y: auto;
+      }
+      .modal-media-pane {
+        height: 320px;
+      }
+    }
+
+    @media (max-width: 690px) {
+      .masonry-grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+      .masonry-column:nth-child(4) {
+        display: none;
+      }
+      .search-container {
+        max-width: 240px;
+      }
+      .brand-slogan {
+        display: none;
+      }
+    }
+
+    @media (max-width: 500px) {
+      .masonry-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      .masonry-column:nth-child(3) {
+        display: none;
+      }
+      .header-inner {
+        padding: 0 12px;
+        gap: 12px;
+      }
+      .search-container {
+        flex: 1;
+        max-width: none;
+      }
+      .feed-container {
+        padding: 12px 10px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="app-shell">
+    
+    <!-- TOP HEADER -->
+    <header class="red-header">
+      <div class="header-inner">
+        <!-- Logo / Lifestyle Brand -->
+        <a href="#" class="brand-wrap" aria-label="小红书 首页">
+          <div class="brand-badge">小红书</div>
+          <span class="brand-slogan">标记我的生活</span>
+        </a>
+
+        <!-- Search Bar with Pill shape, #F5F5F5 and Hotspot Tag -->
+        <div class="search-container">
+          <svg class="search-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+          <input type="text" class="search-box" placeholder="搜索你感兴趣的内容，如「秋日露营」" aria-label="搜索笔记">
+          <span class="hotspot-tag">热搜</span>
+        </div>
+
+        <!-- Action controls -->
+        <div class="header-actions">
+          <button class="btn-red-primary" onclick="alert('开启记录生活：上传你的今日图文笔记')">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+            <span>发布笔记</span>
+          </button>
+
+          <button class="icon-action-btn" aria-label="消息通知">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
+            <span class="numeric-badge red-number">3</span>
+          </button>
+
+          <div class="user-avatar-wrap" onclick="toggleBottomSheet()">
+            <svg class="avatar-img" viewBox="0 0 40 40">
+              <circle cx="20" cy="20" r="20" fill="#FFE3E7"/>
+              <circle cx="20" cy="15" r="7" fill="#FF2442"/>
+              <path d="M8 34C8 27.37 13.37 22 20 22C26.63 22 32 27.37 32 34" fill="#FF2442"/>
+            </svg>
+            <span class="creator-v-badge">V</span>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- CHANNEL NAVIGATION TABS (2px Underline in #FF2E4D) -->
+    <nav class="channel-nav-strip">
+      <div class="channel-nav-inner">
+        <div class="channel-tab active" onclick="switchChannel(this)">推荐</div>
+        <div class="channel-tab" onclick="switchChannel(this)">穿搭秀场</div>
+        <div class="channel-tab" onclick="switchChannel(this)">美食探店</div>
+        <div class="channel-tab" onclick="switchChannel(this)">家居设计</div>
+        <div class="channel-tab" onclick="switchChannel(this)">慢调旅行</div>
+        <div class="channel-tab" onclick="switchChannel(this)">胶片摄影</div>
+        <div class="channel-tab" onclick="switchChannel(this)">数字生活</div>
+        <div class="channel-tab" onclick="switchChannel(this)">户外露营</div>
+      </div>
+    </nav>
+
+    <!-- TRENDING TOPICS PILL STRIP -->
+    <div class="topics-strip">
+      <div class="topic-pill hot"># 今日咖啡日常</div>
+      <div class="topic-pill"># 极简衣橱计划</div>
+      <div class="topic-pill"># 周末不宅家探店</div>
+      <div class="topic-pill"># 书房一角治愈感</div>
+      <div class="topic-pill"># 胶片相机色彩</div>
+      <div class="topic-pill"># 自制低卡轻食</div>
+      <div class="topic-pill"># 京都秋日散步</div>
+      <div class="topic-pill"># 新手绿植指南</div>
+    </div>
+
+    <!-- MAIN WATERFALL MASONRY (5 Columns on Desktop) -->
+    <main class="feed-container">
+      <div class="masonry-grid">
+        
+        <!-- COLUMN 1 -->
+        <div class="masonry-column">
+          
+          <!-- Note 1: 3:4 Aspect -->
+          <article class="note-card" onclick="openNoteModal(1)">
+            <div class="note-cover-wrap" style="aspect-ratio: 3/4;">
+              <svg class="note-cover-svg" viewBox="0 0 300 400" preserveAspectRatio="xMidYMid slice">
+                <rect width="300" height="400" fill="#E8DEC8"/>
+                <circle cx="150" cy="180" r="75" fill="#D5C5A1"/>
+                <path d="M120 180C120 150 180 150 180 180C180 210 120 210 120 180Z" fill="#583A20"/>
+                <circle cx="150" cy="180" r="35" fill="#C29A64"/>
+                <rect x="140" y="270" width="20" height="70" rx="4" fill="#3D3025"/>
+                <text x="150" y="370" font-family="sans-serif" font-size="12" fill="#5C4D3C" text-anchor="middle">HAND DRIP COFFEE // ETHIOPIA</text>
+              </svg>
+              <div class="note-tag-badge">探店指南</div>
+            </div>
+            <div class="note-content-body">
+              <h2 class="note-title">藏在老弄堂里的治愈系手冲小店，浅烘耶加雪菲的柑橘香气太温柔了 ☕️</h2>
+              <div class="note-footer">
+                <div class="creator-info">
+                  <div class="creator-avatar" style="background: #FF7D03;"></div>
+                  <span class="creator-name">林间慢咖啡</span>
+                </div>
+                <button class="like-btn" onclick="event.stopPropagation(); toggleLike(this, 1280)">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+                  <span class="red-number">1280</span>
+                </button>
+              </div>
+            </div>
+          </article>
+
+          <!-- Note 2: 1:1 Aspect -->
+          <article class="note-card" onclick="openNoteModal(2)">
+            <div class="note-cover-wrap" style="aspect-ratio: 1/1;">
+              <svg class="note-cover-svg" viewBox="0 0 300 300">
+                <rect width="300" height="300" fill="#D9E2EC"/>
+                <rect x="60" y="70" width="180" height="150" rx="14" fill="#486581"/>
+                <circle cx="150" cy="145" r="44" fill="#102A43"/>
+                <circle cx="150" cy="145" r="28" fill="#334E68" stroke="#829AB1" stroke-width="3"/>
+                <rect x="75" y="55" width="30" height="15" rx="3" fill="#627D98"/>
+              </svg>
+            </div>
+            <div class="note-content-body">
+              <h2 class="note-title">带着理光GR3去扫街，街头光影抓拍的松弛感瞬间 📷</h2>
+              <div class="note-footer">
+                <div class="creator-info">
+                  <div class="creator-avatar" style="background: #3D8AF5;"></div>
+                  <span class="creator-name">街头观察者阿澈</span>
+                </div>
+                <button class="like-btn" onclick="event.stopPropagation(); toggleLike(this, 842)">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+                  <span class="red-number">842</span>
+                </button>
+              </div>
+            </div>
+          </article>
+
+        </div>
+
+        <!-- COLUMN 2 -->
+        <div class="masonry-column">
+          
+          <!-- Note 3: 4:5 Aspect -->
+          <article class="note-card" onclick="openNoteModal(3)">
+            <div class="note-cover-wrap" style="aspect-ratio: 4/5;">
+              <svg class="note-cover-svg" viewBox="0 0 320 400">
+                <rect width="320" height="400" fill="#E2E8F0"/>
+                <path d="M80 120L160 80L240 120L220 300H100L80 120Z" fill="#94A3B8"/>
+                <rect x="135" y="160" width="50" height="90" rx="6" fill="#F8FAFC"/>
+                <text x="160" y="350" font-family="sans-serif" font-size="12" fill="#475569" text-anchor="middle">AUTUMN OUTFIT 03</text>
+              </svg>
+              <div class="note-tag-badge">每日OOTD</div>
+            </div>
+            <div class="note-content-body">
+              <h2 class="note-title">入秋的第一套松弛感叠穿，亚麻衬衫配灰色阔腿裤的高级灰调 🍂</h2>
+              <div class="note-footer">
+                <div class="creator-info">
+                  <div class="creator-avatar" style="background: #E53E3E;"></div>
+                  <span class="creator-name">苏苏的穿搭手册</span>
+                </div>
+                <button class="like-btn" onclick="event.stopPropagation(); toggleLike(this, 3420)">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+                  <span class="red-number">3420</span>
+                </button>
+              </div>
+            </div>
+          </article>
+
+          <!-- Note 4: 3:4 Aspect -->
+          <article class="note-card" onclick="openNoteModal(4)">
+            <div class="note-cover-wrap" style="aspect-ratio: 3/4;">
+              <svg class="note-cover-svg" viewBox="0 0 300 400">
+                <rect width="300" height="400" fill="#FDE2E4"/>
+                <circle cx="150" cy="190" r="80" fill="#FFCAD4"/>
+                <rect x="130" y="230" width="40" height="50" rx="8" fill="#B5838D"/>
+                <path d="M120 150Q150 120 180 150" stroke="#6D6875" stroke-width="4" fill="none"/>
+              </svg>
+            </div>
+            <div class="note-content-body">
+              <h2 class="note-title">坚持早起做一份巴斯克芝士蛋糕，表层焦糖香气弥漫整个清晨 🧀</h2>
+              <div class="note-footer">
+                <div class="creator-info">
+                  <div class="creator-avatar" style="background: #FDBC5F;"></div>
+                  <span class="creator-name">小安烘焙室</span>
+                </div>
+                <button class="like-btn" onclick="event.stopPropagation(); toggleLike(this, 915)">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+                  <span class="red-number">915</span>
+                </button>
+              </div>
+            </div>
+          </article>
+
+        </div>
+
+        <!-- COLUMN 3 -->
+        <div class="masonry-column">
+          
+          <!-- Note 5: 1:1 Aspect -->
+          <article class="note-card" onclick="openNoteModal(5)">
+            <div class="note-cover-wrap" style="aspect-ratio: 1/1;">
+              <svg class="note-cover-svg" viewBox="0 0 300 300">
+                <rect width="300" height="300" fill="#E0E7FF"/>
+                <rect x="50" y="80" width="200" height="140" rx="8" fill="#4338CA"/>
+                <circle cx="150" cy="150" r="30" fill="#C7D2FE"/>
+              </svg>
+              <div class="note-tag-badge">桌搭灵感</div>
+            </div>
+            <div class="note-content-body">
+              <h2 class="note-title">花三个周末改造的无线桌面：胡桃木升降桌与护眼屏幕挂灯 ✨</h2>
+              <div class="note-footer">
+                <div class="creator-info">
+                  <div class="creator-avatar" style="background: #4338CA;"></div>
+                  <span class="creator-name">极客木木</span>
+                </div>
+                <button class="like-btn" onclick="event.stopPropagation(); toggleLike(this, 2140)">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+                  <span class="red-number">2140</span>
+                </button>
+              </div>
+            </div>
+          </article>
+
+          <!-- Note 6: 4:5 Aspect -->
+          <article class="note-card" onclick="openNoteModal(6)">
+            <div class="note-cover-wrap" style="aspect-ratio: 4/5;">
+              <svg class="note-cover-svg" viewBox="0 0 320 400">
+                <rect width="320" height="400" fill="#DCFCE7"/>
+                <path d="M160 100 Q190 180 160 260 Q130 180 160 100Z" fill="#15803D"/>
+                <path d="M190 140 Q240 200 200 280 Q160 220 190 140Z" fill="#22C55E"/>
+                <path d="M130 140 Q80 200 120 280 Q160 220 130 140Z" fill="#16A34A"/>
+                <rect x="135" y="270" width="50" height="60" rx="6" fill="#78350F"/>
+              </svg>
+            </div>
+            <div class="note-content-body">
+              <h2 class="note-title">把客厅变成热带雨林！新手也绝不踩雷的耐阴室内大叶绿植 🌿</h2>
+              <div class="note-footer">
+                <div class="creator-info">
+                  <div class="creator-avatar" style="background: #15803D;"></div>
+                  <span class="creator-name">植物研究所</span>
+                </div>
+                <button class="like-btn" onclick="event.stopPropagation(); toggleLike(this, 1560)">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+                  <span class="red-number">1560</span>
+                </button>
+              </div>
+            </div>
+          </article>
+
+        </div>
+
+        <!-- COLUMN 4 -->
+        <div class="masonry-column">
+          
+          <!-- Note 7: 3:4 Aspect -->
+          <article class="note-card" onclick="openNoteModal(7)">
+            <div class="note-cover-wrap" style="aspect-ratio: 3/4;">
+              <svg class="note-cover-svg" viewBox="0 0 300 400">
+                <rect width="300" height="400" fill="#FEF3C7"/>
+                <path d="M40 280L150 140L260 280H40Z" fill="#D97706"/>
+                <rect x="130" y="230" width="40" height="50" fill="#78350F"/>
+                <circle cx="220" cy="90" r="30" fill="#F59E0B"/>
+              </svg>
+              <div class="note-tag-badge">露营日常</div>
+            </div>
+            <div class="note-content-body">
+              <h2 class="note-title">远离城市喧嚣的一夜，山谷溪畔围炉煮茶，抬头便是满天繁星 🏕️</h2>
+              <div class="note-footer">
+                <div class="creator-info">
+                  <div class="creator-avatar" style="background: #D97706;"></div>
+                  <span class="creator-name">野行Camp</span>
+                </div>
+                <button class="like-btn" onclick="event.stopPropagation(); toggleLike(this, 4210)">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+                  <span class="red-number">4210</span>
+                </button>
+              </div>
+            </div>
+          </article>
+
+          <!-- Note 8: 1:1 Aspect -->
+          <article class="note-card" onclick="openNoteModal(8)">
+            <div class="note-cover-wrap" style="aspect-ratio: 1/1;">
+              <svg class="note-cover-svg" viewBox="0 0 300 300">
+                <rect width="300" height="300" fill="#F1F5F9"/>
+                <circle cx="150" cy="150" r="70" fill="#CBD5E1"/>
+                <rect x="140" y="80" width="20" height="70" rx="10" fill="#0F172A"/>
+                <line x1="150" y1="150" x2="190" y2="150" stroke="#0F172A" stroke-width="6" stroke-linecap="round"/>
+              </svg>
+            </div>
+            <div class="note-content-body">
+              <h2 class="note-title">极简主义者的书房时钟：包豪斯工业设计的经典魅力 ⏱️</h2>
+              <div class="note-footer">
+                <div class="creator-info">
+                  <div class="creator-avatar" style="background: #64748B;"></div>
+                  <span class="creator-name">设计美物集</span>
+                </div>
+                <button class="like-btn" onclick="event.stopPropagation(); toggleLike(this, 620)">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+                  <span class="red-number">620</span>
+                </button>
+              </div>
+            </div>
+          </article>
+
+        </div>
+
+        <!-- COLUMN 5 -->
+        <div class="masonry-column">
+          
+          <!-- Note 9: 4:5 Aspect -->
+          <article class="note-card" onclick="openNoteModal(9)">
+            <div class="note-cover-wrap" style="aspect-ratio: 4/5;">
+              <svg class="note-cover-svg" viewBox="0 0 320 400">
+                <rect width="320" height="400" fill="#FFEDD5"/>
+                <path d="M100 120H220V260C220 290 190 320 160 320C130 320 100 290 100 260V120Z" fill="#EA580C"/>
+                <rect x="145" y="60" width="30" height="60" rx="15" fill="#C2410C"/>
+              </svg>
+              <div class="note-tag-badge">香氛手记</div>
+            </div>
+            <div class="note-content-body">
+              <h2 class="note-title">一闻就沦陷的冷门木质香，像是在深秋踩过潮湿雪松森林的安心感 🌲</h2>
+              <div class="note-footer">
+                <div class="creator-info">
+                  <div class="creator-avatar" style="background: #EA580C;"></div>
+                  <span class="creator-name">晚安闻香师</span>
+                </div>
+                <button class="like-btn" onclick="event.stopPropagation(); toggleLike(this, 1890)">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+                  <span class="red-number">1890</span>
+                </button>
+              </div>
+            </div>
+          </article>
+
+          <!-- Note 10: 3:4 Aspect -->
+          <article class="note-card" onclick="openNoteModal(10)">
+            <div class="note-cover-wrap" style="aspect-ratio: 3/4;">
+              <svg class="note-cover-svg" viewBox="0 0 300 400">
+                <rect width="300" height="400" fill="#E0F2FE"/>
+                <circle cx="150" cy="180" r="70" fill="#0284C7"/>
+                <path d="M70 280Q150 220 230 280" stroke="#0369A1" stroke-width="8" fill="none"/>
+              </svg>
+            </div>
+            <div class="note-content-body">
+              <h2 class="note-title">手把手教你揉出透光膜！家用烤箱也能做出外脆内软的法式大孔欧包 🥖</h2>
+              <div class="note-footer">
+                <div class="creator-info">
+                  <div class="creator-avatar" style="background: #0284C7;"></div>
+                  <span class="creator-name">麦香手记</span>
+                </div>
+                <button class="like-btn" onclick="event.stopPropagation(); toggleLike(this, 2750)">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+                  <span class="red-number">2750</span>
+                </button>
+              </div>
+            </div>
+          </article>
+
+        </div>
+
+      </div>
+    </main>
+
+  </div>
+
+  <!-- NOTE DETAIL MODAL (PC 2-Pane: Media Left / Metadata + Comments Right) -->
+  <div id="noteModal" class="modal-backdrop" onclick="closeNoteModal(event)">
+    <div class="note-modal-card" onclick="event.stopPropagation()">
+      <button class="modal-close-btn" onclick="closeNoteModalDirect()" aria-label="关闭">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+      </button>
+
+      <!-- Left Media Pane -->
+      <div class="modal-media-pane">
+        <svg width="100%" height="100%" viewBox="0 0 520 680" preserveAspectRatio="xMidYMid slice">
+          <rect width="520" height="680" fill="#19191E"/>
+          <circle cx="260" cy="300" r="140" fill="#2E2E36"/>
+          <circle cx="260" cy="300" r="90" fill="#3E3E48"/>
+          <path d="M200 300Q260 220 320 300" stroke="#FF2442" stroke-width="4" fill="none"/>
+          <text x="260" y="520" font-family="'PingFang SC', sans-serif" font-size="16" fill="rgba(255,255,255,0.7)" text-anchor="middle">LIFE IN FOCUS // RED COMMUNITY</text>
+        </svg>
+      </div>
+
+      <!-- Right Content Pane -->
+      <div class="modal-content-pane">
+        <!-- Creator Header with Three-State Follow Button -->
+        <div class="modal-creator-header">
+          <div class="modal-creator-profile">
+            <div class="creator-avatar modal-creator-avatar" style="background: #FF2442;"></div>
+            <div>
+              <div style="font-size: 14px; font-weight: 600; color: var(--title);">林间慢咖啡</div>
+              <div style="font-size: 12px; color: var(--description);">发布于上海 • 2小时前</div>
+            </div>
+          </div>
+
+          <!-- The Three-State Follow Button -->
+          <button id="modalFollowBtn" class="btn-follow not-following" onclick="toggleFollow(this)">
+            + 关注
+          </button>
+        </div>
+
+        <!-- Note Scroll Body -->
+        <div class="modal-body-scroll">
+          <h1 class="modal-note-title">藏在老弄堂里的治愈系手冲小店，浅烘耶加雪菲的柑橘香气太温柔了 ☕️</h1>
+          <p class="modal-note-text">
+            周六清晨避开人潮，拐进巨鹿路深处这间没有醒目招牌的木质小馆。
+            
+            推门便是扑鼻的研磨果香。主理人今天推荐了水洗日晒拼配的埃塞俄比亚，用91度恒温细水流慢萃。第一口入口是清脆的青苹果酸感，中段泛出浓郁的茉莉花香与白桃甜感，尾韵则是持久的伯爵红茶回甘。
+            
+            店里放着Bill Evans的慢调钢琴，窗外梧桐树影斑驳。如果你也想找个安静角落发发呆、读半本书，这里绝对值得列入私藏清单。
+          </p>
+
+          <div class="modal-tags">
+            <span class="tag-link">#我的咖啡日记</span>
+            <span class="tag-link">#周末去哪儿</span>
+            <span class="tag-link">#魔都小众探店</span>
+            <span class="tag-link">#手冲咖啡指南</span>
+          </div>
+
+          <!-- Comments Section -->
+          <div class="comment-list-title">共 <span class="red-number">28</span> 条真实评论</div>
+          
+          <div class="comment-item">
+            <div class="comment-avatar" style="background: #3D8AF5;"></div>
+            <div>
+              <div class="comment-user">夏日晚风</div>
+              <div class="comment-text">这家店老板的手冲水流真的稳！上次去喝了肯尼亚，酸质很亮，强烈推荐再去试试他的肉桂卷！</div>
+            </div>
+          </div>
+
+          <div class="comment-item">
+            <div class="comment-avatar" style="background: #02B940;"></div>
+            <div>
+              <div class="comment-user">小确幸日记</div>
+              <div class="comment-text">拍得太有电影质感了！请问用的什么滤镜呀？感觉色调特别温暖舒服～</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Action Footer (Like, Collect Star, Share) -->
+        <div class="modal-action-footer">
+          <div class="action-icons-group">
+            <button id="modalHeartBtn" class="action-counter-btn" onclick="toggleModalLike(this)">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+              <span id="modalLikeCount" class="red-number">1,280</span>
+            </button>
+
+            <!-- Collect Star Button (Yellow #FDBC5F when active) -->
+            <button id="modalStarBtn" class="action-counter-btn" onclick="toggleModalCollect(this)">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+              <span id="modalCollectCount" class="red-number">435</span>
+            </button>
+
+            <button class="action-counter-btn">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg>
+              <span class="red-number">28</span>
+            </button>
+          </div>
+
+          <button class="btn-red-primary" style="padding: 6px 16px; font-size: 13px;" onclick="alert('已复制笔记分享链接，快分享给好友吧！')">
+            分享笔记
+          </button>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- MOBILE BOTTOM SHEET DEMO (16px top-only radius, 4x36 drag handle) -->
+  <div id="mobileSheet" class="mobile-bottom-sheet">
+    <div class="sheet-drag-handle"></div>
+    <div style="font-size: 16px; font-weight: 600; color: var(--title); margin-bottom: 12px; text-align: center;">更多生活操作</div>
+    <div style="display: flex; flex-direction: column; gap: 8px;">
+      <button class="topic-pill" style="width: 100%; justify-content: center; height: 42px; font-size: 14px;" onclick="toggleBottomSheet()">保存高清封面</button>
+      <button class="topic-pill" style="width: 100%; justify-content: center; height: 42px; font-size: 14px;" onclick="toggleBottomSheet()">不感兴趣 / 减少类似推荐</button>
+      <button class="topic-pill" style="width: 100%; justify-content: center; height: 42px; font-size: 14px; color: var(--primary);" onclick="toggleBottomSheet()">取消</button>
+    </div>
+  </div>
+
+  <!-- INTERACTIVE JAVASCRIPT -->
+  <script>
+    // Tab switching with 2px underline
+    function switchChannel(tab) {
+      document.querySelectorAll('.channel-tab').forEach(t => t.classList.remove('active'));
+      tab.classList.add('active');
+    }
+
+    // Like toggle on feed cards
+    function toggleLike(btn, baseCount) {
+      const isLiked = btn.classList.contains('liked');
+      const countEl = btn.querySelector('.red-number');
+      if (isLiked) {
+        btn.classList.remove('liked');
+        countEl.textContent = baseCount;
+      } else {
+        btn.classList.add('liked');
+        countEl.textContent = baseCount + 1;
+      }
+    }
+
+    // Three-State Follow Button logic (Not following -> Following -> Mutual)
+    function toggleFollow(btn) {
+      if (btn.classList.contains('not-following')) {
+        btn.classList.remove('not-following');
+        btn.classList.add('following');
+        btn.textContent = '已关注';
+      } else if (btn.classList.contains('following')) {
+        btn.classList.remove('following');
+        btn.classList.add('mutual');
+        btn.textContent = '互相关注';
+      } else {
+        btn.classList.remove('mutual');
+        btn.classList.add('not-following');
+        btn.textContent = '+ 关注';
+      }
+    }
+
+    // Modal behavior
+    function openNoteModal(id) {
+      document.getElementById('noteModal').classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeNoteModal(event) {
+      if (event.target === document.getElementById('noteModal')) {
+        closeNoteModalDirect();
+      }
+    }
+
+    function closeNoteModalDirect() {
+      document.getElementById('noteModal').classList.remove('open');
+      document.body.style.overflow = 'auto';
+    }
+
+    // Modal heart like
+    function toggleModalLike(btn) {
+      const countEl = document.getElementById('modalLikeCount');
+      let val = 1280;
+      if (btn.style.color === 'rgb(255, 36, 66)' || btn.style.color === '#FF2442') {
+        btn.style.color = 'var(--title)';
+        btn.querySelector('svg').style.fill = 'none';
+        countEl.textContent = '1,280';
+      } else {
+        btn.style.color = 'var(--primary)';
+        btn.querySelector('svg').style.fill = 'var(--primary)';
+        countEl.textContent = '1,281';
+      }
+    }
+
+    // Modal collect star (Yellow #FDBC5F)
+    function toggleModalCollect(btn) {
+      const countEl = document.getElementById('modalCollectCount');
+      if (btn.classList.contains('collected')) {
+        btn.classList.remove('collected');
+        countEl.textContent = '435';
+      } else {
+        btn.classList.add('collected');
+        countEl.textContent = '436';
+      }
+    }
+
+    // Mobile Bottom Sheet toggle
+    function toggleBottomSheet() {
+      const sheet = document.getElementById('mobileSheet');
+      sheet.style.display = sheet.style.display === 'block' ? 'none' : 'block';
+    }
+  </script>
+
+</body>
+</html>

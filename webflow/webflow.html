@@ -1,0 +1,1553 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Webflow Design System — Visual Web Builder & Design Language</title>
+  <meta name="description" content="Authentic implementation of the Webflow Design System: WF Visual Sans Variable, signature Webflow Blue (#146ef5), 4px-8px sharp radius, translate(6px) animations, and 5-layer cascading shadows." />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inconsolata:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    /* ─────────────────────────────────────────────────────────────────
+       WEBFLOW DESIGN SYSTEM TOKENS
+       Specification: /home/honeypot/open-design/design-systems/webflow/DESIGN.md
+       ───────────────────────────────────────────────────────────────── */
+    :root {
+      /* Primary Brand & Interactive */
+      --_color---primary--webflow-blue: #146ef5;
+      --_color---primary--blue-400: #3b89ff;
+      --_color---blue-300: #006acc;
+      --mkto-embed-color-button-hover: #0055d4;
+
+      /* Primary Canvas & Text */
+      --color-near-black: #080808;
+      --color-white: #ffffff;
+
+      /* Secondary Accents */
+      --_color---secondary--purple: #7a3dff;
+      --_color---secondary--pink: #ed52cb;
+      --_color---secondary--green: #00d722;
+      --_color---secondary--orange: #ff6b00;
+      --_color---secondary--yellow: #ffae13;
+      --_color---secondary--red: #ee1d36;
+
+      /* Neutral Palette */
+      --color-gray-800: #222222;
+      --color-gray-700: #363636;
+      --color-gray-300: #ababab;
+      --color-mid-gray: #5a5a5a;
+      --color-border-gray: #d8d8d8;
+      --color-border-hover: #898989;
+      --color-canvas-bg: #f9f9f9;
+
+      /* 5-Layer Cascading Shadow System */
+      --shadow-5layer-cascade:
+        0px 84px 24px rgba(0, 0, 0, 0),
+        0px 54px 22px rgba(0, 0, 0, 0.01),
+        0px 30px 18px rgba(0, 0, 0, 0.04),
+        0px 13px 13px rgba(0, 0, 0, 0.08),
+        0px 3px 7px rgba(0, 0, 0, 0.09);
+
+      --shadow-card-hover:
+        0px 96px 28px rgba(0, 0, 0, 0),
+        0px 60px 24px rgba(0, 0, 0, 0.02),
+        0px 34px 20px rgba(0, 0, 0, 0.06),
+        0px 16px 15px rgba(0, 0, 0, 0.10),
+        0px 4px 8px rgba(0, 0, 0, 0.12);
+
+      /* Typography: WF Visual Sans Variable + Inconsolata Mono */
+      --font-wf-visual-sans: "WF Visual Sans Variable", "Inter", Arial, -apple-system, BlinkMacSystemFont, sans-serif;
+      --font-inconsolata: "Inconsolata", monospace, ui-monospace, Menlo;
+
+      /* Fractional Spacing Scale */
+      --space-1: 1px;
+      --space-2-4: 2.4px;
+      --space-3-2: 3.2px;
+      --space-4: 4px;
+      --space-5-6: 5.6px;
+      --space-6: 6px;
+      --space-7-2: 7.2px;
+      --space-8: 8px;
+      --space-9-6: 9.6px;
+      --space-12: 12px;
+      --space-16: 16px;
+      --space-24: 24px;
+      --space-32: 32px;
+      --space-48: 48px;
+      --space-64: 64px;
+      --space-80: 80px;
+
+      /* Radii - Conservative Sharp 4px to 8px */
+      --radius-2: 2px;
+      --radius-4: 4px;
+      --radius-8: 8px;
+      --radius-circle: 50%;
+
+      /* Interactive Hover Translation */
+      --translate-hover-x: translateX(6px);
+      --transition-hover: transform 0.2s cubic-bezier(0.2, 0, 0, 1), background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+    }
+
+    /* Reset */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      font-family: var(--font-wf-visual-sans);
+      color: var(--color-near-black);
+      background-color: var(--color-white);
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-size: 16px;
+      line-height: 1.6;
+      letter-spacing: -0.16px;
+      color: var(--color-near-black);
+      background-color: var(--color-white);
+      overflow-x: hidden;
+    }
+
+    /* Typography Classes per DESIGN.md */
+    .display-hero {
+      font-size: 80px;
+      font-weight: 600;
+      line-height: 1.04;
+      letter-spacing: -0.8px;
+      color: var(--color-near-black);
+    }
+
+    @media (max-width: 991px) {
+      .display-hero {
+        font-size: 56px;
+      }
+    }
+
+    @media (max-width: 479px) {
+      .display-hero {
+        font-size: 38px;
+      }
+    }
+
+    .section-heading {
+      font-size: 56px;
+      font-weight: 600;
+      line-height: 1.04;
+      letter-spacing: normal;
+      color: var(--color-near-black);
+    }
+
+    @media (max-width: 768px) {
+      .section-heading {
+        font-size: 38px;
+      }
+    }
+
+    .sub-heading {
+      font-size: 32px;
+      font-weight: 500;
+      line-height: 1.30;
+      letter-spacing: normal;
+      color: var(--color-near-black);
+    }
+
+    .feature-title {
+      font-size: 24px;
+      font-weight: 600;
+      line-height: 1.30;
+      letter-spacing: normal;
+      color: var(--color-near-black);
+    }
+
+    .body-lead {
+      font-size: 20px;
+      font-weight: 400;
+      line-height: 1.45;
+      color: var(--color-gray-700);
+    }
+
+    .body-standard {
+      font-size: 16px;
+      font-weight: 400;
+      line-height: 1.60;
+      letter-spacing: -0.16px;
+      color: var(--color-gray-700);
+    }
+
+    .uppercase-label {
+      font-size: 15px;
+      font-weight: 500;
+      line-height: 1.30;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--color-mid-gray);
+    }
+
+    .badge-uppercase {
+      font-size: 12.8px;
+      font-weight: 550;
+      line-height: 1.20;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+    }
+
+    .micro-uppercase {
+      font-size: 10px;
+      font-weight: 600;
+      line-height: 1.30;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+
+    .code-font {
+      font-family: var(--font-inconsolata);
+    }
+
+    /* Layout Containers */
+    .container {
+      max-width: 1240px;
+      margin: 0 auto;
+      padding: 0 var(--space-24);
+    }
+
+    @media (max-width: 768px) {
+      .container {
+        padding: 0 var(--space-16);
+      }
+    }
+
+    /* Webflow Top Navbar */
+    .wf-navbar {
+      position: sticky;
+      top: 0;
+      background: var(--color-white);
+      border-bottom: 1px solid var(--color-border-gray);
+      z-index: 1000;
+      height: 64px;
+    }
+
+    .wf-nav-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 100%;
+    }
+
+    .wf-logo-group {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      text-decoration: none;
+      color: var(--color-near-black);
+    }
+
+    .wf-logo-svg {
+      width: 100px;
+      height: 24px;
+      fill: var(--color-near-black);
+    }
+
+    .wf-tag-spec {
+      background: rgba(20, 110, 245, 0.10);
+      color: var(--_color---primary--webflow-blue);
+      padding: 2px 8px;
+      border-radius: var(--radius-4);
+      font-size: 11px;
+      font-weight: 600;
+    }
+
+    .wf-nav-links {
+      display: flex;
+      align-items: center;
+      gap: 24px;
+      list-style: none;
+    }
+
+    @media (max-width: 991px) {
+      .wf-nav-links {
+        display: none;
+      }
+    }
+
+    .wf-nav-item {
+      font-size: 15px;
+      font-weight: 500;
+      color: var(--color-near-black);
+      text-decoration: none;
+      padding: 8px 12px;
+      border-radius: var(--radius-4);
+      transition: color 0.15s, background-color 0.15s;
+    }
+
+    .wf-nav-item:hover {
+      color: var(--_color---primary--webflow-blue);
+      background-color: rgba(20, 110, 245, 0.05);
+    }
+
+    .wf-nav-right {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    /* Webflow Authentic Buttons */
+    .btn-wf-primary {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background-color: var(--_color---primary--webflow-blue);
+      color: var(--color-white);
+      border: 1px solid var(--_color---primary--webflow-blue);
+      border-radius: var(--radius-4);
+      padding: 10px 20px;
+      font-size: 16px;
+      font-weight: 500;
+      line-height: 1.6;
+      letter-spacing: -0.16px;
+      text-decoration: none;
+      cursor: pointer;
+      transition: var(--transition-hover);
+      user-select: none;
+    }
+
+    .btn-wf-primary:hover {
+      background-color: var(--mkto-embed-color-button-hover);
+      border-color: var(--mkto-embed-color-button-hover);
+      transform: var(--translate-hover-x);
+    }
+
+    .btn-wf-primary .arrow-icon {
+      transition: transform 0.2s cubic-bezier(0.2, 0, 0, 1);
+    }
+
+    .btn-wf-primary:hover .arrow-icon {
+      transform: translateX(3px);
+    }
+
+    .btn-wf-transparent {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background-color: transparent;
+      color: var(--color-near-black);
+      border: 1px solid transparent;
+      border-radius: var(--radius-4);
+      padding: 10px 16px;
+      font-size: 16px;
+      font-weight: 500;
+      text-decoration: none;
+      cursor: pointer;
+      transition: var(--transition-hover);
+    }
+
+    .btn-wf-transparent:hover {
+      transform: var(--translate-hover-x);
+      color: var(--_color---primary--webflow-blue);
+    }
+
+    .btn-wf-white-circle {
+      width: 44px;
+      height: 44px;
+      border-radius: var(--radius-circle);
+      background: var(--color-white);
+      border: 1px solid var(--color-border-gray);
+      color: var(--color-near-black);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
+      transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
+    }
+
+    .btn-wf-white-circle:hover {
+      transform: var(--translate-hover-x);
+      border-color: var(--_color---primary--webflow-blue);
+      color: var(--_color---primary--webflow-blue);
+      box-shadow: 0 4px 12px rgba(20, 110, 245, 0.15);
+    }
+
+    /* Badges */
+    .wf-badge-blue {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background-color: var(--_color---primary--webflow-blue);
+      color: var(--color-white);
+      border-radius: var(--radius-4);
+      padding: 4px 10px;
+      font-size: 12.8px;
+      font-weight: 550;
+      line-height: 1.2;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+    }
+
+    .wf-badge-tint {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background-color: rgba(20, 110, 245, 0.10);
+      color: var(--_color---primary--webflow-blue);
+      border-radius: var(--radius-4);
+      padding: 4px 10px;
+      font-size: 12.8px;
+      font-weight: 550;
+      line-height: 1.2;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+    }
+
+    /* Secondary Accent Badges (10% tint bg) */
+    .badge-purple { background: rgba(122, 61, 255, 0.10); color: var(--_color---secondary--purple); }
+    .badge-pink   { background: rgba(237, 82, 203, 0.10); color: var(--_color---secondary--pink); }
+    .badge-green  { background: rgba(0, 215, 34, 0.12); color: #008715; }
+    .badge-orange { background: rgba(255, 107, 0, 0.10); color: var(--_color---secondary--orange); }
+    .badge-yellow { background: rgba(255, 174, 19, 0.15); color: #a46d00; }
+    .badge-red    { background: rgba(238, 29, 54, 0.10); color: var(--_color---secondary--red); }
+
+    /* Hero Section */
+    .wf-hero {
+      padding: var(--space-80) 0 var(--space-64);
+      border-bottom: 1px solid var(--color-border-gray);
+      background: linear-gradient(180deg, #ffffff 0%, #fafafa 100%);
+    }
+
+    .hero-top-eyebrow {
+      margin-bottom: var(--space-16);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .hero-title-wrap {
+      max-width: 920px;
+      margin-bottom: var(--space-24);
+    }
+
+    .hero-desc-wrap {
+      max-width: 680px;
+      margin-bottom: var(--space-32);
+    }
+
+    .hero-actions-wrap {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    /* Interactive Webflow Designer Visual Builder Workspace */
+    .designer-section {
+      padding: var(--space-64) 0;
+      background: #eef1f5;
+      border-bottom: 1px solid var(--color-border-gray);
+    }
+
+    .designer-container {
+      background: var(--color-white);
+      border: 1px solid var(--color-border-gray);
+      border-radius: var(--radius-8);
+      box-shadow: var(--shadow-5layer-cascade);
+      overflow: hidden;
+    }
+
+    /* Designer Chrome Header */
+    .designer-header {
+      height: 48px;
+      background: #222222;
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 16px;
+      font-size: 13px;
+    }
+
+    .designer-header-left {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .bp-switcher {
+      display: flex;
+      background: #363636;
+      border-radius: var(--radius-4);
+      padding: 2px;
+      gap: 2px;
+    }
+
+    .bp-btn {
+      background: transparent;
+      border: none;
+      color: #ababab;
+      padding: 4px 10px;
+      border-radius: var(--radius-2);
+      cursor: pointer;
+      font-size: 12px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.15s;
+    }
+
+    .bp-btn.active {
+      background: var(--_color---primary--webflow-blue);
+      color: #ffffff;
+      font-weight: 500;
+    }
+
+    .bp-btn:hover:not(.active) {
+      color: #ffffff;
+    }
+
+    .designer-body {
+      display: grid;
+      grid-template-columns: 240px 1fr 280px;
+      height: 580px;
+      background: #ffffff;
+    }
+
+    @media (max-width: 992px) {
+      .designer-body {
+        grid-template-columns: 1fr;
+        height: auto;
+      }
+    }
+
+    /* Left Sidebar: Navigator & Elements */
+    .designer-left-bar {
+      background: #fcfcfc;
+      border-right: 1px solid var(--color-border-gray);
+      display: flex;
+      flex-direction: column;
+      font-size: 13px;
+    }
+
+    .tool-tabs {
+      display: flex;
+      border-bottom: 1px solid var(--color-border-gray);
+      background: #f4f4f4;
+    }
+
+    .tool-tab {
+      flex: 1;
+      padding: 8px;
+      text-align: center;
+      font-weight: 600;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--color-mid-gray);
+      cursor: pointer;
+      border-bottom: 2px solid transparent;
+    }
+
+    .tool-tab.active {
+      background: #ffffff;
+      color: var(--_color---primary--webflow-blue);
+      border-bottom-color: var(--_color---primary--webflow-blue);
+    }
+
+    .navigator-tree {
+      padding: 8px;
+      overflow-y: auto;
+      flex: 1;
+    }
+
+    .nav-node {
+      padding: 6px 8px;
+      border-radius: var(--radius-2);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--color-gray-700);
+      cursor: pointer;
+      font-family: var(--font-inconsolata);
+      font-size: 13px;
+      transition: background 0.15s;
+    }
+
+    .nav-node:hover {
+      background: #f0f0f0;
+    }
+
+    .nav-node.active-element {
+      background: rgba(20, 110, 245, 0.12);
+      color: var(--_color---primary--webflow-blue);
+      font-weight: 600;
+    }
+
+    .indent-1 { margin-left: 12px; }
+    .indent-2 { margin-left: 24px; }
+    .indent-3 { margin-left: 36px; }
+
+    /* Center: Live Interactive Canvas */
+    .designer-canvas-stage {
+      background: #e9ecef;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      overflow: auto;
+      transition: padding 0.3s;
+    }
+
+    .canvas-viewport {
+      background: #ffffff;
+      border: 1px solid var(--color-border-gray);
+      border-radius: var(--radius-4);
+      width: 100%;
+      max-width: 720px;
+      height: 100%;
+      overflow-y: auto;
+      padding: 24px;
+      position: relative;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+      transition: max-width 0.3s cubic-bezier(0.2, 0, 0, 1);
+    }
+
+    /* Selected element bounding box in Designer */
+    .selectable-component {
+      border: 1px dashed transparent;
+      padding: 8px;
+      position: relative;
+      cursor: pointer;
+      transition: border 0.15s;
+    }
+
+    .selectable-component:hover {
+      border-color: rgba(20, 110, 245, 0.4);
+    }
+
+    .selectable-component.selected {
+      border: 1.5px solid var(--_color---primary--webflow-blue);
+      background: rgba(20, 110, 245, 0.02);
+    }
+
+    .designer-selection-tag {
+      position: absolute;
+      top: -18px;
+      left: -1px;
+      background: var(--_color---primary--webflow-blue);
+      color: #ffffff;
+      font-size: 10px;
+      font-weight: 600;
+      padding: 1px 6px;
+      border-radius: var(--radius-2) var(--radius-2) 0 0;
+      font-family: var(--font-inconsolata);
+      letter-spacing: 0.5px;
+      pointer-events: none;
+    }
+
+    /* Right Sidebar: Style Inspector */
+    .designer-style-panel {
+      background: #fcfcfc;
+      border-left: 1px solid var(--color-border-gray);
+      padding: 16px;
+      overflow-y: auto;
+      font-size: 13px;
+    }
+
+    .panel-section-title {
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--color-mid-gray);
+      margin: 16px 0 8px;
+    }
+
+    .class-selector-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(20, 110, 245, 0.10);
+      color: var(--_color---primary--webflow-blue);
+      border: 1px solid rgba(20, 110, 245, 0.3);
+      padding: 4px 10px;
+      border-radius: var(--radius-4);
+      font-family: var(--font-inconsolata);
+      font-weight: 600;
+      font-size: 12px;
+      width: 100%;
+      justify-content: space-between;
+    }
+
+    /* Box Model Diagram */
+    .box-model-container {
+      background: #f0f0f0;
+      border: 1px solid var(--color-border-gray);
+      border-radius: var(--radius-4);
+      padding: 12px;
+      text-align: center;
+      font-family: var(--font-inconsolata);
+      font-size: 11px;
+      color: var(--color-mid-gray);
+      position: relative;
+    }
+
+    .box-model-padding {
+      background: #e3ebfc;
+      border: 1px dashed var(--_color---primary--webflow-blue);
+      border-radius: var(--radius-2);
+      padding: 16px;
+      margin: 8px 0;
+      color: var(--_color---primary--webflow-blue);
+      font-weight: 600;
+    }
+
+    /* Tokens & Swatches Section */
+    .tokens-section {
+      padding: var(--space-64) 0;
+      background: var(--color-white);
+      border-bottom: 1px solid var(--color-border-gray);
+    }
+
+    .token-grid-showcase {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 16px;
+      margin-top: 32px;
+    }
+
+    .wf-token-card {
+      border: 1px solid var(--color-border-gray);
+      border-radius: var(--radius-4);
+      padding: 16px;
+      background: var(--color-white);
+      transition: var(--transition-hover);
+      cursor: pointer;
+    }
+
+    .wf-token-card:hover {
+      border-color: var(--color-border-hover);
+      transform: var(--translate-hover-x);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    }
+
+    .token-bar {
+      height: 40px;
+      border-radius: var(--radius-2);
+      margin-bottom: 12px;
+      border: 1px solid rgba(0, 0, 0, 0.06);
+    }
+
+    .token-css-var {
+      font-family: var(--font-inconsolata);
+      font-size: 12px;
+      color: var(--color-mid-gray);
+      word-break: break-all;
+    }
+
+    .token-hex-val {
+      font-family: var(--font-inconsolata);
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--color-near-black);
+      margin-top: 4px;
+    }
+
+    /* Cards & Depth Showcase (5-layer cascading shadows) */
+    .depth-section {
+      padding: var(--space-64) 0;
+      background: #fafafa;
+      border-bottom: 1px solid var(--color-border-gray);
+    }
+
+    .cards-triple-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: var(--space-32);
+      margin-top: 32px;
+    }
+
+    .wf-feature-card {
+      background: var(--color-white);
+      border: 1px solid var(--color-border-gray);
+      border-radius: var(--radius-4);
+      padding: var(--space-32);
+      box-shadow: var(--shadow-5layer-cascade);
+      transition: transform 0.25s cubic-bezier(0.2, 0, 0, 1), box-shadow 0.25s cubic-bezier(0.2, 0, 0, 1), border-color 0.2s;
+      position: relative;
+    }
+
+    .wf-feature-card:hover {
+      border-color: var(--_color---primary--webflow-blue);
+      box-shadow: var(--shadow-card-hover);
+      transform: translateY(-4px);
+    }
+
+    .card-top-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: var(--radius-4);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 20px;
+    }
+
+    .wf-feature-card .card-cta-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--_color---primary--webflow-blue);
+      font-weight: 600;
+      font-size: 15px;
+      text-decoration: none;
+      margin-top: 20px;
+      transition: var(--transition-hover);
+    }
+
+    .wf-feature-card:hover .card-cta-link {
+      transform: var(--translate-hover-x);
+    }
+
+    /* Do's and Don'ts */
+    .guidelines-section {
+      padding: var(--space-64) 0;
+      background: var(--color-white);
+    }
+
+    .rules-split-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--space-32);
+      margin-top: 32px;
+    }
+
+    @media (max-width: 768px) {
+      .rules-split-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .rules-card {
+      border: 1px solid var(--color-border-gray);
+      border-radius: var(--radius-4);
+      padding: 28px;
+      background: #ffffff;
+    }
+
+    .rules-card.do-card {
+      border-left: 4px solid var(--_color---secondary--green);
+    }
+
+    .rules-card.dont-card {
+      border-left: 4px solid var(--_color---secondary--red);
+    }
+
+    .rules-badge {
+      display: inline-block;
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      padding: 4px 10px;
+      border-radius: var(--radius-2);
+      margin-bottom: 16px;
+    }
+
+    .do-card .rules-badge {
+      background: rgba(0, 215, 34, 0.12);
+      color: #008715;
+    }
+
+    .dont-card .rules-badge {
+      background: rgba(238, 29, 54, 0.10);
+      color: var(--_color---secondary--red);
+    }
+
+    .rules-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .rules-list li {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      font-size: 15px;
+      color: var(--color-gray-700);
+      line-height: 1.5;
+    }
+
+    .rules-list li strong {
+      color: var(--color-near-black);
+    }
+
+    /* Footer */
+    .wf-footer {
+      background: var(--color-near-black);
+      color: #ffffff;
+      padding: var(--space-64) 0;
+      font-size: 14px;
+      border-top: 1px solid #222222;
+    }
+
+    .wf-footer-content {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+
+    /* Interactive Toast */
+    .wf-toast {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      background: var(--color-near-black);
+      color: #ffffff;
+      padding: 12px 20px;
+      border-radius: var(--radius-4);
+      border-left: 4px solid var(--_color---primary--webflow-blue);
+      font-family: var(--font-inconsolata);
+      font-size: 14px;
+      box-shadow: 0 12px 32px rgba(0, 0, 0, 0.2);
+      z-index: 2000;
+      opacity: 0;
+      transform: translateY(10px);
+      transition: all 0.2s cubic-bezier(0.2, 0, 0, 1);
+      pointer-events: none;
+    }
+
+    .wf-toast.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Sticky Top Webflow Navbar -->
+  <nav class="wf-navbar">
+    <div class="container wf-nav-inner">
+      <a href="#hero" class="wf-logo-group">
+        <!-- Official Webflow Wordmark SVG -->
+        <svg class="wf-logo-svg" viewBox="0 0 120 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M26.4 7.2h-4.3l-4.1 11.2L14 7.2H9.7l-4.1 11.2L1.5 7.2H0l4.9 13.6h4.3l4-11.2 4 11.2h4.3l4.9-13.6z" fill="currentColor"/>
+          <path d="M35.6 15.6c0-3.3-2.3-5.2-5.7-5.2h-4.7v10.4h4.7c3.4 0 5.7-1.9 5.7-5.2zm-2.4 0c0 2-1.4 3.1-3.3 3.1h-2.3v-6.2h2.3c1.9 0 3.3 1.1 3.3 3.1z" fill="currentColor"/>
+          <path d="M47.8 7.2h-2.4v13.6h2.4zM47.8 2.8h-2.4v2.4h2.4z" fill="currentColor"/>
+          <path d="M60.2 16.3c0-2.8-2-4.9-5-4.9s-5 2.1-5 4.9 2 4.9 5 4.9c1.9 0 3.5-.8 4.4-2.2l-1.8-1.1c-.6.8-1.5 1.3-2.6 1.3-1.6 0-2.7-1.1-2.7-2.9h7.7zm-7.7-1c.2-1.4 1.2-2.3 2.7-2.3s2.5.9 2.7 2.3h-5.4z" fill="currentColor"/>
+          <path d="M72.4 11.4h-2.4v9.4h2.4z" fill="currentColor"/>
+          <path d="M84.8 11.4h-2.4v9.4h2.4z" fill="currentColor"/>
+          <path d="M97.2 16.3c0-2.8-2-4.9-5-4.9s-5 2.1-5 4.9 2 4.9 5 4.9 5-2.1 5-4.9zm-2.4 0c0 1.6-1.1 2.9-2.6 2.9s-2.6-1.3-2.6-2.9 1.1-2.9 2.6-2.9 2.6 1.3 2.6 2.9z" fill="currentColor"/>
+          <path d="M117.8 11.4h-2.4l-2.6 7.4-2.6-7.4h-2.4l3.8 9.4h2.4z" fill="currentColor"/>
+        </svg>
+        <span class="wf-tag-spec">DS • WF Visual Sans</span>
+      </a>
+
+      <ul class="wf-nav-links">
+        <li><a href="#hero" class="wf-nav-item">Platform</a></li>
+        <li><a href="#designer" class="wf-nav-item">Designer Canvas</a></li>
+        <li><a href="#tokens" class="wf-nav-item">Design Tokens</a></li>
+        <li><a href="#depth" class="wf-nav-item">5-Layer Shadows</a></li>
+        <li><a href="#rules" class="wf-nav-item">Do's & Don'ts</a></li>
+      </ul>
+
+      <div class="wf-nav-right">
+        <a href="#designer" class="btn-wf-transparent">Log in</a>
+        <a href="#designer" class="btn-wf-primary">
+          Get started — it's free
+          <svg class="arrow-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <line x1="5" y1="12" x2="19" y2="12"></line>
+            <polyline points="12 5 19 12 12 19"></polyline>
+          </svg>
+        </a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <header id="hero" class="wf-hero">
+    <div class="container">
+      <div class="hero-top-eyebrow">
+        <span class="wf-badge-tint">VISUAL WEB BUILDER</span>
+        <span class="uppercase-label" style="font-size: 13px;">DESIGN WITHOUT CODE</span>
+      </div>
+
+      <div class="hero-title-wrap">
+        <h1 class="display-hero">
+          Build without code. Launch without limits.
+        </h1>
+      </div>
+
+      <div class="hero-desc-wrap">
+        <p class="body-lead">
+          Webflow gives designers and developers the power to create bespoke, production-ready web experiences with clean semantic HTML, direct CSS control, and enterprise-grade hosting.
+        </p>
+      </div>
+
+      <div class="hero-actions-wrap">
+        <a href="#designer" class="btn-wf-primary">
+          Open Visual Designer
+          <svg class="arrow-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <line x1="5" y1="12" x2="19" y2="12"></line>
+            <polyline points="12 5 19 12 12 19"></polyline>
+          </svg>
+        </a>
+
+        <button class="btn-wf-transparent" onclick="copyVar('--_color---primary--webflow-blue', '#146ef5')">
+          Copy Token: #146ef5
+        </button>
+
+        <button class="btn-wf-white-circle" title="View Source Inspector" onclick="triggerInspectMode()">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="16 18 22 12 16 6"></polyline>
+            <polyline points="8 6 2 12 8 18"></polyline>
+          </svg>
+        </button>
+      </div>
+
+      <!-- Quick Metrics Bar -->
+      <div style="margin-top: 48px; padding-top: 24px; border-top: 1px solid var(--color-border-gray); display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 24px;">
+        <div>
+          <div class="micro-uppercase" style="color: var(--color-mid-gray);">PRIMARY ACTION</div>
+          <div style="font-size: 20px; font-weight: 600; color: var(--_color---primary--webflow-blue); margin-top: 4px;">Webflow Blue #146ef5</div>
+        </div>
+        <div>
+          <div class="micro-uppercase" style="color: var(--color-mid-gray);">BORDER GEOMETRY</div>
+          <div style="font-size: 20px; font-weight: 600; color: var(--color-near-black); margin-top: 4px;">4px – 8px Conservative Sharp</div>
+        </div>
+        <div>
+          <div class="micro-uppercase" style="color: var(--color-mid-gray);">INTERACTION SIGNATURE</div>
+          <div style="font-size: 20px; font-weight: 600; color: var(--color-near-black); margin-top: 4px;">translate(6px) on hover</div>
+        </div>
+        <div>
+          <div class="micro-uppercase" style="color: var(--color-mid-gray);">ELEVATION SYSTEM</div>
+          <div style="font-size: 20px; font-weight: 600; color: var(--color-near-black); margin-top: 4px;">5-Layer Cascading Shadows</div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Interactive Webflow Designer Canvas Workspace -->
+  <section id="designer" class="designer-section">
+    <div class="container">
+      <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 24px;">
+        <div>
+          <div class="uppercase-label" style="color: var(--_color---primary--webflow-blue);">LIVE DESIGNER INTERFACE</div>
+          <h2 class="section-heading" style="font-size: 38px; margin-top: 4px;">Visual Canvas & Style Inspector</h2>
+        </div>
+        <p class="body-standard" style="max-width: 440px;">
+          Select any element on the canvas to inspect its CSS box-model, typography, and switch viewport breakpoints interactively.
+        </p>
+      </div>
+
+      <!-- Real Designer Window -->
+      <div class="designer-container">
+        <!-- Designer Top Bar -->
+        <div class="designer-header">
+          <div class="designer-header-left">
+            <span style="font-weight: 700; color: #fff; display: flex; align-items: center; gap: 8px;">
+              <span style="width: 10px; height: 10px; border-radius: 50%; background: #00d722; display: inline-block;"></span>
+              Webflow Designer
+            </span>
+            <span style="color: #666;">|</span>
+            <span style="color: #ababab;">Page: Home (Index)</span>
+          </div>
+
+          <!-- Breakpoint Switcher per DESIGN.md: 992px, 768px, 479px -->
+          <div class="bp-switcher">
+            <button class="bp-btn active" id="bpDesktop" onclick="setCanvasBreakpoint('desktop')">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg>
+              992px+
+            </button>
+            <button class="bp-btn" id="bpTablet" onclick="setCanvasBreakpoint('tablet')">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="2" width="16" height="20" rx="2" ry="2"></rect><line x1="12" y1="18" x2="12" y2="18"></line></svg>
+              768px
+            </button>
+            <button class="bp-btn" id="bpMobileLandscape" onclick="setCanvasBreakpoint('mobileLandscape')">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2" ry="2"></rect></svg>
+              479px
+            </button>
+            <button class="bp-btn" id="bpMobilePortrait" onclick="setCanvasBreakpoint('mobilePortrait')">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="7" y="2" width="10" height="20" rx="2" ry="2"></rect></svg>
+              360px
+            </button>
+          </div>
+
+          <div>
+            <span class="code-font" style="font-size: 12px; color: #ababab; background: #333; padding: 4px 8px; border-radius: 4px;">Scale: 100%</span>
+          </div>
+        </div>
+
+        <!-- Designer 3-Pane Body -->
+        <div class="designer-body">
+          <!-- Left Pane: Navigator Tree -->
+          <div class="designer-left-bar">
+            <div class="tool-tabs">
+              <div class="tool-tab active">Navigator</div>
+              <div class="tool-tab">Add (+)</div>
+              <div class="tool-tab">Assets</div>
+            </div>
+
+            <div class="navigator-tree">
+              <div class="nav-node" onclick="selectCanvasElement('body')">
+                <span>📄</span> Body
+              </div>
+              <div class="nav-node indent-1" onclick="selectCanvasElement('heroSection')">
+                <span>📦</span> Section.hero
+              </div>
+              <div class="nav-node indent-2" onclick="selectCanvasElement('container')">
+                <span>🔲</span> Container.default
+              </div>
+              <div class="nav-node indent-3 active-element" id="treeNodeHeading" onclick="selectCanvasElement('heroHeading')">
+                <span>🔤</span> H1.display-hero
+              </div>
+              <div class="nav-node indent-3" id="treeNodeParagraph" onclick="selectCanvasElement('heroPara')">
+                <span>¶</span> P.body-standard
+              </div>
+              <div class="nav-node indent-3" id="treeNodeButton" onclick="selectCanvasElement('heroBtn')">
+                <span>🔘</span> Button.btn-wf-primary
+              </div>
+            </div>
+          </div>
+
+          <!-- Center Stage: Live Resizable Canvas -->
+          <div class="designer-canvas-stage">
+            <div class="canvas-viewport" id="canvasViewport">
+              <!-- Selected Canvas Element 1: Heading -->
+              <div class="selectable-component selected" id="canvasHeroHeading" onclick="selectCanvasElement('heroHeading')">
+                <div class="designer-selection-tag">H1.display-hero</div>
+                <h1 style="font-size: 38px; font-weight: 600; line-height: 1.08; letter-spacing: -0.5px; color: var(--color-near-black);">
+                  Design and build visually for the modern web.
+                </h1>
+              </div>
+
+              <!-- Selected Canvas Element 2: Paragraph -->
+              <div class="selectable-component" id="canvasHeroPara" style="margin-top: 16px;" onclick="selectCanvasElement('heroPara')">
+                <p style="font-size: 16px; color: var(--color-gray-700); line-height: 1.6;">
+                  Take complete control of HTML5, CSS3, and rich interactions without writing a single line of code manually.
+                </p>
+              </div>
+
+              <!-- Selected Canvas Element 3: Button CTA -->
+              <div class="selectable-component" id="canvasHeroBtn" style="margin-top: 20px; display: inline-block;" onclick="selectCanvasElement('heroBtn')">
+                <a href="#designer" class="btn-wf-primary">
+                  Start building free
+                  <svg class="arrow-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                    <polyline points="12 5 19 12 12 19"></polyline>
+                  </svg>
+                </a>
+              </div>
+
+              <!-- Sample Component Card inside Canvas -->
+              <div style="margin-top: 32px; padding: 20px; border: 1px solid var(--color-border-gray); border-radius: var(--radius-4); box-shadow: var(--shadow-5layer-cascade); background: #ffffff;">
+                <span class="wf-badge-tint">CMS ITEM PREVIEW</span>
+                <h3 style="font-size: 20px; font-weight: 600; margin-top: 8px;">Interactive Component Card</h3>
+                <p style="font-size: 14px; color: var(--color-mid-gray); margin-top: 4px;">4px sharp border-radius, clean 1px gray border, 5-layer cascade shadow.</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Right Pane: Style Inspector -->
+          <div class="designer-style-panel">
+            <div class="panel-section-title">CSS SELECTOR</div>
+            <div class="class-selector-pill">
+              <span id="selectedClassName">.display-hero</span>
+              <span style="color: #ababab; font-size: 11px;">1 on page</span>
+            </div>
+
+            <div class="panel-section-title">BOX MODEL (SPACING)</div>
+            <div class="box-model-container">
+              <div>margin: 0px 0px 24px 0px</div>
+              <div class="box-model-padding">
+                <div>padding: 8px 8px 8px 8px</div>
+                <div style="background: #ffffff; padding: 6px; border: 1px solid var(--color-border-gray); color: var(--color-near-black); font-size: 10px;">
+                  ELEMENT
+                </div>
+              </div>
+            </div>
+
+            <div class="panel-section-title">TYPOGRAPHY</div>
+            <div style="display: flex; flex-direction: column; gap: 8px;">
+              <div style="display: flex; justify-content: space-between; font-size: 12px;">
+                <span style="color: var(--color-mid-gray);">Font:</span>
+                <span style="font-weight: 600;">WF Visual Sans</span>
+              </div>
+              <div style="display: flex; justify-content: space-between; font-size: 12px;">
+                <span style="color: var(--color-mid-gray);">Weight:</span>
+                <span id="inspectorWeight" style="font-weight: 600;">600 (Semi-bold)</span>
+              </div>
+              <div style="display: flex; justify-content: space-between; font-size: 12px;">
+                <span style="color: var(--color-mid-gray);">Size / Line-Height:</span>
+                <span id="inspectorSize" class="code-font">80px / 1.04</span>
+              </div>
+              <div style="display: flex; justify-content: space-between; font-size: 12px;">
+                <span style="color: var(--color-mid-gray);">Tracking:</span>
+                <span id="inspectorTracking" class="code-font">-0.8px</span>
+              </div>
+            </div>
+
+            <div class="panel-section-title">BORDER RADIUS</div>
+            <div style="display: flex; align-items: center; justify-content: space-between;">
+              <span style="font-size: 12px; color: var(--color-mid-gray);">Radius:</span>
+              <span class="code-font" style="font-size: 12px; background: #eee; padding: 2px 8px; border-radius: 2px;">4px (Sharp)</span>
+            </div>
+
+            <div class="panel-section-title">ACTIONS</div>
+            <button class="btn-wf-primary" style="width: 100%; justify-content: center; font-size: 13px; padding: 8px 12px;" onclick="copyCSSProperties()">
+              Copy Computed CSS
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Complete Design Tokens Showcase -->
+  <section id="tokens" class="tokens-section">
+    <div class="container">
+      <div class="uppercase-label" style="color: var(--_color---primary--webflow-blue);">SYSTEM DESIGN TOKENS</div>
+      <h2 class="section-heading" style="font-size: 38px; margin-top: 4px;">Exact Color Roles & CSS Variables</h2>
+      <p class="body-lead" style="margin-top: 8px; max-width: 720px;">
+        Click any token card to copy its official Webflow variable and hex value. Notice strict sharp 4px geometry and <code>translate(6px)</code> hover motion.
+      </p>
+
+      <div class="token-grid-showcase">
+        <!-- Primary Brand Blue -->
+        <div class="wf-token-card" onclick="copyVar('--_color---primary--webflow-blue', '#146ef5')">
+          <div class="token-bar" style="background: var(--_color---primary--webflow-blue);"></div>
+          <div class="token-css-var">--_color---primary--webflow-blue</div>
+          <div class="token-hex-val">#146ef5</div>
+          <div class="micro-uppercase" style="color: var(--_color---primary--webflow-blue); margin-top: 4px;">Primary CTA & Links</div>
+        </div>
+
+        <!-- Blue 400 -->
+        <div class="wf-token-card" onclick="copyVar('--_color---primary--blue-400', '#3b89ff')">
+          <div class="token-bar" style="background: var(--_color---primary--blue-400);"></div>
+          <div class="token-css-var">--_color---primary--blue-400</div>
+          <div class="token-hex-val">#3b89ff</div>
+          <div class="micro-uppercase" style="color: var(--color-mid-gray); margin-top: 4px;">Interactive Blue</div>
+        </div>
+
+        <!-- Blue 300 -->
+        <div class="wf-token-card" onclick="copyVar('--_color---blue-300', '#006acc')">
+          <div class="token-bar" style="background: var(--_color---blue-300);"></div>
+          <div class="token-css-var">--_color---blue-300</div>
+          <div class="token-hex-val">#006acc</div>
+          <div class="micro-uppercase" style="color: var(--color-mid-gray); margin-top: 4px;">Darker Variant</div>
+        </div>
+
+        <!-- Button Hover Blue -->
+        <div class="wf-token-card" onclick="copyVar('--mkto-embed-color-button-hover', '#0055d4')">
+          <div class="token-bar" style="background: var(--mkto-embed-color-button-hover);"></div>
+          <div class="token-css-var">--mkto-button-hover</div>
+          <div class="token-hex-val">#0055d4</div>
+          <div class="micro-uppercase" style="color: var(--color-mid-gray); margin-top: 4px;">Button Hover Blue</div>
+        </div>
+
+        <!-- Secondary Purple -->
+        <div class="wf-token-card" onclick="copyVar('--_color---secondary--purple', '#7a3dff')">
+          <div class="token-bar" style="background: var(--_color---secondary--purple);"></div>
+          <div class="token-css-var">--_color---secondary--purple</div>
+          <div class="token-hex-val">#7a3dff</div>
+          <div class="micro-uppercase" style="color: var(--_color---secondary--purple); margin-top: 4px;">Secondary Accent</div>
+        </div>
+
+        <!-- Secondary Pink -->
+        <div class="wf-token-card" onclick="copyVar('--_color---secondary--pink', '#ed52cb')">
+          <div class="token-bar" style="background: var(--_color---secondary--pink);"></div>
+          <div class="token-css-var">--_color---secondary--pink</div>
+          <div class="token-hex-val">#ed52cb</div>
+          <div class="micro-uppercase" style="color: var(--_color---secondary--pink); margin-top: 4px;">Secondary Accent</div>
+        </div>
+
+        <!-- Secondary Green -->
+        <div class="wf-token-card" onclick="copyVar('--_color---secondary--green', '#00d722')">
+          <div class="token-bar" style="background: var(--_color---secondary--green);"></div>
+          <div class="token-css-var">--_color---secondary--green</div>
+          <div class="token-hex-val">#00d722</div>
+          <div class="micro-uppercase" style="color: #008715; margin-top: 4px;">Secondary Accent</div>
+        </div>
+
+        <!-- Secondary Orange -->
+        <div class="wf-token-card" onclick="copyVar('--_color---secondary--orange', '#ff6b00')">
+          <div class="token-bar" style="background: var(--_color---secondary--orange);"></div>
+          <div class="token-css-var">--_color---secondary--orange</div>
+          <div class="token-hex-val">#ff6b00</div>
+          <div class="micro-uppercase" style="color: var(--_color---secondary--orange); margin-top: 4px;">Secondary Accent</div>
+        </div>
+
+        <!-- Secondary Yellow -->
+        <div class="wf-token-card" onclick="copyVar('--_color---secondary--yellow', '#ffae13')">
+          <div class="token-bar" style="background: var(--_color---secondary--yellow);"></div>
+          <div class="token-css-var">--_color---secondary--yellow</div>
+          <div class="token-hex-val">#ffae13</div>
+          <div class="micro-uppercase" style="color: #a46d00; margin-top: 4px;">Secondary Accent</div>
+        </div>
+
+        <!-- Secondary Red -->
+        <div class="wf-token-card" onclick="copyVar('--_color---secondary--red', '#ee1d36')">
+          <div class="token-bar" style="background: var(--_color---secondary--red);"></div>
+          <div class="token-css-var">--_color---secondary--red</div>
+          <div class="token-hex-val">#ee1d36</div>
+          <div class="micro-uppercase" style="color: var(--_color---secondary--red); margin-top: 4px;">Secondary Accent</div>
+        </div>
+
+        <!-- Near Black -->
+        <div class="wf-token-card" onclick="copyVar('--color-near-black', '#080808')">
+          <div class="token-bar" style="background: #080808;"></div>
+          <div class="token-css-var">--color-near-black</div>
+          <div class="token-hex-val">#080808</div>
+          <div class="micro-uppercase" style="color: var(--color-mid-gray); margin-top: 4px;">Primary Text</div>
+        </div>
+
+        <!-- Border Gray -->
+        <div class="wf-token-card" onclick="copyVar('--color-border-gray', '#d8d8d8')">
+          <div class="token-bar" style="background: #d8d8d8;"></div>
+          <div class="token-css-var">--color-border-gray</div>
+          <div class="token-hex-val">#d8d8d8</div>
+          <div class="micro-uppercase" style="color: var(--color-mid-gray); margin-top: 4px;">Borders & Dividers</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 5-Layer Cascading Shadow System Showcase -->
+  <section id="depth" class="depth-section">
+    <div class="container">
+      <div class="uppercase-label" style="color: var(--_color---primary--webflow-blue);">DEPTH & ELEVATION</div>
+      <h2 class="section-heading" style="font-size: 38px; margin-top: 4px;">5-Layer Cascading Shadow System</h2>
+      <p class="body-lead" style="margin-top: 8px; max-width: 720px;">
+        Webflow achieves subtle optical realism with a 5-layer cascade shadow that avoids blurry halos while maintaining clean 4px border geometry.
+      </p>
+
+      <div class="cards-triple-grid">
+        <!-- Feature Card 1 -->
+        <div class="wf-feature-card">
+          <div class="card-top-icon" style="background: rgba(20, 110, 245, 0.10); color: var(--_color---primary--webflow-blue);">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg>
+          </div>
+          <span class="wf-badge-tint">VISUAL CMS</span>
+          <h3 class="feature-title" style="margin-top: 12px;">Structured Content Modeling</h3>
+          <p class="body-standard" style="margin-top: 8px;">
+            Define custom schemas, link relational collections, and build dynamic templates designed for seamless marketing editing.
+          </p>
+          <a href="#designer" class="card-cta-link">
+            Explore Visual CMS
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+          </a>
+        </div>
+
+        <!-- Feature Card 2 -->
+        <div class="wf-feature-card">
+          <div class="card-top-icon" style="background: rgba(122, 61, 255, 0.10); color: var(--_color---secondary--purple);">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 2 7 12 12 22 7 12 2"></polygon><polyline points="2 17 12 22 22 17"></polyline><polyline points="2 12 12 17 22 12"></polyline></svg>
+          </div>
+          <span class="wf-badge-tint badge-purple">INTERACTIONS 2.0</span>
+          <h3 class="feature-title" style="margin-top: 12px;">Expressive Motion & Spline</h3>
+          <p class="body-standard" style="margin-top: 8px;">
+            Create multi-step scroll progress, cursor tracking, and 3D web experiences without touching complex JavaScript libraries.
+          </p>
+          <a href="#designer" class="card-cta-link" style="color: var(--_color---secondary--purple);">
+            Discover Interactions
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+          </a>
+        </div>
+
+        <!-- Feature Card 3 -->
+        <div class="wf-feature-card">
+          <div class="card-top-icon" style="background: rgba(0, 215, 34, 0.12); color: #008715;">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+          </div>
+          <span class="wf-badge-tint badge-green">ENTERPRISE CLOUD</span>
+          <h3 class="feature-title" style="margin-top: 12px;">Global Scale & Edge CDN</h3>
+          <p class="body-standard" style="margin-top: 8px;">
+            Ultra-fast worldwide asset delivery, SOC2 compliance, custom SSL, and 99.99% uptime SLA powered by AWS and Fastly edge networks.
+          </p>
+          <a href="#designer" class="card-cta-link" style="color: #008715;">
+            View Enterprise Specs
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Do's and Don'ts Section -->
+  <section id="rules" class="guidelines-section">
+    <div class="container">
+      <div class="uppercase-label" style="color: var(--_color---primary--webflow-blue);">SYSTEM CONSTRAINTS</div>
+      <h2 class="section-heading" style="font-size: 38px; margin-top: 4px;">Webflow Do's and Don'ts</h2>
+      <p class="body-standard" style="margin-top: 8px;">
+        Preserve the authentic look and feel defined in <code>open-design/design-systems/webflow/DESIGN.md</code>.
+      </p>
+
+      <div class="rules-split-grid">
+        <!-- DO CARD -->
+        <div class="rules-card do-card">
+          <span class="rules-badge">✓ DO</span>
+          <ul class="rules-list">
+            <li>
+              <strong>Primary CTA Blue:</strong> Use Webflow Blue (<code>#146ef5</code>) for primary actions with hover state <code>#0055d4</code>.
+            </li>
+            <li>
+              <strong>Sharp 4px Radius:</strong> Keep functional buttons, cards, input controls, and badges tightly constrained to 4px–8px radius.
+            </li>
+            <li>
+              <strong>translate(6px) Motion:</strong> Apply the signature 6px translation hover animation to buttons and interactive links.
+            </li>
+            <li>
+              <strong>Uppercase Labels:</strong> Format badges and section categories in uppercase with 0.8px–1.5px letter-spacing.
+            </li>
+            <li>
+              <strong>5-Layer Cascading Depth:</strong> Use multi-layer shadow stacks for authentic optical depth.
+            </li>
+          </ul>
+        </div>
+
+        <!-- DON'T CARD -->
+        <div class="rules-card dont-card">
+          <span class="rules-badge">✗ DON'T</span>
+          <ul class="rules-list">
+            <li>
+              <strong>No Over-Rounding:</strong> Never round functional interactive elements beyond 8px (pills and bubbles violate Webflow geometry).
+            </li>
+            <li>
+              <strong>Never Secondary as CTA:</strong> Do not use purple, pink, green, orange, or yellow on primary CTA buttons.
+            </li>
+            <li>
+              <strong>No Generic Gray Shadows:</strong> Avoid single-value blurry shadows like <code>0 10px 20px rgba(0,0,0,0.2)</code>.
+            </li>
+            <li>
+              <strong>No Pure Black Backgrounds:</strong> The Webflow canvas is crisp white (<code>#ffffff</code>) with near-black (<code>#080808</code>) text.
+            </li>
+            <li>
+              <strong>No Decorative Serif Mixing:</strong> Stick strictly to WF Visual Sans Variable and companion Inconsolata.
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="wf-footer">
+    <div class="container wf-footer-content">
+      <div>
+        <strong style="color: #fff; font-size: 16px;">Webflow Design System</strong>
+        <div style="color: #ababab; margin-top: 4px;">
+          Rebuilt authentically from <code>open-design/design-systems/webflow/DESIGN.md</code>
+        </div>
+      </div>
+      <div class="code-font" style="color: #ababab; font-size: 13px;">
+        <span>Primary: #146ef5</span> • <span>Radius: 4px</span> • <span>Hover: translate(6px)</span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Toast Notification -->
+  <div class="wf-toast" id="wfToast">
+    <span id="wfToastText">Token Copied</span>
+  </div>
+
+  <!-- Interactive Client Script -->
+  <script>
+    function copyVar(cssVar, hex) {
+      const text = `${cssVar}: ${hex};`;
+      navigator.clipboard.writeText(text).then(() => {
+        showWfToast(`Copied ${cssVar} (${hex})`);
+      }).catch(() => {
+        showWfToast(`${cssVar}: ${hex}`);
+      });
+    }
+
+    function showWfToast(msg) {
+      const toast = document.getElementById('wfToast');
+      document.getElementById('wfToastText').innerText = msg;
+      toast.classList.add('show');
+      setTimeout(() => {
+        toast.classList.remove('show');
+      }, 2200);
+    }
+
+    function setCanvasBreakpoint(bp) {
+      const viewport = document.getElementById('canvasViewport');
+      const buttons = document.querySelectorAll('.bp-btn');
+      buttons.forEach(b => b.classList.remove('active'));
+
+      if (bp === 'desktop') {
+        document.getElementById('bpDesktop').classList.add('active');
+        viewport.style.maxWidth = '720px';
+        showWfToast('Breakpoint: Desktop (992px+)');
+      } else if (bp === 'tablet') {
+        document.getElementById('bpTablet').classList.add('active');
+        viewport.style.maxWidth = '560px';
+        showWfToast('Breakpoint: Tablet (768px)');
+      } else if (bp === 'mobileLandscape') {
+        document.getElementById('bpMobileLandscape').classList.add('active');
+        viewport.style.maxWidth = '420px';
+        showWfToast('Breakpoint: Mobile Landscape (479px)');
+      } else if (bp === 'mobilePortrait') {
+        document.getElementById('bpMobilePortrait').classList.add('active');
+        viewport.style.maxWidth = '320px';
+        showWfToast('Breakpoint: Mobile Portrait (360px)');
+      }
+    }
+
+    function selectCanvasElement(elId) {
+      // Remove selection
+      document.querySelectorAll('.selectable-component').forEach(el => el.classList.remove('selected'));
+      document.querySelectorAll('.navigator-tree .nav-node').forEach(node => node.classList.remove('active-element'));
+
+      if (elId === 'heroHeading') {
+        document.getElementById('canvasHeroHeading').classList.add('selected');
+        document.getElementById('treeNodeHeading').classList.add('active-element');
+        document.getElementById('selectedClassName').innerText = '.display-hero';
+        document.getElementById('inspectorWeight').innerText = '600 (Semi-bold)';
+        document.getElementById('inspectorSize').innerText = '80px / 1.04';
+        document.getElementById('inspectorTracking').innerText = '-0.8px';
+      } else if (elId === 'heroPara') {
+        document.getElementById('canvasHeroPara').classList.add('selected');
+        document.getElementById('treeNodeParagraph').classList.add('active-element');
+        document.getElementById('selectedClassName').innerText = '.body-standard';
+        document.getElementById('inspectorWeight').innerText = '400 (Regular)';
+        document.getElementById('inspectorSize').innerText = '16px / 1.60';
+        document.getElementById('inspectorTracking').innerText = '-0.16px';
+      } else if (elId === 'heroBtn') {
+        document.getElementById('canvasHeroBtn').classList.add('selected');
+        document.getElementById('treeNodeButton').classList.add('active-element');
+        document.getElementById('selectedClassName').innerText = '.btn-wf-primary';
+        document.getElementById('inspectorWeight').innerText = '500 (Medium)';
+        document.getElementById('inspectorSize').innerText = '16px / 1.60';
+        document.getElementById('inspectorTracking').innerText = '-0.16px';
+      }
+    }
+
+    function copyCSSProperties() {
+      const className = document.getElementById('selectedClassName').innerText;
+      const css = `${className} {
+  font-family: "WF Visual Sans Variable", Arial, sans-serif;
+  font-size: ${document.getElementById('inspectorSize').innerText.split('/')[0].trim()};
+  font-weight: ${document.getElementById('inspectorWeight').innerText.split(' ')[0]};
+  border-radius: 4px;
+}`;
+      navigator.clipboard.writeText(css).then(() => {
+        showWfToast(`Copied CSS for ${className}`);
+      });
+    }
+
+    function triggerInspectMode() {
+      showWfToast('Inspector Mode active. Click any component in Canvas.');
+      document.getElementById('designer').scrollIntoView({ behavior: 'smooth' });
+    }
+  </script>
+</body>
+</html>

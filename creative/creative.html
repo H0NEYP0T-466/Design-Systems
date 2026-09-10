@@ -1,0 +1,606 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>TOONCRAFT — Playful Character Design Studio | Official Creative System</title>
+  <meta name="description" content="Authentic implementation of Creative design system: playful character-driven design, expressive Bangers typography, IBM Plex Mono, Primary #3B82F6, Secondary #8B5CF6, and 4/8/12/16/24/32 spacing scale." />
+
+  <!-- Google Fonts: Bangers (display/headings), IBM Plex Mono (mono), and Inter for crisp readable body -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bangers&family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+
+  <style>
+    /* ─────────────────────────────────────────────────────────────────
+       CREATIVE OFFICIAL DESIGN TOKENS (from DESIGN.md)
+       Visual Style: Playful, character-driven, expressive
+       Tokens:
+         Primary: #3B82F6
+         Secondary: #8B5CF6
+         Success: #16A34A
+         Warning: #D97706
+         Danger: #DC2626
+         Surface: #FFFFFF
+         Text: #111827
+         Neutral: #FFFFFF
+       Typography: primary=Bangers, display=Bangers, mono=IBM Plex Mono
+       Scale: 12 / 14 / 16 / 20 / 24 / 32
+       Spacing Scale: 4 / 8 / 12 / 16 / 24 / 32
+       Motion: 150-250ms stable transitions
+       ───────────────────────────────────────────────────────────────── */
+    :root {
+      --color-primary: #3B82F6;
+      --color-secondary: #8B5CF6;
+      --color-success: #16A34A;
+      --color-warning: #D97706;
+      --color-danger: #DC2626;
+      --color-surface: #FFFFFF;
+      --color-text: #111827;
+      --color-neutral: #FFFFFF;
+      --color-bg: #F8FAFC;
+      --color-border: #E2E8F0;
+
+      /* Typography Families */
+      --font-display: "Bangers", cursive, sans-serif;
+      --font-primary: "Bangers", cursive, sans-serif;
+      --font-body: "Inter", -apple-system, sans-serif;
+      --font-mono: "IBM Plex Mono", monospace;
+
+      /* Official Scale: 12 / 14 / 16 / 20 / 24 / 32 */
+      --text-12: 12px;
+      --text-14: 14px;
+      --text-16: 16px;
+      --text-20: 20px;
+      --text-24: 24px;
+      --text-32: 32px;
+
+      /* Official Spacing: 4 / 8 / 12 / 16 / 24 / 32 */
+      --space-4: 4px;
+      --space-8: 8px;
+      --space-12: 12px;
+      --space-16: 16px;
+      --space-24: 24px;
+      --space-32: 32px;
+
+      /* Playful Bold Radii */
+      --radius-sm: 8px;
+      --radius-md: 16px;
+      --radius-lg: 24px;
+      --radius-pill: 9999px;
+
+      /* Playful Pop Elevation */
+      --shadow-pop: 4px 4px 0px #111827;
+      --shadow-pop-hover: 6px 6px 0px #111827;
+      --shadow-subtle: 0 4px 12px rgba(17, 24, 39, 0.06);
+
+      --transition-pop: 180ms cubic-bezier(0.16, 1, 0.3, 1);
+      --container-max: 1160px;
+    }
+
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      background: var(--color-bg);
+      color: var(--color-text);
+      font-size: 16px;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    body {
+      background: var(--color-bg);
+      color: var(--color-text);
+      font-family: var(--font-body);
+      font-size: var(--text-16);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    /* ─── TYPOGRAPHY ─── */
+    h1, h2, h3, h4, .comic-title {
+      font-family: var(--font-display);
+      color: var(--color-text);
+      letter-spacing: 0.04em;
+      line-height: 1.1;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      font-size: clamp(38px, 6vw, 56px);
+      text-shadow: 2px 2px 0px rgba(59, 130, 246, 0.3);
+    }
+
+    h2 {
+      font-size: var(--text-32);
+    }
+
+    h3 {
+      font-size: var(--text-24);
+    }
+
+    h4 {
+      font-size: var(--text-20);
+    }
+
+    p {
+      color: #374151;
+      font-size: var(--text-16);
+    }
+
+    .tag-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-4);
+      font-family: var(--font-mono);
+      font-size: var(--text-12);
+      font-weight: 600;
+      background: var(--color-surface);
+      color: var(--color-primary);
+      border: 2px solid var(--color-text);
+      box-shadow: 2px 2px 0px var(--color-text);
+      padding: 4px 10px;
+      border-radius: var(--radius-pill);
+    }
+
+    /* ─── PLAYFUL BUTTONS ─── */
+    .btn-pop {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--space-8);
+      font-family: var(--font-display);
+      font-size: var(--text-16);
+      letter-spacing: 0.05em;
+      padding: 10px 22px;
+      border-radius: var(--radius-md);
+      text-decoration: none;
+      cursor: pointer;
+      border: 2px solid var(--color-text);
+      box-shadow: var(--shadow-pop);
+      transition: all var(--transition-pop);
+      outline: none;
+      text-transform: uppercase;
+    }
+
+    .btn-pop:hover {
+      transform: translate(-2px, -2px);
+      box-shadow: var(--shadow-pop-hover);
+    }
+
+    .btn-pop:active {
+      transform: translate(2px, 2px);
+      box-shadow: 2px 2px 0px var(--color-text);
+    }
+
+    .btn-pop-primary {
+      background: var(--color-primary);
+      color: #ffffff;
+    }
+
+    .btn-pop-primary:hover {
+      background: #2563eb;
+    }
+
+    .btn-pop-secondary {
+      background: var(--color-secondary);
+      color: #ffffff;
+    }
+
+    .btn-pop-secondary:hover {
+      background: #7c3aed;
+    }
+
+    .btn-pop-neutral {
+      background: var(--color-surface);
+      color: var(--color-text);
+    }
+
+    /* ─── STICKY HEADER ─── */
+    .creative-header {
+      position: sticky;
+      top: 0;
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(8px);
+      border-bottom: 2px solid var(--color-text);
+      z-index: 1000;
+    }
+
+    .nav-container {
+      max-width: var(--container-max);
+      margin: 0 auto;
+      padding: var(--space-12) var(--space-24);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .brand-logo {
+      display: flex;
+      align-items: center;
+      gap: var(--space-8);
+      text-decoration: none;
+      font-family: var(--font-display);
+      font-size: var(--text-24);
+      color: var(--color-text);
+      letter-spacing: 0.05em;
+    }
+
+    .brand-icon {
+      width: 28px;
+      height: 28px;
+      background: var(--color-primary);
+      border: 2px solid var(--color-text);
+      border-radius: 6px;
+      box-shadow: 2px 2px 0px var(--color-text);
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: var(--space-24);
+      list-style: none;
+    }
+
+    @media (max-width: 768px) {
+      .nav-links {
+        display: none;
+      }
+    }
+
+    .nav-link {
+      font-family: var(--font-display);
+      font-size: var(--text-16);
+      color: var(--color-text);
+      text-decoration: none;
+      letter-spacing: 0.04em;
+      transition: color 150ms ease;
+    }
+
+    .nav-link:hover {
+      color: var(--color-primary);
+    }
+
+    /* ─── MAIN CONTAINER ─── */
+    .main-container {
+      max-width: var(--container-max);
+      margin: 0 auto;
+      padding: 0 var(--space-24);
+    }
+
+    /* ─── HERO SECTION ─── */
+    .hero-box {
+      padding: var(--space-32) 0;
+      display: grid;
+      grid-template-columns: 1.15fr 0.85fr;
+      gap: var(--space-32);
+      align-items: center;
+    }
+
+    @media (max-width: 860px) {
+      .hero-box {
+        grid-template-columns: 1fr;
+        text-align: center;
+      }
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: var(--space-16);
+      margin-top: var(--space-24);
+      flex-wrap: wrap;
+    }
+
+    @media (max-width: 860px) {
+      .hero-actions {
+        justify-content: center;
+      }
+    }
+
+    .hero-stage-card {
+      background: var(--color-surface);
+      border: 2px solid var(--color-text);
+      border-radius: var(--radius-lg);
+      padding: var(--space-24);
+      box-shadow: var(--shadow-pop);
+      position: relative;
+    }
+
+    .sticker-floating {
+      position: absolute;
+      top: -12px;
+      right: -12px;
+      background: #FBBF24;
+      border: 2px solid var(--color-text);
+      padding: 4px 12px;
+      border-radius: var(--radius-pill);
+      font-family: var(--font-display);
+      font-size: var(--text-14);
+      box-shadow: 2px 2px 0px var(--color-text);
+      transform: rotate(8deg);
+    }
+
+    /* ─── CARDS GRID ─── */
+    .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: var(--space-24);
+      margin: var(--space-32) 0;
+    }
+
+    .pop-card {
+      background: var(--color-surface);
+      border: 2px solid var(--color-text);
+      border-radius: var(--radius-md);
+      padding: var(--space-24);
+      box-shadow: var(--shadow-pop);
+      transition: all var(--transition-pop);
+    }
+
+    .pop-card:hover {
+      transform: translate(-3px, -3px);
+      box-shadow: var(--shadow-pop-hover);
+    }
+
+    .card-icon-box {
+      width: 44px;
+      height: 44px;
+      border-radius: var(--radius-sm);
+      border: 2px solid var(--color-text);
+      box-shadow: 2px 2px 0px var(--color-text);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-display);
+      font-size: var(--text-20);
+      margin-bottom: var(--space-16);
+      color: #ffffff;
+    }
+
+    /* ─── INTERACTIVE CHARACTER WORKBENCH ─── */
+    .workbench-section {
+      background: var(--color-surface);
+      border: 2px solid var(--color-text);
+      border-radius: var(--radius-lg);
+      padding: var(--space-32);
+      box-shadow: var(--shadow-pop);
+      margin: var(--space-32) 0;
+    }
+
+    .character-avatar-stage {
+      width: 100%;
+      height: 220px;
+      background: #EFF6FF;
+      border: 2px dashed var(--color-primary);
+      border-radius: var(--radius-md);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: var(--space-16) 0;
+      position: relative;
+    }
+
+    /* ─── FOOTER ─── */
+    .creative-footer {
+      border-top: 2px solid var(--color-text);
+      background: var(--color-surface);
+      padding: var(--space-32) 0;
+      margin-top: var(--space-32);
+    }
+
+    .footer-inner {
+      max-width: var(--container-max);
+      margin: 0 auto;
+      padding: 0 var(--space-24);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: var(--space-16);
+    }
+
+    /* ─── AUDIT DRAWER ─── */
+    .audit-trigger {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      z-index: 1000;
+    }
+
+    .audit-modal {
+      display: none;
+      position: fixed;
+      bottom: 80px;
+      right: 24px;
+      width: 360px;
+      background: var(--color-surface);
+      border: 2px solid var(--color-text);
+      border-radius: var(--radius-md);
+      box-shadow: 6px 6px 0px var(--color-text);
+      padding: var(--space-24);
+      z-index: 1001;
+      font-family: var(--font-mono);
+      font-size: var(--text-12);
+    }
+
+    .audit-modal.open {
+      display: block;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- STICKY TOP NAV -->
+  <header class="creative-header">
+    <div class="nav-container">
+      <a href="#" class="brand-logo">
+        <div class="brand-icon"></div>
+        <span>TOONCRAFT</span>
+      </a>
+
+      <ul class="nav-links">
+        <li><a href="#characters" class="nav-link">Characters</a></li>
+        <li><a href="#workbench" class="nav-link">Pop Lab</a></li>
+        <li><a href="#styles" class="nav-link">Tokens</a></li>
+      </ul>
+
+      <div style="display: flex; gap: var(--space-8); align-items: center;">
+        <button class="btn-pop btn-pop-neutral" onclick="toggleAuditor()">Spec</button>
+        <a href="#workbench" class="btn-pop btn-pop-primary">Get Started</a>
+      </div>
+    </div>
+  </header>
+
+  <main class="main-container">
+    <!-- HERO SECTION -->
+    <section class="hero-box">
+      <div>
+        <div class="tag-badge">★ PLAYFUL CHARACTER-DRIVEN DESIGN</div>
+        <h1 style="margin-top: var(--space-16); margin-bottom: var(--space-12);">Bolder visuals for creative minds!</h1>
+        <p>
+          High-energy comic aesthetic with punchy Bangers display typography, crisp pop shadows, and a vibrant primary palette (#3B82F6 and #8B5CF6).
+        </p>
+        <div class="hero-actions">
+          <a href="#workbench" class="btn-pop btn-pop-primary">Customize Hero Avatar</a>
+          <a href="#characters" class="btn-pop btn-pop-secondary">Explore Characters</a>
+        </div>
+      </div>
+
+      <!-- Hero Character Showcase Card -->
+      <div class="hero-stage-card">
+        <div class="sticker-floating">NEW DROP!</div>
+        <h3 style="margin-bottom: var(--space-8);">Captain Vector v2.0</h3>
+        <p style="font-size: var(--text-14); margin-bottom: var(--space-16);">
+          Handcrafted vector character pack ready for games, apps, and landing pages.
+        </p>
+
+        <!-- Dynamic SVG Comic Character -->
+        <div style="text-align: center; background: #FEF3C7; border: 2px solid var(--color-text); border-radius: var(--radius-md); padding: var(--space-16);">
+          <svg viewBox="0 0 200 160" width="100%" height="150" id="heroCharSvg">
+            <!-- Comic shadow base -->
+            <ellipse cx="100" cy="140" rx="60" ry="10" fill="#111827" opacity="0.2" />
+            <!-- Head / Helmet -->
+            <circle cx="100" cy="70" r="45" fill="#3B82F6" stroke="#111827" stroke-width="3" id="charHead" />
+            <!-- Goggles / Visor -->
+            <rect x="75" y="55" width="50" height="24" rx="12" fill="#FFFFFF" stroke="#111827" stroke-width="3" />
+            <circle cx="90" cy="67" r="6" fill="#111827" />
+            <circle cx="110" cy="67" r="6" fill="#111827" />
+            <path d="M 88 92 Q 100 102 112 92" stroke="#111827" stroke-width="3" fill="none" stroke-linecap="round" />
+            <!-- Sparkles -->
+            <polygon points="45,40 50,30 55,40 65,45 55,50 50,60 45,50 35,45" fill="#F59E0B" stroke="#111827" stroke-width="2" />
+          </svg>
+        </div>
+
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-top: var(--space-16);">
+          <span style="font-family: var(--font-mono); font-size: var(--text-14); font-weight: 600;">LICENSED SVG + PNG</span>
+          <button class="btn-pop btn-pop-primary" onclick="popRandomColor()" style="font-size: var(--text-14); padding: 6px 14px;">Pop Color</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- CARDS GRID -->
+    <section id="characters">
+      <h2>Creative Tooling Modules</h2>
+      <div class="cards-grid">
+        <div class="pop-card">
+          <div class="card-icon-box" style="background: var(--color-primary);">01</div>
+          <h3>Vector Sprite Generator</h3>
+          <p>Generate SVG game assets and stylized cartoon props with custom stroke widths and pop drop shadows.</p>
+        </div>
+
+        <div class="pop-card">
+          <div class="card-icon-box" style="background: var(--color-secondary);">02</div>
+          <h3>Comic Speech Bubbles</h3>
+          <p>Drop-in dialogue callouts with authentic pop-art half-tone dots and dynamic pointer angles.</p>
+        </div>
+
+        <div class="pop-card">
+          <div class="card-icon-box" style="background: var(--color-warning);">03</div>
+          <h3>Action Onomatopoeia</h3>
+          <p>Pow, Bam, Zap, and Swoosh! Scalable stylized action typography rendered directly on canvas.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- INTERACTIVE WORKBENCH -->
+    <section class="workbench-section" id="workbench">
+      <h2>Interactive Pop Avatar Lab</h2>
+      <p style="margin-bottom: var(--space-16);">Test color stances and style foundations directly in the browser.</p>
+
+      <div class="character-avatar-stage">
+        <span class="comic-title" id="stageBanner" style="font-size: var(--text-32); color: var(--color-primary);">SUPERCHARGED!</span>
+      </div>
+
+      <div style="display: flex; gap: var(--space-12); flex-wrap: wrap;">
+        <button class="btn-pop btn-pop-primary" onclick="setPopTheme('#3B82F6', 'PRIMARY SKY BLUE')">Primary Blue</button>
+        <button class="btn-pop btn-pop-secondary" onclick="setPopTheme('#8B5CF6', 'SECONDARY VIOLET')">Secondary Violet</button>
+        <button class="btn-pop" style="background: #16A34A; color: #fff;" onclick="setPopTheme('#16A34A', 'SUCCESS GREEN')">Success Green</button>
+        <button class="btn-pop" style="background: #D97706; color: #fff;" onclick="setPopTheme('#D97706', 'WARNING AMBER')">Warning Amber</button>
+      </div>
+    </section>
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="creative-footer">
+    <div class="footer-inner">
+      <span class="comic-title" style="font-size: var(--text-16);">© 2026 TOONCRAFT STUDIOS. ALL CREATIVE RIGHTS RESERVED.</span>
+      <div style="display: flex; gap: var(--space-16); font-family: var(--font-mono); font-size: var(--text-12);">
+        <a href="#" style="color: var(--color-text);">TERMS</a>
+        <a href="#" style="color: var(--color-text);">COMMISSIONS</a>
+        <a href="#" style="color: var(--color-text);">CREATIVE COMMONS</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- FLOATING AUDIT MODAL -->
+  <div class="audit-trigger">
+    <button class="btn-pop btn-pop-primary" onclick="toggleAuditor()">
+      <span>Audit Tokens</span>
+    </button>
+  </div>
+
+  <div class="audit-modal" id="auditModal">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; border-bottom: 2px solid var(--color-text); padding-bottom: 6px;">
+      <span class="comic-title" style="font-size: var(--text-16);">CREATIVE TOKENS</span>
+      <button onclick="toggleAuditor()" style="background: none; border: none; cursor: pointer; font-size: 16px; font-weight: 700;">✕</button>
+    </div>
+    <div style="display: flex; flex-direction: column; gap: 6px;">
+      <div>• Primary: <span style="color: #3B82F6; font-weight: 600;">#3B82F6</span></div>
+      <div>• Secondary: <span style="color: #8B5CF6; font-weight: 600;">#8B5CF6</span></div>
+      <div>• Success: <span style="color: #16A34A; font-weight: 600;">#16A34A</span></div>
+      <div>• Warning: <span style="color: #D97706; font-weight: 600;">#D97706</span></div>
+      <div>• Danger: <span style="color: #DC2626; font-weight: 600;">#DC2626</span></div>
+      <div>• Surface: <span style="font-weight: 600;">#FFFFFF</span></div>
+      <div>• Text: <span style="color: #111827; font-weight: 600;">#111827</span></div>
+      <div>• Fonts: Bangers + IBM Plex Mono</div>
+      <div>• Scale: 12 / 14 / 16 / 20 / 24 / 32</div>
+      <div>• Spacing: 4 / 8 / 12 / 16 / 24 / 32</div>
+    </div>
+  </div>
+
+  <!-- SCRIPTS -->
+  <script>
+    function toggleAuditor() {
+      document.getElementById('auditModal').classList.toggle('open');
+    }
+
+    const popColors = ['#3B82F6', '#8B5CF6', '#16A34A', '#D97706', '#DC2626'];
+    let cIdx = 0;
+    function popRandomColor() {
+      cIdx = (cIdx + 1) % popColors.length;
+      document.getElementById('charHead').setAttribute('fill', popColors[cIdx]);
+    }
+
+    function setPopTheme(hex, label) {
+      const banner = document.getElementById('stageBanner');
+      banner.textContent = label;
+      banner.style.color = hex;
+      document.getElementById('charHead').setAttribute('fill', hex);
+    }
+  </script>
+</body>
+</html>

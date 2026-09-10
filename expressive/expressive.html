@@ -1,0 +1,655 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Expressive — Bold Creative Design Studio</title>
+  <meta name="description" content="Authentic implementation of the Expressive design system with IBM Plex Mono typography, #DB2777 fuchsia accents, vibrant grids, and playful structured components.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;1,400;1,600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      /* Expressive Palette Tokens */
+      --primary: #DB2777;
+      --primary-hover: #be185d;
+      --secondary: #2563EB;
+      --secondary-hover: #1d4ed8;
+      --success: #16A34A;
+      --warning: #D97706;
+      --danger: #DC2626;
+      --surface: #FFFFFF;
+      --surface-subtle: #FDF2F8;
+      --surface-neutral: #F9FAFB;
+      --text: #111827;
+      --text-muted: #4B5563;
+      --border: #E5E7EB;
+      --border-accent: #FBCFE8;
+
+      /* Spacing Scale: 4/8/12/16/24/32 */
+      --space-1: 4px;
+      --space-2: 8px;
+      --space-3: 12px;
+      --space-4: 16px;
+      --space-6: 24px;
+      --space-8: 32px;
+
+      /* Typography: Pure IBM Plex Mono */
+      --font-family: 'IBM Plex Mono', monospace;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--surface-neutral);
+      color: var(--text);
+      font-family: var(--font-family);
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+      padding-bottom: 64px;
+    }
+
+    .container {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 0 var(--space-6);
+    }
+
+    /* Top Strip */
+    .top-strip {
+      background: var(--primary);
+      color: #FFFFFF;
+      font-size: 14px;
+      font-weight: 600;
+      text-align: center;
+      padding: var(--space-2) var(--space-4);
+      letter-spacing: -0.02em;
+    }
+
+    /* Header Nav */
+    .expressive-nav {
+      background: var(--surface);
+      border-bottom: 2px solid var(--text);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .nav-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 72px;
+    }
+
+    .brand-logo {
+      display: flex;
+      align-items: center;
+      gap: var(--space-3);
+      text-decoration: none;
+      color: var(--text);
+      font-size: 24px;
+      font-weight: 800;
+      letter-spacing: -0.04em;
+    }
+
+    .brand-symbol {
+      width: 36px;
+      height: 36px;
+      background: var(--primary);
+      color: #FFFFFF;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 8px;
+      box-shadow: 3px 3px 0px var(--text);
+      font-weight: 900;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: var(--space-6);
+      list-style: none;
+    }
+
+    .nav-links a {
+      color: var(--text);
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 600;
+      transition: color 0.15s ease;
+    }
+
+    .nav-links a:hover {
+      color: var(--primary);
+    }
+
+    .btn-primary {
+      background: var(--primary);
+      color: #FFFFFF;
+      border: 2px solid var(--text);
+      padding: var(--space-2) var(--space-4);
+      font-family: var(--font-family);
+      font-size: 14px;
+      font-weight: 700;
+      border-radius: 8px;
+      cursor: pointer;
+      box-shadow: 3px 3px 0px var(--text);
+      transition: all 0.15s ease;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-2);
+    }
+
+    .btn-primary:hover {
+      background: var(--primary-hover);
+      transform: translate(-1px, -1px);
+      box-shadow: 4px 4px 0px var(--text);
+    }
+
+    .btn-primary:active {
+      transform: translate(2px, 2px);
+      box-shadow: 1px 1px 0px var(--text);
+    }
+
+    .btn-secondary {
+      background: var(--surface);
+      color: var(--text);
+      border: 2px solid var(--text);
+      padding: var(--space-2) var(--space-4);
+      font-family: var(--font-family);
+      font-size: 14px;
+      font-weight: 700;
+      border-radius: 8px;
+      cursor: pointer;
+      box-shadow: 3px 3px 0px var(--text);
+      transition: all 0.15s ease;
+      text-decoration: none;
+    }
+
+    .btn-secondary:hover {
+      background: var(--surface-subtle);
+      border-color: var(--secondary);
+      color: var(--secondary);
+    }
+
+    /* Hero Section */
+    .hero-section {
+      padding: var(--space-8) 0;
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: var(--space-8);
+      align-items: center;
+    }
+
+    .hero-content {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-4);
+    }
+
+    .badge-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-2);
+      align-self: flex-start;
+      background: var(--surface-subtle);
+      border: 1px solid var(--border-accent);
+      color: var(--primary);
+      padding: var(--space-1) var(--space-3);
+      border-radius: 20px;
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    .hero-title {
+      font-size: 40px;
+      font-weight: 800;
+      line-height: 1.15;
+      letter-spacing: -0.03em;
+      color: var(--text);
+    }
+
+    .hero-title span {
+      color: var(--primary);
+      text-decoration: underline wavy var(--secondary) 3px;
+    }
+
+    .hero-lead {
+      font-size: 18px;
+      color: var(--text-muted);
+      font-weight: 400;
+      line-height: 1.5;
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: var(--space-4);
+      margin-top: var(--space-2);
+    }
+
+    /* Hero Interactive Graphic Card */
+    .hero-interactive-card {
+      background: var(--surface);
+      border: 2px solid var(--text);
+      border-radius: 16px;
+      padding: var(--space-6);
+      box-shadow: 6px 6px 0px var(--text);
+      position: relative;
+    }
+
+    .card-topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 2px dashed var(--border);
+      padding-bottom: var(--space-3);
+      margin-bottom: var(--space-4);
+    }
+
+    .status-badge {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--success);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--success);
+    }
+
+    /* Live Studio Widget */
+    .studio-panel {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-4);
+    }
+
+    .canvas-preview {
+      height: 180px;
+      background: linear-gradient(135deg, var(--surface-subtle) 0%, #EFF6FF 100%);
+      border: 2px solid var(--text);
+      border-radius: 12px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+      transition: background 0.3s ease;
+    }
+
+    .canvas-text {
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--text);
+      letter-spacing: -0.02em;
+      transition: all 0.2s ease;
+    }
+
+    .canvas-tag {
+      font-size: 12px;
+      background: var(--secondary);
+      color: #FFF;
+      padding: 2px 8px;
+      border-radius: 4px;
+      margin-top: var(--space-2);
+      font-weight: 600;
+    }
+
+    .controls-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--space-3);
+    }
+
+    .control-item {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-1);
+    }
+
+    .control-label {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--text-muted);
+      text-transform: uppercase;
+    }
+
+    .slider {
+      accent-color: var(--primary);
+    }
+
+    /* Token Specifications Section */
+    .section-tokens {
+      margin-top: var(--space-8);
+      padding: var(--space-8) 0;
+    }
+
+    .section-title {
+      font-size: 32px;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      margin-bottom: var(--space-2);
+      display: flex;
+      align-items: center;
+      gap: var(--space-3);
+    }
+
+    .section-desc {
+      font-size: 16px;
+      color: var(--text-muted);
+      margin-bottom: var(--space-6);
+    }
+
+    .tokens-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: var(--space-4);
+    }
+
+    .token-box {
+      background: var(--surface);
+      border: 2px solid var(--text);
+      border-radius: 12px;
+      padding: var(--space-4);
+      box-shadow: 4px 4px 0px var(--text);
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-2);
+    }
+
+    .token-chip {
+      height: 64px;
+      border-radius: 8px;
+      border: 2px solid var(--text);
+      display: flex;
+      align-items: flex-end;
+      padding: var(--space-1) var(--space-2);
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .token-name {
+      font-size: 16px;
+      font-weight: 700;
+    }
+
+    .token-role {
+      font-size: 14px;
+      color: var(--text-muted);
+      line-height: 1.3;
+    }
+
+    /* Feature Grid (4, 8, 12, 16, 24, 32 scale) */
+    .feature-cards {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: var(--space-6);
+      margin-top: var(--space-8);
+    }
+
+    .card-expressive {
+      background: var(--surface);
+      border: 2px solid var(--text);
+      border-radius: 12px;
+      padding: var(--space-6);
+      box-shadow: 4px 4px 0px var(--text);
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-3);
+      position: relative;
+    }
+
+    .card-badge-corner {
+      position: absolute;
+      top: -12px;
+      right: var(--space-4);
+      background: var(--primary);
+      color: #FFF;
+      font-size: 12px;
+      font-weight: 700;
+      padding: 2px 8px;
+      border: 2px solid var(--text);
+      border-radius: 4px;
+      box-shadow: 2px 2px 0px var(--text);
+    }
+
+    .card-title {
+      font-size: 24px;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+    }
+
+    .card-body {
+      font-size: 16px;
+      color: var(--text-muted);
+      line-height: 1.45;
+    }
+
+    /* Footer */
+    .expressive-footer {
+      margin-top: var(--space-8);
+      border-top: 2px solid var(--text);
+      background: var(--surface);
+      padding: var(--space-8) 0;
+    }
+
+    .footer-content {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .footer-legal {
+      font-size: 14px;
+      color: var(--text-muted);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Announcement Strip -->
+  <div class="top-strip">
+    ⚡ EXPRESSIVE DESIGN ENGINE — STRUCTURED PLAYFULNESS & DYNAMIC MONOSPACE
+  </div>
+
+  <!-- Header Navigation -->
+  <header class="expressive-nav">
+    <div class="container nav-inner">
+      <a href="#" class="brand-logo">
+        <div class="brand-symbol">E!</div>
+        <span>Expressive</span>
+      </a>
+
+      <ul class="nav-links">
+        <li><a href="#tokens">Tokens</a></li>
+        <li><a href="#studio">Interactive Studio</a></li>
+        <li><a href="#scale">Type Scale</a></li>
+        <li><a href="#">Guidelines</a></li>
+      </ul>
+
+      <div style="display: flex; gap: var(--space-3);">
+        <button class="btn-secondary" onclick="alert('Component library specs opened')">Components</button>
+        <a href="#studio" class="btn-primary">Launch Studio →</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="container hero-section">
+    <div class="hero-content">
+      <div class="badge-pill">
+        <span>★</span>
+        <span>Bold & Expressive Category</span>
+      </div>
+
+      <h1 class="hero-title">
+        Vibrant personality. <span>Strict typographic</span> structure.
+      </h1>
+
+      <p class="hero-lead">
+        Expressive merges high-energy fuchsia (#DB2777) and cobalt blue (#2563EB) accents with the disciplined, geometric rhythm of pure IBM Plex Mono typography across all weights.
+      </p>
+
+      <div class="hero-actions">
+        <button class="btn-primary" onclick="randomizeTheme()">Experiment Palette</button>
+        <button class="btn-secondary" onclick="document.getElementById('studio').scrollIntoView({behavior: 'smooth'})">Explore Widgets</button>
+      </div>
+    </div>
+
+    <!-- Live Interactive Graphic Card -->
+    <div class="hero-interactive-card" id="studio">
+      <div class="card-topbar">
+        <span style="font-size: 14px; font-weight: 700;">LIVE ENGINE STAGE</span>
+        <div class="status-badge">
+          <span class="status-dot"></span>
+          <span>ACTIVE STREAM</span>
+        </div>
+      </div>
+
+      <div class="studio-panel">
+        <div class="canvas-preview" id="canvasBox">
+          <div class="canvas-text" id="canvasHeadline">IBM Plex Mono 700</div>
+          <div class="canvas-tag" id="canvasSub">PRIMARY #DB2777</div>
+        </div>
+
+        <div class="controls-row">
+          <div class="control-item">
+            <label class="control-label">Font Weight (100–900)</label>
+            <input type="range" class="slider" min="100" max="900" step="100" value="700" oninput="updateWeight(this.value)">
+          </div>
+
+          <div class="control-item">
+            <label class="control-label">Accent Style</label>
+            <button class="btn-secondary" style="padding: 4px 8px; font-size: 12px;" onclick="toggleAccent()">Switch Fuchsia / Cobalt</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Color Tokens Grid -->
+  <section class="container section-tokens" id="tokens">
+    <h2 class="section-title">
+      <span style="color: var(--primary);">#</span> Foundations & Palette Tokens
+    </h2>
+    <p class="section-desc">
+      Strict adherence to expressive style foundations: high-contrast accents, light surfaces, and legible body copy.
+    </p>
+
+    <div class="tokens-grid">
+      <!-- Token 1 -->
+      <div class="token-box">
+        <div class="token-chip" style="background: #DB2777; color: #FFFFFF;">#DB2777</div>
+        <div class="token-name">Primary</div>
+        <div class="token-role">Fuchsia CTA emphasis, brand hero accents, active states</div>
+      </div>
+
+      <!-- Token 2 -->
+      <div class="token-box">
+        <div class="token-chip" style="background: #2563EB; color: #FFFFFF;">#2563EB</div>
+        <div class="token-name">Secondary</div>
+        <div class="token-role">Cobalt blue secondary actions, hyperlinks, badges</div>
+      </div>
+
+      <!-- Token 3 -->
+      <div class="token-box">
+        <div class="token-chip" style="background: #16A34A; color: #FFFFFF;">#16A34A</div>
+        <div class="token-name">Success</div>
+        <div class="token-role">Positive validation, verified badges, live statuses</div>
+      </div>
+
+      <!-- Token 4 -->
+      <div class="token-box">
+        <div class="token-chip" style="background: #D97706; color: #FFFFFF;">#D97706</div>
+        <div class="token-name">Warning</div>
+        <div class="token-role">Caution flags, rate limit notices, pending review</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Feature Grid -->
+  <section class="container" id="scale">
+    <div class="feature-cards">
+      <div class="card-expressive">
+        <div class="card-badge-corner">SCALE 40</div>
+        <h3 class="card-title">Pure Monospace</h3>
+        <p class="card-body">
+          Every heading, label, paragraph, and code tag uses IBM Plex Mono. Character widths align mathematically across columns.
+        </p>
+      </div>
+
+      <div class="card-expressive">
+        <div class="card-badge-corner" style="background: var(--secondary);">GRID 4/8/12</div>
+        <h3 class="card-title">Structured Cadence</h3>
+        <p class="card-body">
+          Rigid spacing steps ensure components maintain rhythm even when saturated colors and offset drop-shadows provide playful punch.
+        </p>
+      </div>
+
+      <div class="card-expressive">
+        <div class="card-badge-corner" style="background: var(--success);">ACCESSIBILITY</div>
+        <h3 class="card-title">High Contrast</h3>
+        <p class="card-body">
+          Text remains strictly on #111827 against pure #FFFFFF cards, guaranteeing complete WCAG AAA readability at all type sizes.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="expressive-footer">
+    <div class="container footer-content">
+      <div style="display: flex; align-items: center; gap: var(--space-3);">
+        <div class="brand-symbol" style="width: 28px; height: 28px; font-size: 14px;">E!</div>
+        <span style="font-weight: 700; font-size: 16px;">Expressive Design System</span>
+      </div>
+
+      <div class="footer-legal">
+        Adheres to <code>open-design/design-systems/expressive/DESIGN.md</code> • 2026
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    function updateWeight(val) {
+      const headline = document.getElementById('canvasHeadline');
+      headline.style.fontWeight = val;
+      headline.textContent = `IBM Plex Mono ${val}`;
+    }
+
+    let isCobalt = false;
+    function toggleAccent() {
+      isCobalt = !isCobalt;
+      const tag = document.getElementById('canvasSub');
+      const box = document.getElementById('canvasBox');
+      if (isCobalt) {
+        tag.style.background = 'var(--primary)';
+        tag.textContent = 'SECONDARY #2563EB';
+        box.style.background = 'linear-gradient(135deg, #EFF6FF 0%, #DBEAFE 100%)';
+      } else {
+        tag.style.background = 'var(--secondary)';
+        tag.textContent = 'PRIMARY #DB2777';
+        box.style.background = 'linear-gradient(135deg, var(--surface-subtle) 0%, #EFF6FF 100%)';
+      }
+    }
+
+    function randomizeTheme() {
+      const colors = ['#FDF2F8', '#EFF6FF', '#FEF3C7', '#DCFCE7'];
+      const pick = colors[Math.floor(Math.random() * colors.length)];
+      document.getElementById('canvasBox').style.background = pick;
+    }
+  </script>
+</body>
+</html>

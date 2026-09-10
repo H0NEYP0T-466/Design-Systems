@@ -1,0 +1,393 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Bento — Modular Grid &amp; Card Architecture</title>
+  <meta name="description" content="Bento design system: Warm peach primary #FAD4C0, slate blue #80A1C1, creamy surface #FFF5E6, and modular bento-box grid layouts." />
+
+  <!-- Google Fonts: Inter & JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+  <style>
+    /* ─────────────────────────────────────────────────────────────────
+       BENTO DESIGN SYSTEM TOKENS
+       Source: open-design/design-systems/bento/DESIGN.md
+       ───────────────────────────────────────────────────────────────── */
+    :root {
+      --primary: #FAD4C0;
+      --primary-border: #f5bfa5;
+      --secondary: #80A1C1;
+      --surface: #FFF5E6;
+      --surface-card: #FFFFFF;
+      --text: #111827;
+      --text-muted: #596775;
+      --border: #ebd9c8;
+
+      --success: #16A34A;
+      --warning: #D97706;
+      --danger: #DC2626;
+
+      --font-display: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
+      --font-body: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
+      --font-mono: "JetBrains Mono", monospace;
+
+      --text-12: 12px;
+      --text-14: 14px;
+      --text-16: 16px;
+      --text-20: 20px;
+      --text-24: 24px;
+      --text-32: 32px;
+
+      --radius-sm: 8px;
+      --radius-md: 14px;
+      --radius-lg: 24px;
+      --radius-pill: 9999px;
+
+      --shadow-bento: 0 4px 20px rgba(128, 161, 193, 0.08);
+      --transition-fast: 180ms ease;
+    }
+
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--surface);
+      color: var(--text);
+      font-family: var(--font-body);
+      font-size: var(--text-16);
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+      padding-bottom: 60px;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin-inline: auto;
+      padding-inline: 28px;
+    }
+
+    /* Top Navigation */
+    .bento-nav {
+      padding-block: 20px;
+      border-bottom: 1px solid var(--border);
+      background: var(--surface);
+      position: sticky;
+      top: 0;
+      z-index: 50;
+    }
+    .nav-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .brand-bento {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+      color: var(--text);
+      font-weight: 800;
+      font-size: 20px;
+      letter-spacing: -0.02em;
+    }
+    .bento-logo-icon {
+      width: 28px;
+      height: 28px;
+      background: var(--primary);
+      border: 1px solid var(--primary-border);
+      border-radius: 6px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      padding: 4px;
+      gap: 3px;
+    }
+    .bento-mini-dot {
+      background: var(--secondary);
+      border-radius: 2px;
+    }
+    .nav-links {
+      display: flex;
+      gap: 28px;
+      list-style: none;
+    }
+    @media (max-width: 768px) {
+      .nav-links { display: none; }
+    }
+    .nav-links a {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-weight: 500;
+      font-size: 15px;
+      transition: color var(--transition-fast);
+    }
+    .nav-links a:hover {
+      color: var(--text);
+    }
+
+    /* Buttons */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 20px;
+      border-radius: var(--radius-pill);
+      font-size: 14px;
+      font-weight: 600;
+      text-decoration: none;
+      border: 1px solid transparent;
+      cursor: pointer;
+      transition: all var(--transition-fast);
+    }
+    .btn-primary {
+      background: var(--primary);
+      color: var(--text);
+      border-color: var(--primary-border);
+    }
+    .btn-primary:hover {
+      background: #f7c9b0;
+      transform: translateY(-1px);
+    }
+    .btn-secondary {
+      background: var(--surface-card);
+      color: var(--text);
+      border-color: var(--border);
+    }
+    .btn-secondary:hover {
+      border-color: var(--secondary);
+    }
+
+    /* Hero Section */
+    .hero-wrap {
+      padding-block: 56px 40px;
+      text-align: center;
+    }
+    .hero-eyebrow {
+      display: inline-block;
+      padding: 4px 14px;
+      border-radius: var(--radius-pill);
+      background: var(--surface-card);
+      border: 1px solid var(--border);
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--secondary);
+      margin-bottom: 16px;
+    }
+    .hero-title {
+      font-size: clamp(34px, 5.5vw, 60px);
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      line-height: 1.1;
+      margin-bottom: 18px;
+    }
+    .hero-sub {
+      font-size: 18px;
+      color: var(--text-muted);
+      max-width: 600px;
+      margin: 0 auto 32px;
+    }
+
+    /* Modular Bento Grid System */
+    .bento-grid-showcase {
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap: 20px;
+      margin-top: 32px;
+    }
+    .bento-cell {
+      background: var(--surface-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 32px;
+      box-shadow: var(--shadow-bento);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: transform var(--transition-fast), border-color var(--transition-fast);
+    }
+    .bento-cell:hover {
+      transform: translateY(-2px);
+      border-color: var(--secondary);
+    }
+
+    /* Bento Cell Sizes */
+    .cell-8col { grid-column: span 8; min-height: 340px; }
+    .cell-4col { grid-column: span 4; min-height: 340px; }
+    .cell-6col { grid-column: span 6; min-height: 280px; }
+    .cell-12col { grid-column: span 12; min-height: 260px; }
+
+    @media (max-width: 900px) {
+      .cell-8col, .cell-4col, .cell-6col, .cell-12col {
+        grid-column: span 12;
+      }
+    }
+
+    .cell-tag {
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--secondary);
+      margin-bottom: 8px;
+    }
+    .cell-title {
+      font-size: var(--text-24);
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      margin-bottom: 10px;
+    }
+    .cell-desc {
+      font-size: 15px;
+      color: var(--text-muted);
+      line-height: 1.55;
+    }
+
+    /* Graphic widgets inside bento cells */
+    .metric-pill-row {
+      display: flex;
+      gap: 12px;
+      margin-top: 24px;
+      flex-wrap: wrap;
+    }
+    .metric-pill {
+      padding: 6px 14px;
+      border-radius: var(--radius-pill);
+      background: var(--surface);
+      border: 1px solid var(--border);
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text);
+    }
+
+    /* Footer */
+    .bento-footer {
+      margin-top: 64px;
+      padding-top: 28px;
+      border-top: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navigation -->
+  <header class="bento-nav">
+    <div class="container nav-inner">
+      <a href="#hero" class="brand-bento">
+        <div class="bento-logo-icon">
+          <div class="bento-mini-dot"></div>
+          <div class="bento-mini-dot"></div>
+          <div class="bento-mini-dot"></div>
+          <div class="bento-mini-dot"></div>
+        </div>
+        <span>Bento</span>
+      </a>
+
+      <ul class="nav-links">
+        <li><a href="#modules">Grid Modules</a></li>
+        <li><a href="#palette">Warm Palette</a></li>
+        <li><a href="#scannability">Scannability</a></li>
+      </ul>
+
+      <div style="display: flex; gap: 10px;">
+        <a href="00_Index.md" class="btn btn-secondary">Index</a>
+        <a href="#modules" class="btn btn-primary">Try Bento Layout</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section id="hero" class="hero-wrap">
+    <div class="container">
+      <div class="hero-eyebrow">Modular Grid System</div>
+      <h1 class="hero-title">Information architecture structured into harmonious cards</h1>
+      <p class="hero-sub">
+        Clear hierarchy, soft warm peach #FAD4C0 and slate blue #80A1C1 accents, and modular scannability.
+      </p>
+    </div>
+  </section>
+
+  <!-- Modular Bento Grid Showcase -->
+  <main id="modules" class="container">
+    <div class="bento-grid-showcase">
+      
+      <!-- 8-Column Cell -->
+      <article class="bento-cell cell-8col" style="background: linear-gradient(135deg, #ffffff 0%, #FFF5E6 100%);">
+        <div>
+          <span class="cell-tag">Primary Architecture</span>
+          <h2 class="cell-title">Asymmetric Card Proportioning</h2>
+          <p class="cell-desc">
+            Bento replaces monotonous lists with deliberate 8-column and 4-column module pairings, providing visual rhythm that guides the eye effortlessly between key facts and details.
+          </p>
+        </div>
+        <div class="metric-pill-row">
+          <span class="metric-pill">● 8pt Soft Baseline</span>
+          <span class="metric-pill">● #FFF5E6 Cream Surface</span>
+          <span class="metric-pill">● 24px Squircle Radii</span>
+        </div>
+      </article>
+
+      <!-- 4-Column Cell -->
+      <article class="bento-cell cell-4col">
+        <div>
+          <span class="cell-tag">Slate Signal</span>
+          <h2 class="cell-title">#80A1C1 Accent</h2>
+          <p class="cell-desc">
+            Soft slate blue offers calm visual counterweight to warm peach fills, anchoring metadata, badges, and secondary actions.
+          </p>
+        </div>
+        <div style="font-family: var(--font-mono); font-size: 12px; color: var(--secondary); font-weight: 600;">
+          SLATE COMPLEMENT
+        </div>
+      </article>
+
+      <!-- 6-Column Cell A -->
+      <article class="bento-cell cell-6col">
+        <div>
+          <span class="cell-tag">Scannability</span>
+          <h2 class="cell-title">Autonomous Micro-Surfaces</h2>
+          <p class="cell-desc">
+            Each card functions as a complete self-contained context with internal padding, preventing layout spillover across breakpoints.
+          </p>
+        </div>
+        <div style="display: flex; gap: 8px;">
+          <span style="width: 16px; height: 16px; border-radius: 50%; background: var(--primary); display: inline-block;"></span>
+          <span style="width: 16px; height: 16px; border-radius: 50%; background: var(--secondary); display: inline-block;"></span>
+          <span style="width: 16px; height: 16px; border-radius: 50%; background: var(--surface); border: 1px solid var(--border); display: inline-block;"></span>
+        </div>
+      </article>
+
+      <!-- 6-Column Cell B -->
+      <article class="bento-cell cell-6col">
+        <div>
+          <span class="cell-tag">Interactive Bench</span>
+          <h2 class="cell-title">State Feedback</h2>
+          <p class="cell-desc">
+            Subtle lift on hover (`translateY(-2px)`) with slate border transitions make each container feel tactile and responsive.
+          </p>
+        </div>
+        <div>
+          <button class="btn btn-primary" style="padding: 8px 16px; font-size: 13px;">Interact With Card</button>
+        </div>
+      </article>
+
+    </div>
+
+    <!-- Footer -->
+    <footer class="bento-footer">
+      <div>Bento Modular Design System &copy; 2026. Warm Layout Token Contract.</div>
+      <div><a href="00_Index.md" style="color: var(--secondary); text-decoration: none; font-weight: 600;">← Master Index</a></div>
+    </footer>
+  </main>
+
+</body>
+</html>

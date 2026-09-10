@@ -1,0 +1,1390 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Framer — The Internet is Your Canvas</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Azeret+Mono:wght@400;500;600&family=Inter:wght@300;400;500;600;700&family=Mona+Sans:wght@100;300;400;500;700&family=Plus+Jakarta+Sans:wght@500;600;700&display=swap" rel="stylesheet">
+  <style>
+    /* -------------------------------------------------------------
+       FRAMER DESIGN SYSTEM TOKENS & FOUNDATIONS
+       ------------------------------------------------------------- */
+    :root {
+      /* Primary Void & Surface Palette */
+      --void-black: #000000;
+      --near-black: #090909;
+      --card-bg: #090909;
+      --surface-elevated: #111111;
+      
+      /* Primary Accent */
+      --framer-blue: #0099ff;
+      --blue-glow: rgba(0, 153, 255, 0.15);
+      --blue-glow-hover: rgba(0, 153, 255, 0.35);
+      --link-blue: #0000ee;
+      
+      /* Text & Neutrals */
+      --text-white: #ffffff;
+      --text-muted: #a6a6a6;
+      --text-ghost: rgba(255, 255, 255, 0.6);
+      --text-dim: rgba(255, 255, 255, 0.4);
+      
+      /* Translucent / Frosted Elements */
+      --frosted-white: rgba(255, 255, 255, 0.1);
+      --frosted-white-hover: rgba(255, 255, 255, 0.18);
+      --subtle-white: rgba(255, 255, 255, 0.5);
+      --border-subtle: rgba(255, 255, 255, 0.08);
+      --border-frosted: rgba(255, 255, 255, 0.12);
+      
+      /* Typography */
+      --font-display: "GT Walsheim", "GT Walsheim Framer Medium", "Plus Jakarta Sans", -apple-system, BlinkMacSystemFont, sans-serif;
+      --font-accent: "Mona Sans", -apple-system, sans-serif;
+      --font-ui: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      --font-mono: "Azeret Mono", monospace;
+      --font-rounded: "Inter", -apple-system, sans-serif;
+      
+      /* Elevations */
+      --elevation-ring: rgba(0, 153, 255, 0.15) 0px 0px 0px 1px;
+      --elevation-ring-hover: rgba(0, 153, 255, 0.35) 0px 0px 0px 1px, rgba(0, 153, 255, 0.2) 0px 8px 32px;
+      --elevation-contained: rgb(9, 9, 9) 0px 0px 0px 2px;
+      --elevation-floating: rgba(255, 255, 255, 0.1) 0px 0.5px 0px 0.5px, rgba(0, 0, 0, 0.4) 0px 10px 30px;
+    }
+
+    /* Reset & Void Canvas */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html, body {
+      background-color: var(--void-black);
+      color: var(--text-white);
+      font-family: var(--font-ui);
+      font-feature-settings: "cv01", "cv05", "cv09", "cv11", "ss03", "ss07";
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      overflow-x: hidden;
+      line-height: 1.5;
+    }
+
+    a {
+      color: var(--framer-blue);
+      text-decoration: none;
+      transition: opacity 0.15s ease;
+    }
+    a:hover {
+      opacity: 0.85;
+    }
+
+    /* Container System */
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    /* -------------------------------------------------------------
+       TYPOGRAPHY HIERARCHY (GT WALSHEIM SPEC)
+       ------------------------------------------------------------- */
+    .hero-title {
+      font-family: var(--font-display);
+      font-weight: 500;
+      font-size: 110px;
+      line-height: 0.85;
+      letter-spacing: -5.5px;
+      color: var(--text-white);
+      margin-bottom: 24px;
+    }
+
+    .section-display {
+      font-family: var(--font-display);
+      font-weight: 500;
+      font-size: 85px;
+      line-height: 0.95;
+      letter-spacing: -4.25px;
+      color: var(--text-white);
+    }
+
+    .section-heading {
+      font-family: var(--font-display);
+      font-weight: 500;
+      font-size: 62px;
+      line-height: 1.00;
+      letter-spacing: -3.1px;
+      color: var(--text-white);
+    }
+
+    .feature-heading {
+      font-family: var(--font-display);
+      font-weight: 500;
+      font-size: 32px;
+      line-height: 1.13;
+      letter-spacing: -1px;
+      color: var(--text-white);
+    }
+
+    .accent-display {
+      font-family: var(--font-accent);
+      font-weight: 100;
+      font-size: 61.5px;
+      line-height: 1.00;
+      letter-spacing: -3.1px;
+      color: var(--text-white);
+    }
+
+    .card-title {
+      font-family: var(--font-ui);
+      font-weight: 700;
+      font-size: 22px;
+      line-height: 1.20;
+      letter-spacing: -0.8px;
+      font-feature-settings: "cv05";
+      color: var(--text-white);
+    }
+
+    .body-large {
+      font-family: var(--font-ui);
+      font-size: 18px;
+      font-weight: 400;
+      line-height: 1.35;
+      letter-spacing: -0.01px;
+      color: var(--text-muted);
+      font-feature-settings: "cv01", "cv05", "cv09", "cv11", "ss03", "ss07";
+    }
+
+    .body-standard {
+      font-family: var(--font-ui);
+      font-size: 15px;
+      font-weight: 400;
+      line-height: 1.40;
+      letter-spacing: -0.01px;
+      color: var(--text-muted);
+      font-feature-settings: "cv11";
+    }
+
+    .code-micro {
+      font-family: var(--font-mono);
+      font-size: 10.4px;
+      line-height: 1.60;
+      color: var(--text-ghost);
+    }
+
+    .badge-label {
+      font-family: var(--font-rounded);
+      font-size: 9px;
+      font-weight: 600;
+      line-height: 1.11;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      padding: 3px 8px;
+      border-radius: 100px;
+      background: rgba(0, 153, 255, 0.12);
+      color: var(--framer-blue);
+      border: 1px solid rgba(0, 153, 255, 0.25);
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    /* -------------------------------------------------------------
+       BUTTONS (PILL-SHAPED ONLY: 40px - 100px RADIUS)
+       ------------------------------------------------------------- */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-ui);
+      font-size: 15px;
+      font-weight: 500;
+      text-decoration: none;
+      cursor: pointer;
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+      border: none;
+      white-space: nowrap;
+    }
+
+    .btn-solid-white {
+      background-color: #ffffff;
+      color: #000000;
+      border-radius: 100px;
+      padding: 10px 22px;
+      height: 44px;
+      font-weight: 600;
+    }
+    .btn-solid-white:hover {
+      background-color: #e6e6e6;
+      transform: scale(1.02);
+      color: #000000;
+    }
+
+    .btn-frosted {
+      background-color: var(--frosted-white);
+      color: #ffffff;
+      border-radius: 40px;
+      padding: 9px 20px;
+      height: 40px;
+      border: 1px solid var(--border-frosted);
+      backdrop-filter: blur(12px);
+    }
+    .btn-frosted:hover {
+      background-color: var(--frosted-white-hover);
+      color: #ffffff;
+      border-color: rgba(255, 255, 255, 0.25);
+    }
+
+    .btn-blue {
+      background-color: var(--framer-blue);
+      color: #ffffff;
+      border-radius: 100px;
+      padding: 10px 22px;
+      height: 44px;
+      font-weight: 600;
+      box-shadow: 0 4px 16px rgba(0, 153, 255, 0.4);
+    }
+    .btn-blue:hover {
+      opacity: 0.92;
+      box-shadow: 0 6px 24px rgba(0, 153, 255, 0.6);
+      transform: scale(1.02);
+      color: #ffffff;
+    }
+
+    /* -------------------------------------------------------------
+       NAVIGATION BAR (FLOATING FROSTED GLASS)
+       ------------------------------------------------------------- */
+    .navbar-wrapper {
+      position: fixed;
+      top: 16px;
+      left: 0;
+      right: 0;
+      z-index: 1000;
+      display: flex;
+      justify-content: center;
+      padding: 0 20px;
+    }
+
+    .navbar {
+      background: rgba(9, 9, 9, 0.75);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid var(--border-frosted);
+      border-radius: 100px;
+      padding: 6px 12px 6px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 32px;
+      width: 100%;
+      max-width: 980px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
+    }
+
+    .brand-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 600;
+      color: #ffffff;
+      font-size: 17px;
+      letter-spacing: -0.4px;
+    }
+
+    .framer-f-icon {
+      width: 18px;
+      height: 27px;
+      fill: #ffffff;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 24px;
+      list-style: none;
+    }
+
+    .nav-link {
+      font-size: 14px;
+      color: var(--text-ghost);
+      transition: color 0.15s ease;
+      font-feature-settings: "cv06", "cv11", "dlig", "ss03";
+    }
+    .nav-link:hover {
+      color: var(--text-white);
+    }
+
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    /* -------------------------------------------------------------
+       HERO SECTION WITH RADIAL BLUE GLOW
+       ------------------------------------------------------------- */
+    .hero-section {
+      padding-top: 180px;
+      padding-bottom: 90px;
+      position: relative;
+      text-align: center;
+      overflow: hidden;
+    }
+
+    .hero-glow {
+      position: absolute;
+      top: 10%;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 700px;
+      height: 380px;
+      background: radial-gradient(circle, rgba(0, 153, 255, 0.14) 0%, rgba(0, 0, 0, 0) 70%);
+      filter: blur(80px);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 1;
+      max-width: 960px;
+      margin: 0 auto;
+    }
+
+    .hero-tag {
+      margin-bottom: 24px;
+    }
+
+    .hero-actions {
+      margin-top: 36px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+    }
+
+    /* -------------------------------------------------------------
+       INTERACTIVE PRODUCT SHOWCASE: FRAMER STUDIO
+       ------------------------------------------------------------- */
+    .studio-showcase {
+      margin-top: 50px;
+      position: relative;
+      z-index: 2;
+    }
+
+    .studio-frame {
+      background: var(--near-black);
+      border-radius: 12px;
+      box-shadow: var(--elevation-ring), var(--elevation-floating);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      height: 680px;
+      transition: box-shadow 0.3s ease;
+    }
+    .studio-frame:hover {
+      box-shadow: var(--elevation-ring-hover);
+    }
+
+    /* Studio Header */
+    .studio-topbar {
+      height: 48px;
+      background: #0d0d0d;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 16px;
+      user-select: none;
+    }
+
+    .window-controls {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .window-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.2);
+    }
+
+    .viewport-switchers {
+      display: flex;
+      align-items: center;
+      background: rgba(255, 255, 255, 0.05);
+      padding: 3px;
+      border-radius: 100px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .vp-btn {
+      background: transparent;
+      border: none;
+      color: var(--text-dim);
+      padding: 4px 14px;
+      font-size: 12px;
+      font-family: var(--font-ui);
+      font-weight: 500;
+      border-radius: 100px;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .vp-btn.active {
+      background: rgba(255, 255, 255, 0.15);
+      color: #ffffff;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+    }
+
+    .studio-topbar-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    /* Studio Workspace Body */
+    .studio-workspace {
+      display: grid;
+      grid-template-columns: 240px 1fr 280px;
+      flex: 1;
+      overflow: hidden;
+    }
+
+    /* Left Sidebar: Layers & Hierarchy */
+    .studio-sidebar-left {
+      background: #090909;
+      border-right: 1px solid rgba(255, 255, 255, 0.06);
+      padding: 14px 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      font-size: 12px;
+      user-select: none;
+    }
+
+    .sidebar-section-title {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      color: var(--text-dim);
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+      padding-left: 6px;
+    }
+
+    .layer-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 7px 10px;
+      border-radius: 6px;
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: all 0.12s ease;
+    }
+    .layer-item:hover {
+      background: rgba(255, 255, 255, 0.04);
+      color: var(--text-white);
+    }
+    .layer-item.selected {
+      background: rgba(0, 153, 255, 0.15);
+      color: #ffffff;
+      border-left: 2px solid var(--framer-blue);
+    }
+
+    /* Center Stage: Canvas */
+    .studio-stage {
+      background: #050505;
+      position: relative;
+      overflow: auto;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 30px;
+      background-image: radial-gradient(rgba(255, 255, 255, 0.08) 1px, transparent 0);
+      background-size: 24px 24px;
+    }
+
+    .canvas-device-container {
+      background: #000000;
+      border-radius: 12px;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      box-shadow: 0 24px 60px rgba(0, 0, 0, 0.9), 0 0 0 1px rgba(0, 153, 255, 0.12);
+      width: 100%;
+      max-width: 620px;
+      padding: 32px 28px;
+      transition: max-width 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+      position: relative;
+    }
+
+    /* Live Canvas Preview Inside Frame */
+    .preview-navbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-bottom: 20px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      margin-bottom: 24px;
+    }
+    .preview-logo {
+      font-size: 14px;
+      font-weight: 700;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .preview-pill-badge {
+      font-size: 10px;
+      padding: 3px 8px;
+      border-radius: 100px;
+      background: rgba(0, 153, 255, 0.15);
+      color: var(--framer-blue);
+      border: 1px solid rgba(0, 153, 255, 0.3);
+    }
+
+    .preview-hero-block {
+      text-align: left;
+    }
+    .preview-headline {
+      font-family: var(--font-display);
+      font-size: 38px;
+      font-weight: 500;
+      line-height: 0.95;
+      letter-spacing: -1.8px;
+      color: #ffffff;
+      margin-bottom: 14px;
+    }
+    .preview-desc {
+      font-size: 13px;
+      color: var(--text-muted);
+      line-height: 1.45;
+      margin-bottom: 20px;
+    }
+    .preview-cta-row {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+
+    /* Interactive Spring Object on Canvas */
+    .spring-motion-box {
+      margin-top: 24px;
+      padding: 16px;
+      background: rgba(255, 255, 255, 0.03);
+      border-radius: 10px;
+      border: 1px solid rgba(255, 255, 255, 0.07);
+    }
+    .spring-track {
+      height: 48px;
+      background: rgba(0, 0, 0, 0.6);
+      border-radius: 8px;
+      position: relative;
+      display: flex;
+      align-items: center;
+      padding: 0 6px;
+      overflow: hidden;
+      border: 1px solid rgba(255, 255, 255, 0.04);
+    }
+    .spring-puck {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: var(--framer-blue);
+      box-shadow: 0 0 16px var(--framer-blue);
+      position: absolute;
+      left: 6px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      font-size: 11px;
+      user-select: none;
+      transition: transform 0.05s linear;
+    }
+
+    /* Right Sidebar: Style & Motion Inspector */
+    .studio-sidebar-right {
+      background: #090909;
+      border-left: 1px solid rgba(255, 255, 255, 0.06);
+      padding: 16px 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+      font-size: 12px;
+      overflow-y: auto;
+    }
+
+    .inspector-prop-group {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .prop-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      color: var(--text-muted);
+    }
+    .prop-val {
+      font-family: var(--font-mono);
+      color: var(--text-white);
+      background: rgba(255, 255, 255, 0.06);
+      padding: 3px 7px;
+      border-radius: 4px;
+      font-size: 11px;
+    }
+    .inspector-slider {
+      width: 100%;
+      accent-color: var(--framer-blue);
+      cursor: pointer;
+    }
+
+    /* -------------------------------------------------------------
+       BENTO GRID FEATURE SECTION
+       ------------------------------------------------------------- */
+    .features-section {
+      padding: 120px 0;
+      position: relative;
+    }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap: 20px;
+      margin-top: 60px;
+    }
+
+    .bento-card {
+      background: var(--card-bg);
+      border-radius: 12px;
+      padding: 36px;
+      box-shadow: var(--elevation-ring);
+      border: 1px solid rgba(255, 255, 255, 0.04);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      position: relative;
+      overflow: hidden;
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .bento-card:hover {
+      box-shadow: var(--elevation-ring-hover);
+      transform: translateY(-2px);
+    }
+
+    .card-span-7 {
+      grid-column: span 7;
+    }
+    .card-span-5 {
+      grid-column: span 5;
+    }
+    .card-span-4 {
+      grid-column: span 4;
+    }
+    .card-span-8 {
+      grid-column: span 8;
+    }
+
+    .card-top {
+      margin-bottom: 24px;
+    }
+    .card-icon-badge {
+      width: 44px;
+      height: 44px;
+      border-radius: 10px;
+      background: rgba(0, 153, 255, 0.1);
+      border: 1px solid rgba(0, 153, 255, 0.2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--framer-blue);
+      margin-bottom: 20px;
+    }
+
+    /* Interactive Curve Graph */
+    .curve-canvas {
+      width: 100%;
+      height: 120px;
+      background: #050505;
+      border-radius: 8px;
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      margin-top: 18px;
+      position: relative;
+    }
+
+    /* -------------------------------------------------------------
+       PRICING SECTION
+       ------------------------------------------------------------- */
+    .pricing-section {
+      padding: 100px 0 140px;
+      text-align: center;
+    }
+
+    .pricing-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+      margin-top: 60px;
+      text-align: left;
+    }
+
+    .pricing-card {
+      background: var(--card-bg);
+      border-radius: 14px;
+      padding: 36px 30px;
+      box-shadow: var(--elevation-ring);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      position: relative;
+    }
+    .pricing-card.featured {
+      box-shadow: 0 0 0 2px var(--framer-blue), 0 20px 40px rgba(0, 153, 255, 0.15);
+      background: #0c0c0c;
+    }
+
+    .price-num {
+      font-family: var(--font-display);
+      font-size: 54px;
+      font-weight: 500;
+      line-height: 1;
+      letter-spacing: -2px;
+      color: #ffffff;
+      margin: 20px 0 6px;
+    }
+    .price-period {
+      font-size: 14px;
+      color: var(--text-dim);
+    }
+
+    .plan-features {
+      list-style: none;
+      margin: 28px 0;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      font-size: 14px;
+      color: var(--text-muted);
+    }
+    .plan-features li {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .plan-features li::before {
+      content: "✓";
+      color: var(--framer-blue);
+      font-weight: bold;
+    }
+
+    /* -------------------------------------------------------------
+       FOOTER
+       ------------------------------------------------------------- */
+    .footer {
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+      padding: 60px 0 80px;
+      background: var(--void-black);
+    }
+    .footer-content {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 24px;
+    }
+    .footer-left {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+
+    /* Responsive Queries */
+    @media (max-width: 1199px) {
+      .hero-title {
+        font-size: 85px;
+        letter-spacing: -4.25px;
+      }
+      .section-display {
+        font-size: 62px;
+        letter-spacing: -3.1px;
+      }
+      .features-grid {
+        grid-template-columns: 1fr;
+      }
+      .card-span-7, .card-span-5, .card-span-4, .card-span-8 {
+        grid-column: span 1;
+      }
+      .pricing-grid {
+        grid-template-columns: 1fr;
+      }
+      .studio-workspace {
+        grid-template-columns: 200px 1fr;
+      }
+      .studio-sidebar-right {
+        display: none;
+      }
+    }
+
+    @media (max-width: 809px) {
+      .hero-title {
+        font-size: 52px;
+        line-height: 0.92;
+        letter-spacing: -2.5px;
+      }
+      .navbar {
+        padding: 6px 14px;
+      }
+      .nav-links {
+        display: none;
+      }
+      .studio-workspace {
+        grid-template-columns: 1fr;
+      }
+      .studio-sidebar-left {
+        display: none;
+      }
+      .studio-frame {
+        height: 540px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- FLOATING FROSTED NAVIGATION BAR -->
+  <div class="navbar-wrapper">
+    <nav class="navbar">
+      <a href="#" class="brand-logo">
+        <svg class="framer-f-icon" viewBox="0 0 18 27" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M0 0H18V9H9L0 0Z" fill="white"/>
+          <path d="M0 9H18L9 18H0V9Z" fill="white"/>
+          <path d="M0 18H9V27L0 18Z" fill="white"/>
+        </svg>
+        <span>Framer</span>
+      </a>
+
+      <ul class="nav-links">
+        <li><a href="#features" class="nav-link">Features</a></li>
+        <li><a href="#templates" class="nav-link">Templates</a></li>
+        <li><a href="#canvas" class="nav-link">Studio</a></li>
+        <li><a href="#pricing" class="nav-link">Pricing</a></li>
+      </ul>
+
+      <div class="nav-actions">
+        <a href="#canvas" class="btn btn-frosted" style="font-size: 13px; height: 34px; padding: 0 16px;">Log in</a>
+        <a href="#pricing" class="btn btn-solid-white" style="font-size: 13px; height: 34px; padding: 0 18px;">Start for free</a>
+      </div>
+    </nav>
+  </div>
+
+  <!-- HERO SECTION -->
+  <section class="hero-section">
+    <div class="hero-glow"></div>
+    <div class="container hero-content">
+      <div class="hero-tag">
+        <span class="badge-label">
+          <span style="display:inline-block; width:6px; height:6px; background:#0099ff; border-radius:50%;"></span>
+          Spring Physics Engine v2.4 Live
+        </span>
+      </div>
+
+      <h1 class="hero-title">The Internet is Your Canvas</h1>
+      
+      <p class="body-large" style="max-width: 680px; margin: 0 auto;">
+        Design real websites with zero code compromises. Layout, animations, responsive breakpoints, and instant worldwide edge deployment.
+      </p>
+
+      <div class="hero-actions">
+        <a href="#canvas" class="btn btn-solid-white">Start Building — Free</a>
+        <a href="#features" class="btn btn-frosted">Explore Showcase</a>
+      </div>
+
+      <!-- INTERACTIVE FRAMER STUDIO COMPONENT -->
+      <div class="studio-showcase" id="canvas">
+        <div class="studio-frame">
+          <!-- Studio Topbar -->
+          <div class="studio-topbar">
+            <div class="window-controls">
+              <span class="window-dot" style="background:#ff5f56;"></span>
+              <span class="window-dot" style="background:#ffbd2e;"></span>
+              <span class="window-dot" style="background:#27c93f;"></span>
+              <span class="code-micro" style="margin-left: 10px; color: var(--text-dim);">framer.app/canvas/preview</span>
+            </div>
+
+            <div class="viewport-switchers">
+              <button class="vp-btn active" id="vpDesktop" onclick="setViewport('desktop')">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+                1200px
+              </button>
+              <button class="vp-btn" id="vpTablet" onclick="setViewport('tablet')">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="2" width="16" height="20" rx="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>
+                810px
+              </button>
+              <button class="vp-btn" id="vpMobile" onclick="setViewport('mobile')">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="2" width="14" height="20" rx="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>
+                390px
+              </button>
+            </div>
+
+            <div class="studio-topbar-actions">
+              <button class="btn btn-frosted" style="height: 30px; font-size: 11px; padding: 0 12px;" onclick="triggerSpringPulse()">
+                ▶ Test Spring
+              </button>
+              <button class="btn btn-blue" style="height: 30px; font-size: 11px; padding: 0 14px;">
+                Publish
+              </button>
+            </div>
+          </div>
+
+          <!-- Studio Body -->
+          <div class="studio-workspace">
+            <!-- Left Layers -->
+            <div class="studio-sidebar-left">
+              <span class="sidebar-section-title">Layers & Nodes</span>
+              <div class="layer-item selected" onclick="selectLayer(this, 'Hero Container')">
+                <span>❖</span> Frame: Hero Stage
+              </div>
+              <div class="layer-item" onclick="selectLayer(this, 'Typography')">
+                <span>T</span> Text: Headline Display
+              </div>
+              <div class="layer-item" onclick="selectLayer(this, 'Interactive Spring')">
+                <span>◎</span> Motion: Spring Puck
+              </div>
+              <div class="layer-item" onclick="selectLayer(this, 'CTA Buttons')">
+                <span>⬭</span> Pill: CTA Group
+              </div>
+              <div class="layer-item" onclick="selectLayer(this, 'Bento Grid')">
+                <span>☵</span> Component: Bento Cards
+              </div>
+
+              <span class="sidebar-section-title" style="margin-top:14px;">Color Tokens</span>
+              <div style="display:flex; gap:6px; padding:0 6px;">
+                <div style="width:20px; height:20px; background:#000000; border:1px solid #333; border-radius:4px;" title="Void Black (#000000)"></div>
+                <div style="width:20px; height:20px; background:#0099ff; border-radius:4px;" title="Framer Blue (#0099ff)"></div>
+                <div style="width:20px; height:20px; background:#ffffff; border-radius:4px;" title="Pure White (#ffffff)"></div>
+                <div style="width:20px; height:20px; background:#a6a6a6; border-radius:4px;" title="Muted Silver (#a6a6a6)"></div>
+              </div>
+            </div>
+
+            <!-- Center Interactive Canvas -->
+            <div class="studio-stage">
+              <div class="canvas-device-container" id="canvasDevice">
+                <div class="preview-navbar">
+                  <div class="preview-logo">
+                    <span style="color:var(--framer-blue)">✦</span> Studio.io
+                  </div>
+                  <div class="preview-pill-badge">Prototype Live</div>
+                </div>
+
+                <div class="preview-hero-block">
+                  <h2 class="preview-headline" id="previewHeadline">Craft Without Constraints.</h2>
+                  <p class="preview-desc">
+                    Layout engine with continuous fluid scaling and physics-driven spring transitions. Zero code required.
+                  </p>
+                  <div class="preview-cta-row">
+                    <button class="btn btn-solid-white" style="height:36px; font-size:12px; padding:0 18px;" onclick="triggerSpringPulse()">
+                      Trigger Physics
+                    </button>
+                    <button class="btn btn-frosted" style="height:36px; font-size:12px; padding:0 14px;">
+                      Inspect CSS
+                    </button>
+                  </div>
+                </div>
+
+                <!-- Spring Motion Track Demo -->
+                <div class="spring-motion-box">
+                  <div style="display:flex; justify-content:space-between; margin-bottom:8px;">
+                    <span class="code-micro" style="color:var(--text-white);">Framer Spring Simulation</span>
+                    <span class="code-micro" id="springReadout">damping: 24 | stiffness: 220</span>
+                  </div>
+                  <div class="spring-track" id="springTrack">
+                    <div class="spring-puck" id="springPuck" onclick="triggerSpringPulse()">
+                      ✦
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Right Inspector -->
+            <div class="studio-sidebar-right">
+              <span class="sidebar-section-title">Design Inspector</span>
+              
+              <div class="inspector-prop-group">
+                <div class="prop-row">
+                  <span>Selected Node</span>
+                  <span class="prop-val" id="selectedNodeLabel">Hero Container</span>
+                </div>
+                <div class="prop-row">
+                  <span>Background</span>
+                  <span class="prop-val">#000000</span>
+                </div>
+                <div class="prop-row">
+                  <span>Border Radius</span>
+                  <span class="prop-val" id="radiusVal">12px</span>
+                </div>
+                <input type="range" class="inspector-slider" min="0" max="40" value="12" oninput="updateRadius(this.value)">
+              </div>
+
+              <span class="sidebar-section-title" style="margin-top:10px;">Spring Physics</span>
+              <div class="inspector-prop-group">
+                <div class="prop-row">
+                  <span>Stiffness</span>
+                  <span class="prop-val" id="stiffnessVal">220</span>
+                </div>
+                <input type="range" class="inspector-slider" min="50" max="500" value="220" oninput="updatePhysics('stiffness', this.value)">
+
+                <div class="prop-row">
+                  <span>Damping</span>
+                  <span class="prop-val" id="dampingVal">24</span>
+                </div>
+                <input type="range" class="inspector-slider" min="5" max="60" value="24" oninput="updatePhysics('damping', this.value)">
+
+                <div class="prop-row">
+                  <span>Mass</span>
+                  <span class="prop-val" id="massVal">1.0</span>
+                </div>
+                <input type="range" class="inspector-slider" min="0.2" max="3" step="0.1" value="1.0" oninput="updatePhysics('mass', this.value)">
+              </div>
+
+              <div style="background:rgba(0,153,255,0.08); border:1px solid rgba(0,153,255,0.2); border-radius:8px; padding:10px; margin-top:10px;">
+                <span class="code-micro" style="color:var(--framer-blue); display:block; margin-bottom:4px;">OPEN-TYPE FEATURES</span>
+                <span class="code-micro" style="color:var(--text-ghost);">cv01, cv05, cv09, cv11, ss03, ss07</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- BENTO FEATURES GRID -->
+  <section class="features-section" id="features">
+    <div class="container">
+      <div style="text-align: center; max-width: 720px; margin: 0 auto 50px;">
+        <span class="badge-label">Capabilities</span>
+        <h2 class="section-heading" style="margin-top: 14px;">Built for the modern web</h2>
+        <p class="body-large" style="margin-top: 12px;">Every component is engineered with mathematical precision, negative tracking, and sub-pixel edge rendering.</p>
+      </div>
+
+      <div class="features-grid">
+        <!-- Bento Card 1 -->
+        <div class="bento-card card-span-7">
+          <div class="card-top">
+            <div class="card-icon-badge">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M8 12a4 4 0 1 0 8 0 4 4 0 0 0-8 0"/></svg>
+            </div>
+            <h3 class="card-title">Physics-Driven Spring Transitions</h3>
+            <p class="body-standard" style="margin-top: 8px;">
+              Interruptible animations modeled after harmonic oscillators. Elements calculate velocity handoffs dynamically without jarring jump-cuts.
+            </p>
+          </div>
+          <div class="curve-canvas">
+            <canvas id="springCurveCanvas" width="500" height="120" style="width:100%; height:100%;"></canvas>
+          </div>
+        </div>
+
+        <!-- Bento Card 2 -->
+        <div class="bento-card card-span-5">
+          <div class="card-top">
+            <div class="card-icon-badge">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+            </div>
+            <h3 class="card-title">Worldwide Edge Hosting</h3>
+            <p class="body-standard" style="margin-top: 8px;">
+              Sub-50ms TTFB across 320 global edge locations. Automated Brotli compression, AVIF image pipelines, and HTTP/3 support.
+            </p>
+          </div>
+          <div style="margin-top: 20px; padding: 14px; background: rgba(0,0,0,0.5); border-radius: 8px; border: 1px solid rgba(255,255,255,0.06);">
+            <div style="display:flex; justify-content:space-between; margin-bottom: 8px;">
+              <span class="code-micro">Global CDN Uptime</span>
+              <span class="code-micro" style="color:#0099ff;">99.998%</span>
+            </div>
+            <div style="height: 6px; background: rgba(255,255,255,0.1); border-radius: 100px; overflow: hidden;">
+              <div style="width: 99%; height: 100%; background: var(--framer-blue);"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Bento Card 3 -->
+        <div class="bento-card card-span-4">
+          <div class="card-top">
+            <div class="card-icon-badge">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
+            </div>
+            <h3 class="card-title">Component Variants</h3>
+            <p class="body-standard" style="margin-top: 8px;">
+              Create multi-state components with interactive hover, pressed, and loading variants seamlessly bound to URL parameters.
+            </p>
+          </div>
+          <div style="display:flex; gap:8px; margin-top:20px;">
+            <span class="badge-label" style="background:rgba(255,255,255,0.08); color:#fff; border-color:rgba(255,255,255,0.15);">Default</span>
+            <span class="badge-label">Hover</span>
+            <span class="badge-label" style="background:rgba(0,153,255,0.3); color:#fff;">Active</span>
+          </div>
+        </div>
+
+        <!-- Bento Card 4 -->
+        <div class="bento-card card-span-8">
+          <div class="card-top">
+            <div class="card-icon-badge">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="4 7 4 4 20 4 20 7"/><line x1="9" y1="20" x2="15" y2="20"/><line x1="12" y1="4" x2="12" y2="20"/></svg>
+            </div>
+            <h3 class="card-title">Deep Typography Engine</h3>
+            <p class="body-standard" style="margin-top: 8px;">
+              Engineered with GT Walsheim medium display weights and Inter OpenType font-feature-settings: <code>cv01</code>, <code>cv05</code>, <code>cv09</code>, <code>cv11</code>, <code>ss03</code>, <code>ss07</code>.
+            </p>
+          </div>
+          <div style="background: #000000; border-radius: 8px; padding: 18px; border: 1px solid rgba(255,255,255,0.08);">
+            <div class="accent-display" style="font-size: 34px; letter-spacing: -1.8px; color: #ffffff;">
+              Fluid Scale: -5.5px Tracking
+            </div>
+            <div class="code-micro" style="color: var(--framer-blue); margin-top: 8px;">
+              font-feature-settings: "cv01", "cv05", "cv09", "cv11", "ss03", "ss07";
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PRICING SECTION -->
+  <section class="pricing-section" id="pricing">
+    <div class="container">
+      <div style="text-align: center; max-width: 600px; margin: 0 auto;">
+        <span class="badge-label">Plans</span>
+        <h2 class="section-heading" style="margin-top: 14px;">Simple, transparent pricing</h2>
+        <p class="body-large" style="margin-top: 10px;">Deploy free and upgrade when your audience expands.</p>
+      </div>
+
+      <div class="pricing-grid">
+        <!-- Free Plan -->
+        <div class="pricing-card">
+          <div>
+            <span class="code-micro" style="text-transform: uppercase; color: var(--text-dim);">Hobby</span>
+            <h3 class="card-title" style="margin-top: 6px;">Free</h3>
+            <div class="price-num">$0</div>
+            <div class="price-period">Forever free on framer.app</div>
+            <ul class="plan-features">
+              <li>Up to 3 active projects</li>
+              <li>Framer subdomain</li>
+              <li>1,000 visitors / mo</li>
+              <li>Community support</li>
+            </ul>
+          </div>
+          <a href="#canvas" class="btn btn-frosted" style="width: 100%;">Get Started</a>
+        </div>
+
+        <!-- Pro Plan (Featured) -->
+        <div class="pricing-card featured">
+          <div>
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+              <span class="code-micro" style="text-transform: uppercase; color: var(--framer-blue);">Most Popular</span>
+              <span class="badge-label">Pro</span>
+            </div>
+            <h3 class="card-title" style="margin-top: 6px;">Professional</h3>
+            <div class="price-num">$30</div>
+            <div class="price-period">per site / month billed annually</div>
+            <ul class="plan-features">
+              <li>Unlimited pages & CMS items</li>
+              <li>Custom domains + SSL</li>
+              <li>200,000 visitors / mo</li>
+              <li>Staging & Version history</li>
+              <li>Physics spring curves</li>
+            </ul>
+          </div>
+          <a href="#canvas" class="btn btn-solid-white" style="width: 100%;">Launch Pro Site</a>
+        </div>
+
+        <!-- Enterprise Plan -->
+        <div class="pricing-card">
+          <div>
+            <span class="code-micro" style="text-transform: uppercase; color: var(--text-dim);">Scale</span>
+            <h3 class="card-title" style="margin-top: 6px;">Enterprise</h3>
+            <div class="price-num">Custom</div>
+            <div class="price-period">Dedicated cloud infrastructure</div>
+            <ul class="plan-features">
+              <li>SLA with 99.99% uptime guarantee</li>
+              <li>SSO / SAML authentication</li>
+              <li>Custom edge caching</li>
+              <li>Dedicated design partner</li>
+            </ul>
+          </div>
+          <a href="#canvas" class="btn btn-frosted" style="width: 100%;">Contact Sales</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="container footer-content">
+      <div class="footer-left">
+        <svg class="framer-f-icon" style="width:14px; height:21px;" viewBox="0 0 18 27" fill="none">
+          <path d="M0 0H18V9H9L0 0Z" fill="white"/>
+          <path d="M0 9H18L9 18H0V9Z" fill="white"/>
+          <path d="M0 18H9V27L0 18Z" fill="white"/>
+        </svg>
+        <span>© Framer Inc. Pure Black Void Edition.</span>
+      </div>
+
+      <div style="display:flex; gap:20px; align-items:center;">
+        <span class="code-micro" style="color:var(--text-dim);">SYSTEM: VOID #000000</span>
+        <span class="code-micro" style="color:var(--framer-blue);">ACCENT: #0099ff</span>
+        <span class="code-micro" style="color:var(--text-muted);">PILL RADIUS: 100px</span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- INTERACTIVE STUDIO JAVASCRIPT -->
+  <script>
+    // Viewport Toggle Engine
+    function setViewport(mode) {
+      const container = document.getElementById('canvasDevice');
+      const btnDesktop = document.getElementById('vpDesktop');
+      const btnTablet = document.getElementById('vpTablet');
+      const btnMobile = document.getElementById('vpMobile');
+
+      btnDesktop.classList.remove('active');
+      btnTablet.classList.remove('active');
+      btnMobile.classList.remove('active');
+
+      if (mode === 'desktop') {
+        container.style.maxWidth = '620px';
+        btnDesktop.classList.add('active');
+      } else if (mode === 'tablet') {
+        container.style.maxWidth = '460px';
+        btnTablet.classList.add('active');
+      } else if (mode === 'mobile') {
+        container.style.maxWidth = '320px';
+        btnMobile.classList.add('active');
+      }
+    }
+
+    // Layer selection handler
+    function selectLayer(element, label) {
+      document.querySelectorAll('.layer-item').forEach(el => el.classList.remove('selected'));
+      element.classList.add('selected');
+      document.getElementById('selectedNodeLabel').textContent = label;
+    }
+
+    // Border Radius Inspector
+    function updateRadius(val) {
+      document.getElementById('radiusVal').textContent = val + 'px';
+      document.getElementById('canvasDevice').style.borderRadius = val + 'px';
+    }
+
+    // Physics Engine Simulator
+    let physics = {
+      stiffness: 220,
+      damping: 24,
+      mass: 1.0
+    };
+
+    function updatePhysics(key, val) {
+      physics[key] = parseFloat(val);
+      document.getElementById(key + 'Val').textContent = val;
+      document.getElementById('springReadout').textContent = 
+        `damping: ${physics.damping} | stiffness: ${physics.stiffness}`;
+      drawSpringCurve();
+    }
+
+    let isPuckRight = false;
+    function triggerSpringPulse() {
+      const puck = document.getElementById('springPuck');
+      const track = document.getElementById('springTrack');
+      const maxOffset = track.clientWidth - puck.clientWidth - 12;
+
+      isPuckRight = !isPuckRight;
+      const target = isPuckRight ? maxOffset : 0;
+
+      // Realistic spring step calculation
+      let currentPos = isPuckRight ? 0 : maxOffset;
+      let velocity = 0;
+      const startTime = performance.now();
+
+      function stepSpring(now) {
+        const dt = 0.016; // 60fps delta
+        const force = -physics.stiffness * (currentPos - target) - physics.damping * velocity;
+        const acceleration = force / physics.mass;
+        velocity += acceleration * dt;
+        currentPos += velocity * dt;
+
+        puck.style.transform = `translateX(${currentPos}px)`;
+
+        if (Math.abs(currentPos - target) > 0.5 || Math.abs(velocity) > 0.5) {
+          requestAnimationFrame(stepSpring);
+        } else {
+          puck.style.transform = `translateX(${target}px)`;
+        }
+      }
+      requestAnimationFrame(stepSpring);
+    }
+
+    // Spring Curve Graph Visualization
+    function drawSpringCurve() {
+      const canvas = document.getElementById('springCurveCanvas');
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+      const width = canvas.width;
+      const height = canvas.height;
+
+      ctx.clearRect(0, 0, width, height);
+
+      // Baseline grid
+      ctx.strokeStyle = 'rgba(255, 255, 255, 0.06)';
+      ctx.lineWidth = 1;
+      ctx.beginPath();
+      for (let y = 20; y < height; y += 25) {
+        ctx.moveTo(0, y);
+        ctx.lineTo(width, y);
+      }
+      ctx.stroke();
+
+      // Draw spring motion curve
+      ctx.beginPath();
+      ctx.strokeStyle = '#0099ff';
+      ctx.lineWidth = 2.5;
+
+      let pos = 0;
+      let vel = 0;
+      const target = 1;
+      const dt = 0.016;
+      const steps = width;
+
+      for (let x = 0; x < steps; x++) {
+        const force = -physics.stiffness * (pos - target) - physics.damping * vel;
+        const accel = force / physics.mass;
+        vel += accel * dt;
+        pos += vel * dt;
+
+        const y = height - 20 - pos * (height - 50);
+        if (x === 0) {
+          ctx.moveTo(x, height - 20);
+        } else {
+          ctx.lineTo(x, y);
+        }
+      }
+      ctx.stroke();
+
+      // Glow effect under curve
+      ctx.lineTo(width, height);
+      ctx.lineTo(0, height);
+      ctx.fillStyle = 'rgba(0, 153, 255, 0.08)';
+      ctx.fill();
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+      drawSpringCurve();
+    });
+  </script>
+</body>
+</html>

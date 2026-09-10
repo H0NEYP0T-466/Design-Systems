@@ -1,0 +1,889 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>kami (紙 / 纸) — Editorial Paper Design System</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=Noto+Serif+JP:wght@400;500&family=Noto+Serif+SC:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      /* kami Color Tokens per DESIGN.md */
+      --brand: #1B365D;       /* Ink Blue - single chromatic move (<= 5% surface) */
+      --brand-light: #2D5A8A; /* Ink Light - links on dark surfaces */
+
+      /* Surfaces: Never pure #ffffff */
+      --parchment: #f5f4ed;   /* Page canvas - emotional foundation */
+      --ivory: #faf9f5;       /* Cards & lifted containers (1 half-shade brighter) */
+      --warm-sand: #e8e6dc;   /* Default button bg, secondary surfaces */
+      --dark-surface: #30302e;/* Dark-theme containers - warm charcoal */
+      --deep-dark: #141413;   /* Olive-tinted near-black, never #000000 */
+
+      /* Text Hierarchy: 4 levels strictly */
+      --near-black: #141413;  /* Primary text */
+      --dark-warm: #3d3d3a;   /* Secondary text, table headers */
+      --olive: #504e49;       /* Subtext, captions, descriptions */
+      --stone: #6b6a64;       /* Tertiary - dates, metadata */
+
+      /* Borders */
+      --border: #e8e6dc;      /* Primary border */
+      --border-soft: #e5e3d8; /* Row separators */
+
+      /* Solid Hex Tag Tints (Never rgba to prevent double-paint on print renderers) */
+      --tag-08: #EEF2F7;
+      --tag-14: #E4ECF5;
+      --tag-18: #E4ECF5;      /* Default tag fill */
+      --tag-22: #D0DCE9;
+      --tag-30: #D6E1EE;
+
+      /* Typography: Serif carries hierarchy */
+      --serif: Charter, Georgia, Palatino, "Times New Roman", serif;
+      --sans: var(--serif);   /* Sans always equals serif per DESIGN.md */
+      --mono: "JetBrains Mono", "SF Mono", Consolas, monospace;
+
+      /* Elevation: Whisper shadow */
+      --shadow-whisper: 0 4px 24px rgba(0, 0, 0, 0.05);
+      --ring-border: 0 0 0 1px var(--border);
+      --ring-brand: 0 0 0 1px var(--brand);
+    }
+
+    /* Multilingual Stack Overrides per §3 */
+    html[lang="zh-CN"] {
+      --serif: "Noto Serif SC", "Songti SC", "STSong", Georgia, serif;
+      --sans: var(--serif);
+    }
+
+    html[lang="ja"] {
+      --serif: "Noto Serif JP", "YuMincho", "Hiragino Mincho ProN", Georgia, serif;
+      --sans: var(--serif);
+      --olive: #4d4c48; /* Thinner YuMincho strokes override */
+    }
+
+    /* Reset & Base */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      font-size: 16px;
+      background-color: var(--parchment); /* Strictly parchment, NEVER white */
+      color: var(--near-black);
+      font-family: var(--serif);
+      -webkit-font-smoothing: antialiased;
+      scroll-behavior: smooth;
+    }
+
+    body {
+      line-height: 1.55;
+      overflow-x: hidden;
+    }
+
+    /* Explicit weight locking: Weights 400 and 500 only. NO ITALIC ANYWHERE. */
+    strong, b {
+      font-weight: 500; /* Never synthesize bold 700 */
+    }
+
+    em, i {
+      font-style: normal; /* No italic per DESIGN.md */
+      color: var(--brand);
+    }
+
+    /* Tabular-nums for aligned numbers */
+    .tabular-nums {
+      font-variant-numeric: tabular-nums;
+    }
+
+    /* Typography Classes */
+    .hero-display {
+      font-size: clamp(54px, 7vw, 100px);
+      font-weight: 500;
+      line-height: 1.05;
+      letter-spacing: -1.2px;
+      color: var(--near-black);
+    }
+
+    .section-head {
+      margin-bottom: 24px;
+    }
+
+    .section-num {
+      font-family: var(--serif);
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--brand);
+      letter-spacing: 0.4px;
+      margin-bottom: 6px;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .section-title {
+      font-size: 32px;
+      font-weight: 500;
+      line-height: 1.20;
+      color: var(--near-black);
+      letter-spacing: 0.4px;
+    }
+
+    .section-lede {
+      font-size: 16px;
+      font-weight: 500;
+      line-height: 1.55;
+      color: var(--olive);
+      margin-top: 6px;
+      max-width: 680px;
+    }
+
+    .body-reading {
+      font-size: 14px;
+      font-weight: 400;
+      line-height: 1.55;
+      color: var(--near-black);
+    }
+
+    .body-dense {
+      font-size: 13.5px;
+      font-weight: 400;
+      line-height: 1.45;
+      color: var(--dark-warm);
+    }
+
+    .caption {
+      font-size: 12px;
+      font-weight: 500;
+      line-height: 1.45;
+      color: var(--olive);
+    }
+
+    .eyebrow {
+      font-size: 12px;
+      font-weight: 500;
+      line-height: 1.0;
+      letter-spacing: 1.2px;
+      text-transform: uppercase;
+      color: var(--stone);
+    }
+
+    .spec-code {
+      font-family: var(--mono);
+      font-size: 12.5px;
+      line-height: 1.55;
+      letter-spacing: 0.4px;
+    }
+
+    /* Layout Containers */
+    .container {
+      max-width: 1040px;
+      margin: 0 auto;
+      padding: 0 32px;
+    }
+
+    /* Navigation Bar */
+    header.kami-header {
+      padding: 24px 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .header-inner {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+    }
+
+    .kami-brand {
+      display: flex;
+      align-items: baseline;
+      gap: 12px;
+      text-decoration: none;
+      color: var(--near-black);
+    }
+
+    .brand-kanji {
+      font-size: 24px;
+      font-weight: 500;
+      color: var(--brand);
+    }
+
+    .brand-title {
+      font-size: 18px;
+      font-weight: 500;
+      letter-spacing: 0.5px;
+    }
+
+    .lang-switcher {
+      display: flex;
+      gap: 12px;
+      list-style: none;
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: 0.4px;
+    }
+
+    .lang-btn {
+      background: none;
+      border: none;
+      font-family: var(--serif);
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--stone);
+      cursor: pointer;
+      padding: 2px 6px;
+      border-radius: 4px;
+      transition: color 0.15s;
+    }
+
+    .lang-btn.active {
+      color: var(--brand);
+      box-shadow: 0 0 0 1px var(--brand);
+    }
+
+    /* Hero Section: Editorial Cover Page */
+    .hero-section {
+      padding: 80px 0 60px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .hero-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      margin-bottom: 40px;
+    }
+
+    .hero-headline {
+      margin-bottom: 24px;
+    }
+
+    /* Cards: Ivory (#faf9f5), whisper shadow on hover */
+    .kami-card {
+      background: var(--ivory);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 28px 28px 24px;
+      transition: box-shadow 0.2s ease;
+    }
+
+    .kami-card:hover {
+      box-shadow: var(--shadow-whisper);
+    }
+
+    /* Buttons per DESIGN.md */
+    .btn-primary {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--brand);
+      color: var(--ivory);
+      box-shadow: var(--ring-brand);
+      padding: 8px 16px;
+      border-radius: 8px;
+      font-family: var(--serif);
+      font-size: 12px;
+      font-weight: 500;
+      line-height: 1;
+      letter-spacing: 0.4px;
+      text-decoration: none;
+      cursor: pointer;
+      border: none;
+      transition: opacity 0.15s;
+    }
+
+    .btn-primary:hover {
+      opacity: 0.92;
+    }
+
+    .btn-secondary {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--warm-sand);
+      color: var(--dark-warm);
+      box-shadow: var(--ring-border);
+      padding: 8px 16px;
+      border-radius: 8px;
+      font-family: var(--serif);
+      font-size: 12px;
+      font-weight: 500;
+      line-height: 1;
+      letter-spacing: 0.4px;
+      text-decoration: none;
+      cursor: pointer;
+      border: none;
+    }
+
+    .btn-ghost {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: transparent;
+      color: var(--brand);
+      box-shadow: var(--ring-brand);
+      padding: 8px 16px;
+      border-radius: 8px;
+      font-family: var(--serif);
+      font-size: 12px;
+      font-weight: 500;
+      line-height: 1;
+      letter-spacing: 0.4px;
+      text-decoration: none;
+      cursor: pointer;
+      border: none;
+    }
+
+    /* Solid Hex Tags per DESIGN.md (Never rgba) */
+    .tag {
+      font-family: var(--serif);
+      font-size: 12px;
+      font-weight: 500;
+      line-height: 1;
+      padding: 2px 7px;
+      border-radius: 2px;
+      color: var(--brand);
+      background: #EEF2F7;
+      letter-spacing: 0.4px;
+      display: inline-block;
+    }
+
+    .tag.standard {
+      background: #E4ECF5;
+      padding: 2px 8px;
+      border-radius: 4px;
+    }
+
+    /* Single Sanctioned Watercolor Wash Brush Tag */
+    .tag.brush {
+      background: linear-gradient(to right, #D6E1EE, #E4ECF5 70%, #EEF2F7);
+      padding: 3px 10px;
+      border-radius: 4px;
+    }
+
+    /* Pull Quote with Ink Blue Left Rule */
+    .quote {
+      border-left: 2px solid var(--brand);
+      padding: 4px 0 4px 16px;
+      font-family: var(--serif);
+      font-size: 17px;
+      font-weight: 500;
+      line-height: 1.55;
+      color: var(--olive);
+      margin: 28px 0;
+    }
+
+    /* Dash Lists with En-dash in Ink Blue */
+    ul.dash {
+      list-style: none;
+      padding: 0;
+      margin: 16px 0;
+    }
+
+    ul.dash li {
+      position: relative;
+      padding-left: 18px;
+      margin-bottom: 8px;
+      font-size: 14px;
+      color: var(--dark-warm);
+    }
+
+    ul.dash li::before {
+      content: "\2013"; /* En-dash in ink-blue */
+      position: absolute;
+      left: 0;
+      color: var(--brand);
+      font-weight: 500;
+    }
+
+    /* Metric Grid with Tabular-Nums */
+    .metrics-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 20px;
+      margin: 32px 0;
+    }
+
+    .metric {
+      background: var(--ivory);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 20px;
+    }
+
+    .metric-value {
+      font-family: var(--serif);
+      font-size: 32px;
+      font-weight: 500;
+      line-height: 1.1;
+      color: var(--brand); /* Ink-blue metric value */
+      font-variant-numeric: tabular-nums;
+    }
+
+    .metric-label {
+      font-family: var(--serif);
+      font-size: 13px;
+      color: var(--olive);
+      margin-top: 6px;
+    }
+
+    /* Section Rhythm */
+    section.doc-section {
+      padding: 60px 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    /* Code Block */
+    .code-block {
+      background: var(--ivory);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 16px 20px;
+      font-family: var(--mono);
+      font-size: 12.5px;
+      line-height: 1.55;
+      color: var(--near-black);
+      overflow-x: auto;
+      white-space: pre;
+    }
+
+    .code-block .k { color: var(--brand); font-weight: 500; }
+    .code-block .c { color: var(--stone); }
+
+    /* Interactive Document Studio & Print Sheet Simulator */
+    .print-simulator {
+      background: var(--ivory);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 32px;
+      margin-top: 32px;
+    }
+
+    .simulator-controls {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 24px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .sheet-preview {
+      background: var(--parchment);
+      border: 1px solid var(--border);
+      padding: 40px;
+      border-radius: 4px;
+      transition: padding 0.2s ease;
+      box-shadow: 0 2px 12px rgba(0, 0, 0, 0.03);
+    }
+
+    /* Footer: High quality print finish */
+    footer.kami-footer {
+      padding: 48px 0 60px;
+      border-top: 1px solid var(--border);
+      font-size: 13px;
+      color: var(--stone);
+    }
+
+    .footer-content {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+    }
+
+    /* Token Drawer */
+    .token-audit-toggle {
+      position: fixed;
+      bottom: 24px;
+      left: 24px;
+      z-index: 999;
+      background: var(--near-black);
+      color: var(--ivory);
+      padding: 8px 14px;
+      border-radius: 6px;
+      font-size: 12px;
+      font-family: var(--serif);
+      font-weight: 500;
+      cursor: pointer;
+      border: 1px solid var(--near-black);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .token-audit-toggle:hover {
+      background: var(--brand);
+      border-color: var(--brand);
+    }
+
+    .token-drawer {
+      position: fixed;
+      top: 0;
+      left: -440px;
+      width: 400px;
+      height: 100vh;
+      background: var(--parchment);
+      border-right: 1px solid var(--border);
+      z-index: 2000;
+      padding: 32px 24px;
+      overflow-y: auto;
+      transition: left 0.25s ease;
+    }
+
+    .token-drawer.open {
+      left: 0;
+    }
+
+    .token-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 8px 0;
+      border-bottom: 1px solid var(--border-soft);
+      font-size: 13px;
+    }
+
+    /* Toast */
+    .toast-box {
+      position: fixed;
+      top: 24px;
+      right: 24px;
+      background: var(--near-black);
+      color: var(--ivory);
+      border-left: 3px solid var(--brand);
+      padding: 12px 18px;
+      border-radius: 4px;
+      font-size: 13px;
+      z-index: 3000;
+      opacity: 0;
+      transform: translateY(-10px);
+      transition: all 0.2s ease;
+      pointer-events: none;
+    }
+
+    .toast-box.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Responsive */
+    @media (max-width: 800px) {
+      .metrics-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      .footer-content {
+        flex-direction: column;
+        gap: 16px;
+      }
+    }
+
+    @media (max-width: 500px) {
+      .metrics-grid {
+        grid-template-columns: 1fr;
+      }
+      .sheet-preview {
+        padding: 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Masthead -->
+  <header class="kami-header">
+    <div class="container header-inner">
+      <a href="#" class="kami-brand">
+        <span class="brand-kanji">紙</span>
+        <span class="brand-title">kami design system</span>
+        <span class="tag standard" style="margin-left: 4px;">v2.4</span>
+      </a>
+
+      <!-- Multilingual Switcher: EN · zh-CN · ja -->
+      <ul class="lang-switcher">
+        <li><button class="lang-btn active" id="btnEn" onclick="switchLang('en')">English</button></li>
+        <li><span>·</span></li>
+        <li><button class="lang-btn" id="btnZh" onclick="switchLang('zh-CN')">简体中文</button></li>
+        <li><span>·</span></li>
+        <li><button class="lang-btn" id="btnJa" onclick="switchLang('ja')">日本語</button></li>
+      </ul>
+    </div>
+  </header>
+
+  <!-- Hero Section: Warm Parchment Canvas -->
+  <section class="hero-section">
+    <div class="container">
+      <div class="hero-meta">
+        <span class="eyebrow">MONOGRAPH · EDITORIAL SPECIFICATION</span>
+        <!-- Single sanctioned watercolor wash brush tag -->
+        <span class="tag brush">New · Edition 02</span>
+      </div>
+
+      <h1 class="hero-display" id="heroTitle">Parchment, ink, and typographic quiet.</h1>
+      
+      <p class="section-lede" id="heroDesc" style="margin-top: 16px;">
+        A constraint system for documents that should feel like high-quality print rather than modern app UI. Warm parchment canvas, ink-blue accent, serif-led hierarchy, no cool grays, no hard shadows.
+      </p>
+
+      <div style="display: flex; gap: 12px; margin-top: 32px; align-items: center;">
+        <button class="btn-primary" onclick="triggerToast('Downloading PDF Monograph in A4')">Download Specification</button>
+        <button class="btn-secondary" onclick="document.getElementById('studio').scrollIntoView({ behavior: 'smooth' })">Paper Studio</button>
+        <button class="btn-ghost" onclick="tokenDrawer.classList.toggle('open')">Token Sheet</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Metric Stacks: Tabular Numbers Aligned in Ink Blue -->
+  <section class="doc-section">
+    <div class="container">
+      <div class="section-head">
+        <p class="section-num">01</p>
+        <h2 class="section-title">Restraint in Numbers</h2>
+        <p class="section-lede">
+          Tabular numbers ensure vertical alignment across financial lines and white-paper metrics. The ink-blue hue is applied only to the numeric glyphs.
+        </p>
+      </div>
+
+      <div class="metrics-grid">
+        <div class="metric">
+          <div class="metric-value">≤ 5%</div>
+          <div class="metric-label">ink-blue surface ceiling</div>
+        </div>
+
+        <div class="metric">
+          <div class="metric-value">500</div>
+          <div class="metric-label">locked serif weight (no bold)</div>
+        </div>
+
+        <div class="metric">
+          <div class="metric-value">0</div>
+          <div class="metric-label">italic occurrences allowed</div>
+        </div>
+
+        <div class="metric">
+          <div class="metric-value">3</div>
+          <div class="metric-label">native typographic scripts</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section 02: Editorial Manifesto & Quote -->
+  <section class="doc-section">
+    <div class="container">
+      <div class="section-head">
+        <p class="section-num">02</p>
+        <h2 class="section-title">The Paper Discipline</h2>
+        <p class="section-lede">
+          kami is not a component library for buttons and modals; it is a typographical agreement between author and reader.
+        </p>
+      </div>
+
+      <!-- Pull Quote with 2px Ink Blue Left Border -->
+      <blockquote class="quote" id="manifestoQuote">
+        "When the surface is parchment and the ink is dark blue, the eye slows down. We read for comprehension rather than skimming for notification badges."
+      </blockquote>
+
+      <p class="body-reading" style="margin-bottom: 16px;">
+        Traditional digital user interfaces treat typography as an afterthought wrapped in plastic shadows and colored pills. In kami, the serif typeface carries the entire architectural burden of hierarchy:
+      </p>
+
+      <!-- En-dash list in ink blue -->
+      <ul class="dash">
+        <li><strong>No Synthetic Bold:</strong> Headlines, section markers, and subtitles all share weight 500, varying only in size and vertical spacing.</li>
+        <li><strong>No Italic:</strong> Emphasis is never slanted. If a sentence requires gravitas, it shifts to ink-blue or takes a solid tag fill.</li>
+        <li><strong>Solid Tag Hex Fills:</strong> Print engines double-render alpha values; tag backgrounds must use solid hex values like #E4ECF5.</li>
+        <li><strong>Whisper Shadows:</strong> Zero hard drop-shadows; elevation is communicated through a 1px ring and 4px blur whisper.</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- Section 03: Code & Print Studio -->
+  <section class="doc-section" id="studio">
+    <div class="container">
+      <div class="section-head">
+        <p class="section-num">03</p>
+        <h2 class="section-title">Interactive Document Studio</h2>
+        <p class="section-lede">
+          Toggle physical A4 margin geometry presets to simulate high-resolution print deliverables.
+        </p>
+      </div>
+
+      <div class="print-simulator">
+        <div class="simulator-controls">
+          <span class="eyebrow" style="margin-right: 8px;">A4 PRINT PRESETS:</span>
+          <button class="btn-secondary" onclick="setMarginPreset('11mm 13mm', 'Resume (Dense: 11mm top/bottom, 13mm left/right)')">Resume (11mm/13mm)</button>
+          <button class="btn-secondary" onclick="setMarginPreset('15mm 18mm', 'One-Pager (15mm top/bottom, 18mm left/right)')">One-Pager (15mm/18mm)</button>
+          <button class="btn-secondary" onclick="setMarginPreset('20mm 22mm', 'Long Doc / White Paper (20mm/22mm)')">Long Doc (20mm/22mm)</button>
+          <button class="btn-secondary" onclick="setMarginPreset('25mm 25mm', 'Formal Letter (25mm balanced)')">Letter (25mm)</button>
+        </div>
+
+        <!-- Sheet Preview -->
+        <div class="sheet-preview" id="sheetPreview" style="padding: 24px;">
+          <div style="display: flex; justify-content: space-between; border-bottom: 1px solid var(--border); padding-bottom: 12px; margin-bottom: 16px;">
+            <div>
+              <span class="eyebrow">DELIVERABLE SAMPLE</span>
+              <h3 style="font-size: 20px; font-weight: 500; margin-top: 4px;">Technical Research Summary</h3>
+            </div>
+            <span class="spec-code" style="color: var(--stone); font-variant-numeric: tabular-nums;">DOC-REF #2026-09</span>
+          </div>
+
+          <p class="body-dense" style="margin-bottom: 12px;">
+            This document sample demonstrates strict adherence to the kami editorial standard. Notice that numbers like <span class="tabular-nums" style="color: var(--brand); font-weight: 500;">99.82%</span> and ranges <span class="tabular-nums">2024–2026</span> maintain tabular tracking.
+          </p>
+
+          <!-- Code Snippet -->
+          <div class="code-block" style="margin-top: 16px;"><span class="c">/* CSS Tokens for Document Compilation */</span>
+<span class="k">:root</span> {
+  --brand: <span style="color: #1B365D;">#1B365D</span>;       <span class="c">/* Ink Blue (≤ 5% surface) */</span>
+  --parchment: <span style="color: #504e49;">#f5f4ed</span>;   <span class="c">/* Never pure white */</span>
+  --ivory: <span style="color: #504e49;">#faf9f5</span>;       <span class="c">/* Card surfaces */</span>
+  --serif: Charter, Georgia, Palatino, serif;
+}</div>
+        </div>
+
+        <div style="margin-top: 16px; font-size: 12px; color: var(--stone);" id="presetStatus">
+          Active preset: One-Pager (15mm top/bottom, 18mm left/right)
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer: High-Quality Print Finish -->
+  <footer class="kami-footer">
+    <div class="container footer-content">
+      <div>
+        <strong style="color: var(--near-black);">kami / 紙 / 纸</strong> — A constraint system for editorial paper deliverables.
+      </div>
+      <div style="display: flex; gap: 16px; font-variant-numeric: tabular-nums;">
+        <span>#1B365D</span>
+        <span>·</span>
+        <span>#f5f4ed</span>
+        <span>·</span>
+        <span>WEIGHT 500</span>
+        <span>·</span>
+        <span>NO ITALIC</span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Token Auditor Drawer -->
+  <button class="token-audit-toggle" id="tokenDrawerBtn" aria-label="Open Token Sheet">
+    <span>紙</span>
+    <span>KAMI TOKENS</span>
+  </button>
+
+  <div class="token-drawer" id="tokenDrawer">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; padding-bottom: 12px; border-bottom: 1px solid var(--border);">
+      <h3 style="font-size: 16px; font-weight: 500; color: var(--near-black);">KAMI PAPER SPEC</h3>
+      <button id="closeDrawerBtn" style="background: none; border: none; font-size: 20px; cursor: pointer; color: var(--near-black);">&times;</button>
+    </div>
+
+    <div style="margin-bottom: 24px;">
+      <span class="eyebrow">COLOR DISCIPLINE</span>
+      <div class="token-row">
+        <span>Ink Blue (Sole Chromatic)</span>
+        <code style="color: #1B365D; font-weight: 500;">#1B365D</code>
+      </div>
+      <div class="token-row">
+        <span>Parchment Canvas</span>
+        <code>#f5f4ed</code>
+      </div>
+      <div class="token-row">
+        <span>Ivory Card Surface</span>
+        <code>#faf9f5</code>
+      </div>
+      <div class="token-row">
+        <span>Warm Sand Button</span>
+        <code>#e8e6dc</code>
+      </div>
+      <div class="token-row">
+        <span>Near Black (Primary Text)</span>
+        <code>#141413</code>
+      </div>
+      <div class="token-row">
+        <span>Olive (Subtext)</span>
+        <code>#504e49</code>
+      </div>
+    </div>
+
+    <div style="margin-bottom: 24px;">
+      <span class="eyebrow">SOLID TAG TINTS (NOT RGBA)</span>
+      <div class="token-row"><span>Tag 0.08 Alpha</span><code>#EEF2F7</code></div>
+      <div class="token-row"><span>Tag 0.18 Default</span><code>#E4ECF5</code></div>
+      <div class="token-row"><span>Tag 0.30 Alpha</span><code>#D6E1EE</code></div>
+    </div>
+
+    <div style="margin-bottom: 24px;">
+      <span class="eyebrow">CONSTRAINTS</span>
+      <div class="token-row"><span>Serif Weights</span><code>400 &amp; 500 only</code></div>
+      <div class="token-row"><span>Italic</span><code>Forbidden (0 allowed)</code></div>
+      <div class="token-row"><span>Numbers</span><code>tabular-nums</code></div>
+      <div class="token-row"><span>Shadows</span><code>Whisper (0 4px 24px)</code></div>
+    </div>
+
+    <div>
+      <span class="eyebrow">SURFACE CEILING</span>
+      <p style="font-size: 13px; color: var(--olive); margin-top: 6px; line-height: 1.4;">
+        Ink-blue (#1B365D) must not exceed 5% of any page surface.
+      </p>
+    </div>
+  </div>
+
+  <!-- Toast Box -->
+  <div class="toast-box" id="toastBox">Action acknowledged.</div>
+
+  <script>
+    // Toast
+    const toast = document.getElementById('toastBox');
+    function triggerToast(text) {
+      toast.textContent = text;
+      toast.classList.add('show');
+      setTimeout(() => {
+        toast.classList.remove('show');
+      }, 2500);
+    }
+
+    // Multilingual Switcher
+    function switchLang(lang) {
+      document.documentElement.lang = lang;
+      document.getElementById('btnEn').classList.toggle('active', lang === 'en');
+      document.getElementById('btnZh').classList.toggle('active', lang === 'zh-CN');
+      document.getElementById('btnJa').classList.toggle('active', lang === 'ja');
+
+      const title = document.getElementById('heroTitle');
+      const desc = document.getElementById('heroDesc');
+      const quote = document.getElementById('manifestoQuote');
+
+      if (lang === 'zh-CN') {
+        title.textContent = '纸墨温润，排版自静。';
+        desc.textContent = '专为实体出版与高质感长文打造的纸张设计系统。暖羊皮底色、墨蓝点缀、衬线字体主导层级，无冷灰，无生硬阴影。';
+        quote.textContent = '“当文字落在羊皮纸与墨蓝之间，眼睛自然慢了下来。我们为理解而阅读，而非被通知红点所驱赶。”';
+        triggerToast('已切换至简体中文衬线排版 (Source Han Serif)');
+      } else if (lang === 'ja') {
+        title.textContent = '和紙の温もり、活字の静寂。';
+        desc.textContent = '高品質な印刷物の手触りを画面上に再現するペーパーデザインシステム。羊皮紙の地色、インクブルーのアクセント、明朝体が織りなす格調。';
+        quote.textContent = '「紙の温もりと濃紺のインクに出会うとき、読書の時間は深まります。通知に追われるのではなく、思索のために読むのです。」';
+        triggerToast('日本語明朝体レイアウトに切り替えました (YuMincho)');
+      } else {
+        title.textContent = 'Parchment, ink, and typographic quiet.';
+        desc.textContent = 'A constraint system for documents that should feel like high-quality print rather than modern app UI. Warm parchment canvas, ink-blue accent, serif-led hierarchy, no cool grays, no hard shadows.';
+        quote.textContent = '“When the surface is parchment and the ink is dark blue, the eye slows down. We read for comprehension rather than skimming for notification badges.”';
+        triggerToast('Switched to English Charter Serif typography');
+      }
+    }
+
+    // Sheet Margin Preset
+    function setMarginPreset(pad, label) {
+      document.getElementById('sheetPreview').style.padding = pad;
+      document.getElementById('presetStatus').textContent = 'Active preset: ' + label;
+      triggerToast('Applied ' + label);
+    }
+
+    // Token Drawer
+    const tokenDrawer = document.getElementById('tokenDrawer');
+    document.getElementById('tokenDrawerBtn').addEventListener('click', () => {
+      tokenDrawer.classList.toggle('open');
+    });
+    document.getElementById('closeDrawerBtn').addEventListener('click', () => {
+      tokenDrawer.classList.remove('open');
+    });
+  </script>
+</body>
+</html>

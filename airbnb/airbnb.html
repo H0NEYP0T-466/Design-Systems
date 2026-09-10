@@ -1,0 +1,863 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Airbnb — Architectural Villa &amp; Coastal Retreat</title>
+  <meta name="description" content="Airbnb authentic design system implementation: Rausch coral-pink accent, 500 body baseline, full-bleed 5-photo grid, sticky booking panel, and Guest Favorite lockup." />
+
+  <!-- Typography: Inter (closest open substitute for Airbnb Cereal VF) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    /* ─────────────────────────────────────────────────────────────────
+       AIRBNB DESIGN SYSTEM TOKENS
+       Source: open-design/design-systems/airbnb/DESIGN.md
+       ───────────────────────────────────────────────────────────────── */
+    :root {
+      --rausch: #ff385c;
+      --rausch-deep: #e00b41;
+      --plus-magenta: #92174d;
+      --luxe-purple: #460479;
+      --info-blue: #428bff;
+
+      --canvas: #ffffff;
+      --cloud: #f7f7f7;
+      --hairline: #dddddd;
+
+      --ink: #222222;
+      --charcoal: #3f3f3f;
+      --ash: #6a6a6a;
+      --mute: #929292;
+      --stone: #c1c1c1;
+
+      --font-cereal: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+
+      --brand-gradient: linear-gradient(90deg, #ff385c 0%, #e00b41 50%, #92174d 100%);
+      --card-shadow: rgba(0, 0, 0, 0.02) 0 0 0 1px, rgba(0, 0, 0, 0.04) 0 2px 6px 0, rgba(0, 0, 0, 0.1) 0 4px 8px 0;
+      --search-shadow: 0 3px 12px 0 rgba(0,0,0,0.1), 0 1px 2px 0 rgba(0,0,0,0.08);
+
+      --radius-sm: 8px;
+      --radius-md: 14px;
+      --radius-lg: 20px;
+      --radius-pill: 9999px;
+
+      --transition-base: 0.18s cubic-bezier(0.2, 0, 0, 1);
+    }
+
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      background-color: var(--canvas);
+      color: var(--ink);
+      font-family: var(--font-cereal);
+      font-size: 16px;
+      font-weight: 500; /* Airbnb Rule: 500 is the new 400 */
+      line-height: 1.43;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .container {
+      max-width: 1280px;
+      margin-inline: auto;
+      padding-inline: 40px;
+    }
+    @media (max-width: 768px) {
+      .container { padding-inline: 20px; }
+    }
+
+    /* 1. TOP HEADER & TRI-TAB CATEGORY SELECTOR */
+    .site-header {
+      border-bottom: 1px solid var(--hairline);
+      background: var(--canvas);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .header-main-row {
+      height: 80px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+    }
+    .brand-logo-link {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      text-decoration: none;
+      color: var(--rausch);
+    }
+    .brand-logo-text {
+      font-size: 22px;
+      font-weight: 800;
+      letter-spacing: -0.04em;
+    }
+
+    /* Tri-Tab Category Picker (Homes / Experiences / Services) */
+    .tri-tabs {
+      display: flex;
+      align-items: center;
+      gap: 32px;
+    }
+    @media (max-width: 900px) {
+      .tri-tabs { display: none; }
+    }
+    .tri-tab-btn {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      text-decoration: none;
+      color: var(--ash);
+      padding: 10px 4px;
+      position: relative;
+      font-size: 15px;
+      font-weight: 600;
+      transition: color var(--transition-base);
+    }
+    .tri-tab-btn:hover {
+      color: var(--ink);
+    }
+    .tri-tab-btn.active {
+      color: var(--ink);
+    }
+    .tri-tab-btn.active::after {
+      content: "";
+      position: absolute;
+      bottom: -10px;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: var(--ink);
+      border-radius: 2px;
+    }
+    .new-pill-badge {
+      position: absolute;
+      top: -2px;
+      right: -24px;
+      background: #0f172a;
+      color: #ffffff;
+      font-size: 10px;
+      font-weight: 700;
+      padding: 1px 6px;
+      border-radius: var(--radius-pill);
+    }
+
+    /* User Profile Controls */
+    .header-user-controls {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .host-link {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--ink);
+      text-decoration: none;
+      padding: 10px 14px;
+      border-radius: 22px;
+      transition: background var(--transition-base);
+    }
+    .host-link:hover {
+      background: var(--cloud);
+    }
+    .btn-circular {
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      border: 1px solid var(--hairline);
+      background: var(--canvas);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--ink);
+      cursor: pointer;
+      transition: all var(--transition-base);
+    }
+    .btn-circular:hover {
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    .user-menu-pill {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 5px 6px 5px 14px;
+      border: 1px solid var(--hairline);
+      border-radius: 30px;
+      background: var(--canvas);
+      cursor: pointer;
+      transition: box-shadow var(--transition-base);
+    }
+    .user-menu-pill:hover {
+      box-shadow: 0 2px 4px rgba(0,0,0,0.14);
+    }
+
+    /* Floating Expandable Search Pill Bar */
+    .search-pill-bar {
+      max-width: 850px;
+      margin: 8px auto 24px;
+      border: 1px solid var(--hairline);
+      border-radius: 32px;
+      box-shadow: var(--search-shadow);
+      background: var(--canvas);
+      display: grid;
+      grid-template-columns: 1.5fr 1fr 1fr auto;
+      align-items: center;
+      padding: 4px 6px 4px 24px;
+    }
+    @media (max-width: 768px) {
+      .search-pill-bar { display: none; }
+    }
+    .search-segment {
+      padding: 6px 12px 6px 0;
+      border-right: 1px solid var(--hairline);
+      display: flex;
+      flex-direction: column;
+    }
+    .search-segment:nth-child(3) {
+      border-right: none;
+    }
+    .search-label {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--ink);
+      letter-spacing: 0.04em;
+    }
+    .search-placeholder {
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--ash);
+    }
+    .search-submit-btn {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: var(--rausch);
+      color: #ffffff;
+      border: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: background var(--transition-base), transform var(--transition-base);
+    }
+    .search-submit-btn:hover {
+      background: var(--rausch-deep);
+      transform: scale(1.04);
+    }
+
+    /* 2. LISTING TITLE & SHARE BAR */
+    .listing-header-wrap {
+      padding-top: 28px;
+      margin-bottom: 20px;
+    }
+    .listing-headline {
+      font-size: 26px;
+      font-weight: 600;
+      letter-spacing: -0.2px;
+      color: var(--ink);
+      margin-bottom: 8px;
+    }
+    .listing-sub-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 14px;
+      color: var(--ash);
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    .listing-sub-left {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: 600;
+      color: var(--ink);
+    }
+    .listing-sub-actions {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    .listing-action-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      text-decoration: underline;
+      color: var(--ink);
+      font-weight: 600;
+      font-size: 14px;
+      cursor: pointer;
+      background: none;
+      border: none;
+    }
+
+    /* 3. FULL-BLEED 5-PHOTO HERO GRID (Section 4: Image treatment) */
+    .photo-grid-5 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      height: 480px;
+      margin-bottom: 40px;
+      position: relative;
+    }
+    @media (max-width: 768px) {
+      .photo-grid-5 { grid-template-columns: 1fr; height: 320px; }
+      .photo-grid-sub { display: none !important; }
+    }
+    .photo-main {
+      background: linear-gradient(135deg, #1e293b, #334155);
+      position: relative;
+      display: flex;
+      align-items: flex-end;
+      padding: 24px;
+      color: #ffffff;
+      cursor: pointer;
+    }
+    .photo-grid-sub {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      grid-template-rows: 1fr 1fr;
+      gap: 10px;
+    }
+    .photo-sub-item {
+      background: #475569;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: rgba(255,255,255,0.75);
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: filter var(--transition-base);
+    }
+    .photo-sub-item:hover, .photo-main:hover {
+      filter: brightness(0.92);
+    }
+    .photo-sub-item:nth-child(1) { background: #3b82f6; }
+    .photo-sub-item:nth-child(2) { background: #0284c7; }
+    .photo-sub-item:nth-child(3) { background: #0f766e; }
+    .photo-sub-item:nth-child(4) { background: #334155; }
+
+    /* 4. DETAIL LAYOUT & STICKY BOOKING PANEL */
+    .detail-body-grid {
+      display: grid;
+      grid-template-columns: 1.55fr 0.95fr;
+      gap: 64px;
+      align-items: start;
+    }
+    @media (max-width: 980px) {
+      .detail-body-grid { grid-template-columns: 1fr; gap: 40px; }
+    }
+
+    /* Left Column Details */
+    .host-intro-box {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-bottom: 24px;
+      border-bottom: 1px solid var(--hairline);
+      margin-bottom: 32px;
+    }
+    .host-avatar-60 {
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      background: var(--cloud);
+      border: 1px solid var(--hairline);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      color: var(--ash);
+    }
+
+    /* Guest Favorite Award Lockup (Mandatory Signature Component) */
+    .guest-favorite-band {
+      border: 1px solid var(--hairline);
+      border-radius: var(--radius-md);
+      padding: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 32px;
+      background: #FFFFFF;
+    }
+    .gf-lockup {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    .laurel-wreath {
+      width: 44px;
+      height: 44px;
+      color: var(--ink);
+    }
+    .gf-rating-giant {
+      font-size: 48px;
+      font-weight: 700;
+      line-height: 1;
+      color: var(--ink);
+      letter-spacing: -0.04em;
+    }
+    .gf-text-col {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .gf-label-title {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--ink);
+    }
+    .gf-label-sub {
+      font-size: 13px;
+      color: var(--ash);
+      max-width: 320px;
+    }
+
+    /* Amenities Section */
+    .amenities-section {
+      padding-block: 32px;
+      border-bottom: 1px solid var(--hairline);
+    }
+    .amenities-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 18px;
+      margin-top: 20px;
+    }
+    .amenity-item {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      font-size: 16px;
+      color: var(--ink);
+    }
+
+    /* Sticky Right Rail Booking Card (Section 4: Detail page booking panel) */
+    .sticky-booking-card {
+      position: sticky;
+      top: 110px;
+      background: var(--canvas);
+      border: 1px solid var(--hairline);
+      border-radius: var(--radius-md);
+      box-shadow: var(--card-shadow);
+      padding: 28px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+    .booking-price-row {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+    }
+    .price-num {
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--ink);
+    }
+    .price-night {
+      font-size: 15px;
+      color: var(--ash);
+      font-weight: 500;
+    }
+    .booking-fields-wrap {
+      border: 1px solid var(--hairline);
+      border-radius: var(--radius-sm);
+      overflow: hidden;
+    }
+    .booking-dates-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      border-bottom: 1px solid var(--hairline);
+    }
+    .booking-field-cell {
+      padding: 10px 14px;
+      background: var(--canvas);
+    }
+    .booking-field-cell:first-child {
+      border-right: 1px solid var(--hairline);
+    }
+    .field-mini-title {
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      color: var(--ink);
+      letter-spacing: 0.05em;
+    }
+    .field-val-text {
+      font-size: 14px;
+      color: var(--charcoal);
+      font-weight: 500;
+      margin-top: 2px;
+    }
+
+    /* Rausch Primary Reserve Button */
+    .btn-reserve {
+      width: 100%;
+      height: 48px;
+      background: var(--rausch);
+      color: #ffffff;
+      font-family: inherit;
+      font-size: 16px;
+      font-weight: 600;
+      border: none;
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background var(--transition-base), transform var(--transition-base);
+    }
+    .btn-reserve:hover {
+      background: var(--rausch-deep);
+    }
+    .btn-reserve:active {
+      transform: scale(0.96);
+    }
+    .no-charge-foot {
+      font-size: 13px;
+      color: var(--ash);
+      text-align: center;
+    }
+    .pricing-calc-table {
+      border-top: 1px solid var(--hairline);
+      padding-top: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      font-size: 15px;
+    }
+    .calc-row {
+      display: flex;
+      justify-content: space-between;
+      color: var(--charcoal);
+    }
+    .calc-total {
+      border-top: 1px solid var(--hairline);
+      padding-top: 14px;
+      font-weight: 700;
+      color: var(--ink);
+    }
+
+    /* 5. FOOTER */
+    .airbnb-footer {
+      background: var(--cloud);
+      border-top: 1px solid var(--hairline);
+      margin-top: 80px;
+      padding-block: 48px 32px;
+      font-size: 14px;
+      color: var(--charcoal);
+    }
+    .footer-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 32px;
+      padding-bottom: 36px;
+      border-bottom: 1px solid var(--hairline);
+    }
+    @media (max-width: 768px) {
+      .footer-grid { grid-template-columns: 1fr; }
+    }
+    .footer-col h6 {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--ink);
+      margin-bottom: 16px;
+    }
+    .footer-col ul {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .footer-col a {
+      color: var(--charcoal);
+      text-decoration: none;
+    }
+    .footer-col a:hover {
+      text-decoration: underline;
+    }
+    .footer-bottom-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-top: 24px;
+      font-size: 13px;
+      color: var(--ash);
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- 1. AIRBNB HEADER & TRI-TABS -->
+  <header class="site-header">
+    <div class="container">
+      <div class="header-main-row">
+        <!-- Logo -->
+        <a href="#listing" class="brand-logo-link">
+          <svg width="32" height="32" viewBox="0 0 32 32" fill="currentColor">
+            <path d="M16 1c2.008 0 3.463.963 4.751 3.269l.533 1.025c1.954 3.83 6.18 12.637 6.18 17.039 0 5.485-3.864 9.667-9.464 9.667-2.023 0-3.864-.61-5.464-1.802-1.6 1.192-3.441 1.802-5.464 1.802-5.6 0-9.464-4.182-9.464-9.667 0-4.402 4.226-13.209 6.18-17.039l.533-1.025C8.073 1.963 9.528 1 11.536 1h4.464zm0 2.222h-4.464c-1.229 0-2.128.599-3.056 2.285l-.478.922C6.183 9.98 2.222 18.238 2.222 22.333c0 4.27 2.873 7.445 7.242 7.445 1.776 0 3.323-.578 4.602-1.724l.934-.897.934.897c1.279 1.146 2.826 1.724 4.602 1.724 4.369 0 7.242-3.175 7.242-7.445 0-4.095-3.961-12.353-5.778-15.904l-.478-.922c-.928-1.686-1.827-2.285-3.056-2.285H16zm0 13.334c2.454 0 4.444 2.012 4.444 4.494 0 2.837-2.164 5.253-4.444 7.214-2.28-1.961-4.444-4.377-4.444-7.214 0-2.482 1.99-4.494 4.444-4.494zm0 2.222c-1.224 0-2.222.999-2.222 2.272 0 1.585 1.343 3.348 2.222 4.498.879-1.15 2.222-2.913 2.222-4.498 0-1.273-.998-2.272-2.222-2.272z"/>
+          </svg>
+          <span class="brand-logo-text">airbnb</span>
+        </a>
+
+        <!-- Tri-Tab Category Picker (Homes / Experiences / Services) -->
+        <nav class="tri-tabs">
+          <a href="#homes" class="tri-tab-btn active">
+            <span>Stays</span>
+          </a>
+          <a href="#experiences" class="tri-tab-btn">
+            <span>Experiences</span>
+            <span class="new-pill-badge">NEW</span>
+          </a>
+          <a href="#services" class="tri-tab-btn">
+            <span>Services</span>
+            <span class="new-pill-badge">NEW</span>
+          </a>
+        </nav>
+
+        <!-- Right User Actions -->
+        <div class="header-user-controls">
+          <a href="#host" class="host-link">Airbnb your home</a>
+          <button class="btn-circular" aria-label="Language selector">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><path d="M8 0a8 8 0 100 16A8 8 0 008 0zm6.86 7.33h-2.9a13.3 13.3 0 00-1.07-4.63A6.88 6.88 0 0114.86 7.33zM8 1.34c.7 1.13 1.34 3.4 1.5 5.99H6.5c.16-2.59.8-4.86 1.5-5.99zM5.11 2.7c-.43 1.35-.8 2.97-.97 4.63H1.24A6.88 6.88 0 015.11 2.7zm-3.87 6h2.9c.17 1.66.54 3.28.97 4.63A6.88 6.88 0 011.24 8.7zm6.76 5.96c-.7-1.13-1.34-3.4-1.5-5.99h3c-.16 2.59-.8 4.86-1.5 5.99zm2.89-1.33c.43-1.35.8-2.97.97-4.63h2.9a6.88 6.88 0 01-3.87 4.63z"/></svg>
+          </button>
+          <div class="user-menu-pill">
+            <svg width="16" height="16" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="3"><path d="M4 8h24M4 16h24M4 24h24"/></svg>
+            <div style="width: 30px; height: 30px; border-radius: 50%; background: #717171; color: #fff; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700;">G</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Expandable Floating Search Bar -->
+      <div class="search-pill-bar">
+        <div class="search-segment">
+          <span class="search-label">Where</span>
+          <span class="search-placeholder">Santorini, Greece</span>
+        </div>
+        <div class="search-segment">
+          <span class="search-label">Check in / out</span>
+          <span class="search-placeholder">Oct 14 – 21</span>
+        </div>
+        <div class="search-segment">
+          <span class="search-label">Who</span>
+          <span class="search-placeholder">2 guests</span>
+        </div>
+        <button class="search-submit-btn" aria-label="Search listings">
+          <svg width="18" height="18" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="4"><path d="M20.667 20.667L29 29M14 24a10 10 0 100-20 10 10 0 000 20z"/></svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- 2. LISTING DETAIL HEADLINE & ACTIONS -->
+  <main id="listing" class="container">
+    <div class="listing-header-wrap">
+      <h1 class="listing-headline">Cliffside Caldera Villa with Private Infinity Plunge Pool</h1>
+      <div class="listing-sub-row">
+        <div class="listing-sub-left">
+          <span>★ 4.96 · 142 reviews</span>
+          <span>·</span>
+          <span>Superhost</span>
+          <span>·</span>
+          <span style="text-decoration: underline;">Oia, Cyclades, Greece</span>
+        </div>
+        <div class="listing-sub-actions">
+          <button class="listing-action-btn">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M4 12v8a2 2 0 002 2h12a2 2 0 002-2v-8M16 6l-4-4-4 4M12 2v13"/></svg>
+            Share
+          </button>
+          <button class="listing-action-btn">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg>
+            Save
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 3. FULL-BLEED 5-PHOTO GRID (Section 4) -->
+    <div class="photo-grid-5">
+      <div class="photo-main">
+        <div style="font-size: 18px; font-weight: 700;">Panoramic Sunset Terrace Over Looking the Aegean</div>
+      </div>
+      <div class="photo-grid-sub">
+        <div class="photo-sub-item">Master Bedroom Cave Suite</div>
+        <div class="photo-sub-item">Infinity Plunge Pool</div>
+        <div class="photo-sub-item">Limestone Kitchenette</div>
+        <div class="photo-sub-item">Sunken Lounge Atrium</div>
+      </div>
+    </div>
+
+    <!-- 4. DETAIL PAGE CONTENT & STICKY BOOKING PANEL -->
+    <div class="detail-body-grid">
+      <div>
+        <!-- Host Profile Intro -->
+        <div class="host-intro-box">
+          <div>
+            <h2 style="font-size: 22px; font-weight: 600; color: var(--ink);">Entire cave villa hosted by Eleni &amp; Nikos</h2>
+            <p style="color: var(--ash); font-size: 15px; margin-top: 4px;">4 guests · 2 bedrooms · 2 beds · 2 baths</p>
+          </div>
+          <div class="host-avatar-60">E&amp;N</div>
+        </div>
+
+        <!-- Guest Favorite Award Lockup (Signature Airbnb Pattern) -->
+        <div class="guest-favorite-band">
+          <div class="gf-lockup">
+            <svg class="laurel-wreath" viewBox="0 0 32 32" fill="currentColor">
+              <path d="M12 2C7 8 6 16 10 24c1 2 3 4 5 6-4-2-8-6-9-11-1-6 1-13 6-17zm8 0c5 6 6 14 2 22-1 2-3 4-5 6 4-2 8-6 9-11 1-6-1-13-6-17z"/>
+            </svg>
+            <div class="gf-rating-giant">4.96</div>
+            <svg class="laurel-wreath" viewBox="0 0 32 32" fill="currentColor" style="transform: scaleX(-1);">
+              <path d="M12 2C7 8 6 16 10 24c1 2 3 4 5 6-4-2-8-6-9-11-1-6 1-13 6-17zm8 0c5 6 6 14 2 22-1 2-3 4-5 6 4-2 8-6 9-11 1-6-1-13-6-17z"/>
+            </svg>
+          </div>
+          <div class="gf-text-col">
+            <span class="gf-label-title">Guest Favorite</span>
+            <span class="gf-label-sub">One of the most loved homes on Airbnb based on ratings, reviews, and reliability.</span>
+          </div>
+        </div>
+
+        <!-- Property Description -->
+        <div style="padding-block: 24px; border-bottom: 1px solid var(--hairline);">
+          <p style="font-size: 16px; line-height: 1.6; color: var(--charcoal); margin-bottom: 18px;">
+            Carved directly into the volcanic cliffs of Oia, this private sanctuary marries Cycladic vernacular minimalism with bespoke Mediterranean luxury. Wake up to unobstructed morning vistas across the caldera crater, swim along the infinity precipice, and toast the Aegean sunset in total privacy.
+          </p>
+          <a href="#more" style="color: var(--ink); font-weight: 700; text-decoration: underline;">Show more →</a>
+        </div>
+
+        <!-- Amenities -->
+        <div class="amenities-section">
+          <h3 style="font-size: 22px; font-weight: 600; color: var(--ink); margin-bottom: 16px;">What this place offers</h3>
+          <div class="amenities-grid">
+            <div class="amenity-item">🌊 Unobstructed caldera &amp; ocean view</div>
+            <div class="amenity-item">🏊 Heated cliffside infinity plunge pool</div>
+            <div class="amenity-item">📶 500 Mbps high-speed WiFi</div>
+            <div class="amenity-item">❄️ Dedicated climate control</div>
+            <div class="amenity-item">🍳 Fully equipped chef's kitchen</div>
+            <div class="amenity-item">🍷 Curated Santorini wine cellar on arrival</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Sticky Booking Card (Desktop Right Rail) -->
+      <aside>
+        <div class="sticky-booking-card">
+          <div class="booking-price-row">
+            <div>
+              <span class="price-num">$420</span>
+              <span class="price-night">/ night</span>
+            </div>
+            <div style="font-size: 14px; font-weight: 600; color: var(--ink);">
+              ★ 4.96 · <span style="color: var(--ash); text-decoration: underline;">142 reviews</span>
+            </div>
+          </div>
+
+          <div class="booking-fields-wrap">
+            <div class="booking-dates-row">
+              <div class="booking-field-cell">
+                <span class="field-mini-title">CHECK-IN</span>
+                <div class="field-val-text">10/14/2026</div>
+              </div>
+              <div class="booking-field-cell">
+                <span class="field-mini-title">CHECKOUT</span>
+                <div class="field-val-text">10/21/2026</div>
+              </div>
+            </div>
+            <div class="booking-field-cell">
+              <span class="field-mini-title">GUESTS</span>
+              <div class="field-val-text">2 guests</div>
+            </div>
+          </div>
+
+          <!-- Signature Primary Action -->
+          <button class="btn-reserve">Reserve</button>
+          <div class="no-charge-foot">You won't be charged yet</div>
+
+          <div class="pricing-calc-table">
+            <div class="calc-row">
+              <span style="text-decoration: underline;">$420 × 7 nights</span>
+              <span>$2,940</span>
+            </div>
+            <div class="calc-row">
+              <span style="text-decoration: underline;">Cleaning fee</span>
+              <span>$120</span>
+            </div>
+            <div class="calc-row">
+              <span style="text-decoration: underline;">Airbnb service fee</span>
+              <span>$380</span>
+            </div>
+            <div class="calc-row calc-total">
+              <span>Total before taxes</span>
+              <span>$3,440</span>
+            </div>
+          </div>
+        </div>
+      </aside>
+    </div>
+  </main>
+
+  <!-- 5. AIRBNB FOOTER -->
+  <footer class="airbnb-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-col">
+          <h6>Support</h6>
+          <ul>
+            <li><a href="#">Help Center</a></li>
+            <li><a href="#">AirCover protection</a></li>
+            <li><a href="#">Anti-discrimination</a></li>
+            <li><a href="#">Disability support</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h6>Hosting</h6>
+          <ul>
+            <li><a href="#">Airbnb your home</a></li>
+            <li><a href="#">AirCover for Hosts</a></li>
+            <li><a href="#">Hosting resources</a></li>
+            <li><a href="#">Community forum</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h6>Airbnb</h6>
+          <ul>
+            <li><a href="#">Newsroom</a></li>
+            <li><a href="#">New features</a></li>
+            <li><a href="#">Careers</a></li>
+            <li><a href="#">Investors</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="footer-bottom-bar">
+        <div>
+          &copy; 2026 Airbnb, Inc. · Privacy · Terms · Sitemap · Company details
+        </div>
+        <div>
+          <a href="00_Index.md" style="color: var(--ink); font-weight: 600; text-decoration: none;">← Master Index</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>

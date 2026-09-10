@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Uber — Go Anywhere, Get Anything</title>
+  <meta name="description" content="Mobility platform. Bold true black and white duality, tight typography, universal 999px pill buttons, whisper shadows, and urban transit efficiency.">
+
+  <!-- Font: DM Sans & Inter for engineered geometric UberMove character -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,700;1,9..40,400&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      /* Pure Black & White Foundations from uber/DESIGN.md */
+      --ub-black: #000000;
+      --ub-white: #ffffff;
+      
+      /* Interactive & Button States */
+      --ub-hover-gray: #e2e2e2;
+      --ub-hover-light: #f3f3f3;
+      --ub-chip-gray: #efefef;
+
+      /* Text & Content */
+      --ub-body-gray: #4b4b4b;
+      --ub-muted-gray: #afafaf;
+
+      /* Shadows (Whisper-soft) */
+      --ub-shadow-light: 0px 4px 16px rgba(0, 0, 0, 0.12);
+      --ub-shadow-medium: 0px 4px 16px rgba(0, 0, 0, 0.16);
+      --ub-shadow-floating: 0px 2px 8px rgba(0, 0, 0, 0.16);
+
+      /* Typography */
+      --font-headline: 'DM Sans', 'UberMove', -apple-system, sans-serif;
+      --font-text: 'Inter', 'UberMoveText', -apple-system, sans-serif;
+
+      /* Radii */
+      --rad-card: 8px;
+      --rad-featured: 12px;
+      --rad-pill: 999px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--ub-white);
+      color: var(--ub-black);
+      font-family: var(--font-text);
+      font-size: 16px;
+      line-height: 1.50;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* Top Sticky Nav */
+    header.ub-nav {
+      background: var(--ub-white);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      border-bottom: 1px solid #F1F1F1;
+    }
+    .nav-inner {
+      max-width: 1136px;
+      margin: 0 auto;
+      padding: 16px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .ub-brand {
+      font-family: var(--font-headline);
+      font-size: 26px;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+      color: var(--ub-black);
+      text-decoration: none;
+    }
+
+    /* Pill Navigation Chips */
+    .chip-group {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      overflow-x: auto;
+    }
+    .nav-chip {
+      background: var(--ub-chip-gray);
+      color: var(--ub-black);
+      font-family: var(--font-text);
+      font-size: 14px;
+      font-weight: 500;
+      padding: 10px 18px;
+      border-radius: var(--rad-pill);
+      border: none;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 150ms ease;
+      white-space: nowrap;
+    }
+    .nav-chip:hover {
+      background: var(--ub-hover-gray);
+    }
+    .nav-chip.active {
+      background: var(--ub-black);
+      color: var(--ub-white);
+    }
+
+    /* Buttons (999px Universal Pill) */
+    .btn-ub {
+      font-family: var(--font-text);
+      font-size: 16px;
+      font-weight: 500;
+      padding: 12px 24px;
+      border-radius: var(--rad-pill);
+      border: none;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      text-decoration: none;
+      transition: all 150ms ease;
+    }
+    .btn-ub-black {
+      background: var(--ub-black);
+      color: var(--ub-white);
+    }
+    .btn-ub-black:hover {
+      opacity: 0.85;
+    }
+    .btn-ub-white {
+      background: var(--ub-white);
+      color: var(--ub-black);
+      border: 1px solid var(--ub-black);
+    }
+    .btn-ub-white:hover {
+      background: var(--ub-hover-gray);
+    }
+
+    /* Container */
+    .ub-container {
+      max-width: 1136px;
+      margin: 0 auto;
+      padding: 48px 24px;
+    }
+
+    /* Split Hero Layout */
+    .hero-split {
+      display: grid;
+      grid-template-columns: 1.1fr 1fr;
+      gap: 48px;
+      align-items: center;
+      padding-bottom: 64px;
+    }
+    @media (max-width: 860px) {
+      .hero-split { grid-template-columns: 1fr; }
+    }
+
+    .hero-title {
+      font-family: var(--font-headline);
+      font-size: clamp(38px, 5.5vw, 52px);
+      font-weight: 700;
+      line-height: 1.23;
+      letter-spacing: -0.5px;
+      margin-bottom: 24px;
+    }
+    .hero-lead {
+      font-size: 18px;
+      color: var(--ub-body-gray);
+      margin-bottom: 32px;
+      line-height: 1.5;
+    }
+
+    /* Interactive Ride Booking Card */
+    .booking-box {
+      background: var(--ub-white);
+      border-radius: var(--rad-card);
+      box-shadow: var(--ub-shadow-light);
+      padding: 32px;
+    }
+    .input-row {
+      position: relative;
+      margin-bottom: 16px;
+    }
+    .ub-input {
+      width: 100%;
+      background: #F6F6F6;
+      border: 1px solid transparent;
+      border-radius: var(--rad-card);
+      padding: 14px 16px 14px 44px;
+      font-family: var(--font-text);
+      font-size: 16px;
+      color: var(--ub-black);
+      outline: none;
+      transition: all 150ms ease;
+    }
+    .ub-input:focus {
+      background: var(--ub-white);
+      border-color: var(--ub-black);
+    }
+    .input-icon {
+      position: absolute;
+      left: 16px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 16px;
+    }
+
+    /* Ride Options Preview */
+    .ride-options {
+      margin-top: 24px;
+      border-top: 1px solid #EEEEEE;
+      padding-top: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .ride-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 16px;
+      border-radius: var(--rad-card);
+      cursor: pointer;
+      transition: background 150ms ease;
+    }
+    .ride-row:hover, .ride-row.selected {
+      background: #F3F3F3;
+    }
+    .ride-name {
+      font-weight: 700;
+      font-size: 16px;
+    }
+    .ride-meta {
+      font-size: 13px;
+      color: var(--ub-body-gray);
+    }
+    .ride-fare {
+      font-weight: 700;
+      font-size: 18px;
+    }
+
+    /* Cards Grid */
+    .cards-grid-3 {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 24px;
+      margin-top: 64px;
+    }
+    .ub-card {
+      background: var(--ub-white);
+      border-radius: var(--rad-card);
+      box-shadow: var(--ub-shadow-light);
+      padding: 32px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: transform 150ms ease, box-shadow 150ms ease;
+    }
+    .ub-card:hover {
+      box-shadow: var(--ub-shadow-medium);
+      transform: translateY(-2px);
+    }
+    .card-title {
+      font-family: var(--font-headline);
+      font-size: 24px;
+      font-weight: 700;
+      line-height: 1.33;
+      margin-bottom: 12px;
+    }
+    .card-body {
+      font-size: 16px;
+      color: var(--ub-body-gray);
+      margin-bottom: 24px;
+    }
+
+    /* Dark Footer (Uber Black #000000) */
+    footer.ub-footer {
+      background: var(--ub-black);
+      color: var(--ub-white);
+      padding: 80px 24px 40px;
+      margin-top: 80px;
+    }
+    .footer-inner {
+      max-width: 1136px;
+      margin: 0 auto;
+    }
+    .footer-links-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 32px;
+      margin-bottom: 60px;
+    }
+    .footer-col h4 {
+      font-family: var(--font-headline);
+      font-size: 18px;
+      font-weight: 700;
+      margin-bottom: 16px;
+    }
+    .footer-col ul {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .footer-col a {
+      color: var(--ub-muted-gray);
+      text-decoration: none;
+      font-size: 14px;
+      transition: color 150ms ease;
+    }
+    .footer-col a:hover {
+      color: var(--ub-white);
+    }
+    .footer-bottom {
+      border-top: 1px solid #222222;
+      padding-top: 32px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 16px;
+      font-size: 13px;
+      color: var(--ub-muted-gray);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Sticky Top Navigation -->
+  <header class="ub-nav">
+    <div class="nav-inner">
+      <a href="#" class="ub-brand">Uber</a>
+      
+      <div class="chip-group">
+        <button class="nav-chip active" onclick="selectChip(this, 'Ride')">🚗 Ride</button>
+        <button class="nav-chip" onclick="selectChip(this, 'Drive')">🔑 Drive</button>
+        <button class="nav-chip" onclick="selectChip(this, 'Eats')">🍔 Eats</button>
+        <button class="nav-chip" onclick="selectChip(this, 'Business')">💼 Business</button>
+      </div>
+
+      <div style="display:flex; gap:10px;">
+        <button class="btn-ub btn-ub-white" style="padding:8px 18px; font-size:14px;" onclick="openAuth('Login')">Log in</button>
+        <button class="btn-ub btn-ub-black" style="padding:8px 18px; font-size:14px;" onclick="openAuth('Signup')">Sign up</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="ub-container">
+    <!-- Hero Section with Ride Booking -->
+    <section class="hero-split">
+      <div>
+        <h1 class="hero-title" id="dynamicHeading">Go anywhere with Uber. Request a ride now.</h1>
+        <p class="hero-lead">
+          Request a ride, hop in, and relax. Engineered for urban efficiency with true black and white clarity, universal pill buttons, and whisper-soft card elevation.
+        </p>
+        <div style="display:flex; gap:12px; flex-wrap:wrap;">
+          <button class="btn-ub btn-ub-black" onclick="requestRideAction()">Request Now</button>
+          <button class="btn-ub btn-ub-white" onclick="scheduleAhead()">Schedule for Later</button>
+        </div>
+      </div>
+
+      <!-- Booking Card -->
+      <div class="booking-box">
+        <h3 style="font-family: var(--font-headline); font-size: 20px; font-weight:700; margin-bottom: 20px;">Request a Ride</h3>
+        
+        <div class="input-row">
+          <span class="input-icon">◉</span>
+          <input type="text" id="pickup" class="ub-input" value="Current location (742 Evergreen Terrace)" oninput="updateFares()">
+        </div>
+
+        <div class="input-row">
+          <span class="input-icon">◼</span>
+          <input type="text" id="dropoff" class="ub-input" placeholder="Enter destination" value="Downtown Financial District" oninput="updateFares()">
+        </div>
+
+        <div class="ride-options">
+          <div class="ride-row selected" onclick="chooseTier(this, 'UberX', '$18.50')">
+            <div>
+              <div class="ride-name">UberX <span>👤 4</span></div>
+              <div class="ride-meta">3 mins away • Affordable everyday rides</div>
+            </div>
+            <div class="ride-fare" id="fare-uberx">$18.50</div>
+          </div>
+
+          <div class="ride-row" onclick="chooseTier(this, 'Uber Comfort', '$24.20')">
+            <div>
+              <div class="ride-name">Uber Comfort <span>👤 4</span></div>
+              <div class="ride-meta">5 mins away • Newer cars with extra legroom</div>
+            </div>
+            <div class="ride-fare" id="fare-comfort">$24.20</div>
+          </div>
+
+          <div class="ride-row" onclick="chooseTier(this, 'Uber Black', '$38.00')">
+            <div>
+              <div class="ride-name">Uber Black <span>👤 4</span></div>
+              <div class="ride-meta">7 mins away • Premium rides with top-rated drivers</div>
+            </div>
+            <div class="ride-fare" id="fare-black">$38.00</div>
+          </div>
+        </div>
+
+        <button class="btn-ub btn-ub-black" style="width:100%; margin-top:20px;" onclick="confirmRide()">See Prices & Confirm</button>
+      </div>
+    </section>
+
+    <!-- Cards Section -->
+    <h2 style="font-family:var(--font-headline); font-size:36px; font-weight:700; margin-top:40px; margin-bottom:12px;">Focus on What Matters</h2>
+    <p style="color:var(--ub-body-gray); font-size:18px; max-width:640px;">Ways to move and earn with transparent pricing and global infrastructure.</p>
+
+    <div class="cards-grid-3">
+      <!-- Card 1 -->
+      <div class="ub-card">
+        <div>
+          <h3 class="card-title">Ride with Uber Reserve</h3>
+          <p class="card-body">Choose your exact pickup date and time up to 90 days in advance with guaranteed driver confirmation.</p>
+        </div>
+        <button class="btn-ub btn-ub-black" onclick="alert('Uber Reserve configured.')">Reserve a Ride</button>
+      </div>
+
+      <!-- Card 2 -->
+      <div class="ub-card">
+        <div>
+          <h3 class="card-title">Drive When You Want</h3>
+          <p class="card-body">Make money on your schedule with deliveries or rides. Flexible earnings deposited instantly to your debit card.</p>
+        </div>
+        <button class="btn-ub btn-ub-white" onclick="alert('Driver onboarding initiated.')">Get Started</button>
+      </div>
+
+      <!-- Card 3 -->
+      <div class="ub-card">
+        <div>
+          <h3 class="card-title">Uber for Business</h3>
+          <p class="card-body">Transform the way your company moves and feeds employees with centralized billing and policy controls.</p>
+        </div>
+        <button class="btn-ub btn-ub-white" onclick="alert('Business portal opened.')">Learn More</button>
+      </div>
+    </div>
+  </main>
+
+  <!-- Dark Footer -->
+  <footer class="ub-footer">
+    <div class="footer-inner">
+      <div style="font-family:var(--font-headline); font-size:24px; font-weight:700; margin-bottom:32px;">Uber</div>
+      <div class="footer-links-grid">
+        <div class="footer-col">
+          <h4>Company</h4>
+          <ul>
+            <li><a href="#">About us</a></li>
+            <li><a href="#">Our offerings</a></li>
+            <li><a href="#">Newsroom</a></li>
+            <li><a href="#">Investors</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Products</h4>
+          <ul>
+            <li><a href="#">Ride</a></li>
+            <li><a href="#">Drive</a></li>
+            <li><a href="#">Deliver</a></li>
+            <li><a href="#">Uber Eats</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Global Citizenship</h4>
+          <ul>
+            <li><a href="#">Safety</a></li>
+            <li><a href="#">Diversity and Inclusion</a></li>
+            <li><a href="#">Sustainability</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Travel</h4>
+          <ul>
+            <li><a href="#">Reserve</a></li>
+            <li><a href="#">Airports</a></li>
+            <li><a href="#">Cities</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <div>© 2026 Uber Technologies Inc. Built strictly conforming to open-design/design-systems/uber/DESIGN.md</div>
+        <div>True Black #000000 • Pure White #ffffff • Universal 999px Pills • Zero Gradients</div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    let selectedTier = 'UberX';
+    let selectedPrice = '$18.50';
+
+    function selectChip(el, category) {
+      document.querySelectorAll('.nav-chip').forEach(c => c.classList.remove('active'));
+      el.classList.add('active');
+      const heading = document.getElementById('dynamicHeading');
+      if (category === 'Ride') heading.textContent = 'Go anywhere with Uber. Request a ride now.';
+      if (category === 'Drive') heading.textContent = 'Drive when you want, make what you need.';
+      if (category === 'Eats') heading.textContent = 'Order food from your favorite local restaurants.';
+      if (category === 'Business') heading.textContent = 'A business solution for all your corporate travel.';
+    }
+
+    function chooseTier(el, tier, price) {
+      document.querySelectorAll('.ride-row').forEach(r => r.classList.remove('selected'));
+      el.classList.add('selected');
+      selectedTier = tier;
+      selectedPrice = price;
+    }
+
+    function updateFares() {
+      // Dynamic calculation feedback
+      const drop = document.getElementById('dropoff').value;
+      if (drop.length > 5) {
+        document.getElementById('fare-uberx').textContent = '$21.30';
+        document.getElementById('fare-comfort').textContent = '$27.80';
+        document.getElementById('fare-black').textContent = '$42.50';
+      }
+    }
+
+    function confirmRide() {
+      const drop = document.getElementById('dropoff').value;
+      alert(`Booking confirmed:\nTier: ${selectedTier}\nDestination: ${drop}\nEstimated Fare: ${selectedPrice}\nDriver dispatching now.`);
+    }
+
+    function requestRideAction() {
+      document.getElementById('dropoff').focus();
+    }
+
+    function scheduleAhead() {
+      alert('Uber Reserve schedule modal opened for future trip selection.');
+    }
+
+    function openAuth(type) {
+      alert(`Uber ${type} flow initialized.`);
+    }
+  </script>
+</body>
+</html>

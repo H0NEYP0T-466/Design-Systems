@@ -1,0 +1,1301 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>SPECTRUM // Vibrant Creative Engine &amp; Color Design Studio</title>
+  <meta name="description" content="A playful, high-contrast, premium design system website featuring vibrant palettes, Primary #3B82F6 CTA emphasis, Secondary #8B5CF6 accents, Surface #FFFFFF, and Text #111827." />
+
+  <!-- Google Fonts: Inter and JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    /* ─────────────────────────────────────────────────────────────────
+       COLORFUL DESIGN SYSTEM SPECIFICATION & DESIGN TOKENS
+       Directly sourced from /open-design/design-systems/colorful/DESIGN.md
+       ───────────────────────────────────────────────────────────────── */
+    :root {
+      /* Tokens from Style Foundations (DESIGN.md §2) */
+      --color-primary: #3B82F6;
+      --color-primary-hover: #2563eb;
+      --color-secondary: #8B5CF6;
+      --color-secondary-hover: #7c3aed;
+      --color-success: #16A34A;
+      --color-warning: #D97706;
+      --color-danger: #DC2626;
+      --color-surface: #FFFFFF;
+      --color-text: #111827;
+      --color-neutral: #FFFFFF;
+
+      /* Vibrant Gradient Accents */
+      --gradient-vibrant: linear-gradient(135deg, #3B82F6 0%, #8B5CF6 50%, #EC4899 100%);
+      --gradient-subtle: linear-gradient(180deg, rgba(59, 130, 246, 0.06) 0%, rgba(139, 92, 246, 0.04) 100%);
+      --gradient-cyan-blue: linear-gradient(135deg, #06B6D4 0%, #3B82F6 100%);
+      --gradient-purple-rose: linear-gradient(135deg, #8B5CF6 0%, #F43F5E 100%);
+
+      /* Neutrals & Borders */
+      --color-border-subtle: #E5E7EB;
+      --color-border-hover: #CBD5E1;
+      --color-card-bg: #FFFFFF;
+      --color-gray-soft: #F9FAFB;
+
+      /* Typography Families (DESIGN.md §3) */
+      --font-display: "Inter", system-ui, -apple-system, sans-serif;
+      --font-primary: "Inter", system-ui, -apple-system, sans-serif;
+      --font-body: "Inter", system-ui, -apple-system, sans-serif;
+      --font-mono: "JetBrains Mono", ui-monospace, monospace;
+
+      /* Typography Scale (DESIGN.md §3: 12/14/16/20/24/32/48/64) */
+      --text-xs: 12px;
+      --text-sm: 14px;
+      --text-base: 16px;
+      --text-lg: 20px;
+      --text-xl: 24px;
+      --text-2xl: 32px;
+      --text-3xl: 48px;
+      --text-4xl: 64px;
+
+      /* 8pt Baseline Spacing Scale (DESIGN.md §4) */
+      --space-1: 4px;
+      --space-2: 8px;
+      --space-3: 12px;
+      --space-4: 16px;
+      --space-6: 24px;
+      --space-8: 32px;
+      --space-10: 40px;
+      --space-12: 48px;
+      --space-16: 64px;
+      --space-20: 80px;
+      --space-24: 96px;
+
+      /* Consistent Radii (DESIGN.md §6) */
+      --radius-sm: 6px;
+      --radius-md: 12px;
+      --radius-lg: 18px;
+      --radius-pill: 9999px;
+
+      /* Motion (150–250ms stable easing per DESIGN.md §7) */
+      --motion-fast: 150ms;
+      --motion-base: 240ms;
+      --ease-standard: cubic-bezier(0.16, 1, 0.3, 1);
+
+      /* Focus Ring */
+      --focus-ring: 0 0 0 3px rgba(59, 130, 246, 0.45);
+      --container-max: 1220px;
+    }
+
+    /* ─── Global Reset & Clean Base ────────────────────────────────── */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      background-color: var(--color-surface);
+      color: var(--color-text);
+    }
+
+    body {
+      background-color: var(--color-surface);
+      color: var(--color-text);
+      font-family: var(--font-body);
+      font-size: var(--text-base);
+      line-height: 1.55;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      overflow-x: hidden;
+    }
+
+    /* Headings carry playful, confident weight */
+    h1, h2, h3, h4 {
+      font-family: var(--font-display);
+      line-height: 1.12;
+      color: var(--color-text);
+      letter-spacing: -0.025em;
+    }
+
+    h1 {
+      font-size: var(--text-4xl);
+      font-weight: 800;
+    }
+
+    h2 {
+      font-size: var(--text-3xl);
+      font-weight: 800;
+    }
+
+    h3 {
+      font-size: var(--text-2xl);
+      font-weight: 700;
+    }
+
+    p {
+      color: var(--color-text);
+      line-height: 1.55;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    :focus-visible {
+      outline: none;
+      box-shadow: var(--focus-ring);
+    }
+
+    /* ─── Button Components (DESIGN.md §6) ─────────────────────────── */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--space-2);
+      padding: 12px 26px;
+      font-family: var(--font-body);
+      font-size: var(--text-base);
+      font-weight: 600;
+      border-radius: var(--radius-pill);
+      border: 1px solid transparent;
+      cursor: pointer;
+      text-decoration: none;
+      white-space: nowrap;
+      transition: background-color var(--motion-fast) var(--ease-standard),
+                  transform var(--motion-fast) var(--ease-standard),
+                  box-shadow var(--motion-fast) var(--ease-standard),
+                  border-color var(--motion-fast) var(--ease-standard);
+    }
+
+    /* Primary Action uses #3B82F6 per DESIGN.md §6 */
+    .btn-primary {
+      background-color: var(--color-primary);
+      color: #FFFFFF;
+      box-shadow: 0 4px 14px rgba(59, 130, 246, 0.35);
+    }
+
+    .btn-primary:hover {
+      background-color: var(--color-primary-hover);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(59, 130, 246, 0.45);
+    }
+
+    .btn-primary:active {
+      transform: translateY(0);
+    }
+
+    /* Secondary Action stays neutral (#FFFFFF / #111827) per DESIGN.md §6 */
+    .btn-neutral {
+      background-color: var(--color-surface);
+      color: var(--color-text);
+      border: 1px solid var(--color-border-subtle);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+    }
+
+    .btn-neutral:hover {
+      border-color: var(--color-primary);
+      color: var(--color-primary);
+      transform: translateY(-2px);
+    }
+
+    .btn-secondary-purple {
+      background-color: var(--color-secondary);
+      color: #FFFFFF;
+      box-shadow: 0 4px 14px rgba(139, 92, 246, 0.35);
+    }
+
+    .btn-secondary-purple:hover {
+      background-color: var(--color-secondary-hover);
+      transform: translateY(-2px);
+    }
+
+    /* ─── Layout Primitives ────────────────────────────────────────── */
+    .container {
+      max-width: var(--container-max);
+      margin: 0 auto;
+      padding: 0 var(--space-6);
+    }
+
+    .section-spacing {
+      padding-block: var(--space-20);
+    }
+
+    /* ─── Top Navigation Bar ───────────────────────────────────────── */
+    .site-header {
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      height: 76px;
+      background-color: rgba(255, 255, 255, 0.92);
+      backdrop-filter: blur(14px);
+      border-bottom: 1px solid var(--color-border-subtle);
+      display: flex;
+      align-items: center;
+    }
+
+    .nav-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      width: 100%;
+    }
+
+    .brand-cluster {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .logo-glyph {
+      width: 36px;
+      height: 36px;
+      border-radius: var(--radius-md);
+      background: var(--gradient-vibrant);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      font-weight: 800;
+      font-size: 18px;
+      box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3);
+    }
+
+    .brand-title {
+      font-size: 22px;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      color: var(--color-text);
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      list-style: none;
+      gap: var(--space-8);
+    }
+
+    .nav-links a {
+      font-size: 15px;
+      font-weight: 600;
+      color: #4B5563;
+      transition: color var(--motion-fast);
+    }
+
+    .nav-links a:hover {
+      color: var(--color-primary);
+    }
+
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: var(--space-3);
+    }
+
+    /* ─── Hero Section: Playful & High-Contrast ────────────────────── */
+    .hero-section {
+      padding: var(--space-20) 0;
+      background: var(--gradient-subtle);
+      border-bottom: 1px solid var(--color-border-subtle);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1.15fr 0.85fr;
+      gap: var(--space-12);
+      align-items: center;
+    }
+
+    .hero-pill-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 14px;
+      background-color: #FFFFFF;
+      border: 1px solid #E0E7FF;
+      border-radius: var(--radius-pill);
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--color-secondary);
+      box-shadow: 0 2px 8px rgba(139, 92, 246, 0.1);
+      margin-bottom: var(--space-6);
+    }
+
+    .gradient-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--gradient-vibrant);
+    }
+
+    .hero-h1 {
+      margin-bottom: var(--space-6);
+    }
+
+    .hero-h1 .gradient-text {
+      background: var(--gradient-vibrant);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .hero-lead-text {
+      font-size: 20px;
+      line-height: 1.5;
+      color: #4B5563;
+      margin-bottom: var(--space-8);
+      max-width: 580px;
+    }
+
+    .hero-btn-row {
+      display: flex;
+      align-items: center;
+      gap: var(--space-4);
+      margin-bottom: var(--space-8);
+      flex-wrap: wrap;
+    }
+
+    /* Interactive Color Studio Card (Hero Right) */
+    .palette-studio-card {
+      background-color: var(--color-card-bg);
+      border: 1px solid var(--color-border-subtle);
+      border-radius: var(--radius-lg);
+      padding: var(--space-8);
+      box-shadow: 0 20px 48px rgba(59, 130, 246, 0.1);
+    }
+
+    .studio-card-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: var(--space-6);
+    }
+
+    .palette-swatches-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: var(--space-3);
+      margin-bottom: var(--space-6);
+    }
+
+    .swatch-item {
+      height: 90px;
+      border-radius: var(--radius-md);
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 8px;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+      transition: transform var(--motion-fast), box-shadow var(--motion-fast);
+      position: relative;
+    }
+
+    .swatch-item:hover {
+      transform: scale(1.06);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+    }
+
+    .swatch-hex {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      font-weight: 700;
+      color: #FFFFFF;
+      text-shadow: 0 1px 2px rgba(0, 0, 0, 0.6);
+    }
+
+    .studio-actions-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-top: 1px solid var(--color-border-subtle);
+      padding-top: var(--space-4);
+    }
+
+    /* ─── Metric Showcase Band ─────────────────────────────────────── */
+    .metrics-section {
+      padding: var(--space-12) 0;
+      background-color: var(--color-surface);
+      border-bottom: 1px solid var(--color-border-subtle);
+    }
+
+    .metrics-grid-3up {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: var(--space-8);
+      text-align: center;
+    }
+
+    .metric-number-bold {
+      font-size: 52px;
+      font-weight: 900;
+      line-height: 1;
+      background: var(--gradient-vibrant);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: var(--space-2);
+    }
+
+    .metric-label-text {
+      font-size: 16px;
+      font-weight: 600;
+      color: #6B7280;
+    }
+
+    /* ─── Features Grid Section (DESIGN.md §5: Clear Content Blocks) ─ */
+    .features-section {
+      padding: var(--space-20) 0;
+      background-color: var(--color-gray-soft);
+    }
+
+    .section-head {
+      max-width: 680px;
+      margin-bottom: var(--space-16);
+    }
+
+    .section-tag {
+      font-size: 13px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--color-primary);
+      margin-bottom: var(--space-2);
+      display: block;
+    }
+
+    .features-grid-3up {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: var(--space-8);
+    }
+
+    /* Cards with consistent radii and elevation per DESIGN.md §6 */
+    .feature-card {
+      background-color: var(--color-surface);
+      border: 1px solid var(--color-border-subtle);
+      border-radius: var(--radius-lg);
+      padding: var(--space-8);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
+      transition: transform var(--motion-fast), box-shadow var(--motion-fast), border-color var(--motion-fast);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .feature-card::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: var(--gradient-vibrant);
+      opacity: 0;
+      transition: opacity var(--motion-fast);
+    }
+
+    .feature-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 16px 36px rgba(59, 130, 246, 0.12);
+      border-color: #BFDBFE;
+    }
+
+    .feature-card:hover::before {
+      opacity: 1;
+    }
+
+    .feature-icon-badge {
+      width: 48px;
+      height: 48px;
+      border-radius: var(--radius-md);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: var(--space-6);
+      color: #fff;
+    }
+
+    .feature-card h4 {
+      font-size: 22px;
+      font-weight: 700;
+      margin-bottom: var(--space-3);
+    }
+
+    .feature-card p {
+      font-size: 16px;
+      color: #4B5563;
+      line-height: 1.5;
+      margin-bottom: var(--space-6);
+      flex: 1;
+    }
+
+    .feature-card-footer {
+      border-top: 1px solid var(--color-border-subtle);
+      padding-top: var(--space-4);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    /* ─── Interactive Live Gradient Playground ─────────────────────── */
+    .playground-section {
+      padding: var(--space-20) 0;
+      background-color: var(--color-surface);
+      border-top: 1px solid var(--color-border-subtle);
+      border-bottom: 1px solid var(--color-border-subtle);
+    }
+
+    .playground-layout {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--space-12);
+      align-items: center;
+    }
+
+    .gradient-preview-box {
+      height: 380px;
+      border-radius: var(--radius-lg);
+      background: linear-gradient(135deg, #3B82F6 0%, #8B5CF6 50%, #EC4899 100%);
+      box-shadow: 0 20px 48px rgba(139, 92, 246, 0.25);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #FFFFFF;
+      font-family: var(--font-display);
+      font-size: 28px;
+      font-weight: 800;
+      text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+      transition: background var(--motion-base);
+    }
+
+    .controls-panel-box {
+      background-color: var(--color-gray-soft);
+      border: 1px solid var(--color-border-subtle);
+      border-radius: var(--radius-lg);
+      padding: var(--space-8);
+    }
+
+    .slider-group {
+      margin-bottom: var(--space-6);
+    }
+
+    .slider-label-row {
+      display: flex;
+      justify-content: space-between;
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: var(--space-2);
+    }
+
+    .spectrum-slider {
+      width: 100%;
+      height: 8px;
+      border-radius: var(--radius-pill);
+      accent-color: var(--color-primary);
+      cursor: pointer;
+    }
+
+    .code-output-box {
+      background-color: #0F172A;
+      color: #E2E8F0;
+      padding: var(--space-4);
+      border-radius: var(--radius-md);
+      font-family: var(--font-mono);
+      font-size: 13px;
+      line-height: 1.5;
+      margin-top: var(--space-6);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    /* ─── Pricing Matrix ───────────────────────────────────────────── */
+    .pricing-section {
+      padding: var(--space-20) 0;
+      background-color: var(--color-gray-soft);
+    }
+
+    .pricing-grid-3up {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: var(--space-8);
+      align-items: stretch;
+    }
+
+    .pricing-card {
+      background-color: var(--color-surface);
+      border: 1px solid var(--color-border-subtle);
+      border-radius: var(--radius-lg);
+      padding: var(--space-8);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
+      position: relative;
+    }
+
+    .pricing-card.featured {
+      border: 2px solid var(--color-primary);
+      box-shadow: 0 20px 48px rgba(59, 130, 246, 0.2);
+      transform: scale(1.03);
+    }
+
+    .featured-ribbon {
+      position: absolute;
+      top: -14px;
+      right: var(--space-6);
+      background: var(--gradient-vibrant);
+      color: #FFFFFF;
+      font-size: 12px;
+      font-weight: 700;
+      padding: 4px 14px;
+      border-radius: var(--radius-pill);
+      box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3);
+    }
+
+    .price-amount {
+      font-size: 48px;
+      font-weight: 900;
+      line-height: 1;
+      margin-bottom: var(--space-6);
+    }
+
+    .plan-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-3);
+      margin-bottom: var(--space-8);
+      border-top: 1px solid var(--color-border-subtle);
+      padding-top: var(--space-6);
+      flex: 1;
+    }
+
+    .plan-item {
+      display: flex;
+      align-items: center;
+      gap: var(--space-3);
+      font-size: 15px;
+      color: #374151;
+    }
+
+    .plan-item svg {
+      color: var(--color-success);
+      flex-shrink: 0;
+    }
+
+    /* ─── Community & Newsletter ───────────────────────────────────── */
+    .community-band {
+      padding: var(--space-20) 0;
+      background: var(--gradient-subtle);
+      border-top: 1px solid var(--color-border-subtle);
+      text-align: center;
+    }
+
+    .community-box {
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    .newsletter-row {
+      display: flex;
+      gap: var(--space-3);
+      margin-top: var(--space-6);
+    }
+
+    .colorful-input {
+      flex: 1;
+      height: 52px;
+      border: 1px solid var(--color-border-subtle);
+      border-radius: var(--radius-pill);
+      padding: 0 var(--space-6);
+      font-family: var(--font-body);
+      font-size: 16px;
+      background-color: #FFFFFF;
+    }
+
+    .colorful-input:focus {
+      outline: none;
+      border-color: var(--color-primary);
+      box-shadow: var(--focus-ring);
+    }
+
+    /* ─── Footer ───────────────────────────────────────────────────── */
+    .site-footer {
+      background-color: #FFFFFF;
+      border-top: 1px solid var(--color-border-subtle);
+      padding: var(--space-16) 0 var(--space-8);
+    }
+
+    .footer-grid-4up {
+      display: grid;
+      grid-template-columns: 1.4fr 1fr 1fr 1fr;
+      gap: var(--space-8);
+      margin-bottom: var(--space-16);
+    }
+
+    .footer-title {
+      font-size: 15px;
+      font-weight: 700;
+      margin-bottom: var(--space-4);
+      color: var(--color-text);
+    }
+
+    .footer-nav {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-3);
+    }
+
+    .footer-nav a {
+      font-size: 14px;
+      color: #6B7280;
+      transition: color var(--motion-fast);
+    }
+
+    .footer-nav a:hover {
+      color: var(--color-primary);
+    }
+
+    .footer-bottom {
+      border-top: 1px solid var(--color-border-subtle);
+      padding-top: var(--space-8);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 13px;
+      color: #6B7280;
+      flex-wrap: wrap;
+      gap: var(--space-4);
+    }
+
+    /* ─── Responsive Adjustments ───────────────────────────────────── */
+    @media (max-width: 1024px) {
+      .hero-grid { grid-template-columns: 1fr; }
+      .features-grid-3up { grid-template-columns: 1fr; }
+      .playground-layout { grid-template-columns: 1fr; }
+      .pricing-grid-3up { grid-template-columns: 1fr; }
+      .footer-grid-4up { grid-template-columns: repeat(2, 1fr); }
+      h1 { font-size: 48px; }
+      h2 { font-size: 36px; }
+    }
+
+    @media (max-width: 640px) {
+      .nav-links { display: none; }
+      .metrics-grid-3up { grid-template-columns: 1fr; }
+      .newsletter-row { flex-direction: column; }
+      .colorful-input { width: 100%; }
+      .footer-grid-4up { grid-template-columns: 1fr; }
+      h1 { font-size: 36px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Navigation Header -->
+  <header class="site-header">
+    <div class="container nav-row">
+      <a href="#hero" class="brand-cluster" aria-label="Spectrum Home">
+        <div class="logo-glyph">S</div>
+        <span class="brand-title">SPECTRUM</span>
+      </a>
+
+      <nav aria-label="Main Navigation">
+        <ul class="nav-links">
+          <li><a href="#palette">Palette Studio</a></li>
+          <li><a href="#features">Tools</a></li>
+          <li><a href="#playground">Gradient Engine</a></li>
+          <li><a href="#pricing">Pricing</a></li>
+          <li><a href="#community">Community</a></li>
+        </ul>
+      </nav>
+
+      <div class="nav-actions">
+        <a href="#pricing" class="btn btn-neutral" style="padding: 8px 18px; font-size: 14px;">Sign in</a>
+        <a href="#hero" class="btn btn-primary" style="padding: 8px 18px; font-size: 14px;">Get started</a>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <!-- HERO SECTION: Vibrant, Playful, High-Contrast -->
+    <section class="hero-section" id="hero">
+      <div class="container hero-grid">
+        <div>
+          <div class="hero-pill-badge">
+            <span class="gradient-dot"></span>
+            <span>NEXT-GEN COLOR HARMONY ENGINE</span>
+          </div>
+
+          <h1 class="hero-h1">
+            Design with <span class="gradient-text">vibrant energy</span> and high contrast.
+          </h1>
+
+          <p class="hero-lead-text">
+            Spectrum equips creators, engineers, and digital artists with high-contrast color palettes, generative gradients, and accessible visual systems that make brands unforgettable.
+          </p>
+
+          <div class="hero-btn-row">
+            <a href="#palette" class="btn btn-primary" id="startStudioBtn">START CREATING FREE</a>
+            <a href="#playground" class="btn btn-neutral">EXPLORE GRADIENT ENGINE</a>
+          </div>
+
+          <div style="display: flex; gap: 24px; font-size: 14px; font-weight: 500; color: #6B7280;">
+            <span>✔ WCAG AAA Accessible</span>
+            <span>✔ Instant Figma &amp; CSS Sync</span>
+            <span>✔ Zero Credit Card Required</span>
+          </div>
+        </div>
+
+        <!-- Interactive Palette Studio Card -->
+        <div class="palette-studio-card" id="palette">
+          <div class="studio-card-head">
+            <div>
+              <h3 style="font-size: 18px; font-weight: 700;">PALETTE GENERATOR</h3>
+              <span style="font-size: 13px; color: #6B7280;" id="paletteName">Cyberpunk Radiance</span>
+            </div>
+            <button class="btn btn-neutral" id="randomizePaletteBtn" style="padding: 6px 14px; font-size: 13px;">
+              ⚡ RANDOMIZE
+            </button>
+          </div>
+
+          <div class="palette-swatches-grid" id="swatchesContainer">
+            <div class="swatch-item" style="background-color: #3B82F6;" data-hex="#3B82F6">
+              <span class="swatch-hex">#3B82F6</span>
+            </div>
+            <div class="swatch-item" style="background-color: #8B5CF6;" data-hex="#8B5CF6">
+              <span class="swatch-hex">#8B5CF6</span>
+            </div>
+            <div class="swatch-item" style="background-color: #EC4899;" data-hex="#EC4899">
+              <span class="swatch-hex">#EC4899</span>
+            </div>
+            <div class="swatch-item" style="background-color: #10B981;" data-hex="#10B981">
+              <span class="swatch-hex">#10B981</span>
+            </div>
+            <div class="swatch-item" style="background-color: #F59E0B;" data-hex="#F59E0B">
+              <span class="swatch-hex">#F59E0B</span>
+            </div>
+          </div>
+
+          <div class="studio-actions-row">
+            <span style="font-size: 13px; color: #6B7280;">Click any swatch to copy HEX code</span>
+            <button class="btn btn-secondary-purple" id="copyPaletteBtn" style="padding: 6px 16px; font-size: 13px;">
+              EXPORT PALETTE
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- METRICS STRIP -->
+    <section class="metrics-section">
+      <div class="container">
+        <div class="metrics-grid-3up">
+          <div>
+            <div class="metric-number-bold">12M+</div>
+            <div class="metric-label-text">Harmonious Color Palettes Generated</div>
+          </div>
+          <div>
+            <div class="metric-number-bold">850K+</div>
+            <div class="metric-label-text">Active Digital Designers &amp; Engineers</div>
+          </div>
+          <div>
+            <div class="metric-number-bold">99.8%</div>
+            <div class="metric-label-text">WCAG Contrast Compliance Rate</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FEATURES SECTION: Clear Content Blocks with Consistent Radii -->
+    <section class="features-section" id="features">
+      <div class="container">
+        <div class="section-head">
+          <span class="section-tag">PLAYFUL YET PRECISE</span>
+          <h2>ENGINEERED FOR MODERN DESIGN WORKFLOWS</h2>
+          <p style="font-size: 18px; color: #4B5563; margin-top: 12px;">
+            Every tool is designed to spark creativity while upholding accessibility standards and design token consistency.
+          </p>
+        </div>
+
+        <div class="features-grid-3up">
+          <!-- Feature Card 1 -->
+          <div class="feature-card">
+            <div>
+              <div class="feature-icon-badge" style="background: var(--gradient-cyan-blue);">
+                <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><path d="m4.93 4.93 4.24 4.24"></path><path d="m14.83 9.17 4.24-4.24"></path><path d="m14.83 14.83 4.24 4.24"></path><path d="m9.17 14.83-4.24 4.24"></path></svg>
+              </div>
+              <h4>Harmonic Color Theory</h4>
+              <p>Generate complementary, triadic, and analogous color scales mathematically balanced for digital screen reproduction.</p>
+            </div>
+            <div class="feature-card-footer">
+              <span style="font-family: var(--font-mono); font-size: 13px; font-weight: 700; color: var(--color-primary);">OKLCH ACCURACY</span>
+              <a href="#palette" class="btn btn-neutral" style="padding: 4px 12px; font-size: 12px;">TRY TOOL →</a>
+            </div>
+          </div>
+
+          <!-- Feature Card 2 -->
+          <div class="feature-card">
+            <div>
+              <div class="feature-icon-badge" style="background: var(--gradient-purple-rose);">
+                <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
+              </div>
+              <h4>Contrast Guardian</h4>
+              <p>Real-time contrast ratio auditing against APCA and WCAG 2.1 specifications so your UI remains crisp and inclusive.</p>
+            </div>
+            <div class="feature-card-footer">
+              <span style="font-family: var(--font-mono); font-size: 13px; font-weight: 700; color: var(--color-secondary);">AAA COMPLIANT</span>
+              <a href="#palette" class="btn btn-neutral" style="padding: 4px 12px; font-size: 12px;">TRY TOOL →</a>
+            </div>
+          </div>
+
+          <!-- Feature Card 3 -->
+          <div class="feature-card">
+            <div>
+              <div class="feature-icon-badge" style="background: var(--gradient-vibrant);">
+                <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polygon points="12 2 2 7 12 12 22 7 12 2"></polygon><polyline points="2 17 12 22 22 17"></polyline><polyline points="2 12 12 17 22 12"></polyline></svg>
+              </div>
+              <h4>Design Token Export</h4>
+              <p>Export directly to Tailwind v4 CSS variables, Style Dictionary JSON, and Figma Tokens with zero manual conversion.</p>
+            </div>
+            <div class="feature-card-footer">
+              <span style="font-family: var(--font-mono); font-size: 13px; font-weight: 700; color: #EC4899;">INSTANT SYNC</span>
+              <a href="#palette" class="btn btn-neutral" style="padding: 4px 12px; font-size: 12px;">TRY TOOL →</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- INTERACTIVE GRADIENT ENGINE -->
+    <section class="playground-section" id="playground">
+      <div class="container playground-layout">
+        <!-- Visual Canvas -->
+        <div class="gradient-preview-box" id="gradientPreview">
+          <span>VIBRANT MESH</span>
+        </div>
+
+        <!-- Controls Panel -->
+        <div class="controls-panel-box">
+          <span class="section-tag">LIVE GRADIENT ENGINE</span>
+          <h3 style="margin-bottom: var(--space-4);">CRAFT RADIANT GRADIENTS</h3>
+
+          <div class="slider-group">
+            <div class="slider-label-row">
+              <span>GRADIENT ANGLE:</span>
+              <span id="angleVal" style="color: var(--color-primary); font-weight: 700;">135 DEG</span>
+            </div>
+            <input type="range" min="0" max="360" value="135" class="spectrum-slider" id="angleSlider" />
+          </div>
+
+          <div style="display: flex; gap: 8px; margin-bottom: 24px;">
+            <button class="btn btn-neutral" data-preset="blue-purple" style="padding: 6px 14px; font-size: 13px;">Neon Blue</button>
+            <button class="btn btn-neutral" data-preset="purple-rose" style="padding: 6px 14px; font-size: 13px;">Sunset Rose</button>
+            <button class="btn btn-neutral" data-preset="cyan-emerald" style="padding: 6px 14px; font-size: 13px;">Electric Cyan</button>
+          </div>
+
+          <div class="code-output-box">
+            <code id="cssCodeOutput">background: linear-gradient(135deg, #3B82F6 0%, #8B5CF6 50%, #EC4899 100%);</code>
+            <button class="btn btn-primary" id="copyCssBtn" style="padding: 4px 10px; font-size: 11px;">COPY</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- PRICING TIERS: High-Contrast and Premium -->
+    <section class="pricing-section" id="pricing">
+      <div class="container">
+        <div style="text-align: center; max-width: 640px; margin: 0 auto var(--space-16);">
+          <span class="section-tag">TRANSPARENT PLANS</span>
+          <h2>SIMPLE PRICING FOR TEAMS &amp; CREATORS</h2>
+          <p style="font-size: 18px; color: #4B5563; margin-top: 12px;">
+            Choose the plan that powers your creative workflow.
+          </p>
+        </div>
+
+        <div class="pricing-grid-3up">
+          <!-- Free Plan -->
+          <div class="pricing-card">
+            <div>
+              <h3 style="font-size: 22px; margin-bottom: 4px;">STARTER</h3>
+              <p style="font-size: 14px; color: #6B7280; margin-bottom: 16px;">For individual hobbyists and students.</p>
+              <div class="price-amount">$0</div>
+              <ul class="plan-list">
+                <li class="plan-item">
+                  <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                  <span>Unlimited basic palette generation</span>
+                </li>
+                <li class="plan-item">
+                  <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                  <span>Export to CSS &amp; HEX values</span>
+                </li>
+                <li class="plan-item">
+                  <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                  <span>WCAG 2.1 AA Contrast Checker</span>
+                </li>
+              </ul>
+            </div>
+            <a href="#hero" class="btn btn-neutral" style="width: 100%;">START FREE</a>
+          </div>
+
+          <!-- Pro Plan (Featured, #3B82F6) -->
+          <div class="pricing-card featured">
+            <span class="featured-ribbon">MOST POPULAR</span>
+            <div>
+              <h3 style="font-size: 22px; margin-bottom: 4px;">PRO CREATOR</h3>
+              <p style="font-size: 14px; color: #6B7280; margin-bottom: 16px;">For professional UI/UX designers and engineers.</p>
+              <div class="price-amount" style="color: var(--color-primary);">$19 <span style="font-size: 16px; font-weight: 500; color: #6B7280;">/ mo</span></div>
+              <ul class="plan-list">
+                <li class="plan-item">
+                  <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                  <span>Figma Plugin &amp; live sync integration</span>
+                </li>
+                <li class="plan-item">
+                  <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                  <span>Design Token JSON and Tailwind exports</span>
+                </li>
+                <li class="plan-item">
+                  <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                  <span>APCA Advanced Perception Contrast</span>
+                </li>
+                <li class="plan-item">
+                  <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                  <span>Cloud palette library &amp; sharing</span>
+                </li>
+              </ul>
+            </div>
+            <a href="#hero" class="btn btn-primary" style="width: 100%;">UPGRADE TO PRO</a>
+          </div>
+
+          <!-- Studio Plan -->
+          <div class="pricing-card">
+            <div>
+              <h3 style="font-size: 22px; margin-bottom: 4px;">STUDIO TEAM</h3>
+              <p style="font-size: 14px; color: #6B7280; margin-bottom: 16px;">For agency departments and product teams.</p>
+              <div class="price-amount">$49 <span style="font-size: 16px; font-weight: 500; color: #6B7280;">/ mo</span></div>
+              <ul class="plan-list">
+                <li class="plan-item">
+                  <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                  <span>Unlimited team seats &amp; shared spaces</span>
+                </li>
+                <li class="plan-item">
+                  <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                  <span>Design system brand governance</span>
+                </li>
+                <li class="plan-item">
+                  <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                  <span>Dedicated support &amp; custom onboarding</span>
+                </li>
+              </ul>
+            </div>
+            <a href="#hero" class="btn btn-neutral" style="width: 100%;">START STUDIO TRIAL</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- COMMUNITY & NEWSLETTER -->
+    <section class="community-band" id="community">
+      <div class="container community-box">
+        <span class="section-tag">JOIN THE SPECTRUM</span>
+        <h2>STAY INSPIRED BY VIBRANT DESIGN</h2>
+        <p style="font-size: 18px; color: #4B5563; margin-top: 12px;">
+          Weekly color inspiration, curated palettes, and advanced CSS gradient recipes delivered to your inbox.
+        </p>
+
+        <form class="newsletter-row" id="newsletterForm">
+          <input type="email" class="colorful-input" placeholder="creator@studio.design" required />
+          <button type="submit" class="btn btn-primary">JOIN 100K+ CREATORS</button>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-grid-4up">
+        <div>
+          <div class="brand-cluster" style="margin-bottom: var(--space-4);">
+            <div class="logo-glyph">S</div>
+            <span class="brand-title">SPECTRUM</span>
+          </div>
+          <p style="font-size: 14px; color: #6B7280; line-height: 1.6;">
+            A vibrant, high-contrast creative design system powering modern digital interfaces, expressive graphics, and accessible digital products.
+          </p>
+        </div>
+
+        <div>
+          <h4 class="footer-title">STUDIO TOOLS</h4>
+          <ul class="footer-nav">
+            <li><a href="#palette">Color Palette Generator</a></li>
+            <li><a href="#playground">Gradient Mesh Maker</a></li>
+            <li><a href="#features">WCAG Contrast Auditor</a></li>
+            <li><a href="#features">Design Token Exporter</a></li>
+            <li><a href="#features">Figma Plugin</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h4 class="footer-title">RESOURCES</h4>
+          <ul class="footer-nav">
+            <li><a href="#features">Color Harmony Guide</a></li>
+            <li><a href="#features">Tailwind v4 Integration</a></li>
+            <li><a href="#features">OKLCH Visual Theory</a></li>
+            <li><a href="#features">Brand Showcase</a></li>
+            <li><a href="#features">API Documentation</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h4 class="footer-title">COMPANY</h4>
+          <ul class="footer-nav">
+            <li><a href="#about">About Spectrum</a></li>
+            <li><a href="#careers">Careers (We're Hiring!)</a></li>
+            <li><a href="#privacy">Privacy Policy</a></li>
+            <li><a href="#terms">Terms of Service</a></li>
+            <li><a href="#contact">Contact Support</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <span>© 2026 SPECTRUM DESIGN SYSTEMS INC. ALL RIGHTS RESERVED.</span>
+        <div style="display: flex; gap: 24px;">
+          <span>VIBRANT &amp; ACCESSIBLE</span>
+          <span>SYSTEM STATUS: OPERATIONAL</span>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Interactive JavaScript Logic -->
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      // 1. Palette Generator Randomizer
+      const randomizeBtn = document.getElementById('randomizePaletteBtn');
+      const paletteName = document.getElementById('paletteName');
+      const swatchesContainer = document.getElementById('swatchesContainer');
+
+      const palettePresets = [
+        {
+          name: "Cyberpunk Radiance",
+          colors: ["#3B82F6", "#8B5CF6", "#EC4899", "#10B981", "#F59E0B"]
+        },
+        {
+          name: "Electric Sunset",
+          colors: ["#F43F5E", "#FB923C", "#FBBF24", "#8B5CF6", "#3B82F6"]
+        },
+        {
+          name: "Oceanic Twilight",
+          colors: ["#06B6D4", "#0EA5E9", "#3B82F6", "#6366F1", "#8B5CF6"]
+        },
+        {
+          name: "Emerald Prism",
+          colors: ["#10B981", "#14B8A6", "#06B6D4", "#3B82F6", "#8B5CF6"]
+        }
+      ];
+
+      let currentIndex = 0;
+      if (randomizeBtn) {
+        randomizeBtn.addEventListener('click', () => {
+          currentIndex = (currentIndex + 1) % palettePresets.length;
+          const current = palettePresets[currentIndex];
+          paletteName.textContent = current.name;
+
+          swatchesContainer.innerHTML = current.colors.map(hex => `
+            <div class="swatch-item" style="background-color: ${hex};" data-hex="${hex}">
+              <span class="swatch-hex">${hex}</span>
+            </div>
+          `).join('');
+
+          attachSwatchClick();
+        });
+      }
+
+      function attachSwatchClick() {
+        const swatches = document.querySelectorAll('.swatch-item');
+        swatches.forEach(swatch => {
+          swatch.addEventListener('click', () => {
+            const hex = swatch.getAttribute('data-hex');
+            navigator.clipboard.writeText(hex);
+            alert(`Copied ${hex} to clipboard!`);
+          });
+        });
+      }
+      attachSwatchClick();
+
+      // 2. Export Palette Button
+      const copyPaletteBtn = document.getElementById('copyPaletteBtn');
+      if (copyPaletteBtn) {
+        copyPaletteBtn.addEventListener('click', () => {
+          const current = palettePresets[currentIndex];
+          const text = JSON.stringify(current, null, 2);
+          navigator.clipboard.writeText(text);
+          alert(`Exported "${current.name}" palette JSON to clipboard!`);
+        });
+      }
+
+      // 3. Interactive Gradient Slider
+      const angleSlider = document.getElementById('angleSlider');
+      const angleVal = document.getElementById('angleVal');
+      const gradientPreview = document.getElementById('gradientPreview');
+      const cssCodeOutput = document.getElementById('cssCodeOutput');
+
+      let currentGradientColors = "#3B82F6 0%, #8B5CF6 50%, #EC4899 100%";
+
+      function updateGradient() {
+        const angle = angleSlider.value;
+        angleVal.textContent = `${angle} DEG`;
+        const css = `linear-gradient(${angle}deg, ${currentGradientColors})`;
+        gradientPreview.style.background = css;
+        cssCodeOutput.textContent = `background: ${css};`;
+      }
+
+      if (angleSlider) {
+        angleSlider.addEventListener('input', updateGradient);
+      }
+
+      // Preset buttons for gradient
+      const presetBtns = document.querySelectorAll('[data-preset]');
+      presetBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+          const p = btn.getAttribute('data-preset');
+          if (p === 'blue-purple') {
+            currentGradientColors = "#3B82F6 0%, #8B5CF6 50%, #EC4899 100%";
+          } else if (p === 'purple-rose') {
+            currentGradientColors = "#8B5CF6 0%, #EC4899 50%, #F59E0B 100%";
+          } else if (p === 'cyan-emerald') {
+            currentGradientColors = "#06B6D4 0%, #10B981 50%, #3B82F6 100%";
+          }
+          updateGradient();
+        });
+      });
+
+      // Copy CSS button
+      const copyCssBtn = document.getElementById('copyCssBtn');
+      if (copyCssBtn) {
+        copyCssBtn.addEventListener('click', () => {
+          navigator.clipboard.writeText(cssCodeOutput.textContent);
+          alert('CSS Gradient code copied to clipboard!');
+        });
+      }
+
+      // 4. Newsletter Form
+      const newsletterForm = document.getElementById('newsletterForm');
+      if (newsletterForm) {
+        newsletterForm.addEventListener('submit', (e) => {
+          e.preventDefault();
+          alert('Thank you for joining the Spectrum creator community!');
+          newsletterForm.reset();
+        });
+      }
+    });
+  </script>
+</body>
+</html>

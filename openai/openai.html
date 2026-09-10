@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>OpenAI — Creating Safe AGI that Benefits All of Humanity</title>
+  <meta name="description" content="Authentic implementation of the OpenAI design system with clinical white canvas, Signifier editorial serif headlines, OpenAI Teal (#10a37f) accents, and interactive model playground.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      /* Palette Foundations */
+      --pure-white: #ffffff;
+      --ink-black: #0d0d0d;
+      --soft-black: #1a1a1a;
+      --mist: #fafafa;
+      --pearl: #f5f5f5;
+      --cloud: #ececec;
+
+      /* Brand Accent */
+      --openai-teal: #10a37f;
+      --teal-deep: #0a7a5e;
+      --teal-soft: #e8f5f0;
+
+      /* Neutrals & Text */
+      --graphite: #3c3c3c;
+      --slate: #6e6e6e;
+      --ash: #9b9b9b;
+      --border-hairline: #e5e5e5;
+      --border-soft: #ededed;
+
+      /* Typography */
+      --font-serif: 'Newsreader', 'Source Serif Pro', Georgia, serif;
+      --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--pure-white);
+      color: var(--ink-black);
+      font-family: var(--font-sans);
+      font-size: 16px;
+      line-height: 1.65;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 32px;
+    }
+
+    /* 1. MINIMAL RESEARCH NAVIGATION */
+    .openai-nav {
+      background: rgba(255, 255, 255, 0.92);
+      backdrop-filter: blur(8px);
+      border-bottom: 1px solid var(--border-hairline);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .nav-inner {
+      height: 68px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .brand-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+      color: var(--ink-black);
+      font-size: 18px;
+      font-weight: 600;
+      letter-spacing: -0.02em;
+    }
+
+    .spark-icon {
+      width: 22px;
+      height: 22px;
+      fill: var(--ink-black);
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 28px;
+      list-style: none;
+    }
+
+    .nav-links a {
+      color: var(--graphite);
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 500;
+      transition: color 0.15s;
+    }
+
+    .nav-links a:hover {
+      color: var(--ink-black);
+    }
+
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    /* Restrained Button Components */
+    .btn-primary {
+      background-color: var(--ink-black);
+      color: #ffffff;
+      border: 1px solid var(--ink-black);
+      border-radius: 12px;
+      padding: 9px 18px;
+      font-family: var(--font-sans);
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background 0.15s;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .btn-primary:hover {
+      background-color: var(--soft-black);
+    }
+
+    .btn-secondary {
+      background-color: var(--pure-white);
+      color: var(--ink-black);
+      border: 1px solid var(--border-hairline);
+      border-radius: 12px;
+      padding: 9px 18px;
+      font-family: var(--font-sans);
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background 0.15s, border-color 0.15s;
+      text-decoration: none;
+    }
+
+    .btn-secondary:hover {
+      background-color: var(--mist);
+      border-color: #d4d4d4;
+    }
+
+    .btn-teal {
+      background-color: var(--openai-teal);
+      color: #ffffff;
+      border: 1px solid var(--openai-teal);
+      border-radius: 12px;
+      padding: 9px 18px;
+      font-family: var(--font-sans);
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background 0.15s;
+      text-decoration: none;
+    }
+
+    .btn-teal:hover {
+      background-color: var(--teal-deep);
+    }
+
+    /* 2. EDITORIAL HERO */
+    .hero-section {
+      padding: 104px 0 72px 0;
+    }
+
+    .hero-eyebrow {
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      color: var(--slate);
+      margin-bottom: 20px;
+    }
+
+    .hero-display {
+      font-family: var(--font-serif);
+      font-size: 58px;
+      font-weight: 400;
+      line-height: 1.08;
+      letter-spacing: -0.02em;
+      color: var(--ink-black);
+      max-width: 880px;
+      margin-bottom: 24px;
+    }
+
+    .hero-lead {
+      font-size: 19px;
+      color: var(--graphite);
+      max-width: 660px;
+      margin-bottom: 40px;
+      line-height: 1.6;
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: 16px;
+      align-items: center;
+      margin-bottom: 64px;
+    }
+
+    /* 3. INTERACTIVE INTELLIGENCE STUDIO */
+    .studio-panel {
+      background: var(--pure-white);
+      border: 1px solid var(--border-soft);
+      border-radius: 16px;
+      padding: 32px;
+      box-shadow: 0 4px 20px rgba(13, 13, 13, 0.03);
+    }
+
+    .studio-topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid var(--border-hairline);
+      padding-bottom: 16px;
+      margin-bottom: 20px;
+    }
+
+    .model-pills {
+      display: flex;
+      gap: 8px;
+    }
+
+    .model-pill {
+      background: var(--pearl);
+      color: var(--graphite);
+      border: 1px solid transparent;
+      padding: 6px 14px;
+      border-radius: 9999px;
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+
+    .model-pill.active {
+      background: var(--ink-black);
+      color: #ffffff;
+    }
+
+    .studio-prompt-box {
+      width: 100%;
+      height: 80px;
+      border: 1px solid var(--border-hairline);
+      border-radius: 12px;
+      padding: 14px;
+      font-family: var(--font-sans);
+      font-size: 15px;
+      color: var(--ink-black);
+      outline: none;
+      resize: none;
+      margin-bottom: 16px;
+      transition: border-color 0.15s, box-shadow 0.15s;
+    }
+
+    .studio-prompt-box:focus {
+      border-color: var(--openai-teal);
+      box-shadow: 0 0 0 3px rgba(16, 163, 127, 0.12);
+    }
+
+    .completion-output {
+      background: var(--mist);
+      border: 1px solid var(--border-hairline);
+      border-radius: 12px;
+      padding: 20px;
+      font-size: 15px;
+      line-height: 1.65;
+      color: var(--ink-black);
+      min-height: 100px;
+    }
+
+    /* 4. RESEARCH & ARTICLES CARDS */
+    .research-section {
+      padding: 96px 0;
+      border-top: 1px solid var(--border-hairline);
+    }
+
+    .section-title {
+      font-family: var(--font-serif);
+      font-size: 36px;
+      font-weight: 400;
+      margin-bottom: 12px;
+      letter-spacing: -0.01em;
+    }
+
+    .section-desc {
+      font-size: 16px;
+      color: var(--slate);
+      margin-bottom: 40px;
+    }
+
+    .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+
+    .article-card {
+      background: var(--pure-white);
+      border: 1px solid var(--border-soft);
+      border-radius: 16px;
+      padding: 28px;
+      transition: box-shadow 0.2s, transform 0.2s;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .article-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 16px rgba(13, 13, 13, 0.06);
+    }
+
+    .article-card .tag-chip {
+      display: inline-block;
+      background: var(--pearl);
+      color: var(--slate);
+      font-size: 12px;
+      font-weight: 500;
+      padding: 3px 8px;
+      border-radius: 9999px;
+      margin-bottom: 16px;
+      align-self: flex-start;
+    }
+
+    .article-title {
+      font-family: var(--font-serif);
+      font-size: 22px;
+      font-weight: 400;
+      line-height: 1.25;
+      margin-bottom: 12px;
+      color: var(--ink-black);
+    }
+
+    .article-snippet {
+      font-size: 14px;
+      color: var(--graphite);
+      line-height: 1.55;
+    }
+
+    /* 5. FOOTER */
+    .openai-footer {
+      background: var(--mist);
+      border-top: 1px solid var(--border-hairline);
+      padding: 64px 0 40px 0;
+      font-size: 14px;
+      color: var(--slate);
+    }
+
+    .footer-flex {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navigation -->
+  <nav class="openai-nav">
+    <div class="container nav-inner">
+      <a href="#" class="brand-logo">
+        <svg class="spark-icon" viewBox="0 0 24 24">
+          <path d="M22.28 10.15a5.95 5.95 0 0 0-.52-4.93 6.03 6.03 0 0 0-6.19-2.88A6 6 0 0 0 4.6 4.7a5.97 5.97 0 0 0-3.3 4.47 6.02 6.02 0 0 0 1.15 6.08 6 6 0 0 0 .52 4.93 6.03 6.03 0 0 0 6.19 2.88 5.99 5.99 0 0 0 6.32-2.36 5.97 5.97 0 0 0 3.3-4.47 6.02 6.02 0 0 0-1.15-6.08h.65zm-8.86 10.66a4.48 4.48 0 0 1-2.9-1.07l.14-.08 4.83-2.79a.78.78 0 0 0 .39-.68v-6.82l2.05 1.18a.08.08 0 0 1 .05.06v5.74a4.5 4.5 0 0 1-4.56 4.46zM3.86 17.5a4.47 4.47 0 0 1-.53-3.04l.15.09 4.83 2.79a.78.78 0 0 0 .78 0l5.9-3.41v2.37a.08.08 0 0 1-.03.07l-4.97 2.87a4.5 4.5 0 0 1-6.13-1.74zm-1.42-8.54c.48-.84 1.2-1.5 2.06-1.92v5.75a.78.78 0 0 0 .39.68l5.9 3.41-2.05 1.18a.08.08 0 0 1-.08 0L3.75 15.2a4.5 4.5 0 0 1-1.31-6.24zm14.86 2.77-5.9-3.41 2.05-1.18a.08.08 0 0 1 .08 0l4.97 2.87a4.5 4.5 0 0 1-1.2 8.16v-5.76a.78.78 0 0 0-.39-.68zm3.25-3.03a4.5 4.5 0 0 1 .53 3.04l-.15-.09-4.83-2.79a.78.78 0 0 0-.78 0l-5.9 3.41V9.99a.08.08 0 0 1 .03-.07l4.97-2.87a4.5 4.5 0 0 1 6.13 1.74zM10.57 12l2.95-1.7 2.95 1.7v3.42l-2.95 1.71-2.95-1.71V12z"/>
+        </svg>
+        <span>OpenAI</span>
+      </a>
+
+      <ul class="nav-links">
+        <li><a href="#research">Research</a></li>
+        <li><a href="#studio">Products</a></li>
+        <li><a href="#">Safety</a></li>
+        <li><a href="#">Company</a></li>
+      </ul>
+
+      <div class="nav-actions">
+        <a href="#" class="btn-secondary">Log in</a>
+        <a href="#studio" class="btn-primary">Try ChatGPT</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Editorial Hero Section -->
+  <header class="hero-section">
+    <div class="container">
+      <div class="hero-eyebrow">RESEARCH ANNOUNCEMENT • SEPTEMBER 2026</div>
+
+      <h1 class="hero-display">
+        Creating safe artificial general intelligence that benefits all of humanity.
+      </h1>
+
+      <p class="hero-lead">
+        We research generative intelligence and deploy systems that reason through multi-step scientific, mathematical, and coding challenges with provable alignment.
+      </p>
+
+      <div class="hero-actions">
+        <a href="#studio" class="btn-primary">Explore Reasoning Models</a>
+        <a href="#research" class="btn-secondary">Read System Card</a>
+      </div>
+
+      <!-- Live Interactive Intelligence Studio -->
+      <div class="studio-panel" id="studio">
+        <div class="studio-topbar">
+          <div class="model-pills">
+            <button class="model-pill active" onclick="selectModel('o3-mini', this)">o3-mini (Reasoning)</button>
+            <button class="model-pill" onclick="selectModel('gpt-4o', this)">GPT-4o (Omni)</button>
+            <button class="model-pill" onclick="selectModel('dall-e-3', this)">DALL·E 3</button>
+          </div>
+          <span style="font-size: 13px; color: var(--slate);" id="modelStatus">Latency: 14ms • Alignment: Certified</span>
+        </div>
+
+        <textarea class="studio-prompt-box" id="promptArea">Evaluate the implications of deep reasoning architectures on scientific hypothesis generation.</textarea>
+
+        <div style="display: flex; justify-content: flex-end; margin-bottom: 16px;">
+          <button class="btn-teal" onclick="simulateInference()">Generate Response ⚡</button>
+        </div>
+
+        <div class="completion-output" id="outputArea">
+          Reasoning models formulate internal chains of thought prior to generating verifiable hypotheses. This dramatically mitigates hallucination rates in domain-specific tasks such as genomic sequence prediction and biochemical synthesis.
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Research & Systems Grid -->
+  <section class="research-section" id="research">
+    <div class="container">
+      <h2 class="section-title">Recent Research & Benchmarks</h2>
+      <p class="section-desc">Peer-reviewed publications and frontier model evaluations.</p>
+
+      <div class="cards-grid">
+        <div class="article-card">
+          <div>
+            <span class="tag-chip">REASONING</span>
+            <h3 class="article-title">Learning to Reason with Reinforcement Learning</h3>
+            <p class="article-snippet">Analysis of chain-of-thought exploration algorithms applied to competitive programming and AIME olympiads.</p>
+          </div>
+          <span style="font-size: 13px; color: var(--openai-teal); margin-top: 16px; font-weight: 500;">Read Paper →</span>
+        </div>
+
+        <div class="article-card">
+          <div>
+            <span class="tag-chip">ALIGNMENT</span>
+            <h3 class="article-title">Scalable Oversight in Frontier Architectures</h3>
+            <p class="article-snippet">Methods for evaluating model intentions when task complexity exceeds human expert verification bandwidth.</p>
+          </div>
+          <span style="font-size: 13px; color: var(--openai-teal); margin-top: 16px; font-weight: 500;">Read Paper →</span>
+        </div>
+
+        <div class="article-card">
+          <div>
+            <span class="tag-chip">SAFETY</span>
+            <h3 class="article-title">Preparedness Framework: Evaluation Wave 4</h3>
+            <p class="article-snippet">Quarterly security evaluations for autonomous replication, cybersecurity exploit resilience, and biological safety.</p>
+          </div>
+          <span style="font-size: 13px; color: var(--openai-teal); margin-top: 16px; font-weight: 500;">Read Paper →</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="openai-footer">
+    <div class="container footer-flex">
+      <div>OpenAI © 2026. All rights reserved.</div>
+      <div>Verified against <code>open-design/design-systems/openai/DESIGN.md</code></div>
+    </div>
+  </footer>
+
+  <script>
+    function selectModel(name, btn) {
+      document.querySelectorAll('.model-pill').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      document.getElementById('modelStatus').textContent = `Active: ${name} • Safe Completion Target`;
+    }
+
+    function simulateInference() {
+      const out = document.getElementById('outputArea');
+      out.textContent = 'Thinking... (internal reasoning tokens evaluating hypothesis)...';
+      out.style.color = 'var(--slate)';
+
+      setTimeout(() => {
+        out.textContent = 'The reasoning process systematically decomposes the user premise into foundational axioms, verifies logical consistency against verifiable lemmas, and produces a calibrated deduction with zero off-target extrapolation.';
+        out.style.color = 'var(--ink-black)';
+      }, 600);
+    }
+  </script>
+</body>
+</html>

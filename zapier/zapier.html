@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Zapier — Automation that moves you forward</title>
+  <meta name="description" content="Automation platform. Warm orange, approachable cream canvas, sand borders, Degular compressed display typography, and friendly multi-app workflow builder.">
+
+  <!-- Google Fonts: Space Grotesk / Inter / Newsreader (for GT Alpina editorial moments) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Newsreader:ital,opsz,wght@1,6..72,300&family=Space+Grotesk:wght@500;600&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      /* Warm Palette Tokens from zapier/DESIGN.md */
+      --zp-cream: #fffefb;
+      --zp-off-white: #fffdf9;
+      --zp-black: #201515;
+      --zp-orange: #ff4f00;
+      
+      --zp-charcoal: #36342e;
+      --zp-warm-gray: #939084;
+      --zp-sand: #c5c0b1;
+      --zp-light-sand: #eceae3;
+
+      /* Typography */
+      --font-display: 'Space Grotesk', 'Degular Display', -apple-system, sans-serif;
+      --font-body: 'Inter', -apple-system, sans-serif;
+      --font-editorial: 'Newsreader', 'GT Alpina', serif;
+
+      /* Border Radii */
+      --rad-sm: 4px;
+      --rad-card: 5px;
+      --rad-btn-lg: 8px;
+      --rad-tag: 20px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--zp-cream); /* Never pure white! */
+      color: var(--zp-charcoal);
+      font-family: var(--font-body);
+      font-size: 16px;
+      line-height: 1.25;
+      letter-spacing: -0.16px;
+      -webkit-font-smoothing: antialiased;
+      /* ZERO BOX-SHADOW ELEVATION — BORDER FORWARD */
+    }
+
+    /* Sticky Top Header */
+    header.zp-header {
+      background: var(--zp-cream);
+      border-bottom: 1px solid var(--zp-sand);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+    .header-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 16px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .zp-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-family: var(--font-display);
+      font-size: 24px;
+      font-weight: 600;
+      color: var(--zp-black);
+      text-decoration: none;
+    }
+    .zp-asterisk {
+      color: var(--zp-orange);
+      font-size: 28px;
+      line-height: 1;
+    }
+    .zp-nav-menu {
+      display: flex;
+      gap: 28px;
+      list-style: none;
+    }
+    .zp-nav-menu a {
+      color: var(--zp-black);
+      text-decoration: none;
+      font-size: 16px;
+      font-weight: 500;
+    }
+    .zp-nav-menu a:hover {
+      text-decoration: underline;
+    }
+
+    /* Inset Box-Shadow Tab Bar */
+    .tab-bar {
+      display: flex;
+      gap: 12px;
+      border-bottom: 1px solid var(--zp-sand);
+      margin-bottom: 32px;
+    }
+    .tab-item {
+      background: transparent;
+      border: none;
+      font-family: var(--font-body);
+      font-size: 16px;
+      font-weight: 500;
+      color: var(--zp-black);
+      padding: 12px 16px;
+      cursor: pointer;
+      transition: all 150ms ease;
+    }
+    .tab-item:hover {
+      box-shadow: rgb(197, 192, 177) 0px -4px 0px 0px inset;
+    }
+    .tab-item.active {
+      box-shadow: rgb(255, 79, 0) 0px -4px 0px 0px inset;
+    }
+
+    /* Buttons */
+    .btn-zp-orange {
+      background: var(--zp-orange);
+      color: var(--zp-cream);
+      font-family: var(--font-body);
+      font-size: 16px;
+      font-weight: 600;
+      padding: 10px 22px;
+      border-radius: var(--rad-sm);
+      border: 1px solid var(--zp-orange);
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: opacity 150ms ease;
+    }
+    .btn-zp-orange:hover {
+      opacity: 0.9;
+    }
+
+    .btn-zp-dark-lg {
+      background: var(--zp-black);
+      color: var(--zp-cream);
+      font-family: var(--font-body);
+      font-size: 16px;
+      font-weight: 600;
+      padding: 16px 24px;
+      border-radius: var(--rad-btn-lg);
+      border: 1px solid var(--zp-black);
+      cursor: pointer;
+      transition: all 150ms ease;
+    }
+    .btn-zp-dark-lg:hover {
+      background: var(--zp-sand);
+      color: var(--zp-black);
+    }
+
+    .btn-zp-ghost {
+      background: var(--zp-light-sand);
+      color: var(--zp-charcoal);
+      font-family: var(--font-body);
+      font-size: 16px;
+      font-weight: 600;
+      padding: 16px 24px;
+      border-radius: var(--rad-btn-lg);
+      border: 1px solid var(--zp-sand);
+      cursor: pointer;
+      transition: all 150ms ease;
+    }
+    .btn-zp-ghost:hover {
+      background: var(--zp-sand);
+      color: var(--zp-black);
+    }
+
+    /* Container */
+    .zp-wrap {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 80px 24px;
+    }
+
+    /* Hero Section */
+    .hero-container {
+      margin-bottom: 80px;
+    }
+    .hero-kicker {
+      font-family: var(--font-body);
+      font-size: 14px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--zp-orange);
+      margin-bottom: 12px;
+      display: block;
+    }
+    .hero-title {
+      font-family: var(--font-display);
+      font-size: clamp(48px, 7vw, 76px);
+      font-weight: 500;
+      line-height: 0.90; /* Tight Degular compression */
+      letter-spacing: normal;
+      color: var(--zp-black);
+      max-width: 960px;
+      margin-bottom: 24px;
+    }
+    .hero-sub {
+      font-size: 20px;
+      line-height: 1.4;
+      color: var(--zp-charcoal);
+      max-width: 720px;
+      margin-bottom: 36px;
+    }
+
+    /* Interactive Zapier Studio */
+    .studio-card {
+      background: var(--zp-cream);
+      border: 1px solid var(--zp-sand);
+      border-radius: var(--rad-card);
+      padding: 36px;
+      margin-bottom: 80px;
+    }
+    .zap-flow-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      position: relative;
+    }
+    .flow-step {
+      background: #FFFFFF;
+      border: 1px solid var(--zp-sand);
+      border-radius: var(--rad-card);
+      padding: 20px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+    .step-badge {
+      background: var(--zp-light-sand);
+      font-family: var(--font-body);
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      padding: 4px 10px;
+      border-radius: 4px;
+      color: var(--zp-charcoal);
+    }
+    .step-icon {
+      width: 42px;
+      height: 42px;
+      background: var(--zp-light-sand);
+      border: 1px solid var(--zp-sand);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+    }
+    .connector-line {
+      width: 2px;
+      height: 20px;
+      background: var(--zp-sand);
+      margin: 0 auto;
+    }
+
+    /* Integration Cards Grid */
+    .cards-grid-3 {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 24px;
+      margin-top: 48px;
+    }
+    .zp-card {
+      background: var(--zp-cream);
+      border: 1px solid var(--zp-sand);
+      border-radius: var(--rad-card);
+      padding: 32px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: border-color 150ms ease;
+    }
+    .zp-card:hover {
+      border-color: var(--zp-black);
+    }
+    .zp-card-title {
+      font-family: var(--font-body);
+      font-size: 24px;
+      font-weight: 600;
+      letter-spacing: -0.48px;
+      color: var(--zp-black);
+      margin-bottom: 12px;
+    }
+    .zp-card-body {
+      font-size: 16px;
+      color: var(--zp-charcoal);
+      line-height: 1.45;
+      margin-bottom: 24px;
+    }
+
+    /* Dark Footer (#201515) */
+    footer.zp-footer {
+      background: var(--zp-black);
+      color: var(--zp-cream);
+      padding: 80px 24px 40px;
+      margin-top: 100px;
+    }
+    .footer-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    .footer-cols {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 32px;
+      margin-bottom: 60px;
+    }
+    .footer-cols h4 {
+      font-size: 16px;
+      font-weight: 600;
+      margin-bottom: 16px;
+      color: var(--zp-cream);
+    }
+    .footer-cols ul {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .footer-cols a {
+      color: var(--zp-sand);
+      text-decoration: none;
+      font-size: 14px;
+      transition: color 150ms ease;
+    }
+    .footer-cols a:hover {
+      color: var(--zp-cream);
+    }
+    .footer-bottom-row {
+      border-top: 1px solid #36342e;
+      padding-top: 32px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 16px;
+      font-size: 14px;
+      color: var(--zp-sand);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navigation -->
+  <header class="zp-header">
+    <div class="header-inner">
+      <a href="#" class="zp-logo">
+        <span class="zp-asterisk">_</span>zapier
+      </a>
+
+      <ul class="zp-nav-menu">
+        <li><a href="#solutions">Product</a></li>
+        <li><a href="#studio">Zap Studio</a></li>
+        <li><a href="#integrations">Apps</a></li>
+        <li><a href="#pricing">Pricing</a></li>
+      </ul>
+
+      <div style="display:flex; gap:12px; align-items:center;">
+        <button class="btn-zp-ghost" style="padding:8px 16px; font-size:14px;" onclick="alert('Login dialog')">Log in</button>
+        <button class="btn-zp-orange" onclick="startTrial()">Start free with email</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="zp-wrap">
+    <!-- Hero Section -->
+    <section class="hero-container">
+      <span class="hero-kicker">01 / AUTOMATION INFRASTRUCTURE</span>
+      <h1 class="hero-title">Automate without limits. Connect 7,000+ apps.</h1>
+      <p class="hero-sub">
+        Build custom automated workflows for your business without writing code. Approachable warmth, architectural typography, and sand-bordered structure.
+      </p>
+      <div style="display:flex; gap:16px; flex-wrap:wrap;">
+        <button class="btn-zp-orange" style="padding:16px 28px; font-size:17px;" onclick="startTrial()">Start free with email</button>
+        <button class="btn-zp-dark-lg" onclick="scrollToStudio()">Build your first Zap</button>
+      </div>
+    </section>
+
+    <!-- Inset Underline Tab Bar -->
+    <div class="tab-bar">
+      <button class="tab-item active" onclick="selectTab(this, 'Marketing')">Marketing & Leads</button>
+      <button class="tab-item" onclick="selectTab(this, 'Sales')">Sales Pipeline</button>
+      <button class="tab-item" onclick="selectTab(this, 'Support')">Customer Support</button>
+      <button class="tab-item" onclick="selectTab(this, 'AI')">AI Agents</button>
+    </div>
+
+    <!-- Interactive Zapier Flow Builder -->
+    <section class="studio-card" id="studio">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:24px;">
+        <div>
+          <h2 style="font-size:26px; font-weight:600; color:var(--zp-black);">Live Workflow Editor</h2>
+          <p style="color:var(--zp-warm-gray); font-size:14px;">CONFIGURING ACTIVE AUTOMATION: "LEAD ENRICHMENT & SLACK NOTIFIER"</p>
+        </div>
+        <button class="btn-zp-orange" style="padding:8px 16px; font-size:14px;" onclick="testZap()">⚡ Test Zap</button>
+      </div>
+
+      <div class="zap-flow-grid">
+        <!-- Step 1: Trigger -->
+        <div class="flow-step">
+          <div style="display:flex; align-items:center; gap:16px;">
+            <div class="step-icon">📋</div>
+            <div>
+              <span class="step-badge">1. TRIGGER</span>
+              <div style="font-weight:600; font-size:17px; margin-top:4px; color:var(--zp-black);">Typeform</div>
+              <div style="font-size:14px; color:var(--zp-warm-gray);">When new lead inquiry is submitted</div>
+            </div>
+          </div>
+          <span style="font-size:13px; color:var(--zp-orange); font-weight:600;">ACTIVE</span>
+        </div>
+
+        <div class="connector-line"></div>
+
+        <!-- Step 2: AI Action -->
+        <div class="flow-step">
+          <div style="display:flex; align-items:center; gap:16px;">
+            <div class="step-icon">🤖</div>
+            <div>
+              <span class="step-badge">2. AI FILTER</span>
+              <div style="font-weight:600; font-size:17px; margin-top:4px; color:var(--zp-black);">ChatGPT by OpenAI</div>
+              <div style="font-size:14px; color:var(--zp-warm-gray);">Classify customer intent and calculate lead score</div>
+            </div>
+          </div>
+          <span style="font-size:13px; color:var(--zp-orange); font-weight:600;">ACTIVE</span>
+        </div>
+
+        <div class="connector-line"></div>
+
+        <!-- Step 3: Action -->
+        <div class="flow-step">
+          <div style="display:flex; align-items:center; gap:16px;">
+            <div class="step-icon">💬</div>
+            <div>
+              <span class="step-badge">3. ACTION</span>
+              <div style="font-weight:600; font-size:17px; margin-top:4px; color:var(--zp-black);">Slack & HubSpot</div>
+              <div style="font-size:14px; color:var(--zp-warm-gray);">Post high-priority alert to #deals and create CRM record</div>
+            </div>
+          </div>
+          <span style="font-size:13px; color:var(--zp-orange); font-weight:600;">ACTIVE</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Cards Section -->
+    <div style="margin-top:60px;" id="integrations">
+      <span class="hero-kicker">02 / INTEGRATION CAPABILITIES</span>
+      <h2 style="font-family:var(--font-display); font-size:36px; font-weight:500; color:var(--zp-black); margin-bottom:12px;">Enterprise Workflow Suite</h2>
+      <p style="color:var(--zp-charcoal); font-size:17px; max-width:640px;">Bespoke connections for the modern tech stack with sand-bordered resilience.</p>
+
+      <div class="cards-grid-3">
+        <!-- Card 1 -->
+        <div class="zp-card">
+          <div>
+            <h3 class="zp-card-title">Zaps & Multi-Step Logic</h3>
+            <p class="zp-card-body">Route actions conditionally using paths, filters, webhooks, and delayed scheduling routines.</p>
+          </div>
+          <button class="btn-zp-ghost" style="padding:10px 18px; font-size:14px;" onclick="alert('Multi-step logic preview')">Explore Zaps</button>
+        </div>
+
+        <!-- Card 2 -->
+        <div class="zp-card">
+          <div>
+            <h3 class="zp-card-title">Zapier Central & AI</h3>
+            <p class="zp-card-body">Autonomous AI assistants that access your live company knowledge base to take action across thousands of SaaS tools.</p>
+          </div>
+          <button class="btn-zp-ghost" style="padding:10px 18px; font-size:14px;" onclick="alert('Central preview')">Explore AI</button>
+        </div>
+
+        <!-- Card 3 -->
+        <div class="zp-card">
+          <div>
+            <h3 class="zp-card-title">Zapier Tables & Canvas</h3>
+            <p class="zp-card-body">Store, visualize, and orchestrate relational data built explicitly to fuel automated workflows.</p>
+          </div>
+          <button class="btn-zp-ghost" style="padding:10px 18px; font-size:14px;" onclick="alert('Tables preview')">Explore Tables</button>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Dark Footer -->
+  <footer class="zp-footer">
+    <div class="footer-inner">
+      <div class="footer-cols">
+        <div>
+          <h4>Solutions</h4>
+          <ul>
+            <li><a href="#">Lead management</a></li>
+            <li><a href="#">Customer support</a></li>
+            <li><a href="#">Sales pipeline</a></li>
+            <li><a href="#">AI workflows</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4>Apps & Platforms</h4>
+          <ul>
+            <li><a href="#">Salesforce</a></li>
+            <li><a href="#">Google Sheets</a></li>
+            <li><a href="#">Slack</a></li>
+            <li><a href="#">OpenAI</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4>Resources</h4>
+          <ul>
+            <li><a href="#">Blog & Guides</a></li>
+            <li><a href="#">Community Forum</a></li>
+            <li><a href="#">Zapier University</a></li>
+            <li><a href="#">API Documentation</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4>Company</h4>
+          <ul>
+            <li><a href="#">About us</a></li>
+            <li><a href="#">Careers</a></li>
+            <li><a href="#">Press releases</a></li>
+            <li><a href="#">Security & Trust</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="footer-bottom-row">
+        <div>© 2026 Zapier Inc. Hand-crafted conforming to open-design/design-systems/zapier/DESIGN.md</div>
+        <div>Cream #FFFEFB • Orange #FF4F00 • Sand #C5C0B1 • Degular 0.90 Line-Height</div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    function startTrial() {
+      alert('Zapier 14-day Professional Trial initialized. Welcome aboard!');
+    }
+
+    function scrollToStudio() {
+      document.getElementById('studio').scrollIntoView({ behavior: 'smooth' });
+    }
+
+    function selectTab(el, cat) {
+      document.querySelectorAll('.tab-item').forEach(t => t.classList.remove('active'));
+      el.classList.add('active');
+    }
+
+    function testZap() {
+      alert('Testing Zap flow:\n1. Mock lead received from Typeform.\n2. ChatGPT scored lead: 92/100 (Enterprise Tier).\n3. Transmitted rich notification card to Slack #deals.\n4. HubSpot deal record created successfully in 120ms.');
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,1285 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Perplexity AI — Design System &amp; Research Workspace</title>
+  <meta name="description" content="Conversational AI search engine design system. Deep-dark canvas, sharp typography, single violet accent, dense information hierarchy, answer-first pattern.">
+
+  <!-- Inter for UI / Body & JetBrains Mono for Code / Citations as specified in DESIGN.md -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+  <style>
+    /* ==========================================================================
+       PERPLEXITY AI DESIGN SYSTEM TOKENS — Exactly sampled from DESIGN.md
+       ========================================================================== */
+    :root, [data-theme="dark"] {
+      /* Dark surface (default) */
+      --bg-base: #0f0f10;
+      --bg-surface: #19191a;
+      --bg-elevated: #232325;
+      --border: #2e2e30;
+      --text-primary: #f0f0f0;
+      --text-secondary: #9b9b9b;
+      --text-tertiary: #5c5c5e;
+      --accent: #a855f7;
+      --accent-hover: #c084fc;
+      --accent-subtle: #3b1f5e;
+      --success: #22c55e;
+      --warning: #f59e0b;
+      --error: #ef4444;
+    }
+
+    [data-theme="light"] {
+      /* Light surface */
+      --bg-base: #ffffff;
+      --bg-surface: #f8f8f8;
+      --bg-elevated: #f0f0f0;
+      --border: #e0e0e0;
+      --text-primary: #0f0f10;
+      --text-secondary: #5c5c5e;
+      --text-tertiary: #9b9b9b;
+      --accent: #7c3aed;
+      --accent-hover: #6d28d9;
+      --accent-subtle: #ede9fe;
+      --success: #16a34a;
+      --warning: #d97706;
+      --error: #dc2626;
+    }
+
+    /* Shared System Scales */
+    :root {
+      /* Typography Families */
+      --font-body: "Inter", ui-sans-serif, system-ui, -apple-system, sans-serif;
+      --font-code: "JetBrains Mono", ui-monospace, "Cascadia Code", monospace;
+
+      /* Spacing Scale (8px base unit) */
+      --space-1: 4px;
+      --space-2: 8px;
+      --space-3: 12px;
+      --space-4: 16px;
+      --space-5: 24px;
+      --space-6: 32px;
+      --space-7: 48px;
+      --space-8: 64px;
+
+      /* Border Radii */
+      --radius-sm: 4px;
+      --radius-md: 8px;
+      --radius-lg: 12px;
+      --radius-xl: 16px;
+      --radius-full: 9999px;
+
+      /* Motion */
+      --motion-hover: 120ms ease;
+      --motion-panel: 160ms ease-out;
+      --motion-modal: 200ms ease-out;
+    }
+
+    /* Reset & Clean Defaults */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--bg-base);
+      color: var(--text-primary);
+      font-family: var(--font-body);
+      font-size: 0.9375rem; /* 15px body */
+      line-height: 1.65;
+      font-weight: 400;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* Tabular numeric data */
+    .tabular-nums {
+      font-variant-numeric: tabular-nums;
+      font-feature-settings: "tnum" 1, "ss01" 1;
+    }
+
+    /* App Shell Layout */
+    .app-shell {
+      display: flex;
+      min-height: 100vh;
+      width: 100%;
+    }
+
+    /* Fixed Left Sidebar: 280px */
+    .sidebar {
+      width: 280px;
+      background-color: var(--bg-surface);
+      border-right: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      flex-shrink: 0;
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      padding: var(--space-4);
+      z-index: 40;
+      transition: transform var(--motion-panel);
+    }
+
+    .brand-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: var(--space-4);
+      padding: var(--space-2) var(--space-2);
+    }
+
+    .brand-logo {
+      display: flex;
+      align-items: center;
+      gap: var(--space-2);
+      text-decoration: none;
+      color: var(--text-primary);
+      font-weight: 600;
+      font-size: 1.125rem;
+      letter-spacing: -0.01em;
+    }
+
+    .brand-logo svg {
+      width: 20px;
+      height: 20px;
+      stroke: var(--text-primary);
+      stroke-width: 1.5;
+      stroke-linecap: square;
+      stroke-linejoin: miter;
+      fill: none;
+    }
+
+    /* Ghost Button token from DESIGN.md */
+    .btn-ghost {
+      background: transparent;
+      color: var(--text-primary);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 9px 20px;
+      font-size: 0.9375rem;
+      font-weight: 500;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--space-2);
+      transition: background var(--motion-hover);
+      text-decoration: none;
+    }
+
+    .btn-ghost:hover {
+      background: var(--bg-elevated);
+    }
+
+    .btn-ghost svg {
+      width: 16px;
+      height: 16px;
+      stroke: var(--text-secondary);
+      stroke-width: 1.5;
+      fill: none;
+    }
+
+    /* Primary Button token from DESIGN.md: single violet accent action */
+    .btn-primary {
+      background: var(--accent);
+      color: #fff;
+      border-radius: var(--radius-md);
+      padding: 10px 20px;
+      font-size: 0.9375rem;
+      font-weight: 500;
+      border: none;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--space-2);
+      transition: background var(--motion-hover);
+      text-decoration: none;
+    }
+
+    .btn-primary:hover {
+      background: var(--accent-hover);
+    }
+
+    .btn-primary:focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 2px;
+    }
+
+    .btn-primary:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+    }
+
+    /* Sidebar Navigation Links */
+    .nav-group {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      margin-top: var(--space-4);
+      margin-bottom: var(--space-4);
+    }
+
+    .nav-item {
+      display: flex;
+      align-items: center;
+      gap: var(--space-3);
+      padding: 8px var(--space-3);
+      color: var(--text-secondary);
+      border-radius: var(--radius-md);
+      text-decoration: none;
+      font-size: 0.875rem;
+      font-weight: 500;
+      transition: background var(--motion-hover), color var(--motion-hover);
+      cursor: pointer;
+    }
+
+    .nav-item:hover {
+      background-color: var(--bg-elevated);
+      color: var(--text-primary);
+    }
+
+    .nav-item.active {
+      color: var(--text-primary);
+      background-color: var(--bg-elevated);
+    }
+
+    .nav-item svg {
+      width: 16px;
+      height: 16px;
+      stroke: var(--text-secondary);
+      stroke-width: 1.5;
+      stroke-linecap: square;
+      stroke-linejoin: miter;
+      fill: none;
+    }
+
+    .sidebar-history-title {
+      font-size: 0.6875rem; /* caption */
+      color: var(--text-tertiary);
+      text-transform: none; /* sentence case rule */
+      padding: var(--space-2) var(--space-3);
+      margin-top: var(--space-3);
+    }
+
+    .history-list {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      overflow-y: auto;
+      flex-grow: 1;
+    }
+
+    .history-link {
+      padding: 8px var(--space-3);
+      border-radius: var(--radius-md);
+      font-size: 0.8125rem; /* body-sm */
+      color: var(--text-secondary);
+      text-decoration: none;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      transition: background var(--motion-hover), color var(--motion-hover);
+    }
+
+    .history-link:hover {
+      background-color: var(--bg-elevated);
+      color: var(--text-primary);
+    }
+
+    .sidebar-footer {
+      border-top: 1px solid var(--border);
+      padding-top: var(--space-3);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .theme-toggle-btn {
+      background: transparent;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      color: var(--text-secondary);
+      padding: 6px 12px;
+      font-size: 0.8125rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .theme-toggle-btn:hover {
+      background: var(--bg-elevated);
+      color: var(--text-primary);
+    }
+
+    /* Main Workspace Shell: 1100px max */
+    .main-workspace {
+      flex: 1;
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: var(--space-5) var(--space-4) var(--space-8);
+    }
+
+    .content-shell {
+      width: 100%;
+      max-width: 1100px;
+    }
+
+    /* Search Bar Token */
+    .search-container {
+      width: 100%;
+      max-width: 720px;
+      margin-left: auto;
+      margin-right: auto;
+      margin-bottom: var(--space-6);
+    }
+
+    .search-box {
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-xl);
+      padding: 12px 16px;
+      display: flex;
+      align-items: center;
+      gap: var(--space-3);
+      transition: border-color var(--motion-hover);
+      position: relative;
+    }
+
+    .search-box:focus-within {
+      outline: 2px solid var(--accent);
+      outline-offset: 0px;
+      border-color: transparent;
+    }
+
+    .search-box svg {
+      width: 20px;
+      height: 20px;
+      stroke: var(--text-secondary);
+      stroke-width: 1.5;
+      stroke-linecap: square;
+      stroke-linejoin: miter;
+      fill: none;
+      flex-shrink: 0;
+    }
+
+    .search-input {
+      background: transparent;
+      border: none;
+      outline: none;
+      color: var(--text-primary);
+      font-size: 0.9375rem;
+      font-family: var(--font-body);
+      width: 100%;
+    }
+
+    .search-input::placeholder {
+      color: var(--text-tertiary);
+    }
+
+    .search-submit-btn {
+      background: var(--bg-elevated);
+      border: none;
+      border-radius: var(--radius-full);
+      width: 32px;
+      height: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      flex-shrink: 0;
+      transition: background var(--motion-hover);
+    }
+
+    .search-submit-btn:hover {
+      background: var(--accent);
+    }
+
+    .search-submit-btn:hover svg {
+      stroke: #ffffff;
+    }
+
+    /* Tab Bar token from DESIGN.md */
+    .tab-bar {
+      display: flex;
+      gap: var(--space-5);
+      border-bottom: 1px solid var(--border);
+      margin-bottom: var(--space-5);
+      width: 100%;
+      max-width: 720px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .tab-item {
+      padding: var(--space-2) 0;
+      color: var(--text-secondary);
+      font-size: 0.875rem;
+      font-weight: 500;
+      background: transparent;
+      border: none;
+      border-bottom: 2px solid transparent;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: color var(--motion-hover);
+    }
+
+    .tab-item:hover {
+      color: var(--text-primary);
+    }
+
+    .tab-item.active {
+      color: var(--text-primary);
+      border-bottom: 2px solid var(--accent);
+    }
+
+    /* Reading Column: exactly 720px max content width */
+    .answer-column {
+      width: 100%;
+      max-width: 720px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    /* The Question */
+    .query-title {
+      font-size: 1.375rem; /* heading-l: 22px */
+      line-height: 1.3;
+      font-weight: 600;
+      color: var(--text-primary);
+      margin-bottom: var(--space-4);
+      letter-spacing: -0.01em;
+    }
+
+    /* Source Badge from DESIGN.md */
+    .source-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 3px 8px;
+      font-size: 0.6875rem; /* caption: 11px */
+      color: var(--text-secondary);
+      font-weight: 500;
+    }
+
+    .source-badge .badge-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background-color: var(--success);
+    }
+
+    /* Source Cards Grid */
+    .sources-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: var(--space-2);
+    }
+
+    .section-label {
+      font-size: 0.8125rem; /* body-sm */
+      color: var(--text-secondary);
+      font-weight: 500;
+      text-transform: none; /* sentence case rule */
+    }
+
+    .sources-row {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: var(--space-2);
+      margin-bottom: var(--space-5);
+    }
+
+    .source-chip {
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: var(--space-3);
+      text-decoration: none;
+      color: inherit;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      cursor: pointer;
+      transition: none; /* instant hover rule from DESIGN.md */
+    }
+
+    .source-chip:hover, .source-chip.highlighted {
+      background: var(--bg-elevated);
+      border-color: var(--accent);
+    }
+
+    .chip-top {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .chip-favicon {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background: var(--bg-elevated);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 9px;
+      font-family: var(--font-code);
+      color: var(--text-secondary);
+      flex-shrink: 0;
+    }
+
+    .chip-domain {
+      font-size: 0.8125rem; /* body-sm: 13px */
+      color: var(--text-secondary);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .chip-title {
+      font-size: 0.8125rem;
+      color: var(--text-primary);
+      font-weight: 500;
+      line-height: 1.35;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    /* Answer Card Token (No drop shadow, elevation through border contrast) */
+    .answer-card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: var(--space-5);
+      margin-bottom: var(--space-5);
+    }
+
+    .answer-text {
+      font-size: 0.9375rem; /* 15px */
+      line-height: 1.65;
+      color: var(--text-primary);
+      max-width: 68ch; /* 55-70 characters rule */
+      margin-bottom: var(--space-4);
+    }
+
+    .answer-text p {
+      margin-bottom: var(--space-3);
+    }
+
+    /* Citation Tag */
+    .citation-ref {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--bg-elevated);
+      color: var(--text-secondary);
+      border-radius: var(--radius-full);
+      font-family: var(--font-code);
+      font-size: 0.6875rem;
+      padding: 0 5px;
+      height: 16px;
+      min-width: 16px;
+      margin: 0 2px;
+      cursor: pointer;
+      text-decoration: none;
+      vertical-align: 2px;
+      border: 1px solid transparent;
+      transition: background var(--motion-hover), color var(--motion-hover);
+    }
+
+    .citation-ref:hover, .citation-ref.active {
+      background: var(--accent-subtle);
+      color: var(--accent-hover);
+      border-color: var(--accent);
+    }
+
+    /* Code Block token from DESIGN.md */
+    .code-container {
+      background: var(--bg-base);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: var(--space-4);
+      margin: var(--space-4) 0;
+      overflow-x: auto;
+    }
+
+    .code-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: var(--space-2);
+      font-size: 0.6875rem;
+      color: var(--text-secondary);
+      font-family: var(--font-code);
+      border-bottom: 1px solid var(--border);
+      padding-bottom: var(--space-2);
+    }
+
+    .code-body {
+      font-family: var(--font-code);
+      font-size: 0.875rem; /* 14px */
+      line-height: 1.6;
+      color: var(--text-primary);
+      white-space: pre;
+    }
+
+    .code-body .token-kw { color: #a855f7; }
+    .code-body .token-fn { color: #60a5fa; }
+    .code-body .token-cm { color: #5c5c5e; }
+    .code-body .token-num { color: #f59e0b; }
+
+    /* Comparison Table in Answer */
+    .data-table-wrap {
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      margin: var(--space-4) 0;
+    }
+
+    .data-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.8125rem;
+      text-align: left;
+    }
+
+    .data-table th {
+      background: var(--bg-elevated);
+      color: var(--text-secondary);
+      padding: 8px 12px;
+      font-weight: 500;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .data-table td {
+      padding: 8px 12px;
+      border-bottom: 1px solid var(--border);
+      color: var(--text-primary);
+    }
+
+    .data-table tr:last-child td {
+      border-bottom: none;
+    }
+
+    /* Skeleton Loader Token from DESIGN.md */
+    .skeleton-box {
+      background: linear-gradient(
+        90deg,
+        var(--bg-elevated) 25%,
+        var(--bg-surface)  50%,
+        var(--bg-elevated) 75%
+      );
+      background-size: 400% 100%;
+      animation: skeleton-shimmer 1.4s ease infinite;
+      border-radius: var(--radius-sm);
+    }
+
+    @keyframes skeleton-shimmer {
+      0% { background-position: 100% 0; }
+      100% { background-position: -100% 0; }
+    }
+
+    /* Follow up input bar */
+    .followup-bar {
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-xl);
+      padding: 10px 16px;
+      display: flex;
+      align-items: center;
+      gap: var(--space-3);
+      margin-top: var(--space-4);
+    }
+
+    .followup-bar:focus-within {
+      outline: 2px solid var(--accent);
+      border-color: transparent;
+    }
+
+    .followup-input {
+      background: transparent;
+      border: none;
+      outline: none;
+      color: var(--text-primary);
+      font-size: 0.875rem;
+      font-family: var(--font-body);
+      flex: 1;
+    }
+
+    /* Design System Spec & Component Lab Container */
+    .system-spec-section {
+      width: 100%;
+      max-width: 720px;
+      margin: var(--space-8) auto 0;
+      border-top: 1px solid var(--border);
+      padding-top: var(--space-6);
+    }
+
+    .spec-heading {
+      font-size: 1.125rem; /* heading-m: 18px */
+      font-weight: 600;
+      color: var(--text-primary);
+      margin-bottom: var(--space-2);
+    }
+
+    .tokens-table-card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: var(--space-4);
+      margin-bottom: var(--space-5);
+    }
+
+    .swatch-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 6px 0;
+      border-bottom: 1px solid var(--border);
+      font-family: var(--font-code);
+      font-size: 0.8125rem;
+    }
+
+    .swatch-row:last-child {
+      border-bottom: none;
+    }
+
+    .swatch-visual {
+      width: 24px;
+      height: 24px;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border);
+      flex-shrink: 0;
+    }
+
+    /* Streaming simulated text cursor */
+    .stream-cursor {
+      display: inline-block;
+      width: 7px;
+      height: 15px;
+      background-color: var(--accent);
+      vertical-align: -2px;
+      margin-left: 2px;
+      animation: blink 0.9s infinite;
+    }
+
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0; }
+    }
+
+    /* Responsive breakdown */
+    @media (max-width: 900px) {
+      .sidebar {
+        display: none;
+      }
+      .sources-row {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="app-shell">
+    <!-- Collapsible Sidebar (280px fixed) -->
+    <aside class="sidebar">
+      <div class="brand-row">
+        <a href="#" class="brand-logo">
+          <svg viewBox="0 0 24 24">
+            <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+          </svg>
+          <span>Perplexity</span>
+        </a>
+        <span class="source-badge">
+          <span class="badge-dot"></span>
+          <span>Pro</span>
+        </span>
+      </div>
+
+      <!-- New Thread Ghost Button -->
+      <button class="btn-ghost" style="width: 100%; justify-content: space-between;" onclick="startNewThread()">
+        <span>New thread</span>
+        <svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>
+      </button>
+
+      <!-- Nav Items -->
+      <nav class="nav-group">
+        <a class="nav-item active" href="#">
+          <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
+          <span>Home</span>
+        </a>
+        <a class="nav-item" href="#spec">
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/></svg>
+          <span>Discover</span>
+        </a>
+        <a class="nav-item" href="#components">
+          <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+          <span>Spaces</span>
+        </a>
+        <a class="nav-item" href="#tokens">
+          <svg viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+          <span>Library</span>
+        </a>
+      </nav>
+
+      <!-- History Thread List -->
+      <div class="sidebar-history-title">Recent threads</div>
+      <div class="history-list">
+        <a href="#" class="history-link" onclick="loadQuery('Linear attention vs quadratic softmax')">Linear attention vs quadratic softmax</a>
+        <a href="#" class="history-link" onclick="loadQuery('FlashAttention kernel tiling memory bound')">FlashAttention kernel tiling memory bound</a>
+        <a href="#" class="history-link" onclick="loadQuery('State space models Mamba vs Transformers')">State space models Mamba vs Transformers</a>
+        <a href="#" class="history-link" onclick="loadQuery('Rotary position embedding RoPE degradation')">Rotary position embedding RoPE degradation</a>
+        <a href="#" class="history-link" onclick="loadQuery('Quantization scale factors FP8 vs INT4')">Quantization scale factors FP8 vs INT4</a>
+      </div>
+
+      <!-- Footer: Theme Toggle -->
+      <div class="sidebar-footer">
+        <button class="theme-toggle-btn" id="themeToggleBtn" onclick="toggleTheme()">
+          <svg style="width: 14px; height: 14px; stroke: currentColor; fill: none; stroke-width: 1.5;" viewBox="0 0 24 24">
+            <circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+          </svg>
+          <span id="themeLabel">Dark mode</span>
+        </button>
+        <span style="font-size: 0.6875rem; color: var(--text-tertiary); font-family: var(--font-code);">v2026.05</span>
+      </div>
+    </aside>
+
+    <!-- Main Content Workspace -->
+    <main class="main-workspace">
+      <div class="content-shell">
+
+        <!-- Top Search Box (Answer-First Entrance) -->
+        <div class="search-container">
+          <div class="search-box">
+            <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+            <input type="text" id="mainSearchInput" class="search-input" value="What are the computational limits and algorithmic trade-offs of linear attention?" placeholder="Ask anything...">
+            <button class="search-submit-btn" onclick="triggerSearch()" title="Ask">
+              <svg style="width: 16px; height: 16px; stroke: var(--text-secondary); fill: none; stroke-width: 2;" viewBox="0 0 24 24">
+                <line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/>
+              </svg>
+            </button>
+          </div>
+        </div>
+
+        <!-- Tab Bar -->
+        <div class="tab-bar">
+          <button class="tab-item active" onclick="switchTab('answer', this)">Answer</button>
+          <button class="tab-item" onclick="switchTab('sources', this)">Sources <span class="tabular-nums">(4)</span></button>
+          <button class="tab-item" onclick="switchTab('code', this)">Kernel implementation</button>
+          <button class="tab-item" onclick="switchTab('spec', this)">Design tokens &amp; components</button>
+        </div>
+
+        <!-- Answer View Column (720px max width) -->
+        <div class="answer-column" id="answerTabContent">
+          <!-- Question Heading (heading-l: 22px / 600 weight) -->
+          <h1 class="query-title" id="displayedQueryTitle">
+            What are the computational limits and algorithmic trade-offs of linear attention?
+          </h1>
+
+          <!-- Sources Row -->
+          <div class="sources-header">
+            <span class="section-label">Sources</span>
+            <span class="source-badge">
+              <span class="badge-dot"></span>
+              <span>4 verified</span>
+            </span>
+          </div>
+
+          <div class="sources-row">
+            <!-- Source 1 -->
+            <a class="source-chip" id="source-1" onclick="highlightCitation(1)">
+              <div class="chip-top">
+                <div class="chip-favicon">1</div>
+                <span class="chip-domain">arxiv.org</span>
+              </div>
+              <div class="chip-title">Transformers are RNNs: Fast Autoregressive Linear Attention</div>
+            </a>
+
+            <!-- Source 2 -->
+            <a class="source-chip" id="source-2" onclick="highlightCitation(2)">
+              <div class="chip-top">
+                <div class="chip-favicon">2</div>
+                <span class="chip-domain">stanford.edu</span>
+              </div>
+              <div class="chip-title">FlashAttention: Fast Exact Attention with IO-Awareness</div>
+            </a>
+
+            <!-- Source 3 -->
+            <a class="source-chip" id="source-3" onclick="highlightCitation(3)">
+              <div class="chip-top">
+                <div class="chip-favicon">3</div>
+                <span class="chip-domain">nature.com</span>
+              </div>
+              <div class="chip-title">Associative Memory Bounds in Sub-quadratic Sequence Models</div>
+            </a>
+
+            <!-- Source 4 -->
+            <a class="source-chip" id="source-4" onclick="highlightCitation(4)">
+              <div class="chip-top">
+                <div class="chip-favicon">4</div>
+                <span class="chip-domain">deepmind.google</span>
+              </div>
+              <div class="chip-title">Long-Context Retrieval Trade-Offs in State Space Architecture</div>
+            </a>
+          </div>
+
+          <!-- Answer Card (bg-surface, 1px border, radius-lg, no drop-shadow) -->
+          <article class="answer-card">
+            <div class="answer-text" id="answerStreamingContainer">
+              <p>
+                Standard softmax attention requires computing an <span class="tabular-nums">N &times; N</span> similarity matrix, creating quadratic <span class="tabular-nums">O(N&sup2;)</span> time and memory complexity with respect to sequence length <span class="tabular-nums">N</span> <a class="citation-ref" onclick="highlightCitation(1)">[1]</a>. Linear attention resolves this bottle-neck by decomposing the softmax kernel into a product of feature maps <span class="tabular-nums">&phi;(Q)&phi;(K)&top;</span>, allowing the matrix multiplication order to be inverted via associativity <a class="citation-ref" onclick="highlightCitation(1)">[1]</a>.
+              </p>
+
+              <p>
+                This inversion reduces computational complexity from <span class="tabular-nums">O(N&sup2;d)</span> to <span class="tabular-nums">O(Nd&sup2;)</span>, converting autoregressive inference into a constant-time <span class="tabular-nums">O(1)</span> recurrent update step <a class="citation-ref" onclick="highlightCitation(3)">[3]</a>. However, this efficiency introduces three fundamental algorithmic trade-offs:
+              </p>
+
+              <!-- Dense numbered takeaways -->
+              <ol style="margin-left: 20px; margin-bottom: var(--space-4); display: flex; flex-direction: column; gap: var(--space-2);">
+                <li>
+                  <strong>Associative memory capacity degradation:</strong> Because the recurrent state is compressed into a fixed-size matrix <span class="tabular-nums">S &in; &Ropf;^{d &times; d}</span>, exact token retrieval degrades severely over context lengths exceeding several thousand steps compared to softmax KV caching <a class="citation-ref" onclick="highlightCitation(3)">[3]</a>.
+                </li>
+                <li>
+                  <strong>Hardware IO-bound reality:</strong> Exact softmax attention accelerated by IO-aware SRAM tiling (FlashAttention) frequently out-performs naive linear attention kernels on modern GPU memory hierarchies up to 8,192 tokens <a class="citation-ref" onclick="highlightCitation(2)">[2]</a>.
+                </li>
+                <li>
+                  <strong>Expressivity on multi-query reasoning:</strong> The absence of sharp non-linear softmax peaks prevents the model from isolating single needle-in-a-haystack tokens during multi-hop logical deduction <a class="citation-ref" onclick="highlightCitation(4)">[4]</a>.
+                </li>
+              </ol>
+
+              <!-- Comparison Table -->
+              <div class="data-table-wrap">
+                <table class="data-table">
+                  <thead>
+                    <tr>
+                      <th>Architecture</th>
+                      <th>Time Complexity</th>
+                      <th>Inference Step</th>
+                      <th>Exact Needle Retrieval</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>Standard Softmax Attention</td>
+                      <td class="tabular-nums">O(N²d)</td>
+                      <td class="tabular-nums">O(N) with KV-cache</td>
+                      <td>Near Optimal (100%)</td>
+                    </tr>
+                    <tr>
+                      <td>Kernelized Linear Attention</td>
+                      <td class="tabular-nums">O(Nd²)</td>
+                      <td class="tabular-nums">O(1) Recurrent State</td>
+                      <td>Degrades with depth (&lt;68%)</td>
+                    </tr>
+                    <tr>
+                      <td>FlashAttention-2 (Exact)</td>
+                      <td class="tabular-nums">O(N²d) IO-tiled</td>
+                      <td class="tabular-nums">O(N) with KV-cache</td>
+                      <td>Optimal (100%)</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <p style="margin-top: var(--space-4);">
+                Consequently, modern frontier deployments pair linear recurrent layers (or state space mechanisms like Mamba) with interleaved softmax attention heads to retain needle retrieval while maintaining linear scaling throughput <a class="citation-ref" onclick="highlightCitation(4)">[4]</a>.
+              </p>
+            </div>
+
+            <!-- Follow-up Prompt Bar -->
+            <div class="followup-bar">
+              <svg style="width: 16px; height: 16px; stroke: var(--text-secondary); fill: none; stroke-width: 1.5;" viewBox="0 0 24 24">
+                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+              </svg>
+              <input type="text" class="followup-input" placeholder="Ask follow-up..." onkeydown="if(event.key === 'Enter') handleFollowUp(this.value)">
+              <button class="btn-primary" style="padding: 6px 14px; font-size: 0.8125rem;" onclick="handleFollowUp(document.querySelector('.followup-input').value)">
+                Ask
+              </button>
+            </div>
+          </article>
+        </div>
+
+        <!-- Code Tab Content (hidden by default) -->
+        <div class="answer-column" id="codeTabContent" style="display: none;">
+          <h2 style="font-size: 1.125rem; font-weight: 600; margin-bottom: var(--space-3);">Linear Attention Kernel Implementation</h2>
+          <div class="code-container">
+            <div class="code-header">
+              <span>linear_attention.py &bull; PyTorch Flash Formulation</span>
+              <button class="btn-ghost" style="padding: 2px 8px; font-size: 11px;" onclick="copyCodeSnippet()">Copy</button>
+            </div>
+            <pre class="code-body"><code><span class="token-kw">import</span> torch
+<span class="token-kw">import</span> torch.nn <span class="token-kw">as</span> nn
+<span class="token-kw">import</span> torch.nn.functional <span class="token-kw">as</span> F
+
+<span class="token-kw">class</span> <span class="token-fn">CausalLinearAttention</span>(nn.Module):
+    <span class="token-kw">def</span> <span class="token-fn">__init__</span>(self, d_model, eps=<span class="token-num">1e-6</span>):
+        <span class="token-fn">super</span>().__init__()
+        self.d_model = d_model
+        self.eps = eps
+        
+    <span class="token-kw">def</span> <span class="token-fn">feature_map</span>(self, x):
+        <span class="token-cm"># ELU + 1 kernel ensures non-negativity without softmax saturation</span>
+        <span class="token-kw">return</span> F.elu(x) + <span class="token-num">1.0</span>
+
+    <span class="token-kw">def</span> <span class="token-fn">forward</span>(self, Q, K, V):
+        <span class="token-cm"># Q, K, V: [B, H, N, D]</span>
+        Q = self.feature_map(Q)
+        K = self.feature_map(K)
+        
+        <span class="token-cm"># Compute recurrent associative state: S = sum(K_i^T * V_i)</span>
+        KV = torch.einsum(<span class="token-str">"b h n d, b h n m -&gt; b h d m"</span>, K, V)
+        Z = <span class="token-num">1.0</span> / (torch.einsum(<span class="token-str">"b h n d, b h d -&gt; b h n"</span>, Q, K.sum(dim=<span class="token-num">2</span>)) + self.eps)
+        
+        <span class="token-cm"># Constant complexity projection</span>
+        out = torch.einsum(<span class="token-str">"b h n d, b h d m, b h n -&gt; b h n m"</span>, Q, KV, Z)
+        <span class="token-kw">return</span> out</code></pre>
+          </div>
+        </div>
+
+        <!-- Sources Detailed Tab Content -->
+        <div class="answer-column" id="sourcesTabContent" style="display: none;">
+          <h2 style="font-size: 1.125rem; font-weight: 600; margin-bottom: var(--space-3);">Cited Research Literature</h2>
+          <div class="answer-card">
+            <div style="display: flex; flex-direction: column; gap: var(--space-4);">
+              <div>
+                <span class="source-badge"><span class="badge-dot"></span> ArXiv 2006.16236</span>
+                <h3 style="font-size: 0.9375rem; font-weight: 600; margin: 4px 0;">Transformers are RNNs: Fast Autoregressive Transformers with Linear Attention</h3>
+                <p style="font-size: 0.8125rem; color: var(--text-secondary);">Katharopoulos et al. — Formulated kernelized causal attention without softmax denominators.</p>
+              </div>
+              <div style="border-top: 1px solid var(--border); padding-top: var(--space-3);">
+                <span class="source-badge"><span class="badge-dot"></span> NeurIPS 2022</span>
+                <h3 style="font-size: 0.9375rem; font-weight: 600; margin: 4px 0;">FlashAttention: Fast and Memory-Efficient Exact Attention with IO-Awareness</h3>
+                <p style="font-size: 0.8125rem; color: var(--text-secondary);">Dao et al. — Demonstrates exact softmax throughput improvements via GPU SRAM tiling.</p>
+              </div>
+              <div style="border-top: 1px solid var(--border); padding-top: var(--space-3);">
+                <span class="source-badge"><span class="badge-dot"></span> Nature Mach. Intel 2024</span>
+                <h3 style="font-size: 0.9375rem; font-weight: 600; margin: 4px 0;">Associative Memory Limits in Sequence Models</h3>
+                <p style="font-size: 0.8125rem; color: var(--text-secondary);">Proves sub-quadratic state decay over multi-hop reasoning tasks.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Design System Spec & Tokens Tab -->
+        <div class="answer-column" id="specTabContent" style="display: none;">
+          <h2 class="spec-heading">Perplexity Design System Tokens (DESIGN.md)</h2>
+          <p style="font-size: 0.8125rem; color: var(--text-secondary); margin-bottom: var(--space-4);">
+            Strictly adhering to production rules: 3 background levels only, zero drop shadows, single violet accent, and 8px spacing grid.
+          </p>
+
+          <!-- Color Tokens -->
+          <div class="tokens-table-card">
+            <div style="font-size: 0.8125rem; font-weight: 600; margin-bottom: var(--space-3);">Dark Surface Color Foundations</div>
+            
+            <div class="swatch-row">
+              <div style="display: flex; align-items: center; gap: 8px;">
+                <div class="swatch-visual" style="background: #0f0f10;"></div>
+                <span>--bg-base</span>
+              </div>
+              <span>#0f0f10 (Page background)</span>
+            </div>
+
+            <div class="swatch-row">
+              <div style="display: flex; align-items: center; gap: 8px;">
+                <div class="swatch-visual" style="background: #19191a;"></div>
+                <span>--bg-surface</span>
+              </div>
+              <span>#19191a (Card / sidebar)</span>
+            </div>
+
+            <div class="swatch-row">
+              <div style="display: flex; align-items: center; gap: 8px;">
+                <div class="swatch-visual" style="background: #232325;"></div>
+                <span>--bg-elevated</span>
+              </div>
+              <span>#232325 (Hover / elevated)</span>
+            </div>
+
+            <div class="swatch-row">
+              <div style="display: flex; align-items: center; gap: 8px;">
+                <div class="swatch-visual" style="background: #2e2e30;"></div>
+                <span>--border</span>
+              </div>
+              <span>#2e2e30 (Divider / stroke)</span>
+            </div>
+
+            <div class="swatch-row">
+              <div style="display: flex; align-items: center; gap: 8px;">
+                <div class="swatch-visual" style="background: #a855f7;"></div>
+                <span>--accent</span>
+              </div>
+              <span>#a855f7 (Single primary action)</span>
+            </div>
+
+            <div class="swatch-row">
+              <div style="display: flex; align-items: center; gap: 8px;">
+                <div class="swatch-visual" style="background: #22c55e;"></div>
+                <span>--success</span>
+              </div>
+              <span>#22c55e (Verified badge)</span>
+            </div>
+
+            <div class="swatch-row">
+              <div style="display: flex; align-items: center; gap: 8px;">
+                <div class="swatch-visual" style="background: #f59e0b;"></div>
+                <span>--warning</span>
+              </div>
+              <span>#f59e0b (Caution state)</span>
+            </div>
+
+            <div class="swatch-row">
+              <div style="display: flex; align-items: center; gap: 8px;">
+                <div class="swatch-visual" style="background: #ef4444;"></div>
+                <span>--error</span>
+              </div>
+              <span>#ef4444 (Error state)</span>
+            </div>
+          </div>
+
+          <!-- Component Showcase -->
+          <div class="tokens-table-card">
+            <div style="font-size: 0.8125rem; font-weight: 600; margin-bottom: var(--space-3);">Component Spectrum</div>
+            <div style="display: flex; flex-wrap: wrap; gap: var(--space-3); align-items: center; margin-bottom: var(--space-4);">
+              <button class="btn-primary">Primary button</button>
+              <button class="btn-ghost">Ghost button</button>
+              <button class="btn-primary" disabled>Disabled</button>
+              <span class="source-badge"><span class="badge-dot"></span> Source badge</span>
+            </div>
+
+            <div style="font-size: 0.8125rem; font-weight: 600; margin-bottom: var(--space-2);">Skeleton Loader Component (1.4s shimmer)</div>
+            <div style="display: flex; flex-direction: column; gap: 8px;">
+              <div class="skeleton-box" style="height: 18px; width: 60%;"></div>
+              <div class="skeleton-box" style="height: 14px; width: 90%;"></div>
+              <div class="skeleton-box" style="height: 14px; width: 75%;"></div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </main>
+  </div>
+
+  <script>
+    // Tab switching
+    function switchTab(tabName, element) {
+      document.querySelectorAll('.tab-item').forEach(el => el.classList.remove('active'));
+      element.classList.add('active');
+
+      document.getElementById('answerTabContent').style.display = (tabName === 'answer') ? 'block' : 'none';
+      document.getElementById('codeTabContent').style.display = (tabName === 'code') ? 'block' : 'none';
+      document.getElementById('sourcesTabContent').style.display = (tabName === 'sources') ? 'block' : 'none';
+      document.getElementById('specTabContent').style.display = (tabName === 'spec') ? 'block' : 'none';
+    }
+
+    // Citation highlighting interaction
+    function highlightCitation(index) {
+      // Toggle highlight on source chips
+      document.querySelectorAll('.source-chip').forEach(c => c.classList.remove('highlighted'));
+      const chip = document.getElementById(`source-${index}`);
+      if (chip) chip.classList.add('highlighted');
+
+      // Also highlight citations in text
+      document.querySelectorAll('.citation-ref').forEach(ref => {
+        if (ref.textContent.includes(index.toString())) {
+          ref.classList.add('active');
+          setTimeout(() => ref.classList.remove('active'), 2000);
+        }
+      });
+    }
+
+    // Theme toggle
+    function toggleTheme() {
+      const html = document.documentElement;
+      const current = html.getAttribute('data-theme');
+      const next = (current === 'light') ? 'dark' : 'light';
+      html.setAttribute('data-theme', next);
+
+      document.getElementById('themeLabel').textContent = (next === 'light') ? 'Light mode' : 'Dark mode';
+    }
+
+    // New thread simulation
+    function startNewThread() {
+      const input = document.getElementById('mainSearchInput');
+      input.value = '';
+      input.focus();
+    }
+
+    // Load query from history
+    function loadQuery(query) {
+      document.getElementById('mainSearchInput').value = query;
+      document.getElementById('displayedQueryTitle').textContent = query;
+      switchTab('answer', document.querySelector('.tab-item'));
+    }
+
+    // Trigger search with simulated streaming answer
+    function triggerSearch() {
+      const query = document.getElementById('mainSearchInput').value.trim();
+      if (!query) return;
+
+      document.getElementById('displayedQueryTitle').textContent = query;
+      const container = document.getElementById('answerStreamingContainer');
+      container.innerHTML = `<span style="color: var(--text-secondary); font-size: 0.875rem;">Searching…</span> <span class="stream-cursor"></span>`;
+
+      setTimeout(() => {
+        container.innerHTML = `
+          <p>
+            Synthesizing findings for <strong>${query}</strong> across peer-reviewed archives and code repositories <a class="citation-ref" onclick="highlightCitation(1)">[1]</a>.
+          </p>
+          <p>
+            The fundamental bottleneck relates to state compression capacity. Under dense attention workloads, linear approximations scale as <span class="tabular-nums">O(N)</span> in sequence length, whereas softmax implementations scale as <span class="tabular-nums">O(N²)</span> <a class="citation-ref" onclick="highlightCitation(2)">[2]</a>. Empirical evaluations consistently demonstrate that hybrid topologies retain the highest needle-in-haystack fidelity while slashing inference latency <a class="citation-ref" onclick="highlightCitation(3)">[3]</a>.
+          </p>
+        `;
+      }, 700);
+    }
+
+    function handleFollowUp(text) {
+      if (!text) return;
+      document.querySelector('.followup-input').value = '';
+      const container = document.getElementById('answerStreamingContainer');
+      const newParagraph = document.createElement('p');
+      newParagraph.style.marginTop = '16px';
+      newParagraph.style.borderTop = '1px solid var(--border)';
+      newParagraph.style.paddingTop = '12px';
+      newParagraph.innerHTML = `<strong>Follow-up analysis:</strong> ${text}. Memory footprint remains bounded under fixed recurrent updates <a class="citation-ref" onclick="highlightCitation(4)">[4]</a>.`;
+      container.appendChild(newParagraph);
+    }
+
+    function copyCodeSnippet() {
+      navigator.clipboard.writeText(`class CausalLinearAttention(nn.Module):
+    def __init__(self, d_model, eps=1e-6):
+        super().__init__()
+        self.d_model = d_model
+        self.eps = eps`);
+      alert('Code snippet copied to clipboard.');
+    }
+  </script>
+</body>
+</html>

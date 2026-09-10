@@ -1,0 +1,432 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Application — Developer-First Cloud Platform</title>
+  <meta name="description" content="Application design system: purple-themed aesthetic #9333EA, card-based layouts, top-bar navigation, and high-contrast developer workflows." />
+
+  <!-- Google Fonts: Inter & JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+  <style>
+    /* ─────────────────────────────────────────────────────────────────
+       APPLICATION DESIGN SYSTEM TOKENS
+       Source: open-design/design-systems/application/DESIGN.md
+       ───────────────────────────────────────────────────────────────── */
+    :root {
+      --primary: #9333EA;
+      --primary-hover: #7e22ce;
+      --primary-active: #6b21a8;
+      --secondary: #A855F7;
+      --primary-light: #faf5ff;
+      --surface: #FFFFFF;
+      --surface-subtle: #fafaf9;
+      --text: #09090B;
+      --text-muted: #71717A;
+      --border: #E4E4E7;
+      --border-focus: #9333EA;
+
+      --success: #10B981;
+      --warning: #F59E0B;
+      --danger: #EF4444;
+
+      --font-display: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
+      --font-body: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
+      --font-mono: "JetBrains Mono", Menlo, Consolas, monospace;
+
+      --radius-sm: 6px;
+      --radius-md: 10px;
+      --radius-lg: 14px;
+      --radius-pill: 9999px;
+
+      --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+      --shadow-purple: 0 8px 24px -4px rgba(147, 51, 234, 0.2);
+      --shadow-card: 0 2px 8px rgba(0, 0, 0, 0.04), 0 1px 2px rgba(0, 0, 0, 0.06);
+      --focus-ring: 0 0 0 3px rgba(147, 51, 234, 0.25);
+
+      --transition-fast: 180ms ease;
+    }
+
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: #FAFAFB;
+      color: var(--text);
+      font-family: var(--font-body);
+      font-size: 15px;
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .container {
+      max-width: 1240px;
+      margin-inline: auto;
+      padding-inline: 24px;
+    }
+
+    /* Top-Bar Navigation */
+    .app-header {
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      height: 68px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .app-header-inner {
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+    }
+    .brand-group {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+      color: var(--text);
+    }
+    .brand-icon {
+      width: 32px;
+      height: 32px;
+      border-radius: var(--radius-sm);
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #ffffff;
+      font-weight: 800;
+      font-size: 16px;
+      box-shadow: 0 2px 8px rgba(147, 51, 234, 0.3);
+    }
+    .brand-title {
+      font-size: 18px;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+    }
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 24px;
+      list-style: none;
+    }
+    @media (max-width: 800px) {
+      .nav-links { display: none; }
+    }
+    .nav-links a {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 500;
+      transition: color var(--transition-fast);
+    }
+    .nav-links a:hover {
+      color: var(--primary);
+    }
+
+    /* Buttons */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      font-family: var(--font-body);
+      font-size: 14px;
+      font-weight: 600;
+      padding: 10px 18px;
+      border-radius: var(--radius-sm);
+      border: 1px solid transparent;
+      text-decoration: none;
+      cursor: pointer;
+      transition: all var(--transition-fast);
+    }
+    .btn:focus-visible {
+      outline: none;
+      box-shadow: var(--focus-ring);
+    }
+    .btn-primary {
+      background: var(--primary);
+      color: #ffffff;
+      box-shadow: var(--shadow-purple);
+    }
+    .btn-primary:hover {
+      background: var(--primary-hover);
+      transform: translateY(-1px);
+    }
+    .btn-secondary {
+      background: var(--surface);
+      color: var(--text);
+      border-color: var(--border);
+    }
+    .btn-secondary:hover {
+      background: #f4f4f5;
+      border-color: #d4d4d8;
+    }
+
+    /* Hero Section */
+    .hero-section {
+      padding-block: 64px 48px;
+      text-align: center;
+      background: radial-gradient(circle at 50% 10%, rgba(168, 85, 247, 0.08) 0%, transparent 60%);
+    }
+    .hero-eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 4px 12px;
+      border-radius: var(--radius-pill);
+      background: var(--primary-light);
+      border: 1px solid rgba(147, 51, 234, 0.2);
+      color: var(--primary);
+      font-size: 12px;
+      font-weight: 600;
+      margin-bottom: 20px;
+    }
+    .hero-title {
+      font-size: clamp(34px, 5vw, 56px);
+      font-weight: 800;
+      line-height: 1.1;
+      letter-spacing: -0.03em;
+      color: var(--text);
+      max-width: 800px;
+      margin: 0 auto 20px;
+    }
+    .hero-desc {
+      font-size: 18px;
+      color: var(--text-muted);
+      max-width: 620px;
+      margin: 0 auto 32px;
+    }
+
+    /* Dashboard Application Shell */
+    .app-dashboard-shell {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-card);
+      overflow: hidden;
+      margin-bottom: 64px;
+    }
+    .dashboard-toolbar {
+      padding: 16px 24px;
+      border-bottom: 1px solid var(--border);
+      background: #fafafa;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+    .env-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 10px;
+      background: #ecfdf5;
+      color: var(--success);
+      border: 1px solid rgba(16, 185, 129, 0.2);
+      border-radius: var(--radius-pill);
+      font-size: 12px;
+      font-weight: 600;
+      font-family: var(--font-mono);
+    }
+    .dashboard-content {
+      padding: 32px;
+    }
+    .metrics-grid-4 {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 20px;
+      margin-bottom: 32px;
+    }
+    @media (max-width: 960px) {
+      .metrics-grid-4 { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 520px) {
+      .metrics-grid-4 { grid-template-columns: 1fr; }
+    }
+    .metric-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 20px;
+    }
+    .metric-title {
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-bottom: 8px;
+      font-weight: 500;
+    }
+    .metric-value {
+      font-size: 26px;
+      font-weight: 800;
+      color: var(--text);
+      line-height: 1.1;
+      margin-bottom: 6px;
+    }
+    .metric-delta {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--success);
+    }
+
+    /* Code Deployment Log */
+    .deploy-log-box {
+      background: #09090b;
+      color: #fafafa;
+      border-radius: var(--radius-md);
+      padding: 20px;
+      font-family: var(--font-mono);
+      font-size: 13px;
+      line-height: 1.6;
+    }
+    .log-line {
+      display: flex;
+      gap: 12px;
+    }
+    .log-time {
+      color: #71717a;
+    }
+    .log-success {
+      color: var(--success);
+    }
+    .log-info {
+      color: #38bdf8;
+    }
+
+    /* Footer */
+    .app-footer {
+      border-top: 1px solid var(--border);
+      background: var(--surface);
+      padding-block: 48px 32px;
+      font-size: 14px;
+      color: var(--text-muted);
+    }
+    .footer-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top-Bar Navigation -->
+  <header class="app-header">
+    <div class="container app-header-inner">
+      <a href="#dashboard" class="brand-group">
+        <div class="brand-icon">▲</div>
+        <span class="brand-title">Application</span>
+      </a>
+
+      <ul class="nav-links">
+        <li><a href="#dashboard">Deployments</a></li>
+        <li><a href="#services">Microservices</a></li>
+        <li><a href="#observability">Metrics</a></li>
+        <li><a href="#settings">Settings</a></li>
+      </ul>
+
+      <div style="display: flex; gap: 10px; align-items: center;">
+        <a href="00_Index.md" class="btn btn-secondary">Index</a>
+        <a href="#dashboard" class="btn btn-primary">+ Deploy Service</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="hero-section">
+    <div class="container">
+      <div class="hero-eyebrow">
+        <span>●</span>
+        <span>Developer-First Cloud Engine</span>
+      </div>
+      <h1 class="hero-title">Continuous microservice delivery with instant observability</h1>
+      <p class="hero-desc">
+        Engineered with a purple-themed aesthetic, card-based architecture, and precision telemetry for production web services.
+      </p>
+
+      <!-- Interactive Application Dashboard Shell -->
+      <div id="dashboard" class="app-dashboard-shell">
+        <div class="dashboard-toolbar">
+          <div style="display: flex; align-items: center; gap: 12px;">
+            <span class="env-badge">● PROD-US-EAST</span>
+            <span style="font-size: 14px; font-weight: 600; color: var(--text);">Cluster: api-gateway-edge-v4</span>
+          </div>
+          <div style="display: flex; gap: 8px;">
+            <button class="btn btn-secondary" style="padding: 6px 12px; font-size: 12px;">Rollback</button>
+            <button class="btn btn-primary" style="padding: 6px 14px; font-size: 12px;">Build &amp; Ship</button>
+          </div>
+        </div>
+
+        <div class="dashboard-content">
+          <!-- 4 Metric Cards -->
+          <div class="metrics-grid-4">
+            <div class="metric-card">
+              <div class="metric-title">Active Replicas</div>
+              <div class="metric-value">64 / 64</div>
+              <div class="metric-delta">100% Healthy</div>
+            </div>
+            <div class="metric-card">
+              <div class="metric-title">Request Ingress</div>
+              <div class="metric-value">42.8k/s</div>
+              <div class="metric-delta">↑ 8.4% capacity</div>
+            </div>
+            <div class="metric-card">
+              <div class="metric-title">p99 Latency</div>
+              <div class="metric-value">6.2 ms</div>
+              <div class="metric-delta">Sub-millisecond target</div>
+            </div>
+            <div class="metric-card">
+              <div class="metric-title">Error Rate</div>
+              <div class="metric-value">0.00%</div>
+              <div class="metric-delta">Zero HTTP 5xx</div>
+            </div>
+          </div>
+
+          <!-- Live Build Terminal -->
+          <div class="deploy-log-box">
+            <div class="log-line">
+              <span class="log-time">[21:14:02]</span>
+              <span class="log-info">INFO:</span>
+              <span>Pulling base image node:20-alpine from cache registry</span>
+            </div>
+            <div class="log-line">
+              <span class="log-time">[21:14:04]</span>
+              <span class="log-info">BUILD:</span>
+              <span>Executing vite build --mode production (chunks: 14)</span>
+            </div>
+            <div class="log-line">
+              <span class="log-time">[21:14:06]</span>
+              <span class="log-success">SUCCESS:</span>
+              <span>Artifact hashed to SHA-256: 7f8a91c0e4 · Image dispatched to 64 cluster nodes</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="app-footer">
+    <div class="container footer-inner">
+      <div>
+        <strong>Application Framework</strong> · Purple Theme Token Contract #9333EA
+      </div>
+      <div>
+        <a href="00_Index.md" style="color: var(--primary); text-decoration: none; font-weight: 600;">← Master Index</a>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>

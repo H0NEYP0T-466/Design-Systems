@@ -1,0 +1,1207 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Claude — Thoughtful AI by Anthropic</title>
+  <meta name="description" content="Authentic Claude Design System website. Warm parchment canvas, terracotta brand accent, Anthropic Serif typography, ring shadows, model comparisons, and chapter-like reading rhythm." />
+
+  <!-- Fonts: Georgia / Times for Anthropic Serif, Plus Jakarta Sans / Inter for Anthropic Sans, JetBrains Mono for Anthropic Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=Plus+Jakarta+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+
+  <style>
+    /* ─────────────────────────────────────────────────────────────────────────
+     * CLAUDE DESIGN SYSTEM TOKENS (DESIGN.md & tokens.css verbatim alignment)
+     * ───────────────────────────────────────────────────────────────────────── */
+    :root {
+      /* Surface & Background (Warm parchment tones — never pure white page background) */
+      --bg: #f5f4ed;             /* Parchment — warm cream evoking premium paper */
+      --surface: #faf9f5;        /* Ivory — elevated card containers on Parchment */
+      --surface-warm: #e8e6dc;   /* Warm Sand — button bg & interactive surfaces */
+      --surface-pure: #ffffff;   /* Pure White — reserved for button surfaces */
+      
+      /* Dark Theme Surfaces (Warm charcoal & Near Black) */
+      --surface-dark: #30302e;   /* Dark Surface — dark containers & nav borders */
+      --deep-dark: #141413;      /* Deep Dark / Anthropic Near Black */
+
+      /* Foreground & Text (Exclusively warm-toned neutrals — no cool blue-grays) */
+      --fg: #141413;             /* Anthropic Near Black — warmest black in tech */
+      --fg-2: #3d3d3a;           /* Dark Warm — emphasized secondary, text links */
+      --muted: #5e5d59;          /* Olive Gray — secondary body text */
+      --meta: #87867f;           /* Stone Gray — tertiary text, footnotes, metadata */
+      --charcoal-warm: #4d4c48;  /* Button text on light warm surfaces */
+      --warm-silver: #b0aea5;    /* Light text on dark surfaces */
+
+      /* Brand Accent */
+      --accent: #c96442;         /* Terracotta Brand — earthy burnt orange-brown */
+      --accent-coral: #d97757;   /* Coral Accent — text accents & secondary emphasis */
+      --accent-on: #faf9f5;      /* Ivory — text on terracotta */
+      --accent-hover: color-mix(in oklab, var(--accent), black 8%);
+      --accent-active: color-mix(in oklab, var(--accent), black 14%);
+
+      /* Semantic */
+      --danger: #b53333;         /* Error Crimson — deep warm red */
+      --success: #17a34a;
+      --warn: #eab308;
+      --focus-blue: #3898ec;     /* Focus Blue — sole cool color for accessibility */
+
+      /* Borders (Cream-tinted containment) */
+      --border: #f0eee6;         /* Border Cream — standard light-theme border */
+      --border-soft: #e8e6dc;    /* Border Warm — section dividers, model cards */
+      --border-dark: #30302e;    /* Border Dark — on dark surfaces */
+
+      /* Shadow Rings (Warm-toned ring halos pretending to be borders) */
+      --ring-warm: #d1cfc5;      /* Ring Warm — button hover / focus */
+      --ring-subtle: #dedc01;
+      --ring-deep: #c2c0b6;
+
+      /* Typography Families */
+      --font-display: "Anthropic Serif", Georgia, "Times New Roman", serif;
+      --font-body: "Anthropic Sans", "Plus Jakarta Sans", "Arial", system-ui, -apple-system, sans-serif;
+      --font-mono: "Anthropic Mono", "JetBrains Mono", ui-monospace, Menlo, monospace;
+
+      /* Typography Scale (DESIGN.md §3) — SINGLE WEIGHT 500 FOR ALL SERIFS */
+      --text-xs: 10px;           /* Overline — uppercase labels (0.5px letter-spacing) */
+      --text-label: 12px;        /* Label — badges, small metadata (0.12px letter-spacing) */
+      --text-sm: 14px;           /* Caption — metadata, descriptions */
+      --text-compact: 15px;      /* Body Small — compact prose */
+      --text-base: 16px;         /* Body Standard */
+      --text-editorial: 17px;    /* Body Serif & Nav */
+      --text-lg: 20px;           /* Body Large — intro paragraphs (1.60 line-height) */
+      --text-feature: 20.8px;    /* Feature Title */
+      --text-xl: 25px;           /* Sub-heading Small */
+      --text-2xl: 32px;          /* Sub-heading — card titles */
+      --text-sub-lg: 36px;       /* Sub-heading Large */
+      --text-3xl: 52px;          /* Section Heading (500 weight, 1.20) */
+      --text-4xl: 64px;          /* Hero / Display (500 weight, 1.10) */
+
+      --leading-body: 1.60;      /* Relaxed editorial reading experience */
+      --leading-tight: 1.10;     /* Tight-but-comfortable serif line-height */
+      --tracking-display: 0em;
+
+      /* Spacing Scale (8px base) */
+      --space-1: 4px;
+      --space-2: 8px;
+      --space-3: 12px;
+      --space-4: 16px;
+      --space-5: 20px;
+      --space-6: 24px;
+      --space-8: 32px;
+      --space-12: 48px;
+      --space-16: 64px;
+      --space-24: 96px;
+
+      /* Section Rhythm */
+      --section-y-desktop: 96px;
+      --section-y-tablet: 64px;
+      --section-y-phone: 48px;
+
+      /* Container */
+      --container-max: 1200px;
+      --container-gutter-desktop: 24px;
+      --container-gutter-tablet: 16px;
+      --container-gutter-phone: 12px;
+
+      /* Radii — Softness is core identity */
+      --radius-sm: 8px;          /* Standard buttons & cards */
+      --radius-md: 12px;         /* Generously rounded — primary buttons, inputs */
+      --radius-lg: 16px;         /* Very rounded — featured containers, video players */
+      --radius-xl: 24px;         /* Highlighted tags */
+      --radius-2xl: 32px;        /* Maximum rounded — hero containers */
+      --radius-pill: 9999px;
+
+      /* Elevation & Ring Depth */
+      --elev-flat: none;
+      --elev-ring: 0 0 0 1px var(--border);
+      --elev-raised: rgba(0, 0, 0, 0.05) 0px 4px 24px; /* Whisper soft lift */
+
+      /* Focus Ring (The only cool color in the entire system) */
+      --focus-ring: 0 0 0 3px rgba(56, 152, 236, 0.35);
+
+      /* Motion */
+      --motion-fast: 150ms;
+      --motion-base: 200ms;
+      --ease-standard: cubic-bezier(0.2, 0, 0, 1);
+    }
+
+    /* ─────────────────────────────────────────────────────────────────────────
+     * RESET & BASE STYLES
+     * ───────────────────────────────────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--bg);
+      color: var(--fg);
+      font-family: var(--font-body);
+      font-size: var(--text-base);
+      line-height: var(--leading-body);
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+
+    /* Container */
+    .container {
+      max-width: var(--container-max);
+      margin-inline: auto;
+      padding-inline: var(--container-gutter-desktop);
+    }
+    @media (max-width: 992px) {
+      .container { padding-inline: var(--container-gutter-tablet); }
+    }
+    @media (max-width: 640px) {
+      .container { padding-inline: var(--container-gutter-phone); }
+    }
+
+    /* Typography Hierarchy — ALL SERIFS STRICTLY WEIGHT 500 (DESIGN.md §3) */
+    h1, h2, h3, h4, h5 {
+      font-family: var(--font-display);
+      font-weight: 500; /* No bold 700! Gravitas of published book titles */
+      color: var(--fg);
+    }
+    h1 {
+      font-size: clamp(38px, 5.5vw, var(--text-4xl));
+      line-height: var(--leading-tight);
+      letter-spacing: var(--tracking-display);
+    }
+    h2 {
+      font-size: clamp(30px, 4vw, var(--text-3xl));
+      line-height: 1.20;
+    }
+    h3 {
+      font-size: var(--text-sub-lg);
+      line-height: 1.30;
+    }
+    h4 {
+      font-size: var(--text-2xl);
+      line-height: 1.10;
+    }
+    h5 {
+      font-size: var(--text-xl);
+      line-height: 1.20;
+    }
+
+    p { margin-bottom: 0; }
+    .lead-editorial {
+      font-size: var(--text-lg);
+      line-height: 1.60;
+      color: var(--muted);
+      max-width: 62ch;
+    }
+    .serif-body {
+      font-family: var(--font-display);
+      font-size: var(--text-editorial);
+      line-height: 1.60;
+      color: var(--fg-2);
+    }
+    .label-overline {
+      font-size: var(--text-xs);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--meta);
+      font-weight: 500;
+    }
+    .mono { font-family: var(--font-mono); }
+
+    /* ─────────────────────────────────────────────────────────────────────────
+     * BUTTONS & RING SHADOWS (DESIGN.md §4)
+     * ───────────────────────────────────────────────────────────────────────── */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      text-decoration: none;
+      font-family: var(--font-body);
+      font-size: var(--text-base);
+      font-weight: 500;
+      line-height: 1.25;
+      cursor: pointer;
+      border: none;
+      white-space: nowrap;
+      transition: all var(--motion-fast) var(--ease-standard);
+    }
+    .btn:focus-visible {
+      outline: none;
+      box-shadow: var(--focus-ring);
+    }
+
+    /* Brand Terracotta (Primary CTA — only button with chromatic color) */
+    .btn-terracotta {
+      background: var(--accent);
+      color: var(--accent-on);
+      padding: 10px 20px;
+      border-radius: var(--radius-md);
+      box-shadow: var(--accent) 0px 0px 0px 0px, var(--accent) 0px 0px 0px 1px;
+    }
+    .btn-terracotta:hover {
+      background: var(--accent-hover);
+      box-shadow: var(--accent-hover) 0px 0px 0px 0px, var(--accent-hover) 0px 0px 0px 1px;
+    }
+
+    /* Warm Sand (The workhorse secondary button with asymmetric padding) */
+    .btn-sand {
+      background: var(--surface-warm);
+      color: var(--charcoal-warm);
+      padding: 8px 14px 8px 10px; /* Asymmetric icon-first layout */
+      border-radius: var(--radius-sm);
+      box-shadow: var(--surface-warm) 0px 0px 0px 0px, var(--ring-warm) 0px 0px 0px 1px;
+    }
+    .btn-sand:hover {
+      background: #dfdcd2;
+      box-shadow: #dfdcd2 0px 0px 0px 0px, var(--ring-deep) 0px 0px 0px 1px;
+      color: var(--fg);
+    }
+
+    /* White Surface Button */
+    .btn-white {
+      background: var(--surface-pure);
+      color: var(--fg);
+      padding: 8px 16px 8px 12px;
+      border-radius: var(--radius-md);
+      box-shadow: var(--surface-pure) 0px 0px 0px 0px, var(--border-soft) 0px 0px 0px 1px;
+    }
+    .btn-white:hover {
+      background: var(--surface);
+      color: var(--fg);
+    }
+
+    /* Dark Primary Button (For dark sections) */
+    .btn-dark-primary {
+      background: var(--deep-dark);
+      color: var(--warm-silver);
+      padding: 9.6px 16.8px;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--surface-dark);
+    }
+    .btn-dark-primary:hover {
+      background: #1e1e1d;
+      color: var(--surface);
+    }
+
+    /* ─────────────────────────────────────────────────────────────────────────
+     * STICKY EDITORIAL NAVIGATION
+     * ───────────────────────────────────────────────────────────────────────── */
+    .claude-nav {
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      background: rgba(245, 244, 237, 0.94);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      height: 68px;
+      display: flex;
+      align-items: center;
+    }
+    .nav-wrapper {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+      gap: var(--space-4);
+    }
+    .claude-wordmark {
+      font-family: var(--font-display);
+      font-size: 28px;
+      font-weight: 500;
+      color: var(--fg);
+      text-decoration: none;
+      letter-spacing: -0.5px;
+    }
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: var(--space-6);
+      list-style: none;
+    }
+    @media (max-width: 860px) {
+      .nav-links { display: none; }
+    }
+    .nav-link {
+      color: var(--muted);
+      font-size: var(--text-editorial);
+      font-weight: 400;
+      text-decoration: none;
+      transition: color var(--motion-fast) var(--ease-standard);
+    }
+    .nav-link:hover {
+      color: var(--fg);
+    }
+
+    /* ─────────────────────────────────────────────────────────────────────────
+     * HERO SECTION (Parchment Paper Atmosphere & Literary Cadence)
+     * ───────────────────────────────────────────────────────────────────────── */
+    .claude-hero {
+      padding-top: var(--section-y-desktop);
+      padding-bottom: 80px;
+      text-align: center;
+      position: relative;
+    }
+    .hero-content {
+      max-width: 820px;
+      margin-inline: auto;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: var(--space-4);
+    }
+    .hero-headline {
+      color: var(--fg);
+    }
+    .hero-actions {
+      display: flex;
+      align-items: center;
+      gap: var(--space-3);
+      margin-top: var(--space-4);
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    /* Organic Vector Illustration Motif */
+    .hero-illustration-wrap {
+      margin-top: var(--space-8);
+      max-width: 480px;
+      width: 100%;
+      display: flex;
+      justify-content: center;
+    }
+
+    /* ─────────────────────────────────────────────────────────────────────────
+     * INTERACTIVE CLAUDE CHAT & ARTIFACTS STUDIO
+     * ───────────────────────────────────────────────────────────────────────── */
+    .section-chat-studio {
+      padding-block: var(--section-y-desktop);
+      background: var(--bg);
+      border-top: 1px solid var(--border);
+    }
+    .studio-frame {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-2xl);
+      box-shadow: var(--elev-raised);
+      padding: var(--space-8);
+      display: grid;
+      grid-template-columns: 1.1fr 1fr;
+      gap: var(--space-8);
+      margin-top: var(--space-8);
+    }
+    @media (max-width: 992px) {
+      .studio-frame { grid-template-columns: 1fr; padding: var(--space-6); }
+    }
+
+    /* Chat Conversation Side */
+    .chat-convo-pane {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-4);
+    }
+    .prompt-bubble {
+      background: var(--surface-warm);
+      color: var(--fg);
+      padding: var(--space-4) var(--space-5);
+      border-radius: var(--radius-lg);
+      font-size: var(--text-base);
+      line-height: var(--leading-body);
+      align-self: flex-start;
+      max-width: 88%;
+      box-shadow: var(--surface-warm) 0px 0px 0px 0px, var(--border-soft) 0px 0px 0px 1px;
+    }
+    .response-card {
+      background: var(--surface-pure);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: var(--space-6);
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-3);
+      box-shadow: 0 2px 12px rgba(0,0,0,0.03);
+    }
+    .claude-avatar-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .claude-star-icon {
+      width: 22px;
+      height: 22px;
+      color: var(--accent);
+    }
+    .claude-name-label {
+      font-family: var(--font-display);
+      font-size: 16px;
+      font-weight: 500;
+      color: var(--fg);
+    }
+
+    /* Artifact Preview Pane */
+    .artifact-pane {
+      background: var(--surface-pure);
+      border: 1px solid var(--border-soft);
+      border-radius: var(--radius-lg);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.04);
+    }
+    .artifact-header {
+      background: #fdfdfa;
+      border-bottom: 1px solid var(--border);
+      padding: 12px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .artifact-tag {
+      font-size: 11px;
+      font-family: var(--font-mono);
+      background: var(--surface-warm);
+      color: var(--muted);
+      padding: 2px 8px;
+      border-radius: 4px;
+    }
+    .artifact-body {
+      padding: var(--space-6);
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+    }
+
+    /* ─────────────────────────────────────────────────────────────────────────
+     * DISTINCTIVE COMPONENT: MODEL COMPARISON CARDS (Opus, Sonnet, Haiku)
+     * ───────────────────────────────────────────────────────────────────────── */
+    .section-models {
+      padding-block: var(--section-y-desktop);
+      background: var(--bg);
+      border-top: 1px solid var(--border);
+    }
+    .models-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: var(--space-6);
+      margin-top: var(--space-8);
+    }
+    @media (max-width: 960px) {
+      .models-grid { grid-template-columns: 1fr; }
+    }
+
+    .model-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-top: 3px solid var(--border-soft);
+      border-radius: var(--radius-sm);
+      padding: var(--space-6);
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-4);
+      transition: all var(--motion-fast) var(--ease-standard);
+      position: relative;
+    }
+    .model-card:hover {
+      box-shadow: var(--elev-raised);
+      border-top-color: var(--accent);
+    }
+    .model-card.featured {
+      border-top-color: var(--accent);
+      background: #fdfdf9;
+    }
+    .model-name {
+      font-family: var(--font-display);
+      font-size: var(--text-xl); /* 25px weight 500 */
+      font-weight: 500;
+      color: var(--fg);
+    }
+    .model-desc {
+      font-size: var(--text-compact);
+      color: var(--muted);
+      line-height: var(--leading-body);
+    }
+    .model-specs-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      border-top: 1px solid var(--border);
+      padding-top: var(--space-4);
+      margin-top: auto;
+    }
+    .model-spec-row {
+      display: flex;
+      justify-content: space-between;
+      font-size: var(--text-sm);
+    }
+
+    /* ─────────────────────────────────────────────────────────────────────────
+     * DARK CHAPTER SECTION (Section Alternation: Anthropic Near Black #141413)
+     * ───────────────────────────────────────────────────────────────────────── */
+    .section-dark-chapter {
+      padding-block: var(--section-y-desktop);
+      background: var(--deep-dark);
+      color: var(--warm-silver);
+      position: relative;
+    }
+    .dark-headline {
+      color: var(--surface); /* Ivory text on Near Black */
+      font-family: var(--font-display);
+      font-weight: 500;
+      margin-bottom: var(--space-4);
+    }
+    .dark-prose {
+      color: var(--warm-silver);
+      font-size: var(--text-lg);
+      line-height: 1.60;
+      max-width: 64ch;
+      margin-bottom: var(--space-8);
+    }
+    .dark-cards-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: var(--space-6);
+      margin-top: var(--space-8);
+    }
+    @media (max-width: 960px) {
+      .dark-cards-grid { grid-template-columns: 1fr; }
+    }
+    .dark-card {
+      background: var(--surface-dark);
+      border: 1px solid #3d3d3a;
+      border-radius: var(--radius-md);
+      padding: var(--space-6);
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-3);
+    }
+    .dark-card-title {
+      color: var(--surface);
+      font-family: var(--font-display);
+      font-size: 20px;
+      font-weight: 500;
+    }
+    .dark-card-body {
+      color: var(--warm-silver);
+      font-size: var(--text-sm);
+      line-height: 1.55;
+    }
+
+    /* ─────────────────────────────────────────────────────────────────────────
+     * DESIGN SYSTEM PHILOSOPHY & TOKEN INSPECTOR
+     * ───────────────────────────────────────────────────────────────────────── */
+    .section-spec {
+      padding-block: var(--section-y-desktop);
+      background: var(--bg);
+      border-top: 1px solid var(--border);
+    }
+    .spec-card-container {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: var(--space-8);
+      margin-top: var(--space-8);
+    }
+    .swatch-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
+      gap: var(--space-4);
+      margin-top: var(--space-6);
+    }
+    .swatch-item {
+      border: 1px solid var(--border-soft);
+      border-radius: var(--radius-sm);
+      overflow: hidden;
+      background: var(--surface);
+    }
+    .swatch-color { height: 56px; width: 100%; }
+    .swatch-meta {
+      padding: 8px 10px;
+      font-size: var(--text-sm);
+    }
+    .swatch-name { font-weight: 500; color: var(--fg); font-size: 13px; }
+    .swatch-hex { font-family: var(--font-mono); color: var(--muted); font-size: 11px; }
+
+    /* ─────────────────────────────────────────────────────────────────────────
+     * EDITORIAL FOOTER
+     * ───────────────────────────────────────────────────────────────────────── */
+    .claude-footer {
+      background: var(--bg);
+      border-top: 1px solid var(--border);
+      padding-top: var(--space-16);
+      padding-bottom: var(--space-8);
+    }
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 2fr repeat(3, 1fr);
+      gap: var(--space-8);
+      margin-bottom: var(--space-12);
+    }
+    @media (max-width: 900px) {
+      .footer-grid { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 500px) {
+      .footer-grid { grid-template-columns: 1fr; }
+    }
+    .footer-col h5 {
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--fg);
+      margin-bottom: var(--space-4);
+    }
+    .footer-links {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .footer-links a {
+      color: var(--muted);
+      text-decoration: none;
+      font-size: var(--text-sm);
+      transition: color var(--motion-fast) var(--ease-standard);
+    }
+    .footer-links a:hover {
+      color: var(--fg);
+    }
+    .footer-bottom {
+      border-top: 1px solid var(--border);
+      padding-top: var(--space-6);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: var(--space-4);
+      color: var(--meta);
+      font-size: var(--text-sm);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ─────────────────────────────────────────────────────────────────────────
+       STICKY EDITORIAL NAVIGATION
+       ───────────────────────────────────────────────────────────────────────── -->
+  <header class="claude-nav" role="banner">
+    <div class="container nav-wrapper">
+      <div style="display: flex; align-items: center; gap: var(--space-8);">
+        <a href="#hero" class="claude-wordmark" aria-label="Claude">Claude</a>
+        
+        <nav aria-label="Main Navigation">
+          <ul class="nav-links">
+            <li><a href="#chat" class="nav-link">Artifacts Studio</a></li>
+            <li><a href="#models" class="nav-link">Models</a></li>
+            <li><a href="#safety" class="nav-link">Frontier Safety</a></li>
+            <li><a href="#spec" class="nav-link">Design System</a></li>
+          </ul>
+        </nav>
+      </div>
+
+      <!-- Button CTAs -->
+      <div style="display: flex; align-items: center; gap: 12px;">
+        <a href="#chat" class="btn btn-sand">
+          <!-- Organic Hand-drawn Star Glyph -->
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.4 7.4H22l-6 4.6 2.3 7.2-6.3-4.6-6.3 4.6 2.3-7.2-6-4.6h7.6z"/></svg>
+          Explore Artifacts
+        </a>
+        <a href="#models" class="btn btn-terracotta">
+          Try Claude
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- ─────────────────────────────────────────────────────────────────────────
+       HERO SECTION (Literary Salon & Parchment Atmosphere)
+       ───────────────────────────────────────────────────────────────────────── -->
+  <section class="claude-hero" id="hero">
+    <div class="container">
+      <div class="hero-content">
+        <span class="label-overline">Anthropic Research · Design System</span>
+        <h1 class="hero-headline">The next chapter in AI.</h1>
+        <p class="lead-editorial">
+          Warm, unhurried, and quietly intellectual. Built on a parchment-toned canvas with terracotta accents, where every serif headline carries the gravitas of a published title.
+        </p>
+        
+        <div class="hero-actions">
+          <a href="#models" class="btn btn-terracotta" style="font-size: 17px; padding: 12px 24px;">
+            Start a conversation
+          </a>
+          <a href="#spec" class="btn btn-sand" style="font-size: 17px; padding: 12px 20px;">
+            Read the design spec
+          </a>
+        </div>
+
+        <!-- Organic hand-drawn botanical / celestial vector illustration -->
+        <div class="hero-illustration-wrap" aria-hidden="true">
+          <svg viewBox="0 0 320 120" width="320" height="120" fill="none" stroke="currentColor">
+            <!-- Delicate hand-drawn leaf & sun motiff in Terracotta (#c96442) & Olive (#5e5d59) -->
+            <path d="M160 15 C130 40 100 80 160 105 C220 80 190 40 160 15 Z" stroke="#c96442" stroke-width="1.8" fill="rgba(201, 100, 66, 0.08)" />
+            <path d="M160 25 L160 95" stroke="#c96442" stroke-width="1.5" stroke-linecap="round" />
+            <path d="M160 50 C145 42 135 48 128 54" stroke="#5e5d59" stroke-width="1.2" stroke-linecap="round" />
+            <path d="M160 68 C145 60 135 66 128 72" stroke="#5e5d59" stroke-width="1.2" stroke-linecap="round" />
+            <path d="M160 50 C175 42 185 48 192 54" stroke="#5e5d59" stroke-width="1.2" stroke-linecap="round" />
+            <path d="M160 68 C175 60 185 66 192 72" stroke="#5e5d59" stroke-width="1.2" stroke-linecap="round" />
+            <circle cx="95" cy="60" r="14" stroke="#c96442" stroke-width="1.2" stroke-dasharray="3 3" />
+            <circle cx="225" cy="60" r="14" stroke="#5e5d59" stroke-width="1.2" stroke-dasharray="3 3" />
+          </svg>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─────────────────────────────────────────────────────────────────────────
+       INTERACTIVE CLAUDE CHAT & ARTIFACTS STUDIO
+       ───────────────────────────────────────────────────────────────────────── -->
+  <section class="section-chat-studio" id="chat">
+    <div class="container">
+      <div style="max-width: 640px;">
+        <span class="label-overline">Interactive Workspace</span>
+        <h2>Thoughtful answers. Dynamic artifacts.</h2>
+        <p class="lead-editorial" style="font-size: 16px; margin-top: 8px;">
+          Claude generates stand-alone code, documentation, and visualizations in a side-by-side artifact canvas.
+        </p>
+      </div>
+
+      <div class="studio-frame">
+        <!-- Chat Conversation Side -->
+        <div class="chat-convo-pane">
+          <div class="prompt-bubble" id="chatPromptText">
+            "Can you illustrate how the golden ratio geometry structures classical book layouts?"
+          </div>
+
+          <div class="response-card">
+            <div class="claude-avatar-row">
+              <svg class="claude-star-icon" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12 2l2.4 7.4H22l-6 4.6 2.3 7.2-6.3-4.6-6.3 4.6 2.3-7.2-6-4.6h7.6z"/>
+              </svg>
+              <span class="claude-name-label">Claude</span>
+              <span style="font-size: 11px; color: var(--meta); margin-left: auto;">Claude 3.7 Sonnet</span>
+            </div>
+
+            <p class="serif-body" id="chatResponseText" style="font-size: 15px;">
+              In classical book design, margins follow the Canon of Page Construction. By anchoring proportions to the golden section (1:1.618), text blocks breathe with natural harmonic rhythm.
+            </p>
+
+            <!-- Artifact trigger button -->
+            <div style="margin-top: var(--space-2);">
+              <button class="btn btn-sand" onclick="switchArtifact('canon')">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-2 10H7v-2h10v2z"/></svg>
+                View Artifact: Golden Ratio Geometry
+              </button>
+            </div>
+          </div>
+
+          <!-- Switchable prompt prompts -->
+          <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-top: var(--space-2);">
+            <button class="btn btn-white" style="font-size: 13px;" onclick="loadPrompt('golden')">Book Page Canon</button>
+            <button class="btn btn-white" style="font-size: 13px;" onclick="loadPrompt('arch')">Distributed Systems</button>
+            <button class="btn btn-white" style="font-size: 13px;" onclick="loadPrompt('code')">Rust State Machine</button>
+          </div>
+        </div>
+
+        <!-- Artifact Visualizer Side -->
+        <div class="artifact-pane">
+          <div class="artifact-header">
+            <span style="font-size: 13px; font-weight: 500; color: var(--fg);" id="artifactTitle">golden_ratio_layout.svg</span>
+            <span class="artifact-tag">SVG Artifact</span>
+          </div>
+          
+          <div class="artifact-body" id="artifactCanvas">
+            <!-- Dynamic SVG Graphic simulating interactive artifact -->
+            <svg viewBox="0 0 300 220" width="100%" height="220">
+              <rect x="20" y="10" width="260" height="200" rx="8" fill="#faf9f5" stroke="#e8e6dc" stroke-width="1.5" />
+              <!-- Outer page lines -->
+              <rect x="50" y="35" width="200" height="150" rx="4" fill="#ffffff" stroke="#f0eee6" stroke-width="1" />
+              <!-- Diagonal golden section lines -->
+              <line x1="20" y1="10" x2="280" y2="210" stroke="#c96442" stroke-width="1" stroke-dasharray="4 4" />
+              <line x1="280" y1="10" x2="20" y2="210" stroke="#5e5d59" stroke-width="1" stroke-dasharray="4 4" />
+              <!-- Golden text block -->
+              <rect x="80" y="60" width="140" height="100" rx="4" fill="rgba(201, 100, 66, 0.12)" stroke="#c96442" stroke-width="1.5" />
+              <text x="150" y="115" font-family="Georgia" font-size="12" fill="#c96442" text-anchor="middle">Harmonic Text Block (1:1.618)</text>
+            </svg>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─────────────────────────────────────────────────────────────────────────
+       MODEL COMPARISON CARDS (Opus, Sonnet, Haiku)
+       ───────────────────────────────────────────────────────────────────────── -->
+  <section class="section-models" id="models">
+    <div class="container">
+      <div style="text-align: center; max-width: 640px; margin-inline: auto;">
+        <span class="label-overline">Anthropic Model Family</span>
+        <h2>Intelligence scaled to your brief</h2>
+        <p class="lead-editorial" style="margin-top: 8px;">
+          Three distinct models, each calibrated for distinct speed, reasoning, and engineering thresholds.
+        </p>
+      </div>
+
+      <div class="models-grid">
+        
+        <!-- Opus 4.5 -->
+        <article class="model-card">
+          <span class="label-overline">Deepest Reasoning</span>
+          <h3 class="model-name">Claude 3.7 Opus</h3>
+          <p class="model-desc">
+            Our most capable model for highly intricate analysis, synthesis of vast literatures, and multi-step creative problem solving.
+          </p>
+
+          <ul class="model-specs-list">
+            <li class="model-spec-row">
+              <span style="color: var(--meta);">Context Window</span>
+              <span class="mono" style="color: var(--fg);">200,000 tokens</span>
+            </li>
+            <li class="model-spec-row">
+              <span style="color: var(--meta);">Coding & Proofs</span>
+              <span style="color: var(--accent); font-weight: 500;">Frontier SOTA</span>
+            </li>
+            <li class="model-spec-row">
+              <span style="color: var(--meta);">Speed Profile</span>
+              <span style="color: var(--muted);">Deliberate, unhurried</span>
+            </li>
+          </ul>
+
+          <a href="#chat" class="btn btn-sand" style="width: 100%; margin-top: var(--space-2);">Deploy Opus</a>
+        </article>
+
+        <!-- Sonnet 4.5 (Featured) -->
+        <article class="model-card featured">
+          <div style="display: flex; justify-content: space-between; align-items: center;">
+            <span class="label-overline" style="color: var(--accent);">Optimal Balance</span>
+            <span style="font-size: 10px; font-weight: 600; background: rgba(201, 100, 66, 0.12); color: var(--accent); padding: 2px 8px; border-radius: 9999px;">MOST POPULAR</span>
+          </div>
+          <h3 class="model-name">Claude 3.7 Sonnet</h3>
+          <p class="model-desc">
+            The standard engine for daily work. Lightning responsiveness matched with deep coding, writing, and analytical mastery.
+          </p>
+
+          <ul class="model-specs-list">
+            <li class="model-spec-row">
+              <span style="color: var(--meta);">Context Window</span>
+              <span class="mono" style="color: var(--fg);">200,000 tokens</span>
+            </li>
+            <li class="model-spec-row">
+              <span style="color: var(--meta);">Artifact Generation</span>
+              <span style="color: var(--accent); font-weight: 500;">Native Real-Time</span>
+            </li>
+            <li class="model-spec-row">
+              <span style="color: var(--meta);">Speed Profile</span>
+              <span style="color: var(--muted);">Sub-second initial token</span>
+            </li>
+          </ul>
+
+          <a href="#chat" class="btn btn-terracotta" style="width: 100%; margin-top: var(--space-2);">Deploy Sonnet</a>
+        </article>
+
+        <!-- Haiku 4.5 -->
+        <article class="model-card">
+          <span class="label-overline">Speed & Utility</span>
+          <h3 class="model-name">Claude 3.7 Haiku</h3>
+          <p class="model-desc">
+            Our most compact model for high-frequency workflows, customer-facing agents, and instant summarization.
+          </p>
+
+          <ul class="model-specs-list">
+            <li class="model-spec-row">
+              <span style="color: var(--meta);">Context Window</span>
+              <span class="mono" style="color: var(--fg);">200,000 tokens</span>
+            </li>
+            <li class="model-spec-row">
+              <span style="color: var(--meta);">Latency</span>
+              <span style="color: var(--accent); font-weight: 500;">Near Instant</span>
+            </li>
+            <li class="model-spec-row">
+              <span style="color: var(--meta);">Cost Profile</span>
+              <span style="color: var(--muted);">Maximum throughput value</span>
+            </li>
+          </ul>
+
+          <a href="#chat" class="btn btn-sand" style="width: 100%; margin-top: var(--space-2);">Deploy Haiku</a>
+        </article>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ─────────────────────────────────────────────────────────────────────────
+       DARK CHAPTER SECTION (Near Black #141413 Section Alternation)
+       ───────────────────────────────────────────────────────────────────────── -->
+  <section class="section-dark-chapter" id="safety">
+    <div class="container">
+      <div style="max-width: 760px;">
+        <span class="label-overline" style="color: var(--accent-coral);">Safety by Design · Chapter II</span>
+        <h2 class="dark-headline">Frontier safety rooted in Constitutional principles.</h2>
+        <p class="dark-prose">
+          Anthropic was founded on the conviction that as artificial intelligence grows more capable, alignment must deepen in tandem. Our research pioneers interpretability, evaluation, and safety guardrails.
+        </p>
+      </div>
+
+      <div class="dark-cards-grid">
+        <div class="dark-card">
+          <h4 class="dark-card-title">Constitutional AI</h4>
+          <p class="dark-card-body">
+            Rather than relying solely on human feedback loops, models self-critique using a clear set of safety principles inspired by the Universal Declaration of Human Rights.
+          </p>
+        </div>
+
+        <div class="dark-card">
+          <h4 class="dark-card-title">Mechanistic Interpretability</h4>
+          <p class="dark-card-body">
+            Peering inside the neural network's weights to understand how Claude thinks, maps concepts, and avoids hallucinations before weights are deployed.
+          </p>
+        </div>
+
+        <div class="dark-card">
+          <h4 class="dark-card-title">Enterprise Security</h4>
+          <p class="dark-card-body">
+            Your conversational data is never used to train our models. Fully compliant with SOC 2 Type II, HIPAA, and GDPR standards with zero data retention options.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─────────────────────────────────────────────────────────────────────────
+       DESIGN SYSTEM SPECIFICATION & SWATCHES
+       ───────────────────────────────────────────────────────────────────────── -->
+  <section class="section-spec" id="spec">
+    <div class="container">
+      <span class="label-overline">Token Architecture</span>
+      <h2>Claude Typographic & Color Palette</h2>
+      <p class="lead-editorial" style="margin-top: 8px;">
+        All grays carry warm yellow-brown undertones. The single cool color, Focus Blue (#3898ec), is reserved for accessibility.
+      </p>
+
+      <div class="spec-card-container">
+        <h4 style="font-size: 22px;">Warm Surface Ramp & Accents</h4>
+        
+        <div class="swatch-grid">
+          <div class="swatch-item">
+            <div class="swatch-color" style="background: #f5f4ed; border-bottom: 1px solid var(--border);"></div>
+            <div class="swatch-meta">
+              <div class="swatch-name">Parchment (Canvas)</div>
+              <div class="swatch-hex">#f5f4ed</div>
+            </div>
+          </div>
+
+          <div class="swatch-item">
+            <div class="swatch-color" style="background: #faf9f5; border-bottom: 1px solid var(--border);"></div>
+            <div class="swatch-meta">
+              <div class="swatch-name">Ivory (Surface)</div>
+              <div class="swatch-hex">#faf9f5</div>
+            </div>
+          </div>
+
+          <div class="swatch-item">
+            <div class="swatch-color" style="background: #e8e6dc;"></div>
+            <div class="swatch-meta">
+              <div class="swatch-name">Warm Sand (Button)</div>
+              <div class="swatch-hex">#e8e6dc</div>
+            </div>
+          </div>
+
+          <div class="swatch-item">
+            <div class="swatch-color" style="background: #c96442;"></div>
+            <div class="swatch-meta">
+              <div class="swatch-name">Terracotta (Brand)</div>
+              <div class="swatch-hex">#c96442</div>
+            </div>
+          </div>
+
+          <div class="swatch-item">
+            <div class="swatch-color" style="background: #141413;"></div>
+            <div class="swatch-meta">
+              <div class="swatch-name">Anthropic Near Black</div>
+              <div class="swatch-hex">#141413</div>
+            </div>
+          </div>
+
+          <div class="swatch-item">
+            <div class="swatch-color" style="background: #5e5d59;"></div>
+            <div class="swatch-meta">
+              <div class="swatch-name">Olive Gray (Body)</div>
+              <div class="swatch-hex">#5e5d59</div>
+            </div>
+          </div>
+
+          <div class="swatch-item">
+            <div class="swatch-color" style="background: #87867f;"></div>
+            <div class="swatch-meta">
+              <div class="swatch-name">Stone Gray (Meta)</div>
+              <div class="swatch-hex">#87867f</div>
+            </div>
+          </div>
+
+          <div class="swatch-item">
+            <div class="swatch-color" style="background: #3898ec;"></div>
+            <div class="swatch-meta">
+              <div class="swatch-name">Focus Blue (A11y only)</div>
+              <div class="swatch-hex">#3898ec</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Typography Hierarchy Reference Table -->
+        <div style="margin-top: var(--space-8); padding-top: var(--space-6); border-top: 1px solid var(--border);">
+          <h4 style="font-size: 20px; margin-bottom: 12px;">Anthropic Serif & Sans Split</h4>
+          <p style="font-size: 14px; color: var(--muted); margin-bottom: var(--space-4);">
+            Serif for authority and headings (fixed weight 500); Sans for functional UI and relaxed body reading.
+          </p>
+          
+          <div style="display: flex; flex-direction: column; gap: 12px;">
+            <div style="display: flex; justify-content: space-between; align-items: baseline; border-bottom: 1px solid var(--border); padding-bottom: 8px;">
+              <span style="font-family: var(--font-display); font-size: 28px; font-weight: 500;">Display Hero (64px / 500 / 1.10)</span>
+              <span class="mono" style="font-size: 12px; color: var(--meta);">--text-4xl</span>
+            </div>
+            <div style="display: flex; justify-content: space-between; align-items: baseline; border-bottom: 1px solid var(--border); padding-bottom: 8px;">
+              <span style="font-family: var(--font-display); font-size: 22px; font-weight: 500;">Section Heading (52px / 500 / 1.20)</span>
+              <span class="mono" style="font-size: 12px; color: var(--meta);">--text-3xl</span>
+            </div>
+            <div style="display: flex; justify-content: space-between; align-items: baseline; border-bottom: 1px solid var(--border); padding-bottom: 8px;">
+              <span style="font-family: var(--font-display); font-size: 18px; font-weight: 500;">Sub-heading (32px / 500 / 1.10)</span>
+              <span class="mono" style="font-size: 12px; color: var(--meta);">--text-2xl</span>
+            </div>
+            <div style="display: flex; justify-content: space-between; align-items: baseline;">
+              <span style="font-family: var(--font-body); font-size: 16px; color: var(--fg-2);">Anthropic Sans Standard Body (16px / 1.60 relaxed)</span>
+              <span class="mono" style="font-size: 12px; color: var(--meta);">--text-base</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ─────────────────────────────────────────────────────────────────────────
+       EDITORIAL FOOTER
+       ───────────────────────────────────────────────────────────────────────── -->
+  <footer class="claude-footer" role="contentinfo">
+    <div class="container">
+      <div class="footer-grid">
+        <div>
+          <a href="#hero" class="claude-wordmark" style="display: block; margin-bottom: var(--space-3);">Claude</a>
+          <p class="serif-body" style="font-size: 14px; max-width: 320px; color: var(--muted); margin-bottom: var(--space-4);">
+            An AI assistant created by Anthropic to be helpful, harmless, and honest.
+          </p>
+          <span style="font-size: 12px; color: var(--meta);">© 2026 Anthropic, PBC. All rights reserved.</span>
+        </div>
+
+        <div class="footer-col">
+          <h5>Product</h5>
+          <ul class="footer-links">
+            <li><a href="#chat">Artifacts Studio</a></li>
+            <li><a href="#models">Claude for Work</a></li>
+            <li><a href="#models">Claude Team Plan</a></li>
+            <li><a href="#models">API Console</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h5>Research & Safety</h5>
+          <ul class="footer-links">
+            <li><a href="#safety">Constitutional AI</a></li>
+            <li><a href="#safety">Interpretability</a></li>
+            <li><a href="#safety">Model Card 3.7</a></li>
+            <li><a href="#safety">Responsible Scaling</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h5>Company</h5>
+          <ul class="footer-links">
+            <li><a href="#">About Anthropic</a></li>
+            <li><a href="#">Careers</a></li>
+            <li><a href="#">News & Essays</a></li>
+            <li><a href="#">Privacy Policy</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <div>
+          <span>Design System Reference: Claude (Anthropic / AI & LLM)</span>
+        </div>
+        <div style="display: flex; gap: 16px;">
+          <span>Parchment #f5f4ed</span>
+          <span>Terracotta #c96442</span>
+          <span>Single-weight Serifs (500)</span>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ─────────────────────────────────────────────────────────────────────────
+       CLIENT INTERACTION LOGIC
+       ───────────────────────────────────────────────────────────────────────── -->
+  <script>
+    function loadPrompt(type) {
+      const promptEl = document.getElementById('chatPromptText');
+      const responseEl = document.getElementById('chatResponseText');
+      const titleEl = document.getElementById('artifactTitle');
+      const canvasEl = document.getElementById('artifactCanvas');
+
+      if (type === 'golden') {
+        promptEl.textContent = '"Can you illustrate how the golden ratio geometry structures classical book layouts?"';
+        responseEl.textContent = 'In classical book design, margins follow the Canon of Page Construction. By anchoring proportions to the golden section (1:1.618), text blocks breathe with natural harmonic rhythm.';
+        titleEl.textContent = 'golden_ratio_layout.svg';
+        canvasEl.innerHTML = `
+          <svg viewBox="0 0 300 220" width="100%" height="220">
+            <rect x="20" y="10" width="260" height="200" rx="8" fill="#faf9f5" stroke="#e8e6dc" stroke-width="1.5" />
+            <rect x="50" y="35" width="200" height="150" rx="4" fill="#ffffff" stroke="#f0eee6" stroke-width="1" />
+            <line x1="20" y1="10" x2="280" y2="210" stroke="#c96442" stroke-width="1" stroke-dasharray="4 4" />
+            <line x1="280" y1="10" x2="20" y2="210" stroke="#5e5d59" stroke-width="1" stroke-dasharray="4 4" />
+            <rect x="80" y="60" width="140" height="100" rx="4" fill="rgba(201, 100, 66, 0.12)" stroke="#c96442" stroke-width="1.5" />
+            <text x="150" y="115" font-family="Georgia" font-size="12" fill="#c96442" text-anchor="middle">Harmonic Text Block (1:1.618)</text>
+          </svg>
+        `;
+      } else if (type === 'arch') {
+        promptEl.textContent = '"How does consensus propagate across Raft quorum clusters under network partitions?"';
+        responseEl.textContent = 'Under network partition, the sub-cluster containing a strict majority (N/2 + 1) retains the leader election lease, ensuring split-brain impossibility while lagging minority nodes freeze safely.';
+        titleEl.textContent = 'raft_quorum_partition.svg';
+        canvasEl.innerHTML = `
+          <svg viewBox="0 0 300 220" width="100%" height="220">
+            <rect x="15" y="15" width="125" height="190" rx="8" fill="rgba(23, 163, 74, 0.08)" stroke="#17a34a" stroke-dasharray="4 4" />
+            <text x="77" y="35" font-family="system-ui" font-size="11" font-weight="600" fill="#17a34a" text-anchor="middle">QUORUM (3 NODES)</text>
+            <circle cx="77" cy="70" r="18" fill="#c96442" />
+            <text x="77" y="74" fill="#ffffff" font-size="10" text-anchor="middle">Leader</text>
+            <circle cx="50" cy="140" r="14" fill="#e8e6dc" stroke="#5e5d59" />
+            <text x="50" y="144" fill="#141413" font-size="9" text-anchor="middle">Node 2</text>
+            <circle cx="104" cy="140" r="14" fill="#e8e6dc" stroke="#5e5d59" />
+            <text x="104" y="144" fill="#141413" font-size="9" text-anchor="middle">Node 3</text>
+
+            <rect x="160" y="15" width="125" height="190" rx="8" fill="rgba(181, 51, 51, 0.08)" stroke="#b53333" stroke-dasharray="4 4" />
+            <text x="222" y="35" font-family="system-ui" font-size="11" font-weight="600" fill="#b53333" text-anchor="middle">ISOLATED (2 NODES)</text>
+            <circle cx="195" cy="100" r="14" fill="#e8e6dc" stroke="#b53333" />
+            <circle cx="250" cy="100" r="14" fill="#e8e6dc" stroke="#b53333" />
+          </svg>
+        `;
+      } else if (type === 'code') {
+        promptEl.textContent = '"Write a zero-allocation state machine in Rust for token decoding."';
+        responseEl.textContent = 'Here is the zero-allocation state machine utilizing const generics and type-state transitions to eliminate runtime heap penalties:';
+        titleEl.textContent = 'tokenizer_state.rs';
+        canvasEl.innerHTML = `
+          <div style="text-align: left; font-family: var(--font-mono); font-size: 11px; line-height: 1.6; color: #141413; background: #faf9f5; padding: 16px; border-radius: 8px; width: 100%; height: 100%; overflow-y: auto;">
+            <span style="color: #c96442;">pub struct</span> <span style="color: #141413; font-weight: 600;">Tokenizer</span>&lt;S: State&gt; {<br/>
+            &nbsp;&nbsp;buffer: [u8; 1024],<br/>
+            &nbsp;&nbsp;_marker: PhantomData&lt;S&gt;,<br/>
+            }<br/><br/>
+            <span style="color: #c96442;">impl</span> Tokenizer&lt;Init&gt; {<br/>
+            &nbsp;&nbsp;<span style="color: #5e5d59;">// Safe transition with zero allocations</span><br/>
+            &nbsp;&nbsp;<span style="color: #c96442;">pub fn</span> stream(self) -&gt; Tokenizer&lt;Streaming&gt; {<br/>
+            &nbsp;&nbsp;&nbsp;&nbsp;Tokenizer { buffer: self.buffer, _marker: PhantomData }<br/>
+            &nbsp;&nbsp;}<br/>
+            }
+          </div>
+        `;
+      }
+    }
+
+    function switchArtifact(name) {
+      loadPrompt('golden');
+    }
+  </script>
+</body>
+</html>

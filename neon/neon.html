@@ -1,0 +1,1780 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Neon — High-Contrast Electric Interface System</title>
+  <meta name="description" content="Official showcase and living application built with the Neon design system. Electric neon glow effects with high-contrast color pairings for bold, attention-grabbing interfaces.">
+  
+  <!-- Google Fonts: STIX Two Text (display), Roboto (primary), Source Code Pro (mono) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,400;1,700&family=STIX+Two+Text:ital,wght@0,400;0,500;0,600;0,700;1,400;1,700&family=Source+Code+Pro:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+
+  <style>
+    /* ─────────────────────────────────────────────────────────────
+       1. EXACT TOKENS FROM neon/DESIGN.md
+       ───────────────────────────────────────────────────────────── */
+    :root {
+      /* Color Foundations */
+      --neon-primary: #BBF351;      /* Electric Lime - primary CTA emphasis */
+      --neon-secondary: #00BCFF;    /* Electric Cyan - secondary accent */
+      --neon-success: #16A34A;      /* Success token */
+      --neon-warning: #D97706;      /* Warning token */
+      --neon-danger: #DC2626;       /* Danger token */
+      --neon-surface: #FFFFFF;      /* Large backgrounds and cards */
+      --neon-text: #111827;         /* Body copy & high-contrast text */
+      --neon-neutral: #FFFFFF;      /* Neutral surface derived token */
+
+      /* High-Contrast Shading & Borders */
+      --neon-border: #111827;
+      --neon-border-light: rgba(17, 24, 39, 0.12);
+      --neon-surface-subtle: #F9FAFB;
+      --neon-surface-dark: #0B0F19;
+
+      /* Electric Glow Effects (Signature Neon Morphism) */
+      --glow-primary: 0 0 20px rgba(187, 243, 81, 0.55), 0 0 45px rgba(187, 243, 81, 0.25);
+      --glow-primary-sm: 0 0 10px rgba(187, 243, 81, 0.45);
+      --glow-secondary: 0 0 20px rgba(0, 188, 255, 0.55), 0 0 45px rgba(0, 188, 255, 0.25);
+      --glow-secondary-sm: 0 0 10px rgba(0, 188, 255, 0.45);
+      --glow-card: 0 12px 32px -4px rgba(17, 24, 39, 0.08), 0 0 28px rgba(187, 243, 81, 0.16);
+
+      /* Typography Families */
+      --font-primary: 'Roboto', -apple-system, BlinkMacSystemFont, sans-serif;
+      --font-display: 'STIX Two Text', serif;
+      --font-mono: 'Source Code Pro', monospace;
+
+      /* Typography Scale */
+      --text-14: 14px;
+      --text-16: 16px;
+      --text-18: 18px;
+      --text-24: 24px;
+      --text-32: 32px;
+      --text-40: 40px;
+
+      /* Spacing Scale */
+      --space-4: 4px;
+      --space-8: 8px;
+      --space-12: 12px;
+      --space-16: 16px;
+      --space-24: 24px;
+      --space-32: 32px;
+
+      /* Radii & Motion */
+      --radius-sm: 4px;
+      --radius-md: 8px;
+      --radius-lg: 16px;
+      --radius-pill: 9999px;
+      --transition-fast: 180ms cubic-bezier(0.16, 1, 0.3, 1);
+      --transition-base: 240ms cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    /* Reset */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      font-size: 16px;
+      background-color: var(--neon-surface);
+      color: var(--neon-text);
+      font-family: var(--font-primary);
+      scroll-behavior: smooth;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    body {
+      background: var(--neon-surface);
+      color: var(--neon-text);
+      line-height: 1.55;
+      overflow-x: hidden;
+    }
+
+    /* Container */
+    .container {
+      max-width: 1200px;
+      margin-left: auto;
+      margin-right: auto;
+      padding-left: var(--space-24);
+      padding-right: var(--space-24);
+    }
+
+    /* ─────────────────────────────────────────────────────────────
+       2. TYPOGRAPHIC HIERARCHY
+       ───────────────────────────────────────────────────────────── */
+    h1, h2, h3, .font-display {
+      font-family: var(--font-display);
+      font-weight: 700;
+      line-height: 1.15;
+      color: var(--neon-text);
+    }
+
+    h1 {
+      font-size: var(--text-40);
+      letter-spacing: -0.02em;
+    }
+
+    @media (min-width: 768px) {
+      h1 {
+        font-size: 52px;
+      }
+    }
+
+    h2 {
+      font-size: var(--text-32);
+      letter-spacing: -0.015em;
+    }
+
+    h3 {
+      font-size: var(--text-24);
+    }
+
+    .text-18 {
+      font-size: var(--text-18);
+    }
+
+    .text-16 {
+      font-size: var(--text-16);
+    }
+
+    .text-14 {
+      font-size: var(--text-14);
+    }
+
+    .mono {
+      font-family: var(--font-mono);
+    }
+
+    /* High contrast text selection */
+    ::selection {
+      background: var(--neon-primary);
+      color: var(--neon-text);
+    }
+
+    /* ─────────────────────────────────────────────────────────────
+       3. NAVIGATION BAR
+       ───────────────────────────────────────────────────────────── */
+    .header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(255, 255, 255, 0.94);
+      backdrop-filter: blur(12px);
+      border-bottom: 2px solid var(--neon-border);
+      padding-top: var(--space-12);
+      padding-bottom: var(--space-12);
+    }
+
+    .nav-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--space-16);
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: var(--space-8);
+      text-decoration: none;
+      color: var(--neon-text);
+      font-family: var(--font-display);
+      font-size: var(--text-24);
+      font-weight: 700;
+    }
+
+    .brand-mark {
+      width: 28px;
+      height: 28px;
+      background: var(--neon-primary);
+      border: 2px solid var(--neon-border);
+      box-shadow: var(--glow-primary-sm);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-mono);
+      font-size: var(--text-14);
+      font-weight: 700;
+    }
+
+    .nav-links {
+      display: none;
+      align-items: center;
+      gap: var(--space-24);
+      list-style: none;
+    }
+
+    @media (min-width: 820px) {
+      .nav-links {
+        display: flex;
+      }
+    }
+
+    .nav-link {
+      font-family: var(--font-primary);
+      font-size: var(--text-14);
+      font-weight: 600;
+      color: var(--neon-text);
+      text-decoration: none;
+      padding: var(--space-4) var(--space-8);
+      border-radius: var(--radius-sm);
+      transition: background var(--transition-fast), color var(--transition-fast);
+      position: relative;
+    }
+
+    .nav-link:hover {
+      background: var(--neon-primary);
+      color: var(--neon-text);
+      box-shadow: var(--glow-primary-sm);
+    }
+
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: var(--space-12);
+    }
+
+    /* ─────────────────────────────────────────────────────────────
+       4. BUTTONS & CONTROLS (exact DESIGN.md specifications)
+       Primary action uses #BBF351; secondary actions stay neutral.
+       ───────────────────────────────────────────────────────────── */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--space-8);
+      font-family: var(--font-primary);
+      font-size: var(--text-14);
+      font-weight: 700;
+      padding: var(--space-8) var(--space-16);
+      border-radius: var(--radius-sm);
+      border: 2px solid var(--neon-border);
+      cursor: pointer;
+      text-decoration: none;
+      transition: all var(--transition-fast);
+      line-height: 1.2;
+    }
+
+    .btn-primary {
+      background-color: var(--neon-primary);
+      color: var(--neon-text);
+      box-shadow: 2px 2px 0 var(--neon-border);
+    }
+
+    .btn-primary:hover {
+      background-color: #c9fa6a;
+      box-shadow: var(--glow-primary), 2px 2px 0 var(--neon-border);
+      transform: translate(-1px, -1px);
+    }
+
+    .btn-primary:active {
+      transform: translate(1px, 1px);
+      box-shadow: 0 0 0 var(--neon-border);
+    }
+
+    .btn-secondary {
+      background-color: var(--neon-surface);
+      color: var(--neon-text);
+      box-shadow: 2px 2px 0 var(--neon-border);
+    }
+
+    .btn-secondary:hover {
+      border-color: var(--neon-secondary);
+      color: var(--neon-border);
+      box-shadow: var(--glow-secondary-sm), 2px 2px 0 var(--neon-border);
+      transform: translate(-1px, -1px);
+    }
+
+    .btn-secondary:active {
+      transform: translate(1px, 1px);
+      box-shadow: 0 0 0 var(--neon-border);
+    }
+
+    .btn-cyan {
+      background-color: var(--neon-secondary);
+      color: var(--neon-text);
+      box-shadow: 2px 2px 0 var(--neon-border);
+    }
+
+    .btn-cyan:hover {
+      background-color: #38caff;
+      box-shadow: var(--glow-secondary), 2px 2px 0 var(--neon-border);
+      transform: translate(-1px, -1px);
+    }
+
+    .btn-sm {
+      padding: var(--space-4) var(--space-8);
+      font-size: var(--text-14);
+    }
+
+    .btn-lg {
+      padding: var(--space-12) var(--space-24);
+      font-size: var(--text-16);
+    }
+
+    .btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      box-shadow: none;
+      transform: none;
+    }
+
+    /* ─────────────────────────────────────────────────────────────
+       5. BADGES, STATUS & MICRO-INDICATORS
+       ───────────────────────────────────────────────────────────── */
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-4);
+      padding: 2px var(--space-8);
+      border-radius: var(--radius-pill);
+      border: 1.5px solid var(--neon-border);
+      font-family: var(--font-mono);
+      font-size: var(--text-14);
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    .badge-neon {
+      background: var(--neon-primary);
+      color: var(--neon-text);
+      box-shadow: var(--glow-primary-sm);
+    }
+
+    .badge-cyan {
+      background: var(--neon-secondary);
+      color: var(--neon-text);
+      box-shadow: var(--glow-secondary-sm);
+    }
+
+    .badge-success {
+      background: #DCFCE7;
+      color: var(--neon-success);
+      border-color: var(--neon-success);
+    }
+
+    .badge-warning {
+      background: #FEF3C7;
+      color: var(--neon-warning);
+      border-color: var(--neon-warning);
+    }
+
+    .badge-danger {
+      background: #FEE2E2;
+      color: var(--neon-danger);
+      border-color: var(--neon-danger);
+    }
+
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      display: inline-block;
+      border: 1px solid var(--neon-border);
+    }
+
+    .status-dot.active {
+      background: var(--neon-primary);
+      box-shadow: 0 0 8px var(--neon-primary);
+    }
+
+    /* ─────────────────────────────────────────────────────────────
+       6. HERO SECTION
+       Obvious hierarchy: headline -> support text -> primary action
+       ───────────────────────────────────────────────────────────── */
+    .hero-section {
+      padding-top: var(--space-32);
+      padding-bottom: 56px;
+      background: 
+        radial-gradient(ellipse at 80% 20%, rgba(187, 243, 81, 0.18) 0%, transparent 45%),
+        radial-gradient(ellipse at 20% 75%, rgba(0, 188, 255, 0.14) 0%, transparent 40%),
+        var(--neon-surface);
+      border-bottom: 2px solid var(--neon-border);
+      position: relative;
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: var(--space-32);
+      align-items: center;
+    }
+
+    @media (min-width: 960px) {
+      .hero-grid {
+        grid-template-columns: 1.15fr 0.85fr;
+      }
+    }
+
+    .hero-content {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-16);
+    }
+
+    .hero-title {
+      font-size: var(--text-40);
+      line-height: 1.1;
+      letter-spacing: -0.02em;
+    }
+
+    @media (min-width: 768px) {
+      .hero-title {
+        font-size: 48px;
+      }
+    }
+
+    .hero-title mark {
+      background: var(--neon-primary);
+      color: var(--neon-text);
+      padding: 0 6px;
+      border-radius: var(--radius-sm);
+      border: 1.5px solid var(--neon-border);
+      box-shadow: var(--glow-primary-sm);
+    }
+
+    .hero-lead {
+      font-size: var(--text-18);
+      color: #374151;
+      max-width: 580px;
+    }
+
+    .hero-ctas {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-12);
+      margin-top: var(--space-8);
+    }
+
+    .hero-meta {
+      display: flex;
+      align-items: center;
+      gap: var(--space-16);
+      font-family: var(--font-mono);
+      font-size: var(--text-14);
+      color: #4B5563;
+      margin-top: var(--space-8);
+    }
+
+    /* Hero Interactive Terminal Card */
+    .terminal-card {
+      background: #0B0F19;
+      color: #F9FAFB;
+      border: 2px solid var(--neon-border);
+      border-radius: var(--radius-md);
+      box-shadow: 6px 6px 0 var(--neon-border), var(--glow-primary);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .terminal-header {
+      background: #111827;
+      padding: var(--space-8) var(--space-16);
+      border-bottom: 2px solid #1F2937;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .terminal-dots {
+      display: flex;
+      gap: 6px;
+    }
+
+    .dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+    }
+    .dot-red { background: var(--neon-danger); }
+    .dot-yellow { background: var(--neon-warning); }
+    .dot-green { background: var(--neon-primary); }
+
+    .terminal-title {
+      font-family: var(--font-mono);
+      font-size: var(--text-14);
+      color: var(--neon-secondary);
+      letter-spacing: 0.05em;
+    }
+
+    .terminal-body {
+      padding: var(--space-16);
+      font-family: var(--font-mono);
+      font-size: var(--text-14);
+      line-height: 1.6;
+    }
+
+    .terminal-line {
+      display: flex;
+      gap: var(--space-8);
+      margin-bottom: var(--space-8);
+    }
+
+    .terminal-prompt {
+      color: var(--neon-primary);
+      font-weight: 700;
+    }
+
+    .terminal-output {
+      color: #9CA3AF;
+    }
+
+    .terminal-highlight {
+      color: var(--neon-primary);
+      font-weight: 600;
+      text-shadow: 0 0 8px rgba(187, 243, 81, 0.4);
+    }
+
+    .terminal-cyan {
+      color: var(--neon-secondary);
+      font-weight: 600;
+      text-shadow: 0 0 8px rgba(0, 188, 255, 0.4);
+    }
+
+    /* ─────────────────────────────────────────────────────────────
+       7. DESIGN SYSTEM TOKENS FOUNDATION SHOWCASE
+       Exact Foundation Tokens: Primary, Secondary, Success, Warning,
+       Danger, Surface, Text, Neutral
+       ───────────────────────────────────────────────────────────── */
+    .section {
+      padding-top: 56px;
+      padding-bottom: 56px;
+      border-bottom: 2px solid var(--neon-border);
+    }
+
+    .section-header {
+      margin-bottom: var(--space-32);
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-8);
+    }
+
+    .section-eyebrow {
+      font-family: var(--font-mono);
+      font-size: var(--text-14);
+      font-weight: 700;
+      color: #4B5563;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .token-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: var(--space-16);
+    }
+
+    .token-card {
+      background: var(--neon-surface);
+      border: 2px solid var(--neon-border);
+      border-radius: var(--radius-sm);
+      padding: var(--space-16);
+      box-shadow: 3px 3px 0 var(--neon-border);
+      transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+    }
+
+    .token-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 3px 3px 0 var(--neon-border), var(--glow-primary-sm);
+    }
+
+    .swatch {
+      width: 100%;
+      height: 72px;
+      border: 2px solid var(--neon-border);
+      border-radius: var(--radius-sm);
+      margin-bottom: var(--space-12);
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      padding: var(--space-8);
+    }
+
+    .token-info {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-4);
+    }
+
+    .token-name {
+      font-family: var(--font-mono);
+      font-size: var(--text-14);
+      font-weight: 700;
+      color: var(--neon-text);
+    }
+
+    .token-hex {
+      font-family: var(--font-mono);
+      font-size: var(--text-14);
+      color: #4B5563;
+    }
+
+    .token-role {
+      font-size: var(--text-14);
+      color: #6B7280;
+      margin-top: var(--space-4);
+    }
+
+    /* ─────────────────────────────────────────────────────────────
+       8. COMPONENT SPECIMENS & INTERACTIVE CONTROLS
+       Buttons, Inputs with strong focus-visible, Cards, Toggles
+       ───────────────────────────────────────────────────────────── */
+    .controls-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: var(--space-24);
+    }
+
+    @media (min-width: 900px) {
+      .controls-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    .panel {
+      background: var(--neon-surface);
+      border: 2px solid var(--neon-border);
+      border-radius: var(--radius-md);
+      padding: var(--space-24);
+      box-shadow: 4px 4px 0 var(--neon-border);
+    }
+
+    .panel-title {
+      font-family: var(--font-display);
+      font-size: var(--text-24);
+      margin-bottom: var(--space-16);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .field-group {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-8);
+      margin-bottom: var(--space-16);
+    }
+
+    .field-label {
+      font-family: var(--font-primary);
+      font-size: var(--text-14);
+      font-weight: 700;
+      color: var(--neon-text);
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .input-text {
+      width: 100%;
+      height: 44px;
+      padding: 0 var(--space-12);
+      background: var(--neon-surface);
+      border: 2px solid var(--neon-border);
+      border-radius: var(--radius-sm);
+      font-family: var(--font-primary);
+      font-size: var(--text-16);
+      color: var(--neon-text);
+      transition: all var(--transition-fast);
+    }
+
+    /* Strong focus-visible states as dictated in DESIGN.md */
+    .input-text:focus, .input-text:focus-visible {
+      outline: none;
+      border-color: var(--neon-border);
+      box-shadow: 0 0 0 3px var(--neon-primary), var(--glow-primary-sm);
+      background: #FFFFFF;
+    }
+
+    .input-text.has-error {
+      border-color: var(--neon-danger);
+      box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.25);
+    }
+
+    .field-helper {
+      font-family: var(--font-mono);
+      font-size: var(--text-14);
+      color: #6B7280;
+    }
+
+    .field-helper.error {
+      color: var(--neon-danger);
+      font-weight: 600;
+    }
+
+    /* Interactive Neon Sliders & Switches */
+    .switch-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: var(--space-8) 0;
+      border-bottom: 1px solid var(--neon-border-light);
+    }
+
+    .switch {
+      position: relative;
+      display: inline-block;
+      width: 50px;
+      height: 28px;
+    }
+
+    .switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+
+    .slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: #E5E7EB;
+      border: 2px solid var(--neon-border);
+      border-radius: var(--radius-pill);
+      transition: var(--transition-fast);
+    }
+
+    .slider:before {
+      position: absolute;
+      content: "";
+      height: 16px;
+      width: 16px;
+      left: 4px;
+      bottom: 4px;
+      background-color: var(--neon-border);
+      border-radius: 50%;
+      transition: var(--transition-fast);
+    }
+
+    input:checked + .slider {
+      background-color: var(--neon-primary);
+      box-shadow: var(--glow-primary-sm);
+    }
+
+    input:checked + .slider:before {
+      transform: translateX(22px);
+      background-color: var(--neon-border);
+    }
+
+    /* Range slider */
+    .range-slider {
+      width: 100%;
+      accent-color: var(--neon-border);
+      cursor: pointer;
+    }
+
+    /* ─────────────────────────────────────────────────────────────
+       9. ARCHITECTURE / SYSTEM METRICS GRID
+       ───────────────────────────────────────────────────────────── */
+    .metrics-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: var(--space-16);
+      margin-bottom: var(--space-32);
+    }
+
+    .metric-card {
+      background: var(--neon-surface);
+      border: 2px solid var(--neon-border);
+      border-radius: var(--radius-sm);
+      padding: var(--space-16);
+      box-shadow: 3px 3px 0 var(--neon-border);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .metric-card::after {
+      content: "";
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: var(--neon-primary);
+      box-shadow: var(--glow-primary-sm);
+    }
+
+    .metric-card.cyan::after {
+      background: var(--neon-secondary);
+      box-shadow: var(--glow-secondary-sm);
+    }
+
+    .metric-value {
+      font-family: var(--font-display);
+      font-size: var(--text-40);
+      font-weight: 700;
+      color: var(--neon-text);
+      line-height: 1;
+      margin-bottom: var(--space-4);
+    }
+
+    .metric-label {
+      font-family: var(--font-mono);
+      font-size: var(--text-14);
+      color: #4B5563;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    /* ─────────────────────────────────────────────────────────────
+       10. FEATURE CARDS GRID
+       Consistent radii, spacing, elevation strategy across the page.
+       ───────────────────────────────────────────────────────────── */
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: var(--space-24);
+    }
+
+    .feature-card {
+      background: var(--neon-surface);
+      border: 2px solid var(--neon-border);
+      border-radius: var(--radius-md);
+      padding: var(--space-24);
+      box-shadow: 4px 4px 0 var(--neon-border);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: var(--space-16);
+      transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+    }
+
+    .feature-card:hover {
+      transform: translate(-2px, -2px);
+      box-shadow: 6px 6px 0 var(--neon-border), var(--glow-primary-sm);
+    }
+
+    .feature-card.featured {
+      background: #FAFFF0;
+      border-color: var(--neon-border);
+      box-shadow: 4px 4px 0 var(--neon-border), var(--glow-primary-sm);
+    }
+
+    .feature-icon-box {
+      width: 44px;
+      height: 44px;
+      border: 2px solid var(--neon-border);
+      border-radius: var(--radius-sm);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: var(--text-24);
+      background: var(--neon-primary);
+      box-shadow: var(--glow-primary-sm);
+    }
+
+    .feature-icon-box.cyan {
+      background: var(--neon-secondary);
+      box-shadow: var(--glow-secondary-sm);
+    }
+
+    /* ─────────────────────────────────────────────────────────────
+       11. PRICING & TIERS
+       ───────────────────────────────────────────────────────────── */
+    .pricing-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: var(--space-24);
+      margin-top: var(--space-32);
+    }
+
+    .price-card {
+      background: var(--neon-surface);
+      border: 2px solid var(--neon-border);
+      border-radius: var(--radius-md);
+      padding: var(--space-32);
+      box-shadow: 4px 4px 0 var(--neon-border);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .price-card.popular {
+      background: #FCFFF5;
+      position: relative;
+      box-shadow: 6px 6px 0 var(--neon-border), var(--glow-primary);
+    }
+
+    .price-header {
+      margin-bottom: var(--space-24);
+    }
+
+    .price-tag {
+      font-family: var(--font-display);
+      font-size: var(--text-40);
+      font-weight: 700;
+      display: flex;
+      align-items: baseline;
+      gap: var(--space-4);
+      margin-top: var(--space-12);
+    }
+
+    .price-period {
+      font-family: var(--font-mono);
+      font-size: var(--text-14);
+      color: #6B7280;
+    }
+
+    .price-features {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-12);
+      margin-bottom: var(--space-32);
+      font-size: var(--text-14);
+    }
+
+    .price-feature-item {
+      display: flex;
+      align-items: center;
+      gap: var(--space-8);
+    }
+
+    .price-check {
+      width: 18px;
+      height: 18px;
+      border: 1.5px solid var(--neon-border);
+      background: var(--neon-primary);
+      box-shadow: var(--glow-primary-sm);
+      border-radius: 2px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      font-weight: bold;
+    }
+
+    /* ─────────────────────────────────────────────────────────────
+       12. INTERACTIVE TOKENS INSPECTOR MODAL/CONSOLE
+       ───────────────────────────────────────────────────────────── */
+    .playground-area {
+      background: var(--neon-surface-subtle);
+      border: 2px dashed var(--neon-border);
+      border-radius: var(--radius-md);
+      padding: var(--space-24);
+      margin-top: var(--space-24);
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-16);
+    }
+
+    .code-preview {
+      background: #0B0F19;
+      color: #BBF351;
+      font-family: var(--font-mono);
+      font-size: var(--text-14);
+      padding: var(--space-16);
+      border-radius: var(--radius-sm);
+      border: 2px solid var(--neon-border);
+      overflow-x: auto;
+    }
+
+    /* ─────────────────────────────────────────────────────────────
+       13. FOOTER
+       ───────────────────────────────────────────────────────────── */
+    .footer {
+      background: #0B0F19;
+      color: #F3F4F6;
+      border-top: 2px solid var(--neon-border);
+      padding-top: 56px;
+      padding-bottom: 40px;
+    }
+
+    .footer a {
+      color: #9CA3AF;
+      text-decoration: none;
+      transition: color var(--transition-fast);
+    }
+
+    .footer a:hover {
+      color: var(--neon-primary);
+      text-shadow: var(--glow-primary-sm);
+    }
+
+    .footer-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: var(--space-32);
+      margin-bottom: var(--space-32);
+    }
+
+    .footer-col-title {
+      font-family: var(--font-display);
+      font-size: var(--text-18);
+      color: #FFFFFF;
+      margin-bottom: var(--space-16);
+    }
+
+    .footer-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-8);
+      font-size: var(--text-14);
+    }
+
+    .footer-bottom {
+      border-top: 1px solid #1F2937;
+      padding-top: var(--space-24);
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-12);
+      align-items: center;
+      justify-content: space-between;
+      font-family: var(--font-mono);
+      font-size: var(--text-14);
+      color: #6B7280;
+    }
+
+    @media (min-width: 680px) {
+      .footer-bottom {
+        flex-direction: row;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ==================== HEADER ==================== -->
+  <header class="header">
+    <div class="container nav-inner">
+      <a href="#hero" class="brand">
+        <span class="brand-mark">⚡</span>
+        <span>NEON</span>
+      </a>
+
+      <ul class="nav-links">
+        <li><a href="#tokens" class="nav-link">Tokens</a></li>
+        <li><a href="#components" class="nav-link">Components</a></li>
+        <li><a href="#telemetry" class="nav-link">Telemetry</a></li>
+        <li><a href="#pricing" class="nav-link">Pricing</a></li>
+        <li><a href="#spec" class="nav-link">Tokens API</a></li>
+      </ul>
+
+      <div class="nav-actions">
+        <span class="badge badge-neon">
+          <span class="status-dot active"></span>
+          HIGH-CONTRAST
+        </span>
+        <a href="#components" class="btn btn-primary btn-sm">Launch App</a>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <!-- ==================== HERO SECTION ==================== -->
+    <section id="hero" class="hero-section">
+      <div class="container hero-grid">
+        <div class="hero-content">
+          <div style="display: flex; gap: var(--space-8); align-items: center;">
+            <span class="badge badge-neon">Morphism &amp; Effects</span>
+            <span class="badge badge-cyan">v2.0 Core</span>
+          </div>
+
+          <h1 class="hero-title">
+            Electric neon glow with <mark>high-contrast</mark> clarity.
+          </h1>
+
+          <p class="hero-lead">
+            Built strictly according to the Neon design foundations. Powered by electric lime <code class="mono">#BBF351</code> CTA emphasis, electric cyan <code class="mono">#00BCFF</code> accents, crisp white surfaces, and bold STIX Two Text display typography.
+          </p>
+
+          <div class="hero-ctas">
+            <a href="#components" class="btn btn-primary btn-lg">
+              <span>Execute Node</span>
+              <span>→</span>
+            </a>
+            <a href="#tokens" class="btn btn-secondary btn-lg">
+              <span>Inspect Tokens</span>
+            </a>
+            <a href="#spec" class="btn btn-cyan btn-lg">
+              <span>Open Spec</span>
+            </a>
+          </div>
+
+          <div class="hero-meta">
+            <span class="price-feature-item">
+              <span class="price-check">✓</span>
+              <span>Primary: #BBF351</span>
+            </span>
+            <span class="price-feature-item">
+              <span class="price-check">✓</span>
+              <span>Secondary: #00BCFF</span>
+            </span>
+            <span class="price-feature-item">
+              <span class="price-check">✓</span>
+              <span>Surface: #FFFFFF</span>
+            </span>
+          </div>
+        </div>
+
+        <!-- Terminal Card Interactive Demonstration -->
+        <div class="terminal-card">
+          <div class="terminal-header">
+            <div class="terminal-dots">
+              <span class="dot dot-red"></span>
+              <span class="dot dot-yellow"></span>
+              <span class="dot dot-green"></span>
+            </div>
+            <div class="terminal-title">neon-cluster-daemon :: tty0</div>
+            <span class="badge badge-cyan" style="font-size: 11px; padding: 1px 6px;">READY</span>
+          </div>
+          <div class="terminal-body">
+            <div class="terminal-line">
+              <span class="terminal-prompt">$</span>
+              <span>neon-cli initialize --palette=high-contrast</span>
+            </div>
+            <div class="terminal-line">
+              <span class="terminal-output">[ok] Loading STIX Two Text display stack...</span>
+            </div>
+            <div class="terminal-line">
+              <span class="terminal-output">[ok] Binding Roboto text foundation at 16px...</span>
+            </div>
+            <div class="terminal-line">
+              <span class="terminal-output">[ok] Emitting primary electric glow (#BBF351)...</span>
+            </div>
+            <div class="terminal-line">
+              <span class="terminal-prompt">&gt;</span>
+              <span class="terminal-highlight">Signal frequency: 100.0% COHERENCE</span>
+            </div>
+            <div class="terminal-line">
+              <span class="terminal-prompt">&gt;</span>
+              <span class="terminal-cyan">Secondary bus: #00BCFF connected</span>
+            </div>
+            <div style="margin-top: var(--space-12); padding-top: var(--space-8); border-top: 1px dashed #374151;">
+              <button class="btn btn-primary btn-sm" id="btn-ping" style="width: 100%;">
+                Pulse Neon Frequency (Click to Broadcast)
+              </button>
+              <div id="ping-log" style="font-size: 12px; margin-top: 6px; color: #BBF351; text-align: center; min-height: 18px;"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== FOUNDATION TOKENS ==================== -->
+    <section id="tokens" class="section">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-eyebrow">Design Foundations</span>
+          <h2>Color Foundations &amp; Contrast Matrix</h2>
+          <p class="text-16" style="color: #4B5563; max-width: 680px;">
+            The exact 8 foundational color tokens specified in <code class="mono">neon/DESIGN.md</code>. Pure surface whites are paired with near-black body text and radiant electric neon accents.
+          </p>
+        </div>
+
+        <div class="token-grid">
+          <!-- Primary -->
+          <div class="token-card">
+            <div class="swatch" style="background-color: var(--neon-primary); box-shadow: var(--glow-primary-sm);">
+              <span class="badge" style="background: white; color: var(--neon-text);">CTA Token</span>
+            </div>
+            <div class="token-info">
+              <span class="token-name">Primary</span>
+              <span class="token-hex">#BBF351</span>
+              <p class="token-role">Electric lime CTA emphasis; interaction beacon.</p>
+            </div>
+          </div>
+
+          <!-- Secondary -->
+          <div class="token-card">
+            <div class="swatch" style="background-color: var(--neon-secondary); box-shadow: var(--glow-secondary-sm);">
+              <span class="badge" style="background: white; color: var(--neon-text);">Accent</span>
+            </div>
+            <div class="token-info">
+              <span class="token-name">Secondary</span>
+              <span class="token-hex">#00BCFF</span>
+              <p class="token-role">Electric cyan; auxiliary badges and highlights.</p>
+            </div>
+          </div>
+
+          <!-- Surface -->
+          <div class="token-card">
+            <div class="swatch" style="background-color: var(--neon-surface); border-color: var(--neon-border);">
+              <span class="badge" style="background: var(--neon-primary); color: var(--neon-text);">Canvas</span>
+            </div>
+            <div class="token-info">
+              <span class="token-name">Surface</span>
+              <span class="token-hex">#FFFFFF</span>
+              <p class="token-role">High-contrast background and card plane.</p>
+            </div>
+          </div>
+
+          <!-- Text -->
+          <div class="token-card">
+            <div class="swatch" style="background-color: var(--neon-text); color: white;">
+              <span class="badge" style="background: white; color: black;">Legibility</span>
+            </div>
+            <div class="token-info">
+              <span class="token-name">Text</span>
+              <span class="token-hex">#111827</span>
+              <p class="token-role">Crisp typography maximizing readability.</p>
+            </div>
+          </div>
+
+          <!-- Success -->
+          <div class="token-card">
+            <div class="swatch" style="background-color: var(--neon-success);"></div>
+            <div class="token-info">
+              <span class="token-name">Success</span>
+              <span class="token-hex">#16A34A</span>
+              <p class="token-role">Resolved flows, confirmed operations.</p>
+            </div>
+          </div>
+
+          <!-- Warning -->
+          <div class="token-card">
+            <div class="swatch" style="background-color: var(--neon-warning);"></div>
+            <div class="token-info">
+              <span class="token-name">Warning</span>
+              <span class="token-hex">#D97706</span>
+              <p class="token-role">Alert thresholds, resource bottlenecks.</p>
+            </div>
+          </div>
+
+          <!-- Danger -->
+          <div class="token-card">
+            <div class="swatch" style="background-color: var(--neon-danger);"></div>
+            <div class="token-info">
+              <span class="token-name">Danger</span>
+              <span class="token-hex">#DC2626</span>
+              <p class="token-role">Critical errors, immediate attention states.</p>
+            </div>
+          </div>
+
+          <!-- Neutral -->
+          <div class="token-card">
+            <div class="swatch" style="background-color: var(--neon-neutral); border: 2px dashed #9CA3AF;"></div>
+            <div class="token-info">
+              <span class="token-name">Neutral</span>
+              <span class="token-hex">#FFFFFF</span>
+              <p class="token-role">Derived from surface token for official compatibility.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== COMPONENT STYLINGS & INTERACTION ==================== -->
+    <section id="components" class="section" style="background: #FAFAFB;">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-eyebrow">Rule Compliant Components</span>
+          <h2>Interactive Control Matrix</h2>
+          <p class="text-16" style="color: #4B5563; max-width: 680px;">
+            Test the live buttons, inputs with focus-visible glows, sliders, error handling, and stateful badges in real-time.
+          </p>
+        </div>
+
+        <div class="controls-grid">
+          <!-- Button & State Tester -->
+          <div class="panel">
+            <div class="panel-title">
+              <span>Buttons &amp; Actions</span>
+              <span class="badge badge-neon">#BBF351</span>
+            </div>
+            <p class="text-14" style="color: #6B7280; margin-bottom: var(--space-16);">
+              Primary action uses <code class="mono">#BBF351</code> with high-contrast text and electric halo. Secondary actions remain neutral or cyan.
+            </p>
+
+            <div style="display: flex; flex-direction: column; gap: var(--space-12);">
+              <div style="display: flex; flex-wrap: wrap; gap: var(--space-8); align-items: center;">
+                <button class="btn btn-primary" onclick="alert('Primary CTA Triggered!')">Primary (#BBF351)</button>
+                <button class="btn btn-secondary">Secondary Neutral</button>
+                <button class="btn btn-cyan">Secondary (#00BCFF)</button>
+              </div>
+
+              <div style="display: flex; flex-wrap: wrap; gap: var(--space-8); align-items: center;">
+                <button class="btn btn-primary btn-sm">Small Action</button>
+                <button class="btn btn-secondary btn-sm">Small Neutral</button>
+                <button class="btn btn-primary" disabled>Disabled State</button>
+              </div>
+            </div>
+
+            <div style="margin-top: var(--space-24); padding-top: var(--space-16); border-top: 1px solid var(--neon-border-light);">
+              <span class="field-label">Interactive Badge Toggles</span>
+              <div style="display: flex; flex-wrap: wrap; gap: var(--space-8); margin-top: var(--space-8);">
+                <span class="badge badge-neon">PRIMARY GLOW</span>
+                <span class="badge badge-cyan">CYAN PULSE</span>
+                <span class="badge badge-success">SYNCED 100%</span>
+                <span class="badge badge-warning">MEMORY 84%</span>
+                <span class="badge badge-danger">LATENCY SPIKE</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Input Controls & Validation -->
+          <div class="panel">
+            <div class="panel-title">
+              <span>Inputs &amp; Focus-Visible</span>
+              <span class="badge badge-cyan">Predictable</span>
+            </div>
+            <p class="text-14" style="color: #6B7280; margin-bottom: var(--space-16);">
+              High-contrast fields with electric neon focus ring (<code class="mono">box-shadow: 0 0 0 3px #BBF351</code>) and explicit error signaling.
+            </p>
+
+            <form onsubmit="event.preventDefault(); validateDemo();">
+              <div class="field-group">
+                <label class="field-label" for="cluster-input">
+                  <span>Cluster Subdomain</span>
+                  <span class="mono text-14" style="color: var(--neon-secondary);">.neon.mesh</span>
+                </label>
+                <input type="text" id="cluster-input" class="input-text" value="us-west-quantum" placeholder="e.g. us-east-alpha">
+                <span class="field-helper">Focus this field to observe the signature neon aura.</span>
+              </div>
+
+              <div class="field-group">
+                <label class="field-label" for="token-auth-input">
+                  <span>Secret Key Verification</span>
+                  <span class="badge badge-danger" id="validation-pill" style="display:none;">INVALID</span>
+                </label>
+                <input type="password" id="token-auth-input" class="input-text" placeholder="Enter key (minimum 6 chars)...">
+                <span class="field-helper" id="input-error-msg">Strict validation: must exceed 6 alphanumeric characters.</span>
+              </div>
+
+              <div style="display: flex; gap: var(--space-8); margin-top: var(--space-8);">
+                <button type="submit" class="btn btn-primary btn-sm">Validate Field</button>
+                <button type="button" class="btn btn-secondary btn-sm" onclick="resetDemo()">Reset</button>
+              </div>
+            </form>
+          </div>
+        </div>
+
+        <!-- Secondary row: Sliders & Toggles -->
+        <div class="controls-grid" style="margin-top: var(--space-24);">
+          <div class="panel">
+            <div class="panel-title">
+              <span>Haptic Switches</span>
+              <span class="status-dot active"></span>
+            </div>
+            
+            <div class="switch-row">
+              <div>
+                <strong>Overclock Luminescence</strong>
+                <p class="text-14" style="color: #6B7280;">Multiply electric glow intensity</p>
+              </div>
+              <label class="switch">
+                <input type="checkbox" id="toggle-glow" checked onchange="toggleGlow(this)">
+                <span class="slider"></span>
+              </label>
+            </div>
+
+            <div class="switch-row">
+              <div>
+                <strong>High-Contrast Enforcement</strong>
+                <p class="text-14" style="color: #6B7280;">Lock contrast ratio above 14:1</p>
+              </div>
+              <label class="switch">
+                <input type="checkbox" checked disabled>
+                <span class="slider"></span>
+              </label>
+            </div>
+          </div>
+
+          <div class="panel">
+            <div class="panel-title">
+              <span>Flux Amplitude (Spacing: 4/8/12/16/24/32)</span>
+              <span class="mono text-14" id="range-readout">24px</span>
+            </div>
+            <p class="text-14" style="color: #6B7280; margin-bottom: var(--space-16);">
+              Dynamic spacing test enforcing the discrete steps defined in Section 4.
+            </p>
+            <input type="range" class="range-slider" min="4" max="32" step="4" value="24" id="spacing-slider" oninput="updateSpacing(this.value)">
+            <div style="display: flex; justify-content: space-between; margin-top: 6px; font-family: var(--font-mono); font-size: 12px; color: #6B7280;">
+              <span>4px</span>
+              <span>8px</span>
+              <span>12px</span>
+              <span>16px</span>
+              <span>24px</span>
+              <span>32px</span>
+            </div>
+            <div id="spacing-sample" style="background: var(--neon-primary); border: 2px solid var(--neon-border); height: 24px; margin-top: var(--space-12); transition: height 150ms ease; display: flex; align-items: center; justify-content: center; font-family: var(--font-mono); font-weight: bold; font-size: 12px;">
+              24px Spacing Unit
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== TELEMETRY / REALTIME METRICS ==================== -->
+    <section id="telemetry" class="section">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-eyebrow">Realtime Synapse</span>
+          <h2>Telemetry &amp; Node Architecture</h2>
+          <p class="text-16" style="color: #4B5563; max-width: 680px;">
+            High-contrast visual hierarchy displaying mission-critical metrics. STIX Two Text display numerals with Source Code Pro metadata.
+          </p>
+        </div>
+
+        <div class="metrics-row">
+          <div class="metric-card">
+            <div class="metric-value">99.98%</div>
+            <div class="metric-label">Signal Coherence</div>
+          </div>
+          <div class="metric-card cyan">
+            <div class="metric-value">1.4ms</div>
+            <div class="metric-label">Synapse Latency</div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-value">4.2 PB</div>
+            <div class="metric-label">Flux Throughput</div>
+          </div>
+          <div class="metric-card cyan">
+            <div class="metric-value">256</div>
+            <div class="metric-label">Active Shards</div>
+          </div>
+        </div>
+
+        <!-- Features Grid -->
+        <div class="features-grid">
+          <div class="feature-card featured">
+            <div>
+              <div class="feature-icon-box">⚡</div>
+              <h3 style="margin-top: var(--space-16); margin-bottom: var(--space-8);">High-Energy Sharding</h3>
+              <p class="text-16" style="color: #4B5563;">
+                Distribute compute across autonomous sub-nodes without dropping high-contrast state transitions.
+              </p>
+            </div>
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+              <span class="badge badge-neon">PRIORITY #1</span>
+              <a href="#components" class="btn btn-primary btn-sm">Inspect</a>
+            </div>
+          </div>
+
+          <div class="feature-card">
+            <div>
+              <div class="feature-icon-box cyan">✦</div>
+              <h3 style="margin-top: var(--space-16); margin-bottom: var(--space-8);">Cyan Hyper-Buses</h3>
+              <p class="text-16" style="color: #4B5563;">
+                Auxiliary data streams route through dedicated <code class="mono">#00BCFF</code> channels for zero interference with primary operations.
+              </p>
+            </div>
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+              <span class="badge badge-cyan">BANDWIDTH 10G</span>
+              <a href="#components" class="btn btn-secondary btn-sm">Configure</a>
+            </div>
+          </div>
+
+          <div class="feature-card">
+            <div>
+              <div class="feature-icon-box">◈</div>
+              <h3 style="margin-top: var(--space-16); margin-bottom: var(--space-8);">Deterministic Typography</h3>
+              <p class="text-16" style="color: #4B5563;">
+                STIX Two Text carries the editorial identity while Roboto safeguards sub-millisecond scannability.
+              </p>
+            </div>
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+              <span class="badge" style="background: white; border-color: var(--neon-border);">14-40PX SCALE</span>
+              <a href="#tokens" class="btn btn-secondary btn-sm">Scale</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== PRICING & TIERS ==================== -->
+    <section id="pricing" class="section" style="background: #FAFAFB;">
+      <div class="container">
+        <div class="section-header" style="text-align: center; align-items: center;">
+          <span class="section-eyebrow">Clear Economics</span>
+          <h2>Predictable Provisioning Tiers</h2>
+          <p class="text-16" style="color: #4B5563; max-width: 580px;">
+            Select the infrastructure tier matching your latency and throughput requirements.
+          </p>
+        </div>
+
+        <div class="pricing-grid">
+          <!-- Starter -->
+          <div class="price-card">
+            <div>
+              <div class="price-header">
+                <span class="badge badge-cyan">COMMUNITY</span>
+                <div class="price-tag">$0 <span class="price-period">/ month</span></div>
+                <p class="text-14" style="color: #6B7280; margin-top: 6px;">For individual engineers &amp; exploratory setups.</p>
+              </div>
+
+              <ul class="price-features">
+                <li class="price-feature-item">
+                  <span class="price-check">✓</span>
+                  <span>Up to 3 Neon clusters</span>
+                </li>
+                <li class="price-feature-item">
+                  <span class="price-check">✓</span>
+                  <span>Standard STIX Two display fonts</span>
+                </li>
+                <li class="price-feature-item">
+                  <span class="price-check">✓</span>
+                  <span>Community telemetry feed</span>
+                </li>
+              </ul>
+            </div>
+            <a href="#hero" class="btn btn-secondary" style="width: 100%;">Start Free</a>
+          </div>
+
+          <!-- Enterprise (Featured) -->
+          <div class="price-card popular">
+            <div style="position: absolute; top: -14px; left: 50%; transform: translateX(-50%);">
+              <span class="badge badge-neon" style="box-shadow: var(--glow-primary);">RECOMMENDED POWER</span>
+            </div>
+
+            <div>
+              <div class="price-header">
+                <span class="badge badge-neon">ENTERPRISE CORE</span>
+                <div class="price-tag">$199 <span class="price-period">/ cluster / mo</span></div>
+                <p class="text-14" style="color: #6B7280; margin-top: 6px;">Full-spectrum high-contrast infrastructure with zero SLA compromises.</p>
+              </div>
+
+              <ul class="price-features">
+                <li class="price-feature-item">
+                  <span class="price-check">✓</span>
+                  <span>Unlimited sharded clusters</span>
+                </li>
+                <li class="price-feature-item">
+                  <span class="price-check">✓</span>
+                  <span>Electric Lime <code class="mono">#BBF351</code> dedicated bus</span>
+                </li>
+                <li class="price-feature-item">
+                  <span class="price-check">✓</span>
+                  <span>Electric Cyan <code class="mono">#00BCFF</code> backup routing</span>
+                </li>
+                <li class="price-feature-item">
+                  <span class="price-check">✓</span>
+                  <span>Sub-200ms guaranteed easing animations</span>
+                </li>
+                <li class="price-feature-item">
+                  <span class="price-check">✓</span>
+                  <span>24/7 Neon engineering access</span>
+                </li>
+              </ul>
+            </div>
+            <a href="#hero" class="btn btn-primary" style="width: 100%;">Deploy Production Node</a>
+          </div>
+
+          <!-- Custom -->
+          <div class="price-card">
+            <div>
+              <div class="price-header">
+                <span class="badge badge-cyan">GLOBAL SCALE</span>
+                <div class="price-tag">Custom</div>
+                <p class="text-14" style="color: #6B7280; margin-top: 6px;">Custom isolation, VPC peering, and custom glowing palettes.</p>
+              </div>
+
+              <ul class="price-features">
+                <li class="price-feature-item">
+                  <span class="price-check">✓</span>
+                  <span>Hardware-level security modules</span>
+                </li>
+                <li class="price-feature-item">
+                  <span class="price-check">✓</span>
+                  <span>Dedicated interconnect pipes</span>
+                </li>
+                <li class="price-feature-item">
+                  <span class="price-check">✓</span>
+                  <span>Full token audit certification</span>
+                </li>
+              </ul>
+            </div>
+            <a href="#hero" class="btn btn-secondary" style="width: 100%;">Contact Architecture</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== TOKENS CODE SPEC & ANTI-PATTERNS ==================== -->
+    <section id="spec" class="section">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-eyebrow">Engineering Specifications</span>
+          <h2>Anti-Patterns &amp; Token Strictness</h2>
+          <p class="text-16" style="color: #4B5563; max-width: 680px;">
+            Rules enforced strictly from Section 9 of <code class="mono">neon/DESIGN.md</code>.
+          </p>
+        </div>
+
+        <div class="controls-grid">
+          <div class="panel">
+            <h3 style="margin-bottom: var(--space-12); color: var(--neon-danger);">✕ Anti-Patterns (Forbidden)</h3>
+            <ul style="list-style: none; display: flex; flex-direction: column; gap: var(--space-12); font-size: var(--text-14);">
+              <li style="display: flex; gap: var(--space-8); align-items: flex-start;">
+                <span style="color: var(--neon-danger); font-weight: bold;">✕</span>
+                <span><strong>No Off-Palette Colors:</strong> Do not introduce random hex colors when Primary (#BBF351), Secondary (#00BCFF), Surface, or Text can resolve it.</span>
+              </li>
+              <li style="display: flex; gap: var(--space-8); align-items: flex-start;">
+                <span style="color: var(--neon-danger); font-weight: bold;">✕</span>
+                <span><strong>No Hierarchy Flattening:</strong> Never use the same type size or weight across headlines and body copy.</span>
+              </li>
+              <li style="display: flex; gap: var(--space-8); align-items: flex-start;">
+                <span style="color: var(--neon-danger); font-weight: bold;">✕</span>
+                <span><strong>No Obtrusive Effects:</strong> Glow effects must enhance, never diminish contrast or legibility (>14:1 text contrast preserved).</span>
+              </li>
+              <li style="display: flex; gap: var(--space-8); align-items: flex-start;">
+                <span style="color: var(--neon-danger); font-weight: bold;">✕</span>
+                <span><strong>No Mixed Metaphors:</strong> Keep strict adherence to high-contrast electric morphism without blending unrelated motifs.</span>
+              </li>
+            </ul>
+          </div>
+
+          <div class="panel">
+            <h3 style="margin-bottom: var(--space-12); color: var(--neon-success);">✓ Live CSS Token Definitions</h3>
+            <pre class="code-preview"><code>:root {
+  --neon-primary:   #BBF351; /* CTA emphasis */
+  --neon-secondary: #00BCFF; /* Aux accent */
+  --neon-success:   #16A34A;
+  --neon-warning:   #D97706;
+  --neon-danger:    #DC2626;
+  --neon-surface:   #FFFFFF; /* White card */
+  --neon-text:      #111827; /* Near black */
+
+  --font-display:   'STIX Two Text', serif;
+  --font-primary:   'Roboto', sans-serif;
+  --font-mono:      'Source Code Pro', monospace;
+  --space-scale:    4px 8px 12px 16px 24px 32px;
+}</code></pre>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ==================== FOOTER ==================== -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div>
+          <div class="brand" style="color: #FFFFFF; margin-bottom: var(--space-16);">
+            <span class="brand-mark">⚡</span>
+            <span>NEON</span>
+          </div>
+          <p class="text-14" style="color: #9CA3AF; line-height: 1.6;">
+            High-contrast electric interface system engineered for extreme clarity, bold CTAs, and luminous precision.
+          </p>
+        </div>
+
+        <div>
+          <h4 class="footer-col-title">Foundations</h4>
+          <ul class="footer-list">
+            <li><a href="#tokens">Primary (#BBF351)</a></li>
+            <li><a href="#tokens">Secondary (#00BCFF)</a></li>
+            <li><a href="#tokens">Surface (#FFFFFF)</a></li>
+            <li><a href="#tokens">Text (#111827)</a></li>
+            <li><a href="#tokens">Typography Hierarchy</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h4 class="footer-col-title">Components</h4>
+          <ul class="footer-list">
+            <li><a href="#components">Electric Primary CTA</a></li>
+            <li><a href="#components">Focus-Visible Inputs</a></li>
+            <li><a href="#components">Haptic Sliders</a></li>
+            <li><a href="#telemetry">Telemetry Cards</a></li>
+            <li><a href="#pricing">Pricing Architecture</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h4 class="footer-col-title">Guidelines</h4>
+          <ul class="footer-list">
+            <li><a href="#spec">Anti-Patterns</a></li>
+            <li><a href="#spec">Grid &amp; Vertical Rhythm</a></li>
+            <li><a href="#spec">Motion (150-250ms)</a></li>
+            <li><a href="#spec">Voice &amp; Tone</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <div>
+          <span>Neon Design System • Conforms to open-design/neon/DESIGN.md</span>
+        </div>
+        <div style="display: flex; gap: var(--space-16); align-items: center;">
+          <span class="status-dot active"></span>
+          <span>ALL TOKENS VALIDATED</span>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Interactive JavaScript for Live Behaviors -->
+  <script>
+    // Live Terminal Pulse Demonstration
+    const pingBtn = document.getElementById('btn-ping');
+    const pingLog = document.getElementById('ping-log');
+    let pingCount = 0;
+
+    if (pingBtn) {
+      pingBtn.addEventListener('click', () => {
+        pingCount++;
+        const lat = (1.1 + Math.random() * 0.6).toFixed(2);
+        pingLog.textContent = `[PULSE #${pingCount}] Broadcast emitted. Coherence verified in ${lat}ms.`;
+        pingBtn.style.boxShadow = '0 0 30px #BBF351';
+        setTimeout(() => {
+          pingBtn.style.boxShadow = '2px 2px 0 var(--neon-border)';
+        }, 300);
+      });
+    }
+
+    // Input Validation Demo
+    function validateDemo() {
+      const input = document.getElementById('token-auth-input');
+      const errorMsg = document.getElementById('input-error-msg');
+      const badge = document.getElementById('validation-pill');
+
+      if (!input.value || input.value.length < 6) {
+        input.classList.add('has-error');
+        errorMsg.classList.add('error');
+        errorMsg.textContent = 'Validation error: Key must be at least 6 characters long!';
+        badge.style.display = 'inline-flex';
+        badge.textContent = 'FAIL';
+        badge.className = 'badge badge-danger';
+      } else {
+        input.classList.remove('has-error');
+        errorMsg.classList.remove('error');
+        errorMsg.textContent = '✓ Key verified and encrypted with Neon cipher.';
+        errorMsg.style.color = 'var(--neon-success)';
+        badge.style.display = 'inline-flex';
+        badge.textContent = 'VALID';
+        badge.className = 'badge badge-success';
+      }
+    }
+
+    function resetDemo() {
+      const input = document.getElementById('token-auth-input');
+      const errorMsg = document.getElementById('input-error-msg');
+      const badge = document.getElementById('validation-pill');
+      input.value = '';
+      input.classList.remove('has-error');
+      errorMsg.classList.remove('error');
+      errorMsg.style.color = '#6B7280';
+      errorMsg.textContent = 'Strict validation: must exceed 6 alphanumeric characters.';
+      badge.style.display = 'none';
+    }
+
+    // Dynamic Spacing Slider Demo
+    function updateSpacing(val) {
+      document.getElementById('range-readout').textContent = val + 'px';
+      const sample = document.getElementById('spacing-sample');
+      sample.style.height = val + 'px';
+      sample.textContent = val + 'px Spacing Unit';
+    }
+
+    // Toggle Glow Intensity Demo
+    function toggleGlow(checkbox) {
+      if (checkbox.checked) {
+        document.documentElement.style.setProperty('--glow-primary', '0 0 20px rgba(187, 243, 81, 0.55), 0 0 45px rgba(187, 243, 81, 0.25)');
+        document.documentElement.style.setProperty('--glow-secondary', '0 0 20px rgba(0, 188, 255, 0.55), 0 0 45px rgba(0, 188, 255, 0.25)');
+      } else {
+        document.documentElement.style.setProperty('--glow-primary', 'none');
+        document.documentElement.style.setProperty('--glow-secondary', 'none');
+      }
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,605 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Ant Design — Enterprise UI Application Framework</title>
+  <meta name="description" content="Ant Design system: Daybreak Blue #1677FF, structured data-dense enterprise layout, Plus Jakarta Sans typography, and comprehensive enterprise controls." />
+
+  <!-- Google Fonts: Plus Jakarta Sans & JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    /* ─────────────────────────────────────────────────────────────────
+       ANT DESIGN TOKENS
+       Source: open-design/design-systems/ant/DESIGN.md
+       ───────────────────────────────────────────────────────────────── */
+    :root {
+      --primary: #1677FF;
+      --primary-hover: #4096ff;
+      --primary-active: #0958d9;
+      --primary-bg: #e6f4ff;
+      --secondary: #8B5CF6;
+      --success: #16A34A;
+      --success-bg: #f6ffed;
+      --warning: #D97706;
+      --warning-bg: #fffbe6;
+      --danger: #DC2626;
+      --danger-bg: #fff2f0;
+
+      --surface: #FFFFFF;
+      --surface-subtle: #F9FAFB;
+      --surface-hover: #F3F4F6;
+      --text: #111827;
+      --text-secondary: #4B5563;
+      --text-tertiary: #9CA3AF;
+      --border: #E5E7EB;
+      --border-split: #F3F4F6;
+
+      --font-display: "Plus Jakarta Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      --font-body: "Plus Jakarta Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      --font-mono: "JetBrains Mono", Menlo, Consolas, monospace;
+
+      --text-12: 12px;
+      --text-14: 14px;
+      --text-16: 16px;
+      --text-20: 20px;
+      --text-24: 24px;
+      --text-32: 32px;
+
+      --radius-sm: 4px;
+      --radius-md: 6px;
+      --radius-lg: 8px;
+
+      --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+      --shadow-card: 0 1px 3px 0 rgba(0, 0, 0, 0.08), 0 4px 12px 0 rgba(0, 0, 0, 0.04);
+      --focus-ring: 0 0 0 2px rgba(22, 119, 255, 0.2);
+
+      --transition-fast: 160ms cubic-bezier(0.2, 0, 0, 1);
+    }
+
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: #F0F2F5; /* Ant standard layout background */
+      color: var(--text);
+      font-family: var(--font-body);
+      font-size: var(--text-14);
+      line-height: 1.5714;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* Top Ant App Header */
+    .ant-header {
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      height: 64px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      padding-inline: 24px;
+      justify-content: space-between;
+    }
+    .header-left {
+      display: flex;
+      align-items: center;
+      gap: 32px;
+    }
+    .ant-brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+      color: var(--text);
+      font-weight: 700;
+      font-size: 18px;
+    }
+    .ant-logo-box {
+      width: 32px;
+      height: 32px;
+      background: var(--primary);
+      border-radius: var(--radius-md);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #ffffff;
+      font-weight: 800;
+      font-size: 16px;
+    }
+    .ant-menu-horizontal {
+      display: flex;
+      list-style: none;
+      gap: 24px;
+    }
+    @media (max-width: 800px) {
+      .ant-menu-horizontal { display: none; }
+    }
+    .ant-menu-item a {
+      color: var(--text-secondary);
+      text-decoration: none;
+      font-weight: 500;
+      padding: 20px 0;
+      display: inline-block;
+      border-bottom: 2px solid transparent;
+      transition: all var(--transition-fast);
+    }
+    .ant-menu-item.active a, .ant-menu-item a:hover {
+      color: var(--primary);
+      border-bottom-color: var(--primary);
+    }
+
+    /* Container */
+    .layout-container {
+      max-width: 1320px;
+      margin: 24px auto;
+      padding-inline: 24px;
+    }
+
+    /* Ant Breadcrumb */
+    .ant-breadcrumb {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: var(--text-14);
+      color: var(--text-tertiary);
+      margin-bottom: 16px;
+    }
+    .ant-breadcrumb a {
+      color: var(--text-secondary);
+      text-decoration: none;
+    }
+    .ant-breadcrumb a:hover {
+      color: var(--primary);
+    }
+
+    /* Page Header Banner */
+    .ant-page-header {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 24px;
+      margin-bottom: 24px;
+      box-shadow: var(--shadow-sm);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+    .header-title-text {
+      font-size: var(--text-20);
+      font-weight: 700;
+      color: var(--text);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    /* Buttons (Ant v5 Spec) */
+    .ant-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      height: 32px;
+      padding: 0 15px;
+      font-size: var(--text-14);
+      border-radius: var(--radius-md);
+      border: 1px solid transparent;
+      font-weight: 500;
+      cursor: pointer;
+      text-decoration: none;
+      transition: all var(--transition-fast);
+      background: var(--surface);
+      color: var(--text);
+      border-color: var(--border);
+    }
+    .ant-btn:focus-visible {
+      outline: none;
+      box-shadow: var(--focus-ring);
+    }
+    .ant-btn-primary {
+      background: var(--primary);
+      border-color: var(--primary);
+      color: #ffffff;
+      box-shadow: 0 2px 0 rgba(0, 0, 0, 0.045);
+    }
+    .ant-btn-primary:hover {
+      background: var(--primary-hover);
+      border-color: var(--primary-hover);
+    }
+    .ant-btn-primary:active {
+      background: var(--primary-active);
+      border-color: var(--primary-active);
+    }
+    .ant-btn-secondary {
+      background: var(--surface);
+      border-color: var(--border);
+      color: var(--text);
+    }
+    .ant-btn-secondary:hover {
+      border-color: var(--primary);
+      color: var(--primary);
+    }
+
+    /* Ant Stat Tiles */
+    .stat-row {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 20px;
+      margin-bottom: 24px;
+    }
+    @media (max-width: 900px) {
+      .stat-row { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 500px) {
+      .stat-row { grid-template-columns: 1fr; }
+    }
+    .stat-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 20px;
+      box-shadow: var(--shadow-sm);
+    }
+    .stat-label {
+      font-size: var(--text-12);
+      color: var(--text-secondary);
+      margin-bottom: 8px;
+    }
+    .stat-val {
+      font-size: var(--text-24);
+      font-weight: 700;
+      color: var(--text);
+      line-height: 1.2;
+    }
+    .stat-trend {
+      font-size: var(--text-12);
+      margin-top: 6px;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .trend-up { color: var(--success); font-weight: 600; }
+
+    /* Ant Data-Dense Table Card */
+    .table-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-sm);
+      margin-bottom: 24px;
+      overflow: hidden;
+    }
+    .table-card-head {
+      padding: 16px 24px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .table-card-title {
+      font-size: var(--text-16);
+      font-weight: 600;
+      color: var(--text);
+    }
+    .ant-table-wrap {
+      overflow-x: auto;
+    }
+    .ant-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: var(--text-14);
+      text-align: left;
+    }
+    .ant-table th {
+      background: #FAFAFA;
+      color: var(--text-secondary);
+      font-weight: 600;
+      padding: 14px 16px;
+      border-bottom: 1px solid var(--border);
+    }
+    .ant-table td {
+      padding: 14px 16px;
+      border-bottom: 1px solid var(--border);
+      color: var(--text);
+    }
+    .ant-table tbody tr:hover {
+      background: #FAFAFA;
+    }
+
+    /* Ant Badges & Tags */
+    .ant-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 1px 8px;
+      font-size: var(--text-12);
+      border-radius: var(--radius-sm);
+      border: 1px solid transparent;
+      font-family: var(--font-body);
+      font-weight: 500;
+    }
+    .ant-tag-success {
+      background: var(--success-bg);
+      border-color: #b7eb8f;
+      color: #389e0d;
+    }
+    .ant-tag-processing {
+      background: var(--primary-bg);
+      border-color: #91caff;
+      color: var(--primary);
+    }
+    .ant-tag-warning {
+      background: var(--warning-bg);
+      border-color: #ffe58f;
+      color: #d48806;
+    }
+    .ant-tag-error {
+      background: var(--danger-bg);
+      border-color: #ffa39e;
+      color: #cf1322;
+    }
+
+    /* Ant Form & Input Section */
+    .grid-2col {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      margin-bottom: 24px;
+    }
+    @media (max-width: 860px) {
+      .grid-2col { grid-template-columns: 1fr; }
+    }
+    .panel-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 24px;
+      box-shadow: var(--shadow-sm);
+    }
+    .panel-head-title {
+      font-size: var(--text-16);
+      font-weight: 600;
+      margin-bottom: 20px;
+      color: var(--text);
+    }
+    .form-item {
+      margin-bottom: 18px;
+    }
+    .form-label {
+      display: block;
+      font-size: var(--text-14);
+      color: var(--text-secondary);
+      margin-bottom: 6px;
+      font-weight: 500;
+    }
+    .form-label.required::before {
+      content: "* ";
+      color: var(--danger);
+    }
+    .ant-input {
+      width: 100%;
+      height: 36px;
+      padding: 4px 11px;
+      color: var(--text);
+      font-size: var(--text-14);
+      background-color: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      transition: all var(--transition-fast);
+      outline: none;
+    }
+    .ant-input:focus {
+      border-color: var(--primary);
+      box-shadow: var(--focus-ring);
+    }
+
+    /* Ant Footer */
+    .ant-footer {
+      text-align: center;
+      padding: 32px;
+      color: var(--text-secondary);
+      font-size: var(--text-14);
+      border-top: 1px solid var(--border);
+      background: var(--surface);
+      margin-top: 48px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Header Navigation -->
+  <header class="ant-header">
+    <div class="header-left">
+      <a href="#overview" class="ant-brand">
+        <div class="ant-logo-box">🐜</div>
+        <span>Ant Design UI</span>
+      </a>
+      <ul class="ant-menu-horizontal">
+        <li class="ant-menu-item active"><a href="#overview">Components</a></li>
+        <li class="ant-menu-item"><a href="#table">Data Grid</a></li>
+        <li class="ant-menu-item"><a href="#form">Forms</a></li>
+        <li class="ant-menu-item"><a href="#tokens">Tokens</a></li>
+      </ul>
+    </div>
+    <div>
+      <a href="00_Index.md" class="ant-btn ant-btn-secondary" style="margin-right: 8px;">Vault Index</a>
+      <a href="#table" class="ant-btn ant-btn-primary">Enterprise Console</a>
+    </div>
+  </header>
+
+  <!-- Main Container -->
+  <main class="layout-container">
+    
+    <!-- Breadcrumb -->
+    <div class="ant-breadcrumb">
+      <a href="#">Home</a>
+      <span>/</span>
+      <a href="#">Application</a>
+      <span>/</span>
+      <span>Enterprise Data Grid</span>
+    </div>
+
+    <!-- Page Header -->
+    <div class="ant-page-header">
+      <div>
+        <div class="header-title-text">
+          <span>Enterprise Services Dashboard</span>
+          <span class="ant-tag ant-tag-processing">Production Ready</span>
+        </div>
+        <div style="font-size: 13px; color: var(--text-secondary); margin-top: 4px;">
+          Structured, enterprise-focused design system emphasizing clarity, consistency, and efficiency.
+        </div>
+      </div>
+      <div style="display: flex; gap: 8px;">
+        <button class="ant-btn ant-btn-secondary">Export JSON</button>
+        <button class="ant-btn ant-btn-primary">+ Create New Cluster</button>
+      </div>
+    </div>
+
+    <!-- Stat Tiles (Section 4) -->
+    <div class="stat-row">
+      <div class="stat-card">
+        <div class="stat-label">Active Node Clusters</div>
+        <div class="stat-val">1,284</div>
+        <div class="stat-trend"><span class="trend-up">↑ 12.4%</span> vs last month</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Mean Latency</div>
+        <div class="stat-val">18.2 ms</div>
+        <div class="stat-trend"><span class="trend-up">↑ 4.1%</span> efficiency gain</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">API Throughput</div>
+        <div class="stat-val">4.8M req/s</div>
+        <div class="stat-trend"><span class="trend-up">↑ 8.0%</span> healthy capacity</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Error Rate</div>
+        <div class="stat-val">0.002%</div>
+        <div class="stat-trend" style="color: var(--success); font-weight: 600;">Optimal 99.998%</div>
+      </div>
+    </div>
+
+    <!-- Ant Data Grid Table Card -->
+    <div id="table" class="table-card">
+      <div class="table-card-head">
+        <span class="table-card-title">Cluster Operations &amp; Health Registry</span>
+        <div style="display: flex; gap: 8px;">
+          <input type="text" class="ant-input" placeholder="Filter clusters..." style="width: 200px; height: 32px;" />
+          <button class="ant-btn ant-btn-secondary">Refresh</button>
+        </div>
+      </div>
+
+      <div class="ant-table-wrap">
+        <table class="ant-table">
+          <thead>
+            <tr>
+              <th>Cluster ID</th>
+              <th>Deployment Region</th>
+              <th>State</th>
+              <th>CPU Utilization</th>
+              <th>Memory Allocation</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong style="color: var(--primary);">k8s-prod-apac-01</strong></td>
+              <td>Tokyo (ap-northeast-1)</td>
+              <td><span class="ant-tag ant-tag-success">● Healthy</span></td>
+              <td>42.8%</td>
+              <td>12.4 GB / 32 GB</td>
+              <td><a href="#" style="color: var(--primary); text-decoration: none; font-weight: 500;">Configure</a></td>
+            </tr>
+            <tr>
+              <td><strong style="color: var(--primary);">k8s-prod-eu-west-04</strong></td>
+              <td>Frankfurt (eu-central-1)</td>
+              <td><span class="ant-tag ant-tag-processing">● Scaling</span></td>
+              <td>78.1%</td>
+              <td>28.2 GB / 32 GB</td>
+              <td><a href="#" style="color: var(--primary); text-decoration: none; font-weight: 500;">Configure</a></td>
+            </tr>
+            <tr>
+              <td><strong style="color: var(--primary);">k8s-edge-us-east-02</strong></td>
+              <td>Virginia (us-east-1)</td>
+              <td><span class="ant-tag ant-tag-success">● Healthy</span></td>
+              <td>36.5%</td>
+              <td>8.1 GB / 16 GB</td>
+              <td><a href="#" style="color: var(--primary); text-decoration: none; font-weight: 500;">Configure</a></td>
+            </tr>
+            <tr>
+              <td><strong style="color: var(--primary);">k8s-staging-sandbox</strong></td>
+              <td>Oregon (us-west-2)</td>
+              <td><span class="ant-tag ant-tag-warning">▲ Maintenance</span></td>
+              <td>12.0%</td>
+              <td>4.0 GB / 16 GB</td>
+              <td><a href="#" style="color: var(--primary); text-decoration: none; font-weight: 500;">Configure</a></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Forms & Components Bench -->
+    <div id="form" class="grid-2col">
+      <div class="panel-card">
+        <div class="panel-head-title">Cluster Provisioning Specification</div>
+        <div class="form-item">
+          <label class="form-label required">Cluster Namespace</label>
+          <input type="text" class="ant-input" value="ant-enterprise-prod" />
+        </div>
+        <div class="form-item">
+          <label class="form-label required">VPC Ingress Endpoint</label>
+          <input type="text" class="ant-input" value="https://vpc-091a4c.internal.ant.design" />
+        </div>
+        <div style="display: flex; gap: 8px; margin-top: 24px;">
+          <button class="ant-btn ant-btn-primary">Apply Settings</button>
+          <button class="ant-btn ant-btn-secondary">Reset</button>
+        </div>
+      </div>
+
+      <div id="tokens" class="panel-card">
+        <div class="panel-head-title">Token Foundation Specifications</div>
+        <div style="font-size: 13px; color: var(--text-secondary); line-height: 1.7;">
+          <div style="display: flex; justify-content: space-between; padding-block: 8px; border-bottom: 1px solid var(--border-split);">
+            <span>Primary Daybreak Blue</span>
+            <strong style="color: var(--primary);">#1677FF</strong>
+          </div>
+          <div style="display: flex; justify-content: space-between; padding-block: 8px; border-bottom: 1px solid var(--border-split);">
+            <span>Secondary Purple</span>
+            <strong style="color: var(--secondary);">#8B5CF6</strong>
+          </div>
+          <div style="display: flex; justify-content: space-between; padding-block: 8px; border-bottom: 1px solid var(--border-split);">
+            <span>Typography Family</span>
+            <strong>Plus Jakarta Sans</strong>
+          </div>
+          <div style="display: flex; justify-content: space-between; padding-block: 8px;">
+            <span>Scale Baseline</span>
+            <strong>12 / 14 / 16 / 20 / 24 / 32</strong>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="ant-footer">
+    <div>Ant Design Specification &copy; 2026. Built with OpenDesign Enterprise Tokens.</div>
+    <div style="margin-top: 8px;">
+      <a href="00_Index.md" style="color: var(--primary); text-decoration: none; font-weight: 500;">← Return to Master Index</a>
+    </div>
+  </footer>
+
+</body>
+</html>

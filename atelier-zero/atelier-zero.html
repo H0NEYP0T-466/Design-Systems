@@ -1,0 +1,1488 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Atelier Zero — Annual Studio Report MMXXVI</title>
+  <meta name="description" content="Atelier Zero: An editorial, collage-driven studio annual report rendered as a working publication website. Inspired by Monocle, Apartamento, and IDEA." />
+
+  <!-- Google Fonts: Inter Tight, Playfair Display, Inter, JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,500;1,600;1,700&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&family=Playfair+Display:ital,wght@0,500;0,600;1,500;1,600&display=swap" rel="stylesheet">
+
+  <style>
+    /* ─────────────────────────────────────────────────────────────────
+       ATELIER ZERO — DESIGN SYSTEM TOKEN CONTRACT
+       Source: open-design/design-systems/atelier-zero/DESIGN.md
+       ───────────────────────────────────────────────────────────────── */
+    :root {
+      /* Palette */
+      --paper: #efe7d2;
+      --paper-warm: #ece4cf;
+      --paper-dark: #ddd2b6;
+      --bone: #f7f1de;
+      --ink: #15140f;
+      --ink-soft: #2a2620;
+      --ink-mute: #5a5448;
+      --ink-faint: #8b8676;
+      --coral: #ed6f5c;
+      --coral-soft: #f08e7c;
+      --mustard: #e9b94a;
+      --olive: #6e7448;
+
+      /* Typography Stacks */
+      --font-display: "Inter Tight", -apple-system, BlinkMacSystemFont, sans-serif;
+      --font-serif-italic: "Playfair Display", Georgia, serif;
+      --font-body: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
+      --font-mono: "JetBrains Mono", Menlo, Consolas, monospace;
+
+      /* Spacing & Layout */
+      --container-max: 1360px;
+      --gutter-desktop: 64px;
+      --gutter-1280: 44px;
+      --gutter-1080: 32px;
+      --gutter-880: 24px;
+      --section-pad-y: 130px;
+      --section-pad-tight: 90px;
+
+      /* Borders & Hairlines */
+      --hairline: 1px solid rgba(21, 20, 15, 0.14);
+      --hairline-strong: 1px solid rgba(21, 20, 15, 0.32);
+      --hairline-faint: 1px solid rgba(21, 20, 15, 0.08);
+
+      /* Motion */
+      --ease-editorial: cubic-bezier(0.2, 0, 0, 1);
+      --transition-fast: 0.18s var(--ease-editorial);
+    }
+
+    /* Reset & Canvas Base */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      background-color: var(--paper);
+    }
+
+    body {
+      background-color: var(--paper);
+      color: var(--ink);
+      font-family: var(--font-body);
+      font-size: 16px;
+      line-height: 1.55;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    /* Paper Noise Texture (Mandatory Section 2: Surface noise) */
+    body::before {
+      content: "";
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      pointer-events: none;
+      z-index: 9999;
+      opacity: 0.06;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+      background-repeat: repeat;
+      mix-blend-mode: multiply;
+    }
+
+    /* Hand-Pressed Paper Warmth Gradients */
+    .paper-warmth {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      pointer-events: none;
+      z-index: 1;
+      background:
+        radial-gradient(ellipse at 15% 20%, rgba(106, 92, 56, 0.06) 0%, transparent 60%),
+        radial-gradient(ellipse at 85% 80%, rgba(106, 92, 56, 0.05) 0%, transparent 65%);
+    }
+
+    /* Fixed Side Rails (Mandatory Section 4 & 6: 36px wide strips) */
+    .side-rail {
+      position: fixed;
+      top: 0;
+      bottom: 0;
+      width: 36px;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      pointer-events: none;
+    }
+    .side-rail-left {
+      left: 0;
+      border-right: var(--hairline-faint);
+    }
+    .side-rail-right {
+      right: 0;
+      border-left: var(--hairline-faint);
+    }
+    .side-rail-text {
+      font-family: var(--font-display);
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.42em;
+      text-transform: uppercase;
+      color: var(--ink-faint);
+      white-space: nowrap;
+      writing-mode: vertical-rl;
+    }
+    .side-rail-left .side-rail-text {
+      transform: rotate(180deg);
+    }
+
+    @media (max-width: 1279px) {
+      .side-rail { display: none; }
+    }
+
+    /* Layout Containers */
+    .atelier-container {
+      max-width: var(--container-max);
+      margin-inline: auto;
+      padding-inline: var(--gutter-desktop);
+      position: relative;
+      z-index: 2;
+    }
+    @media (max-width: 1279px) {
+      .atelier-container { padding-inline: var(--gutter-1280); }
+    }
+    @media (max-width: 1079px) {
+      .atelier-container { padding-inline: var(--gutter-1080); }
+    }
+    @media (max-width: 879px) {
+      .atelier-container { padding-inline: var(--gutter-880); }
+    }
+
+    /* 1. TOP PUBLICATION METADATA STRIP (Mandatory Section 5) */
+    .metadata-strip {
+      border-bottom: 1px solid rgba(21, 20, 15, 0.12);
+      font-family: var(--font-display);
+      font-size: 10.5px;
+      color: var(--ink-faint);
+      background: var(--paper);
+      position: relative;
+      z-index: 50;
+    }
+    .metadata-strip-inner {
+      max-width: var(--container-max);
+      margin-inline: auto;
+      padding: 9px var(--gutter-desktop);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    @media (max-width: 1279px) {
+      .metadata-strip-inner { padding-inline: var(--gutter-1280); }
+    }
+    .meta-col {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .meta-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 2px 7px;
+      border: 1px solid rgba(21, 20, 15, 0.14);
+      border-radius: 3px;
+      background: var(--paper-warm);
+      color: var(--ink-soft);
+      font-weight: 500;
+    }
+    .pulse-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--coral);
+      display: inline-block;
+      animation: pulse 2.4s ease-in-out infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1.0; transform: scale(1); }
+      50% { opacity: 0.35; transform: scale(0.85); }
+    }
+    @media (max-width: 1079px) {
+      .meta-middle { display: none; }
+    }
+
+    /* 2. EDITORIAL STUDIO NAVIGATION */
+    .atelier-nav {
+      border-bottom: 1px solid rgba(21, 20, 15, 0.14);
+      background: var(--paper);
+      position: sticky;
+      top: 0;
+      z-index: 40;
+    }
+    .atelier-nav-inner {
+      max-width: var(--container-max);
+      margin-inline: auto;
+      padding: 16px var(--gutter-desktop);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    @media (max-width: 1279px) {
+      .atelier-nav-inner { padding-inline: var(--gutter-1280); }
+    }
+    .brand-mark {
+      display: inline-flex;
+      align-items: baseline;
+      gap: 8px;
+      text-decoration: none;
+      color: var(--ink);
+    }
+    .brand-glyph {
+      font-family: var(--font-serif-italic);
+      font-size: 26px;
+      font-style: italic;
+      color: var(--ink);
+      line-height: 1;
+    }
+    .brand-title {
+      font-family: var(--font-display);
+      font-size: 16px;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      text-transform: uppercase;
+    }
+    .brand-subtitle {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      color: var(--ink-faint);
+      margin-left: 6px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 28px;
+      list-style: none;
+    }
+    @media (max-width: 879px) {
+      .nav-links { display: none; }
+    }
+    .nav-links a {
+      text-decoration: none;
+      font-family: var(--font-display);
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--ink-soft);
+      transition: color var(--transition-fast);
+    }
+    .nav-links a:hover {
+      color: var(--coral);
+    }
+    .nav-cta-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 8px 16px;
+      border: 1px solid rgba(21, 20, 15, 0.22);
+      border-radius: 999px;
+      background: transparent;
+      color: var(--ink);
+      font-family: var(--font-display);
+      font-size: 12px;
+      font-weight: 700;
+      text-decoration: none;
+      cursor: pointer;
+      transition: all var(--transition-fast);
+    }
+    .nav-cta-btn:hover {
+      border-color: var(--ink);
+      background: rgba(21, 20, 15, 0.04);
+      transform: translateY(-1px);
+    }
+    .nav-star {
+      color: var(--mustard); /* Single ★ in nav as allowed jewelry */
+      font-size: 11px;
+    }
+
+    /* 3. ROMAN SECTION RULES (Mandatory Section 5 & 6) */
+    .sec-rule {
+      padding-top: 18px;
+      margin-bottom: 48px;
+      border-top: var(--hairline);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-family: var(--font-display);
+      font-size: 11px;
+    }
+    .sec-rule-roman {
+      font-family: var(--font-serif-italic);
+      font-size: 15px;
+      font-style: italic;
+      color: var(--coral);
+      font-weight: 500;
+    }
+    .sec-rule-meta {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      color: var(--ink-faint);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+    .sec-rule-page {
+      color: var(--ink-faint);
+      font-size: 11px;
+      font-weight: 500;
+    }
+
+    /* 4. TYPOGRAPHY SCALES & HEADLINES */
+    .eyebrow-coral {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      font-family: var(--font-display);
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--coral);
+      margin-bottom: 20px;
+    }
+    .eyebrow-coral::before {
+      content: "";
+      width: 18px;
+      height: 1px;
+      background: var(--coral);
+      display: inline-block;
+    }
+
+    /* Mixed Sans Bold + Italic Serif Headlines (Mandatory Section 3) */
+    .display-h1 {
+      font-family: var(--font-display);
+      font-size: clamp(38px, 6vw, 78px);
+      font-weight: 800;
+      line-height: 1.05;
+      letter-spacing: -0.035em;
+      color: var(--ink);
+      margin-bottom: 28px;
+      max-width: 17ch;
+    }
+    .display-h1 em, .display-h2 em {
+      font-family: var(--font-serif-italic);
+      font-style: italic;
+      font-weight: 500;
+      letter-spacing: -0.01em;
+    }
+    .dot {
+      color: var(--coral);
+    }
+
+    .lead-paragraph {
+      font-size: 17px;
+      line-height: 1.62;
+      color: var(--ink-soft);
+      max-width: 52ch;
+      margin-bottom: 40px;
+    }
+
+    /* 5. BUTTONS (Mandatory Section 6) */
+    .btn-coral {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: var(--coral);
+      color: #ffffff;
+      padding: 14px 24px;
+      border-radius: 999px;
+      font-family: var(--font-display);
+      font-size: 14px;
+      font-weight: 700;
+      text-decoration: none;
+      border: none;
+      cursor: pointer;
+      box-shadow: 0 14px 26px -16px rgba(237, 111, 92, 0.7);
+      transition: all var(--transition-fast);
+    }
+    .btn-coral:hover {
+      background: var(--coral-soft);
+      transform: translateY(-1px);
+    }
+    .btn-ghost-ink {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: transparent;
+      color: var(--ink);
+      padding: 14px 24px;
+      border-radius: 999px;
+      font-family: var(--font-display);
+      font-size: 14px;
+      font-weight: 700;
+      text-decoration: none;
+      border: 1px solid rgba(21, 20, 15, 0.22);
+      cursor: pointer;
+      transition: all var(--transition-fast);
+    }
+    .btn-ghost-ink:hover {
+      border-color: var(--ink);
+      background: rgba(21, 20, 15, 0.04);
+      transform: translateY(-1px);
+    }
+
+    /* 6. HERO SPREAD & ARTWORK COLLAGE (Section 4 & 5) */
+    .hero-section {
+      padding-top: 56px;
+      padding-bottom: var(--section-pad-tight);
+    }
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 0.95fr 1.05fr;
+      gap: 56px;
+      align-items: start;
+    }
+    @media (max-width: 1079px) {
+      .hero-grid { grid-template-columns: 1fr; gap: 48px; }
+    }
+
+    /* Collage Frame with Corner Hairline Brackets (Section 5: Image annotations) */
+    .collage-frame {
+      position: relative;
+      background: var(--bone);
+      border: 1px solid rgba(21, 20, 15, 0.16);
+      padding: 24px;
+      min-height: 520px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    /* 4 Corner brackets (22x22 hairlines) */
+    .bracket-tl, .bracket-tr, .bracket-bl, .bracket-br {
+      position: absolute;
+      width: 22px;
+      height: 22px;
+      pointer-events: none;
+    }
+    .bracket-tl { top: -1px; left: -1px; border-top: 1px solid var(--ink); border-left: 1px solid var(--ink); }
+    .bracket-tr { top: -1px; right: -1px; border-top: 1px solid var(--ink); border-right: 1px solid var(--ink); }
+    .bracket-bl { bottom: -1px; left: -1px; border-bottom: 1px solid var(--ink); border-left: 1px solid var(--ink); }
+    .bracket-br { bottom: -1px; right: -1px; border-bottom: 1px solid var(--ink); border-right: 1px solid var(--ink); }
+
+    .collage-meta-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-family: var(--font-mono);
+      font-size: 10px;
+      color: var(--ink-faint);
+      border-bottom: var(--hairline);
+      padding-bottom: 12px;
+    }
+    .plate-badge {
+      color: var(--ink);
+      font-weight: 500;
+    }
+
+    /* Collage Center Artwork Simulation */
+    .collage-artwork {
+      margin: 28px 0;
+      position: relative;
+      background: var(--paper-warm);
+      border: 1px dashed rgba(21, 20, 15, 0.2);
+      padding: 32px 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+    .artwork-bust-study {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      border-bottom: 1px solid rgba(21, 20, 15, 0.1);
+      padding-bottom: 24px;
+    }
+    .sculpture-glyph {
+      font-family: var(--font-serif-italic);
+      font-size: 64px;
+      color: var(--ink-soft);
+      line-height: 0.9;
+    }
+    .arch-composition {
+      border: 1px solid var(--ink);
+      padding: 12px 18px;
+      background: var(--paper);
+      font-family: var(--font-mono);
+      font-size: 11px;
+      line-height: 1.5;
+    }
+    .arch-composition span {
+      display: block;
+      color: var(--ink-mute);
+    }
+    .artwork-footer-meta {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-family: var(--font-mono);
+      font-size: 9.5px;
+      color: var(--ink-faint);
+    }
+
+    /* Index Card on Hero Edge (Section 6: 01-04 index entries) */
+    .hero-index-card {
+      border-top: var(--hairline);
+      padding-top: 14px;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+    }
+    .index-card-item {
+      font-family: var(--font-mono);
+      font-size: 10px;
+    }
+    .index-card-item .num {
+      color: var(--coral);
+      font-weight: 500;
+      display: block;
+      margin-bottom: 2px;
+    }
+    .index-card-item.active .label {
+      color: var(--ink);
+      font-weight: 600;
+    }
+    .index-card-item .label {
+      color: var(--ink-faint);
+    }
+
+    /* 7. SECTION II: METHOD 4-STEP HAIRLINE LAYOUT (Section 5: Method section) */
+    .method-section {
+      padding-block: var(--section-pad-tight);
+    }
+    .method-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      position: relative;
+      margin-top: 36px;
+    }
+    /* Continuous horizontal hairline running through the step heads */
+    .method-grid::before {
+      content: "";
+      position: absolute;
+      top: 16px;
+      left: 0;
+      right: 0;
+      height: 1px;
+      background: rgba(21, 20, 15, 0.2);
+      z-index: 1;
+    }
+    .method-step {
+      padding-right: 28px;
+      position: relative;
+      z-index: 2;
+    }
+    .step-head {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 28px;
+      background: var(--paper);
+      display: inline-flex;
+      padding-right: 12px;
+    }
+    .step-ring {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      border: 1px dashed var(--ink-mute);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-mono);
+      font-size: 11px;
+      font-weight: 500;
+      color: var(--ink);
+      background: var(--paper);
+    }
+    .step-ring.highlighted {
+      border-color: var(--mustard); /* Highlighted ring in mustard jewelry */
+      color: var(--ink);
+      font-weight: 700;
+    }
+    .step-sep {
+      color: var(--ink-faint);
+      font-size: 14px;
+    }
+    .step-title {
+      font-family: var(--font-display);
+      font-size: 17px;
+      font-weight: 700;
+      letter-spacing: -0.01em;
+      color: var(--ink);
+      margin-bottom: 12px;
+    }
+    .step-desc {
+      font-size: 13.5px;
+      line-height: 1.6;
+      color: var(--ink-soft);
+    }
+    @media (max-width: 1079px) {
+      .method-grid { grid-template-columns: repeat(2, 1fr); gap: 40px; }
+      .method-grid::before { display: none; }
+    }
+    @media (max-width: 560px) {
+      .method-grid { grid-template-columns: 1fr; }
+    }
+
+    /* 8. SECTION III: CAPABILITIES & BONE CARDS (Section 6: Cards) */
+    .capabilities-section {
+      padding-block: var(--section-pad-tight);
+    }
+    .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+      margin-top: 36px;
+    }
+    @media (max-width: 1079px) {
+      .cards-grid { grid-template-columns: 1fr; }
+    }
+    .bone-card {
+      background: var(--bone);
+      border: 1px solid rgba(21, 20, 15, 0.12);
+      border-radius: 18px;
+      padding: 28px 26px;
+      box-shadow: inset 0 0 0 1px rgba(21, 20, 15, 0.04), 0 10px 24px -14px rgba(21, 20, 15, 0.08);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      min-height: 320px;
+      transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+      position: relative;
+    }
+    .bone-card:hover {
+      transform: translateY(-3px);
+      box-shadow: inset 0 0 0 1px rgba(21, 20, 15, 0.08), 0 18px 30px -18px rgba(21, 20, 15, 0.14);
+    }
+    .card-top-row {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      margin-bottom: 24px;
+    }
+    .card-num {
+      font-family: var(--font-serif-italic);
+      font-size: 22px;
+      font-style: italic;
+      color: var(--ink-soft);
+    }
+    .card-eyebrow {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--olive); /* Quiet third accent */
+      font-weight: 500;
+    }
+    .card-title {
+      font-family: var(--font-display);
+      font-size: 22px;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      color: var(--ink);
+      margin-bottom: 12px;
+      line-height: 1.2;
+    }
+    .card-body {
+      font-size: 14px;
+      line-height: 1.6;
+      color: var(--ink-soft);
+    }
+    .card-bottom-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-top: 24px;
+      border-top: var(--hairline-faint);
+      margin-top: 24px;
+    }
+    .card-spec-mono {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      color: var(--ink-faint);
+    }
+    /* Circular arrow mark turns coral on hover */
+    .card-arrow-mark {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      border: 1px solid rgba(21, 20, 15, 0.22);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--ink);
+      transition: all var(--transition-fast);
+      background: transparent;
+    }
+    .bone-card:hover .card-arrow-mark {
+      background: var(--coral);
+      border-color: var(--coral);
+      color: #ffffff;
+      transform: translateX(2px) translateY(-2px);
+    }
+
+    /* 9. SECTION IV: DARK SELECTED WORK PANEL (Section 2 & 9: Only place pure white is allowed) */
+    .selected-work-section {
+      padding-block: var(--section-pad-tight);
+    }
+    .dark-monograph-panel {
+      background: var(--ink);
+      color: rgba(255, 255, 255, 0.88);
+      border-radius: 32px;
+      padding: 64px 54px;
+      position: relative;
+      overflow: hidden;
+    }
+    @media (max-width: 879px) {
+      .dark-monograph-panel { padding: 40px 24px; border-radius: 20px; }
+    }
+    .dark-panel-head {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+      padding-bottom: 32px;
+      margin-bottom: 48px;
+    }
+    .dark-title {
+      font-family: var(--font-display);
+      font-size: clamp(28px, 4vw, 44px);
+      font-weight: 700;
+      letter-spacing: -0.025em;
+      color: #ffffff; /* Allowed inverse text */
+      line-height: 1.1;
+    }
+    .dark-title em {
+      font-family: var(--font-serif-italic);
+      font-style: italic;
+      color: #ffffff;
+    }
+    .dark-catalog-grid {
+      display: grid;
+      grid-template-columns: 1.2fr 0.8fr;
+      gap: 48px;
+      align-items: center;
+    }
+    @media (max-width: 1079px) {
+      .dark-catalog-grid { grid-template-columns: 1fr; }
+    }
+    .work-plate-box {
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      padding: 28px;
+      background: rgba(255, 255, 255, 0.03);
+      position: relative;
+    }
+    .work-plate-box .bracket-tl, .work-plate-box .bracket-tr,
+    .work-plate-box .bracket-bl, .work-plate-box .bracket-br {
+      border-color: rgba(255, 255, 255, 0.6);
+    }
+    .work-plate-quote {
+      font-family: var(--font-serif-italic);
+      font-size: 22px;
+      line-height: 1.45;
+      color: #ffffff;
+      margin-bottom: 20px;
+    }
+    .work-plate-meta {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: rgba(255, 255, 255, 0.6);
+    }
+
+    /* 10. SECTION V: INTERACTIVE CONTROLS & PILL FILTERS (Section 6) */
+    .controls-section {
+      padding-block: var(--section-pad-tight);
+    }
+    .pill-filter-bar {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-bottom: 36px;
+    }
+    .pill-filter {
+      padding: 10px 18px;
+      border-radius: 999px;
+      border: 1px solid rgba(21, 20, 15, 0.2);
+      background: transparent;
+      font-family: var(--font-display);
+      font-size: 12.5px;
+      font-weight: 600;
+      color: var(--ink);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: all var(--transition-fast);
+    }
+    .pill-filter:hover {
+      background: rgba(21, 20, 15, 0.04);
+    }
+    .pill-filter.active {
+      background: var(--coral);
+      border-color: var(--coral);
+      color: #ffffff;
+    }
+    .pill-count {
+      opacity: 0.7;
+      font-family: var(--font-mono);
+      font-size: 11px;
+    }
+
+    .interactive-specimen-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 32px;
+    }
+    @media (max-width: 879px) {
+      .interactive-specimen-grid { grid-template-columns: 1fr; }
+    }
+    .specimen-card {
+      background: var(--paper-warm);
+      border: 1px solid rgba(21, 20, 15, 0.14);
+      padding: 32px;
+      border-radius: 12px;
+    }
+    .specimen-title {
+      font-family: var(--font-display);
+      font-size: 16px;
+      font-weight: 700;
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .input-editorial {
+      width: 100%;
+      padding: 12px 16px;
+      background: var(--paper);
+      border: 1px solid rgba(21, 20, 15, 0.22);
+      border-radius: 4px;
+      color: var(--ink);
+      font-family: var(--font-mono);
+      font-size: 13px;
+      outline: none;
+      transition: border-color var(--transition-fast);
+    }
+    .input-editorial:focus {
+      border-color: var(--coral);
+    }
+
+    /* 11. COLOPHON & GIANT WORD FOOTER (Section 5 & 12) */
+    .editorial-footer {
+      border-top: 1px solid rgba(21, 20, 15, 0.2);
+      padding-top: 80px;
+      padding-bottom: 60px;
+      margin-top: 80px;
+      background: var(--paper);
+    }
+    .footer-colophon-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1fr;
+      gap: 40px;
+      padding-bottom: 64px;
+      border-bottom: var(--hairline);
+      font-size: 13px;
+    }
+    @media (max-width: 879px) {
+      .footer-colophon-grid { grid-template-columns: 1fr 1fr; }
+    }
+    .colophon-col h5 {
+      font-family: var(--font-display);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--ink-faint);
+      margin-bottom: 18px;
+    }
+    .colophon-col p {
+      color: var(--ink-soft);
+      line-height: 1.6;
+    }
+    .colophon-links {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .colophon-links a {
+      color: var(--ink);
+      text-decoration: none;
+      font-weight: 500;
+      transition: color var(--transition-fast);
+    }
+    .colophon-links a:hover {
+      color: var(--coral);
+    }
+
+    /* Giant Brand Word Footer: clamp(70px, 13vw, 200px) */
+    .footer-giant-word-wrap {
+      padding-top: 48px;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+    }
+    .footer-giant-word {
+      font-family: var(--font-display);
+      font-size: clamp(64px, 12.8vw, 190px);
+      font-weight: 900;
+      letter-spacing: -0.04em;
+      line-height: 0.88;
+      color: var(--ink);
+      text-transform: uppercase;
+      user-select: none;
+    }
+    .footer-giant-word .dot {
+      color: var(--coral);
+    }
+    .footer-fin-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+      padding-top: 28px;
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--ink-faint);
+      border-top: var(--hairline-faint);
+      margin-top: 36px;
+    }
+    .fin-mark {
+      font-family: var(--font-serif-italic);
+      font-size: 16px;
+      color: var(--coral);
+      font-style: italic;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Ambient Handmade Paper Gradients -->
+  <div class="paper-warmth" aria-hidden="true"></div>
+
+  <!-- Mandatory Left & Right Fixed 36px Side Rails (Section 4 & 6) -->
+  <aside class="side-rail side-rail-left" aria-hidden="true">
+    <div class="side-rail-text">ANNUAL REPORT MMXXVI · ISSUE Nº 26</div>
+  </aside>
+  <aside class="side-rail side-rail-right" aria-hidden="true">
+    <div class="side-rail-text">ATELIER ZERO · TOKYO · BERLIN</div>
+  </aside>
+
+  <!-- 1. MANDATORY TOP PUBLICATION METADATA STRIP (Section 5) -->
+  <div class="metadata-strip">
+    <div class="metadata-strip-inner">
+      <div class="meta-col">
+        <span class="meta-badge">FILED UNDER: STUDIO ARCHIVE</span>
+        <span>VOL. 01 / ISSUE Nº 26</span>
+      </div>
+      <div class="meta-col meta-middle">
+        <span>52.5200° N · 13.4050° E</span>
+        <span>SHA-256: 8f4a9c12b7</span>
+      </div>
+      <div class="meta-col">
+        <span class="pulse-dot"></span>
+        <span>SYSTEM LIVE · v2.6.0 · TOKYO / BERLIN</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2. EDITORIAL STUDIO NAVIGATION -->
+  <nav class="atelier-nav">
+    <div class="atelier-nav-inner">
+      <a href="#hero" class="brand-mark">
+        <span class="brand-glyph">Ø</span>
+        <span class="brand-title">Atelier Zero</span>
+        <span class="brand-subtitle">Editorial Studio</span>
+      </a>
+      <ul class="nav-links">
+        <li><a href="#method">I. Method</a></li>
+        <li><a href="#capabilities">II. Capabilities</a></li>
+        <li><a href="#selected-work">III. Selected Work</a></li>
+        <li><a href="#specimens">IV. Specimens</a></li>
+        <li><a href="#colophon">V. Colophon</a></li>
+      </ul>
+      <div>
+        <a href="#specimens" class="nav-cta-btn">
+          <span class="nav-star">★</span>
+          <span>Index MMXXVI</span>
+        </a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- 3. HERO SECTION (Spread I) -->
+  <main id="hero" class="hero-section">
+    <div class="atelier-container">
+      
+      <!-- Section Rule 01 -->
+      <div class="sec-rule">
+        <span class="sec-rule-roman">I.</span>
+        <span class="sec-rule-meta">PROLOGUE · ANNUAL MONOGRAPH</span>
+        <span class="sec-rule-page">001 / 008</span>
+      </div>
+
+      <div class="hero-grid">
+        <!-- Hero Column Left: Declarative + Italic Headline -->
+        <div>
+          <div class="eyebrow-coral">INDEPENDENT ATELIER</div>
+          <h1 class="display-h1">
+            Designing <em>intelligence</em> with craft, <em>taste</em>, and code<span class="dot">.</span>
+          </h1>
+          <p class="lead-paragraph">
+            A museum-grade editorial architecture translated into live software. We construct tactile, publication-first computational environments where typography carries the structure and collage imagery drives the discourse.
+          </p>
+
+          <!-- Single Coral CTA Moment (One coral moment per ~600vh rule) -->
+          <div style="display: flex; gap: 14px; align-items: center; flex-wrap: wrap;">
+            <a href="#capabilities" class="btn-coral">
+              <span>Read Studio Monograph</span>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M7 17L17 7M17 7H7M17 7V17"/></svg>
+            </a>
+            <a href="#selected-work" class="btn-ghost-ink">
+              <span>Browse Plates Nº 01–08</span>
+            </a>
+          </div>
+
+          <div style="margin-top: 48px; display: flex; gap: 32px; font-family: var(--font-mono); font-size: 11px; color: var(--ink-faint);">
+            <div>TYPE: INTER TIGHT · PLAYFAIR ITALIC</div>
+            <div>PAPER: #EFE7D2</div>
+          </div>
+        </div>
+
+        <!-- Hero Column Right: Curated Collage Frame with 4 Corner Brackets -->
+        <div class="collage-frame">
+          <span class="bracket-tl"></span>
+          <span class="bracket-tr"></span>
+          <span class="bracket-bl"></span>
+          <span class="bracket-br"></span>
+
+          <div class="collage-meta-bar">
+            <span class="plate-badge">PLATE Nº 01 / FIG. 26</span>
+            <span>ARCHIVE REF: AT-2026-B</span>
+          </div>
+
+          <!-- Surreal Collage Fragment Mockup (Plaster + Architecture + Serif mark) -->
+          <div class="collage-artwork">
+            <div class="artwork-bust-study">
+              <div>
+                <span style="font-family: var(--font-mono); font-size: 10px; color: var(--ink-faint); display: block; margin-bottom: 4px;">CLASSICAL PLASTER STUDY</span>
+                <span class="sculpture-glyph">Ἀ</span>
+              </div>
+              <div class="arch-composition">
+                <span>PORTICO BRUTALISTE</span>
+                <span>48° 51' N · 02° 20' E</span>
+                <span style="color: var(--olive); font-weight: 600;">ELEVATION: +42.0M</span>
+              </div>
+            </div>
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+              <span style="font-size: 12px; font-family: var(--font-serif-italic); font-style: italic; color: var(--ink-soft);">
+                &ldquo;Form follows the handmade grain.&rdquo;
+              </span>
+              <span style="font-family: var(--font-mono); font-size: 10px; color: var(--ink-faint);">MMXXVI</span>
+            </div>
+          </div>
+
+          <!-- Right Edge Index Card (01-04 entries) -->
+          <div class="hero-index-card">
+            <div class="index-card-item active">
+              <span class="num">01</span>
+              <span class="label">Typography</span>
+            </div>
+            <div class="index-card-item">
+              <span class="num">02</span>
+              <span class="label">Method</span>
+            </div>
+            <div class="index-card-item">
+              <span class="num">03</span>
+              <span class="label">Plates</span>
+            </div>
+            <div class="index-card-item">
+              <span class="num">04</span>
+              <span class="label">Colophon</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- 4. SECTION II: METHOD 4-STEP HAIRLINE LAYOUT (Section 5) -->
+  <section id="method" class="method-section">
+    <div class="atelier-container">
+      
+      <!-- Section Rule 02 -->
+      <div class="sec-rule">
+        <span class="sec-rule-roman">II.</span>
+        <span class="sec-rule-meta">METHODOLOGY · PRODUCTION DISCIPLINE</span>
+        <span class="sec-rule-page">002 / 008</span>
+      </div>
+
+      <div class="eyebrow-coral">PROCESS FORMULATION</div>
+      <h2 style="font-family: var(--font-display); font-size: clamp(28px, 4.5vw, 54px); font-weight: 800; letter-spacing: -0.03em; color: var(--ink); margin-bottom: 24px;">
+        Four tenets of <em>editorial</em> computing<span class="dot">.</span>
+      </h2>
+
+      <!-- 4-step layout with continuous horizontal hairline threading through step heads -->
+      <div class="method-grid">
+        <div class="method-step">
+          <div class="step-head">
+            <div class="step-ring highlighted">01</div>
+            <span class="step-sep">→</span>
+          </div>
+          <h3 class="step-title">Paper Archetype</h3>
+          <p class="step-desc">
+            Surfaces begin at handmade ivory #efe7d2. Pure white is banned from ambient surfaces, preserving print-press warmth across all screen dimensions.
+          </p>
+        </div>
+
+        <div class="method-step">
+          <div class="step-head">
+            <div class="step-ring">02</div>
+            <span class="step-sep">→</span>
+          </div>
+          <h3 class="step-title">Typography Cadence</h3>
+          <p class="step-desc">
+            Inter Tight sans carries structure and data, while Playfair Display italic steps in inline to elevate emotional nouns and Roman indices.
+          </p>
+        </div>
+
+        <div class="method-step">
+          <div class="step-head">
+            <div class="step-ring">03</div>
+            <span class="step-sep">→</span>
+          </div>
+          <h3 class="step-title">Jewelry Balance</h3>
+          <p class="step-desc">
+            Coral #ed6f5c holds the spotlight as the sole hot accent once per viewport. Mustard and olive exist strictly as ≤1% jewelry accents.
+          </p>
+        </div>
+
+        <div class="method-step">
+          <div class="step-head">
+            <div class="step-ring">04</div>
+            <span class="step-sep">FIN</span>
+          </div>
+          <h3 class="step-title">Archival Precision</h3>
+          <p class="step-desc">
+            Every collage carry corner brackets, coordinates, and SHA identifiers, treating digital canvases with the permanence of museum catalog folios.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 5. SECTION III: CAPABILITIES & BONE CARDS (Section 6) -->
+  <section id="capabilities" class="capabilities-section">
+    <div class="atelier-container">
+      
+      <!-- Section Rule 03 -->
+      <div class="sec-rule">
+        <span class="sec-rule-roman">III.</span>
+        <span class="sec-rule-meta">SYSTEM CAPABILITIES · OBJECT CARDS</span>
+        <span class="sec-rule-page">003 / 008</span>
+      </div>
+
+      <div class="eyebrow-coral">CORE ARTIFACTS</div>
+      <h2 style="font-family: var(--font-display); font-size: clamp(28px, 4.5vw, 54px); font-weight: 800; letter-spacing: -0.03em; color: var(--ink); margin-bottom: 24px;">
+        Modular architecture in <em>quiet</em> bone surfaces<span class="dot">.</span>
+      </h2>
+
+      <!-- Bone-fill cards (#f7f1de), 18px radius, hover circular arrow turning coral -->
+      <div class="cards-grid">
+        <!-- Card 01 -->
+        <article class="bone-card">
+          <div>
+            <div class="card-top-row">
+              <span class="card-num">01</span>
+              <span class="card-eyebrow">MONOCLE METRIC</span>
+            </div>
+            <h4 class="card-title">Publication Metadata Strips</h4>
+            <p class="card-body">
+              Compact, international data ribbons displaying edition registers, geodetic coordinates, and continuous pulse state indicators.
+            </p>
+          </div>
+          <div class="card-bottom-row">
+            <span class="card-spec-mono">SPEC: 10.5PX · INK-FAINT</span>
+            <div class="card-arrow-mark">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M7 17L17 7M17 7H7M17 7V17"/></svg>
+            </div>
+          </div>
+        </article>
+
+        <!-- Card 02 -->
+        <article class="bone-card">
+          <div>
+            <div class="card-top-row">
+              <span class="card-num">02</span>
+              <span class="card-eyebrow">APARTAMENTO ATMOSPHERE</span>
+            </div>
+            <h4 class="card-title">Surreal Architectural Collage</h4>
+            <p class="card-body">
+              Generous negative spaces framed by hairline registration marks, plaster sculpture studies, and brutalist geometric planes.
+            </p>
+          </div>
+          <div class="card-bottom-row">
+            <span class="card-spec-mono">SPEC: 22PX CORNER MARKS</span>
+            <div class="card-arrow-mark">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M7 17L17 7M17 7H7M17 7V17"/></svg>
+            </div>
+          </div>
+        </article>
+
+        <!-- Card 03 -->
+        <article class="bone-card">
+          <div>
+            <div class="card-top-row">
+              <span class="card-num">03</span>
+              <span class="card-eyebrow">IDEA RHYTHM</span>
+            </div>
+            <h4 class="card-title">Roman Sequential Walks</h4>
+            <p class="card-body">
+              Unbroken chapter sequencing from I through V. Every section opens with a dedicated hairline, centered metadata, and pagination.
+            </p>
+          </div>
+          <div class="card-bottom-row">
+            <span class="card-spec-mono">SPEC: PLAYFAIR ITALIC 15PX</span>
+            <div class="card-arrow-mark">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M7 17L17 7M17 7H7M17 7V17"/></svg>
+            </div>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- 6. SECTION IV: DARK SELECTED WORK MONOGRAPH (Section 2 & 9) -->
+  <!-- Pure white (#ffffff) is ONLY allowed inside this dark panel as inverse text -->
+  <section id="selected-work" class="selected-work-section">
+    <div class="atelier-container">
+      
+      <!-- Section Rule 04 -->
+      <div class="sec-rule">
+        <span class="sec-rule-roman">IV.</span>
+        <span class="sec-rule-meta">SELECTED MONOGRAPH · CURATED WORK</span>
+        <span class="sec-rule-page">004 / 008</span>
+      </div>
+
+      <div class="dark-monograph-panel">
+        <div class="dark-panel-head">
+          <div>
+            <span style="font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--coral); display: block; margin-bottom: 12px;">INVERSE EXHIBIT</span>
+            <h2 class="dark-title">The Curated <em>Cabinet</em> of Selected Works<span class="dot">.</span></h2>
+          </div>
+          <div style="font-family: var(--font-mono); font-size: 11px; color: rgba(255, 255, 255, 0.4); text-align: right;">
+            <span>EXHIBITION Nº 08</span><br>
+            <span>BERLIN KUNSTHALLE</span>
+          </div>
+        </div>
+
+        <div class="dark-catalog-grid">
+          <div>
+            <p style="font-size: 17px; line-height: 1.65; color: rgba(255, 255, 255, 0.82); margin-bottom: 32px; max-width: 48ch;">
+              Inside this dark enclosure, high-contrast inverse typesetting illuminates architectural folios and research prototypes. Here and only here, pure white (#ffffff) emerges against dense ink #15140f to command maximum visual gravity.
+            </p>
+            <div style="display: flex; gap: 24px; font-family: var(--font-mono); font-size: 12px;">
+              <div>
+                <span style="color: rgba(255, 255, 255, 0.4); display: block;">CURATOR</span>
+                <span style="color: #ffffff; font-weight: 500;">ATELIER Ø COMMITTEE</span>
+              </div>
+              <div>
+                <span style="color: rgba(255, 255, 255, 0.4); display: block;">PLATES DOCUMENTED</span>
+                <span style="color: #ffffff; font-weight: 500;">72 SPECIMENS</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="work-plate-box">
+            <span class="bracket-tl"></span>
+            <span class="bracket-tr"></span>
+            <span class="bracket-bl"></span>
+            <span class="bracket-br"></span>
+
+            <div class="work-plate-quote">
+              &ldquo;The eye must rest before it can comprehend the density of form.&rdquo;
+            </div>
+            <div class="work-plate-meta">
+              <span>PLATE REF: OD-BERLIN-72</span> · <span>ROOM 04</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 7. SECTION V: INTERACTIVE CONTROLS & SPECIMENS (Section 6) -->
+  <section id="specimens" class="controls-section">
+    <div class="atelier-container">
+      
+      <!-- Section Rule 05 -->
+      <div class="sec-rule">
+        <span class="sec-rule-roman">V.</span>
+        <span class="sec-rule-meta">TACTILE CONTROLS · INTERACTIVE SYSTEM</span>
+        <span class="sec-rule-page">005 / 008</span>
+      </div>
+
+      <div class="eyebrow-coral">INTERACTION BENCH</div>
+      <h2 style="font-family: var(--font-display); font-size: clamp(28px, 4.5vw, 54px); font-weight: 800; letter-spacing: -0.03em; color: var(--ink); margin-bottom: 28px;">
+        Interactive pills, inputs &amp; <em>tactile</em> filters<span class="dot">.</span>
+      </h2>
+
+      <!-- Pill Filters (10x18 padding, 999px radius, active coral fill) -->
+      <div class="pill-filter-bar">
+        <button class="pill-filter active" onclick="selectPill(this)">
+          <span>All Archival Volumes</span>
+          <span class="pill-count">36</span>
+        </button>
+        <button class="pill-filter" onclick="selectPill(this)">
+          <span>Editorial Type</span>
+          <span class="pill-count">12</span>
+        </button>
+        <button class="pill-filter" onclick="selectPill(this)">
+          <span>Plaster Studies</span>
+          <span class="pill-count">08</span>
+        </button>
+        <button class="pill-filter" onclick="selectPill(this)">
+          <span>Paper Tokens</span>
+          <span class="pill-count">16</span>
+        </button>
+      </div>
+
+      <div class="interactive-specimen-grid">
+        <!-- Interactive Control Specimen 01 -->
+        <div class="specimen-card">
+          <div class="specimen-title">
+            <span>Query Archive Database</span>
+            <span style="font-family: var(--font-mono); font-size: 11px; color: var(--ink-faint);">LIVE FOCUS RING</span>
+          </div>
+          <label style="display: block; font-family: var(--font-mono); font-size: 11px; color: var(--ink-mute); margin-bottom: 8px;">ENTER SPECIMEN SHA OR PLATE ID</label>
+          <input type="text" class="input-editorial" value="SHA-256: 8f4a9c12b7008" />
+          <div style="margin-top: 16px; display: flex; justify-content: space-between; align-items: center;">
+            <span style="font-family: var(--font-mono); font-size: 11px; color: var(--ink-faint);">STATUS: INDEX READY</span>
+            <button class="nav-cta-btn" style="padding: 6px 14px; font-size: 11px;">Search Catalog</button>
+          </div>
+        </div>
+
+        <!-- Interactive Control Specimen 02 -->
+        <div class="specimen-card">
+          <div class="specimen-title">
+            <span>Palette Jewelry Calibration</span>
+            <span style="font-family: var(--font-mono); font-size: 11px; color: var(--olive);">≤1% JEWELRY</span>
+          </div>
+          <p style="font-size: 13.5px; color: var(--ink-soft); line-height: 1.6; margin-bottom: 16px;">
+            Mustard (#e9b94a) and Olive (#6e7448) accents strictly function as navigational jewelry and glyph anchors.
+          </p>
+          <div style="display: flex; gap: 12px; align-items: center;">
+            <div style="display: flex; align-items: center; gap: 8px; font-family: var(--font-mono); font-size: 11px; color: var(--ink);">
+              <span style="width: 14px; height: 14px; border-radius: 50%; background: var(--mustard); display: inline-block;"></span>
+              Mustard Jewelry
+            </div>
+            <div style="display: flex; align-items: center; gap: 8px; font-family: var(--font-mono); font-size: 11px; color: var(--ink);">
+              <span style="width: 14px; height: 14px; border-radius: 50%; background: var(--olive); display: inline-block;"></span>
+              Olive Accent
+            </div>
+            <div style="display: flex; align-items: center; gap: 8px; font-family: var(--font-mono); font-size: 11px; color: var(--coral);">
+              <span style="width: 14px; height: 14px; border-radius: 50%; background: var(--coral); display: inline-block;"></span>
+              Coral Hot Spot
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- 8. COLOPHON & GIANT WORD FOOTER (Section 5, 8 & 12) -->
+  <footer id="colophon" class="editorial-footer">
+    <div class="atelier-container">
+      
+      <div class="footer-colophon-grid">
+        <div class="colophon-col">
+          <h5>Publication Colophon</h5>
+          <p style="max-width: 34ch; margin-bottom: 16px;">
+            Set in Inter Tight and Playfair Display Italic on handmade paper canvas #efe7d2. Published for independent design researchers and systems architects.
+          </p>
+          <p style="font-family: var(--font-mono); font-size: 11px; color: var(--ink-faint);">
+            EDITION: MMXXVI · TOKYO · BERLIN
+          </p>
+        </div>
+
+        <div class="colophon-col">
+          <h5>Sequential Walk</h5>
+          <ul class="colophon-links">
+            <li><a href="#hero">I. Prologue</a></li>
+            <li><a href="#method">II. Method Tenets</a></li>
+            <li><a href="#capabilities">III. Bone Artifacts</a></li>
+            <li><a href="#selected-work">IV. Inverse Exhibit</a></li>
+            <li><a href="#specimens">V. Control Bench</a></li>
+          </ul>
+        </div>
+
+        <div class="colophon-col">
+          <h5>Archive Indexes</h5>
+          <ul class="colophon-links">
+            <li><a href="00_Index.md">Vault Index</a></li>
+            <li><a href="index.html">System Gallery</a></li>
+            <li><a href="#">Plate Registers</a></li>
+            <li><a href="#">Monocle Strips</a></li>
+          </ul>
+        </div>
+
+        <div class="colophon-col">
+          <h5>Geodetic Coordinates</h5>
+          <p style="font-family: var(--font-mono); font-size: 11px; line-height: 1.8; color: var(--ink-mute);">
+            LAT: 52.5200° N<br>
+            LON: 13.4050° E<br>
+            ALT: +34.2M<br>
+            GRID: BER-TYO-26
+          </p>
+        </div>
+      </div>
+
+      <!-- Mandatory Giant Mega-Word Footer: clamp(70px, 13vw, 200px) -->
+      <div class="footer-giant-word-wrap">
+        <div class="footer-giant-word">
+          Atelier Zero<span class="dot">.</span>
+        </div>
+      </div>
+
+      <!-- FIN Row -->
+      <div class="footer-fin-row">
+        <div>
+          <span class="fin-mark">FIN.</span> MMXXVI · ALL SYSTEM TOKENS RESERVED
+        </div>
+        <div>
+          <a href="#hero" style="color: var(--ink-faint); text-decoration: none;">RETURN TO PROLOGUE ↑</a>
+        </div>
+      </div>
+
+    </div>
+  </footer>
+
+  <script>
+    // Interactive Pill Filter Switcher
+    function selectPill(btn) {
+      document.querySelectorAll('.pill-filter').forEach(p => p.classList.remove('active'));
+      btn.classList.add('active');
+    }
+  </script>
+
+</body>
+</html>

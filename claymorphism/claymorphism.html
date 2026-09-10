@@ -1,0 +1,732 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>CLAYMORPHIC STUDIO — Puffy 3D Malleable Design System</title>
+  <meta name="description" content="Authentic implementation of Claymorphism design system: soft rounded 3D-like shapes mimicking malleable clay, Primary #3B82F6, Text #1C398E, Poppins and Montserrat typography, and double-inset highlights." />
+
+  <!-- Google Fonts: Poppins (display), Montserrat (primary/body), JetBrains Mono (mono) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Montserrat:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    /* ─────────────────────────────────────────────────────────────────
+       CLAYMORPHISM OFFICIAL DESIGN TOKENS (from DESIGN.md)
+       Visual Style: Modern, high-contrast, playful, puffy 3D clay
+       Tokens:
+         Primary: #3B82F6
+         Secondary: #FFFFFF
+         Success: #16A34A
+         Warning: #D97706
+         Danger: #DC2626
+         Surface: #FFFFFF (and soft pastel tint for clay contrast)
+         Text: #1C398E
+         Neutral: #FFFFFF
+       Typography: display=Poppins, primary=Montserrat, mono=JetBrains Mono
+       Spacing Scale: 4 / 8 / 12 / 16 / 24 / 32
+       ───────────────────────────────────────────────────────────────── */
+    :root {
+      --primary: #3B82F6;
+      --secondary: #FFFFFF;
+      --success: #16A34A;
+      --warning: #D97706;
+      --danger: #DC2626;
+      --surface: #FFFFFF;
+      --bg-tint: #EEF4FF;
+      --text: #1C398E;
+      --text-muted: #5B74B8;
+      --neutral: #FFFFFF;
+
+      /* Typography */
+      --font-display: "Poppins", -apple-system, sans-serif;
+      --font-primary: "Montserrat", -apple-system, sans-serif;
+      --font-mono: "JetBrains Mono", monospace;
+
+      /* Spacing Scale (Tokens: 4, 8, 12, 16, 24, 32) */
+      --space-4: 4px;
+      --space-8: 8px;
+      --space-12: 12px;
+      --space-16: 16px;
+      --space-24: 24px;
+      --space-32: 32px;
+
+      /* Puffy Clay Radii */
+      --radius-sm: 14px;
+      --radius-md: 22px;
+      --radius-lg: 32px;
+      --radius-pill: 9999px;
+
+      /* Authentic 3D Clay Shadows (Dual Inset + Drop Shadow) */
+      --clay-card:
+        12px 16px 28px rgba(59, 130, 246, 0.14),
+        -8px -8px 20px #ffffff,
+        inset -8px -8px 14px rgba(59, 130, 246, 0.12),
+        inset 8px 8px 14px #ffffff;
+
+      --clay-card-hover:
+        16px 20px 36px rgba(59, 130, 246, 0.20),
+        -10px -10px 24px #ffffff,
+        inset -10px -10px 16px rgba(59, 130, 246, 0.16),
+        inset 10px 10px 16px #ffffff;
+
+      --clay-primary-btn:
+        6px 10px 20px rgba(59, 130, 246, 0.35),
+        inset 4px 4px 8px rgba(255, 255, 255, 0.4),
+        inset -4px -4px 8px rgba(28, 57, 142, 0.35);
+
+      --clay-pressed:
+        inset 6px 6px 12px rgba(28, 57, 142, 0.25),
+        inset -4px -4px 8px rgba(255, 255, 255, 0.5);
+
+      --transition-clay: 200ms cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      background-color: var(--bg-tint);
+      color: var(--text);
+      font-size: 16px;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    body {
+      background: linear-gradient(135deg, #EEF4FF 0%, #F5F8FF 50%, #E8F0FE 100%);
+      color: var(--text);
+      font-family: var(--font-primary);
+      font-weight: 400;
+      line-height: 1.6;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* ─── TYPOGRAPHY ─── */
+    h1, h2, h3, h4 {
+      font-family: var(--font-display);
+      color: var(--text);
+      line-height: 1.2;
+    }
+
+    h1 {
+      font-size: clamp(38px, 5.5vw, 64px);
+      font-weight: 800;
+      letter-spacing: -0.02em;
+    }
+
+    h2 {
+      font-size: clamp(28px, 4vw, 42px);
+      font-weight: 700;
+      letter-spacing: -0.015em;
+    }
+
+    h3 {
+      font-size: 22px;
+      font-weight: 600;
+    }
+
+    p {
+      color: var(--text-muted);
+      font-size: 16px;
+      line-height: 1.6;
+    }
+
+    /* ─── CLAY BUTTONS ─── */
+    .btn-clay {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--space-8);
+      font-family: var(--font-display);
+      font-size: 15px;
+      font-weight: 600;
+      padding: 12px 24px;
+      border-radius: var(--radius-pill);
+      text-decoration: none;
+      cursor: pointer;
+      border: none;
+      transition: all var(--transition-clay);
+      outline: none;
+      user-select: none;
+    }
+
+    .btn-clay:active {
+      transform: scale(0.96);
+    }
+
+    .btn-clay-primary {
+      background: var(--primary);
+      color: #ffffff;
+      box-shadow: var(--clay-primary-btn);
+    }
+
+    .btn-clay-primary:hover {
+      background: #2b75f0;
+      transform: translateY(-2px);
+      box-shadow:
+        8px 14px 26px rgba(59, 130, 246, 0.45),
+        inset 5px 5px 10px rgba(255, 255, 255, 0.5),
+        inset -5px -5px 10px rgba(28, 57, 142, 0.4);
+    }
+
+    .btn-clay-white {
+      background: var(--surface);
+      color: var(--text);
+      box-shadow:
+        8px 12px 20px rgba(59, 130, 246, 0.12),
+        -6px -6px 14px #ffffff,
+        inset -4px -4px 8px rgba(59, 130, 246, 0.08),
+        inset 4px 4px 8px #ffffff;
+    }
+
+    .btn-clay-white:hover {
+      transform: translateY(-2px);
+      box-shadow:
+        10px 16px 26px rgba(59, 130, 246, 0.18),
+        -8px -8px 18px #ffffff,
+        inset -5px -5px 10px rgba(59, 130, 246, 0.12),
+        inset 5px 5px 10px #ffffff;
+    }
+
+    /* ─── CLAY CONTAINER / CARDS ─── */
+    .clay-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 var(--space-24);
+    }
+
+    .clay-card {
+      background: var(--surface);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--clay-card);
+      padding: var(--space-32);
+      transition: all var(--transition-clay);
+      position: relative;
+    }
+
+    .clay-card:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--clay-card-hover);
+    }
+
+    /* ─── STICKY CLAY NAV ─── */
+    .clay-nav {
+      position: sticky;
+      top: var(--space-16);
+      z-index: 1000;
+      max-width: 1160px;
+      margin: 0 auto;
+      padding: 0 var(--space-16);
+    }
+
+    .nav-bar {
+      background: rgba(255, 255, 255, 0.9);
+      backdrop-filter: blur(12px);
+      border-radius: var(--radius-pill);
+      box-shadow:
+        8px 12px 24px rgba(59, 130, 246, 0.12),
+        inset -4px -4px 8px rgba(59, 130, 246, 0.06),
+        inset 4px 4px 8px #ffffff;
+      padding: 12px 28px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .brand-title {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+      font-family: var(--font-display);
+      font-weight: 800;
+      font-size: 20px;
+      color: var(--text);
+    }
+
+    .clay-blob-icon {
+      width: 28px;
+      height: 28px;
+      border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%;
+      background: var(--primary);
+      box-shadow: var(--clay-primary-btn);
+    }
+
+    .nav-items {
+      display: flex;
+      align-items: center;
+      gap: var(--space-24);
+      list-style: none;
+    }
+
+    @media (max-width: 820px) {
+      .nav-items {
+        display: none;
+      }
+    }
+
+    .nav-item-link {
+      font-family: var(--font-display);
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text);
+      text-decoration: none;
+      transition: color 150ms ease;
+    }
+
+    .nav-item-link:hover {
+      color: var(--primary);
+    }
+
+    /* ─── HERO SECTION ─── */
+    .hero-section {
+      padding: 72px 0 48px;
+      text-align: center;
+    }
+
+    .hero-content {
+      max-width: 780px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .hero-pill-tag {
+      background: #ffffff;
+      padding: 6px 18px;
+      border-radius: var(--radius-pill);
+      box-shadow:
+        4px 6px 14px rgba(59, 130, 246, 0.1),
+        inset -2px -2px 4px rgba(59, 130, 246, 0.08),
+        inset 2px 2px 4px #ffffff;
+      font-family: var(--font-mono);
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--primary);
+      margin-bottom: var(--space-24);
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: var(--space-16);
+      margin-top: var(--space-32);
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    /* ─── INTERACTIVE CLAY PLAYGROUND ─── */
+    .interactive-stage {
+      margin-top: 56px;
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: var(--space-32);
+      align-items: center;
+    }
+
+    @media (max-width: 900px) {
+      .interactive-stage {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .canvas-card {
+      height: 380px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(145deg, #f7faff, #edf3fc);
+      border-radius: var(--radius-lg);
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Malleable 3D Clay Shapes */
+    .clay-sphere {
+      width: 140px;
+      height: 140px;
+      border-radius: 50%;
+      background: var(--primary);
+      box-shadow:
+        18px 24px 40px rgba(59, 130, 246, 0.4),
+        inset -16px -16px 28px rgba(28, 57, 142, 0.55),
+        inset 16px 16px 28px rgba(255, 255, 255, 0.65);
+      transition: all 400ms cubic-bezier(0.34, 1.56, 0.64, 1);
+      cursor: pointer;
+    }
+
+    .clay-pill-shape {
+      position: absolute;
+      bottom: 40px;
+      left: 40px;
+      width: 120px;
+      height: 50px;
+      border-radius: var(--radius-pill);
+      background: #ffffff;
+      box-shadow:
+        8px 12px 20px rgba(59, 130, 246, 0.16),
+        inset -6px -6px 12px rgba(59, 130, 246, 0.1),
+        inset 6px 6px 12px #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-mono);
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text);
+    }
+
+    /* Controls Panel */
+    .controls-panel {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-24);
+    }
+
+    .control-row {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-8);
+    }
+
+    .control-label {
+      display: flex;
+      justify-content: space-between;
+      font-family: var(--font-display);
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text);
+    }
+
+    /* Clay Slider */
+    .clay-slider {
+      -webkit-appearance: none;
+      width: 100%;
+      height: 14px;
+      border-radius: var(--radius-pill);
+      background: #ffffff;
+      box-shadow:
+        inset 3px 3px 6px rgba(59, 130, 246, 0.15),
+        inset -3px -3px 6px #ffffff;
+      outline: none;
+    }
+
+    .clay-slider::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      background: var(--primary);
+      box-shadow: var(--clay-primary-btn);
+      cursor: pointer;
+      transition: transform 120ms ease;
+    }
+
+    .clay-slider::-webkit-slider-thumb:hover {
+      transform: scale(1.15);
+    }
+
+    /* Clay Switch */
+    .clay-switch-box {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #ffffff;
+      padding: var(--space-16) var(--space-24);
+      border-radius: var(--radius-md);
+      box-shadow: var(--clay-card);
+    }
+
+    .clay-toggle {
+      width: 60px;
+      height: 32px;
+      border-radius: var(--radius-pill);
+      background: #e2ecfd;
+      box-shadow: inset 3px 3px 6px rgba(59, 130, 246, 0.2), inset -3px -3px 6px #ffffff;
+      position: relative;
+      cursor: pointer;
+      transition: background 250ms ease;
+    }
+
+    .clay-toggle.on {
+      background: var(--primary);
+    }
+
+    .clay-toggle-knob {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: #ffffff;
+      box-shadow: 2px 4px 8px rgba(0, 0, 0, 0.15), inset -2px -2px 4px rgba(0,0,0,0.05), inset 2px 2px 4px #fff;
+      position: absolute;
+      top: 4px;
+      left: 4px;
+      transition: transform 250ms cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    .clay-toggle.on .clay-toggle-knob {
+      transform: translateX(28px);
+    }
+
+    /* ─── FEATURE CARDS GRID ─── */
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: var(--space-32);
+      margin-top: 64px;
+    }
+
+    .feature-item {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-12);
+    }
+
+    .feature-badge {
+      width: 48px;
+      height: 48px;
+      border-radius: var(--radius-sm);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      background: #ffffff;
+      box-shadow:
+        6px 8px 16px rgba(59, 130, 246, 0.12),
+        inset -4px -4px 8px rgba(59, 130, 246, 0.08),
+        inset 4px 4px 8px #ffffff;
+      color: var(--primary);
+    }
+
+    /* ─── FOOTER ─── */
+    .clay-footer {
+      margin-top: 80px;
+      padding: var(--space-32) 0;
+      text-align: center;
+      border-top: 1px solid rgba(59, 130, 246, 0.1);
+    }
+
+    /* ─── FLOATING TOKEN AUDIT DRAWER ─── */
+    .audit-trigger {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      z-index: 1000;
+    }
+
+    .audit-modal {
+      display: none;
+      position: fixed;
+      bottom: 80px;
+      right: 24px;
+      width: 360px;
+      background: #ffffff;
+      border-radius: var(--radius-md);
+      box-shadow: var(--clay-card);
+      padding: var(--space-24);
+      z-index: 1001;
+      font-size: 13px;
+    }
+
+    .audit-modal.open {
+      display: block;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- STICKY CLAY NAVIGATION -->
+  <header class="clay-nav">
+    <nav class="nav-bar">
+      <a href="#" class="brand-title">
+        <div class="clay-blob-icon"></div>
+        <span>Claycraft 3D</span>
+      </a>
+
+      <ul class="nav-items">
+        <li><a href="#playground" class="nav-item-link">Playground</a></li>
+        <li><a href="#features" class="nav-item-link">Components</a></li>
+        <li><a href="#specs" class="nav-item-link">Clay Foundations</a></li>
+      </ul>
+
+      <div style="display: flex; gap: 12px;">
+        <button class="btn-clay btn-clay-white" onclick="toggleAuditor()">Audit</button>
+        <a href="#playground" class="btn-clay btn-clay-primary">Try Studio</a>
+      </div>
+    </nav>
+  </header>
+
+  <main class="clay-container">
+    <!-- HERO SECTION -->
+    <section class="hero-section">
+      <div class="hero-content">
+        <div class="hero-pill-tag">
+          <span>● SOFT & MALLEABLE 3D UI</span>
+        </div>
+
+        <h1>Puffy, tactile shapes designed to be squeezed.</h1>
+
+        <p style="margin-top: 16px; font-size: 18px;">
+          Meet the Claymorphism design system. Crafted with multi-layered inset highlights, deep ambient drop shadows, and rich Poppins typography in signature #3B82F6 and #1C398E.
+        </p>
+
+        <div class="hero-actions">
+          <a href="#playground" class="btn-clay btn-clay-primary">Launch Playground</a>
+          <button class="btn-clay btn-clay-white" onclick="animateClay()">Morph Clay Form</button>
+        </div>
+      </div>
+
+      <!-- INTERACTIVE STAGE -->
+      <div class="interactive-stage" id="playground">
+        <div class="canvas-card" id="clayCanvas">
+          <div class="clay-sphere" id="claySphere" onclick="animateClay()"></div>
+          <div class="clay-pill-shape" id="clayStatus">
+            <span>Volume: 85%</span>
+          </div>
+        </div>
+
+        <div class="controls-panel">
+          <div class="clay-card">
+            <h3 style="margin-bottom: var(--space-16);">Malleability Controls</h3>
+
+            <div class="control-row" style="margin-bottom: var(--space-16);">
+              <div class="control-label">
+                <span>Clay Inflation:</span>
+                <span id="radiusLabel" style="font-family: var(--font-mono); color: var(--primary);">50%</span>
+              </div>
+              <input type="range" class="clay-slider" id="radiusSlider" min="20" max="80" value="50" oninput="updateShape()" />
+            </div>
+
+            <div class="control-row" style="margin-bottom: var(--space-20);">
+              <div class="control-label">
+                <span>Puffiness Depth:</span>
+                <span id="puffLabel" style="font-family: var(--font-mono); color: var(--primary);">16px</span>
+              </div>
+              <input type="range" class="clay-slider" id="puffSlider" min="8" max="28" value="16" oninput="updateDepth()" />
+            </div>
+
+            <div class="clay-switch-box">
+              <span style="font-family: var(--font-display); font-size: 14px; font-weight: 600;">Specularity Glow</span>
+              <div class="clay-toggle on" id="toggleGlow" onclick="toggleGlowMode()">
+                <div class="clay-toggle-knob"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FEATURES SECTION -->
+    <section class="features-grid" id="features">
+      <div class="clay-card feature-item">
+        <div class="feature-badge">●</div>
+        <h3>High-Contrast Palette</h3>
+        <p>
+          Deep indigo `#1C398E` typography paired with vivid `#3B82F6` primary blue ensures all malleable elements exceed WCAG accessibility thresholds.
+        </p>
+      </div>
+
+      <div class="clay-card feature-item">
+        <div class="feature-badge">☁</div>
+        <h3>Multi-Layer Inset Light</h3>
+        <p>
+          Each card and button uses paired inner shadows: top-left white specular bounce (`#ffffff`) and bottom-right shadow (`rgba(28, 57, 142, 0.12)`).
+        </p>
+      </div>
+
+      <div class="clay-card feature-item">
+        <div class="feature-badge">✦</div>
+        <h3>Predictable 4-32pt Grid</h3>
+        <p>
+          Structured on the official spacing scale (`4/8/12/16/24/32`) to maintain consistent breathing room between tactile 3D controls.
+        </p>
+      </div>
+    </section>
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="clay-footer" id="specs">
+    <p style="font-size: 14px; color: var(--text-muted);">
+      © 2026 CLAYMORPHISM SYSTEM. BUILT FOR MALLEABLE TACTILE SURFACES.
+    </p>
+  </footer>
+
+  <!-- FLOATING TOKEN AUDIT DRAWER -->
+  <div class="audit-trigger">
+    <button class="btn-clay btn-clay-primary" onclick="toggleAuditor()">
+      <span>Audit Tokens</span>
+    </button>
+  </div>
+
+  <div class="audit-modal" id="auditModal">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; border-bottom: 1px solid rgba(59,130,246,0.15); padding-bottom: 6px;">
+      <span style="font-family: var(--font-display); font-weight: 700; color: var(--text);">CLAYMORPHISM SPEC</span>
+      <button onclick="toggleAuditor()" style="background: none; border: none; cursor: pointer; color: var(--text);">✕</button>
+    </div>
+    <div style="display: flex; flex-direction: column; gap: 8px; font-family: var(--font-mono); font-size: 12px;">
+      <div>• Primary: <span style="color: #3B82F6; font-weight: 600;">#3B82F6</span></div>
+      <div>• Secondary: <span style="font-weight: 600;">#FFFFFF</span></div>
+      <div>• Surface: <span style="font-weight: 600;">#FFFFFF</span></div>
+      <div>• Text: <span style="color: #1C398E; font-weight: 600;">#1C398E</span></div>
+      <div>• Success: <span style="color: #16A34A; font-weight: 600;">#16A34A</span></div>
+      <div>• Warning: <span style="color: #D97706; font-weight: 600;">#D97706</span></div>
+      <div>• Danger: <span style="color: #DC2626; font-weight: 600;">#DC2626</span></div>
+      <div>• Display Font: Poppins</div>
+      <div>• Primary Font: Montserrat</div>
+      <div>• Mono Font: JetBrains Mono</div>
+      <div>• Spacing: 4 / 8 / 12 / 16 / 24 / 32</div>
+    </div>
+  </div>
+
+  <!-- SCRIPTS -->
+  <script>
+    function toggleAuditor() {
+      document.getElementById('auditModal').classList.toggle('open');
+    }
+
+    let isSphere = true;
+    function animateClay() {
+      const s = document.getElementById('claySphere');
+      if (isSphere) {
+        s.style.borderRadius = "35% 65% 55% 45% / 40% 50% 60% 50%";
+        s.style.transform = "scale(1.08) rotate(12deg)";
+      } else {
+        s.style.borderRadius = "50%";
+        s.style.transform = "scale(1) rotate(0deg)";
+      }
+      isSphere = !isSphere;
+    }
+
+    function updateShape() {
+      const val = document.getElementById('radiusSlider').value;
+      document.getElementById('radiusLabel').textContent = val + '%';
+      const s = document.getElementById('claySphere');
+      s.style.borderRadius = `${val}% ${100-val}% ${val}% ${100-val}% / ${100-val}% ${val}% ${100-val}% ${val}%`;
+    }
+
+    function updateDepth() {
+      const val = document.getElementById('puffSlider').value;
+      document.getElementById('puffLabel').textContent = val + 'px';
+      const s = document.getElementById('claySphere');
+      s.style.boxShadow = `${val}px ${Number(val)+6}px ${Number(val)*2}px rgba(59, 130, 246, 0.4), inset -${val}px -${val}px ${Number(val)*1.5}px rgba(28, 57, 142, 0.55), inset ${val}px ${val}px ${Number(val)*1.5}px rgba(255, 255, 255, 0.65)`;
+    }
+
+    function toggleGlowMode() {
+      const toggle = document.getElementById('toggleGlow');
+      toggle.classList.toggle('on');
+      const canvas = document.getElementById('clayCanvas');
+      if (toggle.classList.contains('on')) {
+        canvas.style.background = "linear-gradient(145deg, #f7faff, #edf3fc)";
+      } else {
+        canvas.style.background = "#eef4ff";
+      }
+    }
+  </script>
+</body>
+</html>

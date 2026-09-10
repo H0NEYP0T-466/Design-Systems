@@ -1,0 +1,405 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>ClickHouse — The Fastest Analytical Database for Real-Time Apps</title>
+  <meta name="description" content="ClickHouse design system: pure black #000000 canvas, Neon Volt #faff69 accent, Inter 900 Black typography, Inconsolata code terminal, and raw speed telemetry." />
+
+  <!-- Google Fonts: Inter 900/700/600/500/400 & Inconsolata -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inconsolata:wght@500;600;700&family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+  <style>
+    /* ─────────────────────────────────────────────────────────────────
+       CLICKHOUSE DESIGN SYSTEM TOKENS
+       Source: open-design/design-systems/clickhouse/DESIGN.md
+       ───────────────────────────────────────────────────────────────── */
+    :root {
+      --neon-volt: #faff69;
+      --forest-green: #166534;
+      --forest-dark: #14572f;
+      --pale-yellow: #f4f692;
+      --border-olive: #4f5100;
+
+      --bg-black: #000000;
+      --near-black: #141414;
+      --charcoal: rgba(65, 65, 65, 0.8);
+      --charcoal-deep: #343434;
+
+      --text-white: #ffffff;
+      --text-silver: #a0a0a0;
+
+      --font-inter: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
+      --font-mono: "Inconsolata", monospace;
+
+      --radius-sharp: 4px;
+      --radius-sm: 6px;
+
+      --transition-fast: 0.15s ease;
+    }
+
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      background-color: var(--bg-black);
+      color: var(--text-white);
+      font-family: var(--font-inter);
+      font-size: 16px;
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .container {
+      max-width: 1280px;
+      margin-inline: auto;
+      padding-inline: 32px;
+    }
+
+    /* Top Navigation (Pure Black Canvas) */
+    .ch-nav {
+      height: 72px;
+      border-bottom: 1px solid var(--charcoal);
+      background: var(--bg-black);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .ch-nav-inner {
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .brand-clickhouse {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+      color: var(--text-white);
+    }
+    .ch-bars-logo {
+      display: flex;
+      align-items: flex-end;
+      gap: 3px;
+      height: 22px;
+    }
+    .ch-bar {
+      width: 4px;
+      background: var(--neon-volt);
+      border-radius: 1px;
+    }
+    .ch-bar:nth-child(1) { height: 8px; }
+    .ch-bar:nth-child(2) { height: 14px; }
+    .ch-bar:nth-child(3) { height: 22px; }
+    .ch-bar:nth-child(4) { height: 18px; }
+    .ch-bar:nth-child(5) { height: 10px; }
+
+    .brand-title {
+      font-size: 20px;
+      font-weight: 900;
+      letter-spacing: -0.02em;
+    }
+    .ch-nav-links {
+      display: flex;
+      align-items: center;
+      gap: 32px;
+      list-style: none;
+    }
+    @media (max-width: 860px) {
+      .ch-nav-links { display: none; }
+    }
+    .ch-nav-links a {
+      color: var(--text-silver);
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 500;
+      transition: color var(--transition-fast);
+    }
+    .ch-nav-links a:hover {
+      color: var(--neon-volt);
+    }
+
+    /* ClickHouse Buttons (Sharp 4px Radius) */
+    .ch-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 10px 20px;
+      font-family: var(--font-inter);
+      font-size: 14px;
+      font-weight: 700;
+      border-radius: var(--radius-sharp);
+      text-decoration: none;
+      border: 1px solid transparent;
+      cursor: pointer;
+      transition: all var(--transition-fast);
+    }
+    .btn-neon {
+      background: var(--neon-volt);
+      color: #151515;
+      border-color: var(--neon-volt);
+    }
+    .btn-neon:hover {
+      background: #1d1d1d;
+      color: var(--neon-volt);
+    }
+    .btn-forest {
+      background: var(--forest-green);
+      color: #ffffff;
+      border-color: var(--forest-dark);
+    }
+    .btn-forest:hover {
+      background: #15803d;
+    }
+    .btn-outline-dark {
+      background: transparent;
+      color: var(--text-white);
+      border-color: var(--charcoal);
+    }
+    .btn-outline-dark:hover {
+      border-color: var(--neon-volt);
+      color: var(--neon-volt);
+    }
+
+    /* Hero Section (Aggressive Inter 900 Black at 96px) */
+    .ch-hero {
+      padding-block: 88px 72px;
+      border-bottom: 1px solid var(--charcoal);
+      position: relative;
+    }
+    .hero-overline {
+      font-size: 14px;
+      font-weight: 600;
+      letter-spacing: 1.4px; /* Mandatory wide-tracked uppercase label */
+      text-transform: uppercase;
+      color: var(--neon-volt);
+      margin-bottom: 24px;
+    }
+    .hero-headline-mega {
+      font-size: clamp(44px, 7.5vw, 92px);
+      font-weight: 900; /* Inter Black */
+      line-height: 1.0;
+      letter-spacing: -0.03em;
+      color: var(--text-white);
+      margin-bottom: 28px;
+      max-width: 1000px;
+    }
+    .hero-headline-mega span {
+      color: var(--neon-volt);
+    }
+    .hero-lead-text {
+      font-size: 20px;
+      line-height: 1.55;
+      color: var(--text-silver);
+      max-width: 680px;
+      margin-bottom: 40px;
+    }
+    .hero-actions {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      flex-wrap: wrap;
+      margin-bottom: 64px;
+    }
+
+    /* Terminal Console Live Execution Card */
+    .terminal-card {
+      background: #0d0d0d;
+      border: 1px solid var(--charcoal);
+      border-radius: var(--radius-sharp);
+      overflow: hidden;
+      box-shadow: 0 20px 48px rgba(0, 0, 0, 0.8);
+    }
+    .terminal-head {
+      background: #171717;
+      border-bottom: 1px solid var(--charcoal);
+      padding: 10px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-family: var(--font-mono);
+      font-size: 12px;
+      color: var(--text-silver);
+    }
+    .terminal-body {
+      padding: 24px;
+      font-family: var(--font-mono);
+      font-size: 14px;
+      line-height: 1.7;
+    }
+    .sql-kw { color: #f472b6; font-weight: 700; }
+    .sql-fn { color: #38bdf8; font-weight: 700; }
+    .sql-str { color: var(--neon-volt); }
+    .sql-num { color: #facc15; }
+    .sql-res {
+      margin-top: 16px;
+      padding-top: 16px;
+      border-top: 1px dashed var(--charcoal);
+      color: var(--neon-volt);
+    }
+
+    /* Oversized Performance Metric Counters */
+    .stats-grid-mega {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 24px;
+      margin-block: 72px;
+    }
+    @media (max-width: 860px) {
+      .stats-grid-mega { grid-template-columns: repeat(2, 1fr); }
+    }
+    .stat-mega-box {
+      border: 1px solid var(--charcoal);
+      background: #0a0a0a;
+      padding: 32px 24px;
+      border-radius: var(--radius-sharp);
+    }
+    .stat-mega-val {
+      font-size: clamp(36px, 4.5vw, 56px);
+      font-weight: 900;
+      color: var(--neon-volt);
+      line-height: 1.05;
+      margin-bottom: 8px;
+    }
+    .stat-mega-label {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text-white);
+      margin-bottom: 4px;
+    }
+    .stat-mega-sub {
+      font-size: 12px;
+      color: var(--text-silver);
+    }
+
+    /* Footer */
+    .ch-footer {
+      border-top: 1px solid var(--charcoal);
+      padding-block: 48px;
+      font-size: 13px;
+      color: var(--text-silver);
+    }
+    .footer-flex {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navigation -->
+  <header class="ch-nav">
+    <div class="container ch-nav-inner">
+      <a href="#hero" class="brand-clickhouse">
+        <div class="ch-bars-logo">
+          <div class="ch-bar"></div>
+          <div class="ch-bar"></div>
+          <div class="ch-bar"></div>
+          <div class="ch-bar"></div>
+          <div class="ch-bar"></div>
+        </div>
+        <span class="brand-title">ClickHouse</span>
+      </a>
+
+      <ul class="ch-nav-links">
+        <li><a href="#benchmarks">Cloud</a></li>
+        <li><a href="#sql">Documentation</a></li>
+        <li><a href="#metrics">Benchmarks</a></li>
+        <li><a href="#community">Open Source</a></li>
+      </ul>
+
+      <div style="display: flex; gap: 12px; align-items: center;">
+        <a href="00_Index.md" class="ch-btn btn-outline-dark">Index</a>
+        <a href="#sql" class="ch-btn btn-neon">Try ClickHouse Free</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section id="hero" class="ch-hero">
+    <div class="container">
+      <div class="hero-overline">The Real-Time Analytical Database</div>
+      <h1 class="hero-headline-mega">
+        Blazing fast queries over <span>trillions of rows</span>.
+      </h1>
+      <p class="hero-lead-text">
+        ClickHouse is the open-source column-oriented DBMS engineered to generate analytical reports at sub-second speeds. High-contrast, terminal-grade, and raw computing power.
+      </p>
+
+      <div class="hero-actions">
+        <a href="#sql" class="ch-btn btn-neon">Start Free Trial</a>
+        <a href="#benchmarks" class="ch-btn btn-forest">View Real Benchmarks</a>
+        <a href="00_Index.md" class="ch-btn btn-outline-dark">System Spec</a>
+      </div>
+
+      <!-- SQL Console Demonstration -->
+      <div id="sql" class="terminal-card">
+        <div class="terminal-head">
+          <span>● clickhouse-client --host us-east-prod.clickhouse.cloud</span>
+          <span>LATENCY: 4.2ms</span>
+        </div>
+        <div class="terminal-body">
+          <p>
+            <span class="sql-kw">SELECT</span> user_id, <span class="sql-fn">count</span>(*), <span class="sql-fn">avg</span>(latency_ms)<br>
+            <span class="sql-kw">FROM</span> telemetry_events<br>
+            <span class="sql-kw">WHERE</span> timestamp &gt;= <span class="sql-fn">now</span>() - <span class="sql-fn">INTERVAL</span> <span class="sql-num">1</span> <span class="sql-kw">HOUR</span><br>
+            <span class="sql-kw">GROUP BY</span> user_id<br>
+            <span class="sql-kw">ORDER BY</span> <span class="sql-fn">count</span>(*) <span class="sql-kw">DESC</span> <span class="sql-kw">LIMIT</span> <span class="sql-num">5</span>;
+          </p>
+          <div class="sql-res">
+            5 rows in set. Elapsed: 0.004 sec. Processed 142.80 million rows, 1.14 GB (35.70 billion rows/s., 285.60 GB/s.)
+          </div>
+        </div>
+      </div>
+
+      <!-- Oversized Stat Counters -->
+      <div class="stats-grid-mega">
+        <div class="stat-mega-box">
+          <div class="stat-mega-val">35.7B</div>
+          <div class="stat-mega-label">Rows per Second</div>
+          <div class="stat-mega-sub">Single node vector throughput</div>
+        </div>
+        <div class="stat-mega-box">
+          <div class="stat-mega-val">4.2ms</div>
+          <div class="stat-mega-label">Query Elapsed Time</div>
+          <div class="stat-mega-sub">Over 140 million events</div>
+        </div>
+        <div class="stat-mega-box">
+          <div class="stat-mega-val">10x</div>
+          <div class="stat-mega-label">Compression Ratio</div>
+          <div class="stat-mega-sub">ZSTD column encoding</div>
+        </div>
+        <div class="stat-mega-box">
+          <div class="stat-mega-val">100%</div>
+          <div class="stat-mega-label">Open Source SQL</div>
+          <div class="stat-mega-sub">Apache 2.0 Community License</div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="ch-footer">
+    <div class="container footer-flex">
+      <div>ClickHouse Design Language &copy; 2026. Neon Volt #faff69 &amp; Pure Black #000000.</div>
+      <div><a href="00_Index.md" style="color: var(--neon-volt); text-decoration: none; font-weight: 700;">← Master Index</a></div>
+    </div>
+  </footer>
+
+</body>
+</html>

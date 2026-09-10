@@ -1,0 +1,1220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Starbucks® — Design System & Retail Experience</title>
+  <meta name="description" content="Authentic implementation of Starbucks design system featuring the four-tier green system (Starbucks, Accent, House, Uplift), warm cream canvas (#f2f0eb), 50px full-pill buttons with scale(0.95) active press, floating 56px Frap circular button, SoDoSans tight tracking, and Lander Tall Rewards serif.">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Kalam:wght@400;700&family=Lora:ital,wght@0,400;0,600;1,400&family=Newsreader:ital,opsz,wght@0,6..72,500;1,6..72,400&display=swap" rel="stylesheet">
+
+  <style>
+    /* ─────────────────────────────────────────────────────────────
+       1. STARBUCKS DESIGN TOKENS
+       ───────────────────────────────────────────────────────────── */
+    :root {
+      /* Four-Tier Green Brand System */
+      --sb-green: #006241;          /* Starbucks Green: historic brand, h1s */
+      --sb-green-accent: #00754A;   /* Green Accent: primary filled CTAs, Frap */
+      --sb-house-green: #1E3932;    /* House Green: deep band, dark footer */
+      --sb-green-uplift: #2b5148;   /* Green Uplift: decorative mid-dark */
+      --sb-green-light: #d4e9e2;    /* Green Light: pale mint wash, valid tint */
+
+      /* Gold System (Reserved for Rewards Ceremony Only) */
+      --sb-gold: #cba258;
+      --sb-gold-light: #dfc49d;
+      --sb-gold-lightest: #faf6ee;
+
+      /* Page Canvas Surfaces (Never pure cold white) */
+      --sb-canvas-warm: #f2f0eb;    /* Neutral Warm: primary page canvas */
+      --sb-ceramic: #edebe9;        /* Ceramic: soft separators, washes */
+      --sb-surface-white: #ffffff;  /* Content cards & modals */
+      --sb-neutral-cool: #f9f9f9;   /* Menus & dropdowns */
+      --sb-black: #000000;          /* High contrast top join strip */
+
+      /* Neutrals & Text */
+      --sb-text-black: rgba(0, 0, 0, 0.87);      /* Primary text on light (warm!) */
+      --sb-text-black-soft: rgba(0, 0, 0, 0.58); /* Secondary text on light */
+      --sb-text-white: rgba(255, 255, 255, 1);   /* Primary text on dark green */
+      --sb-text-white-soft: rgba(255, 255, 255, 0.70); /* Secondary on dark green */
+      --sb-rewards-green: #33433d;  /* Dedicated Rewards muted slate-green */
+
+      /* Semantic */
+      --sb-red: #c82014;
+      --sb-yellow: #fbbc05;
+      --sb-tint-valid: rgba(212, 233, 226, 0.33);
+      --sb-tint-invalid: rgba(200, 32, 20, 0.05);
+
+      /* Typography */
+      --font-sodosans: "SoDoSans", "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      --font-rewards-serif: "Lander Tall", "Lora", "Iowan Old Style", Georgia, serif;
+      --font-cup-script: "Kalam", "Comic Sans MS", cursive;
+
+      /* Tracking & Leading */
+      --tracking-tight: -0.01em;     /* Tight -0.01em / -0.16px across SoDoSans */
+      --tracking-loose: 0.1em;
+      --line-height-normal: 1.5;
+      --line-height-compact: 1.2;
+
+      /* Radii */
+      --radius-card: 12px;           /* Content cards, modals */
+      --radius-pill: 50px;           /* All buttons: 50px full-pill universal */
+      --radius-circle: 50%;          /* Frap floating button, icons */
+
+      /* Shadows: Whisper-soft & Layered */
+      --shadow-card: 0px 0px 0.5px rgba(0, 0, 0, 0.14), 0px 1px 1px rgba(0, 0, 0, 0.24);
+      --shadow-nav: 0 1px 3px rgba(0,0,0,0.1), 0 2px 2px rgba(0,0,0,0.06), 0 0 2px rgba(0,0,0,0.07);
+      --shadow-frap: 0 0 6px rgba(0,0,0,0.24), 0 8px 12px rgba(0,0,0,0.14);
+      --shadow-frap-active: 0 0 6px rgba(0,0,0,0.24), 0 8px 12px rgba(0,0,0,0);
+    }
+
+    /* Reset & Base Canvas */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      background-color: var(--sb-canvas-warm);
+    }
+
+    body {
+      background-color: var(--sb-canvas-warm); /* Neutral Warm (#f2f0eb) */
+      color: var(--sb-text-black);             /* rgba(0,0,0,0.87) */
+      font-family: var(--font-sodosans);
+      font-size: 16px;
+      line-height: var(--line-height-normal);
+      letter-spacing: var(--tracking-tight);
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    /* ─────────────────────────────────────────────────────────────
+       2. TOP BAR & GLOBAL NAVIGATION
+       ───────────────────────────────────────────────────────────── */
+    .sb-join-strip {
+      background-color: var(--sb-house-green);
+      color: #ffffff;
+      padding: 10px 24px;
+      font-size: 14px;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .sb-global-nav {
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      background-color: #ffffff;
+      box-shadow: var(--shadow-nav);
+      height: 84px;
+      display: flex;
+      align-items: center;
+      padding: 0 36px;
+    }
+
+    .sb-nav-inner {
+      width: 100%;
+      max-width: 1440px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .sb-nav-left {
+      display: flex;
+      align-items: center;
+      gap: 32px;
+    }
+
+    /* Siren Logo SVG */
+    .sb-siren-logo {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .sb-nav-links {
+      display: flex;
+      align-items: center;
+      gap: 24px;
+      list-style: none;
+    }
+
+    .sb-nav-link {
+      font-size: 14px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: var(--tracking-loose);
+      color: var(--sb-text-black);
+      padding: 8px 0;
+      position: relative;
+      transition: color 150ms ease;
+    }
+
+    .sb-nav-link:hover, .sb-nav-link.active {
+      color: var(--sb-green);
+    }
+
+    .sb-nav-link.active::after {
+      content: '';
+      position: absolute;
+      bottom: -22px;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background-color: var(--sb-green);
+    }
+
+    .sb-nav-right {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    /* ─────────────────────────────────────────────────────────────
+       3. 50PX FULL-PILL BUTTONS & SCALE(0.95) ACTIVE PRESS
+       ───────────────────────────────────────────────────────────── */
+
+    /* 1. Primary Filled CTA: Green Accent (#00754A) */
+    .sb-btn-primary {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background-color: var(--sb-green-accent);
+      color: #ffffff;
+      font-family: var(--font-sodosans);
+      font-size: 16px;
+      font-weight: 600;
+      letter-spacing: var(--tracking-tight);
+      padding: 9px 20px;
+      border-radius: var(--radius-pill); /* 50px full-pill */
+      border: 1px solid var(--sb-green-accent);
+      cursor: pointer;
+      text-decoration: none;
+      transition: all 0.2s ease;
+    }
+
+    .sb-btn-primary:active {
+      transform: scale(0.95); /* Universal Starbucks Active Micro-interaction */
+    }
+
+    .sb-btn-primary:hover {
+      background-color: #00603c;
+      border-color: #00603c;
+    }
+
+    /* 2. Primary Outlined CTA */
+    .sb-btn-outlined {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background-color: transparent;
+      color: var(--sb-green-accent);
+      font-family: var(--font-sodosans);
+      font-size: 16px;
+      font-weight: 600;
+      letter-spacing: var(--tracking-tight);
+      padding: 9px 20px;
+      border-radius: var(--radius-pill);
+      border: 1px solid var(--sb-green-accent);
+      cursor: pointer;
+      text-decoration: none;
+      transition: all 0.2s ease;
+    }
+
+    .sb-btn-outlined:active {
+      transform: scale(0.95);
+    }
+
+    .sb-btn-outlined:hover {
+      background-color: rgba(0, 117, 74, 0.06);
+    }
+
+    /* 3. Black Filled: "Join now" */
+    .sb-btn-black {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background-color: var(--sb-black);
+      color: #ffffff;
+      font-family: var(--font-sodosans);
+      font-size: 14px;
+      font-weight: 600;
+      padding: 7px 18px;
+      border-radius: var(--radius-pill);
+      border: 1px solid var(--sb-black);
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .sb-btn-black:active {
+      transform: scale(0.95);
+    }
+
+    /* 4. Dark Outlined: "Sign in" */
+    .sb-btn-dark-outlined {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background-color: transparent;
+      color: var(--sb-text-black);
+      font-family: var(--font-sodosans);
+      font-size: 14px;
+      font-weight: 600;
+      padding: 7px 18px;
+      border-radius: var(--radius-pill);
+      border: 1px solid var(--sb-text-black);
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .sb-btn-dark-outlined:active {
+      transform: scale(0.95);
+    }
+
+    /* 5. Green-on-Green Inverted: White filled on House Green */
+    .sb-btn-inverted {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background-color: #ffffff;
+      color: var(--sb-green-accent);
+      font-family: var(--font-sodosans);
+      font-size: 16px;
+      font-weight: 600;
+      padding: 9px 22px;
+      border-radius: var(--radius-pill);
+      border: 1px solid #ffffff;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .sb-btn-inverted:active {
+      transform: scale(0.95);
+    }
+
+    /* 6. Outlined on Dark */
+    .sb-btn-white-outlined {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background-color: transparent;
+      color: #ffffff;
+      font-family: var(--font-sodosans);
+      font-size: 16px;
+      font-weight: 600;
+      padding: 9px 22px;
+      border-radius: var(--radius-pill);
+      border: 1px solid #ffffff;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .sb-btn-white-outlined:active {
+      transform: scale(0.95);
+    }
+
+    /* ─────────────────────────────────────────────────────────────
+       4. FLOATING "FRAP" CIRCULAR CTA (56PX, SIGNATURE DEPTH)
+       ───────────────────────────────────────────────────────────── */
+    .sb-frap-btn {
+      position: fixed;
+      bottom: 32px;
+      right: 32px;
+      width: 56px;
+      height: 56px;
+      border-radius: var(--radius-circle);
+      background-color: var(--sb-green-accent);
+      color: #ffffff;
+      border: none;
+      box-shadow: var(--shadow-frap);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      z-index: 1050;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .sb-frap-btn:hover {
+      transform: scale(1.05);
+    }
+
+    .sb-frap-btn:active {
+      transform: scale(0.95);
+      box-shadow: var(--shadow-frap-active);
+    }
+
+    /* ─────────────────────────────────────────────────────────────
+       5. COLOR-BLOCK PAGE RHYTHM SECTIONS
+       ───────────────────────────────────────────────────────────── */
+
+    /* Section 1: Warm Cream Hero */
+    .sb-hero-cream {
+      background-color: var(--sb-canvas-warm);
+      padding: 64px 36px;
+    }
+
+    .sb-split-container {
+      max-width: 1440px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1.1fr 1fr;
+      align-items: center;
+      gap: 48px;
+    }
+
+    @media (max-width: 960px) {
+      .sb-split-container {
+        grid-template-columns: 1fr;
+        text-align: center;
+      }
+    }
+
+    /* H1 in Starbucks Green: 24px weight 600 */
+    .sb-h1 {
+      font-size: 24px;
+      font-weight: 600;
+      line-height: 36px;
+      color: var(--sb-green); /* Starbucks Green primary signal */
+      letter-spacing: var(--tracking-tight);
+      margin-bottom: 16px;
+    }
+
+    /* Display / Jumbo scale */
+    .sb-display-hero {
+      font-size: 50px;
+      font-weight: 600;
+      line-height: 1.15;
+      color: var(--sb-text-black);
+      letter-spacing: -0.16px;
+      margin-bottom: 20px;
+    }
+
+    .sb-body-large {
+      font-size: 19px;
+      font-weight: 400;
+      line-height: 1.75;
+      color: var(--sb-text-black-soft);
+      margin-bottom: 32px;
+      max-width: 600px;
+    }
+
+    @media (max-width: 960px) {
+      .sb-body-large {
+        margin-left: auto;
+        margin-right: auto;
+      }
+    }
+
+    /* Cup-name personal touch */
+    .sb-cup-name-tag {
+      font-family: var(--font-cup-script);
+      font-size: 24px;
+      color: #000000;
+      transform: rotate(-3deg);
+      display: inline-block;
+      margin-bottom: 12px;
+    }
+
+    .sb-hero-img-wrap {
+      border-radius: var(--radius-card);
+      overflow: hidden;
+      box-shadow: var(--shadow-card);
+      background-color: #ffffff;
+    }
+
+    .sb-hero-img-wrap img {
+      width: 100%;
+      height: 100%;
+      display: block;
+      object-fit: cover;
+    }
+
+    /* Section 2: House Green (#1E3932) Feature Band */
+    .sb-feature-band {
+      background-color: var(--sb-house-green); /* House Green */
+      color: var(--sb-text-white);
+      padding: 80px 36px;
+    }
+
+    .sb-band-container {
+      max-width: 1440px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      align-items: center;
+      gap: 64px;
+    }
+
+    @media (max-width: 960px) {
+      .sb-band-container {
+        grid-template-columns: 1fr;
+        text-align: center;
+      }
+    }
+
+    /* Rewards Serif Editorial Headline */
+    .sb-serif-headline {
+      font-family: var(--font-rewards-serif);
+      font-size: 45px;
+      font-weight: 600;
+      line-height: 1.2;
+      color: #ffffff;
+      margin-bottom: 20px;
+    }
+
+    .sb-band-deck {
+      font-size: 19px;
+      line-height: 1.75;
+      color: var(--sb-text-white-soft);
+      margin-bottom: 36px;
+    }
+
+    /* Section 3: White Content Cards on Ceramic (#edebe9) */
+    .sb-ceramic-section {
+      background-color: var(--sb-ceramic);
+      padding: 80px 36px;
+    }
+
+    .sb-section-wrap {
+      max-width: 1440px;
+      margin: 0 auto;
+    }
+
+    /* H2 in Text Black: 24px weight 400 */
+    .sb-h2 {
+      font-size: 24px;
+      font-weight: 400;
+      line-height: 36px;
+      color: var(--sb-text-black);
+      letter-spacing: var(--tracking-tight);
+      margin-bottom: 8px;
+    }
+
+    .sb-card-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 28px;
+      margin-top: 36px;
+    }
+
+    /* Content Card: White #ffffff, 12px radius, whisper-soft shadow */
+    .sb-content-card {
+      background-color: var(--sb-surface-white);
+      border-radius: var(--radius-card);
+      box-shadow: var(--shadow-card);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .sb-card-media {
+      width: 100%;
+      height: 240px;
+      overflow: hidden;
+    }
+
+    .sb-card-media img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .sb-card-body {
+      padding: 24px;
+    }
+
+    /* Rewards Cost Pill: Gold #cba258 */
+    .sb-rewards-cost-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      border: 1px solid var(--sb-gold);
+      color: var(--sb-gold);
+      font-size: 13px;
+      font-weight: 700;
+      padding: 4px 12px;
+      border-radius: var(--radius-pill);
+      margin-bottom: 12px;
+    }
+
+    /* ─────────────────────────────────────────────────────────────
+       6. PDP CLUSTER: SIZE SELECTOR & CUSTOMIZE FLOW
+       ───────────────────────────────────────────────────────────── */
+    .sb-pdp-panel {
+      background-color: var(--sb-surface-white);
+      border-radius: var(--radius-card);
+      box-shadow: var(--shadow-card);
+      padding: 40px;
+      margin-top: 48px;
+    }
+
+    .sb-size-selector-row {
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      padding: 24px 0;
+      border-bottom: 1px solid #e7e7e7;
+      margin-bottom: 32px;
+    }
+
+    .sb-cup-option {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+      text-align: center;
+    }
+
+    .sb-cup-icon-circle {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      transition: all 0.2s ease;
+      border: 2px solid transparent;
+    }
+
+    .sb-cup-option.active .sb-cup-icon-circle {
+      border-color: var(--sb-green-accent); /* 2px solid #00754A circular ring */
+      background-color: rgba(0, 117, 74, 0.08);
+    }
+
+    .sb-cup-name {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--sb-green);
+    }
+
+    .sb-cup-oz {
+      font-size: 13px;
+      color: var(--sb-text-black-soft);
+    }
+
+    /* Outlined Add-in Rectangles */
+    .sb-add-in-row {
+      background: #ffffff;
+      border: 1px solid #d6dbde;
+      border-radius: 4px;
+      padding: 12px 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+      position: relative;
+    }
+
+    .sb-add-in-label {
+      font-size: 13px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.325px;
+      color: var(--sb-text-black);
+    }
+
+    /* Stepper */
+    .sb-stepper {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .sb-stepper-btn {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      border: 1px solid #d6dbde;
+      background: #ffffff;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+    }
+
+    /* ─────────────────────────────────────────────────────────────
+       7. REWARDS 3-COLUMN STATUS PANELS (HOUSE GREEN #1E3932)
+       ───────────────────────────────────────────────────────────── */
+    .sb-rewards-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+      margin-top: 36px;
+    }
+
+    @media (max-width: 900px) {
+      .sb-rewards-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .sb-status-card {
+      background-color: var(--sb-house-green);
+      color: #ffffff;
+      border-radius: var(--radius-card);
+      padding: 32px;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .sb-status-stripe {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 6px;
+    }
+
+    .sb-tier-badge {
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1.2px;
+      margin-bottom: 12px;
+    }
+
+    .sb-status-title {
+      font-size: 24px;
+      font-weight: 600;
+      margin-bottom: 16px;
+      color: #ffffff;
+    }
+
+    .sb-status-bullets {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      font-size: 14px;
+      color: var(--sb-text-white-soft);
+      margin-bottom: 24px;
+    }
+
+    /* ─────────────────────────────────────────────────────────────
+       8. NUTRITION FACTS REGULATION TABLE
+       ───────────────────────────────────────────────────────────── */
+    .sb-nutrition-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 24px;
+    }
+
+    .sb-nutrition-table td {
+      padding: 12px 0;
+      border-bottom: 1px solid #e7e7e7;
+      font-size: 14px;
+    }
+
+    .sb-nutrient-label {
+      color: var(--sb-text-black);
+      font-weight: 400;
+    }
+
+    .sb-nutrient-val {
+      color: var(--sb-text-black);
+      font-weight: 700;
+      text-align: right;
+    }
+
+    /* ─────────────────────────────────────────────────────────────
+       9. HOUSE GREEN FOOTER (#1E3932)
+       ───────────────────────────────────────────────────────────── */
+    .sb-footer {
+      background-color: var(--sb-house-green); /* House Green footer */
+      color: #ffffff;
+      padding: 80px 36px 48px;
+    }
+
+    .sb-footer-inner {
+      max-width: 1440px;
+      margin: 0 auto;
+    }
+
+    .sb-footer-cols {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 40px;
+      margin-bottom: 64px;
+    }
+
+    .sb-footer-title {
+      font-size: 19px;
+      font-weight: 600;
+      margin-bottom: 24px;
+      color: #ffffff;
+    }
+
+    .sb-footer-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .sb-footer-list a {
+      font-size: 16px;
+      color: var(--sb-text-white-soft);
+      transition: color 150ms ease;
+    }
+
+    .sb-footer-list a:hover {
+      color: #ffffff;
+      text-decoration: underline;
+    }
+
+    .sb-footer-bottom {
+      border-top: 1px solid rgba(255, 255, 255, 0.2);
+      padding-top: 32px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 16px;
+      font-size: 13px;
+      color: var(--sb-text-white-soft);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- 1. JOIN STRIP -->
+  <div class="sb-join-strip">
+    <span>Free coffee is just the beginning. Join Starbucks® Rewards today.</span>
+    <button class="sb-btn-black" onclick="alert('Welcome to Starbucks Rewards!')">Join now</button>
+  </div>
+
+  <!-- 2. GLOBAL NAVIGATION -->
+  <header class="sb-global-nav">
+    <div class="sb-nav-inner">
+      <div class="sb-nav-left">
+        <a href="#hero" class="sb-siren-logo" title="Starbucks Home">
+          <!-- Siren Emblem SVG -->
+          <svg width="48" height="48" viewBox="0 0 100 100" fill="none">
+            <circle cx="50" cy="50" r="48" fill="#006241"/>
+            <path d="M50 18C52 18 54 22 54 26C54 30 50 34 50 34C50 34 46 30 46 26C46 22 48 18 50 18Z" fill="#ffffff"/>
+            <circle cx="50" cy="40" r="14" fill="#ffffff"/>
+            <circle cx="45" cy="38" r="2" fill="#006241"/>
+            <circle cx="55" cy="38" r="2" fill="#006241"/>
+            <path d="M46 44C48 46 52 46 54 44" stroke="#006241" stroke-width="2" stroke-linecap="round"/>
+            <path d="M30 68C34 60 42 56 50 56C58 56 66 60 70 68" stroke="#ffffff" stroke-width="4" stroke-linecap="round"/>
+          </svg>
+        </a>
+
+        <ul class="sb-nav-links">
+          <li><a href="#menu" class="sb-nav-link active">Menu</a></li>
+          <li><a href="#rewards" class="sb-nav-link">Rewards</a></li>
+          <li><a href="#cards" class="sb-nav-link">Gift Cards</a></li>
+          <li><a href="#spec" class="sb-nav-link">Design Spec</a></li>
+        </ul>
+      </div>
+
+      <div class="sb-nav-right">
+        <a href="#pdp" style="display: flex; align-items: center; gap: 6px; font-size: 14px; font-weight: 700; color: var(--sb-text-black);">
+          📍 Find a store
+        </a>
+        <button class="sb-btn-dark-outlined" onclick="alert('Sign In dialog opened')">Sign in</button>
+        <button class="sb-btn-black" onclick="alert('Join Rewards program')">Join now</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- 3. SECTION 1: WARM CREAM HERO (#f2f0eb) -->
+  <section class="sb-hero-cream" id="hero">
+    <div class="sb-split-container">
+      <div>
+        <div class="sb-cup-name-tag">For Taylor ✨</div>
+        <h1 class="sb-h1">Fresh from the Roastery</h1>
+        <div class="sb-display-hero">It’s a great day for an afternoon iced pick-me-up</div>
+        <p class="sb-body-large">
+          Sip on vibrant fruit-infused Starbucks Refreshers® or velvety cold foam brews crafted by our baristas on a warm cream canvas.
+        </p>
+
+        <div style="display: flex; gap: 16px; flex-wrap: wrap;">
+          <!-- Primary Filled CTA: Green Accent #00754A with scale(0.95) -->
+          <a href="#pdp" class="sb-btn-primary">Explore our afternoon menu</a>
+          <a href="#rewards" class="sb-btn-outlined">Learn about Rewards</a>
+        </div>
+      </div>
+
+      <div class="sb-hero-img-wrap">
+        <img src="https://images.unsplash.com/photo-1517701550927-30cf4ba1dba5?w=800&auto=format&fit=crop&q=80" alt="Iced Refreshers and Artisan Espresso">
+      </div>
+    </div>
+  </section>
+
+  <!-- 4. SECTION 2: HOUSE GREEN (#1E3932) FEATURE BAND -->
+  <section class="sb-feature-band" id="rewards">
+    <div class="sb-band-container">
+      <div>
+        <span class="sb-rewards-cost-pill">★ Starbucks Rewards</span>
+        <h2 class="sb-serif-headline">Free coffee is just the beginning</h2>
+        <p class="sb-band-deck">
+          Join to earn Stars toward free food and beverages, customize your favorite drinks, and receive exclusive offers throughout the year.
+        </p>
+
+        <div style="display: flex; gap: 16px; flex-wrap: wrap;">
+          <!-- Green-on-Green Inverted Button -->
+          <button class="sb-btn-inverted" onclick="alert('Enrolling in Starbucks Rewards...')">Join in the app</button>
+          <!-- Outlined on Dark Button -->
+          <a href="#spec" class="sb-btn-white-outlined">See star redemption tiers</a>
+        </div>
+      </div>
+
+      <div style="border-radius: var(--radius-card); overflow: hidden; box-shadow: var(--shadow-card);">
+        <img src="https://images.unsplash.com/photo-1541167760496-1628856ab772?w=800&auto=format&fit=crop&q=80" alt="Starbucks Coffee &amp; App" style="width: 100%; display: block;">
+      </div>
+    </div>
+  </section>
+
+  <!-- 5. SECTION 3: REWARDS STATUS TIERS (3-COLUMN HOUSE GREEN) -->
+  <section class="sb-ceramic-section">
+    <div class="sb-section-wrap">
+      <h2 class="sb-h2" style="font-size: 28px; font-weight: 600; text-align: center; margin-bottom: 8px;">
+        Endless Extras with Every Cup
+      </h2>
+      <p style="text-align: center; color: var(--sb-text-black-soft); font-size: 16px; margin-bottom: 36px;">
+        Earn 1★ per dollar with cash/card, or 2★ per dollar using preloaded Starbucks Cards.
+      </p>
+
+      <div class="sb-rewards-grid">
+        <!-- Tier 1: Bronze -->
+        <div class="sb-status-card">
+          <div class="sb-status-stripe" style="background: linear-gradient(90deg, #b87333, #e5a65e);"></div>
+          <span class="sb-tier-badge" style="color: #dfc49d;">Bronze Level • 25★</span>
+          <h3 class="sb-status-title">Customize drink</h3>
+          <ul class="sb-status-bullets">
+            <li>• Extra espresso shot</li>
+            <li>• Dairy alternative substitution</li>
+            <li>• Pump of flavored syrup</li>
+          </ul>
+          <div style="margin-top: auto; font-size: 12px; color: var(--sb-text-white-soft);">
+            Redeemable in-store &amp; mobile order
+          </div>
+        </div>
+
+        <!-- Tier 2: Gold (Ceremonial Accent) -->
+        <div class="sb-status-card">
+          <div class="sb-status-stripe" style="background: linear-gradient(90deg, #cba258, #fae596);"></div>
+          <span class="sb-tier-badge" style="color: #cba258;">Gold Ceremony • 200★</span>
+          <h3 class="sb-status-title">Handcrafted drink</h3>
+          <ul class="sb-status-bullets">
+            <li>• Any handcrafted iced latte or Frappuccino®</li>
+            <li>• Hot breakfast sandwich or oatmeal</li>
+            <li>• Free birthday reward on us</li>
+          </ul>
+          <div style="margin-top: auto; font-size: 12px; color: var(--sb-text-white-soft);">
+            Our most popular reward tier
+          </div>
+        </div>
+
+        <!-- Tier 3: Reserve Tier -->
+        <div class="sb-status-card">
+          <div class="sb-status-stripe" style="background: linear-gradient(90deg, #00754A, #d4e9e2);"></div>
+          <span class="sb-tier-badge" style="color: #d4e9e2;">Reserve Level • 400★</span>
+          <h3 class="sb-status-title">Merchandise &amp; Coffee</h3>
+          <ul class="sb-status-bullets">
+            <li>• Signature reusable tumbler or mug</li>
+            <li>• 1 lb bag of whole bean coffee</li>
+            <li>• Starbucks Reserve® exclusive roast</li>
+          </ul>
+          <div style="margin-top: auto; font-size: 12px; color: var(--sb-text-white-soft);">
+            Premium retail merchandise credit
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 6. SECTION 4: PRODUCT DETAIL CLUSTER (PDP SIGNATURE) -->
+  <section class="sb-hero-cream" id="pdp">
+    <div class="sb-section-wrap">
+      <div style="margin-bottom: 24px;">
+        <span style="font-size: 14px; color: var(--sb-text-black-soft);">Menu / Refreshers / </span>
+        <span style="font-size: 14px; font-weight: 700; color: var(--sb-green-accent);">Pink Energy Refresher</span>
+      </div>
+
+      <div class="sb-pdp-panel">
+        <div style="display: grid; grid-template-columns: 1fr 1.2fr; gap: 48px; align-items: center;">
+          <div style="text-align: center;">
+            <img src="https://images.unsplash.com/photo-1551024709-8f23befc6f87?w=600&auto=format&fit=crop&q=80" alt="Pink Drink with Coconut Milk" style="max-width: 100%; border-radius: var(--radius-card); box-shadow: var(--shadow-card);">
+            <div style="margin-top: 16px;">
+              <span class="sb-rewards-cost-pill">200★ item</span>
+              <h2 class="sb-h1" style="font-size: 28px; margin-bottom: 4px;">Pink Drink Refresher</h2>
+              <p style="font-size: 14px; color: var(--sb-text-black-soft);">Crisp strawberry acai combined with creamy coconut milk and real fruit scoop.</p>
+            </div>
+          </div>
+
+          <div>
+            <!-- Size Options Selector -->
+            <div class="sb-size-selector-row">
+              <div class="sb-cup-option" onclick="selectCup(this, 'Tall', '12 fl oz')">
+                <div class="sb-cup-icon-circle">🥤</div>
+                <div class="sb-cup-name">Tall</div>
+                <div class="sb-cup-oz">12 fl oz</div>
+              </div>
+              <div class="sb-cup-option active" onclick="selectCup(this, 'Grande', '16 fl oz')">
+                <div class="sb-cup-icon-circle">🥤</div>
+                <div class="sb-cup-name">Grande</div>
+                <div class="sb-cup-oz">16 fl oz</div>
+              </div>
+              <div class="sb-cup-option" onclick="selectCup(this, 'Venti', '24 fl oz')">
+                <div class="sb-cup-icon-circle">🥤</div>
+                <div class="sb-cup-name">Venti</div>
+                <div class="sb-cup-oz">24 fl oz</div>
+              </div>
+              <div class="sb-cup-option" onclick="selectCup(this, 'Trenta', '30 fl oz')">
+                <div class="sb-cup-icon-circle">🥤</div>
+                <div class="sb-cup-name">Trenta</div>
+                <div class="sb-cup-oz">30 fl oz</div>
+              </div>
+            </div>
+
+            <!-- Outlined Add-in Rectangles -->
+            <div class="sb-add-in-row">
+              <div>
+                <div class="sb-add-in-label">Milk / Base</div>
+                <div style="font-size: 16px; color: var(--sb-text-black);">Coconut Milk (Default)</div>
+              </div>
+              <span style="font-size: 14px; color: var(--sb-text-black-soft);">Change ▼</span>
+            </div>
+
+            <div class="sb-add-in-row">
+              <div>
+                <div class="sb-add-in-label">Ice Level</div>
+                <div style="font-size: 16px; color: var(--sb-text-black);">Regular Ice</div>
+              </div>
+              <span style="font-size: 14px; color: var(--sb-text-black-soft);">Change ▼</span>
+            </div>
+
+            <div class="sb-add-in-row">
+              <div>
+                <div class="sb-add-in-label">Strawberry Inclusions</div>
+                <div style="font-size: 16px; color: var(--sb-text-black);">Freeze-dried Scoops</div>
+              </div>
+              <!-- Numeric Stepper -->
+              <div class="sb-stepper">
+                <button class="sb-stepper-btn" onclick="adjustScoop(-1)">−</button>
+                <span id="scoopCount" style="font-weight: 700; width: 20px; text-align: center;">1</span>
+                <button class="sb-stepper-btn" onclick="adjustScoop(1)">+</button>
+              </div>
+            </div>
+
+            <!-- Order Buttons -->
+            <div style="display: flex; gap: 16px; align-items: center; margin-top: 32px;">
+              <button class="sb-btn-primary" style="flex: 1; padding: 14px 32px;" onclick="addToOrder()">
+                Add to Order • $5.45
+              </button>
+              <button class="sb-btn-outlined" style="padding: 14px 24px;" onclick="alert('Drink saved to favorites!')">
+                ✨ Customize
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Nutrition Facts Table -->
+        <div style="margin-top: 48px; border-top: 1px solid #e7e7e7; padding-top: 32px;">
+          <h3 style="font-size: 18px; font-weight: 700; margin-bottom: 12px;">Nutrition Facts (Grande 16 fl oz)</h3>
+          <table class="sb-nutrition-table">
+            <tbody>
+              <tr><td class="sb-nutrient-label">Calories</td><td class="sb-nutrient-val">140</td></tr>
+              <tr><td class="sb-nutrient-label">Total Fat</td><td class="sb-nutrient-val">2.5 g</td></tr>
+              <tr><td class="sb-nutrient-label">Sodium</td><td class="sb-nutrient-val">65 mg</td></tr>
+              <tr><td class="sb-nutrient-label">Total Carbohydrates</td><td class="sb-nutrient-val">27 g</td></tr>
+              <tr><td class="sb-nutrient-label">Sugars</td><td class="sb-nutrient-val">25 g</td></tr>
+              <tr><td class="sb-nutrient-label">Caffeine</td><td class="sb-nutrient-val">45 mg**</td></tr>
+            </tbody>
+          </table>
+          <p style="font-size: 12px; color: var(--sb-text-black-soft); margin-top: 8px;">
+            **Caffeine is estimated based on standard recipe calculations.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 7. SECTION 5: DESIGN SYSTEM TOKEN MATRIX -->
+  <section class="sb-ceramic-section" id="spec">
+    <div class="sb-section-wrap">
+      <h2 class="sb-h2" style="font-size: 28px; font-weight: 600; text-align: center; margin-bottom: 8px;">
+        Starbucks System Token Specification
+      </h2>
+      <p style="text-align: center; color: var(--sb-text-black-soft); font-size: 15px; margin-bottom: 40px;">
+        Four-tier green architecture, warm cream canvas, tight -0.01em SoDoSans tracking, and floating Frap button.
+      </p>
+
+      <div class="sb-card-grid">
+        <!-- Palette -->
+        <div class="sb-content-card" style="padding: 28px;">
+          <h3 style="font-size: 18px; font-weight: 700; margin-bottom: 16px; border-bottom: 1px solid #e7e7e7; padding-bottom: 8px;">
+            Four-Tier Green System
+          </h3>
+          <div style="display: flex; justify-content: space-between; padding: 6px 0; font-size: 14px;">
+            <span>Starbucks Green</span>
+            <code style="font-weight: 600; color: #006241;">#006241</code>
+          </div>
+          <div style="display: flex; justify-content: space-between; padding: 6px 0; font-size: 14px;">
+            <span>Green Accent (CTAs)</span>
+            <code style="font-weight: 600; color: #00754A;">#00754A</code>
+          </div>
+          <div style="display: flex; justify-content: space-between; padding: 6px 0; font-size: 14px;">
+            <span>House Green (Bands)</span>
+            <code style="font-weight: 600; color: #1E3932;">#1E3932</code>
+          </div>
+          <div style="display: flex; justify-content: space-between; padding: 6px 0; font-size: 14px;">
+            <span>Green Uplift</span>
+            <code style="font-weight: 600; color: #2b5148;">#2b5148</code>
+          </div>
+          <div style="display: flex; justify-content: space-between; padding: 6px 0; font-size: 14px;">
+            <span>Rewards Gold</span>
+            <code style="font-weight: 600; color: #cba258;">#cba258</code>
+          </div>
+        </div>
+
+        <!-- Typography -->
+        <div class="sb-content-card" style="padding: 28px;">
+          <h3 style="font-size: 18px; font-weight: 700; margin-bottom: 16px; border-bottom: 1px solid #e7e7e7; padding-bottom: 8px;">
+            Typography Hierarchy
+          </h3>
+          <div style="display: flex; justify-content: space-between; padding: 6px 0; font-size: 14px;">
+            <span>Primary Voice</span>
+            <span>SoDoSans (-0.01em)</span>
+          </div>
+          <div style="display: flex; justify-content: space-between; padding: 6px 0; font-size: 14px;">
+            <span>Rewards Headlines</span>
+            <span>Lander Tall (Serif)</span>
+          </div>
+          <div style="display: flex; justify-content: space-between; padding: 6px 0; font-size: 14px;">
+            <span>Careers / Personal</span>
+            <span>Kalam (Script)</span>
+          </div>
+          <div style="display: flex; justify-content: space-between; padding: 6px 0; font-size: 14px;">
+            <span>H1 / H2 Size</span>
+            <span>24px (600 vs 400 wt)</span>
+          </div>
+          <div style="display: flex; justify-content: space-between; padding: 6px 0; font-size: 14px;">
+            <span>Button Radius</span>
+            <span>50px Full-Pill</span>
+          </div>
+        </div>
+
+        <!-- Micro-interactions -->
+        <div class="sb-content-card" style="padding: 28px;">
+          <h3 style="font-size: 18px; font-weight: 700; margin-bottom: 16px; border-bottom: 1px solid #e7e7e7; padding-bottom: 8px;">
+            Signature Micro-Interactions
+          </h3>
+          <p style="font-size: 14px; color: var(--sb-text-black-soft); line-height: 1.5; margin-bottom: 16px;">
+            Test the universal button press below: every button must contract using <code>scale(0.95)</code> on active.
+          </p>
+          <div style="display: flex; flex-direction: column; gap: 12px;">
+            <button class="sb-btn-primary" style="width: 100%;">Primary Pill (Press Me)</button>
+            <button class="sb-btn-outlined" style="width: 100%;">Outlined Pill (Press Me)</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 8. FLOATING 56PX "FRAP" CIRCULAR CTA -->
+  <button class="sb-frap-btn" title="Start an order (Floating Frap CTA)" onclick="addToOrder()">
+    <!-- Shopping Bag / Coffee Cup SVG -->
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <path d="M16 10a4 4 0 0 1-8 0"></path>
+    </svg>
+  </button>
+
+  <!-- 9. HOUSE GREEN FOOTER (#1E3932) -->
+  <footer class="sb-footer">
+    <div class="sb-footer-inner">
+      <div class="sb-footer-cols">
+        <div>
+          <h4 class="sb-footer-title">About Us</h4>
+          <ul class="sb-footer-list">
+            <li><a href="#">Our Company</a></li>
+            <li><a href="#">Our Coffee</a></li>
+            <li><a href="#">Stories and News</a></li>
+            <li><a href="#">Customer Service</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="sb-footer-title">Careers</h4>
+          <ul class="sb-footer-list">
+            <li><a href="#">Culture and Values</a></li>
+            <li><a href="#">Inclusion &amp; Diversity</a></li>
+            <li><a href="#">College Achievement Plan</a></li>
+            <li><a href="#">Alumni Community</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="sb-footer-title">Social Impact</h4>
+          <ul class="sb-footer-list">
+            <li><a href="#">Ethical Sourcing</a></li>
+            <li><a href="#">Environmental Stewardship</a></li>
+            <li><a href="#">The Starbucks Foundation</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="sb-footer-title">Order &amp; Rewards</h4>
+          <ul class="sb-footer-list">
+            <li><a href="#">Starbucks Rewards</a></li>
+            <li><a href="#">Gift Cards</a></li>
+            <li><a href="#">Order on Web</a></li>
+            <li><a href="#">Delivery via DoorDash</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="sb-footer-bottom">
+        <div>© 2026 Starbucks Coffee Company. All rights reserved. Built authentically for open-design review.</div>
+        <div style="display: flex; gap: 24px;">
+          <span>Privacy Notice</span>
+          <span>Terms of Use</span>
+          <span>Do Not Share My Personal Information</span>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    function selectCup(el, size, oz) {
+      document.querySelectorAll('.sb-cup-option').forEach(c => c.classList.remove('active'));
+      el.classList.add('active');
+    }
+
+    let scoops = 1;
+    function adjustScoop(delta) {
+      scoops = Math.max(0, Math.min(6, scoops + delta));
+      document.getElementById('scoopCount').textContent = scoops;
+    }
+
+    function addToOrder() {
+      alert("Added to Order! Your drink has been customized and sent to the order queue.");
+    }
+  </script>
+</body>
+</html>

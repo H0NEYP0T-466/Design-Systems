@@ -1,0 +1,1352 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>open-design/primer-engine: High-density GitHub Design System</title>
+  
+  <style>
+    /* GitHub Primer Design Tokens (from DESIGN.md and tokens.css) */
+    :root {
+      /* Surface */
+      --bg: #ffffff;
+      --surface: #f6f8fa;              /* canvas-subtle — sidebar, input bg */
+      --surface-warm: var(--surface);
+      --canvas-inset: #eaeef2;
+      --canvas-overlay: #ffffff;
+
+      /* Foreground */
+      --fg: #1f2328;                      /* fg-default — ink */
+      --fg-2: #1f2328;
+      --muted: #656d76;                     /* fg-muted — captions, file paths */
+      --meta: #656d76;
+
+      /* Border */
+      --border: #d0d7de;              /* border-default — hairline structural */
+      --border-soft: #d8dee4;             /* border-muted — inner panel dividers */
+      --border-subtle: #eaeef2;
+
+      /* Accent */
+      --accent: #0969da;            /* Primer Blue — links, primary CTAs */
+      --accent-on: #ffffff;
+      --accent-hover: #0550ae;            /* darker pressed state */
+      --accent-subtle: #ddf4ff;
+
+      /* Semantic */
+      --success: #1a7f37;                  /* GitHub green — merge, open, success */
+      --success-btn: #1f883d;              /* Primary button green */
+      --success-btn-hover: #1a7f37;
+      --success-subtle: #dafbe1;
+      --warn: #9a6700;                  /* attention amber text */
+      --warn-subtle: #fff8c5;
+      --danger: #cf222e;                  /* closed / destructive red */
+      --danger-subtle: #ffebe9;
+      --done: #8250df;                    /* merged / done purple */
+      --done-subtle: #fbefff;
+      --sponsor: #bf3989;
+
+      /* Typography: System fonts only — no custom webfonts */
+      --font-display: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
+      --font-body: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
+      --font-mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
+
+      /* GitHub Type Scale: 14px body baseline */
+      --text-xs: 12px;
+      --text-sm: 14px;
+      --text-base: 14px;
+      --text-lg: 16px;
+      --text-xl: 20px;
+      --text-2xl: 24px;
+      --text-3xl: 28px;
+      --text-4xl: 32px;
+
+      --leading-body: 1.5;
+      --leading-tight: 1.25;
+      --tracking-display: -0.01em;
+
+      /* Spacing */
+      --space-1: 4px;
+      --space-2: 8px;
+      --space-3: 12px;
+      --space-4: 16px;
+      --space-5: 20px;
+      --space-6: 24px;
+      --space-8: 32px;
+
+      /* Radii */
+      --radius-sm: 6px;
+      --radius-md: 6px;
+      --radius-pill: 9999px;
+
+      /* Elevation & Focus */
+      --elev-raised: 0 1px 3px rgba(31, 35, 40, 0.12), 0 8px 24px rgba(66, 74, 83, 0.12);
+      --focus-ring: 0 0 0 3px rgba(9, 105, 218, 0.3);
+
+      /* Motion */
+      --motion-fast: 80ms;
+      --motion-base: 200ms;
+      --container-max: 1280px;
+
+      /* Diff Colors */
+      --diff-add-bg: #e6ffec;
+      --diff-add-line: #ccffd8;
+      --diff-add-text: #1a7f37;
+      --diff-del-bg: #ffebe9;
+      --diff-del-line: #ffd7d5;
+      --diff-del-text: #cf222e;
+      --diff-hunk-bg: #f6f8fa;
+    }
+
+    [data-theme="dark"] {
+      --bg: #0d1117;
+      --surface: #161b22;
+      --surface-warm: #161b22;
+      --canvas-inset: #010409;
+      --canvas-overlay: #161b22;
+
+      --fg: #e6edf3;
+      --fg-2: #e6edf3;
+      --muted: #848d97;
+      --meta: #848d97;
+
+      --border: #30363d;
+      --border-soft: #21262d;
+      --border-subtle: #21262d;
+
+      --accent: #2f81f7;
+      --accent-hover: #58a6ff;
+      --accent-subtle: rgba(56, 139, 253, 0.15);
+
+      --success: #3fb950;
+      --success-btn: #238636;
+      --success-btn-hover: #2ea043;
+      --success-subtle: rgba(46, 160, 67, 0.15);
+      --warn: #d29922;
+      --warn-subtle: rgba(187, 128, 9, 0.15);
+      --danger: #f85149;
+      --danger-subtle: rgba(248, 81, 73, 0.15);
+      --done: #a371f7;
+      --done-subtle: rgba(163, 113, 247, 0.15);
+      --sponsor: #db61a2;
+
+      --elev-raised: 0 1px 3px rgba(1, 4, 9, 0.8), 0 8px 24px rgba(1, 4, 9, 0.8);
+      --focus-ring: 0 0 0 3px rgba(47, 129, 247, 0.4);
+
+      --diff-add-bg: rgba(46, 160, 67, 0.15);
+      --diff-add-line: rgba(46, 160, 67, 0.25);
+      --diff-add-text: #3fb950;
+      --diff-del-bg: rgba(248, 81, 73, 0.15);
+      --diff-del-line: rgba(248, 81, 73, 0.25);
+      --diff-del-text: #f85149;
+      --diff-hunk-bg: #161b22;
+    }
+
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--bg);
+      color: var(--fg);
+      font-family: var(--font-body);
+      font-size: var(--text-base);
+      line-height: var(--leading-body);
+      -webkit-font-smoothing: antialiased;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* GitHub Global Header */
+    .gh-global-header {
+      background-color: var(--surface);
+      border-bottom: 1px solid var(--border);
+      padding: 12px 24px;
+      font-size: 14px;
+    }
+
+    .gh-header-inner {
+      max-width: var(--container-max);
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    .gh-nav-left {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .gh-logo-svg {
+      fill: var(--fg);
+      display: block;
+      cursor: pointer;
+    }
+
+    .gh-search-input {
+      display: flex;
+      align-items: center;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 5px 12px;
+      width: 280px;
+      color: var(--muted);
+      font-size: 13px;
+      gap: 8px;
+    }
+
+    .gh-search-input input {
+      border: none;
+      background: transparent;
+      outline: none;
+      width: 100%;
+      color: var(--fg);
+      font-family: var(--font-body);
+      font-size: 13px;
+    }
+
+    .gh-kbd-shortcut {
+      border: 1px solid var(--border);
+      background: var(--surface);
+      color: var(--muted);
+      border-radius: 4px;
+      padding: 1px 5px;
+      font-size: 11px;
+      font-family: var(--font-mono);
+    }
+
+    .gh-header-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    /* Buttons */
+    .btn {
+      font-family: var(--font-body);
+      font-size: 13px;
+      font-weight: 500;
+      padding: 4px 12px;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border);
+      background: var(--surface);
+      color: var(--fg);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      line-height: 20px;
+      transition: background-color var(--motion-fast) ease-out, border-color var(--motion-fast) ease-out;
+      text-decoration: none;
+      user-select: none;
+      white-space: nowrap;
+    }
+
+    .btn:hover {
+      background-color: color-mix(in oklab, var(--surface), var(--fg) 5%);
+      border-color: var(--border);
+    }
+
+    .btn:focus-visible {
+      outline: none;
+      box-shadow: var(--focus-ring);
+    }
+
+    .btn-primary {
+      background-color: var(--success-btn);
+      color: #ffffff;
+      border-color: rgba(31, 35, 40, 0.15);
+      box-shadow: 0 1px 0 rgba(31, 35, 40, 0.1);
+      font-weight: 600;
+    }
+
+    .btn-primary:hover {
+      background-color: var(--success-btn-hover);
+      border-color: rgba(31, 35, 40, 0.15);
+    }
+
+    .btn-danger {
+      background-color: var(--surface);
+      color: var(--danger);
+      border-color: var(--border);
+    }
+
+    .btn-danger:hover {
+      background-color: var(--danger);
+      color: #ffffff;
+      border-color: var(--danger);
+    }
+
+    .btn-group {
+      display: inline-flex;
+      vertical-align: middle;
+    }
+
+    .btn-group .btn:not(:first-child) {
+      border-top-left-radius: 0;
+      border-bottom-left-radius: 0;
+      margin-left: -1px;
+    }
+
+    .btn-group .btn:not(:last-child) {
+      border-top-right-radius: 0;
+      border-bottom-right-radius: 0;
+    }
+
+    .counter-badge {
+      display: inline-block;
+      padding: 0 6px;
+      font-size: 11px;
+      font-weight: 500;
+      line-height: 18px;
+      border-radius: var(--radius-pill);
+      background-color: rgba(175, 184, 193, 0.2);
+      color: var(--fg);
+    }
+
+    /* Repo Context Subheader */
+    .repo-subheader {
+      background-color: var(--surface);
+      border-bottom: 1px solid var(--border);
+      padding: 16px 24px 0 24px;
+    }
+
+    .repo-subheader-inner {
+      max-width: var(--container-max);
+      margin: 0 auto;
+    }
+
+    .repo-identity-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 16px;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .repo-name-group {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 20px;
+      font-weight: 400;
+    }
+
+    .repo-name-group a {
+      color: var(--accent);
+      text-decoration: none;
+    }
+
+    .repo-name-group a:hover {
+      text-decoration: underline;
+    }
+
+    .repo-name-group .repo-title {
+      font-weight: 600;
+      color: var(--accent);
+    }
+
+    .public-pill {
+      font-size: 12px;
+      font-weight: 500;
+      padding: 2px 7px;
+      border-radius: var(--radius-pill);
+      border: 1px solid var(--border);
+      color: var(--muted);
+    }
+
+    /* Repo Navigation Tabs */
+    .repo-tabs {
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+    }
+
+    .tab-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 12px;
+      font-size: 14px;
+      color: var(--fg);
+      text-decoration: none;
+      border-bottom: 2px solid transparent;
+      cursor: pointer;
+      user-select: none;
+      white-space: nowrap;
+    }
+
+    .tab-item:hover {
+      color: var(--fg);
+      background: rgba(0, 0, 0, 0.03);
+      border-radius: 6px 6px 0 0;
+    }
+
+    .tab-item.active {
+      font-weight: 600;
+      border-bottom-color: #fd8c73;
+    }
+
+    [data-theme="dark"] .tab-item.active {
+      border-bottom-color: #f78166;
+    }
+
+    /* Main Container */
+    .gh-main-container {
+      max-width: var(--container-max);
+      margin: 0 auto;
+      padding: 24px;
+      width: 100%;
+      flex: 1;
+    }
+
+    /* PR Header Banner */
+    .pr-header-banner {
+      margin-bottom: 24px;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 16px;
+    }
+
+    .pr-title-row {
+      display: flex;
+      align-items: baseline;
+      gap: 12px;
+      margin-bottom: 8px;
+    }
+
+    .pr-title {
+      font-size: var(--text-4xl);
+      font-weight: 600;
+      letter-spacing: var(--tracking-display);
+      line-height: var(--leading-tight);
+      color: var(--fg);
+    }
+
+    .pr-number {
+      font-size: 28px;
+      font-weight: 300;
+      color: var(--muted);
+    }
+
+    .pr-status-strip {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 14px;
+      color: var(--muted);
+      flex-wrap: wrap;
+    }
+
+    .status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 5px 12px;
+      border-radius: var(--radius-pill);
+      font-size: 14px;
+      font-weight: 600;
+      color: #ffffff;
+    }
+
+    .status-badge.open {
+      background-color: var(--success);
+    }
+
+    .status-badge.merged {
+      background-color: var(--done);
+    }
+
+    .status-badge.closed {
+      background-color: var(--danger);
+    }
+
+    .pr-author-info strong {
+      color: var(--fg);
+    }
+
+    /* Two-column PR Layout */
+    .pr-layout-grid {
+      display: grid;
+      grid-template-columns: 1fr 296px;
+      gap: 24px;
+    }
+
+    @media (max-width: 1012px) {
+      .pr-layout-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* Timeline & PR Conversation */
+    .timeline-container {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .timeline-comment-box {
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      background-color: var(--bg);
+      overflow: hidden;
+    }
+
+    .comment-header {
+      background-color: var(--surface);
+      border-bottom: 1px solid var(--border);
+      padding: 10px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    .comment-header-left {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .comment-author {
+      font-weight: 600;
+      color: var(--fg);
+    }
+
+    .comment-badge {
+      border: 1px solid var(--border);
+      border-radius: var(--radius-pill);
+      padding: 1px 7px;
+      font-size: 11px;
+      font-weight: 500;
+      color: var(--muted);
+    }
+
+    .comment-body {
+      padding: 16px;
+      font-size: 14px;
+      line-height: 1.6;
+      color: var(--fg);
+    }
+
+    .comment-body code {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      padding: 2px 5px;
+      border-radius: 4px;
+    }
+
+    .comment-body ul {
+      margin-left: 20px;
+      margin-top: 8px;
+    }
+
+    /* Code Diff Panel */
+    .diff-box {
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      background-color: var(--bg);
+      overflow: hidden;
+      margin-top: 8px;
+    }
+
+    .diff-header {
+      background-color: var(--surface);
+      border-bottom: 1px solid var(--border);
+      padding: 8px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 13px;
+    }
+
+    .diff-file-info {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-family: var(--font-mono);
+      font-size: 12px;
+      color: var(--fg);
+      font-weight: 600;
+    }
+
+    .diff-stats-pill {
+      font-size: 11px;
+      font-weight: 600;
+      padding: 2px 6px;
+      border-radius: 3px;
+      background: var(--success-subtle);
+      color: var(--success);
+    }
+
+    .diff-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-family: var(--font-mono);
+      font-size: 12px;
+      line-height: 1.45;
+    }
+
+    .diff-row {
+      display: flex;
+    }
+
+    .diff-line-num {
+      width: 44px;
+      padding: 2px 8px;
+      text-align: right;
+      color: var(--muted);
+      user-select: none;
+      background: var(--surface);
+      border-right: 1px solid var(--border-soft);
+      font-size: 11px;
+      flex-shrink: 0;
+    }
+
+    .diff-code-cell {
+      padding: 2px 12px;
+      white-space: pre;
+      flex: 1;
+      overflow-x: auto;
+    }
+
+    .diff-row.hunk {
+      background-color: var(--diff-hunk-bg);
+      color: var(--muted);
+      border-top: 1px solid var(--border-soft);
+      border-bottom: 1px solid var(--border-soft);
+    }
+
+    .diff-row.addition {
+      background-color: var(--diff-add-bg);
+    }
+    .diff-row.addition .diff-line-num {
+      background-color: var(--diff-add-line);
+      color: var(--diff-add-text);
+    }
+    .diff-row.addition .diff-code-cell {
+      color: var(--fg);
+    }
+
+    .diff-row.deletion {
+      background-color: var(--diff-del-bg);
+    }
+    .diff-row.deletion .diff-line-num {
+      background-color: var(--diff-del-line);
+      color: var(--diff-del-text);
+    }
+    .diff-row.deletion .diff-code-cell {
+      color: var(--fg);
+    }
+
+    /* Merge Action Box */
+    .merge-box {
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      background-color: var(--surface);
+      padding: 16px;
+      display: flex;
+      align-items: flex-start;
+      gap: 16px;
+      margin-top: 16px;
+    }
+
+    .merge-status-icon {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: var(--success);
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .merge-box-content {
+      flex: 1;
+    }
+
+    .merge-heading {
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--fg);
+      margin-bottom: 4px;
+    }
+
+    .merge-sub {
+      font-size: 13px;
+      color: var(--muted);
+      margin-bottom: 12px;
+    }
+
+    .merge-checks-list {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 8px 12px;
+      margin-bottom: 16px;
+      font-size: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .check-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .check-item-left {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .check-icon-pass {
+      color: var(--success);
+      font-weight: 700;
+    }
+
+    /* Sidebar Metadata */
+    .pr-sidebar {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .sidebar-section {
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 16px;
+      font-size: 12px;
+    }
+
+    .sidebar-title {
+      font-weight: 600;
+      color: var(--muted);
+      margin-bottom: 8px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      cursor: pointer;
+    }
+
+    .sidebar-title:hover {
+      color: var(--accent);
+    }
+
+    .sidebar-content {
+      color: var(--fg);
+      font-size: 13px;
+    }
+
+    .tag-label {
+      display: inline-block;
+      padding: 0 8px;
+      line-height: 20px;
+      font-size: 12px;
+      font-weight: 500;
+      border-radius: var(--radius-pill);
+      margin-right: 4px;
+      margin-bottom: 4px;
+    }
+
+    /* Primer Design Token Drawer */
+    .token-audit-panel {
+      margin-top: 40px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      background: var(--bg);
+      overflow: hidden;
+    }
+
+    .token-audit-header {
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      padding: 12px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .token-audit-title {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--fg);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .token-audit-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 16px;
+      padding: 16px;
+    }
+
+    .token-item-card {
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      overflow: hidden;
+      background: var(--bg);
+    }
+
+    .token-color-preview {
+      height: 48px;
+      display: flex;
+      align-items: flex-end;
+      padding: 6px 8px;
+      font-family: var(--font-mono);
+      font-size: 11px;
+      font-weight: 600;
+    }
+
+    .token-card-body {
+      padding: 8px 10px;
+      background: var(--surface);
+      font-size: 12px;
+    }
+
+    .token-var-name {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--accent);
+      font-weight: 600;
+    }
+
+    .token-var-role {
+      color: var(--muted);
+      margin-top: 2px;
+    }
+
+    /* GitHub Footer */
+    .gh-footer {
+      border-top: 1px solid var(--border);
+      padding: 32px 24px;
+      margin-top: 48px;
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .gh-footer-inner {
+      max-width: var(--container-max);
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
+    .gh-footer-links {
+      display: flex;
+      gap: 16px;
+      list-style: none;
+      flex-wrap: wrap;
+    }
+
+    .gh-footer-links a {
+      color: var(--accent);
+      text-decoration: none;
+    }
+
+    .gh-footer-links a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Global Header -->
+  <header class="gh-global-header">
+    <div class="gh-header-inner">
+      <div class="gh-nav-left">
+        <!-- Octicon GitHub Mark -->
+        <svg class="gh-logo-svg" height="32" viewBox="0 0 16 16" width="32">
+          <path d="M8 0c4.42 0 8 3.58 8 8a8.013 8.013 0 0 1-5.45 7.59c-.4.08-.55-.17-.55-.38 0-.27.01-1.13.01-2.2 0-.75-.25-1.23-.54-1.48 1.78-.2 3.65-.88 3.65-3.95 0-.88-.31-1.59-.82-2.15.08-.2.36-1.02-.08-2.12 0 0-.67-.22-2.2.82-.64-.18-1.32-.27-2-.27-.68 0-1.36.09-2 .27-1.53-1.03-2.2-.82-2.2-.82-.44 1.1-.16 1.92-.08 2.12-.51.56-.82 1.28-.82 2.15 0 3.06 1.86 3.75 3.64 3.95-.23.2-.44.55-.51 1.07-.46.21-1.61.55-2.33-.66-.15-.24-.6-.83-1.23-.82-.67.01-.27.38.01.53.34.19.73.9.82 1.13.16.45.68 1.31 2.69.94 0 .67.01 1.3.01 1.49 0 .21-.15.45-.55.38A7.995 7.995 0 0 1 0 8c0-4.42 3.58-8 8-8Z"></path>
+        </svg>
+
+        <!-- Search Bar -->
+        <div class="gh-search-input">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><path d="M10.68 11.74a6 6 0 0 1-7.922-8.982 6 6 0 0 1 8.982 7.922l3.04 3.04a.749.749 0 0 1-.326 1.275.749.749 0 0 1-.734-.215ZM11.5 7a4.499 4.499 0 1 0-8.997 0A4.499 4.499 0 0 0 11.5 7Z"></path></svg>
+          <input type="text" placeholder="Type '/' to search">
+          <span class="gh-kbd-shortcut">/</span>
+        </div>
+
+        <nav style="display: flex; gap: 12px; font-weight: 600;">
+          <a href="#" style="color: var(--fg); text-decoration: none;">Pull requests</a>
+          <a href="#" style="color: var(--fg); text-decoration: none;">Issues</a>
+          <a href="#" style="color: var(--fg); text-decoration: none;">Codespaces</a>
+          <a href="#" style="color: var(--fg); text-decoration: none;">Marketplace</a>
+        </nav>
+      </div>
+
+      <div class="gh-header-actions">
+        <!-- Theme Toggle -->
+        <button class="btn" onclick="toggleTheme()" id="themeToggleBtn">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" id="themeIcon">
+            <path d="M8 12a4 4 0 1 1 0-8 4 4 0 0 1 0 8Zm0-1.5a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5Zm5.657-8.157a.75.75 0 0 1 0 1.06l-.707.708a.75.75 0 0 1-1.06-1.06l.707-.708a.75.75 0 0 1 1.06 0Zm-9.9 9.9a.75.75 0 0 1 0 1.06l-.707.708a.75.75 0 1 1-1.06-1.06l.707-.708a.75.75 0 0 1 1.06 0ZM8 0a.75.75 0 0 1 .75.75v1a.75.75 0 0 1-1.5 0v-1A.75.75 0 0 1 8 0Zm0 13.5a.75.75 0 0 1 .75.75v1a.75.75 0 0 1-1.5 0v-1a.75.75 0 0 1 .75-.75Zm7.25-6.25a.75.75 0 0 1 0 1.5h-1a.75.75 0 0 1 0-1.5h1ZM2.5 7.25a.75.75 0 0 1 0 1.5h-1a.75.75 0 0 1 0-1.5h1Z"></path>
+          </svg>
+          <span id="themeLabel">Dark Mode</span>
+        </button>
+
+        <button class="btn">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><path d="M8 16a2 2 0 0 0 1.985-1.75c.01-.08.015-.16.015-.25h-4c0 .09.005.17.015.25A2 2 0 0 0 8 16ZM3 5a5 5 0 0 1 10 0v2.447l1.03 2.06c.21.42.06.93-.33 1.17-.18.11-.4.18-.63.18H2.93c-.46 0-.85-.31-.96-.75a.99.99 0 0 1 .23-.88L3 7.447V5Z"></path></svg>
+        </button>
+
+        <div style="width: 24px; height: 24px; border-radius: 50%; background: #0969da; color: #fff; font-weight: 600; font-size: 11px; display: flex; align-items: center; justify-content: center;">
+          GH
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Repository Subheader -->
+  <div class="repo-subheader">
+    <div class="repo-subheader-inner">
+      <div class="repo-identity-bar">
+        <div class="repo-name-group">
+          <!-- Book / Repo Icon -->
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" style="color: var(--muted);"><path d="M2 2.5A2.5 2.5 0 0 1 4.5 0h8.75a.75.75 0 0 1 .75.75v12.5a.75.75 0 0 1-.75.75h-2.5a.75.75 0 0 1 0-1.5h1.75v-2h-8a1 1 0 0 0-.714 1.7.75.75 0 1 1-1.072 1.05A2.495 2.495 0 0 1 2 11.5Zm10.5-1h-8a1 1 0 0 0-1 1v6.708A2.486 2.486 0 0 1 4.5 9h8ZM5 12.25a.25.25 0 0 1 .25-.25h7a.25.25 0 0 1 .25.25v1.5a.25.25 0 0 1-.25.25h-7a.25.25 0 0 1-.25-.25Z"></path></svg>
+          <a href="#">open-design</a>
+          <span style="color: var(--muted);">/</span>
+          <a href="#" class="repo-title">primer-engine</a>
+          <span class="public-pill">Public</span>
+        </div>
+
+        <div style="display: flex; gap: 8px;">
+          <div class="btn-group">
+            <button class="btn"><svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><path d="M8 1.5a6.5 6.5 0 1 0 0 13 6.5 6.5 0 0 0 0-13ZM0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8Zm9 3a1 1 0 1 1-2 0 1 1 0 0 1 2 0Zm-.25-6.25a.75.75 0 0 0-1.5 0v3.5a.75.75 0 0 0 1.5 0v-3.5Z"></path></svg> Notifications</button>
+            <button class="btn"><span class="counter-badge">142</span></button>
+          </div>
+
+          <div class="btn-group">
+            <button class="btn"><svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><path d="M5 3.25a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Zm0 2.122a2.25 2.25 0 1 0-1.5 0v.878A2.25 2.25 0 0 0 5.75 8.5h1.5v2.128a2.251 2.251 0 1 0 1.5 0V8.5h1.5a2.25 2.25 0 0 0 2.25-2.25v-.878a2.25 2.25 0 1 0-1.5 0v.878a.75.75 0 0 1-.75.75h-4.5a.75.75 0 0 1-.75-.75v-.878ZM12.5 3.25a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Zm-4.5 9.5a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z"></path></svg> Fork</button>
+            <button class="btn"><span class="counter-badge">1.8k</span></button>
+          </div>
+
+          <div class="btn-group">
+            <button class="btn" onclick="toggleStar()" id="starBtn">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" id="starIcon"><path d="M8 .25a.75.75 0 0 1 .673.418l1.882 3.815 4.21.612a.75.75 0 0 1 .416 1.279l-3.046 2.97.719 4.192a.751.751 0 0 1-1.088.791L8 12.347l-3.766 1.98a.75.75 0 0 1-1.088-.79l.72-4.194L.818 6.374a.75.75 0 0 1 .416-1.28l4.21-.611L7.327.668A.75.75 0 0 1 8 .25Z"></path></svg>
+              <span id="starLabel">Star</span>
+            </button>
+            <button class="btn"><span class="counter-badge" id="starCount">14,920</span></button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Navigation Tabs -->
+      <nav class="repo-tabs">
+        <a class="tab-item"><svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><path d="m11.28 3.22 4.25 4.25a.75.75 0 0 1 0 1.06l-4.25 4.25a.749.749 0 0 1-1.275-.326.749.749 0 0 1 .215-.734L13.94 8l-3.72-3.72a.749.749 0 0 1 .326-1.275.749.749 0 0 1 .734.215Zm-6.56 0a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042L2.06 8l3.72 3.72a.749.749 0 0 1-.326 1.275.749.749 0 0 1-.734-.215L.47 8.53a.75.75 0 0 1 0-1.06l4.25-4.25Z"></path></svg> Code</a>
+        <a class="tab-item"><svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><path d="M8 9.5a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3Z"></path><path d="M8 0a8 8 0 1 1 0 16A8 8 0 0 1 8 0ZM1.5 8a6.5 6.5 0 1 0 13 0 6.5 6.5 0 0 0-13 0Z"></path></svg> Issues <span class="counter-badge">18</span></a>
+        <a class="tab-item active"><svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><path d="M1.5 3.25a2.25 2.25 0 1 1 3 2.122v5.256a2.251 2.251 0 1 1-1.5 0V5.372A2.25 2.25 0 0 1 1.5 3.25Zm5.677-.177L9.5 5.396l2.323-2.323a.75.75 0 0 1 1.06 1.06l-2.853 2.854a.75.75 0 0 1-1.06 0L6.117 4.133a.75.75 0 0 1 1.06-1.06ZM11 10.75a2.25 2.25 0 1 0 0-4.5 2.25 2.25 0 0 0 0 4.5Z"></path></svg> Pull requests <span class="counter-badge">4</span></a>
+        <a class="tab-item"><svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><path d="M8 0a8 8 0 1 1 0 16A8 8 0 0 1 8 0ZM1.5 8a6.5 6.5 0 1 0 13 0 6.5 6.5 0 0 0-13 0Zm4.879-2.773 4.264 2.559a.25.25 0 0 1 0 .428l-4.264 2.559A.25.25 0 0 1 6 10.559V5.442a.25.25 0 0 1 .379-.215Z"></path></svg> Actions</a>
+        <a class="tab-item"><svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><path d="M1.75 2.5h12.5a.75.75 0 0 1 0 1.5H1.75a.75.75 0 0 1 0-1.5Zm0 5h12.5a.75.75 0 0 1 0 1.5H1.75a.75.75 0 0 1 0-1.5Zm0 5h12.5a.75.75 0 0 1 0 1.5H1.75a.75.75 0 0 1 0-1.5Z"></path></svg> Projects</a>
+        <a class="tab-item"><svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><path d="M7.467.13a1.748 1.748 0 0 1 1.066 0l5.25 1.68A1.75 1.75 0 0 1 15 3.48V7c0 1.566-.32 3.182-1.303 4.682-.983 1.498-2.585 2.813-5.032 3.855a1.697 1.697 0 0 1-1.33 0c-2.447-1.042-4.049-2.357-5.032-3.855C1.32 10.182 1 8.566 1 7V3.48a1.75 1.75 0 0 1 1.217-1.67l5.25-1.68Z"></path></svg> Security</a>
+        <a class="tab-item"><svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><path d="M1.5 1.75V13.5h13.75a.75.75 0 0 1 0 1.5H.75a.75.75 0 0 1-.75-.75V1.75a.75.75 0 0 1 1.5 0Zm14.28 2.53-5.25 5.25a.75.75 0 0 1-1.06 0L7 7.06 2.53 11.53a.75.75 0 0 1-1.06-1.06l5-5a.75.75 0 0 1 1.06 0L10 7.94l4.72-4.72a.75.75 0 0 1 1.06 1.06Z"></path></svg> Insights</a>
+      </nav>
+    </div>
+  </div>
+
+  <!-- Main View -->
+  <main class="gh-main-container">
+
+    <!-- Pull Request Header -->
+    <div class="pr-header-banner">
+      <div class="pr-title-row">
+        <h1 class="pr-title">feat: Add cryptographic vector index pipeline</h1>
+        <span class="pr-number">#1284</span>
+      </div>
+
+      <div class="pr-status-strip">
+        <span class="status-badge open" id="prStateBadge">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" id="prStateIcon"><path d="M1.5 3.25a2.25 2.25 0 1 1 3 2.122v5.256a2.251 2.251 0 1 1-1.5 0V5.372A2.25 2.25 0 0 1 1.5 3.25Zm5.677-.177L9.5 5.396l2.323-2.323a.75.75 0 0 1 1.06 1.06l-2.853 2.854a.75.75 0 0 1-1.06 0L6.117 4.133a.75.75 0 0 1 1.06-1.06ZM11 10.75a2.25 2.25 0 1 0 0-4.5 2.25 2.25 0 0 0 0 4.5Z"></path></svg>
+          <span id="prStateText">Open</span>
+        </span>
+        <span class="pr-author-info">
+          <strong>octocat</strong> wants to merge 3 commits into <code>main</code> from <code>core/vector-pipeline</code>
+        </span>
+      </div>
+    </div>
+
+    <!-- PR Content Grid -->
+    <div class="pr-layout-grid">
+
+      <!-- Left Column: Timeline, Diff & Merge Box -->
+      <div class="timeline-container">
+
+        <!-- Initial PR Comment -->
+        <div class="timeline-comment-box">
+          <div class="comment-header">
+            <div class="comment-header-left">
+              <span class="comment-author">octocat</span>
+              <span>commented 2 hours ago</span>
+            </div>
+            <span class="comment-badge">Author</span>
+          </div>
+          <div class="comment-body">
+            <p>This pull request introduces the cryptographic vector indexing engine specified in the Primer systems governance initiative.</p>
+            <ul>
+              <li>High-contrast <code>#0969da</code> interactive affordances with <code>14px</code> body baseline</li>
+              <li>Hairline structural borders using <code>#d0d7de</code></li>
+              <li>Strict semantic green (<code>#1a7f37</code>) strictly reserved for merge actions and success states</li>
+              <li>Zero webfonts: renders instantaneously via the <code>system-ui</code> stack</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Code Diff Box -->
+        <div class="diff-box">
+          <div class="diff-header">
+            <div class="diff-file-info">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><path d="M2 1.75C2 .784 2.784 0 3.75 0h6.586c.464 0 .909.184 1.237.513l3.914 3.914c.329.328.513.773.513 1.237v8.586A1.75 1.75 0 0 1 14.25 16h-10.5A1.75 1.75 0 0 1 2 14.25Zm1.75-.25a.25.25 0 0 0-.25.25v12.5c0 .138.112.25.25.25h10.5a.25.25 0 0 0 .25-.25V6h-2.75A1.75 1.75 0 0 1 10 4.25V1.5Zm7.75.56v2.69c0 .138.112.25.25.25h2.69Z"></path></svg>
+              <span>packages/core/src/pipeline/vector_stream.ts</span>
+            </div>
+            <div style="display: flex; gap: 8px; align-items: center;">
+              <span class="diff-stats-pill">+18 -4</span>
+              <button class="btn btn-sm" style="font-size: 11px; padding: 2px 8px;">View file</button>
+            </div>
+          </div>
+
+          <table class="diff-table">
+            <tbody>
+              <tr class="diff-row hunk">
+                <td class="diff-line-num">...</td>
+                <td class="diff-line-num">...</td>
+                <td class="diff-code-cell">@@ -42,6 +42,12 @@ export class VectorIngressPipeline {</td>
+              </tr>
+              <tr class="diff-row">
+                <td class="diff-line-num">42</td>
+                <td class="diff-line-num">42</td>
+                <td class="diff-code-cell">   private readonly partitionBroker: KafkaStreamBroker;</td>
+              </tr>
+              <tr class="diff-row deletion">
+                <td class="diff-line-num">43</td>
+                <td class="diff-line-num"></td>
+                <td class="diff-code-cell">-  private readonly cipherSuite: string = "AES-128-CBC";</td>
+              </tr>
+              <tr class="diff-row addition">
+                <td class="diff-line-num"></td>
+                <td class="diff-line-num">43</td>
+                <td class="diff-code-cell">+  private readonly cipherSuite: string = "AES-256-GCM";</td>
+              </tr>
+              <tr class="diff-row addition">
+                <td class="diff-line-num"></td>
+                <td class="diff-line-num">44</td>
+                <td class="diff-code-cell">+  private readonly digestSignature: HmacSha256Validator;</td>
+              </tr>
+              <tr class="diff-row">
+                <td class="diff-line-num">44</td>
+                <td class="diff-line-num">45</td>
+                <td class="diff-code-cell"> </td>
+              </tr>
+              <tr class="diff-row">
+                <td class="diff-line-num">45</td>
+                <td class="diff-line-num">46</td>
+                <td class="diff-code-cell">   public async processBatch(records: StreamRecord[]): Promise<CommitResult> {</td>
+              </tr>
+              <tr class="diff-row addition">
+                <td class="diff-line-num"></td>
+                <td class="diff-line-num">47</td>
+                <td class="diff-code-cell">+    const validated = await this.digestSignature.verifyAll(records);</td>
+              </tr>
+              <tr class="diff-row addition">
+                <td class="diff-line-num"></td>
+                <td class="diff-line-num">48</td>
+                <td class="diff-code-cell">+    if (!validated.isCompliant) throw new SecurityProtocolError("Signature Mismatch");</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Pull Request Checks & Merge Action Box -->
+        <div class="merge-box" id="mergeBox">
+          <div class="merge-status-icon" id="mergeStatusIcon">
+            <svg width="20" height="20" viewBox="0 0 16 16" fill="currentColor"><path d="M13.78 4.22a.75.75 0 0 1 0 1.06l-7.25 7.25a.75.75 0 0 1-1.06 0L2.22 9.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018L6 10.94l6.72-6.72a.75.75 0 0 1 1.06 0Z"></path></svg>
+          </div>
+          <div class="merge-box-content">
+            <div class="merge-heading" id="mergeHeading">This branch has no conflicts with the base branch</div>
+            <div class="merge-sub" id="mergeSub">Merging can be performed automatically. 6 continuous integration checks passed.</div>
+
+            <div class="merge-checks-list">
+              <div class="check-item">
+                <div class="check-item-left">
+                  <span class="check-icon-pass">✓</span>
+                  <span>build (matrix: Node 20.x, Ubuntu-Latest)</span>
+                </div>
+                <span style="color: var(--muted);">Passed in 1m 42s</span>
+              </div>
+              <div class="check-item">
+                <div class="check-item-left">
+                  <span class="check-icon-pass">✓</span>
+                  <span>compliance-audit: SOC2 cryptographic signoff</span>
+                </div>
+                <span style="color: var(--muted);">Passed in 38s</span>
+              </div>
+              <div class="check-item">
+                <div class="check-item-left">
+                  <span class="check-icon-pass">✓</span>
+                  <span>tokens-lint: primer design token fidelity</span>
+                </div>
+                <span style="color: var(--muted);">Passed in 12s</span>
+              </div>
+            </div>
+
+            <div style="display: flex; gap: 8px;">
+              <button class="btn btn-primary" id="mergeActionBtn" onclick="mergePullRequest()">
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><path d="M5 3.25a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Zm0 2.122a2.25 2.25 0 1 0-1.5 0v.878A2.25 2.25 0 0 0 5.75 8.5h1.5v2.128a2.251 2.251 0 1 0 1.5 0V8.5h1.5a2.25 2.25 0 0 0 2.25-2.25v-.878a2.25 2.25 0 1 0-1.5 0v.878a.75.75 0 0 1-.75.75h-4.5a.75.75 0 0 1-.75-.75v-.878ZM12.5 3.25a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Zm-4.5 9.5a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z"></path></svg>
+                Merge pull request
+              </button>
+              <button class="btn btn-danger" onclick="closePullRequest()">Close with comment</button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Right Column: Sidebar Metadata -->
+      <aside class="pr-sidebar">
+        <div class="sidebar-section">
+          <div class="sidebar-title">
+            <span>Reviewers</span>
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><path d="M8 9.5a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3Z"></path></svg>
+          </div>
+          <div class="sidebar-content">
+            <div style="display: flex; align-items: center; gap: 6px;">
+              <span style="color: var(--success); font-weight: 700;">✓</span>
+              <span>primer-bot (approved)</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="sidebar-section">
+          <div class="sidebar-title">
+            <span>Assignees</span>
+          </div>
+          <div class="sidebar-content">
+            <span>octocat</span>
+          </div>
+        </div>
+
+        <div class="sidebar-section">
+          <div class="sidebar-title">
+            <span>Labels</span>
+          </div>
+          <div class="sidebar-content">
+            <span class="tag-label" style="background-color: #0e8a16; color: #ffffff;">enhancement</span>
+            <span class="tag-label" style="background-color: #1d76db; color: #ffffff;">primer-tokens</span>
+            <span class="tag-label" style="background-color: #fbca04; color: #1f2328;">high-density</span>
+          </div>
+        </div>
+
+        <div class="sidebar-section">
+          <div class="sidebar-title">
+            <span>Milestone</span>
+          </div>
+          <div class="sidebar-content">
+            <strong>v2.5 Enterprise Release</strong>
+          </div>
+        </div>
+
+        <div class="sidebar-section">
+          <div class="sidebar-title">
+            <span>Development</span>
+          </div>
+          <div class="sidebar-content">
+            <span>Successfully deployed to preview cluster.</span>
+          </div>
+        </div>
+      </aside>
+
+    </div>
+
+    <!-- Primer Design Tokens Audit Showcase -->
+    <section class="token-audit-panel">
+      <div class="token-audit-header">
+        <div class="token-audit-title">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><path d="M0 2.75C0 1.784.784 1 1.75 1h12.5c.966 0 1.75.784 1.75 1.75v10.5A1.75 1.75 0 0 1 14.25 15H1.75A1.75 1.75 0 0 1 0 13.25Zm1.75-.25a.25.25 0 0 0-.25.25v10.5c0 .138.112.25.25.25h12.5a.25.25 0 0 0 .25-.25V2.75a.25.25 0 0 0-.25-.25Z"></path></svg>
+          <span>Primer Design System Foundations & Semantic Token Audit</span>
+        </div>
+        <span class="counter-badge">100% SPEC COMPLIANT</span>
+      </div>
+
+      <div class="token-audit-grid">
+        <!-- Token 1: Primer Blue -->
+        <div class="token-item-card">
+          <div class="token-color-preview" style="background-color: #0969da; color: #ffffff;">
+            #0969da
+          </div>
+          <div class="token-card-body">
+            <div class="token-var-name">--accent</div>
+            <div class="token-var-role">Primer Blue (links, focus base, interactive)</div>
+          </div>
+        </div>
+
+        <!-- Token 2: GitHub Green -->
+        <div class="token-item-card">
+          <div class="token-color-preview" style="background-color: #1a7f37; color: #ffffff;">
+            #1a7f37
+          </div>
+          <div class="token-card-body">
+            <div class="token-var-name">--success</div>
+            <div class="token-var-role">GitHub Green (merge button, open state)</div>
+          </div>
+        </div>
+
+        <!-- Token 3: Canvas Subtle -->
+        <div class="token-item-card">
+          <div class="token-color-preview" style="background-color: #f6f8fa; color: #1f2328; border-bottom: 1px solid #d0d7de;">
+            #f6f8fa
+          </div>
+          <div class="token-card-body">
+            <div class="token-var-name">--surface</div>
+            <div class="token-var-role">Canvas Subtle (header strips, inputs, sidebar)</div>
+          </div>
+        </div>
+
+        <!-- Token 4: Hairline Border -->
+        <div class="token-item-card">
+          <div class="token-color-preview" style="background-color: #d0d7de; color: #1f2328;">
+            #d0d7de
+          </div>
+          <div class="token-card-body">
+            <div class="token-var-name">--border</div>
+            <div class="token-var-role">Hairline 1px structural pane divider</div>
+          </div>
+        </div>
+
+        <!-- Token 5: Closed / Danger Red -->
+        <div class="token-item-card">
+          <div class="token-color-preview" style="background-color: #cf222e; color: #ffffff;">
+            #cf222e
+          </div>
+          <div class="token-card-body">
+            <div class="token-var-name">--danger</div>
+            <div class="token-var-role">Closed state, destructive actions</div>
+          </div>
+        </div>
+
+        <!-- Token 6: Merged Purple -->
+        <div class="token-item-card">
+          <div class="token-color-preview" style="background-color: #8250df; color: #ffffff;">
+            #8250df
+          </div>
+          <div class="token-card-body">
+            <div class="token-var-name">--done</div>
+            <div class="token-var-role">Merged PR & completed milestone state</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- GitHub Footer -->
+  <footer class="gh-footer">
+    <div class="gh-footer-inner">
+      <div style="display: flex; align-items: center; gap: 10px;">
+        <svg height="24" viewBox="0 0 16 16" width="24" fill="currentColor">
+          <path d="M8 0c4.42 0 8 3.58 8 8a8.013 8.013 0 0 1-5.45 7.59c-.4.08-.55-.17-.55-.38 0-.27.01-1.13.01-2.2 0-.75-.25-1.23-.54-1.48 1.78-.2 3.65-.88 3.65-3.95 0-.88-.31-1.59-.82-2.15.08-.2.36-1.02-.08-2.12 0 0-.67-.22-2.2.82-.64-.18-1.32-.27-2-.27-.68 0-1.36.09-2 .27-1.53-1.03-2.2-.82-2.2-.82-.44 1.1-.16 1.92-.08 2.12-.51.56-.82 1.28-.82 2.15 0 3.06 1.86 3.75 3.64 3.95-.23.2-.44.55-.51 1.07-.46.21-1.61.55-2.33-.66-.15-.24-.6-.83-1.23-.82-.67.01-.27.38.01.53.34.19.73.9.82 1.13.16.45.68 1.31 2.69.94 0 .67.01 1.3.01 1.49 0 .21-.15.45-.55.38A7.995 7.995 0 0 1 0 8c0-4.42 3.58-8 8-8Z"></path>
+        </svg>
+        <span>&copy; 2026 GitHub, Inc. Rebuilt for Open Design Systems.</span>
+      </div>
+      <ul class="gh-footer-links">
+        <li><a href="#">Terms</a></li>
+        <li><a href="#">Privacy</a></li>
+        <li><a href="#">Security</a></li>
+        <li><a href="#">Status</a></li>
+        <li><a href="#">Docs</a></li>
+        <li><a href="#">Contact GitHub</a></li>
+        <li><a href="#">Pricing</a></li>
+        <li><a href="#">API</a></li>
+        <li><a href="#">Training</a></li>
+        <li><a href="#">Blog</a></li>
+        <li><a href="#">About</a></li>
+      </ul>
+    </div>
+  </footer>
+
+  <script>
+    // Theme Toggle Logic
+    let currentTheme = 'light';
+    function toggleTheme() {
+      const html = document.documentElement;
+      const themeLabel = document.getElementById('themeLabel');
+      if (currentTheme === 'light') {
+        html.setAttribute('data-theme', 'dark');
+        currentTheme = 'dark';
+        themeLabel.textContent = 'Light Mode';
+      } else {
+        html.setAttribute('data-theme', 'light');
+        currentTheme = 'light';
+        themeLabel.textContent = 'Dark Mode';
+      }
+    }
+
+    // Star Button Toggle
+    let isStarred = false;
+    let starCount = 14920;
+    function toggleStar() {
+      const starLabel = document.getElementById('starLabel');
+      const starCountElem = document.getElementById('starCount');
+      if (!isStarred) {
+        isStarred = true;
+        starCount += 1;
+        starLabel.textContent = 'Starred';
+      } else {
+        isStarred = false;
+        starCount -= 1;
+        starLabel.textContent = 'Star';
+      }
+      starCountElem.textContent = starCount.toLocaleString();
+    }
+
+    // Pull Request Merge Simulation
+    let isMerged = false;
+    function mergePullRequest() {
+      if (isMerged) return;
+      isMerged = true;
+
+      const badge = document.getElementById('prStateBadge');
+      const text = document.getElementById('prStateText');
+      const heading = document.getElementById('mergeHeading');
+      const sub = document.getElementById('mergeSub');
+      const actionBtn = document.getElementById('mergeActionBtn');
+      const statusIcon = document.getElementById('mergeStatusIcon');
+
+      badge.className = 'status-badge merged';
+      text.textContent = 'Merged';
+      
+      heading.textContent = 'Pull request successfully merged and closed';
+      sub.textContent = 'You are all set — the core/vector-pipeline branch can now be safely deleted.';
+      actionBtn.textContent = 'Delete branch';
+      actionBtn.className = 'btn';
+      actionBtn.onclick = () => {
+        actionBtn.disabled = true;
+        actionBtn.textContent = 'Branch deleted';
+      };
+
+      statusIcon.style.backgroundColor = 'var(--done)';
+      statusIcon.innerHTML = `<svg width="20" height="20" viewBox="0 0 16 16" fill="currentColor"><path d="M5 3.25a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Zm0 2.122a2.25 2.25 0 1 0-1.5 0v.878A2.25 2.25 0 0 0 5.75 8.5h1.5v2.128a2.251 2.251 0 1 0 1.5 0V8.5h1.5a2.25 2.25 0 0 0 2.25-2.25v-.878a2.25 2.25 0 1 0-1.5 0v.878a.75.75 0 0 1-.75.75h-4.5a.75.75 0 0 1-.75-.75v-.878ZM12.5 3.25a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Zm-4.5 9.5a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z"></path></svg>`;
+    }
+
+    function closePullRequest() {
+      const badge = document.getElementById('prStateBadge');
+      const text = document.getElementById('prStateText');
+      badge.className = 'status-badge closed';
+      text.textContent = 'Closed';
+    }
+  </script>
+</body>
+</html>

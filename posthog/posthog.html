@@ -1,0 +1,1024 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PostHog — Product Analytics & Developer Design System</title>
+  <meta name="description" content="Authentic implementation of PostHog's design system: warm parchment canvas (#fdfdf8), olive ink typography, surprise PostHog Orange (#F54E00) hover flash, hand-drawn hedgehog illustrations, IBM Plex Sans, and single deep shadow.">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,600&family=Source+Code+Pro:wght@400;500;600&display=swap" rel="stylesheet">
+
+  <style>
+    /* ─────────────────────────────────────────────────────────────
+       1. POSTHOG SYSTEM DESIGN TOKENS
+       ───────────────────────────────────────────────────────────── */
+    :root {
+      /* Primary Surfaces & Canvas (Never pure white) */
+      --ph-canvas: #fdfdf8;               /* Warm Parchment */
+      --ph-surface-cream: #eeefe9;        /* Sage Cream for inputs/secondary */
+      --ph-surface-light-sage: #e5e7e0;   /* Light Sage for buttons/tertiary */
+      --ph-surface-warm-tan: #d4c9b8;     /* Warm Tan for featured buttons */
+      --ph-surface-hover-white: #f4f4f4;  /* Universal hover background */
+
+      /* Olive & Sage Neutrals */
+      --ph-text-olive-ink: #4d4f46;       /* Primary text */
+      --ph-text-deep-olive: #23251d;      /* Headings & links */
+      --ph-text-muted-olive: #65675e;     /* Secondary text */
+      --ph-text-sage-placeholder: #9ea096;/* Placeholder & disabled */
+      --ph-text-dark: #111827;            /* High contrast text */
+
+      /* Signature Brand Accents (Hidden until hover!) */
+      --ph-orange-hover: #F54E00;         /* PostHog Orange - surprises on hover! */
+      --ph-amber-gold: #F7A501;           /* Dark button hover accent */
+      --ph-gold-border: #b17816;          /* Featured button border */
+      --ph-focus-blue: rgba(59, 130, 246, 0.5); /* 50% opacity Tailwind focus */
+
+      /* Borders (Sage-tinted, never cold gray) */
+      --ph-border-sage: #bfc1b7;          /* Primary 1px border */
+      --ph-border-light: #b6b7af;         /* Secondary / toolbar border */
+
+      /* Dark Buttons */
+      --ph-btn-dark-bg: #1e1f23;          /* Dark near-black primary CTA */
+
+      /* Typography */
+      --font-display: "IBM Plex Sans", -apple-system, system-ui, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      --font-code: "Source Code Pro", ui-monospace, Menlo, Monaco, Consolas, monospace;
+
+      /* Radii (Subtle & Functional: strictly 2px, 4px, 6px, 9999px) */
+      --radius-2: 2px;
+      --radius-4: 4px;   /* Standard UI controls, inputs, light buttons */
+      --radius-6: 6px;   /* Dark buttons, cards */
+      --radius-pill: 9999px; /* Status tags & badges */
+
+      /* Single Shadow Definition in Entire System */
+      --ph-single-shadow: 0px 25px 50px -12px rgba(0, 0, 0, 0.25);
+
+      /* Spacing */
+      --space-4: 4px;
+      --space-8: 8px;
+      --space-12: 12px;
+      --space-16: 16px;
+      --space-24: 24px;
+      --space-32: 32px;
+      --space-48: 48px;
+    }
+
+    /* Reset & Base Canvas */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      background-color: var(--ph-canvas);
+    }
+
+    body {
+      background-color: var(--ph-canvas); /* Warm Parchment (#fdfdf8) */
+      color: var(--ph-text-olive-ink);    /* Olive Ink (#4d4f46) */
+      font-family: var(--font-display);
+      font-size: 16px;
+      font-weight: 400;
+      line-height: 1.50;                 /* Generous 1.50+ line-height */
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+
+    a {
+      color: var(--ph-text-deep-olive);
+      text-decoration: none;
+      transition: color 150ms ease;
+    }
+
+    /* Hover Surprise: Links flash PostHog Orange on hover */
+    a:hover {
+      color: var(--ph-orange-hover);
+      text-decoration: underline;
+    }
+
+    /* ─────────────────────────────────────────────────────────────
+       2. SIGNATURE BUTTONS & HOVER SURPRISES
+       ───────────────────────────────────────────────────────────── */
+
+    /* Dark Primary Button: #1e1f23, 6px radius, Amber Gold text on hover */
+    .ph-btn-dark {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      background-color: var(--ph-btn-dark-bg);
+      color: #ffffff;
+      font-family: var(--font-display);
+      font-size: 15px;
+      font-weight: 600;
+      padding: 10px 16px;
+      border-radius: var(--radius-6);
+      border: 1px solid transparent;
+      cursor: pointer;
+      text-decoration: none !important;
+      transition: opacity 150ms ease, color 150ms ease, transform 100ms ease;
+    }
+
+    .ph-btn-dark:hover {
+      opacity: 0.85;
+      color: var(--ph-amber-gold) !important; /* Amber Gold text flash on dark */
+    }
+
+    .ph-btn-dark:active {
+      opacity: 0.75;
+      transform: scale(0.98);
+    }
+
+    /* Sage Light Button: #e5e7e0, 4px radius, PostHog Orange text on hover */
+    .ph-btn-sage {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      background-color: var(--ph-surface-light-sage);
+      color: var(--ph-text-olive-ink);
+      font-family: var(--font-display);
+      font-size: 14px;
+      font-weight: 600;
+      padding: 6px 12px;
+      border-radius: var(--radius-4);
+      border: 1px solid var(--ph-border-sage);
+      cursor: pointer;
+      text-decoration: none !important;
+      transition: background-color 150ms ease, color 150ms ease;
+    }
+
+    .ph-btn-sage:hover {
+      background-color: var(--ph-surface-hover-white);
+      color: var(--ph-orange-hover) !important; /* PostHog Orange flash! */
+      border-color: var(--ph-orange-hover);
+    }
+
+    /* Warm Tan Featured Button: 0px radius, Gold border */
+    .ph-btn-tan {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background-color: var(--ph-surface-warm-tan);
+      color: #000000;
+      font-family: var(--font-display);
+      font-size: 14px;
+      font-weight: 700;
+      padding: 8px 16px;
+      border-radius: 0px; /* Deliberate 0px radius */
+      border: 1px solid var(--ph-gold-border);
+      cursor: pointer;
+      text-decoration: none !important;
+      transition: color 150ms ease, background-color 150ms ease;
+    }
+
+    .ph-btn-tan:hover {
+      color: var(--ph-orange-hover) !important;
+      background-color: var(--ph-surface-hover-white);
+    }
+
+    /* ─────────────────────────────────────────────────────────────
+       3. TOP NAVIGATION (WARM BACKGROUND, ANTI-CORPORATE)
+       ───────────────────────────────────────────────────────────── */
+    .ph-nav-header {
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      background-color: var(--ph-canvas);
+      border-bottom: 1px solid var(--ph-border-sage);
+      padding: 0 32px;
+    }
+
+    .ph-nav-inner {
+      max-width: 1360px;
+      margin: 0 auto;
+      height: 68px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+    }
+
+    .ph-brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 800;
+      font-size: 20px;
+      color: var(--ph-text-deep-olive);
+      letter-spacing: -0.5px;
+    }
+
+    .ph-brand:hover {
+      color: var(--ph-orange-hover);
+      text-decoration: none;
+    }
+
+    .ph-brand-logo-svg {
+      width: 32px;
+      height: 32px;
+    }
+
+    .ph-nav-menu {
+      display: flex;
+      align-items: center;
+      gap: 24px;
+      list-style: none;
+    }
+
+    .ph-nav-link {
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--ph-text-deep-olive);
+      padding: 6px 0;
+    }
+
+    .ph-nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    /* ─────────────────────────────────────────────────────────────
+       4. HERO SECTION WITH HAND-DRAWN HEDGEHOG MASCOT
+       ───────────────────────────────────────────────────────────── */
+    .ph-hero {
+      padding: 56px 32px 48px;
+      max-width: 1280px;
+      margin: 0 auto;
+    }
+
+    .ph-hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background-color: var(--ph-surface-cream);
+      border: 1px solid var(--ph-border-sage);
+      border-radius: var(--radius-pill);
+      padding: 4px 12px;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--ph-text-muted-olive);
+      margin-bottom: 20px;
+    }
+
+    .ph-hero-grid {
+      display: grid;
+      grid-template-columns: 1.2fr 1fr;
+      align-items: center;
+      gap: 48px;
+    }
+
+    @media (max-width: 960px) {
+      .ph-hero-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* Display Hero: 30px, weight 800, line-height 1.20, letter-spacing -0.75px */
+    .ph-hero-title {
+      font-size: 30px;
+      font-weight: 800;
+      line-height: 1.20;
+      letter-spacing: -0.75px;
+      color: var(--ph-text-deep-olive);
+      margin-bottom: 16px;
+    }
+
+    .ph-hero-deck {
+      font-size: 19.3px; /* Body Emphasis: 19.3px, weight 600 */
+      font-weight: 600;
+      line-height: 1.56;
+      letter-spacing: -0.48px;
+      color: var(--ph-text-olive-ink);
+      margin-bottom: 28px;
+    }
+
+    .ph-hero-cta-row {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      flex-wrap: wrap;
+      margin-bottom: 32px;
+    }
+
+    .ph-mascot-card {
+      background-color: var(--ph-surface-cream);
+      border: 1px solid var(--ph-border-sage);
+      border-radius: var(--radius-6);
+      padding: 32px;
+      text-align: center;
+      position: relative;
+    }
+
+    .ph-mascot-caption {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--ph-text-muted-olive);
+      margin-top: 16px;
+    }
+
+    /* ─────────────────────────────────────────────────────────────
+       5. CONTENT & FEATURE CARDS WITH ORANGE HOVER FLASH
+       ───────────────────────────────────────────────────────────── */
+    .ph-section {
+      padding: 48px 32px;
+      max-width: 1280px;
+      margin: 0 auto;
+      border-top: 1px solid var(--ph-border-sage);
+    }
+
+    .ph-section-title {
+      font-size: 36px;
+      font-weight: 700;
+      line-height: 1.50;
+      letter-spacing: 0px;
+      color: var(--ph-text-deep-olive);
+      margin-bottom: 12px;
+    }
+
+    .ph-section-label {
+      font-size: 18px;
+      font-weight: 700;
+      text-transform: uppercase; /* Label Uppercase */
+      color: var(--ph-text-muted-olive);
+      letter-spacing: 0.5px;
+      margin-bottom: 8px;
+      display: block;
+    }
+
+    .ph-card-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 20px;
+      margin-top: 32px;
+    }
+
+    /* Bordered Card: Warm Parchment or Cream, 1px border, 4px–6px radius */
+    .ph-feature-card {
+      background-color: var(--ph-canvas);
+      border: 1px solid var(--ph-border-sage);
+      border-radius: var(--radius-6);
+      padding: 24px;
+      transition: border-color 150ms ease, background-color 150ms ease;
+      cursor: pointer;
+    }
+
+    .ph-feature-card:hover {
+      border-color: var(--ph-text-deep-olive);
+      background-color: #ffffff;
+    }
+
+    /* Card Heading: 21.4px, weight 700, line-height 1.40, letter-spacing -0.54px */
+    .ph-card-title {
+      font-size: 21.4px;
+      font-weight: 700;
+      line-height: 1.40;
+      letter-spacing: -0.54px;
+      color: var(--ph-text-deep-olive);
+      margin-bottom: 8px;
+      transition: color 150ms ease;
+    }
+
+    /* Signature Hover Flash: Titles flash PostHog Orange on card hover! */
+    .ph-feature-card:hover .ph-card-title {
+      color: var(--ph-orange-hover);
+    }
+
+    .ph-card-body {
+      font-size: 15px;
+      line-height: 1.71; /* Relaxed 1.71 body */
+      color: var(--ph-text-olive-ink);
+    }
+
+    /* ─────────────────────────────────────────────────────────────
+       6. INTERACTIVE ANALYTICS & CODE TERMINAL (SOURCE CODE PRO)
+       ───────────────────────────────────────────────────────────── */
+    .ph-terminal-container {
+      background-color: #1e1f23;
+      border-radius: var(--radius-6);
+      color: #fdfdf8;
+      overflow: hidden;
+      margin-top: 32px;
+      border: 1px solid #33363e;
+    }
+
+    .ph-terminal-header {
+      background-color: #16171a;
+      padding: 10px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid #2d2f36;
+      font-size: 13px;
+      font-family: var(--font-code);
+      color: #9ea096;
+    }
+
+    .ph-terminal-dots {
+      display: flex;
+      gap: 6px;
+    }
+
+    .ph-terminal-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: #444852;
+    }
+
+    .ph-code-body {
+      padding: 20px;
+      font-family: var(--font-code);
+      font-size: 14px;
+      line-height: 1.6;
+      color: #e5e7e0;
+      overflow-x: auto;
+    }
+
+    .ph-code-keyword { color: #f7a501; font-weight: 600; }
+    .ph-code-func { color: #53b1ff; }
+    .ph-code-str { color: #73c991; }
+    .ph-code-comment { color: #888b82; font-style: italic; }
+
+    /* ─────────────────────────────────────────────────────────────
+       7. DESIGN SYSTEM SPECIFICATION & TOKEN LAB
+       ───────────────────────────────────────────────────────────── */
+    .ph-lab-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 24px;
+      margin-top: 32px;
+    }
+
+    .ph-spec-card {
+      background-color: var(--ph-surface-cream);
+      border: 1px solid var(--ph-border-sage);
+      border-radius: var(--radius-4);
+      padding: 24px;
+    }
+
+    .ph-spec-title {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--ph-text-deep-olive);
+      margin-bottom: 16px;
+      border-bottom: 1px solid var(--ph-border-sage);
+      padding-bottom: 8px;
+    }
+
+    .ph-token-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 8px 0;
+      font-size: 13.7px;
+      border-bottom: 1px dashed rgba(191, 193, 183, 0.5);
+    }
+
+    .ph-token-code {
+      font-family: var(--font-code);
+      color: var(--ph-text-muted-olive);
+    }
+
+    .ph-token-val {
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--ph-text-deep-olive);
+    }
+
+    .ph-swatch-box {
+      width: 16px;
+      height: 16px;
+      border-radius: 2px;
+      border: 1px solid rgba(0, 0, 0, 0.15);
+      display: inline-block;
+    }
+
+    /* Inputs with Authentic PostHog 4px radius and Sage Cream */
+    .ph-form-field {
+      margin-bottom: 16px;
+    }
+
+    .ph-form-label {
+      display: block;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--ph-text-deep-olive);
+      margin-bottom: 6px;
+    }
+
+    .ph-input {
+      width: 100%;
+      background-color: var(--ph-surface-cream);
+      border: 1px solid var(--ph-border-light);
+      border-radius: var(--radius-4);
+      padding: 8px 12px;
+      font-family: var(--font-display);
+      font-size: 15px;
+      color: #374151; /* Darker than primary text for inputs */
+      outline: none;
+      transition: box-shadow 150ms ease, border-color 150ms ease;
+    }
+
+    .ph-input::placeholder {
+      color: var(--ph-text-sage-placeholder);
+    }
+
+    .ph-input:focus {
+      border-color: #3b82f6;
+      box-shadow: 0 0 0 3px var(--ph-focus-blue); /* 50% opacity blue focus ring */
+    }
+
+    /* ─────────────────────────────────────────────────────────────
+       8. FLOATING POSTHOG AI CHAT WIDGET (THE SINGLE SHADOW MOMENT)
+       ───────────────────────────────────────────────────────────── */
+    .ph-ai-widget-bubble {
+      position: fixed;
+      bottom: 28px;
+      right: 28px;
+      z-index: 999;
+      background-color: var(--ph-canvas);
+      border: 1px solid var(--ph-border-sage);
+      border-radius: var(--radius-6);
+      box-shadow: var(--ph-single-shadow); /* 0px 25px 50px -12px rgba(0,0,0,0.25) */
+      width: 340px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .ph-ai-header {
+      background-color: var(--ph-surface-cream);
+      padding: 12px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid var(--ph-border-sage);
+    }
+
+    .ph-ai-title {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--ph-text-deep-olive);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .ph-ai-chat-body {
+      padding: 16px;
+      font-size: 13.5px;
+      line-height: 1.45;
+      color: var(--ph-text-olive-ink);
+      max-height: 220px;
+      overflow-y: auto;
+    }
+
+    .ph-ai-msg {
+      background-color: var(--ph-surface-light-sage);
+      padding: 10px 12px;
+      border-radius: var(--radius-4);
+      margin-bottom: 8px;
+    }
+
+    .ph-ai-input-wrap {
+      padding: 8px 12px;
+      border-top: 1px solid var(--ph-border-sage);
+      background-color: var(--ph-canvas);
+      display: flex;
+      gap: 8px;
+    }
+
+    /* ─────────────────────────────────────────────────────────────
+       9. WARM PARCHMENT FOOTER
+       ───────────────────────────────────────────────────────────── */
+    .ph-footer {
+      background-color: var(--ph-surface-cream);
+      border-top: 1px solid var(--ph-border-sage);
+      padding: 48px 32px 36px;
+      margin-top: 64px;
+    }
+
+    .ph-footer-inner {
+      max-width: 1280px;
+      margin: 0 auto;
+    }
+
+    .ph-footer-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 32px;
+      margin-bottom: 40px;
+    }
+
+    .ph-footer-heading {
+      font-size: 14px;
+      font-weight: 700;
+      text-transform: uppercase;
+      color: var(--ph-text-muted-olive);
+      margin-bottom: 16px;
+    }
+
+    .ph-footer-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .ph-footer-bottom {
+      border-top: 1px solid var(--ph-border-sage);
+      padding-top: 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 16px;
+      font-size: 13px;
+      color: var(--ph-text-muted-olive);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- 1. TOP NAVIGATION -->
+  <header class="ph-nav-header">
+    <div class="ph-nav-inner">
+      <a href="#hero" class="ph-brand">
+        <!-- Hedgehog Icon SVG -->
+        <svg class="ph-brand-logo-svg" viewBox="0 0 36 36" fill="none">
+          <circle cx="18" cy="18" r="17" fill="#eeefe9" stroke="#bfc1b7" stroke-width="2"/>
+          <path d="M11 23C11 17.5 15.5 13 21 13C23.5 13 26 14.2 27.5 16.5C28.2 17.5 28.5 18.8 28.5 20C28.5 23.5 25.5 26 22 26H14C12.3 26 11 24.7 11 23Z" fill="#4d4f46"/>
+          <circle cx="24" cy="18" r="1.5" fill="#ffffff"/>
+          <path d="M28 20.5L31 21L28 22" stroke="#F54E00" stroke-width="1.8" stroke-linecap="round"/>
+          <path d="M12 15L9 12M15 11L14 7M19 10L20 6M23 11L25 8" stroke="#4d4f46" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+        <span>PostHog</span>
+      </a>
+
+      <ul class="ph-nav-menu">
+        <li><a href="#products" class="ph-nav-link">Product Analytics</a></li>
+        <li><a href="#session" class="ph-nav-link">Session Replay</a></li>
+        <li><a href="#flags" class="ph-nav-link">Feature Flags</a></li>
+        <li><a href="#spec" class="ph-nav-link">Design System Spec</a></li>
+        <li><a href="#code" class="ph-nav-link">HogQL SQL</a></li>
+      </ul>
+
+      <div class="ph-nav-actions">
+        <a href="#spec" class="ph-btn-sage">Log in</a>
+        <!-- Dark Primary Button with Amber Gold text flash on hover -->
+        <a href="#spec" class="ph-btn-dark">Get started — free</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- 2. HERO SECTION -->
+  <main class="ph-hero" id="hero">
+    <div class="ph-hero-badge">
+      <span>🦔</span>
+      <span>The single platform for developers who build things</span>
+    </div>
+
+    <div class="ph-hero-grid">
+      <div>
+        <!-- Display Hero: 30px, weight 800, line-height 1.20, letter-spacing -0.75px -->
+        <h1 class="ph-hero-title">
+          How to build a great product without losing your mind
+        </h1>
+
+        <!-- Body Emphasis: 19.3px, weight 600, letter-spacing -0.48px -->
+        <p class="ph-hero-deck">
+          Everything developers need: product analytics, session replay, feature flags, A/B testing, and survey tools. All self-hostable or cloud-managed.
+        </p>
+
+        <div class="ph-hero-cta-row">
+          <!-- Dark primary with Amber Gold hover flash -->
+          <button class="ph-btn-dark" onclick="alert('Starting your self-serve PostHog instance!')">
+            Deploy to Cloud / Free Forever
+          </button>
+          <!-- Sage light button with PostHog Orange hover flash -->
+          <button class="ph-btn-sage" onclick="document.getElementById('spec').scrollIntoView({behavior: 'smooth'})">
+            Inspect System Tokens
+          </button>
+          <!-- Warm tan featured button with 0px radius -->
+          <button class="ph-btn-tan" onclick="document.getElementById('code').scrollIntoView({behavior: 'smooth'})">
+            HogQL Query Demo
+          </button>
+        </div>
+
+        <div style="font-size: 13.5px; color: var(--ph-text-muted-olive); display: flex; gap: 16px;">
+          <span>✓ 1,000,000 free events/mo</span>
+          <span>✓ Open-source core</span>
+          <span>✓ Zero corporate fluff</span>
+        </div>
+      </div>
+
+      <!-- Mascot Card with Hand-Drawn Hedgehog -->
+      <div class="ph-mascot-card">
+        <svg width="220" height="180" viewBox="0 0 220 180" fill="none" style="margin: 0 auto; display: block;">
+          <!-- Hedgehog Body -->
+          <ellipse cx="110" cy="115" rx="70" ry="48" fill="#4d4f46"/>
+          <!-- Spikes -->
+          <path d="M55 100L40 85M70 80L60 60M95 70L95 48M120 70L130 50M145 80L160 62M165 95L185 85" stroke="#23251d" stroke-width="5" stroke-linecap="round"/>
+          <ellipse cx="150" cy="115" rx="30" ry="24" fill="#65675e"/>
+          <!-- Snout & Nose -->
+          <path d="M175 115L195 120L175 128Z" fill="#23251d"/>
+          <circle cx="195" cy="120" r="5" fill="#F54E00"/> <!-- PostHog Orange Snout! -->
+          <!-- Eye -->
+          <circle cx="155" cy="108" r="4" fill="#ffffff"/>
+          <circle cx="156" cy="108" r="2.2" fill="#111827"/>
+          <!-- Laptop -->
+          <rect x="135" y="128" width="48" height="28" rx="3" fill="#eeefe9" stroke="#bfc1b7" stroke-width="2"/>
+          <polygon points="125,156 193,156 185,162 133,162" fill="#b6b7af"/>
+          <text x="144" y="146" font-family="monospace" font-size="10" fill="#F54E00">&gt;_ hog</text>
+        </svg>
+        <div class="ph-mascot-caption">Max the Hedgehog • Staff Reliability Engineer</div>
+      </div>
+    </div>
+  </main>
+
+  <!-- 3. FEATURE MODULES (CARD HEADING 21.4PX & HOVER FLASH ORANGE) -->
+  <section class="ph-section" id="products">
+    <span class="ph-section-label">Suite of developer tools</span>
+    <h2 class="ph-section-title">Built for engineers, not slide-deck presenters</h2>
+    <p style="color: var(--ph-text-olive-ink); max-width: 720px; font-size: 16px; line-height: 1.50;">
+      Hover over any card below to see the signature PostHog Orange (<code style="font-family: var(--font-code); color: var(--ph-orange-hover);">#F54E00</code>) title flash.
+    </p>
+
+    <div class="ph-card-grid">
+      <!-- Card 1 -->
+      <article class="ph-feature-card">
+        <div style="font-size: 24px; margin-bottom: 12px;">📊</div>
+        <h3 class="ph-card-title">Product Analytics</h3>
+        <p class="ph-card-body">
+          Autocapture events, create conversion funnels, track retention cohorts, and uncover user journeys without modifying frontend code constantly.
+        </p>
+        <div style="margin-top: 16px; font-size: 13px; font-weight: 600; color: var(--ph-text-muted-olive);">
+          100% HogQL SQL accessible →
+        </div>
+      </article>
+
+      <!-- Card 2 -->
+      <article class="ph-feature-card" id="session">
+        <div style="font-size: 24px; margin-bottom: 12px;">📼</div>
+        <h3 class="ph-card-title">Session Replay</h3>
+        <p class="ph-card-body">
+          Watch real users browse your application. Inspect browser console logs, DOM mutations, network payloads, and unhandled JavaScript errors in lockstep.
+        </p>
+        <div style="margin-top: 16px; font-size: 13px; font-weight: 600; color: var(--ph-text-muted-olive);">
+          Zero performance overhead →
+        </div>
+      </article>
+
+      <!-- Card 3 -->
+      <article class="ph-feature-card" id="flags">
+        <div style="font-size: 24px; margin-bottom: 12px;">🚩</div>
+        <h3 class="ph-card-title">Feature Flags &amp; A/B Testing</h3>
+        <p class="ph-card-body">
+          Roll out features progressively to 5%, 25%, or 100% of customers. Trigger automated experiment calculations with multi-variant statistical power.
+        </p>
+        <div style="margin-top: 16px; font-size: 13px; font-weight: 600; color: var(--ph-text-muted-olive);">
+          Instant client-side evaluation →
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <!-- 4. SOURCE CODE PRO & HOGQL TERMINAL -->
+  <section class="ph-section" id="code">
+    <span class="ph-section-label">HogQL Query Engine</span>
+    <h2 class="ph-section-title">Query your analytics like a real database</h2>
+    <p style="color: var(--ph-text-olive-ink); font-size: 16px;">
+      PostHog allows direct SQL querying on top of raw ClickHouse events using Source Code Pro.
+    </p>
+
+    <div class="ph-terminal-container">
+      <div class="ph-terminal-header">
+        <div class="ph-terminal-dots">
+          <span class="ph-terminal-dot" style="background:#ff5f56;"></span>
+          <span class="ph-terminal-dot" style="background:#ffbd2e;"></span>
+          <span class="ph-terminal-dot" style="background:#27c93f;"></span>
+        </div>
+        <span>query_funnel_retention.sql — HogQL ClickHouse Dialect</span>
+        <span>Source Code Pro 14px</span>
+      </div>
+      <pre class="ph-code-body"><code><span class="ph-code-comment">-- Query active power users who hovered over orange CTA elements</span>
+<span class="ph-code-keyword">SELECT</span>
+    distinct_id,
+    <span class="ph-code-func">count</span>(*) <span class="ph-code-keyword">AS</span> total_interactions,
+    <span class="ph-code-func">avg</span>(properties.$duration) <span class="ph-code-keyword">AS</span> avg_session_sec,
+    <span class="ph-code-func">max</span>(timestamp) <span class="ph-code-keyword">AS</span> last_seen
+<span class="ph-code-keyword">FROM</span> events
+<span class="ph-code-keyword">WHERE</span> event = <span class="ph-code-str">'$pageview'</span>
+  <span class="ph-code-keyword">AND</span> properties.$current_url <span class="ph-code-keyword">LIKE</span> <span class="ph-code-str">'%posthog.html%'</span>
+  <span class="ph-code-keyword">AND</span> timestamp &gt;= <span class="ph-code-func">now</span>() - <span class="ph-code-keyword">INTERVAL</span> <span class="ph-code-str">'7 DAY'</span>
+<span class="ph-code-keyword">GROUP BY</span> distinct_id
+<span class="ph-code-keyword">HAVING</span> total_interactions &gt; 12
+<span class="ph-code-keyword">ORDER BY</span> total_interactions <span class="ph-code-keyword">DESC</span>
+<span class="ph-code-keyword">LIMIT</span> 5;</code></pre>
+    </div>
+  </section>
+
+  <!-- 5. DESIGN SYSTEM SPECIFICATION & TOKEN AUDIT -->
+  <section class="ph-section" id="spec">
+    <span class="ph-section-label">Design System Specification</span>
+    <h2 class="ph-section-title">PostHog Color Matrix &amp; Interaction Rules</h2>
+    <p style="color: var(--ph-text-olive-ink); font-size: 16px;">
+      Warm sage parchment canvas, 4px/6px radii, single shadow rule, and secret orange hover transitions.
+    </p>
+
+    <div class="ph-lab-grid">
+      <!-- Card 1: Colors -->
+      <div class="ph-spec-card">
+        <h3 class="ph-spec-title">Color Palette</h3>
+        <div class="ph-token-row">
+          <span class="ph-token-code">Warm Parchment (Canvas)</span>
+          <span class="ph-token-val"><span class="ph-swatch-box" style="background:#fdfdf8;"></span> #fdfdf8</span>
+        </div>
+        <div class="ph-token-row">
+          <span class="ph-token-code">Olive Ink (Body text)</span>
+          <span class="ph-token-val"><span class="ph-swatch-box" style="background:#4d4f46;"></span> #4d4f46</span>
+        </div>
+        <div class="ph-token-row">
+          <span class="ph-token-code">Deep Olive (Headings)</span>
+          <span class="ph-token-val"><span class="ph-swatch-box" style="background:#23251d;"></span> #23251d</span>
+        </div>
+        <div class="ph-token-row">
+          <span class="ph-token-code">PostHog Orange (Hover!)</span>
+          <span class="ph-token-val"><span class="ph-swatch-box" style="background:#F54E00;"></span> #F54E00</span>
+        </div>
+        <div class="ph-token-row">
+          <span class="ph-token-code">Amber Gold (Dark CTA hover)</span>
+          <span class="ph-token-val"><span class="ph-swatch-box" style="background:#F7A501;"></span> #F7A501</span>
+        </div>
+        <div class="ph-token-row">
+          <span class="ph-token-code">Sage Border (Primary 1px)</span>
+          <span class="ph-token-val"><span class="ph-swatch-box" style="background:#bfc1b7;"></span> #bfc1b7</span>
+        </div>
+        <div class="ph-token-row">
+          <span class="ph-token-code">Sage Cream (Inputs/surfaces)</span>
+          <span class="ph-token-val"><span class="ph-swatch-box" style="background:#eeefe9;"></span> #eeefe9</span>
+        </div>
+      </div>
+
+      <!-- Card 2: Typography & Rules -->
+      <div class="ph-spec-card">
+        <h3 class="ph-spec-title">Typography &amp; Scale</h3>
+        <div class="ph-token-row">
+          <span class="ph-token-code">Hero Headline</span>
+          <span>30px • 800 • -0.75px</span>
+        </div>
+        <div class="ph-token-row">
+          <span class="ph-token-code">Section Heading</span>
+          <span>36px • 700 • 1.50 lh</span>
+        </div>
+        <div class="ph-token-row">
+          <span class="ph-token-code">Card Heading</span>
+          <span>21.4px • 700 • -0.54px</span>
+        </div>
+        <div class="ph-token-row">
+          <span class="ph-token-code">Body Reading</span>
+          <span>16px • 400 • 1.50 lh</span>
+        </div>
+        <div class="ph-token-row">
+          <span class="ph-token-code">Relaxed Reading</span>
+          <span>15px • 400 • 1.71 lh</span>
+        </div>
+        <div class="ph-token-row">
+          <span class="ph-token-code">Code Stack</span>
+          <span>Source Code Pro 14px</span>
+        </div>
+        <div style="margin-top: 16px; font-size: 13px; line-height: 1.4; color: var(--ph-text-muted-olive);">
+          <strong>Single Shadow Rule:</strong> Exactly one shadow in entire system (<code style="font-family: monospace;">0 25px 50px -12px rgba(0,0,0,0.25)</code>). Everything else uses 1px sage borders.
+        </div>
+      </div>
+
+      <!-- Card 3: Interactive Inputs Form -->
+      <div class="ph-spec-card">
+        <h3 class="ph-spec-title">Form Controls &amp; Focus Ring</h3>
+        <form onsubmit="event.preventDefault(); alert('Telemetry tracking test event dispatched to PostHog!');">
+          <div class="ph-form-field">
+            <label class="ph-form-label" for="phProjectKey">Project API Key</label>
+            <input type="text" id="phProjectKey" class="ph-input" placeholder="phc_982bdf108..." value="phc_prod_live_83901" required>
+          </div>
+          <div class="ph-form-field">
+            <label class="ph-form-label" for="phDistinctId">User Distinct ID</label>
+            <input type="text" id="phDistinctId" class="ph-input" placeholder="user_developer_42" required>
+          </div>
+          <div style="display: flex; gap: 8px; margin-top: 20px;">
+            <button type="submit" class="ph-btn-dark" style="flex: 1;">Send Test Event</button>
+            <button type="reset" class="ph-btn-sage">Clear</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- 6. FLOATING POSTHOG AI WIDGET (THE SINGLE SHADOW) -->
+  <div class="ph-ai-widget-bubble">
+    <div class="ph-ai-header">
+      <div class="ph-ai-title">
+        <span>🦔</span>
+        <span>PostHog AI Assistant</span>
+      </div>
+      <span style="font-size: 11px; background: #23251d; color: #fff; padding: 2px 6px; border-radius: 2px;">Beta</span>
+    </div>
+    <div class="ph-ai-chat-body" id="aiChatBody">
+      <div class="ph-ai-msg">
+        <strong>Max:</strong> Hey! I analyzed your session. Looks like your sign-up funnel dropped by 8% on mobile Safari. Want me to run an error trace?
+      </div>
+    </div>
+    <div class="ph-ai-input-wrap">
+      <input type="text" id="aiInput" class="ph-input" style="padding: 4px 8px; font-size: 13px;" placeholder="Ask Max a question..." onkeydown="if(event.key==='Enter') sendAiMessage()">
+      <button class="ph-btn-sage" style="padding: 4px 8px; font-size: 13px;" onclick="sendAiMessage()">Ask</button>
+    </div>
+  </div>
+
+  <!-- 7. WARM PARCHMENT FOOTER -->
+  <footer class="ph-footer">
+    <div class="ph-footer-inner">
+      <div class="ph-footer-grid">
+        <div>
+          <div class="ph-footer-heading">Platform</div>
+          <ul class="ph-footer-list">
+            <li><a href="#">Product Analytics</a></li>
+            <li><a href="#">Session Replay</a></li>
+            <li><a href="#">Feature Flags</a></li>
+            <li><a href="#">Surveys &amp; Data Pipeline</a></li>
+          </ul>
+        </div>
+        <div>
+          <div class="ph-footer-heading">Tokens &amp; Aesthetics</div>
+          <ul class="ph-footer-list">
+            <li><a href="#">Warm Parchment (#fdfdf8)</a></li>
+            <li><a href="#">Olive Ink (#4d4f46)</a></li>
+            <li><a href="#">Hidden Orange (#F54E00)</a></li>
+            <li><a href="#">Sage Border (#bfc1b7)</a></li>
+          </ul>
+        </div>
+        <div>
+          <div class="ph-footer-heading">Developers</div>
+          <ul class="ph-footer-list">
+            <li><a href="#">HogQL Documentation</a></li>
+            <li><a href="#">REST API</a></li>
+            <li><a href="#">GitHub Repository</a></li>
+            <li><a href="#">Self-hosting Guide</a></li>
+          </ul>
+        </div>
+        <div>
+          <div class="ph-footer-heading">Company</div>
+          <ul class="ph-footer-list">
+            <li><a href="#">Public Handbook</a></li>
+            <li><a href="#">Careers (We're hiring)</a></li>
+            <li><a href="#">Compensation Calculator</a></li>
+            <li><a href="#">Hedgehog Merch Store</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="ph-footer-bottom">
+        <div>© 2026 PostHog, Inc. All rights reserved. Deliberately anti-corporate design system specification.</div>
+        <div style="display: flex; gap: 16px;">
+          <span>IBM Plex Sans + Source Code Pro</span>
+          <span>Flat Warm Palette</span>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- 8. JAVASCRIPT CONTROLLER -->
+  <script>
+    function sendAiMessage() {
+      const input = document.getElementById('aiInput');
+      const text = input.value.trim();
+      if (!text) return;
+
+      const body = document.getElementById('aiChatBody');
+      const userMsg = document.createElement('div');
+      userMsg.className = 'ph-ai-msg';
+      userMsg.style.backgroundColor = '#fdfdf8';
+      userMsg.style.border = '1px solid #bfc1b7';
+      userMsg.innerHTML = `<strong>You:</strong> ${text}`;
+      body.appendChild(userMsg);
+
+      input.value = '';
+      body.scrollTop = body.scrollHeight;
+
+      setTimeout(() => {
+        const botMsg = document.createElement('div');
+        botMsg.className = 'ph-ai-msg';
+        botMsg.innerHTML = `<strong>Max:</strong> I ran a HogQL scan for <em>"${text}"</em>! Found 47 matching sessions with clean traces. No anomalies detected in ClickHouse!`;
+        body.appendChild(botMsg);
+        body.scrollTop = body.scrollHeight;
+      }, 700);
+    }
+  </script>
+</body>
+</html>

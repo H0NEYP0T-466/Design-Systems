@@ -1,0 +1,1174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Shopify — The Global Commerce Engine</title>
+  <meta name="description" content="Cinematic, dark-first e-commerce interface built strictly adhering to the Shopify design system. Features ultra-light display typography, Deep Teal surfaces, Neon Green (#36F4A4) focus highlights, and full-pill interactive controls.">
+
+  <!-- Google Fonts: Inter with comprehensive variable weights -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+  <style>
+    /* ─────────────────────────────────────────────────────────────
+       1. EXACT DESIGN SYSTEM TOKENS FROM shopify/DESIGN.md
+       ───────────────────────────────────────────────────────────── */
+    :root {
+      /* Primary Foundation */
+      --shopify-white: #FFFFFF;              /* Primary text on dark, primary button fill */
+      --shopify-black: #000000;              /* Root page void, button text on white */
+      
+      /* Secondary & Accent */
+      --neon-green: #36F4A4;                 /* Signature accent: focus rings, active signals */
+      --color-aloe: #C1FBD4;                 /* Soft green atmospheric wash */
+      --color-pistachio: #D4F9E0;            /* Lightest green tint */
+
+      /* Surface & Dark Hierarchy */
+      --surface-void: #000000;               /* Root page background — true black */
+      --surface-deep-teal: #02090A;          /* Card surfaces, containers (green undertone) */
+      --surface-dark-forest: #061A1C;        /* Section background with visible teal-forest */
+      --surface-forest: #102620;             /* Elevated dark surfaces, nav on scroll */
+      --border-dark-card: #1E2C31;           /* Card border on dark surfaces */
+
+      /* Zinc Neutrals Scale */
+      --shade-30: #D4D4D8;                   /* Lightest neutral, barely-there borders */
+      --muted-text: #A1A1AA;                 /* Secondary text, metadata, descriptions */
+      --shade-50: #71717A;                   /* Tertiary text, timestamps */
+      --shade-60: #52525B;                   /* Disabled text, decorative neutrals */
+      --shade-70: #3F3F46;                   /* Input borders, subtle dividers */
+      --border-light: #E4E4E7;               /* Light surface border */
+
+      /* Links & Themed Accents */
+      --link-muted: #9797A2;
+      --link-sage: #9DABAD;
+      --link-lavender: #BDBDCA;
+      --link-mint: #99B3AD;
+
+      /* Typography Family & OpenType ss03 */
+      --font-display: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+      --font-body: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+      --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', monospace;
+
+      /* Multi-Layer Box Shadows (Section 6 Depth & Elevation) */
+      --shadow-card-resting: rgba(0,0,0,0.1) 0px 0px 0px 1px, 
+                             rgba(0,0,0,0.1) 0px 2px 2px, 
+                             rgba(0,0,0,0.1) 0px 4px 4px, 
+                             rgba(0,0,0,0.1) 0px 8px 8px,
+                             rgba(255,255,255,0.03) 0px 1px 0px inset;
+
+      --shadow-card-hover: rgba(0,0,0,0.2) 0px 0px 0px 1px, 
+                           rgba(0,0,0,0.2) 0px 4px 8px, 
+                           rgba(0,0,0,0.25) 0px 8px 16px, 
+                           rgba(0,0,0,0.3) 0px 16px 32px,
+                           rgba(255,255,255,0.06) 0px 1px 0px inset;
+
+      --shadow-modal: rgba(0,0,0,0.25) 0px 25px 50px -12px;
+
+      /* Focus Ring Token */
+      --focus-neon-ring: 0px 0px 0px 2px var(--neon-green);
+
+      /* Radii Scale (Section 5) */
+      --radius-4: 4px;       /* Tags, badges */
+      --radius-8: 8px;       /* Standard cards, inputs */
+      --radius-12: 12px;     /* Featured cards */
+      --radius-20: 20px;     /* Top-rounded cards */
+      --radius-pill: 9999px; /* Non-negotiable full pill for CTAs */
+
+      /* Spacing Scale (8px base) */
+      --sp-4: 4px;
+      --sp-8: 8px;
+      --sp-12: 12px;
+      --sp-16: 16px;
+      --sp-24: 24px;
+      --sp-28: 28px;
+      --sp-32: 32px;
+      --sp-36: 36px;
+      --sp-40: 40px;
+      --sp-64: 64px;
+      --sp-80: 80px;
+      --sp-100: 100px;
+      --sp-120: 120px;
+    }
+
+    /* Reset & Dark-First Foundations */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      font-size: 16px;
+      background-color: var(--surface-void);
+      color: var(--shopify-white);
+      font-family: var(--font-body);
+      font-feature-settings: "ss03" 1, "cv05" 1;
+      scroll-behavior: smooth;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    body {
+      background-color: var(--surface-void);
+      color: var(--shopify-white);
+      line-height: 1.5;
+      overflow-x: hidden;
+    }
+
+    ::selection {
+      background: var(--neon-green);
+      color: var(--shopify-black);
+    }
+
+    a {
+      color: var(--shopify-white);
+      text-decoration: none;
+      transition: color 150ms ease;
+    }
+
+    .container {
+      max-width: 1280px;
+      margin-left: auto;
+      margin-right: auto;
+      padding-left: var(--sp-64);
+      padding-right: var(--sp-64);
+    }
+
+    @media (max-width: 1024px) {
+      .container {
+        padding-left: var(--sp-32);
+        padding-right: var(--sp-32);
+      }
+    }
+
+    @media (max-width: 640px) {
+      .container {
+        padding-left: var(--sp-16);
+        padding-right: var(--sp-16);
+      }
+    }
+
+    /* ─────────────────────────────────────────────────────────────
+       2. TYPOGRAPHY (Featherweight Display 330-400, Monumental 96px)
+       ───────────────────────────────────────────────────────────── */
+    .display-xl {
+      font-family: var(--font-display);
+      font-size: clamp(48px, 7.5vw, 96px);
+      font-weight: 300; /* Ultra-light 330 emulation */
+      line-height: 1.00;
+      letter-spacing: normal;
+      color: var(--shopify-white);
+    }
+
+    .display-stats {
+      font-family: var(--font-display);
+      font-size: clamp(48px, 6.5vw, 96px);
+      font-weight: 700;
+      line-height: 1.00;
+      letter-spacing: 2px;
+      color: var(--shopify-white);
+    }
+
+    .heading-1 {
+      font-family: var(--font-display);
+      font-size: clamp(36px, 5vw, 70px);
+      font-weight: 300;
+      line-height: 1.05;
+      color: var(--shopify-white);
+    }
+
+    .heading-2 {
+      font-family: var(--font-display);
+      font-size: clamp(28px, 4vw, 55px);
+      font-weight: 300;
+      line-height: 1.16;
+      color: var(--shopify-white);
+    }
+
+    .heading-3 {
+      font-family: var(--font-display);
+      font-size: clamp(24px, 3.5vw, 48px);
+      font-weight: 300;
+      line-height: 1.14;
+      color: var(--shopify-white);
+    }
+
+    .heading-4 {
+      font-family: var(--font-display);
+      font-size: 32px;
+      font-weight: 400;
+      line-height: 1.14;
+      letter-spacing: 0.32px;
+    }
+
+    .lead-paragraph {
+      font-size: 20px;
+      font-weight: 400;
+      line-height: 1.40;
+      letter-spacing: 0.3px;
+      color: var(--muted-text);
+    }
+
+    .body-standard {
+      font-size: 18px;
+      font-weight: 400;
+      line-height: 1.56;
+      color: var(--muted-text);
+    }
+
+    .body-small {
+      font-size: 16px;
+      font-weight: 400;
+      line-height: 1.50;
+      color: var(--muted-text);
+    }
+
+    .overline {
+      font-size: 15.36px;
+      font-weight: 400;
+      letter-spacing: 1.54px;
+      text-transform: uppercase;
+      color: var(--neon-green);
+    }
+
+    .mono-label {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      text-transform: uppercase;
+      color: var(--shade-50);
+    }
+
+    /* ─────────────────────────────────────────────────────────────
+       3. NAVIGATION (Sticky, Dark Forest on scroll, Pill CTAs)
+       ───────────────────────────────────────────────────────────── */
+    .nav-header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background-color: rgba(2, 9, 10, 0.75);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border-dark-card);
+      height: 68px;
+      display: flex;
+      align-items: center;
+      transition: background-color 300ms ease;
+    }
+
+    .nav-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--sp-24);
+      width: 100%;
+    }
+
+    .nav-left {
+      display: flex;
+      align-items: center;
+      gap: var(--sp-32);
+    }
+
+    .shopify-logo {
+      display: flex;
+      align-items: center;
+      gap: var(--sp-8);
+      color: var(--shopify-white);
+      font-size: 20px;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+    }
+
+    .shopify-bag-icon {
+      width: 28px;
+      height: 28px;
+      background: var(--neon-green);
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--shopify-black);
+      font-weight: 900;
+      font-size: 15px;
+    }
+
+    .nav-links {
+      display: none;
+      align-items: center;
+      gap: var(--sp-24);
+      list-style: none;
+    }
+
+    @media (min-width: 960px) {
+      .nav-links {
+        display: flex;
+      }
+    }
+
+    .nav-link-item {
+      font-size: 16px;
+      font-weight: 500;
+      color: var(--shopify-white);
+      letter-spacing: 0.72px;
+      transition: color 150ms ease;
+    }
+
+    .nav-link-item:hover {
+      color: var(--muted-text);
+      text-decoration: none;
+    }
+
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: var(--sp-16);
+    }
+
+    /* ─────────────────────────────────────────────────────────────
+       4. BUTTONS (9999px Full Pill, Asymmetric Padding, Neon Ring)
+       Primary White Fill & Secondary Ghost Outlined
+       ───────────────────────────────────────────────────────────── */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--sp-8);
+      font-family: var(--font-display);
+      font-size: 16px;
+      font-weight: 400;
+      line-height: 1.50;
+      border-radius: var(--radius-pill); /* 9999px non-negotiable */
+      padding: 12px 26px 12px 16px;       /* Asymmetric padding per DESIGN.md */
+      cursor: pointer;
+      text-decoration: none;
+      transition: all 200ms ease;
+      user-select: none;
+      border: 2px solid transparent;
+      outline: none;
+    }
+
+    .btn:focus-visible {
+      box-shadow: var(--focus-neon-ring);
+    }
+
+    /* Primary White Fill */
+    .btn-primary {
+      background-color: var(--shopify-white);
+      color: var(--shopify-black);
+    }
+
+    .btn-primary:hover {
+      opacity: 0.92;
+      transform: translateY(-1px);
+    }
+
+    .btn-primary:active {
+      transform: translateY(1px);
+    }
+
+    /* Secondary Ghost / Outlined */
+    .btn-secondary {
+      background-color: transparent;
+      color: var(--shopify-white);
+      border: 2px solid var(--shopify-white);
+    }
+
+    .btn-secondary:hover {
+      background-color: var(--shopify-white);
+      color: var(--shopify-black);
+      transform: translateY(-1px);
+    }
+
+    .btn-secondary:active {
+      transform: translateY(1px);
+    }
+
+    /* Frosted Glass Tag / Badge */
+    .badge-frosted {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--sp-8);
+      background-color: rgba(255, 255, 255, 0.12);
+      backdrop-filter: blur(8px);
+      color: var(--shopify-white);
+      padding: 6px 14px;
+      border-radius: var(--radius-4);
+      font-size: 14px;
+      font-weight: 400;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .pulse-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--neon-green);
+      box-shadow: 0 0 10px var(--neon-green);
+    }
+
+    /* ─────────────────────────────────────────────────────────────
+       5. HERO SECTION (Cinematic Premiere, Theatrical Spotlight)
+       ───────────────────────────────────────────────────────────── */
+    .hero-section {
+      padding-top: var(--sp-100);
+      padding-bottom: var(--sp-120);
+      position: relative;
+      background: 
+        radial-gradient(ellipse 65% 50% at 50% 20%, rgba(16, 38, 32, 0.7) 0%, rgba(2, 9, 10, 0.9) 60%, var(--surface-void) 100%);
+      text-align: center;
+      border-bottom: 1px solid var(--border-dark-card);
+    }
+
+    .hero-content {
+      max-width: 940px;
+      margin-left: auto;
+      margin-right: auto;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: var(--sp-32);
+    }
+
+    .hero-ctas {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: var(--sp-16);
+      margin-top: var(--sp-8);
+    }
+
+    /* ─────────────────────────────────────────────────────────────
+       6. CARDS & CONTAINERS (Deep Teal #02090A with Multi-layer Shadows)
+       ───────────────────────────────────────────────────────────── */
+    .card-deep-teal {
+      background-color: var(--surface-deep-teal);
+      border: 1px solid var(--border-dark-card);
+      border-radius: var(--radius-12);
+      box-shadow: var(--shadow-card-resting);
+      padding: var(--sp-32);
+      transition: box-shadow 300ms ease, transform 200ms ease, border-color 200ms ease;
+    }
+
+    .card-deep-teal:hover {
+      box-shadow: var(--shadow-card-hover);
+      border-color: rgba(54, 244, 164, 0.25);
+    }
+
+    /* ─────────────────────────────────────────────────────────────
+       7. STATS & KEYNOTE NUMBERS
+       96px NeueHaasGrotesk display scale with 64px gaps
+       ───────────────────────────────────────────────────────────── */
+    .stats-section {
+      background-color: var(--surface-dark-forest);
+      padding-top: var(--sp-100);
+      padding-bottom: var(--sp-100);
+      border-bottom: 1px solid var(--border-dark-card);
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: var(--sp-64);
+    }
+
+    .stat-item {
+      display: flex;
+      flex-direction: column;
+      gap: var(--sp-12);
+    }
+
+    /* ─────────────────────────────────────────────────────────────
+       8. PRODUCT SHOWCASE & COMMERCE SIMULATOR
+       ───────────────────────────────────────────────────────────── */
+    .showcase-section {
+      padding-top: var(--sp-120);
+      padding-bottom: var(--sp-120);
+      background: 
+        radial-gradient(circle at 80% 40%, rgba(16, 38, 32, 0.4) 0%, transparent 50%),
+        var(--surface-void);
+    }
+
+    .showcase-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: var(--sp-48);
+      align-items: center;
+    }
+
+    @media (min-width: 960px) {
+      .showcase-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    /* Interactive Store Terminal */
+    .admin-preview-window {
+      background: var(--surface-deep-teal);
+      border: 1px solid var(--border-dark-card);
+      border-radius: var(--radius-12);
+      box-shadow: var(--shadow-card-hover);
+      overflow: hidden;
+    }
+
+    .admin-window-bar {
+      height: 44px;
+      background: var(--surface-forest);
+      border-bottom: 1px solid var(--border-dark-card);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 var(--sp-16);
+    }
+
+    .admin-window-dots {
+      display: flex;
+      gap: 6px;
+    }
+
+    .window-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: #3F3F46;
+    }
+
+    .admin-body {
+      padding: var(--sp-24);
+      display: flex;
+      flex-direction: column;
+      gap: var(--sp-20);
+    }
+
+    .product-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: var(--sp-16);
+      background: var(--surface-dark-forest);
+      border-radius: var(--radius-8);
+      border: 1px solid var(--border-dark-card);
+    }
+
+    /* Input with Neon Green Focus Ring */
+    .shopify-input {
+      width: 100%;
+      height: 48px;
+      padding: 12px 16px;
+      background: var(--surface-dark-forest);
+      color: var(--shopify-white);
+      border: 1px solid var(--shade-70);
+      border-radius: var(--radius-8);
+      font-family: var(--font-body);
+      font-size: 16px;
+      outline: none;
+      transition: border-color 200ms ease, box-shadow 200ms ease;
+    }
+
+    .shopify-input::placeholder {
+      color: var(--shade-50);
+    }
+
+    .shopify-input:focus, .shopify-input:focus-visible {
+      border-color: var(--neon-green);
+      box-shadow: var(--focus-neon-ring);
+    }
+
+    /* ─────────────────────────────────────────────────────────────
+       9. PRICING & TIERS MATRIX
+       ───────────────────────────────────────────────────────────── */
+    .pricing-section {
+      padding-top: var(--sp-100);
+      padding-bottom: var(--sp-120);
+      background-color: var(--surface-deep-teal);
+      border-top: 1px solid var(--border-dark-card);
+      border-bottom: 1px solid var(--border-dark-card);
+    }
+
+    .pricing-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: var(--sp-32);
+      margin-top: var(--sp-64);
+    }
+
+    .pricing-card {
+      background: var(--surface-void);
+      border: 1px solid var(--border-dark-card);
+      border-radius: var(--radius-12);
+      padding: var(--sp-36);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: var(--sp-32);
+      box-shadow: var(--shadow-card-resting);
+    }
+
+    .pricing-card.featured {
+      border-color: rgba(54, 244, 164, 0.4);
+      box-shadow: var(--shadow-card-hover), 0 0 20px rgba(54, 244, 164, 0.08);
+      position: relative;
+    }
+
+    .price-value {
+      font-size: 48px;
+      font-weight: 300;
+      color: var(--shopify-white);
+      line-height: 1;
+      margin-top: var(--sp-16);
+    }
+
+    .feature-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: var(--sp-12);
+      font-size: 15px;
+      color: var(--muted-text);
+    }
+
+    .feature-item {
+      display: flex;
+      align-items: center;
+      gap: var(--sp-8);
+    }
+
+    .feature-item span.check {
+      color: var(--neon-green);
+      font-weight: bold;
+    }
+
+    /* ─────────────────────────────────────────────────────────────
+       10. DESIGN SYSTEM TOKEN BOARD
+       ───────────────────────────────────────────────────────────── */
+    .token-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: var(--sp-16);
+      margin-top: var(--sp-32);
+    }
+
+    .token-card {
+      background: var(--surface-deep-teal);
+      border: 1px solid var(--border-dark-card);
+      border-radius: var(--radius-8);
+      padding: var(--sp-16);
+    }
+
+    .token-swatch {
+      height: 52px;
+      border-radius: var(--radius-4);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      margin-bottom: var(--sp-12);
+    }
+
+    /* ─────────────────────────────────────────────────────────────
+       11. FOOTER
+       ───────────────────────────────────────────────────────────── */
+    .shopify-footer {
+      background: var(--surface-void);
+      padding-top: var(--sp-80);
+      padding-bottom: var(--sp-48);
+      border-top: 1px solid var(--border-dark-card);
+    }
+
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 1.5fr repeat(3, 1fr);
+      gap: var(--sp-48);
+      margin-bottom: var(--sp-64);
+    }
+
+    @media (max-width: 860px) {
+      .footer-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    .footer-col-title {
+      font-size: 16px;
+      font-weight: 500;
+      color: var(--shopify-white);
+      margin-bottom: var(--sp-16);
+    }
+
+    .footer-links {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: var(--sp-8);
+      font-size: 15px;
+    }
+
+    .footer-links a {
+      color: var(--muted-text);
+    }
+
+    .footer-links a:hover {
+      color: var(--shopify-white);
+    }
+
+    .footer-bottom {
+      border-top: 1px solid var(--border-dark-card);
+      padding-top: var(--sp-32);
+      display: flex;
+      flex-direction: column;
+      gap: var(--sp-16);
+      align-items: center;
+      justify-content: space-between;
+      font-size: 14px;
+      color: var(--shade-50);
+    }
+
+    @media (min-width: 720px) {
+      .footer-bottom {
+        flex-direction: row;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ==================== STICKY NAVIGATION ==================== -->
+  <header class="nav-header" id="navbar">
+    <div class="container nav-inner">
+      <div class="nav-left">
+        <a href="#hero" class="shopify-logo">
+          <div class="shopify-bag-icon">S</div>
+          <span>Shopify</span>
+        </a>
+
+        <ul class="nav-links">
+          <li><a href="#stats" class="nav-link-item">Global Scale</a></li>
+          <li><a href="#showcase" class="nav-link-item">Platform</a></li>
+          <li><a href="#tokens" class="nav-link-item">Design Foundations</a></li>
+          <li><a href="#pricing" class="nav-link-item">Pricing</a></li>
+        </ul>
+      </div>
+
+      <div class="nav-actions">
+        <a href="#pricing" class="btn btn-secondary" style="font-size: 14px; padding: 8px 18px;">
+          Log in
+        </a>
+        <a href="#showcase" class="btn btn-primary" style="font-size: 14px; padding: 8px 18px 8px 14px;">
+          <span>Start for free</span>
+          <span>→</span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <!-- ==================== HERO SECTION ==================== -->
+    <section id="hero" class="hero-section">
+      <div class="container hero-content">
+        <div class="badge-frosted">
+          <span class="pulse-dot"></span>
+          <span>THE GLOBAL COMMERCE THEATRE</span>
+        </div>
+
+        <h1 class="display-xl">
+          The global commerce engine.
+        </h1>
+
+        <p class="lead-paragraph" style="max-width: 720px;">
+          Staged like a cinematic premiere. Built with deep forest teal surfaces, monumental ultra-light typography, stacked multi-layer shadows, and laser-focused Neon Green (<code style="font-family: monospace; color: var(--neon-green);">#36F4A4</code>) accents.
+        </p>
+
+        <div class="hero-ctas">
+          <a href="#showcase" class="btn btn-primary" style="padding: 14px 28px 14px 20px;">
+            <span>Start free trial</span>
+            <span>→</span>
+          </a>
+          <a href="#tokens" class="btn btn-secondary" style="padding: 14px 28px 14px 20px;">
+            Inspect Design Spec
+          </a>
+        </div>
+
+        <div style="display: flex; gap: var(--sp-24); font-size: 14px; color: var(--muted-text); margin-top: var(--sp-8);">
+          <span>✓ Full-pill 9999px buttons</span>
+          <span>✓ ss03 OpenType variable type</span>
+          <span>✓ Multi-layer shadow stacks</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== STATS SECTION ==================== -->
+    <section id="stats" class="stats-section">
+      <div class="container">
+        <div style="margin-bottom: var(--sp-48);">
+          <span class="overline">PROVEN VELOCITY</span>
+          <h2 class="heading-2" style="margin-top: var(--sp-8);">Powering the world's most ambitious merchants.</h2>
+        </div>
+
+        <div class="stats-grid">
+          <div class="stat-item">
+            <div class="display-stats">$444B+</div>
+            <p class="body-small">Global economic activity generated on Shopify infrastructure.</p>
+          </div>
+
+          <div class="stat-item">
+            <div class="display-stats">150M+</div>
+            <p class="body-small">Active buyers shopping across high-speed storefronts worldwide.</p>
+          </div>
+
+          <div class="stat-item">
+            <div class="display-stats">175+</div>
+            <p class="body-small">Countries where independent businesses build and scale without limits.</p>
+          </div>
+
+          <div class="stat-item">
+            <div class="display-stats">10%</div>
+            <p class="body-small">Of all US e-commerce transacts seamlessly through Shopify Checkout.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== SHOWCASE & INTERACTIVE COMMERCE ==================== -->
+    <section id="showcase" class="showcase-section">
+      <div class="container showcase-grid">
+        <div>
+          <span class="overline">INTEGRATED COMMERCE</span>
+          <h2 class="heading-1" style="margin-top: var(--sp-8); margin-bottom: var(--sp-24);">
+            Every touchpoint, flawlessly connected.
+          </h2>
+          <p class="body-standard" style="margin-bottom: var(--sp-24);">
+            Shopify interfaces are engineered like a high-precision digital theatre. Every card rests on Deep Teal (<code style="font-family: monospace; color: #FFF;">#02090A</code>) with a stacked 4-layer box-shadow and an inset white highlight simulating top-lit glass.
+          </p>
+
+          <div style="display: flex; flex-direction: column; gap: var(--sp-16); margin-bottom: var(--sp-32);">
+            <div class="card-deep-teal" style="padding: var(--sp-20);">
+              <div style="display: flex; justify-content: space-between; align-items: center;">
+                <strong style="color: var(--shopify-white);">Neon Green Focus Standard</strong>
+                <span style="color: var(--neon-green); font-family: monospace; font-size: 13px;">#36F4A4</span>
+              </div>
+              <p class="body-small" style="margin-top: 6px;">
+                Focus rings emit a sharp 2px solid <code style="color: var(--neon-green);">#36F4A4</code> glow, guiding keyboard interaction with surgical clarity.
+              </p>
+            </div>
+
+            <div class="card-deep-teal" style="padding: var(--sp-20);">
+              <div style="display: flex; justify-content: space-between; align-items: center;">
+                <strong style="color: var(--shopify-white);">Theatrical Pacing &amp; Void Canvas</strong>
+                <span style="color: var(--shade-30); font-family: monospace; font-size: 13px;">#000000</span>
+              </div>
+              <p class="body-small" style="margin-top: 6px;">
+                Sections breathe with 80px to 120px of dark room, creating presentation-grade pacing.
+              </p>
+            </div>
+          </div>
+
+          <a href="#pricing" class="btn btn-primary">
+            <span>Explore Commerce Features</span>
+            <span>→</span>
+          </a>
+        </div>
+
+        <!-- Interactive Terminal Simulator -->
+        <div class="admin-preview-window">
+          <div class="admin-window-bar">
+            <div class="admin-window-dots">
+              <span class="window-dot"></span>
+              <span class="window-dot"></span>
+              <span class="window-dot"></span>
+            </div>
+            <span class="mono-label" style="color: var(--neon-green);">SHOPIFY ADMIN CONSOLE</span>
+            <span class="badge-frosted" style="font-size: 11px; padding: 2px 8px;">LIVE CLUSTER</span>
+          </div>
+
+          <div class="admin-body">
+            <div style="display: flex; justify-content: space-between; align-items: baseline;">
+              <div>
+                <span class="mono-label">Active Merchant</span>
+                <h3 style="font-size: 20px; font-weight: 500; color: #FFF;">Apex Athletic Gear</h3>
+              </div>
+              <span style="color: var(--neon-green); font-size: 14px; font-weight: bold;">+24.6% TODAY</span>
+            </div>
+
+            <!-- Interactive Form Input -->
+            <div style="display: flex; flex-direction: column; gap: 8px;">
+              <label class="mono-label" for="store-domain">Storefront Domain Filter</label>
+              <input type="text" id="store-domain" class="shopify-input" value="apex-gear.myshopify.com" placeholder="Enter store subdomain...">
+              <span style="font-size: 12px; color: var(--shade-50);">Click inside to verify the signature Neon Green (#36F4A4) focus ring.</span>
+            </div>
+
+            <!-- Product Rows -->
+            <div class="product-row">
+              <div>
+                <strong style="font-size: 15px; color: #FFF;">Hyperion Kinetic Runner</strong>
+                <div style="font-size: 13px; color: var(--muted-text);">SKU-8821 • 142 in stock</div>
+              </div>
+              <div style="text-align: right;">
+                <strong style="color: #FFF;">$185.00</strong>
+                <div style="font-size: 12px; color: var(--neon-green);">HIGH VELOCITY</div>
+              </div>
+            </div>
+
+            <div class="product-row">
+              <div>
+                <strong style="font-size: 15px; color: #FFF;">AeroLite Carbon Track Pant</strong>
+                <div style="font-size: 13px; color: var(--muted-text);">SKU-4912 • 89 in stock</div>
+              </div>
+              <div style="text-align: right;">
+                <strong style="color: #FFF;">$110.00</strong>
+                <div style="font-size: 12px; color: var(--shade-30);">RESTOCKED</div>
+              </div>
+            </div>
+
+            <div style="display: flex; gap: var(--sp-12); margin-top: var(--sp-8);">
+              <button class="btn btn-primary" style="flex: 1; font-size: 14px; padding: 10px 16px;" onclick="simulateSale()">
+                Simulate Accelerated Sale
+              </button>
+              <button class="btn btn-secondary" style="font-size: 14px; padding: 10px 16px;" onclick="resetDemo()">
+                Reset
+              </button>
+            </div>
+            <div id="sale-toast" style="font-size: 12px; color: var(--neon-green); text-align: center; min-height: 18px;"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== TOKENS FOUNDATION SHOWCASE ==================== -->
+    <section id="tokens" class="showcase-section" style="background-color: var(--surface-dark-forest);">
+      <div class="container">
+        <div style="text-align: center; max-width: 780px; margin: 0 auto var(--sp-48);">
+          <span class="overline">DESIGN SYSTEM SPECIFICATION</span>
+          <h2 class="heading-2" style="margin-top: var(--sp-8);">The Nocturnal Surface Hierarchy</h2>
+          <p class="lead-paragraph" style="margin-top: var(--sp-12);">
+            The precise palette declared in <code style="font-family: monospace; color: var(--shopify-white);">shopify/DESIGN.md</code>. Near-black surfaces carry deep teal and forest undertones.
+          </p>
+        </div>
+
+        <div class="token-grid">
+          <!-- Void -->
+          <div class="token-card">
+            <div class="token-swatch" style="background: var(--surface-void);"></div>
+            <strong style="font-size: 15px;">Void (Black)</strong>
+            <div style="font-family: monospace; font-size: 12px; color: var(--muted-text);">#000000</div>
+            <p style="font-size: 13px; color: var(--shade-50); margin-top: 4px;">Root page canvas; maximum contrast base.</p>
+          </div>
+
+          <!-- Deep Teal -->
+          <div class="token-card">
+            <div class="token-swatch" style="background: var(--surface-deep-teal);"></div>
+            <strong style="font-size: 15px;">Deep Teal</strong>
+            <div style="font-family: monospace; font-size: 12px; color: var(--muted-text);">#02090A</div>
+            <p style="font-size: 13px; color: var(--shade-50); margin-top: 4px;">Card surfaces with subtle green undertone.</p>
+          </div>
+
+          <!-- Dark Forest -->
+          <div class="token-card">
+            <div class="token-swatch" style="background: var(--surface-dark-forest);"></div>
+            <strong style="font-size: 15px;">Dark Forest</strong>
+            <div style="font-family: monospace; font-size: 12px; color: var(--muted-text);">#061A1C</div>
+            <p style="font-size: 13px; color: var(--shade-50); margin-top: 4px;">Section backgrounds with visible green depth.</p>
+          </div>
+
+          <!-- Forest -->
+          <div class="token-card">
+            <div class="token-swatch" style="background: var(--surface-forest);"></div>
+            <strong style="font-size: 15px;">Forest</strong>
+            <div style="font-family: monospace; font-size: 12px; color: var(--muted-text);">#102620</div>
+            <p style="font-size: 13px; color: var(--shade-50); margin-top: 4px;">Elevated dark surfaces and navigation on scroll.</p>
+          </div>
+
+          <!-- Neon Green -->
+          <div class="token-card">
+            <div class="token-swatch" style="background: var(--neon-green);"></div>
+            <strong style="font-size: 15px; color: var(--neon-green);">Neon Green</strong>
+            <div style="font-family: monospace; font-size: 12px; color: var(--muted-text);">#36F4A4</div>
+            <p style="font-size: 13px; color: var(--shade-50); margin-top: 4px;">The signature focus ring and active signal.</p>
+          </div>
+
+          <!-- Card Border -->
+          <div class="token-card">
+            <div class="token-swatch" style="background: var(--border-dark-card);"></div>
+            <strong style="font-size: 15px;">Dark Card Border</strong>
+            <div style="font-family: monospace; font-size: 12px; color: var(--muted-text);">#1E2C31</div>
+            <p style="font-size: 13px; color: var(--shade-50); margin-top: 4px;">Whisper-weight boundary definition on dark.</p>
+          </div>
+
+          <!-- White Text -->
+          <div class="token-card">
+            <div class="token-swatch" style="background: var(--shopify-white);"></div>
+            <strong style="font-size: 15px;">Shopify White</strong>
+            <div style="font-family: monospace; font-size: 12px; color: var(--muted-text);">#FFFFFF</div>
+            <p style="font-size: 13px; color: var(--shade-50); margin-top: 4px;">Primary copy and white pill button fill.</p>
+          </div>
+
+          <!-- Muted Zinc -->
+          <div class="token-card">
+            <div class="token-swatch" style="background: var(--muted-text);"></div>
+            <strong style="font-size: 15px;">Muted Zinc</strong>
+            <div style="font-family: monospace; font-size: 12px; color: var(--muted-text);">#A1A1AA</div>
+            <p style="font-size: 13px; color: var(--shade-50); margin-top: 4px;">Secondary text, metadata, and descriptions.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== PRICING MATRIX ==================== -->
+    <section id="pricing" class="pricing-section">
+      <div class="container">
+        <div style="text-align: center; max-width: 780px; margin: 0 auto;">
+          <span class="overline">SCALABLE ECONOMICS</span>
+          <h2 class="heading-1" style="margin-top: var(--sp-8);">Plans built to scale with every stage.</h2>
+          <p class="lead-paragraph" style="margin-top: var(--sp-16);">
+            Start for $1/month during trial, then scale into full enterprise orchestration.
+          </p>
+        </div>
+
+        <div class="pricing-grid">
+          <!-- Basic -->
+          <div class="pricing-card">
+            <div>
+              <span class="mono-label">SOLO ENTREPRENEURS</span>
+              <h3 class="heading-4" style="margin-top: 8px;">Basic</h3>
+              <p class="body-small" style="margin-top: 4px;">Everything you need to create your store and ship products.</p>
+              <div class="price-value">$39 <span style="font-size: 16px; color: var(--muted-text);">/ mo</span></div>
+
+              <ul class="feature-list" style="margin-top: var(--sp-32);">
+                <li class="feature-item"><span class="check">✓</span> 10 inventory locations</li>
+                <li class="feature-item"><span class="check">✓</span> 24/7 localized support</li>
+                <li class="feature-item"><span class="check">✓</span> Basic analytics reporting</li>
+                <li class="feature-item"><span class="check">✓</span> World's best checkout conversion</li>
+              </ul>
+            </div>
+            <a href="#showcase" class="btn btn-secondary" style="width: 100%;">Choose Basic</a>
+          </div>
+
+          <!-- Shopify (Featured) -->
+          <div class="pricing-card featured">
+            <div>
+              <div style="display: flex; justify-content: space-between; align-items: center;">
+                <span class="mono-label" style="color: var(--neon-green);">RECOMMENDED FOR GROWTH</span>
+                <span class="pulse-dot"></span>
+              </div>
+              <h3 class="heading-4" style="margin-top: 8px;">Shopify</h3>
+              <p class="body-small" style="margin-top: 4px;">Level up your business with professional reporting and more staff seats.</p>
+              <div class="price-value">$105 <span style="font-size: 16px; color: var(--muted-text);">/ mo</span></div>
+
+              <ul class="feature-list" style="margin-top: var(--sp-32);">
+                <li class="feature-item"><span class="check">✓</span> 5 additional staff accounts</li>
+                <li class="feature-item"><span class="check">✓</span> Standard reporting &amp; analytics</li>
+                <li class="feature-item"><span class="check">✓</span> Up to 88% shipping discount</li>
+                <li class="feature-item"><span class="check">✓</span> Multi-currency localized selling</li>
+              </ul>
+            </div>
+            <a href="#showcase" class="btn btn-primary" style="width: 100%;">Start Free Trial</a>
+          </div>
+
+          <!-- Advanced -->
+          <div class="pricing-card">
+            <div>
+              <span class="mono-label">ESTABLISHED SCALE</span>
+              <h3 class="heading-4" style="margin-top: 8px;">Advanced</h3>
+              <p class="body-small" style="margin-top: 4px;">Custom report builder and lowest transaction fees for scale.</p>
+              <div class="price-value">$399 <span style="font-size: 16px; color: var(--muted-text);">/ mo</span></div>
+
+              <ul class="feature-list" style="margin-top: var(--sp-32);">
+                <li class="feature-item"><span class="check">✓</span> 15 staff accounts</li>
+                <li class="feature-item"><span class="check">✓</span> Custom report generator</li>
+                <li class="feature-item"><span class="check">✓</span> Lowest credit card transaction rates</li>
+                <li class="feature-item"><span class="check">✓</span> 10x checkout capacity</li>
+              </ul>
+            </div>
+            <a href="#showcase" class="btn btn-secondary" style="width: 100%;">Choose Advanced</a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ==================== FOOTER ==================== -->
+  <footer class="shopify-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div>
+          <div class="shopify-logo" style="margin-bottom: var(--sp-16);">
+            <div class="shopify-bag-icon">S</div>
+            <span>Shopify</span>
+          </div>
+          <p class="body-small" style="max-width: 320px; line-height: 1.6;">
+            A dark-first digital theatre built with ultra-light typography, Deep Teal surfaces, and Neon Green precision.
+          </p>
+        </div>
+
+        <div>
+          <h4 class="footer-col-title">Commerce</h4>
+          <ul class="footer-links">
+            <li><a href="#showcase">Online Store</a></li>
+            <li><a href="#showcase">Point of Sale</a></li>
+            <li><a href="#showcase">Shop Pay Checkout</a></li>
+            <li><a href="#stats">Global Infrastructure</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h4 class="footer-col-title">Tokens</h4>
+          <ul class="footer-links">
+            <li><a href="#tokens">Void (#000000)</a></li>
+            <li><a href="#tokens">Deep Teal (#02090A)</a></li>
+            <li><a href="#tokens">Dark Forest (#061A1C)</a></li>
+            <li><a href="#tokens">Neon Green (#36F4A4)</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h4 class="footer-col-title">Resources</h4>
+          <ul class="footer-links">
+            <li><a href="#hero">Developer Docs</a></li>
+            <li><a href="#hero">Shopify Editions</a></li>
+            <li><a href="#pricing">Pricing Plans</a></li>
+            <li><a href="#tokens">Section 7 Rules</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <div>
+          <span>Shopify Design System • Conforms to open-design/shopify/DESIGN.md</span>
+        </div>
+        <div style="display: flex; gap: var(--sp-24); align-items: center;">
+          <span style="color: var(--neon-green); font-family: monospace;">● ALL TOKENS VALIDATED</span>
+          <span>Terms of Service</span>
+          <span>Privacy</span>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Interactive JavaScript for Live Demonstration -->
+  <script>
+    // Live sale simulation in admin panel
+    function simulateSale() {
+      const toast = document.getElementById('sale-toast');
+      const orderNum = Math.floor(1000 + Math.random() * 9000);
+      const amount = (85 + Math.random() * 200).toFixed(2);
+      toast.textContent = `⚡ Order #${orderNum} captured ($${amount}) via Shop Pay in 420ms`;
+      toast.style.color = 'var(--neon-green)';
+      setTimeout(() => {
+        toast.textContent = '';
+      }, 3500);
+    }
+
+    function resetDemo() {
+      const input = document.getElementById('store-domain');
+      input.value = 'apex-gear.myshopify.com';
+      document.getElementById('sale-toast').textContent = '';
+    }
+
+    // Nav header background transition on scroll
+    window.addEventListener('scroll', () => {
+      const nav = document.getElementById('navbar');
+      if (window.scrollY > 40) {
+        nav.style.backgroundColor = 'var(--surface-forest)';
+      } else {
+        nav.style.backgroundColor = 'rgba(2, 9, 10, 0.75)';
+      }
+    });
+  </script>
+</body>
+</html>

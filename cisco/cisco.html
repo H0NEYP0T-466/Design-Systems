@@ -1,0 +1,1669 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Cisco — Enterprise Infrastructure & Networking Systems</title>
+  <meta name="description" content="Authentic Cisco Design System website. Dark navy-charcoal surfaces, electric Cisco Blue signal, Cisco Indigo action pills, real-time telemetry, topology diagrams, and dense infrastructure controls." />
+
+  <!-- Fonts: Inter & IBM Plex Mono providing CiscoSansTT and technical data precision -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    /* ─────────────────────────────────────────────────────────────────────────
+     * CISCO DESIGN SYSTEM TOKENS (DESIGN.md & tokens.css verbatim alignment)
+     * ───────────────────────────────────────────────────────────────────────── */
+    :root {
+      /* Primary Surfaces — layered navy-charcoal, never pure flat black */
+      --bg: #0f1720;             /* Primary Canvas — blue-black infrastructure ground */
+      --surface: #1b2530;        /* Surface — container, card, mid-dark panel */
+      --surface-warm: #243447;   /* Elevated Surface — technical module highlight */
+      --surface-card: #16202c;   /* Slightly deeper card surface */
+      --surface-dark-1: #39393b; /* Dark Gray 1 — mid-dark dense modules */
+
+      /* Ink & Typography Colors */
+      --fg: #ffffff;             /* Core White — primary inverse text */
+      --fg-2: #e8ebf1;           /* Pale Gray 1 — light text support, technical tint */
+      --muted: #9e9ea2;          /* Medium Gray 2 — low-emphasis metadata, labels */
+      --meta: #64bbe3;           /* Status Blue — secondary telemetry & chart signal */
+
+      /* Borders */
+      --border: #58585b;         /* Dark Gray 2 — borders, separators */
+      --border-soft: rgba(232, 235, 241, 0.14); /* Subtle separator on dark */
+
+      /* Brand Signal & Accent */
+      --accent: #049fd9;         /* Cisco Blue — electric signal accent, outline CTA */
+      --accent-on: #001923;
+      --accent-hover: color-mix(in oklab, var(--accent), black 8%);
+      --accent-active: color-mix(in oklab, var(--accent), black 14%);
+
+      /* Brand Action & Layers */
+      --cisco-indigo: #005073;   /* Filled primary action pill */
+      --cisco-indigo-hover: #2b5592; /* Dark Blue hover state */
+      --cisco-indigo-active: #00364d;
+      --status-blue: #64bbe3;    /* Focus halo & secondary signal */
+
+      /* Operational Semantic Indicators */
+      --sage-green: #abc233;     /* Infrastructure health accent */
+      --success: #6cc04a;        /* Status Green — operational success */
+      --warn: #ffcc00;           /* Status Yellow — caution / degraded */
+      --alert: #ff7300;          /* Status Orange — escalation */
+      --danger: #cf2030;         /* Status Red — critical incident */
+
+      /* Typography Families */
+      --font-display: "CiscoSansTT", "Inter", -apple-system, system-ui, Arial, sans-serif;
+      --font-body: "CiscoSansTT", "Inter", -apple-system, system-ui, Arial, sans-serif;
+      --font-mono: "IBM Plex Mono", "SF Mono", ui-monospace, Menlo, monospace;
+
+      /* Type Scale (DESIGN.md §3) */
+      --text-xs: 12px;           /* Label / Eyebrow — uppercase tags (700 weight, 0.24px) */
+      --text-sm: 14px;           /* Body Small — metadata, nav helper */
+      --text-base: 16px;         /* Body & Button — 500 weight for CTA, 400 for body */
+      --text-lg: 18px;           /* Card subheader */
+      --text-xl: 24px;           /* Subheading (500 weight, -0.2px) */
+      --text-2xl: 32px;          /* Heading (500 weight, -0.4px) */
+      --text-3xl: 56px;          /* Section Display (500 weight, -1.1px) */
+      --text-4xl: 72px;          /* Hero Display (500 weight, -1.6px) */
+
+      --leading-body: 1.55;
+      --leading-tight: 1.05;
+      --tracking-display: -1.6px;
+
+      /* Spacing Scale (8px rhythm) */
+      --space-1: 4px;
+      --space-2: 8px;
+      --space-3: 12px;
+      --space-4: 16px;
+      --space-5: 20px;
+      --space-6: 24px;
+      --space-8: 32px;
+      --space-12: 48px;
+      --space-16: 64px;
+      --space-24: 96px;
+
+      /* Section Rhythm */
+      --section-y-desktop: 104px;
+      --section-y-tablet: 76px;
+      --section-y-phone: 52px;
+
+      /* Container */
+      --container-max: 1240px;
+      --container-gutter-desktop: 40px;
+      --container-gutter-tablet: 28px;
+      --container-gutter-phone: 20px;
+
+      /* Radii */
+      --radius-sm: 12px;         /* Inputs, control shells */
+      --radius-md: 20px;         /* Cards, telemetry modules (16px to 20px) */
+      --radius-lg: 28px;         /* Major structural containers */
+      --radius-pill: 9999px;     /* Action pills — strictly Cisco pill standard */
+
+      /* Elevation & Shadows */
+      --elev-flat: none;
+      --elev-ring: 0 0 0 1px var(--border);
+      --elev-raised: 0 24px 80px rgba(0, 0, 0, 0.32);
+
+      /* Keyboard Focus Pairing (DESIGN.md §4: 2px Status Blue halo + 1px white inner keyline) */
+      --focus-ring: 0 0 0 1px #ffffff, 0 0 0 3px var(--status-blue);
+
+      /* Motion */
+      --motion-fast: 160ms;
+      --motion-base: 240ms;
+      --motion-slow: 400ms;
+      --ease-standard: cubic-bezier(0.2, 0, 0, 1);
+    }
+
+    /* ─────────────────────────────────────────────────────────────────────────
+     * RESET & BASE STYLES
+     * ───────────────────────────────────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--bg);
+      color: var(--fg-2);
+      font-family: var(--font-body);
+      font-size: var(--text-base);
+      line-height: var(--leading-body);
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+
+    /* Container */
+    .container {
+      max-width: var(--container-max);
+      margin-inline: auto;
+      padding-inline: var(--container-gutter-desktop);
+    }
+    @media (max-width: 1024px) {
+      .container { padding-inline: var(--container-gutter-tablet); }
+    }
+    @media (max-width: 640px) {
+      .container { padding-inline: var(--container-gutter-phone); }
+    }
+
+    /* Typography Hierarchy */
+    h1, h2, h3, h4 {
+      font-family: var(--font-display);
+      color: var(--fg);
+      font-weight: 500; /* Disciplined Cisco 500 weight */
+    }
+    h1 {
+      font-size: clamp(40px, 6vw, var(--text-4xl));
+      line-height: var(--leading-tight);
+      letter-spacing: var(--tracking-display);
+    }
+    h2 {
+      font-size: clamp(28px, 4vw, var(--text-3xl));
+      line-height: 1.08;
+      letter-spacing: -1.1px;
+    }
+    h3 {
+      font-size: var(--text-2xl);
+      line-height: 1.20;
+      letter-spacing: -0.4px;
+    }
+    h4 {
+      font-size: var(--text-xl);
+      line-height: 1.30;
+      letter-spacing: -0.2px;
+    }
+    p { margin-bottom: 0; }
+    .lead {
+      font-size: var(--text-base);
+      line-height: 1.6;
+      color: var(--fg-2);
+      max-width: 68ch;
+    }
+    .eyebrow {
+      font-size: var(--text-xs);
+      font-weight: 700;
+      line-height: 1.30;
+      letter-spacing: 0.24px;
+      text-transform: uppercase;
+      color: var(--accent);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .mono { font-family: var(--font-mono); }
+
+    /* ─────────────────────────────────────────────────────────────────────────
+     * BUTTONS & PILLS (DESIGN.md §4: Pill CTAs and rounded control shells)
+     * ───────────────────────────────────────────────────────────────────────── */
+    .btn-pill {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--space-2);
+      padding: 12px 28px;
+      min-height: 44px; /* Minimum 44px touch target */
+      border-radius: var(--radius-pill);
+      font-family: var(--font-body);
+      font-size: var(--text-base);
+      font-weight: 500;
+      line-height: 1.20;
+      text-decoration: none;
+      cursor: pointer;
+      border: 1.5px solid transparent;
+      white-space: nowrap;
+      transition:
+        background-color var(--motion-fast) var(--ease-standard),
+        border-color var(--motion-fast) var(--ease-standard),
+        box-shadow var(--motion-fast) var(--ease-standard),
+        color var(--motion-fast) var(--ease-standard);
+    }
+    .btn-pill:focus-visible {
+      outline: none;
+      box-shadow: var(--focus-ring);
+    }
+
+    /* Primary Action Pill (Cisco Indigo) */
+    .btn-indigo {
+      background: var(--cisco-indigo);
+      color: #ffffff;
+      border-color: var(--cisco-indigo);
+    }
+    .btn-indigo:hover {
+      background: var(--cisco-indigo-hover);
+      border-color: var(--cisco-indigo-hover);
+    }
+    .btn-indigo:active {
+      background: var(--cisco-indigo-active);
+      border-color: var(--cisco-indigo-active);
+    }
+
+    /* Signal Outline Pill (Cisco Blue on Dark) */
+    .btn-outline-signal {
+      background: transparent;
+      color: var(--accent);
+      border-color: var(--accent);
+    }
+    .btn-outline-signal:hover {
+      background: rgba(4, 159, 217, 0.12);
+      color: #ffffff;
+      border-color: var(--status-blue);
+    }
+    .btn-outline-signal:active {
+      background: rgba(4, 159, 217, 0.22);
+    }
+
+    /* Secondary Dark Pill */
+    .btn-dark-pill {
+      background: transparent;
+      color: var(--fg-2);
+      border-color: var(--border);
+    }
+    .btn-dark-pill:hover {
+      background: var(--surface);
+      color: #ffffff;
+      border-color: var(--muted);
+    }
+
+    /* Telemetry Status Badges */
+    .status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 10px;
+      border-radius: var(--radius-pill);
+      font-size: 11px;
+      font-weight: 700;
+      font-family: var(--font-mono);
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      line-height: 1;
+    }
+    .status-badge.ok {
+      background: rgba(108, 192, 74, 0.15);
+      color: var(--success);
+      border: 1px solid rgba(108, 192, 74, 0.3);
+    }
+    .status-badge.warn {
+      background: rgba(255, 204, 0, 0.15);
+      color: var(--warn);
+      border: 1px solid rgba(255, 204, 0, 0.3);
+    }
+    .status-badge.danger {
+      background: rgba(207, 32, 48, 0.15);
+      color: var(--danger);
+      border: 1px solid rgba(207, 32, 48, 0.3);
+    }
+    .status-badge.signal {
+      background: rgba(4, 159, 217, 0.15);
+      color: var(--accent);
+      border: 1px solid rgba(4, 159, 217, 0.3);
+    }
+    .status-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: currentColor;
+    }
+
+    /* ─────────────────────────────────────────────────────────────────────────
+     * NAVIGATION MASTHEAD (Dark Glass Product Chrome)
+     * ───────────────────────────────────────────────────────────────────────── */
+    .cisco-nav {
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      background: rgba(15, 23, 32, 0.88);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border-soft);
+      height: 72px;
+      display: flex;
+      align-items: center;
+    }
+    .nav-wrapper {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+      gap: var(--space-4);
+    }
+    .cisco-brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+      color: #ffffff;
+    }
+    /* Authentic Cisco Bridge Bars Logo Mark */
+    .cisco-bridge-logo {
+      display: flex;
+      align-items: flex-end;
+      gap: 3px;
+      height: 24px;
+    }
+    .cisco-bar {
+      width: 3.5px;
+      background: var(--accent);
+      border-radius: 1.5px;
+      transition: height var(--motion-fast) var(--ease-standard);
+    }
+    .cisco-wordmark {
+      font-size: 22px;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+      color: #ffffff;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: var(--space-1);
+      list-style: none;
+    }
+    @media (max-width: 990px) {
+      .nav-links { display: none; }
+    }
+    .nav-item {
+      padding: 8px 14px;
+      color: var(--fg-2);
+      font-size: var(--text-sm);
+      font-weight: 500;
+      text-decoration: none;
+      border-radius: var(--radius-pill);
+      transition: all var(--motion-fast) var(--ease-standard);
+      position: relative;
+    }
+    .nav-item:hover {
+      color: #ffffff;
+      background: rgba(232, 235, 241, 0.06);
+    }
+    .nav-item.active {
+      color: #ffffff;
+    }
+    .nav-item.active::after {
+      content: "";
+      position: absolute;
+      bottom: -16px;
+      left: 14px;
+      right: 14px;
+      height: 2px;
+      background: var(--accent);
+    }
+
+    .nav-right-actions {
+      display: flex;
+      align-items: center;
+      gap: var(--space-3);
+    }
+
+    /* ─────────────────────────────────────────────────────────────────────────
+     * HERO SECTION (High-Confidence Global Enterprise Positioning)
+     * ───────────────────────────────────────────────────────────────────────── */
+    .cisco-hero {
+      padding-top: var(--section-y-desktop);
+      padding-bottom: 72px;
+      position: relative;
+      overflow: hidden;
+    }
+    /* Subtle infrastructure mesh backdrop */
+    .hero-glow-accent {
+      position: absolute;
+      top: -120px;
+      right: 5%;
+      width: 540px;
+      height: 540px;
+      background: radial-gradient(circle, rgba(4, 159, 217, 0.09) 0%, rgba(15, 23, 32, 0) 70%);
+      pointer-events: none;
+    }
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1.2fr 1fr;
+      gap: var(--space-12);
+      align-items: center;
+    }
+    @media (max-width: 1024px) {
+      .hero-grid { grid-template-columns: 1fr; gap: var(--space-8); }
+    }
+
+    .hero-statement {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-4);
+    }
+    .hero-headline {
+      color: #ffffff;
+    }
+    .hero-headline span.signal-blue {
+      color: var(--accent);
+    }
+    .hero-actions {
+      display: flex;
+      align-items: center;
+      gap: var(--space-4);
+      margin-top: var(--space-4);
+      flex-wrap: wrap;
+    }
+
+    /* Key Infrastructure Telemetry Metrics Ribbon */
+    .metrics-ticker-panel {
+      background: var(--surface);
+      border: 1px solid var(--border-soft);
+      border-radius: var(--radius-md);
+      padding: var(--space-6);
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: var(--space-4);
+      box-shadow: var(--elev-raised);
+    }
+    .metric-module {
+      padding: var(--space-3);
+      border-left: 2px solid var(--accent);
+      background: rgba(15, 23, 32, 0.4);
+      border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+    }
+    .metric-value {
+      font-size: 32px;
+      font-weight: 600;
+      color: #ffffff;
+      font-family: var(--font-mono);
+      line-height: 1.1;
+    }
+    .metric-label {
+      font-size: var(--text-xs);
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-top: 4px;
+    }
+    .metric-delta {
+      font-size: 11px;
+      color: var(--success);
+      font-family: var(--font-mono);
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      margin-top: 2px;
+    }
+
+    /* ─────────────────────────────────────────────────────────────────────────
+     * BRAND RECIPE 1: NETWORK TELEMETRY CARDS
+     * ───────────────────────────────────────────────────────────────────────── */
+    .section-telemetry {
+      padding-block: var(--section-y-desktop);
+      background: var(--surface-card);
+      border-top: 1px solid var(--border-soft);
+    }
+    .telemetry-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: var(--space-6);
+      margin-top: var(--space-8);
+    }
+    @media (max-width: 1024px) {
+      .telemetry-grid { grid-template-columns: 1fr; }
+    }
+
+    .telemetry-card {
+      background: var(--surface);
+      border: 1px solid var(--border-soft);
+      border-radius: var(--radius-md);
+      padding: var(--space-6);
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-3);
+      transition: border-color var(--motion-fast) var(--ease-standard);
+      position: relative;
+    }
+    .telemetry-card:hover {
+      border-color: var(--accent);
+    }
+    .telemetry-card.selected {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 1px var(--accent);
+    }
+    .telemetry-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .telemetry-num {
+      font-size: 40px;
+      font-family: var(--font-mono);
+      font-weight: 600;
+      color: #ffffff;
+      line-height: 1.1;
+      margin-top: var(--space-1);
+    }
+    .telemetry-sub {
+      font-size: var(--text-sm);
+      color: var(--muted);
+    }
+
+    /* SVG Sparkline Graph */
+    .sparkline-container {
+      height: 60px;
+      width: 100%;
+      margin-block: var(--space-2);
+    }
+    .sparkline-svg {
+      width: 100%;
+      height: 100%;
+      overflow: visible;
+    }
+    .sparkline-path {
+      fill: none;
+      stroke: var(--accent);
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+    .sparkline-fill {
+      fill: url(#blueGradient);
+      opacity: 0.15;
+    }
+    .telemetry-footer {
+      border-top: 1px solid rgba(232, 235, 241, 0.08);
+      padding-top: var(--space-3);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: var(--text-xs);
+      color: var(--muted);
+      font-family: var(--font-mono);
+    }
+
+    /* ─────────────────────────────────────────────────────────────────────────
+     * BRAND RECIPE 2: INTERACTIVE TOPOLOGY / PRODUCT DIAGRAM MODULE
+     * ───────────────────────────────────────────────────────────────────────── */
+    .section-topology {
+      padding-block: var(--section-y-desktop);
+      background: var(--bg);
+      border-top: 1px solid var(--border-soft);
+    }
+    .topology-container {
+      background: var(--surface);
+      border: 1px solid var(--border-soft);
+      border-radius: var(--radius-md);
+      padding: var(--space-6);
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-4);
+      margin-top: var(--space-8);
+      position: relative;
+    }
+    .topology-header-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: var(--space-3);
+      padding-bottom: var(--space-3);
+      border-bottom: 1px solid var(--border-soft);
+    }
+
+    /* System Canvas Stage */
+    .topology-canvas-stage {
+      height: 380px;
+      background: #0b1118;
+      border: 1px solid rgba(88, 88, 91, 0.3);
+      border-radius: var(--radius-sm);
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: space-around;
+      padding: var(--space-6);
+    }
+    /* Grid texture */
+    .topology-canvas-stage::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background-image: radial-gradient(rgba(232, 235, 241, 0.08) 1px, transparent 1px);
+      background-size: 24px 24px;
+      pointer-events: none;
+    }
+
+    /* Node Chips */
+    .topology-node {
+      width: 140px;
+      background: var(--surface-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: var(--space-3);
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      position: relative;
+      z-index: 5;
+      cursor: pointer;
+      transition: all var(--motion-fast) var(--ease-standard);
+    }
+    .topology-node:hover, .topology-node.active {
+      border-color: var(--accent);
+      background: var(--surface-warm);
+      box-shadow: 0 0 20px rgba(4, 159, 217, 0.25);
+    }
+    .node-title {
+      font-size: var(--text-xs);
+      font-weight: 700;
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .node-status-badge {
+      font-size: 9px;
+      font-family: var(--font-mono);
+      color: var(--success);
+    }
+    .node-metric {
+      font-size: 11px;
+      font-family: var(--font-mono);
+      color: var(--muted);
+    }
+
+    /* SVG Connectivity Overlay */
+    .topology-svg-wire {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 2;
+    }
+    .network-path {
+      stroke: var(--accent);
+      stroke-width: 2;
+      stroke-dasharray: 6 6;
+      animation: packetFlow 1.2s linear infinite;
+    }
+    @keyframes packetFlow {
+      to { stroke-dashoffset: -24; }
+    }
+
+    /* Inspector Bar below Topology */
+    .topology-inspector {
+      background: var(--surface-card);
+      border: 1px solid var(--border-soft);
+      border-radius: var(--radius-sm);
+      padding: var(--space-4);
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: var(--space-4);
+      font-size: var(--text-sm);
+    }
+    @media (max-width: 768px) {
+      .topology-inspector { grid-template-columns: 1fr 1fr; }
+    }
+
+    /* ─────────────────────────────────────────────────────────────────────────
+     * BRAND RECIPE 3: DENSE CONTROL PANEL / OPERATIONS CENTER
+     * ───────────────────────────────────────────────────────────────────────── */
+    .section-control {
+      padding-block: var(--section-y-desktop);
+      background: var(--surface-card);
+      border-top: 1px solid var(--border-soft);
+    }
+    .control-panel-frame {
+      background: var(--surface);
+      border: 1px solid var(--border-soft);
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      display: grid;
+      grid-template-columns: 220px 1fr 280px;
+      height: 560px;
+      margin-top: var(--space-8);
+      box-shadow: var(--elev-raised);
+    }
+    @media (max-width: 1100px) {
+      .control-panel-frame { grid-template-columns: 1fr; height: auto; }
+    }
+
+    /* Left Nav Rail */
+    .control-rail {
+      background: #121a24;
+      border-right: 1px solid var(--border-soft);
+      padding: var(--space-4);
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .rail-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 12px;
+      border-radius: var(--radius-sm);
+      color: var(--muted);
+      font-size: var(--text-sm);
+      font-weight: 500;
+      text-decoration: none;
+      cursor: pointer;
+      transition: all var(--motion-fast) var(--ease-standard);
+    }
+    .rail-item:hover, .rail-item.active {
+      color: #ffffff;
+      background: rgba(232, 235, 241, 0.08);
+    }
+    .rail-item.active {
+      border-left: 2px solid var(--accent);
+      color: var(--accent);
+    }
+    .rail-item svg { width: 16px; height: 16px; fill: currentColor; }
+
+    /* Center Content: Filter Bar & Table */
+    .control-center {
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      background: var(--bg);
+    }
+    .control-filter-bar {
+      padding: var(--space-3) var(--space-4);
+      border-bottom: 1px solid var(--border-soft);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--space-3);
+      background: var(--surface);
+    }
+    .control-search-input {
+      background: #0f1720;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-pill);
+      padding: 6px 14px;
+      color: #ffffff;
+      font-family: var(--font-body);
+      font-size: var(--text-xs);
+      outline: none;
+      width: 220px;
+    }
+    .control-search-input:focus {
+      border-color: var(--accent);
+      box-shadow: var(--focus-ring);
+    }
+
+    /* Dense Event Table */
+    .event-table-wrap {
+      flex: 1;
+      overflow-y: auto;
+    }
+    .event-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: var(--text-xs);
+      font-family: var(--font-mono);
+      text-align: left;
+    }
+    .event-table th {
+      background: #121a24;
+      color: var(--muted);
+      font-weight: 600;
+      padding: 10px 14px;
+      border-bottom: 1px solid var(--border-soft);
+      position: sticky;
+      top: 0;
+      z-index: 2;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .event-table td {
+      padding: 10px 14px;
+      border-bottom: 1px solid rgba(232, 235, 241, 0.05);
+      color: var(--fg-2);
+      white-space: nowrap;
+    }
+    .event-table tr:hover td {
+      background: rgba(4, 159, 217, 0.06);
+      color: #ffffff;
+      cursor: pointer;
+    }
+
+    /* Contextual Right Rail */
+    .control-right-rail {
+      background: #121a24;
+      border-left: 1px solid var(--border-soft);
+      padding: var(--space-4);
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-4);
+      overflow-y: auto;
+    }
+    .detail-property-row {
+      display: flex;
+      justify-content: space-between;
+      border-bottom: 1px solid rgba(232, 235, 241, 0.06);
+      padding-bottom: 6px;
+      font-size: var(--text-xs);
+    }
+
+    /* ─────────────────────────────────────────────────────────────────────────
+     * DESIGN SYSTEM SPEC & TOKEN PALETTE
+     * ───────────────────────────────────────────────────────────────────────── */
+    .section-spec {
+      padding-block: var(--section-y-desktop);
+      background: var(--bg);
+      border-top: 1px solid var(--border-soft);
+    }
+    .spec-sheet-box {
+      background: var(--surface);
+      border: 1px solid var(--border-soft);
+      border-radius: var(--radius-md);
+      padding: var(--space-8);
+      margin-top: var(--space-8);
+    }
+    .swatch-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+      gap: var(--space-4);
+      margin-top: var(--space-4);
+    }
+    .swatch-item {
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      overflow: hidden;
+      background: var(--surface-card);
+    }
+    .swatch-box { height: 60px; width: 100%; }
+    .swatch-text {
+      padding: 8px 10px;
+      font-size: var(--text-xs);
+    }
+    .swatch-name { font-weight: 600; color: #ffffff; }
+    .swatch-hex { font-family: var(--font-mono); color: var(--muted); }
+
+    /* ─────────────────────────────────────────────────────────────────────────
+     * ENTERPRISE FOOTER
+     * ───────────────────────────────────────────────────────────────────────── */
+    .cisco-footer {
+      background: #090d13;
+      border-top: 1px solid var(--border-soft);
+      padding-top: var(--space-16);
+      padding-bottom: var(--space-8);
+      font-size: var(--text-sm);
+    }
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 2fr repeat(3, 1fr);
+      gap: var(--space-8);
+      margin-bottom: var(--space-12);
+    }
+    @media (max-width: 900px) {
+      .footer-grid { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 500px) {
+      .footer-grid { grid-template-columns: 1fr; }
+    }
+    .footer-col h4 {
+      font-size: var(--text-sm);
+      font-weight: 600;
+      color: #ffffff;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: var(--space-4);
+    }
+    .footer-links {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .footer-links a {
+      color: var(--muted);
+      text-decoration: none;
+      transition: color var(--motion-fast) var(--ease-standard);
+    }
+    .footer-links a:hover {
+      color: var(--accent);
+    }
+    .footer-status-bar {
+      border-top: 1px solid rgba(232, 235, 241, 0.08);
+      padding-top: var(--space-6);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: var(--space-4);
+      color: var(--muted);
+      font-size: var(--text-xs);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- SVG Blue Gradient Definition for Telemetry Charts -->
+  <svg width="0" height="0" style="position: absolute;">
+    <defs>
+      <linearGradient id="blueGradient" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="#049fd9" stop-opacity="0.3"/>
+        <stop offset="100%" stop-color="#049fd9" stop-opacity="0"/>
+      </linearGradient>
+    </defs>
+  </svg>
+
+  <!-- ─────────────────────────────────────────────────────────────────────────
+       NAVIGATION MASTHEAD (Dark Glass Product Chrome)
+       ───────────────────────────────────────────────────────────────────────── -->
+  <header class="cisco-nav" role="banner">
+    <div class="container nav-wrapper">
+      <div style="display: flex; align-items: center; gap: var(--space-8);">
+        <!-- Cisco Bridge Icon & Wordmark -->
+        <a href="#hero" class="cisco-brand" aria-label="Cisco Systems">
+          <div class="cisco-bridge-logo" aria-hidden="true">
+            <span class="cisco-bar" style="height: 10px;"></span>
+            <span class="cisco-bar" style="height: 16px;"></span>
+            <span class="cisco-bar" style="height: 24px;"></span>
+            <span class="cisco-bar" style="height: 16px;"></span>
+            <span class="cisco-bar" style="height: 10px;"></span>
+          </div>
+          <span class="cisco-wordmark">CISCO</span>
+        </a>
+
+        <!-- Enterprise Navigation Links -->
+        <nav aria-label="Infrastructure Solutions">
+          <ul class="nav-links">
+            <li><a href="#telemetry" class="nav-item active">Telemetry</a></li>
+            <li><a href="#topology" class="nav-item">Topology</a></li>
+            <li><a href="#control" class="nav-item">Operations Center</a></li>
+            <li><a href="#spec" class="nav-item">Design System Spec</a></li>
+          </ul>
+        </nav>
+      </div>
+
+      <!-- Action Buttons (Cisco Indigo Pill & Signal Outline) -->
+      <div class="nav-right-actions">
+        <a href="#control" class="btn-pill btn-dark-pill" style="padding: 8px 18px; min-height: 38px; font-size: 14px;">
+          Global Status: 99.999%
+        </a>
+        <a href="#telemetry" class="btn-pill btn-indigo" style="padding: 8px 22px; min-height: 38px; font-size: 14px;">
+          Deploy Cluster
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- ─────────────────────────────────────────────────────────────────────────
+       HERO SECTION (High-Confidence Enterprise Infrastructure)
+       ───────────────────────────────────────────────────────────────────────── -->
+  <section class="cisco-hero" id="hero">
+    <div class="hero-glow-accent"></div>
+    <div class="container">
+      <div class="hero-grid">
+        
+        <div class="hero-statement">
+          <div class="eyebrow">
+            <span class="status-dot"></span>
+            ENTERPRISE NETWORK INFRASTRUCTURE
+          </div>
+          <h1 class="hero-headline">
+            Powering the world's most <span class="signal-blue">critical connections.</span>
+          </h1>
+          <p class="lead">
+            High-assurance networking, zero-trust cybersecurity, and full-stack observability engineered for planetary scale. Layered dark surfaces anchored by a single electric Cisco Blue trust signal.
+          </p>
+          
+          <div class="hero-actions">
+            <!-- Primary Action Pill (Cisco Indigo) -->
+            <a href="#control" class="btn-pill btn-indigo">
+              Launch Operations Center
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </a>
+            <!-- Signal Outline Pill (Cisco Blue outline) -->
+            <a href="#topology" class="btn-pill btn-outline-signal">
+              Inspect Topology
+            </a>
+          </div>
+        </div>
+
+        <!-- Telemetry Metrics Ticker Module -->
+        <aside class="metrics-ticker-panel" aria-label="Global Infrastructure Telemetry">
+          <div class="metric-module">
+            <div class="metric-value">48.2 Tbps</div>
+            <div class="metric-label">Aggregated Throughput</div>
+            <div class="metric-delta">▲ +14.2% peak load</div>
+          </div>
+          <div class="metric-module" style="border-left-color: var(--sage-green);">
+            <div class="metric-value">99.999%</div>
+            <div class="metric-label">Carrier-Grade SLA</div>
+            <div class="metric-delta" style="color: var(--sage-green);">✔ Zero route flap</div>
+          </div>
+          <div class="metric-module" style="border-left-color: var(--status-blue);">
+            <div class="metric-value">11.4 ms</div>
+            <div class="metric-label">Cross-Region Latency</div>
+            <div class="metric-delta" style="color: var(--status-blue);">▼ -2.8 ms optimized</div>
+          </div>
+          <div class="metric-module" style="border-left-color: var(--accent);">
+            <div class="metric-value">180+</div>
+            <div class="metric-label">Global SASE PoPs</div>
+            <div class="metric-delta">✔ Active failover</div>
+          </div>
+        </aside>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ─────────────────────────────────────────────────────────────────────────
+       BRAND RECIPE 1: NETWORK TELEMETRY CARDS
+       ───────────────────────────────────────────────────────────────────────── -->
+  <section class="section-telemetry" id="telemetry">
+    <div class="container">
+      <div style="display: flex; align-items: flex-end; justify-content: space-between; flex-wrap: wrap; gap: var(--space-4);">
+        <div>
+          <div class="eyebrow">RECIPE 01 · TELEMETRY IN ACTION</div>
+          <h2>Live Network Telemetry</h2>
+          <p class="lead" style="color: var(--muted);">Real-time packet flow, latency sparklines, and operational status states.</p>
+        </div>
+        <div style="display: flex; gap: var(--space-2);">
+          <button class="btn-pill btn-dark-pill" style="padding: 6px 14px; min-height: 36px; font-size: 13px;" onclick="simulateTelemetrySpike()">Simulate Load Surge</button>
+          <button class="btn-pill btn-outline-signal" style="padding: 6px 14px; min-height: 36px; font-size: 13px;" onclick="resetTelemetry()">Reset Baseline</button>
+        </div>
+      </div>
+
+      <div class="telemetry-grid">
+        
+        <!-- Card 1: Global Edge Ingress (Normal Operational) -->
+        <div class="telemetry-card selected" id="telemCard1">
+          <div class="telemetry-top">
+            <span class="eyebrow" style="color: var(--muted);">WAN EDGE INGRESS · POPS 01-44</span>
+            <span class="status-badge ok"><span class="status-dot"></span> OPERATIONAL</span>
+          </div>
+          <div class="telemetry-num" id="telemVal1">14.82 Gbps</div>
+          <div class="telemetry-sub">Silicon One ASICs running at nominal thermals</div>
+          
+          <!-- SVG Sparkline -->
+          <div class="sparkline-container">
+            <svg class="sparkline-svg" viewBox="0 0 300 60" preserveAspectRatio="none">
+              <polygon points="0,60 0,40 30,35 60,45 90,30 120,38 150,25 180,28 210,18 240,22 270,12 300,15 300,60" class="sparkline-fill" />
+              <path d="M0,40 L30,35 L60,45 L90,30 L120,38 L150,25 L180,28 L210,18 L240,22 L270,12 L300,15" class="sparkline-path" id="sparklinePath1" />
+            </svg>
+          </div>
+
+          <div class="telemetry-footer">
+            <span>BGP CONVERGENCE: 84ms</span>
+            <span>DROPS: 0.000%</span>
+          </div>
+        </div>
+
+        <!-- Card 2: Core Fabric Transit (High-Signal Blue Edge) -->
+        <div class="telemetry-card" id="telemCard2">
+          <div class="telemetry-top">
+            <span class="eyebrow" style="color: var(--muted);">SPINE FABRIC LATENCY · US-EAST</span>
+            <span class="status-badge signal"><span class="status-dot"></span> OPTIMIZED</span>
+          </div>
+          <div class="telemetry-num" id="telemVal2" style="color: var(--accent);">3.18 ms</div>
+          <div class="telemetry-sub">SRv6 dynamic segment routing engaged</div>
+
+          <div class="sparkline-container">
+            <svg class="sparkline-svg" viewBox="0 0 300 60" preserveAspectRatio="none">
+              <polygon points="0,60 0,25 30,22 60,26 90,20 120,18 150,24 180,15 210,16 240,12 270,14 300,10 300,60" class="sparkline-fill" />
+              <path d="M0,25 L30,22 L60,26 L90,20 L120,18 L150,24 L180,15 L210,16 L240,12 L270,14 L300,10" class="sparkline-path" style="stroke: var(--status-blue);" />
+            </svg>
+          </div>
+
+          <div class="telemetry-footer">
+            <span>FEC CORRECTION: ACTIVE</span>
+            <span>JITTER: 0.12ms</span>
+          </div>
+        </div>
+
+        <!-- Card 3: Multi-Cloud Interconnect (Warning / Advisory Escalation) -->
+        <div class="telemetry-card" id="telemCard3">
+          <div class="telemetry-top">
+            <span class="eyebrow" style="color: var(--muted);">SASE GATEWAY PEER · FRANKFURT</span>
+            <span class="status-badge warn" id="telemBadge3"><span class="status-dot"></span> DEGRADED ROUTE</span>
+          </div>
+          <div class="telemetry-num" id="telemVal3" style="color: var(--warn);">89.4% SAT</div>
+          <div class="telemetry-sub" id="telemSub3">Upstream ISP peer reporting link congestion</div>
+
+          <div class="sparkline-container">
+            <svg class="sparkline-svg" viewBox="0 0 300 60" preserveAspectRatio="none">
+              <path d="M0,45 L30,42 L60,40 L90,38 L120,30 L150,26 L180,20 L210,15 L240,12 L270,10 L300,8" class="sparkline-path" style="stroke: var(--warn);" id="sparklinePath3" />
+            </svg>
+          </div>
+
+          <div class="telemetry-footer">
+            <span id="telemAutoRem">REROUTING VIA AMSTERDAM</span>
+            <span>PEER ID: AS-2914</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ─────────────────────────────────────────────────────────────────────────
+       BRAND RECIPE 2: TOPOLOGY & PRODUCT DIAGRAM MODULE
+       ───────────────────────────────────────────────────────────────────────── -->
+  <section class="section-topology" id="topology">
+    <div class="container">
+      <div class="eyebrow">RECIPE 02 · TOPOLOGY DIAGRAM</div>
+      <h2>Dynamic Network Topology</h2>
+      <p class="lead" style="color: var(--muted);">
+        Interactive fabric canvas. Dark field first, Cisco Blue path highlight second, all other nodes muted until active.
+      </p>
+
+      <div class="topology-container">
+        <div class="topology-header-row">
+          <div style="display: flex; align-items: center; gap: 12px;">
+            <span style="font-size: var(--text-sm); font-weight: 600; color: #ffffff;">Fabric Schema: Catalyst 9000 Spine-Leaf</span>
+            <span class="status-badge ok"><span class="status-dot"></span> 4 NODES SYNCHRONIZED</span>
+          </div>
+          <div style="display: flex; gap: var(--space-2); font-size: 12px; color: var(--muted); font-family: var(--font-mono);">
+            <span>PROTOCOL: EVPN-VXLAN</span>
+            <span>•</span>
+            <span>MTU: 9216 JUMBO</span>
+          </div>
+        </div>
+
+        <!-- Interactive System Canvas -->
+        <div class="topology-canvas-stage" id="topologyCanvas">
+          <!-- Active Pulsing Wire Connections (SVG) -->
+          <svg class="topology-svg-wire">
+            <line x1="16%" y1="50%" x2="38%" y2="50%" class="network-path" />
+            <line x1="38%" y1="50%" x2="62%" y2="50%" class="network-path" />
+            <line x1="62%" y1="50%" x2="84%" y2="50%" class="network-path" />
+          </svg>
+
+          <!-- Node 1: Edge Router -->
+          <div class="topology-node active" id="node1" onclick="inspectNode('Edge Catalyst Router', 'C9800-40', '0.42 ms', '99.999%', '100G ZR+')">
+            <div class="node-title">
+              <span>Edge SD-WAN</span>
+              <span class="node-status-badge">OK</span>
+            </div>
+            <div class="node-metric">IP: 10.240.0.1</div>
+            <div class="node-metric">Load: 34.2%</div>
+          </div>
+
+          <!-- Node 2: Core Spine -->
+          <div class="topology-node" id="node2" onclick="inspectNode('Core Spine 8000', 'Silicon One G100', '0.12 ms', '100%', '400G SR4')">
+            <div class="node-title">
+              <span>Core Spine 01</span>
+              <span class="node-status-badge">OK</span>
+            </div>
+            <div class="node-metric">IP: 10.240.10.4</div>
+            <div class="node-metric">Load: 58.6%</div>
+          </div>
+
+          <!-- Node 3: SASE Gateway -->
+          <div class="topology-node" id="node3" onclick="inspectNode('Cisco Secure Access PoP', 'SASE-FW-09', '1.14 ms', '99.98%', 'Dual 100G')">
+            <div class="node-title">
+              <span>SASE Gateway</span>
+              <span class="node-status-badge">OK</span>
+            </div>
+            <div class="node-metric">IP: 198.51.100.22</div>
+            <div class="node-metric">SSL Insp: Active</div>
+          </div>
+
+          <!-- Node 4: ThousandEyes Agent -->
+          <div class="topology-node" id="node4" onclick="inspectNode('ThousandEyes Observability Node', 'TE-Enterprise-Agent', '1.80 ms', 'OK', 'Synthetic Probe')">
+            <div class="node-title">
+              <span>ThousandEyes</span>
+              <span class="node-status-badge" style="color: var(--accent);">MONITOR</span>
+            </div>
+            <div class="node-metric">IP: 198.51.100.89</div>
+            <div class="node-metric">Loss: 0.00%</div>
+          </div>
+        </div>
+
+        <!-- Node Inspection Detail Bar -->
+        <div class="topology-inspector" id="nodeInspector">
+          <div>
+            <span style="color: var(--muted); font-size: 11px; text-transform: uppercase;">Selected Node</span>
+            <div style="color: #ffffff; font-weight: 600;" id="inspTitle">Edge Catalyst Router</div>
+          </div>
+          <div>
+            <span style="color: var(--muted); font-size: 11px; text-transform: uppercase;">Hardware Architecture</span>
+            <div class="mono" style="color: var(--accent);" id="inspHw">C9800-40 (Silicon One)</div>
+          </div>
+          <div>
+            <span style="color: var(--muted); font-size: 11px; text-transform: uppercase;">Port Latency</span>
+            <div class="mono" style="color: var(--success);" id="inspLat">0.42 ms</div>
+          </div>
+          <div>
+            <span style="color: var(--muted); font-size: 11px; text-transform: uppercase;">Transceiver Interface</span>
+            <div class="mono" style="color: #ffffff;" id="inspTrans">100G ZR+ Coherent</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─────────────────────────────────────────────────────────────────────────
+       BRAND RECIPE 3: DENSE CONTROL PANEL / OPERATIONS CENTER
+       ───────────────────────────────────────────────────────────────────────── -->
+  <section class="section-control" id="control">
+    <div class="container">
+      <div class="eyebrow">RECIPE 03 · DENSE CONTROL PANEL</div>
+      <h2>Enterprise Operations Center</h2>
+      <p class="lead" style="color: var(--muted);">
+        Left navigation rail, filter bar, telemetry log table with status escalation, and contextual telemetry rail.
+      </p>
+
+      <div class="control-panel-frame">
+        
+        <!-- Left Navigation Rail -->
+        <aside class="control-rail" aria-label="Operations Navigation">
+          <div style="font-size: 11px; font-weight: 700; color: var(--muted); text-transform: uppercase; padding: 6px 12px; letter-spacing: 0.5px;">Navigation Rail</div>
+          
+          <div class="rail-item active" onclick="switchRailTab(this, 'Telemetry')">
+            <svg viewBox="0 0 24 24"><path d="M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm0-18v6h8V3h-8z"/></svg>
+            <span>Telemetry</span>
+          </div>
+          <div class="rail-item" onclick="switchRailTab(this, 'Topology')">
+            <svg viewBox="0 0 24 24"><path d="M16 11V3H8v6H2v12h8v-6h4v6h8V11h-6z"/></svg>
+            <span>Topology Map</span>
+          </div>
+          <div class="rail-item" onclick="switchRailTab(this, 'Incidents')">
+            <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>
+            <span>Incident Stream</span>
+          </div>
+          <div class="rail-item" onclick="switchRailTab(this, 'Security')">
+            <svg viewBox="0 0 24 24"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"/></svg>
+            <span>Zero-Trust Policy</span>
+          </div>
+          <div class="rail-item" onclick="switchRailTab(this, 'Audit')">
+            <svg viewBox="0 0 24 24"><path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/></svg>
+            <span>Compliance Logs</span>
+          </div>
+        </aside>
+
+        <!-- Center: Filter Bar & Event Table -->
+        <div class="control-center">
+          <div class="control-filter-bar">
+            <div style="display: flex; align-items: center; gap: 8px;">
+              <input type="text" class="control-search-input" placeholder="Filter node ID, IP or route..." onkeyup="filterLogTable(this.value)" />
+              <select style="background: #0f1720; border: 1px solid var(--border); border-radius: var(--radius-pill); color: #fff; font-size: 11px; padding: 4px 10px; outline: none;" onchange="filterSeverity(this.value)">
+                <option value="ALL">Severity: All</option>
+                <option value="CRITICAL">Critical only</option>
+                <option value="WARNING">Warning / Degraded</option>
+                <option value="HEALTHY">Operational OK</option>
+              </select>
+            </div>
+            <div style="font-size: 11px; font-family: var(--font-mono); color: var(--muted);">
+              LIVE STREAM · 240 EPS
+            </div>
+          </div>
+
+          <div class="event-table-wrap">
+            <table class="event-table" id="incidentTable">
+              <thead>
+                <tr>
+                  <th>Timestamp</th>
+                  <th>Device Identifier</th>
+                  <th>Interface</th>
+                  <th>Severity</th>
+                  <th>Event Description</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr onclick="selectIncidentRow('21:18:42.102', 'spine-chicago-01', 'Eth100/1/1', 'HEALTHY', 'BGP EVPN session established; 420 routes learned.')">
+                  <td style="color: var(--muted);">21:18:42.102</td>
+                  <td style="color: #ffffff;">spine-chicago-01</td>
+                  <td>Eth100/1/1</td>
+                  <td><span class="status-badge ok"><span class="status-dot"></span> HEALTHY</span></td>
+                  <td>BGP EVPN session established; 420 routes learned.</td>
+                </tr>
+                <tr onclick="selectIncidentRow('21:18:39.892', 'gw-frankfurt-04', 'TenGigE0/0/0/2', 'WARNING', 'BGP route flap detected on upstream transit peer.')">
+                  <td style="color: var(--muted);">21:18:39.892</td>
+                  <td style="color: #ffffff;">gw-frankfurt-04</td>
+                  <td>TenGigE0/0/0/2</td>
+                  <td><span class="status-badge warn"><span class="status-dot"></span> WARNING</span></td>
+                  <td>BGP route flap detected on upstream transit peer.</td>
+                </tr>
+                <tr onclick="selectIncidentRow('21:18:35.401', 'sase-pop-tokyo', 'Tunnel-404', 'HEALTHY', 'Zero-Trust mutual TLS certificate rotated successfully.')">
+                  <td style="color: var(--muted);">21:18:35.401</td>
+                  <td style="color: #ffffff;">sase-pop-tokyo</td>
+                  <td>Tunnel-404</td>
+                  <td><span class="status-badge ok"><span class="status-dot"></span> HEALTHY</span></td>
+                  <td>Zero-Trust mutual TLS certificate rotated successfully.</td>
+                </tr>
+                <tr onclick="selectIncidentRow('21:18:22.019', 'core-london-02', 'FortyGig0/2', 'HEALTHY', 'LACP aggregation bundle restored to full bandwidth.')">
+                  <td style="color: var(--muted);">21:18:22.019</td>
+                  <td style="color: #ffffff;">core-london-02</td>
+                  <td>FortyGig0/2</td>
+                  <td><span class="status-badge ok"><span class="status-dot"></span> HEALTHY</span></td>
+                  <td>LACP aggregation bundle restored to full bandwidth.</td>
+                </tr>
+                <tr onclick="selectIncidentRow('21:18:14.542', 'edge-sydney-01', 'GigE0/0/1', 'CRITICAL', 'Power supply module PSU-B lost redundancy feed.')">
+                  <td style="color: var(--muted);">21:18:14.542</td>
+                  <td style="color: #ffffff;">edge-sydney-01</td>
+                  <td>GigE0/0/1</td>
+                  <td><span class="status-badge danger"><span class="status-dot"></span> CRITICAL</span></td>
+                  <td>Power supply module PSU-B lost redundancy feed.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Contextual Right Rail -->
+        <aside class="control-right-rail" aria-label="Incident Inspector">
+          <span style="font-size: 11px; font-weight: 700; color: var(--accent); text-transform: uppercase; letter-spacing: 0.5px;">Contextual Telemetry</span>
+          
+          <div style="background: rgba(15, 23, 32, 0.6); padding: var(--space-3); border-radius: var(--radius-sm); border: 1px solid var(--border-soft);">
+            <div style="font-size: 12px; font-weight: 600; color: #ffffff;" id="ctxDevice">spine-chicago-01</div>
+            <div style="font-size: 11px; color: var(--muted); font-family: var(--font-mono);" id="ctxTime">21:18:42.102 UTC</div>
+          </div>
+
+          <div style="display: flex; flex-direction: column; gap: 8px;">
+            <div class="detail-property-row">
+              <span style="color: var(--muted);">Interface</span>
+              <span class="mono" id="ctxIface" style="color: #ffffff;">Eth100/1/1</span>
+            </div>
+            <div class="detail-property-row">
+              <span style="color: var(--muted);">Telemetry Severity</span>
+              <span class="mono" id="ctxSev" style="color: var(--success);">HEALTHY (Code 0)</span>
+            </div>
+            <div class="detail-property-row">
+              <span style="color: var(--muted);">Chassis MTU</span>
+              <span class="mono">9216 Bytes</span>
+            </div>
+            <div class="detail-property-row">
+              <span style="color: var(--muted);">QoS Queue Buffer</span>
+              <span class="mono">14.2% Occupied</span>
+            </div>
+          </div>
+
+          <div style="margin-top: auto;">
+            <button class="btn-pill btn-indigo" style="width: 100%; font-size: 13px; min-height: 40px;" onclick="acknowledgeIncident()">
+              Acknowledge & Remediate
+            </button>
+          </div>
+        </aside>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ─────────────────────────────────────────────────────────────────────────
+       DESIGN SYSTEM SPECIFICATION & COLOR TOKENS
+       ───────────────────────────────────────────────────────────────────────── -->
+  <section class="section-spec" id="spec">
+    <div class="container">
+      <div class="eyebrow">SYSTEM ARCHITECTURE SPECIFICATION</div>
+      <h2>Cisco Design System Tokens</h2>
+      <p class="lead" style="color: var(--muted);">
+        Disciplined navy-charcoal surfaces, electric Cisco Blue trust signal, and clear operational state semantics.
+      </p>
+
+      <div class="spec-sheet-box">
+        <h3 style="font-size: 20px; margin-bottom: 6px;">Palette & Roles</h3>
+        <p style="font-size: 14px; color: var(--muted);">Exact values specified in Cisco DESIGN.md §2 and tokens.css.</p>
+
+        <div class="swatch-grid">
+          <div class="swatch-item">
+            <div class="swatch-box" style="background: #049fd9;"></div>
+            <div class="swatch-text">
+              <div class="swatch-name">Cisco Blue</div>
+              <div class="swatch-hex">#049fd9</div>
+            </div>
+          </div>
+
+          <div class="swatch-item">
+            <div class="swatch-box" style="background: #005073;"></div>
+            <div class="swatch-text">
+              <div class="swatch-name">Cisco Indigo</div>
+              <div class="swatch-hex">#005073</div>
+            </div>
+          </div>
+
+          <div class="swatch-item">
+            <div class="swatch-box" style="background: #64bbe3;"></div>
+            <div class="swatch-text">
+              <div class="swatch-name">Status Blue</div>
+              <div class="swatch-hex">#64bbe3</div>
+            </div>
+          </div>
+
+          <div class="swatch-item">
+            <div class="swatch-box" style="background: #2b5592;"></div>
+            <div class="swatch-text">
+              <div class="swatch-name">Dark Blue</div>
+              <div class="swatch-hex">#2b5592</div>
+            </div>
+          </div>
+
+          <div class="swatch-item">
+            <div class="swatch-box" style="background: #0f1720; border-bottom: 1px solid var(--border);"></div>
+            <div class="swatch-text">
+              <div class="swatch-name">Primary Canvas</div>
+              <div class="swatch-hex">#0f1720</div>
+            </div>
+          </div>
+
+          <div class="swatch-item">
+            <div class="swatch-box" style="background: #1b2530; border-bottom: 1px solid var(--border);"></div>
+            <div class="swatch-text">
+              <div class="swatch-name">Surface Container</div>
+              <div class="swatch-hex">#1b2530</div>
+            </div>
+          </div>
+
+          <div class="swatch-item">
+            <div class="swatch-box" style="background: #39393b; border-bottom: 1px solid var(--border);"></div>
+            <div class="swatch-text">
+              <div class="swatch-name">Dark Gray 1</div>
+              <div class="swatch-hex">#39393b</div>
+            </div>
+          </div>
+
+          <div class="swatch-item">
+            <div class="swatch-box" style="background: #58585b;"></div>
+            <div class="swatch-text">
+              <div class="swatch-name">Dark Gray 2 (Border)</div>
+              <div class="swatch-hex">#58585b</div>
+            </div>
+          </div>
+
+          <div class="swatch-item">
+            <div class="swatch-box" style="background: #abc233;"></div>
+            <div class="swatch-text">
+              <div class="swatch-name">Sage Green (Health)</div>
+              <div class="swatch-hex">#abc233</div>
+            </div>
+          </div>
+
+          <div class="swatch-item">
+            <div class="swatch-box" style="background: #6cc04a;"></div>
+            <div class="swatch-text">
+              <div class="swatch-name">Status Green (OK)</div>
+              <div class="swatch-hex">#6cc04a</div>
+            </div>
+          </div>
+
+          <div class="swatch-item">
+            <div class="swatch-box" style="background: #ffcc00;"></div>
+            <div class="swatch-text">
+              <div class="swatch-name">Status Yellow (Warn)</div>
+              <div class="swatch-hex">#ffcc00</div>
+            </div>
+          </div>
+
+          <div class="swatch-item">
+            <div class="swatch-box" style="background: #cf2030;"></div>
+            <div class="swatch-text">
+              <div class="swatch-name">Status Red (Critical)</div>
+              <div class="swatch-hex">#cf2030</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Interactive Focus Halo Demonstrator -->
+        <div style="margin-top: var(--space-8); padding-top: var(--space-6); border-top: 1px solid var(--border-soft);">
+          <h4 style="font-size: 16px; margin-bottom: 8px;">Cisco Accessible Focus Halo Pairing</h4>
+          <p style="font-size: 14px; color: var(--muted); margin-bottom: var(--space-4);">
+            2px outer halo in Status Blue (#64bbe3) paired with a 1px white inner keyline for high contrast against dark surfaces.
+          </p>
+          <div style="display: flex; gap: var(--space-4); align-items: center; flex-wrap: wrap;">
+            <button class="btn-pill btn-indigo" style="box-shadow: var(--focus-ring);">Focused Primary Pill</button>
+            <button class="btn-pill btn-outline-signal" style="box-shadow: var(--focus-ring);">Focused Signal Pill</button>
+            <input type="text" value="Accessible keyboard focus active" class="control-search-input" style="width: 260px; box-shadow: var(--focus-ring);" readonly />
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─────────────────────────────────────────────────────────────────────────
+       ENTERPRISE FOOTER
+       ───────────────────────────────────────────────────────────────────────── -->
+  <footer class="cisco-footer" role="contentinfo">
+    <div class="container">
+      <div class="footer-grid">
+        <div>
+          <div class="cisco-brand" style="margin-bottom: var(--space-3);">
+            <div class="cisco-bridge-logo">
+              <span class="cisco-bar" style="height: 10px;"></span>
+              <span class="cisco-bar" style="height: 16px;"></span>
+              <span class="cisco-bar" style="height: 24px;"></span>
+              <span class="cisco-bar" style="height: 16px;"></span>
+              <span class="cisco-bar" style="height: 10px;"></span>
+            </div>
+            <span class="cisco-wordmark">CISCO</span>
+          </div>
+          <p style="color: var(--muted); max-width: 320px; font-size: 13px; line-height: 1.5; margin-bottom: var(--space-4);">
+            Global leaders in enterprise networking, secure access service edge, and planetary-scale cloud observability systems.
+          </p>
+          <span class="mono" style="font-size: 11px; color: var(--muted);">© 2026 Cisco Systems, Inc. All rights reserved.</span>
+        </div>
+
+        <div class="footer-col">
+          <h4>Networking</h4>
+          <ul class="footer-links">
+            <li><a href="#telemetry">Catalyst 9000 Series</a></li>
+            <li><a href="#telemetry">Silicon One Architecture</a></li>
+            <li><a href="#topology">SD-WAN Edge Fabric</a></li>
+            <li><a href="#topology">EVPN-VXLAN Data Centers</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4>Security & Observability</h4>
+          <ul class="footer-links">
+            <li><a href="#control">Cisco Secure Access (SASE)</a></li>
+            <li><a href="#control">ThousandEyes Intelligence</a></li>
+            <li><a href="#control">AppDynamics Full-Stack</a></li>
+            <li><a href="#control">Zero-Trust Identity</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4>Trust & Operations</h4>
+          <ul class="footer-links">
+            <li><a href="#spec">Design System Specification</a></li>
+            <li><a href="#spec">Security Advisories</a></li>
+            <li><a href="#spec">Global Network Status</a></li>
+            <li><a href="#spec">SOC 2 Type II Reports</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="footer-status-bar">
+        <div style="display: flex; gap: var(--space-4); align-items: center;">
+          <span class="status-badge ok" style="font-size: 10px;"><span class="status-dot"></span> 182 / 182 POPS ACTIVE</span>
+          <span>Latency Floor: 1.14ms</span>
+          <span>BGP Route Health: 100.0%</span>
+        </div>
+        <div>
+          <span>Design System Reference: Cisco (Backend & Data Infrastructure)</span>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ─────────────────────────────────────────────────────────────────────────
+       CLIENT INTERACTION LOGIC
+       ───────────────────────────────────────────────────────────────────────── -->
+  <script>
+    // Simulate Telemetry Spike
+    function simulateTelemetrySpike() {
+      document.getElementById('telemVal1').textContent = "42.18 Gbps";
+      document.getElementById('telemVal1').style.color = "var(--warn)";
+      document.getElementById('sparklinePath1').setAttribute('d', 'M0,50 L30,48 L60,40 L90,32 L120,20 L150,14 L180,8 L210,6 L240,4 L270,5 L300,4');
+      
+      const card3 = document.getElementById('telemCard3');
+      card3.style.borderColor = "var(--danger)";
+      document.getElementById('telemVal3').textContent = "98.7% SAT";
+      document.getElementById('telemVal3').style.color = "var(--danger)";
+      document.getElementById('telemBadge3').className = "status-badge danger";
+      document.getElementById('telemBadge3').innerHTML = '<span class="status-dot"></span> CRITICAL CONGESTION';
+      document.getElementById('telemAutoRem').textContent = "EMERGENCY DIVERTER ENGAGED";
+    }
+
+    function resetTelemetry() {
+      document.getElementById('telemVal1').textContent = "14.82 Gbps";
+      document.getElementById('telemVal1').style.color = "#ffffff";
+      document.getElementById('sparklinePath1').setAttribute('d', 'M0,40 L30,35 L60,45 L90,30 L120,38 L150,25 L180,28 L210,18 L240,22 L270,12 L300,15');
+      
+      const card3 = document.getElementById('telemCard3');
+      card3.style.borderColor = "var(--border-soft)";
+      document.getElementById('telemVal3').textContent = "89.4% SAT";
+      document.getElementById('telemVal3').style.color = "var(--warn)";
+      document.getElementById('telemBadge3').className = "status-badge warn";
+      document.getElementById('telemBadge3').innerHTML = '<span class="status-dot"></span> DEGRADED ROUTE';
+      document.getElementById('telemAutoRem').textContent = "REROUTING VIA AMSTERDAM";
+    }
+
+    // Inspect Topology Nodes
+    function inspectNode(title, hw, lat, uptime, trans) {
+      document.querySelectorAll('.topology-node').forEach(n => n.classList.remove('active'));
+      event.currentTarget.classList.add('active');
+
+      document.getElementById('inspTitle').textContent = title;
+      document.getElementById('inspHw').textContent = hw;
+      document.getElementById('inspLat').textContent = lat;
+      document.getElementById('inspTrans').textContent = trans;
+    }
+
+    // Rail switcher in Operations Center
+    function switchRailTab(el, name) {
+      document.querySelectorAll('.rail-item').forEach(r => r.classList.remove('active'));
+      el.classList.add('active');
+    }
+
+    // Table row inspection
+    function selectIncidentRow(time, dev, iface, sev, desc) {
+      document.getElementById('ctxDevice').textContent = dev;
+      document.getElementById('ctxTime').textContent = time + ' UTC';
+      document.getElementById('ctxIface').textContent = iface;
+      
+      const ctxSev = document.getElementById('ctxSev');
+      ctxSev.textContent = sev;
+      if (sev === 'CRITICAL') {
+        ctxSev.style.color = "var(--danger)";
+      } else if (sev === 'WARNING') {
+        ctxSev.style.color = "var(--warn)";
+      } else {
+        ctxSev.style.color = "var(--success)";
+      }
+    }
+
+    function filterLogTable(query) {
+      const q = query.toLowerCase();
+      const rows = document.querySelectorAll('#incidentTable tbody tr');
+      rows.forEach(r => {
+        if (r.textContent.toLowerCase().includes(q)) {
+          r.style.display = '';
+        } else {
+          r.style.display = 'none';
+        }
+      });
+    }
+
+    function filterSeverity(sev) {
+      const rows = document.querySelectorAll('#incidentTable tbody tr');
+      rows.forEach(r => {
+        if (sev === 'ALL' || r.textContent.includes(sev)) {
+          r.style.display = '';
+        } else {
+          r.style.display = 'none';
+        }
+      });
+    }
+
+    function acknowledgeIncident() {
+      const dev = document.getElementById('ctxDevice').textContent;
+      alert(`Automated playbook deployed for ${dev}. Telemetry restored to baseline.`);
+    }
+  </script>
+</body>
+</html>

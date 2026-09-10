@@ -1,0 +1,1077 @@
+<!doctype html>
+<html lang="fr-FR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Renault — E-Tech 100% électrique & Hybride</title>
+  <meta name="description" content="Découvrez la gamme Renault E-Tech 100% électrique et hybride. Design audacieux, technologie de pointe et esprit pionnier français." />
+
+  <!-- Geometric font fallbacks matching NouvelR's architectural character -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Plus+Jakarta+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    /* ─────────────────────────────────────────────────────────────────
+       RENAULT DESIGN SYSTEM TOKENS
+       Strictly adhering to /design-systems/renault/DESIGN.md
+       ───────────────────────────────────────────────────────────────── */
+    @font-face {
+      font-family: 'NouvelR';
+      src: local('NouvelR-Bold'), local('NouvelR');
+      font-weight: 700;
+      font-style: normal;
+    }
+    @font-face {
+      font-family: 'NouvelR';
+      src: local('NouvelR-Regular'), local('NouvelR');
+      font-weight: 400;
+      font-style: normal;
+    }
+
+    :root {
+      /* Primary Foundations */
+      --rt-yellow-super:   #EFDF00; /* Renault Yellow (Pantone signature) */
+      --rt-yellow-soft:    #F8EB4C; /* Hover state for yellow CTA */
+      --rt-black:          #000000; /* Absolute Black */
+      --rt-white:          #FFFFFF; /* Pure White */
+      --rt-blue-interactive: #1883FD; /* Renault Blue - link hover color */
+
+      /* Surfaces & Neutrals */
+      --rt-charcoal:       #222222; /* Secondary dark surface */
+      --rt-pale-silver:    #F2F2F2; /* Alternate light surface */
+      --rt-warm-gray:      #D9D9D6; /* Warm Gray neutral for disabled/metadata */
+      --rt-border-gray:    #D1D1D1; /* Input borders */
+
+      /* Semantic Status */
+      --rt-color-success:  #8DC572;
+      --rt-color-error:    #BE6464;
+      --rt-color-warning:  #F0AD4E;
+      --rt-color-info:     #337AB7;
+
+      /* Typography: NouvelR is the sole family */
+      --font-nouvelr: "NouvelR", "Syne", "Plus Jakarta Sans", -apple-system, sans-serif;
+
+      /* Shadows */
+      --rt-shadow-lvl-1: rgba(0, 0, 0, 0.2) 0px 4px 8px;
+      --rt-shadow-lvl-2: rgba(0, 0, 0, 0.2) 0px 0px 18px;
+      --rt-shadow-lvl-3: rgba(0, 0, 0, 0) 0px 2px 4px, rgba(50, 50, 93, 0.1) 0px 7px 14px;
+      --rt-shadow-lvl-4: rgba(0, 0, 0, 0.15) 0px 40px 80px;
+      --rt-shadow-lvl-6: rgb(199, 197, 199) 0px 0px 12px 2px;
+
+      /* Transition */
+      --rt-transition: 150ms ease-in-out;
+    }
+
+    /* Reset & Base Rules */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      background-color: var(--rt-white);
+      color: var(--rt-black);
+      font-family: var(--font-nouvelr);
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    body {
+      background-color: var(--rt-white);
+      color: var(--rt-black);
+      font-size: 14px;
+      font-weight: 400;
+      line-height: 1.40;
+      overflow-x: hidden;
+    }
+
+    /* Global link behavior: hover shifts to Renault Blue (#1883FD) */
+    a {
+      color: var(--rt-black);
+      text-decoration: none;
+      transition: color var(--rt-transition);
+    }
+    a:hover {
+      color: var(--rt-blue-interactive) !important;
+    }
+
+    .container {
+      max-width: 1440px;
+      margin: 0 auto;
+      padding: 0 40px;
+    }
+
+    /* ─────────────────────────────────────────────────────────────────
+       NAVIGATION (White background, diamond logo, NouvelR 13px bold)
+       ───────────────────────────────────────────────────────────────── */
+    .rt-header {
+      background-color: var(--rt-white);
+      border-bottom: 1px solid var(--rt-pale-silver);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      height: 70px;
+    }
+
+    .header-content {
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    /* Renault Geometric Diamond Logo */
+    .brand-link {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .renault-diamond-icon {
+      width: 32px;
+      height: 40px;
+      position: relative;
+    }
+
+    .nav-menu {
+      display: flex;
+      align-items: center;
+      gap: 32px;
+      list-style: none;
+    }
+
+    .nav-item a {
+      font-size: 13px;
+      font-weight: 700;
+      line-height: 1.50;
+      color: var(--rt-black);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .header-tools {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+    }
+
+    /* Search Input: Explicit Pill Exception (50px radius) */
+    .rt-search-pill {
+      display: flex;
+      align-items: center;
+      position: relative;
+    }
+
+    .rt-search-input {
+      background-color: var(--rt-white);
+      color: var(--rt-black);
+      border: 1px solid var(--rt-border-gray);
+      border-radius: 50px; /* Pill radius exclusive to search */
+      padding: 6px 35px 6px 15px;
+      font-family: var(--font-nouvelr);
+      font-size: 12.8px;
+      outline: none;
+      width: 200px;
+      transition: width var(--rt-transition), border-color var(--rt-transition);
+    }
+    .rt-search-input:focus {
+      width: 240px;
+      border-color: var(--rt-black);
+    }
+
+    .search-icon-btn {
+      position: absolute;
+      right: 12px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      color: var(--rt-black);
+    }
+
+    /* ─────────────────────────────────────────────────────────────────
+       BUTTON SYSTEM: STRICT ZERO BORDER-RADIUS
+       (Precision engineering of pressed metal body panel)
+       ───────────────────────────────────────────────────────────────── */
+    .btn {
+      font-family: var(--font-nouvelr);
+      font-size: 14.4px;
+      font-weight: 700;
+      line-height: 1.00;
+      letter-spacing: 0.144px;
+      border-radius: 0px !important; /* STRICT ZERO RADIUS */
+      padding: 10px 15px;
+      min-height: 46px;
+      min-width: 46px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      text-transform: uppercase;
+      user-select: none;
+      outline: none;
+      transition: background-color var(--rt-transition), border-color var(--rt-transition), color var(--rt-transition);
+      text-decoration: none;
+    }
+
+    /* Super-Primary (Renault Yellow #EFDF00 - ONE CTA Per Screen) */
+    .btn-super-primary {
+      background-color: var(--rt-yellow-super);
+      color: var(--rt-black);
+      border: 1px solid var(--rt-yellow-super);
+    }
+    .btn-super-primary:hover {
+      background-color: var(--rt-yellow-soft);
+      border-color: var(--rt-yellow-soft);
+      color: var(--rt-black) !important;
+    }
+
+    /* Primary (Absolute Black #000000) */
+    .btn-primary {
+      background-color: var(--rt-black);
+      color: var(--rt-white);
+      border: 1px solid var(--rt-black);
+    }
+    .btn-primary:hover {
+      background-color: #222222;
+      border-color: #222222;
+      color: var(--rt-white) !important;
+    }
+
+    /* Inverted Primary (Pure White on Dark Canvas) */
+    .btn-primary-inverted {
+      background-color: var(--rt-white);
+      color: var(--rt-black);
+      border: 1px solid var(--rt-white);
+    }
+    .btn-primary-inverted:hover {
+      background-color: var(--rt-pale-silver);
+      border-color: var(--rt-pale-silver);
+      color: var(--rt-black) !important;
+    }
+
+    /* Ghost (Transparent outline button) */
+    .btn-ghost-dark {
+      background-color: transparent;
+      color: var(--rt-white);
+      border: 1px solid var(--rt-white);
+    }
+    .btn-ghost-dark:hover {
+      background-color: rgba(255, 255, 255, 0.12);
+      color: var(--rt-white) !important;
+    }
+
+    .btn-ghost-light {
+      background-color: transparent;
+      color: var(--rt-black);
+      border: 1px solid var(--rt-black);
+    }
+    .btn-ghost-light:hover {
+      background-color: rgba(0, 0, 0, 0.05);
+      color: var(--rt-black) !important;
+    }
+
+    /* ─────────────────────────────────────────────────────────────────
+       FULL-SCREEN HERO CAROUSEL: VIVID AURORA GRADIENT
+       (Magenta → Violet → Teal bleeding across viewport)
+       ───────────────────────────────────────────────────────────────── */
+    .hero-aurora-viewport {
+      position: relative;
+      width: 100%;
+      min-height: calc(100vh - 70px);
+      display: flex;
+      align-items: center;
+      background: #000000;
+      overflow: hidden;
+    }
+
+    /* Aurora gradient ribbons */
+    .aurora-canvas {
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at 80% 20%, rgba(225, 29, 114, 0.75) 0%, transparent 50%),
+                  radial-gradient(circle at 40% 60%, rgba(109, 40, 217, 0.7) 0%, transparent 60%),
+                  radial-gradient(circle at 15% 30%, rgba(13, 148, 136, 0.65) 0%, transparent 55%),
+                  linear-gradient(180deg, #050505 0%, #000000 100%);
+      filter: blur(40px);
+      transform: scale(1.1);
+      opacity: 0.9;
+    }
+
+    .hero-content-wrapper {
+      position: relative;
+      z-index: 2;
+      width: 100%;
+      padding: 80px 0;
+      display: grid;
+      grid-template-columns: 1.1fr 1fr;
+      align-items: center;
+      gap: 40px;
+    }
+
+    .hero-text-block {
+      color: var(--rt-white);
+    }
+
+    .hero-model-tag {
+      font-size: 13px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      color: var(--rt-yellow-super);
+      margin-bottom: 12px;
+      display: block;
+    }
+
+    /* NouvelR 56px / 0.95 line height (Lines nearly collide!) */
+    .hero-headline {
+      font-size: 56px;
+      font-weight: 700;
+      line-height: 0.95;
+      letter-spacing: -0.02em;
+      color: var(--rt-white);
+      text-transform: uppercase;
+      margin-bottom: 24px;
+    }
+
+    .hero-description {
+      font-size: 16px;
+      font-weight: 400;
+      line-height: 1.40;
+      color: var(--rt-warm-gray);
+      max-width: 520px;
+      margin-bottom: 36px;
+    }
+
+    .hero-actions-row {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    /* Dramatic vehicle silhouette showcase */
+    .hero-vehicle-stage {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .vehicle-svg-render {
+      width: 100%;
+      max-width: 620px;
+      height: auto;
+      filter: drop-shadow(0 25px 35px rgba(0, 0, 0, 0.85));
+    }
+
+    /* Carousel Slide Controls */
+    .carousel-indicators {
+      position: absolute;
+      bottom: 30px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 12px;
+      z-index: 10;
+    }
+
+    .carousel-dot {
+      width: 40px;
+      height: 3px;
+      background: rgba(255, 255, 255, 0.3);
+      cursor: pointer;
+      transition: background-color var(--rt-transition);
+    }
+    .carousel-dot.active {
+      background: var(--rt-yellow-super);
+    }
+
+    /* ─────────────────────────────────────────────────────────────────
+       CHESSBOARD ARCHITECTURE: ALTERNATING LIGHT / DARK SECTIONS
+       ───────────────────────────────────────────────────────────────── */
+    .section-editorial-light {
+      background-color: var(--rt-white);
+      color: var(--rt-black);
+      padding: 80px 0;
+    }
+
+    .section-e-tech-dark {
+      background-color: var(--rt-black);
+      color: var(--rt-white);
+      padding: 100px 0;
+      position: relative;
+    }
+
+    .section-headline {
+      font-size: 40px;
+      font-weight: 700;
+      line-height: 0.95;
+      text-transform: uppercase;
+      margin-bottom: 16px;
+    }
+
+    .section-subtitle {
+      font-size: 16px;
+      color: var(--rt-warm-gray);
+      margin-bottom: 48px;
+      max-width: 600px;
+    }
+
+    /* ─────────────────────────────────────────────────────────────────
+       PROMOCARDS: FULL-BLEED PHOTOGRAPHIC PANELS WITH TOP GRADIENT OVERLAY
+       Top overlay: linear-gradient(rgba(0,0,0,0.6) 0%, rgba(0,0,0,0) 40%)
+       Zero border-radius
+       ───────────────────────────────────────────────────────────────── */
+    .promocard-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 24px;
+      margin-top: 32px;
+    }
+
+    .promocard {
+      position: relative;
+      height: 460px;
+      border-radius: 0px !important;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 32px;
+      background-size: cover;
+      background-position: center;
+      transition: transform var(--rt-transition), box-shadow var(--rt-transition);
+    }
+    .promocard:hover {
+      box-shadow: var(--rt-shadow-lvl-1);
+    }
+
+    /* Required top gradient overlay for typography legibility over photo */
+    .promocard::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(rgba(0, 0, 0, 0.6) 0%, rgba(0, 0, 0, 0) 40%),
+                  linear-gradient(0deg, rgba(0, 0, 0, 0.8) 0%, rgba(0, 0, 0, 0) 45%);
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    .promocard-content-top {
+      position: relative;
+      z-index: 2;
+    }
+
+    .promocard-badge {
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--rt-yellow-super);
+      margin-bottom: 8px;
+      display: block;
+    }
+
+    .promocard-title {
+      font-size: 40px;
+      font-weight: 700;
+      line-height: 0.95;
+      color: var(--rt-white);
+      text-transform: uppercase;
+    }
+
+    .promocard-content-bottom {
+      position: relative;
+      z-index: 2;
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+    }
+
+    .promocard-desc {
+      font-size: 14px;
+      color: var(--rt-white);
+      max-width: 320px;
+      line-height: 1.4;
+    }
+
+    /* ─────────────────────────────────────────────────────────────────
+       VEHICLE RANGE SHOWCASE (Clean flat cards, 0px radius)
+       ───────────────────────────────────────────────────────────────── */
+    .vehicle-range-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 32px;
+      margin-top: 40px;
+    }
+
+    .vehicle-card {
+      border-radius: 0px;
+      background: var(--rt-white);
+      display: flex;
+      flex-direction: column;
+      transition: transform var(--rt-transition);
+    }
+    .vehicle-card:hover {
+      transform: translateY(-4px);
+    }
+
+    .vehicle-photo-box {
+      background: var(--rt-pale-silver);
+      height: 220px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      position: relative;
+    }
+
+    .vehicle-info {
+      padding: 24px 0 0;
+    }
+
+    .vehicle-name {
+      font-size: 24px;
+      font-weight: 700;
+      line-height: 0.95;
+      text-transform: uppercase;
+      color: var(--rt-black);
+      margin-bottom: 8px;
+    }
+
+    .vehicle-powertrain {
+      font-size: 12.8px;
+      color: #666;
+      margin-bottom: 12px;
+    }
+
+    .vehicle-price {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--rt-black);
+      margin-bottom: 20px;
+    }
+
+    .vehicle-actions {
+      display: flex;
+      gap: 12px;
+    }
+
+    /* ─────────────────────────────────────────────────────────────────
+       E-TECH SHOWCASE: DARK SECTION + ONE SUPER PRIMARY YELLOW CTA
+       ───────────────────────────────────────────────────────────────── */
+    .etech-feature-box {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 60px;
+      align-items: center;
+      margin-top: 40px;
+    }
+
+    .stat-strip {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+      margin: 36px 0;
+      border-top: 1px solid var(--rt-charcoal);
+      border-bottom: 1px solid var(--rt-charcoal);
+      padding: 24px 0;
+    }
+
+    .stat-item h3 {
+      font-size: 36px;
+      font-weight: 700;
+      line-height: 0.95;
+      color: var(--rt-yellow-super);
+      margin-bottom: 4px;
+    }
+
+    .stat-item p {
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--rt-warm-gray);
+    }
+
+    /* ─────────────────────────────────────────────────────────────────
+       TOKEN AUDIT TABLE
+       ───────────────────────────────────────────────────────────────── */
+    .spec-table-box {
+      background: var(--rt-charcoal);
+      padding: 32px;
+      margin-top: 60px;
+    }
+
+    .spec-table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+      font-size: 13px;
+    }
+
+    .spec-table th {
+      padding: 12px 16px;
+      border-bottom: 1px solid #333;
+      color: var(--rt-warm-gray);
+      text-transform: uppercase;
+    }
+
+    .spec-table td {
+      padding: 12px 16px;
+      border-bottom: 1px solid #292929;
+      color: var(--rt-white);
+    }
+
+    .color-chip {
+      display: inline-block;
+      width: 14px;
+      height: 14px;
+      margin-right: 8px;
+      vertical-align: middle;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    /* ─────────────────────────────────────────────────────────────────
+       FOOTER (NouvelR 13px bold links, clean multi-column)
+       ───────────────────────────────────────────────────────────────── */
+    .rt-footer {
+      background-color: var(--rt-white);
+      color: var(--rt-black);
+      border-top: 1px solid var(--rt-pale-silver);
+      padding: 60px 0 30px;
+    }
+
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1fr;
+      gap: 40px;
+      margin-bottom: 40px;
+    }
+
+    .footer-col h5 {
+      font-size: 13px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 18px;
+    }
+
+    .footer-col ul {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .footer-col a {
+      font-size: 13px;
+      font-weight: 400;
+      color: #555;
+    }
+
+    .footer-legal {
+      border-top: 1px solid var(--rt-pale-silver);
+      padding-top: 24px;
+      display: flex;
+      justify-content: space-between;
+      font-size: 10px;
+      color: #888;
+      text-transform: uppercase;
+    }
+
+    @media (max-width: 960px) {
+      .hero-content-wrapper { grid-template-columns: 1fr; }
+      .promocard-grid { grid-template-columns: 1fr; }
+      .vehicle-range-grid { grid-template-columns: 1fr; }
+      .etech-feature-box { grid-template-columns: 1fr; }
+      .footer-grid { grid-template-columns: 1fr 1fr; }
+      .nav-menu { display: none; }
+      .hero-headline { font-size: 40px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Sticky Navigation Bar -->
+  <header class="rt-header">
+    <div class="container header-content">
+      <div class="brand-link">
+        <!-- Iconic Renault Geometric Diamond SVG -->
+        <svg class="renault-diamond-icon" viewBox="0 0 100 125" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M50 5L92 50L50 95L8 50L50 5Z" stroke="#000000" stroke-width="8" stroke-linejoin="miter" stroke-miterlimit="4"/>
+          <path d="M50 25L72 50L50 75L28 50L50 25Z" stroke="#000000" stroke-width="6" stroke-linejoin="miter" stroke-miterlimit="4"/>
+        </svg>
+        <span style="font-size: 20px; font-weight: 700; letter-spacing: -0.5px; text-transform: uppercase;">Renault</span>
+      </div>
+
+      <nav>
+        <ul class="nav-menu">
+          <li class="nav-item"><a href="#hero">Véhicules</a></li>
+          <li class="nav-item"><a href="#etech">E-Tech Électrique</a></li>
+          <li class="nav-item"><a href="#promocards">Innovations</a></li>
+          <li class="nav-item"><a href="#range">Gamme &amp; Prix</a></li>
+          <li class="nav-item"><a href="#spec">Design Tokens</a></li>
+        </ul>
+      </nav>
+
+      <div class="header-tools">
+        <!-- Search Input Pill (Strict 50px radius exception for search only) -->
+        <div class="rt-search-pill">
+          <input type="text" class="rt-search-input" placeholder="Rechercher un modèle..." />
+          <button class="search-icon-btn" aria-label="Search">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <circle cx="11" cy="11" r="8"></circle>
+              <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+            </svg>
+          </button>
+        </div>
+
+        <a href="#etech" class="btn btn-primary" style="padding: 8px 18px; min-height: 38px;">
+          Configurateur
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Full-Screen Hero Carousel: Sweeping Aurora Gradient (Magenta / Violet / Teal) -->
+  <section id="hero" class="hero-aurora-viewport">
+    <div class="aurora-canvas"></div>
+
+    <div class="container">
+      <div class="hero-content-wrapper">
+        <div class="hero-text-block">
+          <span class="hero-model-tag">Nouvelle Vague &bull; 100% Électrique</span>
+          <!-- NouvelR 56px / 0.95 line-height -->
+          <h1 class="hero-headline">
+            Renault Scenic<br>E-Tech 100%<br>Électrique.
+          </h1>
+          <p class="hero-description">
+            Élu Voiture Européenne de l'Année 2024. Jusqu'à 625 km d'autonomie WLTP, toit panoramique Solarbay, et système OpenR link avec Google intégré.
+          </p>
+
+          <div class="hero-actions-row">
+            <!-- Binary Black/White CTA system on dark canvas -->
+            <button class="btn btn-primary-inverted">
+              Découvrir le modèle
+            </button>
+            <button class="btn btn-ghost-dark">
+              Essai gratuit
+            </button>
+          </div>
+        </div>
+
+        <div class="hero-vehicle-stage">
+          <!-- Stylized Modern Electric SUV Vector -->
+          <svg class="vehicle-svg-render" viewBox="0 0 600 320" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <ellipse cx="300" cy="270" rx="260" ry="20" fill="black" opacity="0.6" filter="blur(10px)" />
+            <!-- Vehicle Chassis -->
+            <path d="M50 210 Q60 170 110 160 L180 130 Q230 75 330 75 L450 85 Q510 110 550 165 L570 195 Q580 220 560 235 L520 240 Q500 190 440 190 Q380 190 360 240 L230 240 Q210 190 150 190 Q90 190 70 240 L45 235 Q35 220 50 210 Z" fill="url(#car-grad)" stroke="#ffffff" stroke-width="1.5"/>
+            <!-- Aerodynamic Cabin Glass -->
+            <path d="M195 130 L320 85 L440 92 Q490 115 515 155 L380 155 L195 130 Z" fill="#111827" stroke="#374151" stroke-width="1.5"/>
+            <!-- Diamond Blade Wheels -->
+            <circle cx="150" cy="235" r="42" fill="#18181b" stroke="#EFDF00" stroke-width="3"/>
+            <circle cx="150" cy="235" r="22" fill="#27272a" stroke="#ffffff" stroke-width="1.5"/>
+            <circle cx="440" cy="235" r="42" fill="#18181b" stroke="#EFDF00" stroke-width="3"/>
+            <circle cx="440" cy="235" r="22" fill="#27272a" stroke="#ffffff" stroke-width="1.5"/>
+            <!-- LED Signature Headlights -->
+            <path d="M545 175 L565 190 L535 192 Z" fill="#EFDF00"/>
+            <defs>
+              <linearGradient id="car-grad" x1="50" y1="75" x2="570" y2="240" gradientUnits="userSpaceOnUse">
+                <stop stop-color="#2a2e39"/>
+                <stop offset="0.4" stop-color="#1e222d"/>
+                <stop offset="0.8" stop-color="#0f1115"/>
+              </linearGradient>
+            </defs>
+          </svg>
+        </div>
+      </div>
+
+      <!-- Slide Indicator Dots -->
+      <div class="carousel-indicators">
+        <div class="carousel-dot active"></div>
+        <div class="carousel-dot"></div>
+        <div class="carousel-dot"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Editorial Section (Light Canvas: Chessboard rhythm) -->
+  <section id="promocards" class="section-editorial-light">
+    <div class="container">
+      <h2 class="section-headline">Campagnes &amp; Innovations</h2>
+      <p style="font-size: 16px; color: #555; max-width: 650px; margin-bottom: 32px;">
+        Des créations pensées pour vivre et vibrer. Découvrez les programmes d'innovation et les offres exclusives du mois.
+      </p>
+
+      <!-- PromoCards Grid with required linear-gradient overlay -->
+      <div class="promocard-grid">
+        <!-- Card 1: R5 E-Tech -->
+        <div class="promocard" style="background-image: linear-gradient(135deg, #1e1b4b 0%, #312e81 50%, #4338ca 100%);">
+          <div class="promocard-content-top">
+            <span class="promocard-badge">R5 Volts &bull; Révolution Pop</span>
+            <h3 class="promocard-title">Renault 5 E-Tech</h3>
+          </div>
+          <div class="promocard-content-bottom">
+            <p class="promocard-desc">
+              L'icône française renaît en 100% électrique. Autonomie jusqu'à 400 km, assistant avatar Reno, et charge bidirectionnelle V2G.
+            </p>
+            <button class="btn btn-primary-inverted">
+              Commander
+            </button>
+          </div>
+        </div>
+
+        <!-- Card 2: Rafale Hyper-Hybrid -->
+        <div class="promocard" style="background-image: linear-gradient(135deg, #064e3b 0%, #065f46 50%, #047857 100%);">
+          <div class="promocard-content-top">
+            <span class="promocard-badge">Haut de Gamme &bull; 300 ch</span>
+            <h3 class="promocard-title">Nouveau Rafale</h3>
+          </div>
+          <div class="promocard-content-bottom">
+            <p class="promocard-desc">
+              SUV coupé hybride rechargeable à traction intégrale 4x4. Châssis mis au point par Alpine et 1 000 km d'autonomie totale.
+            </p>
+            <button class="btn btn-ghost-dark">
+              Explorer
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section: E-Tech 100% Electric Showcase (Absolute Black #000000) -->
+  <!-- Features the ONE Super-Primary Renault Yellow (#EFDF00) CTA -->
+  <section id="etech" class="section-e-tech-dark">
+    <div class="container">
+      <div class="etech-feature-box">
+        <div>
+          <span style="font-size: 13px; font-weight: 700; letter-spacing: 1.5px; color: var(--rt-yellow-super); text-transform: uppercase;">
+            Électrification Pure
+          </span>
+          <h2 class="section-headline" style="color: var(--rt-white); margin-top: 12px;">
+            E-Tech electric powertrain.<br>L'énergie positive.
+          </h2>
+          <p style="font-size: 16px; color: var(--rt-warm-gray); line-height: 1.5; margin-top: 20px;">
+            Une motorisation synchrone à rotor bobiné sans terres rares, développée et produite en France. Rendement énergétique exceptionnel sur autoroute comme en milieu urbain.
+          </p>
+
+          <div class="stat-strip">
+            <div class="stat-item">
+              <h3>625 km</h3>
+              <p>Autonomie WLTP</p>
+            </div>
+            <div class="stat-item">
+              <h3>30 min</h3>
+              <p>15-80% Recharge DC</p>
+            </div>
+            <div class="stat-item">
+              <h3>220 ch</h3>
+              <p>Puissance moteur</p>
+            </div>
+          </div>
+
+          <!-- THE SINGLE SUPER-PRIMARY CTA ON THE SCREEN -->
+          <a href="#configure" class="btn btn-super-primary" style="padding: 12px 28px; font-size: 16px;">
+            Configurer mon E-Tech (#EFDF00)
+          </a>
+        </div>
+
+        <div style="background: var(--rt-charcoal); padding: 40px; border-left: 4px solid var(--rt-yellow-super);">
+          <h4 style="font-size: 20px; font-weight: 700; text-transform: uppercase; color: var(--rt-white); margin-bottom: 16px;">
+            OpenR Link &bull; Google Automotive
+          </h4>
+          <p style="font-size: 14px; color: var(--rt-warm-gray); line-height: 1.5; margin-bottom: 24px;">
+            Navigation connectée avec planificateur d'itinéraire électrique. Préchauffage automatique de la batterie à l'approche des bornes de recharge rapide Ionity.
+          </p>
+          <ul style="list-style: none; display: flex; flex-direction: column; gap: 12px; font-size: 13px; color: var(--rt-white);">
+            <li>✓ Google Maps avec calcul de charge en temps réel</li>
+            <li>✓ Plus de 50 applications embarquées (Waze, Amazon Music, EasyPark)</li>
+            <li>✓ Mises à jour à distance Firmware-Over-The-Air (FOTA)</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Design Token Verification Table -->
+      <div id="spec" class="spec-table-box">
+        <h4 style="font-size: 18px; font-weight: 700; text-transform: uppercase; color: var(--rt-white); margin-bottom: 20px;">
+          Renault Design System &bull; Token Verification
+        </h4>
+        <table class="spec-table">
+          <thead>
+            <tr>
+              <th>Token & Rôle</th>
+              <th>Valeur</th>
+              <th>Règle Spécifique (DESIGN.md)</th>
+              <th>Échantillon</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Super Primary</strong></td>
+              <td><code>#EFDF00</code> (Renault Yellow)</td>
+              <td>Réservé exclusivement au bouton de conversion suprême (1 par écran)</td>
+              <td><span class="color-chip" style="background: #EFDF00;"></span> Jaune Renault</td>
+            </tr>
+            <tr>
+              <td><strong>Absolute Black</strong></td>
+              <td><code>#000000</code></td>
+              <td>Toile sombre E-Tech, boutons primaires et titrage sur fond clair</td>
+              <td><span class="color-chip" style="background: #000000;"></span> Noir Absolu</td>
+            </tr>
+            <tr>
+              <td><strong>Interactive Blue</strong></td>
+              <td><code>#1883FD</code> (Renault Blue)</td>
+              <td>Couleur unique au survol de tous les liens textuels</td>
+              <td><span class="color-chip" style="background: #1883FD;"></span> Bleu Interaction</td>
+            </tr>
+            <tr>
+              <td><strong>Rayon de Bouton</strong></td>
+              <td><code>0px</code> (Zéro Radius)</td>
+              <td>Forme rectangulaire stricte non-négociable, min 46×46px</td>
+              <td>Bord franc</td>
+            </tr>
+            <tr>
+              <td><strong>Champ Recherche</strong></td>
+              <td><code>50px</code> (Pill Shape)</td>
+              <td>Dérogation exclusive pour les champs de formulaire / recherche</td>
+              <td>Pilule 50px</td>
+            </tr>
+            <tr>
+              <td><strong>Typographie</strong></td>
+              <td><code>NouvelR</code> (700 Bold)</td>
+              <td>Hauteur de ligne ultra-serrée 0.95 pour un impact architectural</td>
+              <td>56px / 0.95</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- Vehicle Range Catalog (Light Mode) -->
+  <section id="range" class="section-editorial-light">
+    <div class="container">
+      <h2 class="section-headline">La Gamme Complète</h2>
+      <p style="font-size: 16px; color: #555; margin-bottom: 40px;">
+        Explorez nos berlines, SUV et citadines électriques et hybrides.
+      </p>
+
+      <div class="vehicle-range-grid">
+        <!-- Model 1 -->
+        <div class="vehicle-card">
+          <div class="vehicle-photo-box">
+            <span style="font-size: 48px; font-weight: 800; color: #d1d5db;">MEGANE</span>
+          </div>
+          <div class="vehicle-info">
+            <h3 class="vehicle-name">Megane E-Tech</h3>
+            <p class="vehicle-powertrain">100% électrique &bull; 470 km d'autonomie</p>
+            <p class="vehicle-price">À partir de 34 000 € ou 260 €/mois</p>
+            <div class="vehicle-actions">
+              <button class="btn btn-ghost-light" style="flex: 1;">Configurer</button>
+              <button class="btn btn-primary" style="flex: 1;">Explorer</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Model 2 -->
+        <div class="vehicle-card">
+          <div class="vehicle-photo-box">
+            <span style="font-size: 48px; font-weight: 800; color: #d1d5db;">AUSTRAL</span>
+          </div>
+          <div class="vehicle-info">
+            <h3 class="vehicle-name">Renault Austral</h3>
+            <p class="vehicle-powertrain">E-Tech full hybrid 200 ch &bull; 4Control advanced</p>
+            <p class="vehicle-price">À partir de 36 500 € ou 310 €/mois</p>
+            <div class="vehicle-actions">
+              <button class="btn btn-ghost-light" style="flex: 1;">Configurer</button>
+              <button class="btn btn-primary" style="flex: 1;">Explorer</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Model 3 -->
+        <div class="vehicle-card">
+          <div class="vehicle-photo-box">
+            <span style="font-size: 48px; font-weight: 800; color: #d1d5db;">CAPTUR</span>
+          </div>
+          <div class="vehicle-info">
+            <h3 class="vehicle-name">Nouveau Captur</h3>
+            <p class="vehicle-powertrain">E-Tech full hybrid 145 ch &bull; Esprit Alpine</p>
+            <p class="vehicle-price">À partir de 25 900 € ou 190 €/mois</p>
+            <div class="vehicle-actions">
+              <button class="btn btn-ghost-light" style="flex: 1;">Configurer</button>
+              <button class="btn btn-primary" style="flex: 1;">Explorer</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Site Footer -->
+  <footer class="rt-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-col">
+          <div class="brand-link" style="margin-bottom: 16px;">
+            <svg class="renault-diamond-icon" viewBox="0 0 100 125" fill="none" style="width: 24px; height: 30px;">
+              <path d="M50 5L92 50L50 95L8 50L50 5Z" stroke="#000000" stroke-width="8"/>
+              <path d="M50 25L72 50L50 75L28 50L50 25Z" stroke="#000000" stroke-width="6"/>
+            </svg>
+            <span style="font-size: 16px; font-weight: 700; text-transform: uppercase;">Renault Group</span>
+          </div>
+          <p style="font-size: 13px; color: #666; line-height: 1.6; max-width: 320px;">
+            Pionnier de la mobilité électrique française. Véhicules conçus et assemblés en France dans le pôle industriel ElectriCity.
+          </p>
+        </div>
+
+        <div class="footer-col">
+          <h5>Véhicules</h5>
+          <ul>
+            <li><a href="#">Scenic E-Tech</a></li>
+            <li><a href="#">Renault 5 E-Tech</a></li>
+            <li><a href="#">Megane E-Tech</a></li>
+            <li><a href="#">Rafale Hybride</a></li>
+            <li><a href="#">Austral</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h5>Services & Énergie</h5>
+          <ul>
+            <li><a href="#">Bornes Mobilize Power Solutions</a></li>
+            <li><a href="#">Carte de recharge Mobilize</a></li>
+            <li><a href="#">Garantie batterie 8 ans</a></li>
+            <li><a href="#">Entretien E-Tech</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h5>Marque</h5>
+          <ul>
+            <li><a href="#">La Nouvelle Vague</a></li>
+            <li><a href="#">Design System NouvelR</a></li>
+            <li><a href="#">Histoire du Losange</a></li>
+            <li><a href="#">ElectriCity France</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="footer-legal">
+        <div>&copy; 2026 Renault S.A.S. Tous droits réservés.</div>
+        <div style="display: flex; gap: 24px;">
+          <a href="#" style="color: inherit;">Mentions Légales</a>
+          <a href="#" style="color: inherit;">Politique de Confidentialité</a>
+          <a href="#" style="color: inherit;">Gestion des Cookies</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>

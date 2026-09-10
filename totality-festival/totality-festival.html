@@ -1,0 +1,1163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Totality Festival — Cosmic Premium Design System</title>
+  <meta name="description" content="A cosmic-premium, glassmorphic dark design system capturing the visceral awe of a solar eclipse — obsidian surfaces, amber corona highlights, and cyan atmospheric accents.">
+
+  <!-- Typography as specified in DESIGN.md: Display=Space Grotesk, Body=Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    /* ==========================================================================
+       TOTALITY FESTIVAL DESIGN SYSTEM TOKENS — Exactly from DESIGN.md
+       ========================================================================== */
+    :root {
+      /* Obsidian Foundations */
+      --surface: #121318;
+      --surface-dim: #121318;
+      --surface-bright: #38393f;
+      --surface-container-lowest: #0d0e13;
+      --surface-container-low: #1a1b21;
+      --surface-container: #1e1f25;
+      --surface-container-high: #292a2f;
+      --surface-container-highest: #34343a;
+      --background: #121318;
+
+      /* Content on Surfaces */
+      --on-surface: #e3e1e9;
+      --on-surface-variant: #d0c6ab;
+      --on-background: #e3e1e9;
+      --inverse-surface: #e3e1e9;
+      --inverse-on-surface: #2f3036;
+
+      /* Outlines */
+      --outline: #999077;
+      --outline-variant: #4d4732;
+      --surface-tint: #e9c400;
+
+      /* Primary: Solar Corona & Diamond Ring Flash */
+      --primary: #fff6df;
+      --on-primary: #3a3000;
+      --primary-container: #ffd700;
+      --on-primary-container: #705e00;
+      --inverse-primary: #705d00;
+
+      /* Secondary: Ethereal Atmospheric Cyan */
+      --secondary: #bdf4ff;
+      --on-secondary: #00363d;
+      --secondary-container: #00e3fd;
+      --on-secondary-container: #00616d;
+
+      /* Tertiary: Celestial Indigo & Lavender Haze */
+      --tertiary: #fcf3ff;
+      --on-tertiary: #3b2754;
+      --tertiary-container: #e7d1ff;
+      --on-tertiary-container: #6b5586;
+
+      /* Error States */
+      --error: #ffb4ab;
+      --on-error: #690005;
+      --error-container: #93000a;
+      --on-error-container: #ffdad6;
+
+      /* Glassmorphism Levels */
+      --glass-surface-2: rgba(52, 52, 58, 0.2);
+      --glass-border: rgba(255, 255, 255, 0.1);
+      --glass-blur: blur(20px);
+
+      /* Typography Families */
+      --font-display: 'Space Grotesk', -apple-system, sans-serif;
+      --font-body: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+
+      /* Typography Scale (DESIGN.md) */
+      /* headline-xl: 72px / 80px / 700 / -0.04em */
+      --text-headline-xl: 72px;
+      /* headline-lg: 48px / 56px / 600 / -0.02em */
+      --text-headline-lg: 48px;
+      /* headline-md: 32px / 40px / 600 */
+      --text-headline-md: 32px;
+      /* body-lg: 18px / 28px / 400 */
+      --text-body-lg: 18px;
+      /* body-md: 16px / 24px / 400 */
+      --text-body-md: 16px;
+      /* label-md: 14px / 20px / 500 / 0.1em uppercase */
+      --text-label-md: 14px;
+
+      /* Radii */
+      --radius-sm: 2px;     /* 0.125rem */
+      --radius-default: 4px;/* 0.25rem */
+      --radius-md: 6px;     /* 0.375rem */
+      --radius-lg: 8px;     /* 0.5rem - buttons, inputs */
+      --radius-xl: 12px;    /* 0.75rem - cards */
+      --radius-full: 9999px;/* badges, pills */
+
+      /* Spacing Scale (8px base) */
+      --spacing-unit: 8px;
+      --spacing-gutter: 24px;
+      --spacing-margin-mobile: 16px;
+      --spacing-margin-desktop: 64px;
+      --container-max: 1280px;
+
+      /* Ambient Glow Shadows */
+      --glow-amber: 0 0 35px rgba(255, 215, 0, 0.35);
+      --glow-cyan: 0 0 30px rgba(0, 227, 253, 0.3);
+      --glow-headline: 0 0 40px rgba(255, 246, 223, 0.25);
+    }
+
+    /* Reset & Base Setup */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--background);
+      color: var(--on-surface);
+      font-family: var(--font-body);
+      font-size: var(--text-body-md);
+      line-height: 24px;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      overflow-x: hidden;
+      position: relative;
+      min-height: 100vh;
+    }
+
+    /* Radial Eclipse Atmosphere Background */
+    .cosmic-radial-bg {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+      background: 
+        radial-gradient(circle at 50% 15%, rgba(255, 215, 0, 0.14) 0%, rgba(0, 227, 253, 0.05) 30%, transparent 65%),
+        radial-gradient(circle at 85% 70%, rgba(231, 209, 255, 0.06) 0%, transparent 50%),
+        radial-gradient(circle at 15% 85%, rgba(0, 227, 253, 0.06) 0%, transparent 50%),
+        #121318;
+    }
+
+    /* Container */
+    .container {
+      width: 100%;
+      max-width: var(--container-max);
+      margin-left: auto;
+      margin-right: auto;
+      padding-left: var(--spacing-gutter);
+      padding-right: var(--spacing-gutter);
+      position: relative;
+      z-index: 1;
+    }
+
+    /* Typography Utilities */
+    .headline-xl {
+      font-family: var(--font-display);
+      font-size: var(--text-headline-xl);
+      font-weight: 700;
+      line-height: 80px;
+      letter-spacing: -0.04em;
+      color: var(--primary);
+      text-shadow: var(--glow-headline);
+    }
+
+    .headline-lg {
+      font-family: var(--font-display);
+      font-size: var(--text-headline-lg);
+      font-weight: 600;
+      line-height: 56px;
+      letter-spacing: -0.02em;
+      color: var(--on-surface);
+    }
+
+    .headline-md {
+      font-family: var(--font-display);
+      font-size: var(--text-headline-md);
+      font-weight: 600;
+      line-height: 40px;
+      color: var(--on-surface);
+    }
+
+    .body-lg {
+      font-size: var(--text-body-lg);
+      line-height: 28px;
+      color: var(--on-surface);
+    }
+
+    .label-md {
+      font-family: var(--font-display);
+      font-size: var(--text-label-md);
+      font-weight: 500;
+      line-height: 20px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    /* Navigation Bar */
+    .totality-nav {
+      background: rgba(18, 19, 24, 0.85);
+      backdrop-filter: var(--glass-blur);
+      border-bottom: 1px solid var(--glass-border);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      height: 72px;
+      display: flex;
+      align-items: center;
+    }
+
+    .nav-inner {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      width: 100%;
+    }
+
+    .brand-cluster {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+    }
+
+    /* Eclipse Corona Emblem */
+    .corona-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: #000000;
+      border: 2px solid var(--primary-container);
+      box-shadow: 0 0 16px var(--primary-container), inset 0 0 8px var(--primary-container);
+      position: relative;
+    }
+
+    .brand-title {
+      font-family: var(--font-display);
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--primary);
+      letter-spacing: -0.01em;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 32px;
+      list-style: none;
+      align-items: center;
+    }
+
+    .nav-links a {
+      color: var(--on-surface);
+      text-decoration: none;
+      font-family: var(--font-display);
+      font-size: 13px;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      transition: color 150ms ease;
+    }
+
+    .nav-links a:hover {
+      color: var(--secondary);
+    }
+
+    /* Badges */
+    .badge-celestial {
+      background-color: var(--tertiary-container);
+      color: var(--on-tertiary-container);
+      font-family: var(--font-display);
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 4px 12px;
+      border-radius: var(--radius-full);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .badge-celestial::before {
+      content: "";
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--on-tertiary-container);
+    }
+
+    /* Buttons from DESIGN.md Component Spec */
+
+    /* Primary Button: Amber fill on obsidian with luminous hover glow */
+    .btn-primary {
+      background-color: var(--primary);
+      color: var(--on-primary);
+      font-family: var(--font-display);
+      font-size: var(--text-label-md);
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      border-radius: var(--radius-lg);
+      padding: 12px 28px;
+      height: 48px;
+      border: none;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: all 200ms ease;
+      text-decoration: none;
+      user-select: none;
+      white-space: nowrap;
+    }
+
+    .btn-primary:hover {
+      box-shadow: var(--glow-amber);
+      transform: translateY(-1px);
+    }
+
+    .btn-primary:active {
+      transform: translateY(1px);
+    }
+
+    /* Secondary Button: Transparent fill, cyan outline and label */
+    .btn-secondary {
+      background-color: transparent;
+      color: var(--secondary);
+      font-family: var(--font-display);
+      font-size: var(--text-label-md);
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      border-radius: var(--radius-lg);
+      padding: 12px 28px;
+      height: 48px;
+      border: 1px solid var(--secondary);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: all 200ms ease;
+      text-decoration: none;
+    }
+
+    .btn-secondary:hover {
+      box-shadow: var(--glow-cyan);
+      border-color: var(--secondary-container);
+      color: var(--secondary-container);
+      transform: translateY(-1px);
+    }
+
+    /* Level 2 Glass Card: rgba(52, 52, 58, 0.2) + 20px blur + 1px stroke */
+    .card-glass-level-2 {
+      background-color: var(--glass-surface-2);
+      backdrop-filter: var(--glass-blur);
+      border-radius: var(--radius-xl);
+      border: 1px solid var(--glass-border);
+      padding: var(--spacing-gutter);
+      transition: border-color 200ms ease, box-shadow 200ms ease, transform 200ms ease;
+      position: relative;
+    }
+
+    .card-glass-level-2:hover {
+      border-color: rgba(255, 255, 255, 0.25);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+      transform: translateY(-2px);
+    }
+
+    /* Hero Section */
+    .hero-section {
+      padding-top: 80px;
+      padding-bottom: 96px;
+      position: relative;
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1.15fr 0.85fr;
+      gap: 48px;
+      align-items: center;
+    }
+
+    .hero-lead {
+      margin-top: 24px;
+      margin-bottom: 36px;
+      color: var(--on-surface);
+      max-width: 580px;
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: 16px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    /* Solar Eclipse Simulator Card */
+    .eclipse-stage-card {
+      background: var(--surface-container-high);
+      border: 1px solid var(--outline-variant);
+      border-radius: var(--radius-xl);
+      padding: 32px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .eclipse-sphere-container {
+      width: 220px;
+      height: 220px;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 24px 0;
+    }
+
+    /* Corona Flare Animation */
+    .corona-outer-glow {
+      position: absolute;
+      width: 190px;
+      height: 190px;
+      border-radius: 50%;
+      background: radial-gradient(circle, var(--primary-container) 20%, rgba(255, 215, 0, 0.4) 50%, transparent 75%);
+      box-shadow: 0 0 60px var(--primary-container);
+      transition: all 400ms ease;
+    }
+
+    /* Moon Disk (Obsidian) */
+    .moon-disk {
+      position: absolute;
+      width: 170px;
+      height: 170px;
+      border-radius: 50%;
+      background: #0d0e13;
+      z-index: 2;
+      box-shadow: inset 0 0 10px rgba(0,0,0,0.8);
+    }
+
+    /* Diamond Ring Sparkle */
+    .diamond-ring-flash {
+      position: absolute;
+      top: 28px;
+      right: 32px;
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      background: #ffffff;
+      box-shadow: 0 0 20px #ffffff, 0 0 40px var(--primary);
+      z-index: 3;
+      transition: opacity 300ms ease;
+    }
+
+    .eclipse-scrubber-row {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-top: 16px;
+    }
+
+    .phase-slider {
+      width: 100%;
+      accent-color: var(--primary-container);
+      cursor: pointer;
+    }
+
+    /* Sections */
+    .section {
+      padding-top: 80px;
+      padding-bottom: 80px;
+      border-top: 1px solid var(--outline-variant);
+    }
+
+    .section-header {
+      max-width: 680px;
+      margin-bottom: 48px;
+    }
+
+    /* Color Tokens Swatches Grid */
+    .tokens-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 16px;
+      margin-bottom: 48px;
+    }
+
+    .token-item {
+      background: var(--surface-container);
+      border: 1px solid var(--outline-variant);
+      border-radius: var(--radius-xl);
+      overflow: hidden;
+      cursor: pointer;
+      transition: all 180ms ease;
+    }
+
+    .token-item:hover {
+      border-color: var(--secondary-container);
+      box-shadow: 0 0 18px rgba(0, 227, 253, 0.2);
+      transform: translateY(-2px);
+    }
+
+    .token-swatch {
+      height: 80px;
+      width: 100%;
+      padding: 12px;
+      display: flex;
+      align-items: flex-end;
+    }
+
+    .token-meta {
+      padding: 16px;
+      font-family: var(--font-display);
+    }
+
+    .token-name {
+      font-size: 14px;
+      font-weight: 600;
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 4px;
+    }
+
+    .token-hex {
+      font-size: 12px;
+      color: var(--on-surface-variant);
+      font-family: monospace;
+    }
+
+    .token-desc {
+      font-size: 12px;
+      color: var(--on-surface);
+      opacity: 0.75;
+      margin-top: 6px;
+      font-family: var(--font-body);
+    }
+
+    /* Stages & Lineup Grid */
+    .stages-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+      margin-bottom: 48px;
+    }
+
+    .stage-card {
+      min-height: 280px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    /* Pass Tier Cards */
+    .passes-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+      align-items: stretch;
+    }
+
+    .pass-card {
+      background: var(--surface-container-low);
+      border: 1px solid var(--outline-variant);
+      border-radius: var(--radius-xl);
+      padding: 32px;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+    }
+
+    .pass-card.corona-tier {
+      border: 2px solid var(--primary-container);
+      box-shadow: var(--glow-amber);
+      background: var(--surface-container);
+    }
+
+    .pass-price {
+      font-family: var(--font-display);
+      font-size: 40px;
+      font-weight: 700;
+      color: var(--primary);
+      margin: 16px 0 24px;
+    }
+
+    /* Input Field from DESIGN.md Component Spec */
+    .input-field {
+      background-color: var(--surface-container-lowest);
+      color: var(--on-surface);
+      font-family: var(--font-body);
+      font-size: var(--text-body-md);
+      border-radius: var(--radius-lg);
+      padding: 12px 16px;
+      border: 1px solid var(--outline-variant);
+      width: 100%;
+      outline: none;
+      transition: border-color 150ms ease, box-shadow 150ms ease;
+    }
+
+    .input-field:focus {
+      border-color: var(--secondary-container);
+      box-shadow: 0 0 12px rgba(0, 227, 253, 0.3);
+    }
+
+    .input-field.input-error {
+      border-color: var(--error);
+      box-shadow: 0 0 12px rgba(255, 180, 171, 0.3);
+    }
+
+    /* Footer */
+    .totality-footer {
+      background: var(--surface-container-lowest);
+      border-top: 1px solid var(--outline-variant);
+      padding-top: 64px;
+      padding-bottom: 48px;
+    }
+
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1.5fr;
+      gap: 32px;
+      margin-bottom: 48px;
+    }
+
+    /* Toast */
+    .totality-toast {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      background: var(--surface-container-highest);
+      color: var(--primary);
+      border: 1px solid var(--primary-container);
+      box-shadow: var(--glow-amber);
+      padding: 12px 24px;
+      border-radius: var(--radius-lg);
+      font-family: var(--font-display);
+      font-size: 14px;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      transform: translateY(100px);
+      opacity: 0;
+      transition: all 200ms ease;
+      z-index: 1000;
+    }
+
+    .totality-toast.show {
+      transform: translateY(0);
+      opacity: 1;
+    }
+
+    /* Responsive */
+    @media (max-width: 960px) {
+      .hero-grid, .stages-grid, .passes-grid, .footer-grid {
+        grid-template-columns: 1fr;
+        gap: 32px;
+      }
+      .headline-xl {
+        font-size: 48px;
+        line-height: 56px;
+      }
+      .nav-links {
+        display: none;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Radial Eclipse Backdrop -->
+  <div class="cosmic-radial-bg"></div>
+
+  <!-- Navigation Bar -->
+  <header class="totality-nav">
+    <div class="container">
+      <div class="nav-inner">
+        <a href="#" class="brand-cluster">
+          <div class="corona-icon"></div>
+          <span class="brand-title">TOTALITY</span>
+        </a>
+
+        <nav>
+          <ul class="nav-links">
+            <li><a href="#eclipse">The Eclipse</a></li>
+            <li><a href="#lineup">Celestial Stages</a></li>
+            <li><a href="#tokens">Cosmic Tokens</a></li>
+            <li><a href="#passes">Expedition Passes</a></li>
+          </ul>
+        </nav>
+
+        <div style="display: flex; gap: 12px; align-items: center;">
+          <span class="badge-celestial">AUGUST 12 &bull; 2026</span>
+          <button class="btn-primary" style="height: 40px; padding: 0 20px; font-size: 12px;" onclick="showToast('Corona pass portal active')">
+            Claim Pass
+          </button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero Section with Monumental Space Grotesk Headline -->
+  <section class="hero-section" id="eclipse">
+    <div class="container">
+      <div class="hero-grid">
+        <div>
+          <span class="badge-celestial" style="margin-bottom: 20px;">PATH OF TOTALITY &bull; 100% OBSCURATION</span>
+          <h1 class="headline-xl">WITNESS THE SOLAR CORONA.</h1>
+          <p class="body-lg hero-lead">
+            A cosmic-premium sensory convergence under the shadow of the moon. Where ambient electronic synthesis meets deep obsidian architecture, illuminated only by the diamond ring flash.
+          </p>
+
+          <div class="hero-actions">
+            <!-- Primary Button: Amber on obsidian, 48px height -->
+            <button class="btn-primary" onclick="showToast('Primary CTA: Diamond Ring Flash (#fff6df)')">
+              Explore Passes
+            </button>
+            <!-- Secondary Button: Transparent, Cyan outline -->
+            <button class="btn-secondary" onclick="document.getElementById('lineup').scrollIntoView({behavior: 'smooth'})">
+              View Coordinates
+            </button>
+          </div>
+        </div>
+
+        <!-- Solar Eclipse Interactive Simulator Card -->
+        <div class="eclipse-stage-card">
+          <div style="display: flex; justify-content: space-between; width: 100%;">
+            <span class="label-md" style="color: var(--secondary);">CHRONOMETRY</span>
+            <span class="label-md" id="phaseIndicator" style="color: var(--primary-container);">PHASE 3: TOTALITY</span>
+          </div>
+
+          <div class="eclipse-sphere-container">
+            <div class="corona-outer-glow" id="coronaGlow"></div>
+            <div class="moon-disk"></div>
+            <div class="diamond-ring-flash" id="diamondFlash"></div>
+          </div>
+
+          <div style="text-align: center;">
+            <div class="headline-md" id="phaseTitle" style="font-size: 22px;">THE CORONA FLASH</div>
+            <p class="body-md" id="phaseDescription" style="font-size: 14px; color: var(--on-surface-variant); max-width: 320px; margin-top: 4px;">
+              Direct solar disk obscured. Solar corona streams outward across the obsidian sky.
+            </p>
+          </div>
+
+          <div class="eclipse-scrubber-row">
+            <input type="range" class="phase-slider" id="phaseSlider" min="1" max="5" value="3" oninput="updateEclipsePhase(this.value)">
+            <div style="display: flex; justify-content: space-between; font-family: var(--font-display); font-size: 11px; color: var(--on-surface-variant);">
+              <span>PARTIAL</span>
+              <span>BAILY'S</span>
+              <span style="color: var(--primary-container);">TOTALITY</span>
+              <span>FLASH</span>
+              <span>FOURTH</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Celestial Stages Section (Glass Level 2 Cards) -->
+  <section class="section" id="lineup">
+    <div class="container">
+      <div class="section-header">
+        <span class="label-md" style="color: var(--secondary);">SONIC OBSCURATION</span>
+        <h2 class="headline-lg" style="margin-top: 8px;">Celestial Sound Environments</h2>
+        <p class="body-lg" style="color: var(--on-surface-variant); margin-top: 12px;">
+          Four custom-engineered acoustics domes clad in obsidian acoustic glass slabs, synchronized with the movement of celestial bodies.
+        </p>
+      </div>
+
+      <div class="stages-grid">
+        <!-- Stage 1 -->
+        <div class="card-glass-level-2 stage-card">
+          <div>
+            <span class="badge-celestial">STAGE 01</span>
+            <h3 class="headline-md" style="margin-top: 16px; color: var(--primary);">Corona Stage</h3>
+            <p class="body-md" style="color: var(--on-surface-variant); margin-top: 8px;">
+              Monumental outdoor amphitheater oriented directly toward the eclipse meridian. 360-degree spatial array.
+            </p>
+          </div>
+          <div style="border-top: 1px solid var(--glass-border); padding-top: 16px; margin-top: 24px; display: flex; justify-content: space-between;">
+            <span class="label-md" style="color: var(--secondary);">LINEUP</span>
+            <span class="label-md" style="color: var(--primary);">JON HOPKINS &bull; RIVAL CONSOLES</span>
+          </div>
+        </div>
+
+        <!-- Stage 2 -->
+        <div class="card-glass-level-2 stage-card">
+          <div>
+            <span class="badge-celestial">STAGE 02</span>
+            <h3 class="headline-md" style="margin-top: 16px; color: var(--primary);">Umbra Dome</h3>
+            <p class="body-md" style="color: var(--on-surface-variant); margin-top: 8px;">
+              Sub-bass meditation chamber plunged into absolute sensory zero. Translucent obsidian monoliths.
+            </p>
+          </div>
+          <div style="border-top: 1px solid var(--glass-border); padding-top: 16px; margin-top: 24px; display: flex; justify-content: space-between;">
+            <span class="label-md" style="color: var(--secondary);">LINEUP</span>
+            <span class="label-md" style="color: var(--primary);">MAX COOPER &bull; KELLY LEE OWENS</span>
+          </div>
+        </div>
+
+        <!-- Stage 3 -->
+        <div class="card-glass-level-2 stage-card">
+          <div>
+            <span class="badge-celestial">STAGE 03</span>
+            <h3 class="headline-md" style="margin-top: 16px; color: var(--primary);">Penumbra Lab</h3>
+            <p class="body-md" style="color: var(--on-surface-variant); margin-top: 8px;">
+              Solar observatory combining high-altitude infrared telescopes with live generative modular synthesis.
+            </p>
+          </div>
+          <div style="border-top: 1px solid var(--glass-border); padding-top: 16px; margin-top: 24px; display: flex; justify-content: space-between;">
+            <span class="label-md" style="color: var(--secondary);">LINEUP</span>
+            <span class="label-md" style="color: var(--primary);">BEN LUKAS BOYSEN &bull; FLOATING POINTS</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Color Tokens Foundation Section -->
+  <section class="section" id="tokens">
+    <div class="container">
+      <div class="section-header">
+        <span class="label-md" style="color: var(--secondary);">COLOR CONTRACT</span>
+        <h2 class="headline-lg" style="margin-top: 8px;">Cosmic Design Tokens</h2>
+        <p class="body-lg" style="color: var(--on-surface-variant); margin-top: 12px;">
+          Sampled directly from the solar eclipse phenomenon. Obsidian slabs, diamond ring gold, and ethereal atmospheric cyan.
+        </p>
+      </div>
+
+      <div class="tokens-grid">
+        <!-- Surface -->
+        <div class="token-item" onclick="copyToken('#121318', 'Surface')">
+          <div class="token-swatch" style="background-color: #121318; border-bottom: 1px solid var(--outline-variant);">
+            <span style="font-family: monospace; font-size: 11px; color: #fff;">#121318</span>
+          </div>
+          <div class="token-meta">
+            <div class="token-name">surface</div>
+            <div class="token-hex">--surface: #121318</div>
+            <div class="token-desc">Obsidian foundation, deep space void.</div>
+          </div>
+        </div>
+
+        <!-- Primary -->
+        <div class="token-item" onclick="copyToken('#fff6df', 'Primary Corona')">
+          <div class="token-swatch" style="background-color: #fff6df; color: #3a3000;">
+            <span style="font-family: monospace; font-size: 11px;">#fff6df</span>
+          </div>
+          <div class="token-meta">
+            <div class="token-name">primary</div>
+            <div class="token-hex">--primary: #fff6df</div>
+            <div class="token-desc">Amber / white-gold solar corona flash.</div>
+          </div>
+        </div>
+
+        <!-- Primary Container -->
+        <div class="token-item" onclick="copyToken('#ffd700', 'Primary Container Gold')">
+          <div class="token-swatch" style="background-color: #ffd700; color: #3a3000;">
+            <span style="font-family: monospace; font-size: 11px;">#ffd700</span>
+          </div>
+          <div class="token-meta">
+            <div class="token-name">primary-container</div>
+            <div class="token-hex">--primary-container: #ffd700</div>
+            <div class="token-desc">Pure corona gold. Max 3 highlights per view.</div>
+          </div>
+        </div>
+
+        <!-- Secondary -->
+        <div class="token-item" onclick="copyToken('#bdf4ff', 'Secondary Cyan')">
+          <div class="token-swatch" style="background-color: #bdf4ff; color: #00363d;">
+            <span style="font-family: monospace; font-size: 11px;">#bdf4ff</span>
+          </div>
+          <div class="token-meta">
+            <div class="token-name">secondary</div>
+            <div class="token-hex">--secondary: #bdf4ff</div>
+            <div class="token-desc">Atmospheric cyan glow during totality.</div>
+          </div>
+        </div>
+
+        <!-- Secondary Container -->
+        <div class="token-item" onclick="copyToken('#00e3fd', 'Secondary Container')">
+          <div class="token-swatch" style="background-color: #00e3fd; color: #00363d;">
+            <span style="font-family: monospace; font-size: 11px;">#00e3fd</span>
+          </div>
+          <div class="token-meta">
+            <div class="token-name">secondary-container</div>
+            <div class="token-hex">--secondary-container: #00e3fd</div>
+            <div class="token-desc">Vivid cyan interactive focus &amp; glow rim.</div>
+          </div>
+        </div>
+
+        <!-- Tertiary Container -->
+        <div class="token-item" onclick="copyToken('#e7d1ff', 'Tertiary Container')">
+          <div class="token-swatch" style="background-color: #e7d1ff; color: #3b2754;">
+            <span style="font-family: monospace; font-size: 11px;">#e7d1ff</span>
+          </div>
+          <div class="token-meta">
+            <div class="token-name">tertiary-container</div>
+            <div class="token-hex">--tertiary-container: #e7d1ff</div>
+            <div class="token-desc">Deep indigo haze for celestial badges.</div>
+          </div>
+        </div>
+
+        <!-- Error -->
+        <div class="token-item" onclick="copyToken('#ffb4ab', 'Error')">
+          <div class="token-swatch" style="background-color: #ffb4ab; color: #690005;">
+            <span style="font-family: monospace; font-size: 11px;">#ffb4ab</span>
+          </div>
+          <div class="token-meta">
+            <div class="token-name">error</div>
+            <div class="token-hex">--error: #ffb4ab</div>
+            <div class="token-desc">Solar flare crimson for form errors.</div>
+          </div>
+        </div>
+
+        <!-- On-Surface -->
+        <div class="token-item" onclick="copyToken('#e3e1e9', 'On-Surface')">
+          <div class="token-swatch" style="background-color: #e3e1e9; color: #121318;">
+            <span style="font-family: monospace; font-size: 11px;">#e3e1e9</span>
+          </div>
+          <div class="token-meta">
+            <div class="token-name">on-surface</div>
+            <div class="token-hex">--on-surface: #e3e1e9</div>
+            <div class="token-desc">Warm off-white for crisp typography.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Passes & Registration Section -->
+  <section class="section" id="passes">
+    <div class="container">
+      <div class="section-header">
+        <span class="label-md" style="color: var(--secondary);">EXPEDITION TIERS</span>
+        <h2 class="headline-lg" style="margin-top: 8px;">Totality Attendance Passes</h2>
+        <p class="body-lg" style="color: var(--on-surface-variant); margin-top: 12px;">
+          Strictly limited capacity to preserve the intimate, sacred silence of the 4 minutes and 28 seconds of totality.
+        </p>
+      </div>
+
+      <div class="passes-grid">
+        <!-- Pass Tier 1 -->
+        <div class="pass-card">
+          <span class="badge-celestial">GENERAL ACCESS</span>
+          <h3 class="headline-md" style="margin-top: 16px;">Penumbra Pass</h3>
+          <p class="body-md" style="color: var(--on-surface-variant); margin-top: 8px;">
+            Full 3-day festival access, astronomy lectures, and general viewing field admission.
+          </p>
+          <div class="pass-price">$240 <span style="font-size: 16px; font-weight: 400; color: var(--on-surface-variant);">/ person</span></div>
+
+          <button class="btn-secondary" style="width: 100%; margin-top: auto;" onclick="showToast('Penumbra pass selected')">
+            Select Pass
+          </button>
+        </div>
+
+        <!-- Pass Tier 2 (Featured Corona) -->
+        <div class="pass-card corona-tier">
+          <div style="position: absolute; top: -14px; left: 50%; transform: translateX(-50%); background: var(--primary-container); color: var(--on-primary); font-family: var(--font-display); font-size: 11px; font-weight: 700; padding: 4px 16px; border-radius: var(--radius-full); letter-spacing: 0.1em;">
+            CORONA FLASH TIER
+          </div>
+          <span class="badge-celestial" style="margin-top: 8px;">EXPEDITION VIP</span>
+          <h3 class="headline-md" style="margin-top: 16px; color: var(--primary);">Totality Zenith Pass</h3>
+          <p class="body-md" style="color: var(--on-surface-variant); margin-top: 8px;">
+            Priority meridian viewing deck, private telescope feeds, backstage artist lounge, and bespoke solar optics kit.
+          </p>
+          <div class="pass-price" style="color: var(--primary-container);">$580 <span style="font-size: 16px; font-weight: 400; color: var(--on-surface-variant);">/ VIP badge</span></div>
+
+          <button class="btn-primary" style="width: 100%; margin-top: auto;" onclick="showToast('Zenith VIP Pass reserved')">
+            Claim Zenith Pass
+          </button>
+        </div>
+
+        <!-- Pass Tier 3 -->
+        <div class="pass-card">
+          <span class="badge-celestial">OBSIDIAN SUITE</span>
+          <h3 class="headline-md" style="margin-top: 16px;">Umbra Observatory</h3>
+          <p class="body-md" style="color: var(--on-surface-variant); margin-top: 8px;">
+            All-inclusive glass glamping geo-dome with personal astrophotography rig and private chef.
+          </p>
+          <div class="pass-price">$1,450 <span style="font-size: 16px; font-weight: 400; color: var(--on-surface-variant);">/ all-inclusive</span></div>
+
+          <button class="btn-secondary" style="width: 100%; margin-top: auto;" onclick="showToast('Umbra Observatory inquiry sent')">
+            Inquire Suite
+          </button>
+        </div>
+      </div>
+
+      <!-- Registration Form Module -->
+      <div style="margin-top: 64px; max-width: 680px; margin-left: auto; margin-right: auto;" class="card-glass-level-2">
+        <h3 class="headline-md" style="color: var(--primary); margin-bottom: 8px;">Astrophotographer Registration</h3>
+        <p class="body-md" style="color: var(--on-surface-variant); margin-bottom: 24px;">
+          Register specialized telescope mounts or drone optics for the designated astronomy quadrant.
+        </p>
+
+        <form id="astronomyForm" onsubmit="handleRegistrationSubmit(event)">
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px;">
+            <div>
+              <label class="label-md" style="display: block; margin-bottom: 6px; color: var(--on-surface);">FULL NAME</label>
+              <input type="text" id="regName" class="input-field" placeholder="Dr. Elena Vance" required>
+            </div>
+            <div>
+              <label class="label-md" style="display: block; margin-bottom: 6px; color: var(--on-surface);">OBSERVATORY EMAIL</label>
+              <input type="email" id="regEmail" class="input-field" placeholder="vance@astronomy.org" required>
+            </div>
+          </div>
+
+          <div style="margin-bottom: 24px;">
+            <label class="label-md" style="display: block; margin-bottom: 6px; color: var(--on-surface);">OPTICS APERTURE &amp; FOCAL LENGTH</label>
+            <input type="text" id="regOptics" class="input-field" placeholder="Celestron EdgeHD 800 + ZWO ASI2600MM Pro">
+          </div>
+
+          <div style="display: flex; gap: 16px; align-items: center;">
+            <button type="submit" class="btn-primary">
+              Register Quadrant
+            </button>
+            <button type="button" class="btn-secondary" onclick="simulateFormError()">
+              Test Validation Error
+            </button>
+            <span id="formFeedback" class="label-md" style="font-size: 12px;"></span>
+          </div>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="totality-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div>
+          <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 16px;">
+            <div class="corona-icon" style="width: 28px; height: 28px;"></div>
+            <span class="brand-title" style="font-size: 18px;">TOTALITY FESTIVAL</span>
+          </div>
+          <p class="body-md" style="font-size: 14px; color: var(--on-surface-variant); max-width: 320px;">
+            Cosmic-premium, glassmorphic dark design system. Celebrating the sublime harmony of celestial mechanics.
+          </p>
+        </div>
+
+        <div>
+          <div class="label-md" style="color: var(--primary); margin-bottom: 16px;">COORDINATES</div>
+          <ul style="list-style: none; font-family: var(--font-display); font-size: 13px; line-height: 2; color: var(--on-surface-variant);">
+            <li>LAT: 42°38′ N</li>
+            <li>LON: 106°19′ W</li>
+            <li>ELEVATION: 1,560M</li>
+            <li>OBSCURATION: 100.0%</li>
+          </ul>
+        </div>
+
+        <div>
+          <div class="label-md" style="color: var(--primary); margin-bottom: 16px;">ATMOSPHERE</div>
+          <ul style="list-style: none; font-size: 13px; line-height: 2; color: var(--on-surface-variant);">
+            <li>Obsidian Slab 20px Blur</li>
+            <li>Corona Gold (#ffd700)</li>
+            <li>Atmospheric Cyan (#00e3fd)</li>
+            <li>Space Grotesk Display</li>
+          </ul>
+        </div>
+
+        <div>
+          <div class="label-md" style="color: var(--primary); margin-bottom: 16px;">CELESTIAL TIME</div>
+          <p class="body-md" style="font-size: 13px; color: var(--on-surface-variant); line-height: 1.6;">
+            Next North American totality: August 12, 2026. Design system compliant with open-design token foundations.
+          </p>
+        </div>
+      </div>
+
+      <div style="border-top: 1px solid var(--outline-variant); padding-top: 24px; display: flex; justify-content: space-between; align-items: center; font-family: var(--font-display); font-size: 12px; color: var(--on-surface-variant);">
+        <div>&copy; 2026 Totality Festival Design System. All celestial rights reserved.</div>
+        <div>SPECIFICATION: REV 2026.09</div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Toast Notice -->
+  <div class="totality-toast" id="totalityToast">Token copied</div>
+
+  <script>
+    function copyToken(hex, name) {
+      navigator.clipboard.writeText(hex).then(() => {
+        showToast(`${name} token (${hex}) copied!`);
+      }).catch(() => {
+        showToast(`${name}: ${hex}`);
+      });
+    }
+
+    function showToast(msg) {
+      const toast = document.getElementById('totalityToast');
+      toast.textContent = msg;
+      toast.classList.add('show');
+      setTimeout(() => {
+        toast.classList.remove('show');
+      }, 2600);
+    }
+
+    // Eclipse Simulator Phasing
+    function updateEclipsePhase(val) {
+      const glow = document.getElementById('coronaGlow');
+      const flash = document.getElementById('diamondFlash');
+      const indicator = document.getElementById('phaseIndicator');
+      const title = document.getElementById('phaseTitle');
+      const desc = document.getElementById('phaseDescription');
+
+      if (val == 1) {
+        glow.style.transform = 'scale(0.8)';
+        glow.style.opacity = '0.2';
+        flash.style.opacity = '0';
+        indicator.textContent = 'PHASE 1: PARTIAL OBSCURATION';
+        title.textContent = 'FIRST CONTACT';
+        desc.textContent = 'The lunar limb begins creeping across the solar photosphere. Temperature begins dropping.';
+      } else if (val == 2) {
+        glow.style.transform = 'scale(0.95)';
+        glow.style.opacity = '0.5';
+        flash.style.opacity = '0.3';
+        indicator.textContent = 'PHASE 2: BAILY\'S BEADS';
+        title.textContent = 'LUNAR VALLEYS';
+        desc.textContent = 'Sunlight shafts beam through deep lunar craters, breaking the ring into beads of molten light.';
+      } else if (val == 3) {
+        glow.style.transform = 'scale(1.2)';
+        glow.style.opacity = '1';
+        flash.style.opacity = '1';
+        indicator.textContent = 'PHASE 3: TOTALITY';
+        title.textContent = 'THE DIAMOND RING FLASH';
+        desc.textContent = 'Direct solar disk obscured. Solar corona streams outward across the obsidian sky.';
+      } else if (val == 4) {
+        glow.style.transform = 'scale(1.05)';
+        glow.style.opacity = '0.7';
+        flash.style.opacity = '0.8';
+        indicator.textContent = 'PHASE 4: THIRD CONTACT';
+        title.textContent = 'EMERGENCE';
+        desc.textContent = 'Opposite diamond ring explodes into view. 360-degree twilight begins returning.';
+      } else {
+        glow.style.transform = 'scale(0.85)';
+        glow.style.opacity = '0.3';
+        flash.style.opacity = '0';
+        indicator.textContent = 'PHASE 5: FOURTH CONTACT';
+        title.textContent = 'SOLAR RESTORATION';
+        desc.textContent = 'The moon completes its celestial transit. Full daylight restored to the expedition site.';
+      }
+    }
+
+    function handleRegistrationSubmit(e) {
+      e.preventDefault();
+      const fb = document.getElementById('formFeedback');
+      fb.style.color = 'var(--secondary-container)';
+      fb.textContent = '✓ Astrophotography quadrant confirmed.';
+      showToast('Quadrant coordinates locked for August 12');
+    }
+
+    function simulateFormError() {
+      const input = document.getElementById('regEmail');
+      const fb = document.getElementById('formFeedback');
+      input.classList.add('input-error');
+      fb.style.color = 'var(--error)';
+      fb.textContent = '⚠ Error: Verified observatory affiliation required.';
+      showToast('Error state simulated with Error token (#ffb4ab)');
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,686 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Duolingo — The World's Best Way to Learn Languages | Official Design System</title>
+  <meta name="description" content="Authentic implementation of Duolingo's design system: Owl Green (#58cc02), chunky 4px tactile bottom-shadows, 2-3px solid borders, Feather Bold typography, Duo mascot, and gamified joy." />
+
+  <!-- Google Fonts: Nunito (Feather Bold rounded fallback), Mona Sans, and JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;600&family=Mona+Sans:wght@400;500;600&family=Nunito:wght@700;800;900&display=swap" rel="stylesheet">
+
+  <style>
+    /* ─────────────────────────────────────────────────────────────────
+       DUOLINGO OFFICIAL DESIGN TOKENS (from DESIGN.md)
+       Gamification rendered as visual language.
+       Tokens:
+         Owl Green: #58cc02 (Deep: #58a700, Light: #89e219, Pale: #dbf8c5)
+         Streak Orange: #ff9600 (Deep: #cc7a00)
+         Gem Pink: #ce82ff
+         Eel Blue: #1cb0f6
+         Cardinal Red: #ff4b4b
+         Bee Yellow: #ffc800
+         Snow (bg): #ffffff, Eel: #f7f7f7, Swan: #e5e5e5, Wolf: #777777
+         Eel Black: #3c3c3c
+       Chunky 4px bottom-shadow on every button. 2-3px solid borders.
+       ───────────────────────────────────────────────────────────────── */
+    :root {
+      /* Brand Primary */
+      --owl-green: #58cc02;
+      --owl-green-deep: #58a700;
+      --owl-green-light: #89e219;
+      --owl-green-pale: #dbf8c5;
+
+      /* Secondary Accents */
+      --streak-orange: #ff9600;
+      --streak-orange-deep: #cc7a00;
+      --gem-pink: #ce82ff;
+      --eel-blue: #1cb0f6;
+      --cardinal-red: #ff4b4b;
+      --cardinal-red-deep: #cc3b3b;
+      --bee-yellow: #ffc800;
+
+      /* Surfaces & Neutrals */
+      --snow: #ffffff;
+      --eel: #f7f7f7;
+      --swan: #e5e5e5;
+      --wolf: #777777;
+      --hare: #afafaf;
+      --eel-black: #3c3c3c;
+
+      /* Typography */
+      --font-display: "Feather Bold", "Nunito", "DIN Round Pro", sans-serif;
+      --font-body: "Mona Sans", "Inter", sans-serif;
+      --font-mono: "JetBrains Mono", monospace;
+
+      /* Radii */
+      --radius-btn: 16px;
+      --radius-card: 16px;
+      --radius-node: 50%;
+      --radius-pill: 9999px;
+
+      /* Chunky 4px Tactile Bottom Shadow */
+      --shadow-chunky-green: 0 4px 0 var(--owl-green-deep);
+      --shadow-chunky-orange: 0 4px 0 var(--streak-orange-deep);
+      --shadow-chunky-white: 0 4px 0 var(--swan);
+      --shadow-chunky-red: 0 4px 0 var(--cardinal-red-deep);
+
+      --container-max: 1080px;
+    }
+
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      background: var(--snow);
+      color: var(--eel-black);
+      font-size: 16px;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    body {
+      background: var(--snow);
+      color: var(--eel-black);
+      font-family: var(--font-body);
+      font-size: 15px;
+      line-height: 1.5;
+      overflow-x: hidden;
+    }
+
+    /* ─── TYPOGRAPHY RULES (Weight 800 is Default for Headings) ─── */
+    h1, h2, h3, h4, .duo-title {
+      font-family: var(--font-display);
+      font-weight: 800;
+      color: var(--eel-black);
+      line-height: 1.15;
+    }
+
+    h1 {
+      font-size: clamp(32px, 5.5vw, 56px);
+      letter-spacing: -0.01em;
+    }
+
+    h2 {
+      font-size: 24px;
+      letter-spacing: normal;
+    }
+
+    h3 {
+      font-size: 18px;
+      font-weight: 700;
+    }
+
+    p {
+      color: var(--wolf);
+      font-size: 15px;
+    }
+
+    /* ─── CHUNKY BUTTONS (The 4px Tactile Press Affordance) ─── */
+    .btn-duo {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      font-family: var(--font-display);
+      font-size: 16px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      padding: 14px 24px;
+      border-radius: var(--radius-btn);
+      text-decoration: none;
+      cursor: pointer;
+      outline: none;
+      user-select: none;
+      transition: background-color 150ms ease, transform 80ms ease, border-bottom 80ms ease;
+      position: relative;
+    }
+
+    /* Primary Owl Green */
+    .btn-duo-green {
+      background: var(--owl-green);
+      color: #ffffff;
+      border: none;
+      border-bottom: 4px solid var(--owl-green-deep);
+    }
+
+    .btn-duo-green:hover {
+      background: var(--owl-green-light);
+    }
+
+    .btn-duo-green:active {
+      transform: translateY(4px);
+      border-bottom: 0px solid transparent;
+      margin-bottom: 4px;
+    }
+
+    /* Secondary White with 4px Gray Shadow */
+    .btn-duo-white {
+      background: #ffffff;
+      color: var(--wolf);
+      border: 2px solid var(--swan);
+      border-bottom: 4px solid var(--swan);
+    }
+
+    .btn-duo-white:hover {
+      color: var(--eel-black);
+      border-color: var(--hare);
+      border-bottom-color: var(--hare);
+      background: var(--eel);
+    }
+
+    .btn-duo-white:active {
+      transform: translateY(4px);
+      border-bottom-width: 2px;
+      margin-bottom: 2px;
+    }
+
+    /* Streak Orange */
+    .btn-duo-orange {
+      background: var(--streak-orange);
+      color: #ffffff;
+      border: none;
+      border-bottom: 4px solid var(--streak-orange-deep);
+    }
+
+    .btn-duo-orange:active {
+      transform: translateY(4px);
+      border-bottom: 0px solid transparent;
+      margin-bottom: 4px;
+    }
+
+    /* ─── STICKY NAVIGATION BAR ─── */
+    .duo-header {
+      position: sticky;
+      top: 0;
+      background: #ffffff;
+      border-bottom: 2px solid var(--swan);
+      z-index: 1000;
+    }
+
+    .nav-container {
+      max-width: var(--container-max);
+      margin: 0 auto;
+      padding: 12px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .brand-group {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+      font-family: var(--font-display);
+      font-size: 26px;
+      font-weight: 800;
+      color: var(--owl-green);
+      letter-spacing: -0.02em;
+    }
+
+    /* Top Stats Pill Bar */
+    .stats-bar {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .stat-pill {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-family: var(--font-display);
+      font-weight: 800;
+      font-size: 15px;
+      padding: 6px 12px;
+      border-radius: var(--radius-pill);
+      border: 2px solid var(--swan);
+      background: #ffffff;
+    }
+
+    /* ─── CONTAINER ─── */
+    .main-wrapper {
+      max-width: var(--container-max);
+      margin: 0 auto;
+      padding: 40px 24px 80px;
+    }
+
+    /* ─── HERO SECTION WITH DUO THE OWL ─── */
+    .hero-layout {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 48px;
+      align-items: center;
+      margin-bottom: 64px;
+    }
+
+    @media (max-width: 840px) {
+      .hero-layout {
+        grid-template-columns: 1fr;
+        text-align: center;
+      }
+    }
+
+    .duo-mascot-box {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* ─── GAMIFIED LESSON TREE PATH ─── */
+    .path-section {
+      max-width: 480px;
+      margin: 0 auto 64px;
+      text-align: center;
+    }
+
+    .unit-banner {
+      background: var(--owl-green);
+      border-radius: var(--radius-card);
+      padding: 20px 24px;
+      color: #ffffff;
+      margin-bottom: 36px;
+      border-bottom: 4px solid var(--owl-green-deep);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .lesson-nodes-flow {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 28px;
+    }
+
+    .lesson-node-btn {
+      width: 80px;
+      height: 72px;
+      border-radius: 50%;
+      border: none;
+      background: var(--owl-green);
+      border-bottom: 6px solid var(--owl-green-deep);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #ffffff;
+      font-size: 28px;
+      transition: all 150ms ease;
+      position: relative;
+    }
+
+    .lesson-node-btn:hover {
+      transform: translateY(-2px);
+      filter: brightness(1.08);
+    }
+
+    .lesson-node-btn:active {
+      transform: translateY(4px);
+      border-bottom-width: 2px;
+    }
+
+    .lesson-node-btn.locked {
+      background: var(--swan);
+      border-bottom: 6px solid #cfcfcf;
+      color: var(--wolf);
+      cursor: not-allowed;
+    }
+
+    /* Active Pulse Animation */
+    @keyframes duoPulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.06); }
+    }
+
+    .lesson-node-btn.active-node {
+      animation: duoPulse 1.8s infinite ease-in-out;
+    }
+
+    /* ─── INTERACTIVE LESSON CARD WIDGET ─── */
+    .lesson-widget {
+      background: #ffffff;
+      border: 2px solid var(--swan);
+      border-bottom: 4px solid var(--swan);
+      border-radius: var(--radius-card);
+      padding: 32px;
+      max-width: 680px;
+      margin: 0 auto;
+    }
+
+    .progress-track {
+      width: 100%;
+      height: 16px;
+      background: var(--swan);
+      border-radius: var(--radius-pill);
+      overflow: hidden;
+      margin-bottom: 24px;
+    }
+
+    .progress-fill {
+      height: 100%;
+      width: 65%;
+      background: var(--owl-green);
+      border-radius: var(--radius-pill);
+      transition: width 320ms ease-out;
+    }
+
+    .word-bank {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin: 28px 0;
+      min-height: 52px;
+    }
+
+    .word-chip {
+      background: #ffffff;
+      border: 2px solid var(--swan);
+      border-bottom: 4px solid var(--swan);
+      border-radius: 12px;
+      padding: 10px 18px;
+      font-family: var(--font-display);
+      font-size: 16px;
+      font-weight: 700;
+      cursor: pointer;
+      color: var(--eel-black);
+      transition: all 120ms ease;
+    }
+
+    .word-chip:hover {
+      background: var(--eel);
+      border-color: var(--hare);
+    }
+
+    .word-chip:active {
+      transform: translateY(2px);
+      border-bottom-width: 2px;
+    }
+
+    .word-chip.selected {
+      background: var(--swan);
+      color: transparent;
+      border-color: var(--swan);
+      cursor: default;
+    }
+
+    .answer-line {
+      border-bottom: 2px solid var(--swan);
+      min-height: 48px;
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      margin-bottom: 24px;
+      padding-bottom: 8px;
+      flex-wrap: wrap;
+    }
+
+    .feedback-banner {
+      display: none;
+      padding: 16px 24px;
+      border-radius: var(--radius-card);
+      margin-top: 20px;
+      font-family: var(--font-display);
+      font-weight: 800;
+    }
+
+    .feedback-banner.correct {
+      display: block;
+      background: var(--owl-green-pale);
+      color: var(--owl-green-deep);
+      border: 2px solid var(--owl-green);
+    }
+
+    /* ─── AUDIT MODAL ─── */
+    .audit-trigger {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      z-index: 1000;
+    }
+
+    .audit-modal {
+      display: none;
+      position: fixed;
+      bottom: 84px;
+      right: 24px;
+      width: 360px;
+      background: #ffffff;
+      border: 2px solid var(--swan);
+      border-bottom: 4px solid var(--swan);
+      border-radius: var(--radius-card);
+      padding: 24px;
+      z-index: 1001;
+      font-family: var(--font-mono);
+      font-size: 12px;
+    }
+
+    .audit-modal.open {
+      display: block;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- TOP APP HEADER -->
+  <header class="duo-header">
+    <div class="nav-container">
+      <a href="#" class="brand-group">
+        <!-- SVG Duo Head Logo -->
+        <svg width="34" height="28" viewBox="0 0 40 34" fill="none">
+          <rect width="40" height="34" rx="12" fill="#58cc02" />
+          <circle cx="14" cy="16" r="7" fill="#ffffff" />
+          <circle cx="26" cy="16" r="7" fill="#ffffff" />
+          <circle cx="14" cy="16" r="3.5" fill="#3c3c3c" />
+          <circle cx="26" cy="16" r="3.5" fill="#3c3c3c" />
+          <polygon points="20,18 16,24 24,24" fill="#ff9600" />
+        </svg>
+        <span>duolingo</span>
+      </a>
+
+      <!-- Gamified Player Bar -->
+      <div class="stats-bar">
+        <div class="stat-pill" style="color: var(--streak-orange);" title="Streak count">
+          <span>🔥</span>
+          <span id="streakCount">14</span>
+        </div>
+
+        <div class="stat-pill" style="color: var(--gem-pink);" title="Gems">
+          <span>💎</span>
+          <span>1,240</span>
+        </div>
+
+        <div class="stat-pill" style="color: var(--cardinal-red);" title="Hearts remaining">
+          <span>❤️</span>
+          <span>5</span>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="main-wrapper">
+    <!-- HERO SECTION -->
+    <section class="hero-layout">
+      <!-- Mascot Duo the Owl (Scalable Vector Illustration) -->
+      <div class="duo-mascot-box">
+        <svg viewBox="0 0 280 240" width="280" height="240">
+          <!-- Body -->
+          <ellipse cx="140" cy="130" rx="90" ry="85" fill="#58cc02" />
+          <ellipse cx="140" cy="134" rx="90" ry="85" fill="none" stroke="#58a700" stroke-width="4" />
+          <!-- Chest pale belly -->
+          <path d="M 80 130 C 80 180, 200 180, 200 130 Z" fill="#dbf8c5" />
+          <!-- Eyes -->
+          <circle cx="105" cy="100" r="28" fill="#ffffff" stroke="#3c3c3c" stroke-width="3" />
+          <circle cx="175" cy="100" r="28" fill="#ffffff" stroke="#3c3c3c" stroke-width="3" />
+          <circle cx="108" cy="100" r="14" fill="#3c3c3c" />
+          <circle cx="172" cy="100" r="14" fill="#3c3c3c" />
+          <circle cx="112" cy="94" r="5" fill="#ffffff" />
+          <circle cx="176" cy="94" r="5" fill="#ffffff" />
+          <!-- Orange Beak -->
+          <path d="M 130 115 Q 140 142 150 115 Z" fill="#ff9600" stroke="#cc7a00" stroke-width="2" />
+          <!-- Feet -->
+          <ellipse cx="105" cy="214" rx="18" ry="8" fill="#ff9600" />
+          <ellipse cx="175" cy="214" rx="18" ry="8" fill="#ff9600" />
+        </svg>
+      </div>
+
+      <!-- Hero Pitch -->
+      <div>
+        <h1>The free, fun, and effective way to learn a language!</h1>
+        <p style="margin: 18px 0 28px; font-size: 17px;">
+          Bite-sized lessons backed by science. Practice speaking, reading, listening, and writing to build your vocabulary and grammar skills.
+        </p>
+
+        <div style="display: flex; flex-direction: column; gap: 14px; max-width: 320px;">
+          <a href="#lesson" class="btn-duo btn-duo-green">GET STARTED</a>
+          <button class="btn-duo btn-duo-white" onclick="toggleAuditor()">I ALREADY HAVE AN ACCOUNT</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- LESSON PATHWAY -->
+    <section class="path-section">
+      <div class="unit-banner">
+        <div>
+          <div style="font-size: 12px; font-family: var(--font-display); letter-spacing: 0.08em; text-transform: uppercase;">SECTION 2, UNIT 5</div>
+          <h2 style="color: #ffffff; font-size: 20px;">Order Food & Drinks</h2>
+        </div>
+        <button class="btn-duo btn-duo-white" style="padding: 8px 16px; font-size: 13px;">GUIDEBOOK</button>
+      </div>
+
+      <div class="lesson-nodes-flow">
+        <!-- Node 1: Completed -->
+        <button class="lesson-node-btn" title="Completed lesson" onclick="jumpToLesson()">★</button>
+        <!-- Node 2: Active Pulse -->
+        <button class="lesson-node-btn active-node" title="Current lesson" onclick="jumpToLesson()">📖</button>
+        <!-- Node 3: Locked -->
+        <button class="lesson-node-btn locked" title="Locked lesson">🔒</button>
+        <!-- Node 4: Chest -->
+        <button class="lesson-node-btn locked" style="background: #f7f7f7;" title="Treasure chest">🎁</button>
+      </div>
+    </section>
+
+    <!-- INTERACTIVE TRANSLATION LESSON WIDGET -->
+    <section id="lesson">
+      <div class="lesson-widget">
+        <!-- Progress Bar -->
+        <div class="progress-track">
+          <div class="progress-fill" id="progressFill"></div>
+        </div>
+
+        <h2 style="margin-bottom: 8px;">Translate this sentence</h2>
+        <div style="font-size: 20px; font-weight: 600; color: var(--eel-black); margin-bottom: 24px;">
+          "Un café con leche, por favor."
+        </div>
+
+        <!-- Dropped / Selected Words Line -->
+        <div class="answer-line" id="answerLine">
+          <!-- Dynamically populated with word chips -->
+        </div>
+
+        <!-- Word Bank Options -->
+        <div class="word-bank" id="wordBank">
+          <button class="word-chip" onclick="pickWord(this, 'A')">A</button>
+          <button class="word-chip" onclick="pickWord(this, 'coffee')">coffee</button>
+          <button class="word-chip" onclick="pickWord(this, 'with')">with</button>
+          <button class="word-chip" onclick="pickWord(this, 'milk,')">milk,</button>
+          <button class="word-chip" onclick="pickWord(this, 'please.')">please.</button>
+          <button class="word-chip" onclick="pickWord(this, 'water')">water</button>
+          <button class="word-chip" onclick="pickWord(this, 'tea')">tea</button>
+        </div>
+
+        <div style="display: flex; justify-content: space-between; align-items: center; border-top: 2px solid var(--swan); padding-top: 24px;">
+          <button class="btn-duo btn-duo-white" onclick="resetLesson()">SKIP</button>
+          <button class="btn-duo btn-duo-green" onclick="checkAnswer()" id="checkBtn">CHECK</button>
+        </div>
+
+        <div class="feedback-banner" id="feedbackBox">
+          <div>🎉 Nicely done! That is correct.</div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- FLOATING AUDIT DRAWER -->
+  <div class="audit-trigger">
+    <button class="btn-duo btn-duo-green" onclick="toggleAuditor()" style="padding: 10px 18px; font-size: 14px;">
+      <span>DUO SPEC</span>
+    </button>
+  </div>
+
+  <div class="audit-modal" id="auditModal">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; border-bottom: 2px solid var(--swan); padding-bottom: 6px;">
+      <span style="font-family: var(--font-display); font-weight: 800; color: var(--owl-green);">DUOLINGO TOKENS</span>
+      <button onclick="toggleAuditor()" style="background: none; border: none; cursor: pointer; font-weight: 800;">✕</button>
+    </div>
+    <div style="display: flex; flex-direction: column; gap: 6px;">
+      <div>• Owl Green: <span style="color: #58cc02; font-weight: 700;">#58cc02</span></div>
+      <div>• Owl Green Deep: <span style="color: #58a700; font-weight: 700;">#58a700</span></div>
+      <div>• Streak Orange: <span style="color: #ff9600; font-weight: 700;">#ff9600</span></div>
+      <div>• Gem Pink: <span style="color: #ce82ff; font-weight: 700;">#ce82ff</span></div>
+      <div>• Cardinal Red: <span style="color: #ff4b4b; font-weight: 700;">#ff4b4b</span></div>
+      <div>• Snow/Swan: #ffffff / #e5e5e5</div>
+      <div>• 4px Bottom Shadow on buttons</div>
+      <div>• 2-3px solid borders (never hairlines)</div>
+      <div>• Feather Bold wt 800 + Mona Sans</div>
+    </div>
+  </div>
+
+  <!-- INTERACTIVE LESSON SCRIPT -->
+  <script>
+    function toggleAuditor() {
+      document.getElementById('auditModal').classList.toggle('open');
+    }
+
+    const selectedWords = [];
+
+    function pickWord(btn, word) {
+      if (btn.classList.contains('selected')) return;
+      btn.classList.add('selected');
+      selectedWords.push({ word, btn });
+
+      const line = document.getElementById('answerLine');
+      const chip = document.createElement('button');
+      chip.className = 'word-chip';
+      chip.textContent = word;
+      chip.onclick = function() {
+        chip.remove();
+        btn.classList.remove('selected');
+        const idx = selectedWords.findIndex(item => item.btn === btn);
+        if (idx > -1) selectedWords.splice(idx, 1);
+      };
+      line.appendChild(chip);
+    }
+
+    function resetLesson() {
+      document.getElementById('answerLine').innerHTML = '';
+      document.querySelectorAll('.word-chip').forEach(c => c.classList.remove('selected'));
+      selectedWords.length = 0;
+      document.getElementById('feedbackBox').className = 'feedback-banner';
+    }
+
+    function checkAnswer() {
+      const sentence = selectedWords.map(s => s.word).join(' ');
+      const feedback = document.getElementById('feedbackBox');
+      if (sentence.toLowerCase().includes('coffee') && sentence.toLowerCase().includes('milk')) {
+        feedback.className = 'feedback-banner correct';
+        document.getElementById('progressFill').style.width = '100%';
+        document.getElementById('streakCount').textContent = '15';
+      } else {
+        alert("Try again! Hint: Coffee with milk.");
+      }
+    }
+
+    function jumpToLesson() {
+      document.getElementById('lesson').scrollIntoView({ behavior: 'smooth' });
+    }
+  </script>
+</body>
+</html>

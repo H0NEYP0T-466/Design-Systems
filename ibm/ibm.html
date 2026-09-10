@@ -1,0 +1,1284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>IBM Design System — Carbon Design Language</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@300;400;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      /* Carbon Core Color Tokens (--cds-*) */
+      --cds-background: #ffffff;
+      --cds-text-primary: #161616;       /* Gray 100 */
+      --cds-text-secondary: #525252;     /* Gray 70 */
+      --cds-text-placeholder: #6f6f6f;   /* Gray 60 */
+      --cds-text-disabled: #8d8d8d;      /* Gray 50 */
+      --cds-text-on-color: #ffffff;
+
+      --cds-layer-01: #f4f4f4;           /* Gray 10 - cards, tiles */
+      --cds-layer-01-hover: #e8e8e8;     /* Gray 10 Hover */
+      --cds-layer-02: #e0e0e0;           /* Gray 20 */
+      --cds-layer-dark: #161616;         /* Gray 100 - Masthead/Footer */
+      --cds-layer-dark-hover: #262626;   /* Gray 90 */
+
+      --cds-border-subtle: #c6c6c6;      /* Gray 30 */
+      --cds-border-strong: #8d8d8d;      /* Gray 50 */
+
+      /* Interactive Carbon Blue */
+      --cds-button-primary: #0f62fe;        /* Blue 60 */
+      --cds-button-primary-hover: #0353e9;  /* Blue 60 Hover */
+      --cds-button-primary-active: #002d9c; /* Blue 80 */
+      --cds-link-primary: #0f62fe;
+      --cds-link-primary-hover: #0043ce;    /* Blue 70 */
+      --cds-layer-selected: #edf5ff;        /* Blue 10 */
+      --cds-focus: #0f62fe;
+
+      /* Secondary & Danger Buttons */
+      --cds-button-secondary: #393939;      /* Gray 80 */
+      --cds-button-secondary-hover: #4c4c4c;
+      --cds-button-danger: #da1e28;         /* Red 60 */
+      --cds-button-danger-hover: #b81921;
+
+      /* Status Support Tokens */
+      --cds-support-error: #da1e28;
+      --cds-support-success: #24a148;
+      --cds-support-warning: #f1c21b;
+      --cds-support-info: #0f62fe;
+
+      /* Typography Families */
+      --font-plex-sans: 'IBM Plex Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+      --font-plex-mono: 'IBM Plex Mono', Menlo, Courier, monospace;
+
+      /* Spacing Scale (8px Base Unit) */
+      --cds-spacing-01: 2px;
+      --cds-spacing-02: 4px;
+      --cds-spacing-03: 8px;
+      --cds-spacing-04: 12px;
+      --cds-spacing-05: 16px;
+      --cds-spacing-06: 24px;
+      --cds-spacing-07: 32px;
+      --cds-spacing-08: 40px;
+      --cds-spacing-09: 48px;
+      --cds-spacing-10: 64px;
+      --cds-spacing-11: 80px;
+      --cds-spacing-12: 96px;
+
+      /* Geometry: 0px Border Radius Strictly per Carbon specification */
+      --cds-radius-none: 0px;
+      --cds-radius-tag: 24px; /* Only exception */
+    }
+
+    /* Reset & Base */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      font-size: 16px;
+      background-color: var(--cds-background);
+      color: var(--cds-text-primary);
+      font-family: var(--font-plex-sans);
+      -webkit-font-smoothing: antialiased;
+      scroll-behavior: smooth;
+    }
+
+    body {
+      line-height: 1.5;
+      overflow-x: hidden;
+    }
+
+    /* Carbon Typography Hierarchy */
+    .display-01 {
+      font-size: 60px;
+      font-weight: 300; /* Light weight display is the Carbon signature */
+      line-height: 1.17;
+      letter-spacing: 0;
+    }
+
+    .heading-02 {
+      font-size: 32px;
+      font-weight: 400;
+      line-height: 1.25;
+      letter-spacing: 0;
+    }
+
+    .heading-03 {
+      font-size: 24px;
+      font-weight: 400;
+      line-height: 1.33;
+      letter-spacing: 0;
+    }
+
+    .heading-04 {
+      font-size: 20px;
+      font-weight: 600; /* Semibold for card titles */
+      line-height: 1.40;
+      letter-spacing: 0;
+    }
+
+    .body-long-01 {
+      font-size: 16px;
+      font-weight: 400;
+      line-height: 1.50;
+      color: var(--cds-text-secondary);
+    }
+
+    .body-short-01 {
+      font-size: 14px;
+      font-weight: 400;
+      line-height: 1.29;
+      letter-spacing: 0.16px; /* Micro-tracking */
+      color: var(--cds-text-secondary);
+    }
+
+    .body-short-02 {
+      font-size: 14px;
+      font-weight: 600;
+      line-height: 1.29;
+      letter-spacing: 0.16px;
+      color: var(--cds-text-primary);
+    }
+
+    .caption-01 {
+      font-size: 12px;
+      font-weight: 400;
+      line-height: 1.33;
+      letter-spacing: 0.32px; /* Micro-tracking */
+      color: var(--cds-text-secondary);
+    }
+
+    .code-01 {
+      font-family: var(--font-plex-mono);
+      font-size: 14px;
+      font-weight: 400;
+      line-height: 1.43;
+      letter-spacing: 0.16px;
+    }
+
+    /* Carbon Masthead Navigation: 48px height, Gray 100 (#161616) */
+    header.cds-header {
+      background-color: var(--cds-layer-dark);
+      height: 48px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 var(--cds-spacing-05);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .header-left {
+      display: flex;
+      align-items: center;
+      gap: var(--cds-spacing-06);
+    }
+
+    .ibm-logo-svg {
+      height: 20px;
+      fill: #ffffff;
+    }
+
+    .header-brand {
+      color: #ffffff;
+      font-size: 14px;
+      font-weight: 600;
+      text-decoration: none;
+      letter-spacing: 0.16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .header-brand span {
+      font-weight: 300;
+      color: #c6c6c6;
+    }
+
+    .header-nav-list {
+      display: flex;
+      list-style: none;
+      height: 48px;
+    }
+
+    .header-nav-item a {
+      display: flex;
+      align-items: center;
+      height: 48px;
+      padding: 0 var(--cds-spacing-05);
+      color: #c6c6c6;
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 400;
+      letter-spacing: 0.16px;
+      transition: background-color 0.15s, color 0.15s;
+      border-bottom: 3px solid transparent;
+    }
+
+    .header-nav-item a:hover {
+      background-color: var(--cds-layer-dark-hover);
+      color: #ffffff;
+    }
+
+    .header-nav-item a.active {
+      color: #ffffff;
+      border-bottom-color: var(--cds-button-primary);
+    }
+
+    .header-right {
+      display: flex;
+      align-items: center;
+      gap: var(--cds-spacing-03);
+    }
+
+    /* Notification Banner */
+    .cds-notification {
+      background-color: var(--cds-button-primary);
+      color: #ffffff;
+      padding: 12px var(--cds-spacing-05);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 14px;
+      letter-spacing: 0.16px;
+    }
+
+    .notification-close {
+      background: none;
+      border: none;
+      color: #ffffff;
+      cursor: pointer;
+      font-size: 18px;
+      display: flex;
+      align-items: center;
+    }
+
+    /* Layout Containers */
+    .container {
+      max-width: 1584px;
+      margin: 0 auto;
+      padding: 0 var(--cds-spacing-07);
+    }
+
+    /* Hero Section on White (#ffffff) */
+    .hero-section {
+      background-color: var(--cds-background);
+      padding: var(--cds-spacing-11) 0 var(--cds-spacing-09);
+      border-bottom: 1px solid var(--cds-layer-02);
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1.3fr 1fr;
+      gap: var(--cds-spacing-09);
+      align-items: center;
+    }
+
+    .hero-eyebrow {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--cds-button-primary);
+      margin-bottom: var(--cds-spacing-04);
+      letter-spacing: 0.16px;
+    }
+
+    .hero-cta-group {
+      display: flex;
+      gap: var(--cds-spacing-05);
+      margin-top: var(--cds-spacing-07);
+    }
+
+    /* Carbon Strict 0px Rectangular Buttons */
+    .cds-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 48px;
+      padding: 14px 63px 14px 15px; /* Asymmetric padding for trailing icon */
+      font-size: 14px;
+      font-family: var(--font-plex-sans);
+      font-weight: 400;
+      letter-spacing: 0.16px;
+      text-decoration: none;
+      border-radius: var(--cds-radius-none); /* Strict 0px */
+      border: 1px solid transparent;
+      cursor: pointer;
+      position: relative;
+      transition: background-color 0.15s ease, border-color 0.15s ease;
+      min-width: 180px;
+    }
+
+    .cds-btn svg {
+      position: absolute;
+      right: 15px;
+      width: 16px;
+      height: 16px;
+      transition: transform 0.15s ease;
+    }
+
+    .cds-btn:hover svg {
+      transform: translateX(3px);
+    }
+
+    .cds-btn:focus-visible {
+      outline: 2px solid var(--cds-focus);
+      outline-offset: -2px;
+    }
+
+    .cds-btn-primary {
+      background-color: var(--cds-button-primary);
+      color: #ffffff;
+    }
+
+    .cds-btn-primary:hover {
+      background-color: var(--cds-button-primary-hover);
+    }
+
+    .cds-btn-primary:active {
+      background-color: var(--cds-button-primary-active);
+    }
+
+    .cds-btn-secondary {
+      background-color: var(--cds-button-secondary);
+      color: #ffffff;
+    }
+
+    .cds-btn-secondary:hover {
+      background-color: var(--cds-button-secondary-hover);
+    }
+
+    .cds-btn-tertiary {
+      background-color: transparent;
+      color: var(--cds-button-primary);
+      border-color: var(--cds-button-primary);
+    }
+
+    .cds-btn-tertiary:hover {
+      background-color: var(--cds-layer-selected);
+      color: var(--cds-button-primary-hover);
+    }
+
+    .cds-btn-danger {
+      background-color: var(--cds-button-danger);
+      color: #ffffff;
+    }
+
+    .cds-btn-danger:hover {
+      background-color: var(--cds-button-danger-hover);
+    }
+
+    /* Carbon Hero Architecture SVG */
+    .hero-art-box {
+      background: var(--cds-layer-01);
+      border: 1px solid var(--cds-border-subtle);
+      padding: var(--cds-spacing-06);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 360px;
+    }
+
+    /* Section Rhythm: Alternating Gray 10 (#f4f4f4) Band */
+    .section-band {
+      background-color: var(--cds-layer-01);
+      padding: var(--cds-spacing-10) 0;
+      border-bottom: 1px solid var(--cds-layer-02);
+    }
+
+    .section-header {
+      margin-bottom: var(--cds-spacing-07);
+    }
+
+    .section-header .caption-01 {
+      margin-bottom: var(--cds-spacing-02);
+      text-transform: uppercase;
+      font-weight: 600;
+      color: var(--cds-button-primary);
+    }
+
+    /* Flat Tiles Grid on Gray 10 */
+    .tiles-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1px; /* Carbon Hairline Grid */
+      background-color: var(--cds-border-subtle);
+      border: 1px solid var(--cds-border-subtle);
+    }
+
+    .cds-tile {
+      background-color: #ffffff;
+      padding: var(--cds-spacing-05);
+      border-radius: var(--cds-radius-none);
+      text-decoration: none;
+      color: var(--cds-text-primary);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      min-height: 220px;
+      position: relative;
+      cursor: pointer;
+      transition: background-color 0.15s ease;
+    }
+
+    .cds-tile:hover {
+      background-color: var(--cds-layer-01-hover);
+    }
+
+    .cds-tile .tile-arrow {
+      align-self: flex-end;
+      margin-top: auto;
+      color: var(--cds-button-primary);
+      transition: transform 0.15s ease;
+    }
+
+    .cds-tile:hover .tile-arrow {
+      transform: translate(3px, -3px);
+    }
+
+    /* Carbon Pill Tag: The sole rounded exception */
+    .cds-tag {
+      display: inline-flex;
+      align-items: center;
+      padding: 4px 8px;
+      border-radius: var(--cds-radius-tag);
+      font-size: 12px;
+      font-weight: 400;
+      letter-spacing: 0.32px;
+      width: fit-content;
+      margin-bottom: var(--cds-spacing-03);
+    }
+
+    .cds-tag-blue {
+      background-color: var(--cds-layer-selected);
+      color: var(--cds-button-primary);
+    }
+
+    .cds-tag-green {
+      background-color: #defbe6;
+      color: var(--cds-support-success);
+    }
+
+    .cds-tag-red {
+      background-color: #ffebee;
+      color: var(--cds-support-error);
+    }
+
+    /* Carbon Interactive Form Laboratory */
+    .form-section {
+      background-color: #ffffff;
+      padding: var(--cds-spacing-10) 0;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--cds-spacing-09);
+    }
+
+    .cds-form-item {
+      margin-bottom: var(--cds-spacing-06);
+    }
+
+    .cds-label {
+      display: block;
+      font-size: 12px;
+      font-weight: 400;
+      letter-spacing: 0.32px;
+      color: var(--cds-text-secondary);
+      margin-bottom: var(--cds-spacing-02);
+    }
+
+    /* Signature Carbon Bottom-Border Input */
+    .cds-text-input {
+      width: 100%;
+      height: 40px;
+      background-color: var(--cds-layer-01);
+      color: var(--cds-text-primary);
+      font-family: var(--font-plex-sans);
+      font-size: 14px;
+      letter-spacing: 0.16px;
+      padding: 0 16px;
+      border: none;
+      border-bottom: 2px solid transparent; /* Bottom-border only */
+      border-radius: var(--cds-radius-none);
+      outline: none;
+      transition: border-bottom-color 0.15s ease;
+    }
+
+    .cds-text-input::placeholder {
+      color: var(--cds-text-placeholder);
+    }
+
+    .cds-text-input:focus {
+      border-bottom: 2px solid var(--cds-focus);
+    }
+
+    .cds-text-input.error {
+      border-bottom: 2px solid var(--cds-support-error);
+    }
+
+    .cds-form-error-msg {
+      color: var(--cds-support-error);
+      font-size: 12px;
+      letter-spacing: 0.32px;
+      margin-top: 4px;
+      display: none;
+    }
+
+    .cds-form-error-msg.show {
+      display: block;
+    }
+
+    /* Carbon Data Table */
+    .cds-table-container {
+      margin-top: var(--cds-spacing-07);
+      background: #ffffff;
+      border: 1px solid var(--cds-layer-02);
+    }
+
+    table.cds-data-table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+    }
+
+    table.cds-data-table th {
+      background-color: var(--cds-layer-01);
+      font-size: 14px;
+      font-weight: 600;
+      letter-spacing: 0.16px;
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--cds-border-subtle);
+    }
+
+    table.cds-data-table td {
+      padding: 14px 16px;
+      font-size: 14px;
+      letter-spacing: 0.16px;
+      border-bottom: 1px solid var(--cds-layer-02);
+      color: var(--cds-text-primary);
+    }
+
+    table.cds-data-table tr:hover td {
+      background-color: var(--cds-layer-selected);
+    }
+
+    /* Terminal / Code Block */
+    .cds-code-block {
+      background-color: var(--cds-layer-dark);
+      color: #ffffff;
+      padding: var(--cds-spacing-05);
+      border-radius: var(--cds-radius-none);
+      font-family: var(--font-plex-mono);
+      font-size: 13px;
+      line-height: 1.5;
+      overflow-x: auto;
+    }
+
+    /* Footer on Gray 100 (#161616) */
+    footer.cds-footer {
+      background-color: var(--cds-layer-dark);
+      color: #c6c6c6;
+      padding: var(--cds-spacing-10) 0 var(--cds-spacing-07);
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 1.5fr repeat(3, 1fr);
+      gap: var(--cds-spacing-08);
+      margin-bottom: var(--cds-spacing-09);
+    }
+
+    .footer-col h5 {
+      color: #ffffff;
+      font-size: 14px;
+      font-weight: 600;
+      letter-spacing: 0.16px;
+      margin-bottom: var(--cds-spacing-05);
+    }
+
+    .footer-links {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .footer-links a {
+      color: #c6c6c6;
+      text-decoration: none;
+      font-size: 14px;
+      letter-spacing: 0.16px;
+      transition: color 0.15s;
+    }
+
+    .footer-links a:hover {
+      color: #ffffff;
+      text-decoration: underline;
+    }
+
+    .footer-bottom {
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      padding-top: var(--cds-spacing-06);
+      display: flex;
+      justify-content: space-between;
+      font-size: 12px;
+      letter-spacing: 0.32px;
+    }
+
+    /* Design System Token Auditor Drawer */
+    .token-audit-toggle {
+      position: fixed;
+      bottom: 24px;
+      left: 24px;
+      z-index: 999;
+      background: var(--cds-layer-dark);
+      color: #ffffff;
+      padding: 12px 18px;
+      border-radius: var(--cds-radius-none);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      font-size: 12px;
+      font-family: var(--font-plex-mono);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+    }
+
+    .token-audit-toggle:hover {
+      background: var(--cds-button-primary);
+      border-color: var(--cds-button-primary);
+    }
+
+    .token-drawer {
+      position: fixed;
+      top: 0;
+      left: -460px;
+      width: 440px;
+      height: 100vh;
+      background: #ffffff;
+      border-right: 1px solid var(--cds-layer-02);
+      z-index: 2000;
+      padding: var(--cds-spacing-07);
+      overflow-y: auto;
+      transition: left 0.25s ease;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+    }
+
+    .token-drawer.open {
+      left: 0;
+    }
+
+    .token-drawer-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: var(--cds-spacing-06);
+      padding-bottom: var(--cds-spacing-04);
+      border-bottom: 1px solid var(--cds-layer-02);
+    }
+
+    .token-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 8px 0;
+      border-bottom: 1px solid var(--cds-layer-01);
+      font-size: 13px;
+    }
+
+    /* Toast Notification */
+    .cds-toast {
+      position: fixed;
+      top: 24px;
+      right: 24px;
+      background: var(--cds-layer-dark);
+      color: #ffffff;
+      border-left: 4px solid var(--cds-button-primary);
+      padding: 14px 20px;
+      border-radius: var(--cds-radius-none);
+      font-size: 14px;
+      letter-spacing: 0.16px;
+      z-index: 3000;
+      opacity: 0;
+      transform: translateY(-10px);
+      transition: all 0.2s ease;
+      pointer-events: none;
+    }
+
+    .cds-toast.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Responsive */
+    @media (max-width: 1056px) {
+      .hero-grid {
+        grid-template-columns: 1fr;
+      }
+      .tiles-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      .form-grid {
+        grid-template-columns: 1fr;
+      }
+      .footer-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 672px) {
+      .tiles-grid {
+        grid-template-columns: 1fr;
+      }
+      .header-nav-list {
+        display: none;
+      }
+      .footer-grid {
+        grid-template-columns: 1fr;
+      }
+      .hero-cta-group {
+        flex-direction: column;
+      }
+      .display-01 {
+        font-size: 42px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Full-Width Dark Masthead: 48px height, Gray 100 (#161616) -->
+  <header class="cds-header">
+    <div class="header-left">
+      <!-- IBM 8-bar Logo SVG -->
+      <a href="#" class="header-brand" aria-label="IBM Home">
+        <svg class="ibm-logo-svg" viewBox="0 0 100 40" xmlns="http://www.w3.org/2000/svg">
+          <!-- 8 Horizontal Bars forming IBM wordmark -->
+          <g fill="#ffffff">
+            <rect y="0" width="100" height="2.8"/>
+            <rect y="5.2" width="100" height="2.8"/>
+            <rect y="10.4" width="100" height="2.8"/>
+            <rect y="15.6" width="100" height="2.8"/>
+            <rect y="20.8" width="100" height="2.8"/>
+            <rect y="26.0" width="100" height="2.8"/>
+            <rect y="31.2" width="100" height="2.8"/>
+            <rect y="36.4" width="100" height="2.8"/>
+          </g>
+        </svg>
+        <span>Carbon</span>
+      </a>
+
+      <ul class="header-nav-list">
+        <li class="header-nav-item"><a href="#hero" class="active">Overview</a></li>
+        <li class="header-nav-item"><a href="#solutions">Hybrid Cloud</a></li>
+        <li class="header-nav-item"><a href="#watsonx">watsonx AI</a></li>
+        <li class="header-nav-item"><a href="#quantum">Quantum</a></li>
+        <li class="header-nav-item"><a href="#components">Carbon Tokens</a></li>
+      </ul>
+    </div>
+
+    <div class="header-right">
+      <button class="cds-btn cds-btn-tertiary" style="height: 32px; padding: 0 16px; min-width: auto; font-size: 12px;" onclick="triggerToast('Consulting an IBM Specialist')">
+        Contact Sales
+      </button>
+    </div>
+  </header>
+
+  <!-- Notification Banner -->
+  <aside class="cds-notification" id="banner">
+    <div>
+      <strong>Announcing IBM Quantum System Two:</strong> Modular quantum architecture now active across global hybrid cloud nodes.
+    </div>
+    <button class="notification-close" onclick="document.getElementById('banner').style.display='none'" aria-label="Dismiss Banner">&times;</button>
+  </aside>
+
+  <!-- Hero Section: Display 01 at 60px Weight 300 (Light) -->
+  <section class="hero-section" id="hero">
+    <div class="container hero-grid">
+      <div>
+        <div class="hero-eyebrow">ENTERPRISE ARTIFICIAL INTELLIGENCE</div>
+        <h1 class="display-01">Scale enterprise intelligence with watsonx.</h1>
+        <p class="body-long-01" style="margin-top: var(--cds-spacing-05); max-width: 640px;">
+          Trained on trusted enterprise data, governed by rigorous compliance, and deployed anywhere across hybrid cloud environments.
+        </p>
+
+        <div class="hero-cta-group">
+          <!-- Primary Blue Button with 14px 63px 14px 15px asymmetric padding and 0px radius -->
+          <button class="cds-btn cds-btn-primary" onclick="triggerToast('Initiating watsonx trial sandbox')">
+            <span>Explore watsonx</span>
+            <svg viewBox="0 0 16 16" fill="currentColor">
+              <path d="M9.3 3.3L8.6 4 12.1 7.5H2v1h10.1L8.6 12l.7.7 4.7-4.7z"/>
+            </svg>
+          </button>
+
+          <!-- Secondary Gray Button (#393939) -->
+          <button class="cds-btn cds-btn-secondary" onclick="triggerToast('Opening architecture white paper')">
+            <span>Book a live demo</span>
+            <svg viewBox="0 0 16 16" fill="currentColor">
+              <path d="M9.3 3.3L8.6 4 12.1 7.5H2v1h10.1L8.6 12l.7.7 4.7-4.7z"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- Carbon Technical Schematic SVG -->
+      <div class="hero-art-box">
+        <svg viewBox="0 0 440 260" width="100%" height="240" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <!-- Carbon Grid Nodes -->
+          <line x1="40" y1="40" x2="400" y2="40" stroke="#c6c6c6" stroke-width="1"/>
+          <line x1="40" y1="120" x2="400" y2="120" stroke="#c6c6c6" stroke-width="1"/>
+          <line x1="40" y1="200" x2="400" y2="200" stroke="#c6c6c6" stroke-width="1"/>
+          <line x1="120" y1="20" x2="120" y2="220" stroke="#c6c6c6" stroke-width="1"/>
+          <line x1="240" y1="20" x2="240" y2="220" stroke="#c6c6c6" stroke-width="1"/>
+          <line x1="360" y1="20" x2="360" y2="220" stroke="#c6c6c6" stroke-width="1"/>
+
+          <!-- IBM Blue 60 (#0f62fe) Active Route -->
+          <rect x="100" y="80" width="160" height="80" fill="#ffffff" stroke="#0f62fe" stroke-width="2"/>
+          <rect x="100" y="80" width="160" height="4" fill="#0f62fe"/>
+          <text x="116" y="112" font-family="'IBM Plex Sans', sans-serif" font-size="12" font-weight="600" fill="#161616">watsonx.data</text>
+          <text x="116" y="132" font-family="'IBM Plex Mono', monospace" font-size="11" fill="#525252">lakehouse_core: active</text>
+
+          <!-- Satellite Cluster -->
+          <rect x="290" y="30" width="100" height="50" fill="#ffffff" stroke="#c6c6c6" stroke-width="1"/>
+          <text x="302" y="58" font-family="'IBM Plex Sans', sans-serif" font-size="11" font-weight="600" fill="#161616">Red Hat OpenShift</text>
+
+          <!-- Quantum Node -->
+          <rect x="290" y="160" width="100" height="50" fill="#ffffff" stroke="#c6c6c6" stroke-width="1"/>
+          <text x="302" y="188" font-family="'IBM Plex Sans', sans-serif" font-size="11" font-weight="600" fill="#161616">Quantum Heron</text>
+
+          <path d="M 260 120 L 290 55" stroke="#0f62fe" stroke-width="1.5" stroke-dasharray="3 3"/>
+          <path d="M 260 120 L 290 185" stroke="#0f62fe" stroke-width="1.5"/>
+          <circle cx="260" cy="120" r="4" fill="#0f62fe"/>
+        </svg>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section Band on Gray 10 (#f4f4f4): Flat Carbon Tiles -->
+  <section class="section-band" id="solutions">
+    <div class="container">
+      <div class="section-header">
+        <div class="caption-01">SOLUTIONS PORTFOLIO</div>
+        <h2 class="heading-02">Engineered for hybrid cloud resilience</h2>
+        <p class="body-long-01" style="max-width: 720px; margin-top: 8px;">
+          Carbon tiles rely on background-color layering rather than drop-shadows. On hover, background shifts cleanly to #e8e8e8.
+        </p>
+      </div>
+
+      <!-- 3-Tile Hairline Grid -->
+      <div class="tiles-grid">
+        <!-- Tile 1 -->
+        <div class="cds-tile" onclick="triggerToast('Opening Red Hat Hybrid Cloud Architecture')">
+          <div>
+            <span class="cds-tag cds-tag-blue">HYBRID CLOUD</span>
+            <h3 class="heading-04" style="margin-top: 8px;">Red Hat OpenShift on IBM Cloud</h3>
+            <p class="body-short-01" style="margin-top: 8px;">
+              Enterprise Kubernetes platform deployed with automated compliance guardrails, built-in security, and multi-zone VPC resilience.
+            </p>
+          </div>
+          <div class="tile-arrow">
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
+              <path d="M11.8 4.3l-.7.7 4.1 4.1H2v1h13.2l-4.1 4.1.7.7 5.3-5.3z"/>
+            </svg>
+          </div>
+        </div>
+
+        <!-- Tile 2 -->
+        <div class="cds-tile" id="watsonx" onclick="triggerToast('Opening watsonx.governance Suite')">
+          <div>
+            <span class="cds-tag cds-tag-green">OPERATIONAL AI</span>
+            <h3 class="heading-04" style="margin-top: 8px;">watsonx.governance</h3>
+            <p class="body-short-01" style="margin-top: 8px;">
+              Accelerate transparent AI lifecycles with lineage tracking, automated bias detection, and EU AI Act compliance telemetry.
+            </p>
+          </div>
+          <div class="tile-arrow">
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
+              <path d="M11.8 4.3l-.7.7 4.1 4.1H2v1h13.2l-4.1 4.1.7.7 5.3-5.3z"/>
+            </svg>
+          </div>
+        </div>
+
+        <!-- Tile 3 -->
+        <div class="cds-tile" id="quantum" onclick="triggerToast('Accessing IBM Quantum Heron Processor')">
+          <div>
+            <span class="cds-tag cds-tag-blue">QUANTUM COMPUTING</span>
+            <h3 class="heading-04" style="margin-top: 8px;">IBM Quantum Heron Processor</h3>
+            <p class="body-short-01" style="margin-top: 8px;">
+              Utility-scale 133-qubit quantum architectures achieving 5x error reduction over previous generations for material science synthesis.
+            </p>
+          </div>
+          <div class="tile-arrow">
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
+              <path d="M11.8 4.3l-.7.7 4.1 4.1H2v1h13.2l-4.1 4.1.7.7 5.3-5.3z"/>
+            </svg>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Interactive Carbon Form & Component Lab -->
+  <section class="form-section" id="components">
+    <div class="container">
+      <div class="section-header">
+        <div class="caption-01">CARBON COMPONENT LABORATORY</div>
+        <h2 class="heading-02">Signature Bottom-Border Form Fields</h2>
+        <p class="body-long-01" style="max-width: 680px; margin-top: 8px;">
+          Carbon forms do not use full box borders. Inputs feature a 40px height, #f4f4f4 surface fill, and a 2px bottom border that activates on focus (#0f62fe).
+        </p>
+      </div>
+
+      <div class="form-grid">
+        <!-- Interactive Form -->
+        <div style="background: var(--cds-layer-01); padding: var(--cds-spacing-06); border: 1px solid var(--cds-border-subtle);">
+          <h3 class="heading-04" style="margin-bottom: var(--cds-spacing-05);">Provision Cluster Node</h3>
+          
+          <form id="carbonForm" onsubmit="event.preventDefault(); handleCarbonSubmit();">
+            <div class="cds-form-item">
+              <label class="cds-label" for="clusterName">CLUSTER IDENTIFIER</label>
+              <input type="text" class="cds-text-input" id="clusterName" placeholder="e.g. us-east-vpc-prod-01" required>
+            </div>
+
+            <div class="cds-form-item">
+              <label class="cds-label" for="adminEmail">SECURITY ADMIN EMAIL</label>
+              <input type="email" class="cds-text-input" id="adminEmail" placeholder="admin@ibm-partner.com" required>
+              <div class="cds-form-error-msg" id="emailError">A valid enterprise email domain is required.</div>
+            </div>
+
+            <div class="cds-form-item">
+              <label class="cds-label" for="tierSelect">COMPUTE SPECIFICATION</label>
+              <select class="cds-text-input" id="tierSelect">
+                <option value="4x16">4 vCPU · 16 GB RAM · OpenShift 4.16</option>
+                <option value="8x32" selected>8 vCPU · 32 GB RAM · Dedicated Isolated VPC</option>
+                <option value="16x64">16 vCPU · 64 GB RAM · Bare Metal Accelerated</option>
+              </select>
+            </div>
+
+            <div style="display: flex; gap: var(--cds-spacing-04); margin-top: var(--cds-spacing-06);">
+              <button type="submit" class="cds-btn cds-btn-primary" style="height: 40px; padding: 0 20px;">
+                <span>Provision Node</span>
+              </button>
+              <button type="button" class="cds-btn cds-btn-tertiary" style="height: 40px; padding: 0 16px;" onclick="resetCarbonForm()">
+                <span>Reset</span>
+              </button>
+            </div>
+          </form>
+        </div>
+
+        <!-- Live Telemetry & Code Block -->
+        <div>
+          <h3 class="heading-04" style="margin-bottom: var(--cds-spacing-04);">Live Cluster Telemetry</h3>
+          <div class="cds-code-block" id="telemetryOutput">
+// IBM Carbon Design System Telemetry Node
+// Status: Connected to us-south-dal10
+{
+  "cluster_id": "ibm-carbon-vpc-09",
+  "carbon_tokens": {
+    "--cds-button-primary": "#0f62fe",
+    "--cds-layer-01": "#f4f4f4",
+    "--cds-text-primary": "#161616",
+    "border-radius": "0px"
+  },
+  "workload_status": "NOMINAL_60_FPS"
+}
+          </div>
+
+          <div style="margin-top: var(--cds-spacing-05); display: flex; gap: var(--cds-spacing-04);">
+            <button class="cds-btn cds-btn-secondary" style="height: 40px; padding: 0 16px;" onclick="triggerToast('Executing Quantum job: 1024 shots')">
+              <span>Run Quantum Circuit</span>
+            </button>
+            <button class="cds-btn cds-btn-danger" style="height: 40px; padding: 0 16px;" onclick="triggerToast('Node de-provisioning confirmed')">
+              <span>Terminate Node</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Carbon Data Table -->
+      <div class="cds-table-container">
+        <table class="cds-data-table">
+          <thead>
+            <tr>
+              <th>NODE ID</th>
+              <th>WORKLOAD NAME</th>
+              <th>CLUSTER REGION</th>
+              <th>CORES</th>
+              <th>STATUS</th>
+              <th style="text-align: right;">ACTION</th>
+            </tr>
+          </thead>
+          <tbody id="nodeTableBody">
+            <tr>
+              <td class="code-01">crn:v1:bluemix:node-01</td>
+              <td><strong>watsonx-llm-inference</strong></td>
+              <td>us-south (Dallas)</td>
+              <td>32 vCPU</td>
+              <td><span class="cds-tag cds-tag-green">RUNNING</span></td>
+              <td style="text-align: right;">
+                <a href="#hero" class="code-01" style="color: var(--cds-link-primary); text-decoration: none;">View &rarr;</a>
+              </td>
+            </tr>
+            <tr>
+              <td class="code-01">crn:v1:bluemix:node-02</td>
+              <td><strong>openshift-kafka-stream</strong></td>
+              <td>eu-de (Frankfurt)</td>
+              <td>16 vCPU</td>
+              <td><span class="cds-tag cds-tag-blue">SYNCING</span></td>
+              <td style="text-align: right;">
+                <a href="#hero" class="code-01" style="color: var(--cds-link-primary); text-decoration: none;">View &rarr;</a>
+              </td>
+            </tr>
+            <tr>
+              <td class="code-01">crn:v1:bluemix:node-03</td>
+              <td><strong>quantum-heron-transpiler</strong></td>
+              <td>us-east (Washington)</td>
+              <td>64 vCPU</td>
+              <td><span class="cds-tag cds-tag-green">OPTIMAL</span></td>
+              <td style="text-align: right;">
+                <a href="#hero" class="code-01" style="color: var(--cds-link-primary); text-decoration: none;">View &rarr;</a>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer: Dark Full-Width Gray 100 (#161616) -->
+  <footer class="cds-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div>
+          <svg class="ibm-logo-svg" style="height: 24px; margin-bottom: 16px;" viewBox="0 0 100 40">
+            <g fill="#ffffff">
+              <rect y="0" width="100" height="2.8"/>
+              <rect y="5.2" width="100" height="2.8"/>
+              <rect y="10.4" width="100" height="2.8"/>
+              <rect y="15.6" width="100" height="2.8"/>
+              <rect y="20.8" width="100" height="2.8"/>
+              <rect y="26.0" width="100" height="2.8"/>
+              <rect y="31.2" width="100" height="2.8"/>
+              <rect y="36.4" width="100" height="2.8"/>
+            </g>
+          </svg>
+          <p class="caption-01" style="color: #8d8d8d; max-width: 280px; line-height: 1.5;">
+            IBM Carbon Design System is an open-source design language for products and digital experiences.
+          </p>
+        </div>
+
+        <div class="footer-col">
+          <h5>Products</h5>
+          <ul class="footer-links">
+            <li><a href="#watsonx">watsonx.ai</a></li>
+            <li><a href="#solutions">Red Hat OpenShift</a></li>
+            <li><a href="#quantum">IBM Quantum</a></li>
+            <li><a href="#solutions">IBM Cloud VPC</a></li>
+            <li><a href="#solutions">IBM Security Guardium</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h5>Carbon System</h5>
+          <ul class="footer-links">
+            <li><a href="#components">Carbon React</a></li>
+            <li><a href="#components">Color Tokens</a></li>
+            <li><a href="#components">2x Grid Guide</a></li>
+            <li><a href="#components">Iconography</a></li>
+            <li><a href="#components">Accessibility WCAG AAA</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h5>Community</h5>
+          <ul class="footer-links">
+            <li><a href="#">GitHub Repo</a></li>
+            <li><a href="#">Design Research</a></li>
+            <li><a href="#">Developer Documentation</a></li>
+            <li><a href="#">Carbon Tutorials</a></li>
+            <li><a href="#">Support Forum</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <div>&copy; 2026 International Business Machines Corporation. All rights reserved.</div>
+        <div style="display: flex; gap: var(--cds-spacing-05);">
+          <a href="#" style="color: #8d8d8d; text-decoration: none;">Privacy</a>
+          <a href="#" style="color: #8d8d8d; text-decoration: none;">Terms of use</a>
+          <a href="#" style="color: #8d8d8d; text-decoration: none;">Cookie preferences</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Token Audit Inspector Drawer -->
+  <button class="token-audit-toggle" id="tokenDrawerBtn" aria-label="Open Carbon Token Auditor">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <circle cx="12" cy="12" r="10"></circle>
+      <line x1="12" y1="16" x2="12" y2="12"></line>
+      <line x1="12" y1="8" x2="12.01" y2="8"></line>
+    </svg>
+    CARBON TOKENS
+  </button>
+
+  <div class="token-drawer" id="tokenDrawer">
+    <div class="token-drawer-header">
+      <h3 class="heading-04">CARBON TOKEN AUDIT</h3>
+      <button id="closeDrawerBtn" style="background: none; border: none; font-size: 20px; cursor: pointer;">&times;</button>
+    </div>
+
+    <div style="margin-bottom: var(--cds-spacing-06);">
+      <div class="caption-01" style="font-weight: 600; color: var(--cds-button-primary);">CORE COLOR PALETTE</div>
+      <div class="token-row">
+        <span>--cds-button-primary (Blue 60)</span>
+        <code style="color: #0f62fe; font-weight: 600;">#0f62fe</code>
+      </div>
+      <div class="token-row">
+        <span>--cds-button-primary-hover</span>
+        <code>#0353e9</code>
+      </div>
+      <div class="token-row">
+        <span>--cds-background (White)</span>
+        <code>#ffffff</code>
+      </div>
+      <div class="token-row">
+        <span>--cds-text-primary (Gray 100)</span>
+        <code>#161616</code>
+      </div>
+      <div class="token-row">
+        <span>--cds-text-secondary (Gray 70)</span>
+        <code>#525252</code>
+      </div>
+      <div class="token-row">
+        <span>--cds-layer-01 (Gray 10)</span>
+        <code>#f4f4f4</code>
+      </div>
+      <div class="token-row">
+        <span>--cds-layer-01-hover</span>
+        <code>#e8e8e8</code>
+      </div>
+      <div class="token-row">
+        <span>--cds-border-subtle (Gray 30)</span>
+        <code>#c6c6c6</code>
+      </div>
+    </div>
+
+    <div style="margin-bottom: var(--cds-spacing-06);">
+      <div class="caption-01" style="font-weight: 600; color: var(--cds-button-primary);">GEOMETRY &amp; ELEVATION</div>
+      <div class="token-row">
+        <span>Border Radius</span>
+        <code>0px (Strict Rectangles)</code>
+      </div>
+      <div class="token-row">
+        <span>Tag Radius (Exception)</span>
+        <code>24px (Pill Only)</code>
+      </div>
+      <div class="token-row">
+        <span>Primary Button Height</span>
+        <code>48px default</code>
+      </div>
+      <div class="token-row">
+        <span>Input Bottom Border</span>
+        <code>2px solid #0f62fe on focus</code>
+      </div>
+      <div class="token-row">
+        <span>Depth Mechanism</span>
+        <code>Color layering (no shadows)</code>
+      </div>
+    </div>
+
+    <div>
+      <div class="caption-01" style="font-weight: 600; color: var(--cds-button-primary);">TYPOGRAPHY SCALE</div>
+      <div class="token-row">
+        <span>Display Headline</span>
+        <code>Weight 300 (Light)</code>
+      </div>
+      <div class="token-row">
+        <span>Micro-tracking</span>
+        <code>0.16px on 14px / 0.32px on 12px</code>
+      </div>
+      <div class="token-row">
+        <span>Boldness Stance</span>
+        <code>Weight 600 max (no 700)</code>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification -->
+  <div class="cds-toast" id="cdsToast">Action acknowledged.</div>
+
+  <script>
+    // Toast Notification System
+    const toast = document.getElementById('cdsToast');
+    function triggerToast(text) {
+      toast.textContent = text;
+      toast.classList.add('show');
+      setTimeout(() => {
+        toast.classList.remove('show');
+      }, 2500);
+    }
+
+    // Form submission & Validation
+    function handleCarbonSubmit() {
+      const email = document.getElementById('adminEmail');
+      const cluster = document.getElementById('clusterName');
+      const error = document.getElementById('emailError');
+
+      if (!email.value.includes('@') || !email.value.includes('.')) {
+        email.classList.add('error');
+        error.classList.add('show');
+        return;
+      }
+
+      email.classList.remove('error');
+      error.classList.remove('show');
+      triggerToast('Provisioning cluster: ' + cluster.value);
+
+      // Add to table
+      const tbody = document.getElementById('nodeTableBody');
+      const tr = document.createElement('tr');
+      const randId = 'crn:v1:bluemix:node-0' + (tbody.children.length + 1);
+      tr.innerHTML = `
+        <td class="code-01">${randId}</td>
+        <td><strong>${cluster.value}</strong></td>
+        <td>us-east (Washington)</td>
+        <td>8 vCPU</td>
+        <td><span class="cds-tag cds-tag-blue">PROVISIONING</span></td>
+        <td style="text-align: right;">
+          <a href="#hero" class="code-01" style="color: var(--cds-link-primary); text-decoration: none;">View &rarr;</a>
+        </td>
+      `;
+      tbody.prepend(tr);
+
+      // Update telemetry
+      document.getElementById('telemetryOutput').textContent = `// IBM Carbon Design System Telemetry Node\n// Latest: Provisioned ${cluster.value}\n{\n  "cluster_id": "${cluster.value}",\n  "admin": "${email.value}",\n  "status": "ALLOCATED_SUCCESS"\n}`;
+
+      cluster.value = '';
+      email.value = '';
+    }
+
+    function resetCarbonForm() {
+      document.getElementById('adminEmail').classList.remove('error');
+      document.getElementById('emailError').classList.remove('show');
+    }
+
+    // Drawer Logic
+    const tokenDrawer = document.getElementById('tokenDrawer');
+    document.getElementById('tokenDrawerBtn').addEventListener('click', () => {
+      tokenDrawer.classList.toggle('open');
+    });
+    document.getElementById('closeDrawerBtn').addEventListener('click', () => {
+      tokenDrawer.classList.remove('open');
+    });
+  </script>
+</body>
+</html>

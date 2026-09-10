@@ -1,0 +1,872 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MiniMax — Artificial General Intelligence &amp; Foundation Models</title>
+  
+  <!-- Fonts: Outfit (Display), DM Sans (Primary UI), Poppins (Mid-tier) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=Outfit:wght@400;500;600;700&family=Poppins:wght@500;600;700&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+  <style>
+    /* MiniMax Design Tokens (from DESIGN.md & tokens.css) */
+    :root {
+      /* Surface & Canvas */
+      --bg: #ffffff;                /* Pure White — primary canvas */
+      --surface: #fafafa;           /* Near-white card surface */
+      --surface-warm: #f0f0f0;      /* Secondary button background */
+      --surface-dark: #181e25;      /* Dark footer background */
+
+      /* Foreground / Text */
+      --fg: #222222;                /* Near-black primary text */
+      --fg-2: #18181b;              /* Dark headings & button labels */
+      --muted: #45515e;             /* Dark gray secondary text */
+      --meta: #8e8e93;              /* Mid gray tertiary / muted labels */
+
+      /* Borders */
+      --border: #e5e7eb;            /* Component border */
+      --border-soft: #f2f3f5;       /* Subtle section divider */
+
+      /* Brand Accents */
+      --accent: #1456f0;            /* MiniMax Brand Blue 6 */
+      --accent-hover: #2563eb;      /* Primary 600 */
+      --accent-active: #1d4ed8;     /* Primary 700 */
+      --brand-sky: #3daeff;
+      --brand-pink: #ea5ec1;        /* Logo / secondary accent */
+      --success-bg: #e8ffea;
+
+      /* Typography */
+      --font-display: "Outfit", "Helvetica Neue", Arial, sans-serif;
+      --font-body: "DM Sans", "Helvetica Neue", Arial, sans-serif;
+      --font-mid: "Poppins", "Helvetica Neue", Arial, sans-serif;
+      --font-mono: "Roboto Mono", monospace;
+
+      /* Radii */
+      --radius-sm: 8px;             /* CTA buttons & tags */
+      --radius-md: 13px;            /* Medium cards / panels */
+      --radius-lg: 20px;            /* Product cards */
+      --radius-xl: 24px;            /* Featured hero containers */
+      --radius-pill: 9999px;        /* Navigation pills & badges */
+
+      /* Depth & Shadows */
+      --shadow-standard: 0 4px 6px rgba(0, 0, 0, 0.08);
+      --shadow-brand-purple: 0 0 15px rgba(44, 30, 116, 0.16);
+      --shadow-lift: 0 12px 16px -4px rgba(36, 36, 36, 0.08);
+      --focus-ring: 0 0 0 3px rgba(20, 86, 240, 0.25);
+    }
+
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--bg);
+      color: var(--fg);
+      font-family: var(--font-body);
+      font-size: 16px;
+      line-height: 1.5;
+      min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Sticky Navigation Header */
+    .minimax-nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(255, 255, 255, 0.92);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border-soft);
+      padding: 0 2rem;
+    }
+
+    .nav-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      height: 72px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1.5rem;
+    }
+
+    .brand-mark {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+      color: var(--fg-2);
+    }
+
+    .logo-badge {
+      width: 34px;
+      height: 34px;
+      background: var(--fg-2);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #ffffff;
+      font-weight: 700;
+      font-family: var(--font-display);
+      position: relative;
+    }
+
+    .logo-badge::after {
+      content: '';
+      position: absolute;
+      width: 8px;
+      height: 8px;
+      background: var(--brand-pink);
+      border-radius: 50%;
+      top: -2px;
+      right: -2px;
+    }
+
+    .brand-title {
+      font-family: var(--font-display);
+      font-size: 20px;
+      font-weight: 600;
+      letter-spacing: -0.02em;
+    }
+
+    .nav-pills {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      list-style: none;
+    }
+
+    .pill-link {
+      padding: 6px 14px;
+      border-radius: var(--radius-pill);
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--fg-2);
+      text-decoration: none;
+      transition: all 150ms ease;
+    }
+
+    .pill-link:hover, .pill-link.active {
+      background: rgba(0, 0, 0, 0.05);
+      color: var(--accent);
+    }
+
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    /* Buttons */
+    .btn {
+      font-family: var(--font-body);
+      font-size: 14px;
+      font-weight: 600;
+      padding: 10px 20px;
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      text-decoration: none;
+      transition: all 150ms ease;
+      border: none;
+      user-select: none;
+    }
+
+    .btn-dark {
+      background: #181e25;
+      color: #ffffff;
+    }
+
+    .btn-dark:hover {
+      background: #2a3440;
+      transform: translateY(-1px);
+    }
+
+    .btn-primary-blue {
+      background: var(--accent);
+      color: #ffffff;
+    }
+
+    .btn-primary-blue:hover {
+      background: var(--accent-hover);
+      transform: translateY(-1px);
+    }
+
+    .btn-secondary {
+      background: var(--surface-warm);
+      color: #333333;
+    }
+
+    .btn-secondary:hover {
+      background: #e4e4e7;
+    }
+
+    .btn-pill {
+      border-radius: var(--radius-pill);
+    }
+
+    /* Hero Section */
+    .hero-wrap {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 5rem 2rem 3rem 2rem;
+      text-align: center;
+    }
+
+    .hero-badge-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--surface-warm);
+      padding: 6px 16px;
+      border-radius: var(--radius-pill);
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--muted);
+      margin-bottom: 2rem;
+    }
+
+    .hero-badge-pill span.model-ver {
+      background: var(--accent);
+      color: #ffffff;
+      padding: 2px 8px;
+      border-radius: var(--radius-pill);
+      font-size: 11px;
+      font-weight: 700;
+    }
+
+    .hero-headline {
+      font-family: var(--font-display);
+      font-size: clamp(3rem, 6.5vw, 5rem);
+      font-weight: 500;
+      line-height: 1.1;
+      letter-spacing: -0.02em;
+      color: var(--fg-2);
+      max-width: 900px;
+      margin: 0 auto 1.5rem auto;
+    }
+
+    .hero-subtext {
+      font-size: 1.25rem;
+      color: var(--muted);
+      max-width: 700px;
+      margin: 0 auto 2.5rem auto;
+      line-height: 1.5;
+    }
+
+    .hero-actions-row {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    /* Main Content Container */
+    .main-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 2rem 5rem 2rem;
+      width: 100%;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 5rem;
+    }
+
+    /* Section Headers */
+    .section-title-wrap {
+      margin-bottom: 2rem;
+    }
+
+    .section-title {
+      font-family: var(--font-display);
+      font-size: 31px;
+      font-weight: 600;
+      color: var(--fg-2);
+      letter-spacing: -0.01em;
+    }
+
+    .section-sub {
+      font-size: 16px;
+      color: var(--muted);
+      margin-top: 4px;
+    }
+
+    /* Product Cards Gallery (Bento with Vibrant Gradients) */
+    .products-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 2rem;
+    }
+
+    @media (max-width: 850px) {
+      .products-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .product-card {
+      border-radius: var(--radius-lg);
+      padding: 2.5rem;
+      color: #ffffff;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      min-height: 320px;
+      position: relative;
+      overflow: hidden;
+      box-shadow: var(--shadow-brand-purple);
+      transition: transform 220ms ease, box-shadow 220ms ease;
+      cursor: pointer;
+    }
+
+    .product-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 20px 32px rgba(44, 30, 116, 0.25);
+    }
+
+    .card-hailuo {
+      background: linear-gradient(135deg, #ea5ec1 0%, #7033ff 60%, #1456f0 100%);
+    }
+
+    .card-conch {
+      background: linear-gradient(135deg, #1456f0 0%, #17437d 100%);
+    }
+
+    .card-voice {
+      background: linear-gradient(135deg, #3daeff 0%, #1456f0 60%, #2563eb 100%);
+    }
+
+    .card-vision {
+      background: linear-gradient(135deg, #ff7a00 0%, #ea5ec1 100%);
+    }
+
+    .card-category {
+      font-family: var(--font-mid);
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      opacity: 0.9;
+    }
+
+    .card-name {
+      font-family: var(--font-display);
+      font-size: 32px;
+      font-weight: 600;
+      margin-top: 4px;
+      line-height: 1.2;
+    }
+
+    .card-desc {
+      font-size: 15px;
+      opacity: 0.9;
+      line-height: 1.5;
+      margin-top: 10px;
+      max-width: 420px;
+    }
+
+    .card-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 2rem;
+    }
+
+    .badge-white {
+      background: rgba(255, 255, 255, 0.25);
+      backdrop-filter: blur(10px);
+      padding: 4px 12px;
+      border-radius: var(--radius-pill);
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    /* Interactive Generation Studio */
+    .studio-panel {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-xl);
+      padding: 2.5rem;
+      box-shadow: var(--shadow-standard);
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2.5rem;
+    }
+
+    @media (max-width: 900px) {
+      .studio-panel {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .studio-editor {
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+    }
+
+    .prompt-textarea {
+      width: 100%;
+      height: 140px;
+      background: #ffffff;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 14px;
+      font-family: var(--font-body);
+      font-size: 15px;
+      color: var(--fg);
+      outline: none;
+      resize: none;
+      transition: border-color 150ms ease, box-shadow 150ms ease;
+    }
+
+    .prompt-textarea:focus {
+      border-color: var(--accent);
+      box-shadow: var(--focus-ring);
+    }
+
+    .studio-preview {
+      background: #0f141c;
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 1.5rem;
+      color: #ffffff;
+      min-height: 280px;
+    }
+
+    .preview-canvas {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      color: var(--meta);
+      font-size: 14px;
+    }
+
+    /* Token Foundations Audit */
+    .token-audit-panel {
+      background: #ffffff;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 2.5rem;
+      box-shadow: var(--shadow-standard);
+    }
+
+    .token-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1.5rem;
+      margin-top: 1.5rem;
+    }
+
+    .token-box {
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      background: #ffffff;
+    }
+
+    .token-color {
+      height: 60px;
+      display: flex;
+      align-items: flex-end;
+      padding: 8px 12px;
+      font-family: var(--font-mono);
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    .token-info {
+      padding: 12px;
+      background: var(--surface);
+    }
+
+    .token-name {
+      font-family: var(--font-mono);
+      font-weight: 700;
+      font-size: 12px;
+      color: var(--accent);
+    }
+
+    .token-desc {
+      font-size: 12px;
+      color: var(--muted);
+      margin-top: 2px;
+    }
+
+    /* Dark Footer Section (#181e25) */
+    .minimax-footer {
+      background: var(--surface-dark);
+      color: #9ca3af;
+      padding: 4rem 2rem 3rem 2rem;
+      margin-top: 4rem;
+      font-size: 14px;
+    }
+
+    .footer-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1fr;
+      gap: 3rem;
+    }
+
+    @media (max-width: 800px) {
+      .footer-inner {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    .footer-brand h4 {
+      color: #ffffff;
+      font-family: var(--font-display);
+      font-size: 1.3rem;
+      margin-bottom: 8px;
+    }
+
+    .footer-col h5 {
+      color: #ffffff;
+      font-family: var(--font-mid);
+      font-size: 14px;
+      margin-bottom: 12px;
+    }
+
+    .footer-col ul {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .footer-col a {
+      color: #9ca3af;
+      text-decoration: none;
+      transition: color 150ms ease;
+    }
+
+    .footer-col a:hover {
+      color: #ffffff;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Sticky Navigation Header -->
+  <header class="minimax-nav">
+    <div class="nav-inner">
+      <a href="#" class="brand-mark">
+        <div class="logo-badge">M</div>
+        <span class="brand-title">MiniMax</span>
+      </a>
+
+      <ul class="nav-pills">
+        <li><a href="#models" class="pill-link active">Models</a></li>
+        <li><a href="#studio" class="pill-link">Playground</a></li>
+        <li><a href="#tokens" class="pill-link">Design Tokens</a></li>
+        <li><a href="#developer" class="pill-link">API &amp; Docs</a></li>
+      </ul>
+
+      <div class="nav-actions">
+        <button class="btn btn-secondary btn-pill" onclick="alert('Redirecting to login...')">Sign In</button>
+        <button class="btn btn-dark btn-pill" onclick="alert('Starting free trial...')">Get Started</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="hero-wrap">
+    <div class="hero-badge-pill">
+      <span class="model-ver">NEW</span>
+      <span>Hailuo-01 High-Definition Video Model Available Globally</span>
+    </div>
+
+    <h1 class="hero-headline">
+      Intelligence for Every Creative Vision
+    </h1>
+
+    <p class="hero-subtext">
+      MiniMax develops state-of-the-art multimodal generative foundation models. Engineered with clean whitespace, geometric Outfit display typography, and vibrant AI capability cards.
+    </p>
+
+    <div class="hero-actions-row">
+      <a href="#studio" class="btn btn-primary-blue btn-pill">Try in Playground</a>
+      <a href="#models" class="btn btn-secondary btn-pill">Explore Model Suite</a>
+    </div>
+  </section>
+
+  <!-- Main View Container -->
+  <main class="main-container">
+
+    <!-- Model Capabilities Gallery (Bento Cards with Vibrant Gradients) -->
+    <section id="models">
+      <div class="section-title-wrap">
+        <h2 class="section-title">Foundation Model Suite</h2>
+        <p class="section-sub">State-of-the-art video, text, speech, and multimodal intelligence engines.</p>
+      </div>
+
+      <div class="products-grid">
+        <!-- Card 1: Hailuo AI Video -->
+        <div class="product-card card-hailuo" onclick="loadPrompt('video')">
+          <div>
+            <span class="card-category">Video Generation</span>
+            <h3 class="card-name">Hailuo AI (海螺)</h3>
+            <p class="card-desc">
+              Cinematic-quality video synthesis with dynamic camera control, realistic physics, and complex scene lighting.
+            </p>
+          </div>
+          <div class="card-footer">
+            <span class="badge-white">720p / 1080p · 25 FPS</span>
+            <span style="font-weight: 700; font-size: 14px;">Try Model →</span>
+          </div>
+        </div>
+
+        <!-- Card 2: Conch AI Text -->
+        <div class="product-card card-conch" onclick="loadPrompt('text')">
+          <div>
+            <span class="card-category">Reasoning &amp; Coding</span>
+            <h3 class="card-name">Conch (ABAB 6.5)</h3>
+            <p class="card-desc">
+              MoE foundation model with 245K context window for long-document comprehension and agent workflows.
+            </p>
+          </div>
+          <div class="card-footer">
+            <span class="badge-white">245K Context Window</span>
+            <span style="font-weight: 700; font-size: 14px;">Try Model →</span>
+          </div>
+        </div>
+
+        <!-- Card 3: Voice Cloning -->
+        <div class="product-card card-voice" onclick="loadPrompt('voice')">
+          <div>
+            <span class="card-category">Speech Synthesis</span>
+            <h3 class="card-name">T2A Voice Synthesizer</h3>
+            <p class="card-desc">
+              Natural expressive speech generation across 32 languages with emotional timbre calibration.
+            </p>
+          </div>
+          <div class="card-footer">
+            <span class="badge-white">32 Languages · Low Latency</span>
+            <span style="font-weight: 700; font-size: 14px;">Try Model →</span>
+          </div>
+        </div>
+
+        <!-- Card 4: Multimodal Vision -->
+        <div class="product-card card-vision" onclick="loadPrompt('vision')">
+          <div>
+            <span class="card-category">Vision-Language</span>
+            <h3 class="card-name">MiniMax VL-Omni</h3>
+            <p class="card-desc">
+              Real-time image inspection, diagram understanding, and visual question answering for autonomous agents.
+            </p>
+          </div>
+          <div class="card-footer">
+            <span class="badge-white">Zero-Shot OCR &amp; VQA</span>
+            <span style="font-weight: 700; font-size: 14px;">Try Model →</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Interactive AI Playground Studio -->
+    <section id="studio">
+      <div class="section-title-wrap">
+        <h2 class="section-title">Interactive Generation Studio</h2>
+        <p class="section-sub">Test generation latency and token parameters in real time.</p>
+      </div>
+
+      <div class="studio-panel">
+        <div class="studio-editor">
+          <label style="font-size: 14px; font-weight: 600; color: var(--fg-2);">Prompt Description</label>
+          <textarea class="prompt-textarea" id="promptInput" placeholder="A futuristic cybernetic hummingbird flying through luminous blossom rain, photorealistic, 8k cinematic lighting..."></textarea>
+          
+          <div style="display: flex; gap: 12px;">
+            <select id="modelSelect" style="padding: 8px 12px; border-radius: var(--radius-sm); border: 1px solid var(--border); font-family: var(--font-body); font-size: 13px;">
+              <option value="Hailuo-01">Hailuo-01 Video</option>
+              <option value="Conch-6.5">Conch 6.5 MoE</option>
+              <option value="T2A-Speech">T2A Speech</option>
+            </select>
+            <button class="btn btn-primary-blue" onclick="generateSimulatedOutput()">Generate Output</button>
+          </div>
+        </div>
+
+        <div class="studio-preview">
+          <div style="display: flex; justify-content: space-between; font-family: var(--font-mono); font-size: 12px; color: #94a3b8;">
+            <span>OUTPUT PREVIEW</span>
+            <span id="genStatus">READY</span>
+          </div>
+          <div class="preview-canvas" id="previewCanvas">
+            Click "Generate Output" to trigger model inference.
+          </div>
+          <div style="font-family: var(--font-mono); font-size: 11px; color: #64748b;">
+            Latency: <span id="genLatency">-- ms</span> · Tokens: <span id="genTokens">0</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Tokens Foundations Audit -->
+    <section id="tokens" class="token-audit-panel">
+      <div class="section-title-wrap">
+        <h2 class="section-title">Design Tokens &amp; Multi-Font Architecture</h2>
+        <p class="section-sub">Verified tokens from open-design/design-systems/minimax/DESIGN.md</p>
+      </div>
+
+      <div class="token-grid">
+        <!-- Token 1 -->
+        <div class="token-box">
+          <div class="token-color" style="background-color: #1456f0; color: #ffffff;">
+            #1456f0
+          </div>
+          <div class="token-info">
+            <div class="token-name">--accent</div>
+            <div class="token-desc">Brand Blue 6 (Primary Accent)</div>
+          </div>
+        </div>
+
+        <!-- Token 2 -->
+        <div class="token-box">
+          <div class="token-color" style="background-color: #ea5ec1; color: #ffffff;">
+            #ea5ec1
+          </div>
+          <div class="token-info">
+            <div class="token-name">--brand-pink</div>
+            <div class="token-desc">Brand Pink Secondary Accent</div>
+          </div>
+        </div>
+
+        <!-- Token 3 -->
+        <div class="token-box">
+          <div class="token-color" style="background-color: #181e25; color: #ffffff;">
+            #181e25
+          </div>
+          <div class="token-info">
+            <div class="token-name">--surface-dark</div>
+            <div class="token-desc">Dark Footer &amp; Primary Button</div>
+          </div>
+        </div>
+
+        <!-- Token 4 -->
+        <div class="token-box">
+          <div class="token-color" style="background-color: #ffffff; color: #222222; border-bottom: 1px solid var(--border);">
+            #ffffff
+          </div>
+          <div class="token-info">
+            <div class="token-name">--bg</div>
+            <div class="token-desc">Pure White Canvas</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Dark Footer Section (#181e25) -->
+  <footer class="minimax-footer">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <h4>MiniMax</h4>
+        <p style="max-width: 320px; line-height: 1.6;">
+          Advancing multimodal intelligence for global creators and developers.
+        </p>
+        <p style="margin-top: 1rem; font-size: 12px; color: #6b7280;">
+          &copy; 2026 MiniMax Inc. Rebuilt for Open Design Systems.
+        </p>
+      </div>
+
+      <div class="footer-col">
+        <h5>Models</h5>
+        <ul>
+          <li><a href="#models">Hailuo Video</a></li>
+          <li><a href="#models">Conch Text</a></li>
+          <li><a href="#models">T2A Voice</a></li>
+          <li><a href="#models">VL-Omni</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h5>Developers</h5>
+        <ul>
+          <li><a href="#">API Reference</a></li>
+          <li><a href="#">Python SDK</a></li>
+          <li><a href="#">Playground</a></li>
+          <li><a href="#">Status</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h5>Company</h5>
+        <ul>
+          <li><a href="#">About Us</a></li>
+          <li><a href="#">Research</a></li>
+          <li><a href="#">Careers</a></li>
+          <li><a href="#">Contact</a></li>
+        </ul>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    function loadPrompt(type) {
+      const pInput = document.getElementById('promptInput');
+      const mSelect = document.getElementById('modelSelect');
+      if (type === 'video') {
+        pInput.value = 'Cinematic drone tracking shot over an emerald cybernetic archipelago at twilight, golden reflections, 4k 60fps.';
+        mSelect.value = 'Hailuo-01';
+      } else if (type === 'text') {
+        pInput.value = 'Explain the mathematical formulation of Mixture-of-Experts routing gate with capacity factor constraints.';
+        mSelect.value = 'Conch-6.5';
+      } else if (type === 'voice') {
+        pInput.value = 'Generate warm British narrator voice reading a narrative passage with subtle pauses.';
+        mSelect.value = 'T2A-Speech';
+      } else {
+        pInput.value = 'Analyze the attached architectural schematic and compute floor load tolerances.';
+        mSelect.value = 'Conch-6.5';
+      }
+      document.getElementById('studio').scrollIntoView({ behavior: 'smooth' });
+    }
+
+    function generateSimulatedOutput() {
+      const canvas = document.getElementById('previewCanvas');
+      const status = document.getElementById('genStatus');
+      const latency = document.getElementById('genLatency');
+      const tokens = document.getElementById('genTokens');
+
+      status.textContent = 'INFERENCING...';
+      status.style.color = '#3daeff';
+      canvas.innerHTML = '<span style="color: #60a5fa;">Processing tokens through MiniMax cluster...</span>';
+
+      setTimeout(() => {
+        status.textContent = 'COMPLETED';
+        status.style.color = '#4ade80';
+        latency.textContent = '428 ms';
+        tokens.textContent = '1,048';
+        canvas.innerHTML = `
+          <div style="color: #ffffff; text-align: left; font-size: 13px; line-height: 1.6;">
+            <strong>Hailuo-01 Video Keyframe Synthesized:</strong><br>
+            • Resolution: 1920x1080 @ 25fps<br>
+            • Seed: 994810291 (Deterministic)<br>
+            • Camera: Hyper-stabilized orbital drone trajectory<br>
+            • Artifact verification: Pass (0 anomalies)
+          </div>
+        `;
+      }, 900);
+    }
+  </script>
+</body>
+</html>

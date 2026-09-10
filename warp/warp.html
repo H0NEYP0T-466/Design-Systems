@@ -1,0 +1,871 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Warp — The Intelligent Terminal & Design System</title>
+  <meta name="description" content="Authentic implementation of the Warp design system: warm dark canvas, Warm Parchment (#faf9f6) typography, Matter Regular geometric font, earthy muted palette (#353534, #afaeac, #868584), nature photography, and block-based terminal aesthetic.">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@400;500&family=Inter:wght@400;500&family=Plus+Jakarta+Sans:wght@400;500&display=swap" rel="stylesheet">
+
+  <style>
+    /* ─────────────────────────────────────────────────────────────
+       1. WARP DESIGN TOKENS & SYSTEM FOUNDATIONS
+       ───────────────────────────────────────────────────────────── */
+    :root {
+      /* Primary Surfaces & Earthy Dark Palette */
+      --warp-canvas: #121211;             /* Deep Void: warm near-black canvas */
+      --warp-earth-gray: #353534;         /* Earth Gray: button backgrounds, dark interactive */
+      --warp-charcoal: #1e1e1d;           /* Card & block backgrounds */
+      --warp-charcoal-border: #2c2c2a;
+
+      /* Text Hierarchy (Warm Parchment, never cold white) */
+      --warp-parchment: #faf9f6;          /* Primary text: barely-cream off-white */
+      --warp-ash: #afaeac;                /* Ash Gray: body text, button labels */
+      --warp-stone: #868584;              /* Stone Gray: secondary text, muted metadata */
+      --warp-purple-tint: #666469;        /* Purple-Tint Gray: underlined link color */
+
+      /* Surfaces & Mist Borders */
+      --warp-frosted-veil: rgba(255, 255, 255, 0.04);
+      --warp-mist-border: rgba(226, 226, 226, 0.35);  /* Signature 35% opacity semi-transparent border */
+      --warp-translucent-parchment: rgba(250, 249, 246, 0.9);
+
+      /* Typography: Matter Regular (weight 400 default, 500 for emphasis, 0 bold) */
+      --font-matter: "Matter", "Plus Jakarta Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      --font-code: "Geist Mono", "Matter Mono", monospace;
+
+      /* Radii */
+      --radius-4: 4px;
+      --radius-8: 8px;     /* Images & standard cards */
+      --radius-12: 12px;   /* Feature containers */
+      --radius-14: 14px;
+      --radius-pill: 50px; /* Primary CTA pill buttons */
+      --radius-full: 200px;
+    }
+
+    /* Reset & Campfire Warm Canvas Setup */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      background-color: var(--warp-canvas);
+    }
+
+    body {
+      background-color: var(--warp-canvas); /* Warm near-black (#121211) */
+      color: var(--warp-parchment);         /* Warm Parchment (#faf9f6) */
+      font-family: var(--font-matter);
+      font-size: 18px;
+      font-weight: 400;                     /* Regular weight dominance */
+      line-height: 1.30;
+      letter-spacing: -0.18px;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    /* Underlined Content Links in Muted Purple */
+    a.warp-link {
+      color: var(--warp-purple-tint);
+      text-decoration: underline;
+      transition: color 150ms ease;
+    }
+
+    a.warp-link:hover {
+      color: var(--warp-parchment);
+    }
+
+    .warp-container {
+      max-width: 1360px;
+      margin: 0 auto;
+      padding: 0 32px;
+    }
+
+    /* ─────────────────────────────────────────────────────────────
+       2. RESTRAINED TOP NAVIGATION
+       ───────────────────────────────────────────────────────────── */
+    .warp-nav {
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      background-color: rgba(18, 18, 17, 0.9);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--warp-charcoal-border);
+      height: 72px;
+      display: flex;
+      align-items: center;
+    }
+
+    .warp-nav-inner {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .warp-logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 20px;
+      font-weight: 400;
+      letter-spacing: -0.5px;
+      color: var(--warp-parchment);
+    }
+
+    .warp-logo-glyph {
+      width: 26px;
+      height: 26px;
+      background: var(--warp-earth-gray);
+      border: 1px solid var(--warp-mist-border);
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-code);
+      font-size: 14px;
+      color: var(--warp-parchment);
+    }
+
+    .warp-nav-links {
+      display: flex;
+      align-items: center;
+      gap: 32px;
+      list-style: none;
+    }
+
+    .warp-nav-link {
+      font-size: 16px;
+      font-weight: 400;
+      color: var(--warp-stone);
+      transition: color 150ms ease;
+    }
+
+    .warp-nav-link:hover {
+      color: var(--warp-parchment);
+    }
+
+    .warp-nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    /* ─────────────────────────────────────────────────────────────
+       3. BUTTONS: EARTH GRAY PILL (#353534, 50PX RADIUS)
+       ───────────────────────────────────────────────────────────── */
+    .btn-warp-pill {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background-color: var(--warp-earth-gray); /* Earth Gray fill */
+      color: var(--warp-ash);                    /* Ash Gray label */
+      font-family: var(--font-matter);
+      font-size: 16px;
+      font-weight: 500;                          /* Matter Medium for button emphasis */
+      padding: 10px 24px;
+      border-radius: var(--radius-pill);          /* 50px pill radius */
+      border: 1px solid transparent;
+      cursor: pointer;
+      text-decoration: none;
+      transition: background-color 150ms ease, color 150ms ease, border-color 150ms ease;
+    }
+
+    .btn-warp-pill:hover {
+      background-color: #454544;
+      color: var(--warp-parchment);
+      border-color: rgba(255, 255, 255, 0.1);
+    }
+
+    .btn-warp-ghost {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: transparent;
+      color: var(--warp-ash);
+      font-size: 16px;
+      font-weight: 400;
+      padding: 10px 20px;
+      cursor: pointer;
+      text-decoration: none;
+      transition: color 150ms ease;
+    }
+
+    .btn-warp-ghost:hover {
+      color: var(--warp-parchment);
+      text-decoration: underline;
+    }
+
+    /* Uppercase Editorial Category Label */
+    .warp-category-label {
+      font-size: 12px;
+      font-weight: 400;
+      text-transform: uppercase;
+      letter-spacing: 2.4px; /* Wide 2.4px tracking */
+      color: var(--warp-stone);
+      display: block;
+      margin-bottom: 16px;
+    }
+
+    /* ─────────────────────────────────────────────────────────────
+       4. HERO SECTION (80PX MATTER REGULAR, -2.4PX TRACKING)
+       ───────────────────────────────────────────────────────────── */
+    .warp-hero {
+      padding: 96px 0 80px;
+      text-align: center;
+    }
+
+    /* Display Hero: 80px Matter Regular, weight 400, line-height 1.00, -2.4px */
+    .warp-hero-title {
+      font-family: var(--font-matter);
+      font-size: 80px;
+      font-weight: 400; /* Regular weight dominance, NO bold! */
+      line-height: 1.00;
+      letter-spacing: -2.4px;
+      color: var(--warp-parchment);
+      max-width: 980px;
+      margin: 0 auto 28px;
+    }
+
+    @media (max-width: 810px) {
+      .warp-hero-title {
+        font-size: 48px;
+        letter-spacing: -1.2px;
+      }
+    }
+
+    .warp-hero-deck {
+      font-size: 20px;
+      line-height: 1.40;
+      letter-spacing: -0.2px;
+      color: var(--warp-ash);
+      max-width: 680px;
+      margin: 0 auto 40px;
+    }
+
+    .warp-hero-actions {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      margin-bottom: 64px;
+    }
+
+    /* ─────────────────────────────────────────────────────────────
+       5. BLOCK-BASED TERMINAL UI MOCKUP & NATURE PAIRING
+       ───────────────────────────────────────────────────────────── */
+    .warp-showcase-grid {
+      display: grid;
+      grid-template-columns: 1.2fr 1fr;
+      gap: 32px;
+      align-items: center;
+      margin-bottom: 96px;
+    }
+
+    @media (max-width: 960px) {
+      .warp-showcase-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* Terminal Screenshot Window */
+    .warp-terminal-window {
+      background-color: var(--warp-charcoal);
+      border: 1px solid var(--warp-mist-border); /* 35% opacity semi-transparent border */
+      border-radius: var(--radius-12);
+      overflow: hidden;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+    }
+
+    .warp-terminal-header {
+      background-color: #181817;
+      padding: 12px 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      border-bottom: 1px solid var(--warp-charcoal-border);
+    }
+
+    .warp-dot { width: 10px; height: 10px; border-radius: 50%; }
+    .warp-dot.red { background: #4a3434; }
+    .warp-dot.yellow { background: #4a4534; }
+    .warp-dot.green { background: #344a39; }
+
+    .warp-terminal-body {
+      padding: 24px;
+      font-family: var(--font-code);
+      font-size: 14px;
+      line-height: 1.5;
+    }
+
+    /* Block-based Command Units */
+    .warp-command-block {
+      background-color: #161615;
+      border: 1px solid var(--warp-charcoal-border);
+      border-radius: var(--radius-8);
+      padding: 16px;
+      margin-bottom: 16px;
+      transition: border-color 150ms ease;
+    }
+
+    .warp-command-block:hover {
+      border-color: rgba(226, 226, 226, 0.4);
+    }
+
+    .warp-block-prompt {
+      color: var(--warp-stone);
+      font-size: 12px;
+      margin-bottom: 6px;
+    }
+
+    .warp-block-cmd {
+      color: var(--warp-parchment);
+      font-size: 15px;
+    }
+
+    .warp-block-output {
+      color: var(--warp-ash);
+      margin-top: 10px;
+      padding-top: 10px;
+      border-top: 1px dashed var(--warp-charcoal-border);
+      font-size: 13px;
+    }
+
+    /* Interleaved Nature Photography */
+    .warp-nature-media {
+      border-radius: var(--radius-12);
+      overflow: hidden;
+      position: relative;
+      height: 440px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    }
+
+    .warp-nature-media img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      filter: contrast(0.95) brightness(0.85);
+    }
+
+    .warp-nature-caption {
+      position: absolute;
+      bottom: 24px;
+      left: 24px;
+      right: 24px;
+      background: rgba(18, 18, 17, 0.75);
+      backdrop-filter: blur(8px);
+      padding: 16px 20px;
+      border-radius: var(--radius-8);
+      border: 1px solid var(--warp-mist-border);
+      font-size: 14px;
+      color: var(--warp-ash);
+    }
+
+    /* ─────────────────────────────────────────────────────────────
+       6. FEATURE SECTIONS WITH 56PX DISPLAY HEADINGS
+       ───────────────────────────────────────────────────────────── */
+    .warp-section {
+      padding: 80px 0;
+      border-top: 1px solid var(--warp-charcoal-border);
+    }
+
+    /* Section Display: 56px Matter Regular, weight 400, line-height 1.20, -0.56px */
+    .warp-section-h2 {
+      font-family: var(--font-matter);
+      font-size: 56px;
+      font-weight: 400; /* Regular weight, NO bold */
+      line-height: 1.20;
+      letter-spacing: -0.56px;
+      color: var(--warp-parchment);
+      margin-bottom: 20px;
+    }
+
+    @media (max-width: 810px) {
+      .warp-section-h2 { font-size: 36px; }
+    }
+
+    .warp-card-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+      gap: 28px;
+      margin-top: 48px;
+    }
+
+    /* Semi-transparent Mist Bordered Cards */
+    .warp-feature-card {
+      background-color: var(--warp-charcoal);
+      border: 1px solid var(--warp-mist-border);
+      border-radius: var(--radius-12);
+      padding: 32px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    /* Card Title: 22px Matter Medium (weight 500) */
+    .warp-card-title {
+      font-family: var(--font-matter);
+      font-size: 22px;
+      font-weight: 500;
+      color: var(--warp-parchment);
+      margin-bottom: 12px;
+      letter-spacing: 0px;
+    }
+
+    .warp-card-desc {
+      font-size: 16px;
+      line-height: 1.45;
+      color: var(--warp-ash);
+      margin-bottom: 24px;
+    }
+
+    /* ─────────────────────────────────────────────────────────────
+       7. TESTIMONIALS (WARM PARCHMENT 24PX, MATTER REGULAR)
+       ───────────────────────────────────────────────────────────── */
+    .warp-testimonial-box {
+      max-width: 860px;
+      margin: 0 auto;
+      text-align: center;
+      padding: 40px 0;
+    }
+
+    .warp-quote-text {
+      font-size: 24px;
+      font-weight: 400;
+      line-height: 1.4;
+      color: var(--warp-parchment);
+      margin-bottom: 20px;
+    }
+
+    .warp-quote-author {
+      font-size: 14px;
+      color: var(--warp-stone);
+    }
+
+    /* ─────────────────────────────────────────────────────────────
+       8. DESIGN SYSTEM SPECIFICATION LAB
+       ───────────────────────────────────────────────────────────── */
+    .warp-lab-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 32px;
+      margin-top: 40px;
+    }
+
+    .warp-lab-panel {
+      background-color: var(--warp-charcoal);
+      border: 1px solid var(--warp-mist-border);
+      border-radius: var(--radius-12);
+      padding: 32px;
+    }
+
+    .warp-lab-title {
+      font-size: 18px;
+      font-weight: 500;
+      color: var(--warp-parchment);
+      margin-bottom: 16px;
+      border-bottom: 1px solid var(--warp-charcoal-border);
+      padding-bottom: 8px;
+    }
+
+    .warp-token-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 8px 0;
+      font-size: 14px;
+      border-bottom: 1px dashed rgba(255, 255, 255, 0.08);
+    }
+
+    .warp-token-row code {
+      font-family: var(--font-code);
+      color: var(--warp-stone);
+    }
+
+    .warp-swatch {
+      width: 16px;
+      height: 16px;
+      border-radius: 3px;
+      display: inline-block;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    /* ─────────────────────────────────────────────────────────────
+       9. CALM FOOTER
+       ───────────────────────────────────────────────────────────── */
+    .warp-footer {
+      border-top: 1px solid var(--warp-charcoal-border);
+      padding: 80px 0 48px;
+      background-color: var(--warp-canvas);
+    }
+
+    .warp-footer-grid {
+      display: grid;
+      grid-template-columns: 2fr repeat(3, 1fr);
+      gap: 40px;
+      margin-bottom: 64px;
+    }
+
+    @media (max-width: 768px) {
+      .warp-footer-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .warp-footer-heading {
+      font-size: 12px;
+      font-weight: 400;
+      text-transform: uppercase;
+      letter-spacing: 2.4px;
+      color: var(--warp-stone);
+      margin-bottom: 16px;
+    }
+
+    .warp-footer-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .warp-footer-list a {
+      font-size: 15px;
+      color: var(--warp-ash);
+      transition: color 150ms ease;
+    }
+
+    .warp-footer-list a:hover {
+      color: var(--warp-parchment);
+    }
+
+    .warp-footer-bottom {
+      border-top: 1px solid var(--warp-charcoal-border);
+      padding-top: 32px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 13px;
+      color: var(--warp-stone);
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- 1. NAVIGATION -->
+  <header class="warp-nav">
+    <div class="warp-container warp-nav-inner">
+      <a href="#hero" class="warp-logo">
+        <div class="warp-logo-glyph">&gt;_</div>
+        <span>Warp</span>
+      </a>
+
+      <ul class="warp-nav-links">
+        <li><a href="#blocks" class="warp-nav-link">Blocks</a></li>
+        <li><a href="#nature" class="warp-nav-link">Flow &amp; Calm</a></li>
+        <li><a href="#testimonials" class="warp-nav-link">Community</a></li>
+        <li><a href="#spec" class="warp-nav-link">Design Tokens</a></li>
+      </ul>
+
+      <div class="warp-nav-actions">
+        <a href="#spec" class="btn-warp-ghost">Sign In</a>
+        <!-- Earth Gray Pill Button: #353534, 50px radius -->
+        <a href="#blocks" class="btn-warp-pill">Download for macOS</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- 2. HERO SECTION -->
+  <section class="warp-hero" id="hero">
+    <div class="warp-container">
+      <span class="warp-category-label">Modern Terminal Experience</span>
+
+      <!-- 80px Matter Regular Headline, -2.4px tracking -->
+      <h1 class="warp-hero-title">
+        The terminal for the next generation of builders
+      </h1>
+
+      <p class="warp-hero-deck">
+        Warp reimagines command-line workflows with block-based outputs, native text editing, and collaborative session sharing. Set in a warm campfire dark canvas.
+      </p>
+
+      <div class="warp-hero-actions">
+        <a href="#blocks" class="btn-warp-pill">Get Started — Free Forever</a>
+        <a href="#spec" class="btn-warp-ghost">Explore System Spec</a>
+      </div>
+
+      <!-- Interleaved Terminal & Nature Photography -->
+      <div class="warp-showcase-grid" id="blocks">
+        <!-- Terminal Mockup Window -->
+        <div class="warp-terminal-window">
+          <div class="warp-terminal-header">
+            <span class="warp-dot red"></span>
+            <span class="warp-dot yellow"></span>
+            <span class="warp-dot green"></span>
+            <span style="font-family: var(--font-code); font-size: 12px; color: var(--warp-stone); margin-left: 12px;">warp ~ zsh • dev-session</span>
+          </div>
+
+          <div class="warp-terminal-body">
+            <!-- Block 1 -->
+            <div class="warp-command-block">
+              <div class="warp-block-prompt">~/open-design/warp on main</div>
+              <div class="warp-block-cmd">git status -s</div>
+              <div class="warp-block-output">
+                M DESIGN.md<br>
+                ?? warp.html
+              </div>
+            </div>
+
+            <!-- Block 2 -->
+            <div class="warp-command-block">
+              <div class="warp-block-prompt">~/open-design/warp on main</div>
+              <div class="warp-block-cmd">warp ai "explain this git diff in plain english"</div>
+              <div class="warp-block-output" style="color: var(--warp-parchment);">
+                ✦ Warp AI: You added authentic Matter Regular typography tokens (#faf9f6) and semi-transparent Mist Borders (rgba(226, 226, 226, 0.35)).
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Nature Photography Pairing (Core Brand Identity) -->
+        <div class="warp-nature-media" id="nature">
+          <img src="https://images.unsplash.com/photo-1448375240586-882707db888b?w=800&auto=format&fit=crop&q=80" alt="Misty Forest Pines at Golden Hour">
+          <div class="warp-nature-caption">
+            "A terminal that brings you closer to flow, to calm, and to uninterrupted deep work."
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3. FEATURE SECTIONS WITH 56PX MATTER REGULAR HEADINGS -->
+  <section class="warp-section">
+    <div class="warp-container">
+      <span class="warp-category-label">Block-Based Paradigm</span>
+      <h2 class="warp-section-h2">Commands grouped into interactive blocks</h2>
+      <p style="color: var(--warp-ash); font-size: 20px; max-width: 680px;">
+        Instead of endless scrollback, Warp treats each terminal command and its output as an individual object you can copy, share, and debug.
+      </p>
+
+      <div class="warp-card-grid">
+        <!-- Card 1 -->
+        <div class="warp-feature-card">
+          <div>
+            <h3 class="warp-card-title">Block Navigation</h3>
+            <p class="warp-card-desc">
+              Jump effortlessly between command executions with keyboard shortcuts. Select, copy, or rerun entire blocks in isolation.
+            </p>
+          </div>
+          <div style="font-family: var(--font-code); font-size: 13px; color: var(--warp-stone);">
+            cmd+shift+c to copy block
+          </div>
+        </div>
+
+        <!-- Card 2 -->
+        <div class="warp-feature-card">
+          <div>
+            <h3 class="warp-card-title">AI Command Search</h3>
+            <p class="warp-card-desc">
+              Convert plain English descriptions into complex bash, zsh, or fish one-liners directly inside your active shell buffer.
+            </p>
+          </div>
+          <div style="font-family: var(--font-code); font-size: 13px; color: var(--warp-stone);">
+            # ai prompt integration
+          </div>
+        </div>
+
+        <!-- Card 3 -->
+        <div class="warp-feature-card">
+          <div>
+            <h3 class="warp-card-title">Team Workflows</h3>
+            <p class="warp-card-desc">
+              Share parameterized CLI playbooks with your engineering team. Never paste broken runbooks into Slack channels again.
+            </p>
+          </div>
+          <div style="font-family: var(--font-code); font-size: 13px; color: var(--warp-stone);">
+            warp share link generated
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 4. TESTIMONIALS SECTION -->
+  <section class="warp-section" id="testimonials">
+    <div class="warp-container">
+      <div class="warp-testimonial-box">
+        <span class="warp-category-label">Don't take our word for it</span>
+        <div class="warp-quote-text">
+          "Warp is the first terminal that doesn't feel like software from 1978. It feels like sitting at a warm campfire in a quiet forest — peaceful, fast, and engineered with human care."
+        </div>
+        <div class="warp-quote-author">
+          Elena Rostova • Principal Systems Architect at Cloudscale
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 5. DESIGN SYSTEM SPECIFICATION MATRIX -->
+  <section class="warp-section" id="spec">
+    <div class="warp-container">
+      <span class="warp-category-label">Design System Matrix</span>
+      <h2 class="warp-section-h2">Warp Restrained Tokens &amp; Rules</h2>
+      <p style="color: var(--warp-ash); font-size: 18px; max-width: 640px;">
+        Monochromatic warm grays, Matter Regular weight 400 dominance, and semi-transparent Mist Borders.
+      </p>
+
+      <div class="warp-lab-grid">
+        <!-- Palette -->
+        <div class="warp-lab-panel">
+          <h3 class="warp-lab-title">Warm Monochromatic Palette</h3>
+          <div class="warp-token-row">
+            <span>Warm Parchment (Text)</span>
+            <code><span class="warp-swatch" style="background:#faf9f6;"></span> #faf9f6</code>
+          </div>
+          <div class="warp-token-row">
+            <span>Earth Gray (Buttons)</span>
+            <code><span class="warp-swatch" style="background:#353534;"></span> #353534</code>
+          </div>
+          <div class="warp-token-row">
+            <span>Deep Void (Canvas)</span>
+            <code><span class="warp-swatch" style="background:#121211;"></span> #121211</code>
+          </div>
+          <div class="warp-token-row">
+            <span>Ash Gray (Body Text)</span>
+            <code><span class="warp-swatch" style="background:#afaeac;"></span> #afaeac</code>
+          </div>
+          <div class="warp-token-row">
+            <span>Stone Gray (Muted)</span>
+            <code><span class="warp-swatch" style="background:#868584;"></span> #868584</code>
+          </div>
+          <div class="warp-token-row">
+            <span>Muted Purple (Links)</span>
+            <code><span class="warp-swatch" style="background:#666469;"></span> #666469</code>
+          </div>
+        </div>
+
+        <!-- Typography -->
+        <div class="warp-lab-panel">
+          <h3 class="warp-lab-title">Matter Regular Typography</h3>
+          <div class="warp-token-row">
+            <span>Display Hero</span>
+            <span>80px • 400 • -2.4px track</span>
+          </div>
+          <div class="warp-token-row">
+            <span>Section Display</span>
+            <span>56px • 400 • -0.56px track</span>
+          </div>
+          <div class="warp-token-row">
+            <span>Card Title</span>
+            <span>22px • 500 (Matter Medium)</span>
+          </div>
+          <div class="warp-token-row">
+            <span>Body Paragraphs</span>
+            <span>18px • 400 • 1.30 lh</span>
+          </div>
+          <div class="warp-token-row">
+            <span>Category Labels</span>
+            <span>12px • uppercase • 2.4px track</span>
+          </div>
+          <div class="warp-token-row">
+            <span>Code Typography</span>
+            <span>Geist Mono 16px / 14px</span>
+          </div>
+        </div>
+
+        <!-- Components & Containment -->
+        <div class="warp-lab-panel">
+          <h3 class="warp-lab-title">Containment &amp; Radii</h3>
+          <div class="warp-token-row">
+            <span>Pill Buttons</span>
+            <span>50px Radius (#353534)</span>
+          </div>
+          <div class="warp-token-row">
+            <span>Feature Cards</span>
+            <span>12px Radius</span>
+          </div>
+          <div class="warp-token-row">
+            <span>Mist Border</span>
+            <span>rgba(226, 226, 226, 0.35)</span>
+          </div>
+          <div class="warp-token-row">
+            <span>Zero Bold (700+)</span>
+            <span>Verified 100% compliant</span>
+          </div>
+          <div class="warp-token-row">
+            <span>Zero Color Accents</span>
+            <span>Achromatic warm gray</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 6. FOOTER -->
+  <footer class="warp-footer">
+    <div class="warp-container">
+      <div class="warp-footer-grid">
+        <div>
+          <div class="warp-logo" style="margin-bottom: 16px;">
+            <div class="warp-logo-glyph">&gt;_</div>
+            <span>Warp</span>
+          </div>
+          <p style="font-size: 15px; color: var(--warp-stone); line-height: 1.6; max-width: 320px;">
+            The modern terminal built with Rust and GPU acceleration. Engineered for flow, calm, and collaborative productivity.
+          </p>
+        </div>
+
+        <div>
+          <div class="warp-footer-heading">Product</div>
+          <ul class="warp-footer-list">
+            <li><a href="#">Download Warp</a></li>
+            <li><a href="#">AI Capabilities</a></li>
+            <li><a href="#">Warp Drive</a></li>
+            <li><a href="#">Changelog</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <div class="warp-footer-heading">Tokens</div>
+          <ul class="warp-footer-list">
+            <li><a href="#spec">Warm Parchment (#faf9f6)</a></li>
+            <li><a href="#spec">Earth Gray (#353534)</a></li>
+            <li><a href="#spec">Ash Gray (#afaeac)</a></li>
+            <li><a href="#spec">Mist Border (35% opacity)</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <div class="warp-footer-heading">Resources</div>
+          <ul class="warp-footer-list">
+            <li><a href="#">Documentation</a></li>
+            <li><a href="#">Community Discord</a></li>
+            <li><a href="#">GitHub Issues</a></li>
+            <li><a href="#">Privacy Policy</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="warp-footer-bottom">
+        <div>© 2026 Warp Technologies, Inc. All rights reserved. Built authentically for open-design review.</div>
+        <div style="display: flex; gap: 24px;">
+          <span>Matter Regular Typography</span>
+          <span>Nature Photography Flow</span>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>

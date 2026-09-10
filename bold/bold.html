@@ -1,0 +1,1575 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>BOLD // Enterprise Compute Engine</title>
+  <meta name="description" content="Bold design system implementation: heavyweight typography, high-contrast colors (#0077BC primary, #009866 secondary, #111111 surface), and commanding architectural layouts." />
+
+  <!-- Google Fonts: Archivo Black, Inter, JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    /* ─────────────────────────────────────────────────────────────────
+       BOLD DESIGN SYSTEM TOKENS & FOUNDATIONS
+       Directly sourced from /open-design/design-systems/bold/DESIGN.md
+       ───────────────────────────────────────────────────────────────── */
+    :root {
+      /* Colors (DESIGN.md §2) */
+      --color-primary: #0077BC;
+      --color-primary-hover: #006096;
+      --color-primary-active: #004d78;
+      --color-secondary: #009866;
+      --color-secondary-hover: #007e54;
+      --color-success: #16A34A;
+      --color-warning: #D97706;
+      --color-danger: #DC2626;
+      --color-surface: #111111;
+      --color-surface-card: #181818;
+      --color-surface-elevated: #222222;
+      --color-text: #111827;
+      --color-text-on-dark: #F9FAFB;
+      --color-text-muted: #6B7280;
+      --color-neutral: #111111;
+      --color-bg-light: #FFFFFF;
+      --color-border-light: #E5E7EB;
+      --color-border-dark: #2A2A2A;
+
+      /* Typography Families (DESIGN.md §3) */
+      --font-display: "Archivo Black", -apple-system, BlinkMacSystemFont, sans-serif;
+      --font-primary: "Archivo Black", -apple-system, BlinkMacSystemFont, sans-serif;
+      --font-body: "Inter", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+      --font-mono: "JetBrains Mono", ui-monospace, Menlo, monospace;
+
+      /* Typography Scale */
+      --text-xs: 12px;
+      --text-sm: 14px;
+      --text-base: 16px;
+      --text-lg: 18px;
+      --text-xl: 24px;
+      --text-2xl: 36px;
+      --text-3xl: 52px;
+      --text-4xl: 72px;
+
+      --leading-tight: 1.05;
+      --leading-normal: 1.5;
+
+      /* Spacing Scale (4/8/12/16/24/32/48/64/96) per DESIGN.md §4 */
+      --space-1: 4px;
+      --space-2: 8px;
+      --space-3: 12px;
+      --space-4: 16px;
+      --space-6: 24px;
+      --space-8: 32px;
+      --space-12: 48px;
+      --space-16: 64px;
+      --space-24: 96px;
+
+      /* Radii (Consistent across page per DESIGN.md §6) */
+      --radius-sm: 4px;
+      --radius-md: 8px;
+      --radius-lg: 12px;
+      --radius-pill: 9999px;
+
+      /* Motion (150-250ms stable easing per DESIGN.md §7) */
+      --motion-fast: 150ms;
+      --motion-base: 220ms;
+      --ease-standard: cubic-bezier(0.2, 0, 0, 1);
+
+      /* Focus Ring */
+      --focus-ring: 0 0 0 3px rgba(0, 119, 188, 0.45);
+      --container-max: 1240px;
+    }
+
+    /* ─── Global Reset ─────────────────────────────────────────────── */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      background-color: var(--color-bg-light);
+      color: var(--color-text);
+    }
+
+    body {
+      background-color: var(--color-bg-light);
+      color: var(--color-text);
+      font-family: var(--font-body);
+      font-size: var(--text-base);
+      line-height: var(--leading-normal);
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      overflow-x: hidden;
+    }
+
+    /* Headings carry the Bold personality (Archivo Black) */
+    h1, h2, h3, h4, .brand-font {
+      font-family: var(--font-display);
+      line-height: var(--leading-tight);
+      text-transform: uppercase;
+      letter-spacing: -0.02em;
+    }
+
+    h1 {
+      font-size: var(--text-4xl);
+      font-weight: 900;
+    }
+
+    h2 {
+      font-size: var(--text-3xl);
+      font-weight: 900;
+    }
+
+    h3 {
+      font-size: var(--text-xl);
+      font-weight: 900;
+    }
+
+    p {
+      color: var(--color-text);
+      line-height: 1.55;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    /* Focus-visible state (DESIGN.md §6 & §7) */
+    :focus-visible {
+      outline: none;
+      box-shadow: var(--focus-ring);
+    }
+
+    /* ─── Layout Primitives ────────────────────────────────────────── */
+    .container {
+      max-width: var(--container-max);
+      margin-inline: auto;
+      padding-inline: var(--space-6);
+    }
+
+    .section-spacing {
+      padding-block: var(--space-24);
+    }
+
+    .dark-surface-section {
+      background-color: var(--color-surface);
+      color: var(--color-text-on-dark);
+    }
+
+    .dark-surface-section p {
+      color: #9CA3AF;
+    }
+
+    .dark-surface-section h1,
+    .dark-surface-section h2,
+    .dark-surface-section h3 {
+      color: var(--color-text-on-dark);
+    }
+
+    /* ─── Button Components (DESIGN.md §6) ─────────────────────────── */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--space-2);
+      padding: var(--space-4) var(--space-8);
+      font-family: var(--font-display);
+      font-size: var(--text-sm);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      border-radius: var(--radius-md);
+      border: 2px solid transparent;
+      cursor: pointer;
+      transition: background-color var(--motion-fast) var(--ease-standard),
+                  border-color var(--motion-fast) var(--ease-standard),
+                  color var(--motion-fast) var(--ease-standard),
+                  transform var(--motion-fast) var(--ease-standard),
+                  box-shadow var(--motion-fast) var(--ease-standard);
+      text-decoration: none;
+      white-space: nowrap;
+    }
+
+    /* Primary Action uses #0077BC per DESIGN.md §6 */
+    .btn-primary {
+      background-color: var(--color-primary);
+      color: #FFFFFF;
+      box-shadow: 0 4px 12px rgba(0, 119, 188, 0.28);
+    }
+
+    .btn-primary:hover {
+      background-color: var(--color-primary-hover);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(0, 119, 188, 0.35);
+    }
+
+    .btn-primary:active {
+      background-color: var(--color-primary-active);
+      transform: translateY(0);
+    }
+
+    /* Secondary Action stays neutral (#111111) per DESIGN.md §6 */
+    .btn-neutral {
+      background-color: transparent;
+      color: var(--color-neutral);
+      border-color: var(--color-neutral);
+    }
+
+    .btn-neutral:hover {
+      background-color: var(--color-neutral);
+      color: #FFFFFF;
+      transform: translateY(-2px);
+    }
+
+    .btn-neutral-dark {
+      background-color: transparent;
+      color: var(--color-text-on-dark);
+      border-color: #374151;
+    }
+
+    .btn-neutral-dark:hover {
+      background-color: #374151;
+      color: #FFFFFF;
+      border-color: #4B5563;
+      transform: translateY(-2px);
+    }
+
+    .btn-secondary-green {
+      background-color: var(--color-secondary);
+      color: #FFFFFF;
+    }
+
+    .btn-secondary-green:hover {
+      background-color: var(--color-secondary-hover);
+      transform: translateY(-2px);
+    }
+
+    /* ─── Navigation Header ────────────────────────────────────────── */
+    .top-header {
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      height: 76px;
+      background-color: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(12px);
+      border-bottom: 2px solid var(--color-border-light);
+      display: flex;
+      align-items: center;
+    }
+
+    .nav-wrapper {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      width: 100%;
+    }
+
+    .logo-container {
+      display: flex;
+      align-items: center;
+      gap: var(--space-3);
+    }
+
+    .logo-icon-box {
+      width: 40px;
+      height: 40px;
+      background-color: var(--color-primary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: var(--radius-md);
+      color: #FFFFFF;
+      font-family: var(--font-display);
+      font-size: 22px;
+    }
+
+    .logo-text {
+      font-family: var(--font-display);
+      font-size: 24px;
+      color: var(--color-neutral);
+      letter-spacing: -0.04em;
+    }
+
+    .logo-badge {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      background-color: #EFF6FF;
+      color: var(--color-primary);
+      padding: 2px 8px;
+      border-radius: var(--radius-pill);
+      font-weight: 700;
+      border: 1px solid #BFDBFE;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      list-style: none;
+      gap: var(--space-8);
+    }
+
+    .nav-links a {
+      font-family: var(--font-body);
+      font-weight: 600;
+      font-size: var(--text-sm);
+      color: var(--color-text);
+      transition: color var(--motion-fast) var(--ease-standard);
+      position: relative;
+    }
+
+    .nav-links a:hover {
+      color: var(--color-primary);
+    }
+
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: var(--space-4);
+    }
+
+    /* ─── Hero Section ─────────────────────────────────────────────── */
+    .hero-section {
+      padding-top: var(--space-24);
+      padding-bottom: var(--space-24);
+      background: radial-gradient(circle at 80% 20%, rgba(0, 119, 188, 0.08) 0%, transparent 60%);
+      border-bottom: 2px solid var(--color-border-light);
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1.15fr 0.85fr;
+      gap: var(--space-12);
+      align-items: center;
+    }
+
+    .hero-eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-2);
+      font-family: var(--font-mono);
+      font-size: var(--text-xs);
+      font-weight: 700;
+      color: var(--color-primary);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      margin-bottom: var(--space-4);
+      padding: var(--space-1) var(--space-3);
+      background-color: #E0F2FE;
+      border-radius: var(--radius-sm);
+      border: 1px solid #BAE6FD;
+    }
+
+    .hero-eyebrow .pulse-dot {
+      width: 8px;
+      height: 8px;
+      background-color: var(--color-primary);
+      border-radius: 50%;
+      animation: pulse 1.8s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); opacity: 1; }
+      50% { transform: scale(1.4); opacity: 0.5; }
+    }
+
+    .hero-title {
+      font-size: 68px;
+      line-height: 0.98;
+      color: var(--color-text);
+      margin-bottom: var(--space-6);
+    }
+
+    .hero-title span.highlight {
+      color: var(--color-primary);
+    }
+
+    .hero-lead {
+      font-size: var(--text-lg);
+      line-height: 1.5;
+      color: #4B5563;
+      margin-bottom: var(--space-8);
+      max-width: 580px;
+    }
+
+    .hero-cta-group {
+      display: flex;
+      align-items: center;
+      gap: var(--space-4);
+      margin-bottom: var(--space-8);
+      flex-wrap: wrap;
+    }
+
+    .hero-meta-row {
+      display: flex;
+      align-items: center;
+      gap: var(--space-6);
+      font-family: var(--font-mono);
+      font-size: var(--text-xs);
+      color: var(--color-text-muted);
+    }
+
+    .hero-meta-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .hero-meta-item svg {
+      color: var(--color-secondary);
+    }
+
+    /* Hero Visual Card: Live Benchmark Terminal */
+    .hero-card {
+      background-color: var(--color-surface);
+      border: 2px solid var(--color-border-dark);
+      border-radius: var(--radius-lg);
+      padding: var(--space-6);
+      color: var(--color-text-on-dark);
+      box-shadow: 0 20px 48px rgba(0, 0, 0, 0.25);
+    }
+
+    .card-header-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-bottom: var(--space-4);
+      border-bottom: 1px solid var(--color-border-dark);
+      margin-bottom: var(--space-4);
+    }
+
+    .card-title-mono {
+      font-family: var(--font-mono);
+      font-size: var(--text-xs);
+      color: #9CA3AF;
+      letter-spacing: 0.05em;
+    }
+
+    .card-status-indicator {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--color-success);
+    }
+
+    .card-status-indicator::before {
+      content: "";
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background-color: var(--color-success);
+    }
+
+    .live-metric-row {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: var(--space-3);
+      margin-bottom: var(--space-4);
+    }
+
+    .metric-box {
+      background-color: var(--color-surface-card);
+      border: 1px solid var(--color-border-dark);
+      padding: var(--space-4);
+      border-radius: var(--radius-md);
+    }
+
+    .metric-label {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: #9CA3AF;
+      text-transform: uppercase;
+      margin-bottom: 4px;
+    }
+
+    .metric-value {
+      font-family: var(--font-display);
+      font-size: 26px;
+      color: #FFFFFF;
+      line-height: 1;
+    }
+
+    .metric-value.cyan {
+      color: #38BDF8;
+    }
+
+    .metric-value.green {
+      color: #34D399;
+    }
+
+    .terminal-output {
+      background-color: #0A0A0A;
+      border: 1px solid #222222;
+      border-radius: var(--radius-md);
+      padding: var(--space-4);
+      font-family: var(--font-mono);
+      font-size: 12px;
+      line-height: 1.6;
+      color: #A3E635;
+      overflow-x: auto;
+    }
+
+    .terminal-line {
+      display: flex;
+      gap: var(--space-2);
+    }
+
+    .terminal-prompt {
+      color: var(--color-primary);
+      user-select: none;
+    }
+
+    /* ─── Metric Showcase Strip ────────────────────────────────────── */
+    .metrics-band {
+      background-color: var(--color-neutral);
+      color: var(--color-text-on-dark);
+      padding: var(--space-16) 0;
+      border-bottom: 2px solid var(--color-border-dark);
+    }
+
+    .metrics-grid-4up {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: var(--space-8);
+    }
+
+    .metric-item-huge {
+      border-left: 3px solid var(--color-primary);
+      padding-left: var(--space-4);
+    }
+
+    .huge-number {
+      font-family: var(--font-display);
+      font-size: 48px;
+      color: #FFFFFF;
+      line-height: 1;
+      margin-bottom: var(--space-2);
+    }
+
+    .metric-desc {
+      font-size: var(--text-sm);
+      color: #9CA3AF;
+      font-weight: 500;
+    }
+
+    /* ─── Feature Matrix Section ───────────────────────────────────── */
+    .features-section {
+      padding: var(--space-24) 0;
+      background-color: var(--color-bg-light);
+    }
+
+    .section-head {
+      margin-bottom: var(--space-16);
+      max-width: 680px;
+    }
+
+    .section-tag {
+      font-family: var(--font-mono);
+      font-size: var(--text-xs);
+      font-weight: 700;
+      color: var(--color-primary);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      margin-bottom: var(--space-2);
+      display: block;
+    }
+
+    .section-heading {
+      font-size: var(--text-3xl);
+      color: var(--color-text);
+      margin-bottom: var(--space-4);
+    }
+
+    .features-grid-3up {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: var(--space-8);
+    }
+
+    /* Clear content blocks with consistent internal padding per DESIGN.md §5 */
+    .feature-card {
+      background-color: #FFFFFF;
+      border: 2px solid var(--color-border-light);
+      border-radius: var(--radius-lg);
+      padding: var(--space-8);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: border-color var(--motion-fast) var(--ease-standard),
+                  transform var(--motion-fast) var(--ease-standard),
+                  box-shadow var(--motion-fast) var(--ease-standard);
+    }
+
+    .feature-card:hover {
+      border-color: var(--color-primary);
+      transform: translateY(-4px);
+      box-shadow: 0 16px 36px rgba(0, 119, 188, 0.12);
+    }
+
+    .feature-icon-badge {
+      width: 52px;
+      height: 52px;
+      border-radius: var(--radius-md);
+      background-color: #F0FDF4;
+      border: 1px solid #BBF7D0;
+      color: var(--color-secondary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: var(--space-6);
+    }
+
+    .feature-card.primary-accent .feature-icon-badge {
+      background-color: #EFF6FF;
+      border-color: #BFDBFE;
+      color: var(--color-primary);
+    }
+
+    .feature-card-title {
+      font-size: 22px;
+      color: var(--color-text);
+      margin-bottom: var(--space-3);
+    }
+
+    .feature-card-body {
+      font-size: var(--text-base);
+      color: #4B5563;
+      line-height: 1.55;
+      margin-bottom: var(--space-6);
+      flex: 1;
+    }
+
+    .feature-card-footer {
+      border-top: 1px solid var(--color-border-light);
+      padding-top: var(--space-4);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .feature-card-metric {
+      font-family: var(--font-mono);
+      font-size: var(--text-sm);
+      font-weight: 700;
+      color: var(--color-primary);
+    }
+
+    /* ─── Interactive Workbench / Code Section (Surface #111111) ──── */
+    .interactive-section {
+      background-color: var(--color-surface);
+      color: var(--color-text-on-dark);
+      padding: var(--space-24) 0;
+      border-top: 2px solid var(--color-border-dark);
+      border-bottom: 2px solid var(--color-border-dark);
+    }
+
+    .code-tabs-nav {
+      display: flex;
+      gap: var(--space-2);
+      margin-bottom: var(--space-4);
+      border-bottom: 1px solid var(--color-border-dark);
+      padding-bottom: var(--space-2);
+    }
+
+    .code-tab-btn {
+      background: none;
+      border: 1px solid transparent;
+      padding: var(--space-2) var(--space-4);
+      font-family: var(--font-mono);
+      font-size: var(--text-sm);
+      color: #9CA3AF;
+      border-radius: var(--radius-md);
+      cursor: pointer;
+      transition: all var(--motion-fast) var(--ease-standard);
+    }
+
+    .code-tab-btn.active {
+      background-color: var(--color-surface-card);
+      border-color: var(--color-border-dark);
+      color: #FFFFFF;
+      font-weight: 700;
+    }
+
+    .code-tab-btn:hover:not(.active) {
+      color: var(--color-primary);
+    }
+
+    .workbench-container {
+      display: grid;
+      grid-template-columns: 1.2fr 0.8fr;
+      gap: var(--space-8);
+      background-color: var(--color-surface-card);
+      border: 1px solid var(--color-border-dark);
+      border-radius: var(--radius-lg);
+      padding: var(--space-6);
+    }
+
+    .code-block {
+      background-color: #0B0F19;
+      border: 1px solid #1E293B;
+      border-radius: var(--radius-md);
+      padding: var(--space-6);
+      font-family: var(--font-mono);
+      font-size: 13px;
+      line-height: 1.65;
+      color: #E2E8F0;
+      overflow-x: auto;
+    }
+
+    .code-keyword { color: #F43F5E; }
+    .code-function { color: #38BDF8; }
+    .code-string { color: #34D399; }
+    .code-comment { color: #64748B; font-style: italic; }
+
+    .test-bench-panel {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: var(--space-6);
+    }
+
+    .bench-controls-group {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-4);
+    }
+
+    .slider-container {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-2);
+    }
+
+    .slider-header {
+      display: flex;
+      justify-content: space-between;
+      font-family: var(--font-mono);
+      font-size: 13px;
+    }
+
+    .slider-input {
+      width: 100%;
+      height: 6px;
+      border-radius: var(--radius-pill);
+      accent-color: var(--color-primary);
+      cursor: pointer;
+    }
+
+    .estimated-stat-box {
+      background-color: var(--color-surface-elevated);
+      border: 1px solid var(--color-border-dark);
+      border-radius: var(--radius-md);
+      padding: var(--space-4);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    /* ─── Pricing Matrix ───────────────────────────────────────────── */
+    .pricing-section {
+      padding: var(--space-24) 0;
+      background-color: var(--color-bg-light);
+    }
+
+    .pricing-grid-3up {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: var(--space-8);
+      align-items: stretch;
+    }
+
+    .pricing-card {
+      background-color: #FFFFFF;
+      border: 2px solid var(--color-border-light);
+      border-radius: var(--radius-lg);
+      padding: var(--space-8);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      position: relative;
+    }
+
+    .pricing-card.featured {
+      border-color: var(--color-primary);
+      box-shadow: 0 20px 48px rgba(0, 119, 188, 0.16);
+      transform: scale(1.02);
+    }
+
+    .pricing-badge {
+      position: absolute;
+      top: -14px;
+      right: var(--space-6);
+      background-color: var(--color-primary);
+      color: #FFFFFF;
+      font-family: var(--font-display);
+      font-size: 11px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 4px 12px;
+      border-radius: var(--radius-pill);
+    }
+
+    .plan-name {
+      font-size: 24px;
+      color: var(--color-text);
+      margin-bottom: var(--space-2);
+    }
+
+    .plan-price-row {
+      display: flex;
+      align-items: baseline;
+      gap: var(--space-1);
+      margin-bottom: var(--space-6);
+    }
+
+    .plan-amount {
+      font-family: var(--font-display);
+      font-size: 44px;
+      color: var(--color-text);
+      line-height: 1;
+    }
+
+    .plan-period {
+      font-family: var(--font-mono);
+      font-size: var(--text-sm);
+      color: var(--color-text-muted);
+    }
+
+    .plan-features-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-3);
+      margin-bottom: var(--space-8);
+      border-top: 1px solid var(--color-border-light);
+      padding-top: var(--space-6);
+      flex: 1;
+    }
+
+    .plan-feature-item {
+      display: flex;
+      align-items: center;
+      gap: var(--space-3);
+      font-size: var(--text-sm);
+      color: #374151;
+    }
+
+    .plan-feature-item svg {
+      color: var(--color-secondary);
+      flex-shrink: 0;
+    }
+
+    /* ─── Forms & Inputs (DESIGN.md §6) ────────────────────────────── */
+    .cta-newsletter-band {
+      background-color: var(--color-surface);
+      color: var(--color-text-on-dark);
+      padding: var(--space-24) 0;
+      border-top: 2px solid var(--color-border-dark);
+    }
+
+    .newsletter-wrapper {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--space-12);
+      align-items: center;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-3);
+    }
+
+    .input-label {
+      font-family: var(--font-display);
+      font-size: var(--text-sm);
+      color: #FFFFFF;
+      letter-spacing: 0.04em;
+    }
+
+    .input-row {
+      display: flex;
+      gap: var(--space-2);
+    }
+
+    .text-input-field {
+      flex: 1;
+      height: 52px;
+      background-color: var(--color-surface-card);
+      border: 2px solid var(--color-border-dark);
+      border-radius: var(--radius-md);
+      padding: 0 var(--space-4);
+      font-family: var(--font-body);
+      font-size: var(--text-base);
+      color: #FFFFFF;
+      transition: border-color var(--motion-fast) var(--ease-standard),
+                  box-shadow var(--motion-fast) var(--ease-standard);
+    }
+
+    .text-input-field:focus {
+      outline: none;
+      border-color: var(--color-primary);
+      box-shadow: var(--focus-ring);
+    }
+
+    .input-help-text {
+      font-family: var(--font-mono);
+      font-size: var(--text-xs);
+      color: #9CA3AF;
+    }
+
+    /* ─── Footer ───────────────────────────────────────────────────── */
+    .site-footer {
+      background-color: #0A0A0A;
+      color: #9CA3AF;
+      border-top: 2px solid #1F2937;
+      padding: var(--space-16) 0 var(--space-8);
+    }
+
+    .footer-grid-4up {
+      display: grid;
+      grid-template-columns: 1.4fr 0.8fr 0.8fr 1fr;
+      gap: var(--space-8);
+      margin-bottom: var(--space-16);
+    }
+
+    .footer-heading {
+      font-family: var(--font-display);
+      font-size: var(--text-sm);
+      color: #FFFFFF;
+      margin-bottom: var(--space-4);
+      letter-spacing: 0.05em;
+    }
+
+    .footer-links {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-2);
+    }
+
+    .footer-links a {
+      font-size: var(--text-sm);
+      color: #9CA3AF;
+      transition: color var(--motion-fast) var(--ease-standard);
+    }
+
+    .footer-links a:hover {
+      color: var(--color-primary);
+    }
+
+    .footer-bottom-bar {
+      border-top: 1px solid #1F2937;
+      padding-top: var(--space-8);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: var(--text-xs);
+      font-family: var(--font-mono);
+    }
+
+    /* ─── Responsive Queries ───────────────────────────────────────── */
+    @media (max-width: 1024px) {
+      .hero-grid { grid-template-columns: 1fr; }
+      .metrics-grid-4up { grid-template-columns: repeat(2, 1fr); }
+      .features-grid-3up { grid-template-columns: 1fr; }
+      .workbench-container { grid-template-columns: 1fr; }
+      .pricing-grid-3up { grid-template-columns: 1fr; }
+      .newsletter-wrapper { grid-template-columns: 1fr; }
+      .footer-grid-4up { grid-template-columns: repeat(2, 1fr); }
+      .hero-title { font-size: 52px; }
+    }
+
+    @media (max-width: 768px) {
+      .nav-links { display: none; }
+      .hero-title { font-size: 40px; }
+      .metrics-grid-4up { grid-template-columns: 1fr; }
+      .footer-grid-4up { grid-template-columns: 1fr; }
+      .input-row { flex-direction: column; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Navigation Header -->
+  <header class="top-header">
+    <div class="container nav-wrapper">
+      <div class="logo-container">
+        <div class="logo-icon-box">B</div>
+        <span class="logo-text">BOLD</span>
+        <span class="logo-badge">V4.2 COMPUTE</span>
+      </div>
+
+      <nav aria-label="Main Navigation">
+        <ul class="nav-links">
+          <li><a href="#clusters">Clusters</a></li>
+          <li><a href="#features">Architecture</a></li>
+          <li><a href="#workbench">Console</a></li>
+          <li><a href="#pricing">Pricing</a></li>
+          <li><a href="#docs">Documentation</a></li>
+        </ul>
+      </nav>
+
+      <div class="nav-actions">
+        <a href="#workbench" class="btn btn-neutral" style="padding: 10px 20px; font-size: 13px;">SIGN IN</a>
+        <a href="#pricing" class="btn btn-primary" style="padding: 10px 20px; font-size: 13px;">DEPLOY NOW</a>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <!-- HERO SECTION: Commanding, Heavyweight Typography, High-Contrast Layout -->
+    <section class="hero-section">
+      <div class="container hero-grid">
+        <div>
+          <div class="hero-eyebrow">
+            <span class="pulse-dot"></span>
+            <span>NEXT-GEN DISTRIBUTED GPU CLUSTERS</span>
+          </div>
+
+          <h1 class="hero-title">
+            SCALE WITHOUT <span class="highlight">CEILING</span>. ZERO DOWNTIME.
+          </h1>
+
+          <p class="hero-lead">
+            Orchestrate terabyte-scale distributed model inference and high-throughput pipelines. Unflinching performance backed by guaranteed SLAs.
+          </p>
+
+          <div class="hero-cta-group">
+            <a href="#pricing" class="btn btn-primary" id="heroDeployBtn">START INSTANT CLUSTER</a>
+            <a href="#workbench" class="btn btn-neutral">VIEW BENCHMARK SUITE</a>
+          </div>
+
+          <div class="hero-meta-row">
+            <div class="hero-meta-item">
+              <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>
+              <span>Sub-4ms p99 Global</span>
+            </div>
+            <div class="hero-meta-item">
+              <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>
+              <span>100% Bare Metal NVLink</span>
+            </div>
+            <div class="hero-meta-item">
+              <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>
+              <span>SOC2 Type II Certified</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Hero Interactive Terminal Card (Surface #111111) -->
+        <div class="hero-card">
+          <div class="card-header-bar">
+            <span class="card-title-mono">NODE // US-EAST-VIRGINIA-01</span>
+            <span class="card-status-indicator">ACTIVE TELEMETRY</span>
+          </div>
+
+          <div class="live-metric-row">
+            <div class="metric-box">
+              <div class="metric-label">CLUSTER THROUGHPUT</div>
+              <div class="metric-value cyan" id="telemetryThroughput">148.2 GB/S</div>
+            </div>
+            <div class="metric-box">
+              <div class="metric-label">NETWORK LATENCY</div>
+              <div class="metric-value green" id="telemetryLatency">2.14 MS</div>
+            </div>
+          </div>
+
+          <div class="terminal-output">
+            <div class="terminal-line">
+              <span class="terminal-prompt">$</span>
+              <span>bold cluster init --tier=h100-sxm5 --replicas=32</span>
+            </div>
+            <div style="color: #60A5FA; margin-top: 4px;">✔ Provisioned 32x SXM5 80GB HBM3 nodes in 4.1s</div>
+            <div style="color: #34D399;">✔ NVLink interconnect active: 900 GB/s bidirectional</div>
+            <div style="color: #FBBF24;">⚡ Ready for batch job ingest on port 9000</div>
+            <div style="color: #9CA3AF; margin-top: 6px;">[09:21:04] Ingestion rate: 2,490,110 tokens/sec</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- METRICS BAND (Large #111111 Background with #0077BC accents) -->
+    <section class="metrics-band" id="clusters">
+      <div class="container">
+        <div class="metrics-grid-4up">
+          <div class="metric-item-huge">
+            <div class="huge-number">99.999%</div>
+            <div class="metric-desc">Guaranteed uptime with hardware failover redundancy.</div>
+          </div>
+          <div class="metric-item-huge">
+            <div class="huge-number">4.2 MS</div>
+            <div class="metric-desc">P99 worldwide packet round-trip edge latency.</div>
+          </div>
+          <div class="metric-item-huge">
+            <div class="huge-number">128 GBPS</div>
+            <div class="metric-desc">Direct memory access per dedicated compute pod.</div>
+          </div>
+          <div class="metric-item-huge">
+            <div class="huge-number">10.4 M+</div>
+            <div class="metric-desc">Parallel jobs dispatched daily with zero queue drops.</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FEATURES SECTION: Clear Content Blocks, Obvious Hierarchy -->
+    <section class="features-section" id="features">
+      <div class="container">
+        <div class="section-head">
+          <span class="section-tag">UNCOMPROMISING INFRASTRUCTURE</span>
+          <h2 class="section-heading">COMMANDING ARCHITECTURE FOR CRITICAL WORKLOADS</h2>
+          <p style="font-size: var(--text-lg); color: #4B5563;">
+            Engineered with strict separation of concerns, deterministic routing, and hardware-accelerated memory fabrics.
+          </p>
+        </div>
+
+        <div class="features-grid-3up">
+          <!-- Card 1 (Primary Accent #0077BC) -->
+          <div class="feature-card primary-accent">
+            <div>
+              <div class="feature-icon-badge">
+                <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polygon points="12 2 2 7 12 12 22 7 12 2"></polygon><polyline points="2 17 12 22 22 17"></polyline><polyline points="2 12 12 17 22 12"></polyline></svg>
+              </div>
+              <h3 class="feature-card-title">DETERMINISTIC COMPUTE</h3>
+              <p class="feature-card-body">
+                Eliminate noisy neighbors. Every core, memory channel, and PCIe lane is hard-pinned to your private virtualization slice.
+              </p>
+            </div>
+            <div class="feature-card-footer">
+              <span class="feature-card-metric">ZERO JITTER</span>
+              <a href="#workbench" class="btn btn-neutral" style="padding: 6px 14px; font-size: 12px;">EXPLORE →</a>
+            </div>
+          </div>
+
+          <!-- Card 2 (Secondary Accent #009866) -->
+          <div class="feature-card">
+            <div>
+              <div class="feature-icon-badge">
+                <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"></path></svg>
+              </div>
+              <h3 class="feature-card-title">SUB-MILLISECOND INGEST</h3>
+              <p class="feature-card-body">
+                High-frequency event ingestion handles millions of payload records per second with immediate ledger commit.
+              </p>
+            </div>
+            <div class="feature-card-footer">
+              <span class="feature-card-metric" style="color: var(--color-secondary);">4.8M OPS/SEC</span>
+              <a href="#workbench" class="btn btn-neutral" style="padding: 6px 14px; font-size: 12px;">EXPLORE →</a>
+            </div>
+          </div>
+
+          <!-- Card 3 -->
+          <div class="feature-card primary-accent">
+            <div>
+              <div class="feature-icon-badge">
+                <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+              </div>
+              <h3 class="feature-card-title">ENCLAVE ENCRYPTION</h3>
+              <p class="feature-card-body">
+                Confidential computing with hardware memory encryption (AMD SEV-SNP & Intel TDX). Keys never touch disk or host RAM.
+              </p>
+            </div>
+            <div class="feature-card-footer">
+              <span class="feature-card-metric">AES-512 HARDWARE</span>
+              <a href="#workbench" class="btn btn-neutral" style="padding: 6px 14px; font-size: 12px;">EXPLORE →</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- INTERACTIVE WORKBENCH (Surface #111111) -->
+    <section class="interactive-section" id="workbench">
+      <div class="container">
+        <div class="section-head">
+          <span class="section-tag" style="color: #38BDF8;">DEVELOPER CONSOLE</span>
+          <h2 class="section-heading" style="color: #FFFFFF;">INTERACTIVE CLUSTER WORKBENCH</h2>
+          <p style="color: #9CA3AF;">Test deployment configurations and preview real-time throughput metrics.</p>
+        </div>
+
+        <!-- Code Language Switcher -->
+        <div class="code-tabs-nav" role="tablist">
+          <button class="code-tab-btn active" data-lang="python">PYTHON SDK</button>
+          <button class="code-tab-btn" data-lang="bash">CLI TERMINAL</button>
+          <button class="code-tab-btn" data-lang="rust">RUST CRATE</button>
+          <button class="code-tab-btn" data-lang="go">GOLANG</button>
+        </div>
+
+        <div class="workbench-container">
+          <!-- Code View Area -->
+          <div class="code-block" id="codeDisplayArea">
+            <span class="code-comment"># Bold Compute Python SDK - High Performance Deployment</span><br>
+            <span class="code-keyword">import</span> bold_compute <span class="code-keyword">as</span> bold<br><br>
+            cluster = bold.<span class="code-function">Cluster</span>(<br>
+            &nbsp;&nbsp;region=<span class="code-string">"us-east-virginia"</span>,<br>
+            &nbsp;&nbsp;hardware=<span class="code-string">"h100-80gb-sxm5"</span>,<br>
+            &nbsp;&nbsp;nodes=<span id="codeNodesVal">16</span>,<br>
+            &nbsp;&nbsp;redundancy=<span class="code-string">"triple-replicated"</span><br>
+            )<br><br>
+            <span class="code-comment"># Synchronize distributed memory array</span><br>
+            session = cluster.<span class="code-function">allocate_pipeline</span>(fast_connect=<span class="code-keyword">True</span>)<br>
+            <span class="code-keyword">print</span>(f<span class="code-string">"Allocated pipeline ready in {session.latency_ms}ms"</span>)
+          </div>
+
+          <!-- Dynamic Control Panel -->
+          <div class="test-bench-panel">
+            <div class="bench-controls-group">
+              <h3 style="font-size: 18px; color: #FFFFFF; margin-bottom: 8px;">CALIBRATE CLUSTER CAPACITY</h3>
+
+              <div class="slider-container">
+                <div class="slider-header">
+                  <span>COMPUTE NODES:</span>
+                  <span id="sliderValueDisplay" style="color: var(--color-primary); font-weight: 700;">16 NODES</span>
+                </div>
+                <input type="range" min="4" max="128" step="4" value="16" class="slider-input" id="nodeSlider" />
+              </div>
+
+              <div class="estimated-stat-box">
+                <div>
+                  <div style="font-family: var(--font-mono); font-size: 11px; color: #9CA3AF;">AGGREGATE VRAM</div>
+                  <div id="vramDisplay" style="font-family: var(--font-display); font-size: 20px; color: #FFFFFF;">1,280 GB HBM3</div>
+                </div>
+                <div>
+                  <div style="font-family: var(--font-mono); font-size: 11px; color: #9CA3AF;">EST. COST / HOUR</div>
+                  <div id="costDisplay" style="font-family: var(--font-display); font-size: 20px; color: #34D399;">$41.60</div>
+                </div>
+              </div>
+            </div>
+
+            <button class="btn btn-primary" id="launchBenchBtn" style="width: 100%;">
+              SIMULATE PIPELINE DEPLOYMENT
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- PRICING MATRIX: High Contrast, Assertive Cards -->
+    <section class="pricing-section" id="pricing">
+      <div class="container">
+        <div class="section-head" style="text-align: center; margin-inline: auto;">
+          <span class="section-tag">PREDICTABLE TARIFFS</span>
+          <h2 class="section-heading">TRANSPARENT ENTERPRISE COMPUTE</h2>
+          <p style="font-size: var(--text-lg); color: #4B5563;">
+            No hidden ingress or egress tolls. Scale up or down with second-by-second billing.
+          </p>
+        </div>
+
+        <div class="pricing-grid-3up">
+          <!-- Developer Plan -->
+          <div class="pricing-card">
+            <div>
+              <h3 class="plan-name">DEVELOPER</h3>
+              <p style="font-size: 14px; color: #6B7280; margin-bottom: 16px;">Ideal for prototyping model architectures.</p>
+              <div class="plan-price-row">
+                <span class="plan-amount">$290</span>
+                <span class="plan-period">/ month</span>
+              </div>
+
+              <ul class="plan-features-list">
+                <li class="plan-feature-item">
+                  <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                  <span>4 Dedicated CPU vCores + 16GB RAM</span>
+                </li>
+                <li class="plan-feature-item">
+                  <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                  <span>Shared NVLink Burst Pool</span>
+                </li>
+                <li class="plan-feature-item">
+                  <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                  <span>500 GB High-Speed NVMe Storage</span>
+                </li>
+                <li class="plan-feature-item">
+                  <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                  <span>Standard Community Discord Support</span>
+                </li>
+              </ul>
+            </div>
+            <a href="#workbench" class="btn btn-neutral" style="width: 100%;">SELECT DEVELOPER</a>
+          </div>
+
+          <!-- Production Plan (Featured, #0077BC) -->
+          <div class="pricing-card featured">
+            <span class="pricing-badge">MOST COMMANDING</span>
+            <div>
+              <h3 class="plan-name">PRODUCTION</h3>
+              <p style="font-size: 14px; color: #6B7280; margin-bottom: 16px;">For high-scale real-time commercial pipelines.</p>
+              <div class="plan-price-row">
+                <span class="plan-amount">$1,450</span>
+                <span class="plan-period">/ month</span>
+              </div>
+
+              <ul class="plan-features-list">
+                <li class="plan-feature-item">
+                  <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                  <span>32 Dedicated Hardware Slices (H100 SXM5)</span>
+                </li>
+                <li class="plan-feature-item">
+                  <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                  <span>Dedicated 900 GB/s NVLink Mesh</span>
+                </li>
+                <li class="plan-feature-item">
+                  <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                  <span>10 TB Encrypted Shared Flash Storage</span>
+                </li>
+                <li class="plan-feature-item">
+                  <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                  <span>99.999% SLA with 15-Minute Response</span>
+                </li>
+              </ul>
+            </div>
+            <a href="#workbench" class="btn btn-primary" style="width: 100%;">SELECT PRODUCTION</a>
+          </div>
+
+          <!-- Enterprise Plan -->
+          <div class="pricing-card">
+            <div>
+              <h3 class="plan-name">ENTERPRISE</h3>
+              <p style="font-size: 14px; color: #6B7280; margin-bottom: 16px;">Multi-datacenter custom hardware reservations.</p>
+              <div class="plan-price-row">
+                <span class="plan-amount">CUSTOM</span>
+                <span class="plan-period">/ tailored</span>
+              </div>
+
+              <ul class="plan-features-list">
+                <li class="plan-feature-item">
+                  <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                  <span>Unlimited Custom GPU & TPU Racks</span>
+                </li>
+                <li class="plan-feature-item">
+                  <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                  <span>On-Premise or Hybrid Dark-Fiber Transit</span>
+                </li>
+                <li class="plan-feature-item">
+                  <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                  <span>Custom Enclave Hardware Security Modules</span>
+                </li>
+                <li class="plan-feature-item">
+                  <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                  <span>Dedicated Solutions Engineering Team</span>
+                </li>
+              </ul>
+            </div>
+            <a href="#workbench" class="btn btn-neutral" style="width: 100%;">TALK TO ARCHITECTS</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- NEWSLETTER & DEPLOYMENT INTAKE (Surface #111111) -->
+    <section class="cta-newsletter-band" id="docs">
+      <div class="container newsletter-wrapper">
+        <div>
+          <span class="section-tag" style="color: var(--color-primary);">INSTANT ACCESS</span>
+          <h2 class="section-heading" style="color: #FFFFFF;">JOIN THE BOLD PRIVATE BETA</h2>
+          <p style="color: #9CA3AF; font-size: var(--text-base);">
+            Receive your initial API cluster keys, SDK binaries, and high-throughput architectural blue-prints.
+          </p>
+        </div>
+
+        <form class="form-group" id="newsletterForm">
+          <label for="engineerEmail" class="input-label">CORPORATE ENGINEERING EMAIL</label>
+          <div class="input-row">
+            <input type="email" id="engineerEmail" class="text-input-field" placeholder="architect@company.com" required />
+            <button type="submit" class="btn btn-primary">REQUEST ACCESS</button>
+          </div>
+          <span class="input-help-text" id="newsletterFeedback">
+            Direct credential generation within 60 seconds.
+          </span>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <!-- BOLD FOOTER (Surface #111111 / #0A0A0A) -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-grid-4up">
+        <div>
+          <div class="logo-container" style="margin-bottom: var(--space-4);">
+            <div class="logo-icon-box" style="width: 32px; height: 32px; font-size: 18px;">B</div>
+            <span class="logo-text" style="color: #FFFFFF; font-size: 20px;">BOLD</span>
+          </div>
+          <p style="font-size: var(--text-sm); line-height: 1.6; color: #9CA3AF;">
+            Commanding high-performance compute infrastructure engineered for zero-latency, high-concurrency workloads.
+          </p>
+        </div>
+
+        <div>
+          <h4 class="footer-heading">PRODUCTS</h4>
+          <ul class="footer-links">
+            <li><a href="#clusters">GPU Clusters</a></li>
+            <li><a href="#features">Bare Metal Nodes</a></li>
+            <li><a href="#features">NVLink Mesh</a></li>
+            <li><a href="#workbench">Inference Endpoints</a></li>
+            <li><a href="#workbench">Dedicated Enclaves</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h4 class="footer-heading">DEVELOPERS</h4>
+          <ul class="footer-links">
+            <li><a href="#workbench">Python SDK</a></li>
+            <li><a href="#workbench">Rust Crates</a></li>
+            <li><a href="#workbench">CLI Quickstart</a></li>
+            <li><a href="#workbench">API Reference</a></li>
+            <li><a href="#workbench">System Status (99.999%)</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h4 class="footer-heading">ORGANIZATION</h4>
+          <ul class="footer-links">
+            <li><a href="#features">Security & Compliance</a></li>
+            <li><a href="#pricing">Enterprise Sales</a></li>
+            <li><a href="#docs">Infrastructure Papers</a></li>
+            <li><a href="#docs">Privacy Policy</a></li>
+            <li><a href="#docs">Terms of Service</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="footer-bottom-bar">
+        <span>© 2026 BOLD COMPUTE INC. ALL RIGHTS RESERVED.</span>
+        <div style="display: flex; gap: var(--space-4);">
+          <span style="color: var(--color-success);">ALL REGIONS OPERATIONAL</span>
+          <span>LATENCY: 2.1MS</span>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Interactive Logic -->
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      // 1. Interactive Slider for Compute Workbench
+      const nodeSlider = document.getElementById('nodeSlider');
+      const sliderValueDisplay = document.getElementById('sliderValueDisplay');
+      const vramDisplay = document.getElementById('vramDisplay');
+      const costDisplay = document.getElementById('costDisplay');
+      const codeNodesVal = document.getElementById('codeNodesVal');
+
+      if (nodeSlider) {
+        nodeSlider.addEventListener('input', (e) => {
+          const nodes = parseInt(e.target.value, 10);
+          sliderValueDisplay.textContent = `${nodes} NODES`;
+          codeNodesVal.textContent = nodes;
+          vramDisplay.textContent = `${(nodes * 80).toLocaleString()} GB HBM3`;
+          costDisplay.textContent = `$${(nodes * 2.6).toFixed(2)}`;
+        });
+      }
+
+      // 2. Interactive Code Tab Switcher
+      const codeTabs = document.querySelectorAll('.code-tab-btn');
+      const codeDisplayArea = document.getElementById('codeDisplayArea');
+
+      const codeSnippets = {
+        python: `<span class="code-comment"># Bold Compute Python SDK - High Performance Deployment</span><br>
+<span class="code-keyword">import</span> bold_compute <span class="code-keyword">as</span> bold<br><br>
+cluster = bold.<span class="code-function">Cluster</span>(<br>
+&nbsp;&nbsp;region=<span class="code-string">"us-east-virginia"</span>,<br>
+&nbsp;&nbsp;hardware=<span class="code-string">"h100-80gb-sxm5"</span>,<br>
+&nbsp;&nbsp;nodes=<span id="codeNodesVal">${nodeSlider ? nodeSlider.value : 16}</span>,<br>
+&nbsp;&nbsp;redundancy=<span class="code-string">"triple-replicated"</span><br>
+)<br><br>
+<span class="code-comment"># Synchronize distributed memory array</span><br>
+session = cluster.<span class="code-function">allocate_pipeline</span>(fast_connect=<span class="code-keyword">True</span>)<br>
+<span class="code-keyword">print</span>(f<span class="code-string">"Allocated pipeline ready in {session.latency_ms}ms"</span>)`,
+
+        bash: `<span class="code-comment"># Bold Compute Command Line Interface</span><br>
+<span class="code-keyword">$</span> curl -fsSL https://get.boldcompute.dev | sh<br>
+<span class="code-keyword">$</span> bold auth login --key=$BOLD_API_KEY<br>
+<span class="code-keyword">$</span> bold deploy ./model_artifacts \\<br>
+&nbsp;&nbsp;--cluster=production-east \\<br>
+&nbsp;&nbsp;--nodes=${nodeSlider ? nodeSlider.value : 16} \\<br>
+&nbsp;&nbsp;--autoscale=2..64<br>
+<span class="code-string">[INFO] Deployment cluster created. Status: HEALTHY (2.1ms p99)</span>`,
+
+        rust: `<span class="code-comment">// Bold Compute High Performance Rust Crate</span><br>
+<span class="code-keyword">use</span> bold_client::{ClusterConfig, HardwareTier, NodeMesh};<br><br>
+<span class="code-keyword">#[tokio::main]</span><br>
+<span class="code-keyword">async fn</span> <span class="code-function">main</span>() -> Result&lt;(), Box&lt;<span class="code-keyword">dyn</span> std::error::Error&gt;&gt; {<br>
+&nbsp;&nbsp;<span class="code-keyword">let</span> mesh = NodeMesh::<span class="code-function">connect</span>(ClusterConfig {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;tier: HardwareTier::H100SXM5,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;node_count: ${nodeSlider ? nodeSlider.value : 16},<br>
+&nbsp;&nbsp;}).<span class="code-keyword">await</span>?;<br>
+&nbsp;&nbsp;mesh.<span class="code-function">broadcast_weights</span>(&amp;tensor_data).<span class="code-keyword">await</span>?;<br>
+&nbsp;&nbsp;Ok(())<br>
+}`,
+
+        go: `<span class="code-comment">// Bold Compute Native Golang Client</span><br>
+<span class="code-keyword">package</span> main<br><br>
+<span class="code-keyword">import</span> (<br>
+&nbsp;&nbsp;<span class="code-string">"context"</span><br>
+&nbsp;&nbsp;<span class="code-string">"github.com/boldcompute/sdk-go"</span><br>
+)<br><br>
+<span class="code-keyword">func</span> <span class="code-function">main</span>() {<br>
+&nbsp;&nbsp;ctx := context.<span class="code-function">Background</span>()<br>
+&nbsp;&nbsp;client := sdk.<span class="code-function">NewClient</span>(<span class="code-string">"us-east-virginia"</span>)<br>
+&nbsp;&nbsp;_, err := client.<span class="code-function">CreateCluster</span>(ctx, &amp;sdk.ClusterOpts{<br>
+&nbsp;&nbsp;&nbsp;&nbsp;Nodes: ${nodeSlider ? nodeSlider.value : 16},<br>
+&nbsp;&nbsp;})<br>
+}`
+      };
+
+      codeTabs.forEach(tab => {
+        tab.addEventListener('click', () => {
+          codeTabs.forEach(t => t.classList.remove('active'));
+          tab.classList.add('active');
+          const lang = tab.getAttribute('data-lang');
+          if (codeSnippets[lang]) {
+            codeDisplayArea.innerHTML = codeSnippets[lang];
+          }
+        });
+      });
+
+      // 3. Live Telemetry Jitter Simulation
+      const throughputElem = document.getElementById('telemetryThroughput');
+      const latencyElem = document.getElementById('telemetryLatency');
+
+      setInterval(() => {
+        if (throughputElem) {
+          const val = (145 + Math.random() * 8).toFixed(1);
+          throughputElem.textContent = `${val} GB/S`;
+        }
+        if (latencyElem) {
+          const lat = (2.0 + Math.random() * 0.35).toFixed(2);
+          latencyElem.textContent = `${lat} MS`;
+        }
+      }, 2500);
+
+      // 4. Form Handling
+      const form = document.getElementById('newsletterForm');
+      const feedback = document.getElementById('newsletterFeedback');
+      if (form) {
+        form.addEventListener('submit', (e) => {
+          e.preventDefault();
+          feedback.style.color = '#34D399';
+          feedback.textContent = '✔ Access credentials issued! Check your inbox for node keys.';
+          form.reset();
+        });
+      }
+
+      // 5. Simulate Pipeline Button
+      const launchBtn = document.getElementById('launchBenchBtn');
+      if (launchBtn) {
+        launchBtn.addEventListener('click', () => {
+          launchBtn.textContent = 'SIMULATING 128GBPS NVLINK PIPELINE...';
+          launchBtn.style.backgroundColor = 'var(--color-secondary)';
+          setTimeout(() => {
+            alert('Benchmark complete: 32 nodes reached maximum throughput in 380ms with 0% packet dropped.');
+            launchBtn.textContent = 'SIMULATE PIPELINE DEPLOYMENT';
+            launchBtn.style.backgroundColor = 'var(--color-primary)';
+          }, 600);
+        });
+      }
+    });
+  </script>
+</body>
+</html>

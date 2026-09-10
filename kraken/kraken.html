@@ -1,0 +1,1049 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kraken — Trade Crypto with World-Class Security</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    /* -------------------------------------------------------------
+       KRAKEN DESIGN SYSTEM TOKENS & FOUNDATIONS
+       ------------------------------------------------------------- */
+    :root {
+      /* Primary Brand Colors */
+      --color-kraken-purple: #7132f5;   /* Primary CTA, brand accent, links */
+      --color-purple-dark: #5741d8;     /* Button borders, outlined variants */
+      --color-purple-deep: #5b1ecf;     /* Deepest purple */
+      --color-purple-subtle: rgba(133, 91, 251, 0.16); /* Purple at 16% */
+      --color-near-black: #101114;      /* Primary text */
+
+      /* Neutrals & Surfaces */
+      --color-surface: #ffffff;         /* Primary surface */
+      --color-cool-gray: #686b82;       /* Primary neutral */
+      --color-silver-blue: #9497a9;     /* Secondary text, muted elements */
+      --color-border-gray: #dedee5;     /* Divider borders */
+      --color-gray-subtle: rgba(148, 151, 169, 0.08); /* Secondary gray button */
+      --color-neutral-badge-bg: rgba(104, 107, 130, 0.12);
+      --color-neutral-badge-text: #484b5e;
+
+      /* Semantics */
+      --color-green: #149e61;           /* Success/positive at 16% for badges */
+      --color-green-bg: rgba(20, 158, 97, 0.16);
+      --color-green-dark: #026b3f;      /* Badge text */
+      --color-red: #e02424;
+      --color-red-bg: rgba(224, 36, 36, 0.14);
+
+      /* Typography Families */
+      --font-brand: "Kraken-Brand", "IBM Plex Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+      --font-product: "Kraken-Product", "IBM Plex Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+      --font-mono: "IBM Plex Mono", monospace;
+
+      /* Depth & Shadows */
+      --shadow-subtle: rgba(0, 0, 0, 0.03) 0px 4px 24px;
+      --shadow-micro: rgba(16, 24, 40, 0.04) 0px 1px 4px;
+      --shadow-card: 0 1px 3px rgba(0, 0, 0, 0.05), rgba(0, 0, 0, 0.03) 0px 4px 24px;
+
+      /* Border Radii (12px on buttons is non-negotiable) */
+      --radius-btn: 12px;
+      --radius-badge-sm: 6px;
+      --radius-badge-md: 8px;
+      --radius-card: 16px;
+    }
+
+    /* Reset & Clean White Canvas */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--color-surface);
+      color: var(--color-near-black);
+      font-family: var(--font-product);
+      font-size: 16px;
+      line-height: 1.38;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    a {
+      color: var(--color-kraken-purple);
+      text-decoration: none;
+    }
+    a:hover {
+      color: var(--color-purple-deep);
+    }
+
+    .container {
+      max-width: 1240px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    /* -------------------------------------------------------------
+       TYPOGRAPHY RULES (KRAKEN-BRAND & KRAKEN-PRODUCT)
+       ------------------------------------------------------------- */
+    .hero-display {
+      font-family: var(--font-brand);
+      font-size: 48px;
+      font-weight: 700;
+      line-height: 1.17;
+      letter-spacing: -1px;
+      color: var(--color-near-black);
+    }
+
+    .section-heading {
+      font-family: var(--font-brand);
+      font-size: 36px;
+      font-weight: 700;
+      line-height: 1.22;
+      letter-spacing: -0.5px;
+      color: var(--color-near-black);
+    }
+
+    .sub-heading {
+      font-family: var(--font-brand);
+      font-size: 28px;
+      font-weight: 700;
+      line-height: 1.29;
+      letter-spacing: -0.5px;
+      color: var(--color-near-black);
+    }
+
+    .feature-title {
+      font-family: var(--font-product);
+      font-size: 22px;
+      font-weight: 600;
+      line-height: 1.20;
+      color: var(--color-near-black);
+    }
+
+    .body-regular {
+      font-family: var(--font-product);
+      font-size: 16px;
+      font-weight: 400;
+      line-height: 1.38;
+      color: var(--color-cool-gray);
+    }
+
+    .body-medium {
+      font-family: var(--font-product);
+      font-size: 16px;
+      font-weight: 500;
+      line-height: 1.38;
+      color: var(--color-near-black);
+    }
+
+    .caption-text {
+      font-family: var(--font-product);
+      font-size: 14px;
+      font-weight: 400;
+      line-height: 1.50;
+      color: var(--color-silver-blue);
+    }
+
+    .small-text {
+      font-family: var(--font-product);
+      font-size: 12px;
+      font-weight: 500;
+      line-height: 1.33;
+    }
+
+    .micro-label {
+      font-family: var(--font-product);
+      font-size: 7px;
+      font-weight: 500;
+      line-height: 1.00;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+    }
+
+    /* -------------------------------------------------------------
+       BUTTONS (STRICTLY 12px RADIUS - NO PILLS)
+       ------------------------------------------------------------- */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-product);
+      font-size: 16px;
+      font-weight: 600;
+      line-height: 1.38;
+      cursor: pointer;
+      text-decoration: none;
+      transition: all 0.15s ease;
+      white-space: nowrap;
+      border: 1px solid transparent;
+    }
+
+    /* Primary Purple: #7132f5, padding 13px 16px, radius 12px */
+    .btn-primary-purple {
+      background-color: var(--color-kraken-purple);
+      color: #ffffff;
+      padding: 13px 16px;
+      border-radius: 12px;
+    }
+    .btn-primary-purple:hover {
+      background-color: var(--color-purple-deep);
+      color: #ffffff;
+    }
+
+    /* Purple Outlined: bg #ffffff, text #5741d8, border 1px solid #5741d8, radius 12px */
+    .btn-purple-outlined {
+      background-color: #ffffff;
+      color: var(--color-purple-dark);
+      border: 1px solid var(--color-purple-dark);
+      padding: 13px 16px;
+      border-radius: 12px;
+    }
+    .btn-purple-outlined:hover {
+      background-color: rgba(87, 65, 216, 0.04);
+      border-color: var(--color-purple-deep);
+    }
+
+    /* Purple Subtle: bg rgba(133,91,251,0.16), text #7132f5, padding 8px, radius 12px */
+    .btn-purple-subtle {
+      background-color: var(--color-purple-subtle);
+      color: var(--color-kraken-purple);
+      padding: 8px 14px;
+      border-radius: 12px;
+      font-size: 14px;
+    }
+    .btn-purple-subtle:hover {
+      background-color: rgba(133, 91, 251, 0.24);
+    }
+
+    /* Secondary Gray: bg rgba(148,151,169,0.08), text #101114, radius 12px */
+    .btn-secondary-gray {
+      background-color: var(--color-gray-subtle);
+      color: var(--color-near-black);
+      padding: 13px 16px;
+      border-radius: 12px;
+    }
+    .btn-secondary-gray:hover {
+      background-color: rgba(148, 151, 169, 0.16);
+    }
+
+    /* White Button: bg #ffffff, text #101114, radius 10px, shadow subtle */
+    .btn-white {
+      background-color: #ffffff;
+      color: var(--color-near-black);
+      padding: 11px 16px;
+      border-radius: 10px;
+      border: 1px solid var(--color-border-gray);
+      box-shadow: var(--shadow-subtle);
+    }
+
+    /* -------------------------------------------------------------
+       BADGES
+       ------------------------------------------------------------- */
+    .badge-success {
+      background-color: var(--color-green-bg);
+      color: var(--color-green-dark);
+      border-radius: 6px;
+      padding: 3px 8px;
+      font-size: 12px;
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .badge-neutral {
+      background-color: var(--color-neutral-badge-bg);
+      color: var(--color-neutral-badge-text);
+      border-radius: 8px;
+      padding: 3px 8px;
+      font-size: 12px;
+      font-weight: 500;
+    }
+
+    /* -------------------------------------------------------------
+       NAVIGATION BAR
+       ------------------------------------------------------------- */
+    .navbar {
+      border-bottom: 1px solid var(--color-border-gray);
+      background: #ffffff;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .nav-inner {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      height: 72px;
+    }
+    .brand-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+    }
+    .kraken-octopus-icon {
+      width: 32px;
+      height: 32px;
+      fill: var(--color-kraken-purple);
+    }
+    .brand-name {
+      font-family: var(--font-brand);
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--color-near-black);
+      letter-spacing: -0.5px;
+    }
+
+    .nav-menu {
+      display: flex;
+      align-items: center;
+      gap: 28px;
+      list-style: none;
+    }
+    .nav-item-link {
+      font-size: 15px;
+      font-weight: 500;
+      color: var(--color-near-black);
+      transition: color 0.15s ease;
+    }
+    .nav-item-link:hover {
+      color: var(--color-kraken-purple);
+    }
+
+    /* -------------------------------------------------------------
+       HERO SECTION
+       ------------------------------------------------------------- */
+    .hero-section {
+      padding: 60px 0 50px;
+      border-bottom: 1px solid var(--color-border-gray);
+    }
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1.05fr 0.95fr;
+      gap: 40px;
+      align-items: center;
+    }
+
+    /* -------------------------------------------------------------
+       INTERACTIVE KRAKEN PRO TRADING CONSOLE & ORDER BOOK
+       ------------------------------------------------------------- */
+    .terminal-card {
+      background: #ffffff;
+      border: 1px solid var(--color-border-gray);
+      border-radius: var(--radius-card);
+      box-shadow: var(--shadow-subtle);
+      overflow: hidden;
+    }
+
+    .terminal-topbar {
+      padding: 12px 18px;
+      background: #fafafc;
+      border-bottom: 1px solid var(--color-border-gray);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .ticker-pair-group {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .pair-tab {
+      padding: 6px 12px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      background: transparent;
+      border: none;
+      color: var(--color-cool-gray);
+    }
+    .pair-tab.active {
+      background: var(--color-purple-subtle);
+      color: var(--color-kraken-purple);
+    }
+
+    .terminal-body {
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      padding: 16px;
+      gap: 16px;
+    }
+
+    /* Order Book Side */
+    .order-book-panel {
+      font-family: var(--font-mono);
+      font-size: 12px;
+    }
+    .ob-header {
+      display: flex;
+      justify-content: space-between;
+      color: var(--color-silver-blue);
+      font-size: 11px;
+      margin-bottom: 8px;
+      text-transform: uppercase;
+    }
+    .ob-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 3px 0;
+      position: relative;
+    }
+    .ob-bar {
+      position: absolute;
+      right: 0;
+      top: 0;
+      bottom: 0;
+      opacity: 0.12;
+      pointer-events: none;
+    }
+    .ask-price { color: var(--color-red); font-weight: 600; }
+    .bid-price { color: var(--color-green); font-weight: 600; }
+
+    .market-mid-price {
+      padding: 8px 0;
+      margin: 6px 0;
+      border-top: 1px solid var(--color-border-gray);
+      border-bottom: 1px solid var(--color-border-gray);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    /* Quick Trade Side */
+    .trade-form-panel {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .trade-type-toggle {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 6px;
+      background: var(--color-gray-subtle);
+      padding: 4px;
+      border-radius: 10px;
+    }
+    .trade-type-btn {
+      padding: 7px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 600;
+      border: none;
+      background: transparent;
+      cursor: pointer;
+      color: var(--color-cool-gray);
+    }
+    .trade-type-btn.active-buy {
+      background: #ffffff;
+      color: var(--color-green);
+      box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+    }
+    .trade-type-btn.active-sell {
+      background: #ffffff;
+      color: var(--color-red);
+      box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+    }
+
+    .input-group {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .input-field-wrapper {
+      display: flex;
+      align-items: center;
+      border: 1px solid var(--color-border-gray);
+      border-radius: 10px;
+      padding: 8px 12px;
+      background: #ffffff;
+    }
+    .trade-input {
+      border: none;
+      outline: none;
+      width: 100%;
+      font-family: var(--font-mono);
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--color-near-black);
+    }
+
+    /* -------------------------------------------------------------
+       SECTION: CRYPTO ASSET MARKETS TABLE
+       ------------------------------------------------------------- */
+    .markets-section {
+      padding: 60px 0;
+    }
+
+    .market-table-card {
+      background: #ffffff;
+      border: 1px solid var(--color-border-gray);
+      border-radius: var(--radius-card);
+      box-shadow: var(--shadow-subtle);
+      overflow: hidden;
+      margin-top: 30px;
+    }
+
+    .market-table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+    }
+    .market-table th {
+      padding: 14px 20px;
+      background: #fafafc;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--color-cool-gray);
+      border-bottom: 1px solid var(--color-border-gray);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .market-table td {
+      padding: 16px 20px;
+      border-bottom: 1px solid var(--color-border-gray);
+      font-size: 15px;
+    }
+    .market-table tr:last-child td {
+      border-bottom: none;
+    }
+    .market-table tr:hover {
+      background-color: #fafafc;
+    }
+
+    /* -------------------------------------------------------------
+       SECTION: SECURITY & PROOF OF RESERVES
+       ------------------------------------------------------------- */
+    .security-section {
+      padding: 60px 0;
+      background: #fbfbfe;
+      border-top: 1px solid var(--color-border-gray);
+      border-bottom: 1px solid var(--color-border-gray);
+    }
+
+    .security-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+      margin-top: 36px;
+    }
+
+    .sec-card {
+      background: #ffffff;
+      border: 1px solid var(--color-border-gray);
+      border-radius: var(--radius-card);
+      padding: 28px;
+      box-shadow: var(--shadow-subtle);
+    }
+
+    /* -------------------------------------------------------------
+       SECTION: COLOR & TOKEN PALETTE FOUNDATION
+       ------------------------------------------------------------- */
+    .tokens-section {
+      padding: 60px 0;
+    }
+    .token-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 16px;
+      margin-top: 24px;
+    }
+    .token-box {
+      border: 1px solid var(--color-border-gray);
+      border-radius: 12px;
+      padding: 14px;
+      background: #ffffff;
+      box-shadow: var(--shadow-micro);
+    }
+    .token-preview {
+      height: 44px;
+      border-radius: 8px;
+      margin-bottom: 8px;
+    }
+
+    /* -------------------------------------------------------------
+       FOOTER
+       ------------------------------------------------------------- */
+    .site-footer {
+      border-top: 1px solid var(--color-border-gray);
+      padding: 48px 0;
+      background: #ffffff;
+    }
+    .footer-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+
+    /* Responsive */
+    @media (max-width: 992px) {
+      .hero-grid, .security-grid, .terminal-body {
+        grid-template-columns: 1fr;
+      }
+      .nav-menu {
+        display: none;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAVIGATION -->
+  <header class="navbar">
+    <div class="container nav-inner">
+      <a href="#" class="brand-logo">
+        <svg class="kraken-octopus-icon" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
+          <path d="M16 2C8.268 2 2 8.268 2 16c0 5.424 3.067 10.134 7.575 12.48l1.716-4.12A10.02 10.02 0 0 1 6 16c0-5.523 4.477-10 10-10s10 4.477 10 10c0 3.265-1.564 6.166-3.987 7.99l1.83 4.072C27.18 25.845 30 21.257 30 16 30 8.268 23.732 2 16 2z"/>
+          <path d="M11 15a2 2 0 1 0 0-4 2 2 0 0 0 0 4zm10 0a2 2 0 1 0 0-4 2 2 0 0 0 0 4z"/>
+        </svg>
+        <span class="brand-name">kraken</span>
+      </a>
+
+      <ul class="nav-menu">
+        <li><a href="#markets" class="nav-item-link">Explore Markets</a></li>
+        <li><a href="#pro" class="nav-item-link">Kraken Pro</a></li>
+        <li><a href="#security" class="nav-item-link">Proof of Reserves</a></li>
+        <li><a href="#tokens" class="nav-item-link">Design Tokens</a></li>
+      </ul>
+
+      <div style="display: flex; gap: 12px; align-items: center;">
+        <a href="#pro" class="btn btn-purple-outlined" style="padding: 10px 16px;">Sign In</a>
+        <a href="#pro" class="btn btn-primary-purple" style="padding: 10px 18px;">Create Account</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- HERO SECTION -->
+  <section class="hero-section">
+    <div class="container hero-grid">
+      <div>
+        <div style="margin-bottom: 16px;">
+          <span class="badge-success">
+            <span>●</span> Zero Security Breaches Since 2011
+          </span>
+        </div>
+
+        <h1 class="hero-display">Trade crypto with institutional conviction.</h1>
+
+        <p class="body-regular" style="font-size: 18px; margin-top: 18px; max-width: 520px;">
+          Industry-leading liquidity, verified cryptographic Proof of Reserves, and round-the-clock client support trusted by over 10 million traders globally.
+        </p>
+
+        <div style="display: flex; gap: 12px; margin-top: 28px; align-items: center; flex-wrap: wrap;">
+          <a href="#pro" class="btn btn-primary-purple">Get Started in Minutes</a>
+          <a href="#pro" class="btn btn-secondary-gray">Explore Kraken Pro</a>
+        </div>
+
+        <div style="margin-top: 24px; display: flex; gap: 14px; align-items: center;">
+          <span class="small-text" style="color: var(--color-silver-blue);">Max button radius: 12px</span>
+          <span style="color: var(--color-border-gray);">|</span>
+          <span class="small-text" style="color: var(--color-kraken-purple); font-weight: 600;">Primary: #7132f5</span>
+        </div>
+      </div>
+
+      <!-- INTERACTIVE ORDER BOOK & TRADE TERMINAL -->
+      <div class="terminal-card" id="pro">
+        <div class="terminal-topbar">
+          <div class="ticker-pair-group">
+            <button class="pair-tab active" id="tabBtc" onclick="switchPair('BTC')">BTC/USD</button>
+            <button class="pair-tab" id="tabEth" onclick="switchPair('ETH')">ETH/USD</button>
+            <button class="pair-tab" id="tabSol" onclick="switchPair('SOL')">SOL/USD</button>
+          </div>
+          <span class="badge-neutral" id="tradeVolBadge">24h Vol: $1.84B</span>
+        </div>
+
+        <div class="terminal-body">
+          <!-- Live Order Book -->
+          <div class="order-book-panel">
+            <div class="ob-header">
+              <span>Price (USD)</span>
+              <span>Size</span>
+              <span>Total</span>
+            </div>
+
+            <!-- Asks (Red) -->
+            <div id="asksContainer">
+              <div class="ob-row">
+                <span class="ask-price">89,455.00</span>
+                <span>0.842</span>
+                <span style="color:var(--color-silver-blue)">75.3K</span>
+                <div class="ob-bar" style="width: 45%; background: var(--color-red);"></div>
+              </div>
+              <div class="ob-row">
+                <span class="ask-price">89,442.50</span>
+                <span>1.410</span>
+                <span style="color:var(--color-silver-blue)">126.1K</span>
+                <div class="ob-bar" style="width: 70%; background: var(--color-red);"></div>
+              </div>
+              <div class="ob-row">
+                <span class="ask-price">89,431.00</span>
+                <span>0.320</span>
+                <span style="color:var(--color-silver-blue)">28.6K</span>
+                <div class="ob-bar" style="width: 25%; background: var(--color-red);"></div>
+              </div>
+            </div>
+
+            <!-- Mid Price / Spread -->
+            <div class="market-mid-price">
+              <div>
+                <span id="midPriceDisplay" style="font-size: 16px; font-weight: 700; color: var(--color-near-black);">$89,420.50</span>
+                <span class="badge-success" style="font-size: 10px; margin-left: 6px;">+4.21%</span>
+              </div>
+              <span style="font-size: 11px; color: var(--color-silver-blue);">Spread: $0.50</span>
+            </div>
+
+            <!-- Bids (Green) -->
+            <div id="bidsContainer">
+              <div class="ob-row">
+                <span class="bid-price">89,420.00</span>
+                <span>1.150</span>
+                <span style="color:var(--color-silver-blue)">102.8K</span>
+                <div class="ob-bar" style="width: 60%; background: var(--color-green);"></div>
+              </div>
+              <div class="ob-row">
+                <span class="bid-price">89,412.50</span>
+                <span>2.040</span>
+                <span style="color:var(--color-silver-blue)">182.4K</span>
+                <div class="ob-bar" style="width: 85%; background: var(--color-green);"></div>
+              </div>
+              <div class="ob-row">
+                <span class="bid-price">89,401.00</span>
+                <span>0.510</span>
+                <span style="color:var(--color-silver-blue)">45.6K</span>
+                <div class="ob-bar" style="width: 30%; background: var(--color-green);"></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Quick Trade Form -->
+          <div class="trade-form-panel">
+            <div class="trade-type-toggle">
+              <button class="trade-type-btn active-buy" id="btnBuy" onclick="setTradeType('buy')">Buy</button>
+              <button class="trade-type-btn" id="btnSell" onclick="setTradeType('sell')">Sell</button>
+            </div>
+
+            <div class="input-group">
+              <span class="caption-text" style="font-size: 12px; font-weight: 500;">Pay with USD</span>
+              <div class="input-field-wrapper">
+                <input type="number" id="usdAmountInput" class="trade-input" value="1000" oninput="calculateCryptoEst()">
+                <span class="small-text" style="color: var(--color-silver-blue);">USD</span>
+              </div>
+            </div>
+
+            <div class="input-group">
+              <span class="caption-text" style="font-size: 12px; font-weight: 500;">Estimated Receive</span>
+              <div class="input-field-wrapper" style="background:#fafafc;">
+                <input type="text" id="cryptoEstInput" class="trade-input" value="0.01118 BTC" readonly>
+                <span class="small-text" id="cryptoUnitSpan" style="color: var(--color-kraken-purple); font-weight:700;">BTC</span>
+              </div>
+            </div>
+
+            <div style="display: flex; justify-content: space-between; font-size: 12px; color: var(--color-silver-blue); margin-top: 4px;">
+              <span>Fee (0.16% Taker):</span>
+              <span id="feeReadout" style="color: var(--color-near-black); font-weight: 500;">$1.60</span>
+            </div>
+
+            <button class="btn btn-primary-purple" id="submitOrderBtn" onclick="executeSimulatedTrade()" style="width: 100%; margin-top: 8px;">
+              Instant Buy BTC
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION: ASSET MARKETS TABLE -->
+  <section class="markets-section" id="markets">
+    <div class="container">
+      <div style="display: flex; justify-content: space-between; align-items: flex-end; flex-wrap: wrap; gap: 16px;">
+        <div>
+          <span class="badge-neutral">Live Quotes</span>
+          <h2 class="section-heading" style="margin-top: 8px;">Market Overview</h2>
+        </div>
+        <div style="display: flex; gap: 8px;">
+          <button class="btn btn-purple-subtle">Top Gainers</button>
+          <button class="btn btn-white">DeFi</button>
+          <button class="btn btn-white">Layer 1</button>
+        </div>
+      </div>
+
+      <div class="market-table-card">
+        <table class="market-table">
+          <thead>
+            <tr>
+              <th>Asset</th>
+              <th>Price</th>
+              <th>24h Change</th>
+              <th>24h Volume</th>
+              <th>Market Cap</th>
+              <th style="text-align: right;">Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>
+                <div style="display: flex; align-items: center; gap: 10px;">
+                  <div style="width: 32px; height: 32px; border-radius: 50%; background: #F7931A; display: flex; align-items: center; justify-content: center; color: #fff; font-weight: bold; font-size: 14px;">₿</div>
+                  <div>
+                    <div class="body-medium">Bitcoin</div>
+                    <div class="caption-text" style="font-size: 12px;">BTC</div>
+                  </div>
+                </div>
+              </td>
+              <td class="body-medium">$89,420.50</td>
+              <td><span class="badge-success">+4.21%</span></td>
+              <td class="caption-text">$38.4B</td>
+              <td class="caption-text">$1.76T</td>
+              <td style="text-align: right;">
+                <button class="btn btn-purple-subtle" onclick="switchPair('BTC')">Trade</button>
+              </td>
+            </tr>
+
+            <tr>
+              <td>
+                <div style="display: flex; align-items: center; gap: 10px;">
+                  <div style="width: 32px; height: 32px; border-radius: 50%; background: #627EEA; display: flex; align-items: center; justify-content: center; color: #fff; font-weight: bold; font-size: 14px;">Ξ</div>
+                  <div>
+                    <div class="body-medium">Ethereum</div>
+                    <div class="caption-text" style="font-size: 12px;">ETH</div>
+                  </div>
+                </div>
+              </td>
+              <td class="body-medium">$3,140.20</td>
+              <td><span class="badge-success">+2.84%</span></td>
+              <td class="caption-text">$19.2B</td>
+              <td class="caption-text">$378.1B</td>
+              <td style="text-align: right;">
+                <button class="btn btn-purple-subtle" onclick="switchPair('ETH')">Trade</button>
+              </td>
+            </tr>
+
+            <tr>
+              <td>
+                <div style="display: flex; align-items: center; gap: 10px;">
+                  <div style="width: 32px; height: 32px; border-radius: 50%; background: #14F195; display: flex; align-items: center; justify-content: center; color: #000; font-weight: bold; font-size: 14px;">◎</div>
+                  <div>
+                    <div class="body-medium">Solana</div>
+                    <div class="caption-text" style="font-size: 12px;">SOL</div>
+                  </div>
+                </div>
+              </td>
+              <td class="body-medium">$182.40</td>
+              <td><span class="badge-success">+6.12%</span></td>
+              <td class="caption-text">$8.9B</td>
+              <td class="caption-text">$84.6B</td>
+              <td style="text-align: right;">
+                <button class="btn btn-purple-subtle" onclick="switchPair('SOL')">Trade</button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION: PROOF OF RESERVES & SECURITY -->
+  <section class="security-section" id="security">
+    <div class="container">
+      <div style="text-align: center; max-width: 640px; margin: 0 auto;">
+        <span class="badge-success">Audit Transparency</span>
+        <h2 class="section-heading" style="margin-top: 10px;">Proof of Reserves since 2014</h2>
+        <p class="body-regular" style="margin-top: 8px;">
+          We hold 100% of client deposits on a 1:1 basis. Verify your account balance cryptographically against public Merkle trees.
+        </p>
+      </div>
+
+      <div class="security-grid">
+        <div class="sec-card">
+          <div style="width: 40px; height: 40px; border-radius: 12px; background: var(--color-purple-subtle); display: flex; align-items: center; justify-content: center; color: var(--color-kraken-purple); font-size: 20px; margin-bottom: 16px;">
+            🔒
+          </div>
+          <h3 class="feature-title">Cold Storage Isolation</h3>
+          <p class="body-regular" style="font-size: 14px; margin-top: 8px;">
+            95% of all crypto assets are held in geographically distributed, air-gapped cold storage vaults protected by armed security.
+          </p>
+        </div>
+
+        <div class="sec-card">
+          <div style="width: 40px; height: 40px; border-radius: 12px; background: var(--color-green-bg); display: flex; align-items: center; justify-content: center; color: var(--color-green); font-size: 20px; margin-bottom: 16px;">
+            🌳
+          </div>
+          <h3 class="feature-title">Merkle Tree Verification</h3>
+          <p class="body-regular" style="font-size: 14px; margin-top: 8px;">
+            Quarterly external audits certify reserve ratios exceeding 100%. Clients can independently inspect anonymized cryptographic hashes.
+          </p>
+        </div>
+
+        <div class="sec-card">
+          <div style="width: 40px; height: 40px; border-radius: 12px; background: rgba(148,151,169,0.12); display: flex; align-items: center; justify-content: center; color: var(--color-near-black); font-size: 20px; margin-bottom: 16px;">
+            🛡️
+          </div>
+          <h3 class="feature-title">Global ISO/IEC 27001</h3>
+          <p class="body-regular" style="font-size: 14px; margin-top: 8px;">
+            Full regulatory compliance across the US, UK, EU, and Australia with institutional-grade SOC 2 Type 1 certifications.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION: DESIGN SYSTEM COLOR ROLES & TOKENS -->
+  <section class="tokens-section" id="tokens">
+    <div class="container">
+      <div style="display: flex; justify-content: space-between; align-items: flex-end; flex-wrap: wrap; gap: 14px;">
+        <div>
+          <span class="badge-neutral">Tokens & Foundations</span>
+          <h2 class="section-heading" style="margin-top: 8px;">Official Color Palette</h2>
+          <p class="caption-text" style="margin-top: 4px;">Direct specification from <code>kraken/DESIGN.md</code></p>
+        </div>
+        <span class="small-text" style="font-family: var(--font-mono); color: var(--color-cool-gray);">
+          Category: Fintech & Crypto
+        </span>
+      </div>
+
+      <div class="token-grid">
+        <!-- Kraken Purple -->
+        <div class="token-box">
+          <div class="token-preview" style="background-color: #7132f5;"></div>
+          <div class="body-medium" style="font-size: 13px;">Kraken Purple</div>
+          <div class="caption-text" style="font-family: var(--font-mono); font-size: 11px;">#7132f5</div>
+        </div>
+
+        <!-- Purple Dark -->
+        <div class="token-box">
+          <div class="token-preview" style="background-color: #5741d8;"></div>
+          <div class="body-medium" style="font-size: 13px;">Purple Dark</div>
+          <div class="caption-text" style="font-family: var(--font-mono); font-size: 11px;">#5741d8</div>
+        </div>
+
+        <!-- Purple Deep -->
+        <div class="token-box">
+          <div class="token-preview" style="background-color: #5b1ecf;"></div>
+          <div class="body-medium" style="font-size: 13px;">Purple Deep</div>
+          <div class="caption-text" style="font-family: var(--font-mono); font-size: 11px;">#5b1ecf</div>
+        </div>
+
+        <!-- Purple Subtle -->
+        <div class="token-box">
+          <div class="token-preview" style="background-color: rgba(133, 91, 251, 0.16); border: 1px solid rgba(133, 91, 251, 0.3);"></div>
+          <div class="body-medium" style="font-size: 13px;">Purple Subtle</div>
+          <div class="caption-text" style="font-family: var(--font-mono); font-size: 11px;">rgba(133,91,251,0.16)</div>
+        </div>
+
+        <!-- Near Black -->
+        <div class="token-box">
+          <div class="token-preview" style="background-color: #101114;"></div>
+          <div class="body-medium" style="font-size: 13px;">Near Black</div>
+          <div class="caption-text" style="font-family: var(--font-mono); font-size: 11px;">#101114</div>
+        </div>
+
+        <!-- Green Accent -->
+        <div class="token-box">
+          <div class="token-preview" style="background-color: #149e61;"></div>
+          <div class="body-medium" style="font-size: 13px;">Green Success</div>
+          <div class="caption-text" style="font-family: var(--font-mono); font-size: 11px;">#149e61</div>
+        </div>
+
+        <!-- Surface White -->
+        <div class="token-box">
+          <div class="token-preview" style="background-color: #ffffff; border: 1px solid #dedee5;"></div>
+          <div class="body-medium" style="font-size: 13px;">White Surface</div>
+          <div class="caption-text" style="font-family: var(--font-mono); font-size: 11px;">#ffffff</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="site-footer">
+    <div class="container footer-row">
+      <div style="display: flex; align-items: center; gap: 10px;">
+        <svg class="kraken-octopus-icon" style="width: 20px; height: 20px;" viewBox="0 0 32 32">
+          <path d="M16 2C8.268 2 2 8.268 2 16c0 5.424 3.067 10.134 7.575 12.48l1.716-4.12A10.02 10.02 0 0 1 6 16c0-5.523 4.477-10 10-10s10 4.477 10 10c0 3.265-1.564 6.166-3.987 7.99l1.83 4.072C27.18 25.845 30 21.257 30 16 30 8.268 23.732 2 16 2z"/>
+        </svg>
+        <span class="body-medium" style="font-size: 14px;">© Payward Inc. Kraken Design System Rebuild.</span>
+      </div>
+
+      <div style="display: flex; gap: 16px; align-items: center;">
+        <span class="caption-text" style="font-family: var(--font-mono); font-size: 12px; color: var(--color-kraken-purple);">BRAND: #7132f5</span>
+        <span class="caption-text" style="font-family: var(--font-mono); font-size: 12px; color: var(--color-near-black);">TEXT: #101114</span>
+        <span class="caption-text" style="font-family: var(--font-mono); font-size: 12px; color: var(--color-cool-gray);">RADIUS: 12px</span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- INTERACTIVE TERMINAL JAVASCRIPT -->
+  <script>
+    const pairData = {
+      BTC: { price: 89420.50, name: 'Bitcoin', vol: '$1.84B', unit: 'BTC' },
+      ETH: { price: 3140.20, name: 'Ethereum', vol: '$920M', unit: 'ETH' },
+      SOL: { price: 182.40, name: 'Solana', vol: '$480M', unit: 'SOL' }
+    };
+
+    let activePair = 'BTC';
+    let tradeType = 'buy';
+
+    function switchPair(pair) {
+      activePair = pair;
+      document.getElementById('tabBtc').classList.toggle('active', pair === 'BTC');
+      document.getElementById('tabEth').classList.toggle('active', pair === 'ETH');
+      document.getElementById('tabSol').classList.toggle('active', pair === 'SOL');
+
+      const data = pairData[pair];
+      document.getElementById('midPriceDisplay').textContent = '$' + data.price.toLocaleString(undefined, {minimumFractionDigits: 2});
+      document.getElementById('tradeVolBadge').textContent = '24h Vol: ' + data.vol;
+      document.getElementById('cryptoUnitSpan').textContent = data.unit;
+      document.getElementById('submitOrderBtn').textContent = `${tradeType === 'buy' ? 'Instant Buy' : 'Instant Sell'} ${data.unit}`;
+
+      calculateCryptoEst();
+    }
+
+    function setTradeType(type) {
+      tradeType = type;
+      const btnBuy = document.getElementById('btnBuy');
+      const btnSell = document.getElementById('btnSell');
+      const submitBtn = document.getElementById('submitOrderBtn');
+
+      if (type === 'buy') {
+        btnBuy.className = 'trade-type-btn active-buy';
+        btnSell.className = 'trade-type-btn';
+        submitBtn.textContent = `Instant Buy ${pairData[activePair].unit}`;
+        submitBtn.style.backgroundColor = 'var(--color-kraken-purple)';
+      } else {
+        btnBuy.className = 'trade-type-btn';
+        btnSell.className = 'trade-type-btn active-sell';
+        submitBtn.textContent = `Instant Sell ${pairData[activePair].unit}`;
+        submitBtn.style.backgroundColor = 'var(--color-red)';
+      }
+    }
+
+    function calculateCryptoEst() {
+      const usd = parseFloat(document.getElementById('usdAmountInput').value) || 0;
+      const price = pairData[activePair].price;
+      const crypto = (usd / price).toFixed(5);
+      document.getElementById('cryptoEstInput').value = `${crypto} ${pairData[activePair].unit}`;
+
+      const fee = (usd * 0.0016).toFixed(2);
+      document.getElementById('feeReadout').textContent = `$${fee}`;
+    }
+
+    function executeSimulatedTrade() {
+      const usd = document.getElementById('usdAmountInput').value;
+      const unit = pairData[activePair].unit;
+      alert(`Order Filled: ${tradeType.toUpperCase()} ${unit} for $${usd} USD at zero slippage on Kraken engine.`);
+    }
+
+    // Dynamic price tick jitter for realism
+    setInterval(() => {
+      const delta = (Math.random() - 0.49) * (pairData[activePair].price * 0.0004);
+      pairData[activePair].price += delta;
+      document.getElementById('midPriceDisplay').textContent = '$' + pairData[activePair].price.toLocaleString(undefined, {minimumFractionDigits: 2});
+    }, 2800);
+  </script>
+</body>
+</html>

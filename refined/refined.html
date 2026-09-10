@@ -1,0 +1,960 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Refined — Curated Design & Typography Studio</title>
+  <meta name="description" content="A carefully curated, modern minimal design system with elegant serif typography, disciplined spacing, and understated palettes." />
+
+  <!-- Playfair Display (Primary & Display) & JetBrains Mono (Code) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,600&display=swap" rel="stylesheet">
+
+  <style>
+    /* ─────────────────────────────────────────────────────────────────
+       REFINED DESIGN SYSTEM TOKENS
+       Strictly adhering to /design-systems/refined/DESIGN.md
+       ───────────────────────────────────────────────────────────────── */
+    :root {
+      /* Colors (Exact Foundation Tokens) */
+      --color-primary:   #3B82F6; /* CTA emphasis & primary interaction signal */
+      --color-secondary: #8B5CF6; /* Accent token */
+      --color-success:   #16A34A; /* Confirmation & positive status */
+      --color-warning:   #D97706; /* Caution & alerts */
+      --color-danger:    #DC2626; /* Error states & destructive actions */
+      --color-surface:   #FFFFFF; /* Canvas & card background */
+      --color-text:      #111827; /* Body & heading copy */
+      
+      /* Subtle supportive neutrals adhering to clean white surface */
+      --color-surface-subtle: #F9FAFB;
+      --color-border:         #E5E7EB;
+      --color-border-hover:   #CBD5E1;
+      --color-text-muted:     #4B5563;
+
+      /* Typography Families */
+      --font-primary: "Playfair Display", Georgia, serif;
+      --font-display: "Playfair Display", Georgia, serif;
+      --font-mono:    "JetBrains Mono", monospace;
+
+      /* Strict Typography Scale (12/14/16/20/24/32) */
+      --type-12: 12px;
+      --type-14: 14px;
+      --type-16: 16px;
+      --type-20: 20px;
+      --type-24: 24px;
+      --type-32: 32px;
+
+      /* Strict Spacing Scale (4/8/12/16/24/32) */
+      --space-4:  4px;
+      --space-8:  8px;
+      --space-12: 12px;
+      --space-16: 16px;
+      --space-24: 24px;
+      --space-32: 32px;
+
+      /* Radii & Motion */
+      --radius-sm: 4px;
+      --radius-md: 8px;
+      --radius-lg: 12px;
+      --transition-base: 200ms cubic-bezier(0.16, 1, 0.3, 1);
+      
+      /* Understated Elevation */
+      --shadow-subtle: 0 1px 3px rgba(0, 0, 0, 0.05), 0 1px 2px rgba(0, 0, 0, 0.03);
+      --shadow-card:   0 4px 6px -1px rgba(0, 0, 0, 0.04), 0 2px 4px -1px rgba(0, 0, 0, 0.02);
+      --shadow-focus:  0 0 0 3px rgba(59, 130, 246, 0.25);
+    }
+
+    /* Reset & Foundational Rules */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      background-color: var(--color-surface);
+      color: var(--color-text);
+      font-family: var(--font-primary);
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    body {
+      background-color: var(--color-surface);
+      color: var(--color-text);
+      font-size: var(--type-16);
+      line-height: 1.6;
+      font-weight: 400;
+    }
+
+    a {
+      color: var(--color-primary);
+      text-decoration: none;
+      transition: color var(--transition-base);
+    }
+    a:hover {
+      color: #2563EB;
+    }
+
+    /* Container */
+    .container {
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 0 var(--space-24);
+    }
+
+    /* ─────────────────────────────────────────────────────────────────
+       NAVIGATION
+       ───────────────────────────────────────────────────────────────── */
+    .site-header {
+      background-color: var(--color-surface);
+      border-bottom: 1px solid var(--color-border);
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      backdrop-filter: blur(10px);
+    }
+
+    .header-inner {
+      height: 72px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .brand-logo {
+      display: flex;
+      align-items: baseline;
+      gap: var(--space-8);
+      font-size: var(--type-24);
+      font-weight: 700;
+      letter-spacing: -0.01em;
+      color: var(--color-text);
+    }
+
+    .brand-dot {
+      width: 6px;
+      height: 6px;
+      background-color: var(--color-primary);
+      display: inline-block;
+      border-radius: 50%;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: var(--space-32);
+      list-style: none;
+    }
+
+    .nav-item a {
+      font-size: var(--type-14);
+      font-weight: 500;
+      color: var(--color-text-muted);
+      transition: color var(--transition-base);
+      padding: var(--space-4) 0;
+    }
+
+    .nav-item a:hover, .nav-item.active a {
+      color: var(--color-text);
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: var(--space-12);
+    }
+
+    /* ─────────────────────────────────────────────────────────────────
+       BUTTONS (Section 6: Primary = #3B82F6, Secondary = Neutral)
+       ───────────────────────────────────────────────────────────────── */
+    .btn {
+      font-family: var(--font-primary);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--space-8);
+      padding: var(--space-8) var(--space-16);
+      font-size: var(--type-14);
+      font-weight: 600;
+      line-height: 1.2;
+      border-radius: var(--radius-md);
+      cursor: pointer;
+      border: 1px solid transparent;
+      outline: none;
+      transition: background-color var(--transition-base),
+                  border-color var(--transition-base),
+                  color var(--transition-base),
+                  box-shadow var(--transition-base);
+      user-select: none;
+      text-decoration: none;
+    }
+
+    .btn:focus-visible {
+      box-shadow: var(--shadow-focus);
+    }
+
+    .btn-primary {
+      background-color: var(--color-primary);
+      color: var(--color-surface);
+      border-color: var(--color-primary);
+    }
+
+    .btn-primary:hover {
+      background-color: #2563EB;
+      border-color: #2563EB;
+      color: var(--color-surface);
+    }
+
+    .btn-secondary {
+      background-color: var(--color-surface);
+      color: var(--color-text);
+      border-color: var(--color-border);
+    }
+
+    .btn-secondary:hover {
+      background-color: var(--color-surface-subtle);
+      border-color: var(--color-border-hover);
+    }
+
+    .btn-accent-purple {
+      background-color: var(--color-secondary);
+      color: var(--color-surface);
+      border-color: var(--color-secondary);
+    }
+
+    .btn-accent-purple:hover {
+      background-color: #7C3AED;
+      border-color: #7C3AED;
+    }
+
+    .btn-sm {
+      padding: var(--space-4) var(--space-12);
+      font-size: var(--type-12);
+    }
+
+    /* ─────────────────────────────────────────────────────────────────
+       HERO SECTION (Obvious hierarchy: headline → support → action)
+       ───────────────────────────────────────────────────────────────── */
+    .hero {
+      padding: 64px 0 48px;
+      text-align: center;
+      border-bottom: 1px solid var(--color-border);
+    }
+
+    .hero-eyebrow {
+      font-size: var(--type-12);
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--color-secondary);
+      margin-bottom: var(--space-16);
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-8);
+      background-color: var(--color-surface-subtle);
+      padding: var(--space-4) var(--space-12);
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--color-border);
+    }
+
+    .hero-title {
+      font-size: var(--type-32);
+      font-weight: 700;
+      line-height: 1.25;
+      color: var(--color-text);
+      max-width: 780px;
+      margin: 0 auto var(--space-16);
+      letter-spacing: -0.015em;
+    }
+
+    .hero-support {
+      font-size: var(--type-16);
+      color: var(--color-text-muted);
+      max-width: 600px;
+      margin: 0 auto var(--space-24);
+      line-height: 1.6;
+    }
+
+    .hero-actions {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--space-12);
+    }
+
+    /* ─────────────────────────────────────────────────────────────────
+       CONTENT BLOCKS & CARDS (Predictable grid, consistent padding)
+       ───────────────────────────────────────────────────────────────── */
+    .section-wrap {
+      padding: 48px 0;
+    }
+
+    .section-header-block {
+      margin-bottom: var(--space-32);
+    }
+
+    .section-label {
+      font-size: var(--type-12);
+      font-weight: 600;
+      color: var(--color-primary);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: var(--space-4);
+    }
+
+    .section-title {
+      font-size: var(--type-24);
+      font-weight: 700;
+      color: var(--color-text);
+      line-height: 1.3;
+      margin-bottom: var(--space-8);
+    }
+
+    .section-desc {
+      font-size: var(--type-14);
+      color: var(--color-text-muted);
+      max-width: 580px;
+      line-height: 1.5;
+    }
+
+    /* 3-Column Grid */
+    .editorial-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: var(--space-24);
+    }
+
+    .refined-card {
+      background-color: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-lg);
+      padding: var(--space-24);
+      box-shadow: var(--shadow-subtle);
+      transition: border-color var(--transition-base), box-shadow var(--transition-base), transform var(--transition-base);
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+    }
+
+    .refined-card:hover {
+      border-color: var(--color-border-hover);
+      box-shadow: var(--shadow-card);
+      transform: translateY(-2px);
+    }
+
+    .card-category {
+      font-size: var(--type-12);
+      font-weight: 600;
+      color: var(--color-secondary);
+      margin-bottom: var(--space-8);
+      letter-spacing: 0.04em;
+    }
+
+    .card-title {
+      font-size: var(--type-20);
+      font-weight: 600;
+      color: var(--color-text);
+      margin-bottom: var(--space-8);
+      line-height: 1.35;
+    }
+
+    .card-copy {
+      font-size: var(--type-14);
+      color: var(--color-text-muted);
+      margin-bottom: var(--space-16);
+      line-height: 1.55;
+      flex-grow: 1;
+    }
+
+    .card-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-top: var(--space-16);
+      border-top: 1px solid var(--color-border);
+    }
+
+    .card-meta {
+      font-family: var(--font-mono);
+      font-size: var(--type-12);
+      color: var(--color-text-muted);
+    }
+
+    /* ─────────────────────────────────────────────────────────────────
+       TYPOGRAPHY SPECIMEN & SCALE MATRIX (Strict 12/14/16/20/24/32)
+       ───────────────────────────────────────────────────────────────── */
+    .specimen-table-wrap {
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      background-color: var(--color-surface);
+      margin-top: var(--space-16);
+    }
+
+    .specimen-table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+    }
+
+    .specimen-table th {
+      background-color: var(--color-surface-subtle);
+      font-size: var(--type-12);
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--color-text-muted);
+      padding: var(--space-12) var(--space-16);
+      border-bottom: 1px solid var(--color-border);
+    }
+
+    .specimen-table td {
+      padding: var(--space-12) var(--space-16);
+      border-bottom: 1px solid var(--color-border);
+      color: var(--color-text);
+      vertical-align: middle;
+    }
+
+    .specimen-table tr:last-child td {
+      border-bottom: none;
+    }
+
+    .type-tag {
+      font-family: var(--font-mono);
+      font-size: var(--type-12);
+      padding: var(--space-4) var(--space-8);
+      background-color: var(--color-surface-subtle);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-sm);
+    }
+
+    /* ─────────────────────────────────────────────────────────────────
+       INTERACTIVE FORM & INPUT COMPONENT SUITE
+       (Inputs: strong focus-visible, clear labels, error messaging)
+       ───────────────────────────────────────────────────────────────── */
+    .form-panel {
+      background-color: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-lg);
+      padding: var(--space-32);
+      box-shadow: var(--shadow-subtle);
+      max-width: 680px;
+      margin: 0 auto;
+    }
+
+    .input-group {
+      margin-bottom: var(--space-16);
+    }
+
+    .input-label {
+      display: block;
+      font-size: var(--type-14);
+      font-weight: 600;
+      color: var(--color-text);
+      margin-bottom: var(--space-4);
+    }
+
+    .input-control {
+      width: 100%;
+      height: 40px;
+      padding: 0 var(--space-12);
+      font-family: var(--font-primary);
+      font-size: var(--type-14);
+      color: var(--color-text);
+      background-color: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-md);
+      transition: border-color var(--transition-base), box-shadow var(--transition-base);
+      outline: none;
+    }
+
+    .input-control:focus-visible, .input-control:focus {
+      border-color: var(--color-primary);
+      box-shadow: var(--shadow-focus);
+    }
+
+    .input-control.error {
+      border-color: var(--color-danger);
+    }
+    .input-control.error:focus {
+      box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.2);
+    }
+
+    .input-msg {
+      font-size: var(--type-12);
+      margin-top: var(--space-4);
+      display: flex;
+      align-items: center;
+      gap: var(--space-4);
+    }
+    .msg-error { color: var(--color-danger); }
+    .msg-success { color: var(--color-success); }
+    .msg-warning { color: var(--color-warning); }
+
+    /* ─────────────────────────────────────────────────────────────────
+       COLOR FOUNDATIONS PALETTE TILES
+       Strict Tokens: #3B82F6, #8B5CF6, #16A34A, #D97706, #DC2626, #FFFFFF, #111827
+       ───────────────────────────────────────────────────────────────── */
+    .palette-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+      gap: var(--space-16);
+      margin-top: var(--space-16);
+    }
+
+    .palette-tile {
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-md);
+      padding: var(--space-12);
+      background-color: var(--color-surface);
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-8);
+      box-shadow: var(--shadow-subtle);
+    }
+
+    .swatch-box {
+      height: 48px;
+      border-radius: var(--radius-sm);
+      border: 1px solid rgba(0, 0, 0, 0.08);
+    }
+
+    .tile-name {
+      font-size: var(--type-12);
+      font-weight: 600;
+      color: var(--color-text);
+    }
+
+    .tile-hex {
+      font-family: var(--font-mono);
+      font-size: var(--type-12);
+      color: var(--color-text-muted);
+    }
+
+    /* ─────────────────────────────────────────────────────────────────
+       CODE SPECIMEN (JetBrains Mono)
+       ───────────────────────────────────────────────────────────────── */
+    .code-box {
+      font-family: var(--font-mono);
+      font-size: var(--type-12);
+      background-color: var(--color-surface-subtle);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-md);
+      padding: var(--space-16);
+      line-height: 1.6;
+      color: var(--color-text);
+      overflow-x: auto;
+    }
+
+    /* ─────────────────────────────────────────────────────────────────
+       FOOTER
+       ───────────────────────────────────────────────────────────────── */
+    .site-footer {
+      border-top: 1px solid var(--color-border);
+      padding: var(--space-32) 0;
+      margin-top: 64px;
+      background-color: var(--color-surface);
+    }
+
+    .footer-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .footer-copy {
+      font-size: var(--type-12);
+      color: var(--color-text-muted);
+    }
+
+    .footer-links {
+      display: flex;
+      gap: var(--space-24);
+      list-style: none;
+    }
+
+    .footer-links a {
+      font-size: var(--type-12);
+      color: var(--color-text-muted);
+    }
+
+    .footer-links a:hover {
+      color: var(--color-primary);
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .editorial-grid {
+        grid-template-columns: 1fr;
+      }
+      .nav-links {
+        display: none;
+      }
+      .hero-title {
+        font-size: var(--type-24);
+      }
+      .footer-inner {
+        flex-direction: column;
+        gap: var(--space-16);
+        text-align: center;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Site Navigation -->
+  <header class="site-header">
+    <div class="container header-inner">
+      <div class="brand-logo">
+        <span>Refined</span>
+        <span class="brand-dot"></span>
+      </div>
+
+      <ul class="nav-links">
+        <li class="nav-item active"><a href="#studio">Studio</a></li>
+        <li class="nav-item"><a href="#curations">Curations</a></li>
+        <li class="nav-item"><a href="#typography">Typography</a></li>
+        <li class="nav-item"><a href="#foundations">Color Foundations</a></li>
+        <li class="nav-item"><a href="#controls">Controls & Form</a></li>
+      </ul>
+
+      <div class="header-actions">
+        <button class="btn btn-secondary btn-sm">Catalog</button>
+        <a href="#controls" class="btn btn-primary btn-sm">Request Specimen</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero Section (Strict Hierarchy & Playfair Display 32px) -->
+  <section id="studio" class="hero">
+    <div class="container">
+      <div class="hero-eyebrow">
+        <span>Modern &amp; Minimal Architecture</span>
+      </div>
+
+      <h1 class="hero-title">
+        Carefully curated design systems with understated sophistication.
+      </h1>
+
+      <p class="hero-support">
+        Refined explores the quiet power of high-contrast serif typography paired with strict, disciplined spacing and minimal interaction palettes.
+      </p>
+
+      <div class="hero-actions">
+        <a href="#curations" class="btn btn-primary">
+          <span>Explore Curations</span>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <polyline points="9 18 15 12 9 6"></polyline>
+          </svg>
+        </a>
+        <a href="#typography" class="btn btn-secondary">Type Specimen</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section: Curated Cards (3-column grid) -->
+  <section id="curations" class="section-wrap">
+    <div class="container">
+      <div class="section-header-block">
+        <div class="section-label">Selected Editions</div>
+        <h2 class="section-title">Harmonious editorial blocks.</h2>
+        <p class="section-desc">
+          Structured modules aligned to a predictable grid. Consistent 24px internal card padding with whitespace separating concerns.
+        </p>
+      </div>
+
+      <div class="editorial-grid">
+        <!-- Card 1 -->
+        <article class="refined-card">
+          <span class="card-category">Volume I &bull; Editorial</span>
+          <h3 class="card-title">The Geometry of Serifs</h3>
+          <p class="card-copy">
+            A comprehensive study on high-contrast vertical stress, bracketed serifs, and the optical balance required when rendering Playfair Display on digital surfaces.
+          </p>
+          <div class="card-footer">
+            <span class="card-meta">PLAYFAIR 20/600</span>
+            <button class="btn btn-secondary btn-sm">Read Piece</button>
+          </div>
+        </article>
+
+        <!-- Card 2 -->
+        <article class="refined-card">
+          <span class="card-category" style="color: var(--color-primary);">Volume II &bull; Foundations</span>
+          <h3 class="card-title">Disciplined Spacing Rhythms</h3>
+          <p class="card-copy">
+            Eliminating ad-hoc pixel offsets through the 4/8/12/16/24/32 progression. Ensuring vertical rhythm creates spatial breathing room without artificial borders.
+          </p>
+          <div class="card-footer">
+            <span class="card-meta">SCALE 4-32</span>
+            <button class="btn btn-primary btn-sm">Review Scale</button>
+          </div>
+        </article>
+
+        <!-- Card 3 -->
+        <article class="refined-card">
+          <span class="card-category" style="color: var(--color-success);">Volume III &bull; Interaction</span>
+          <h3 class="card-title">Understated State Feedback</h3>
+          <p class="card-copy">
+            Using single-token chromatic interaction signals (Primary #3B82F6) with 150–250ms stable transitions to provide clarity without sensory clutter.
+          </p>
+          <div class="card-footer">
+            <span class="card-meta">TRANSITION 200MS</span>
+            <button class="btn btn-secondary btn-sm">Inspect Motion</button>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- Typography Scale Showcase (Strict 12, 14, 16, 20, 24, 32) -->
+  <section id="typography" class="section-wrap" style="background-color: var(--color-surface-subtle); border-top: 1px solid var(--color-border); border-bottom: 1px solid var(--color-border);">
+    <div class="container">
+      <div class="section-header-block">
+        <div class="section-label">Typography System</div>
+        <h2 class="section-title">Strict scale: 12 / 14 / 16 / 20 / 24 / 32</h2>
+        <p class="section-desc">
+          Headings carry the distinct serif personality in Playfair Display, while body and metadata optimize scannability and contrast.
+        </p>
+      </div>
+
+      <div class="specimen-table-wrap">
+        <table class="specimen-table">
+          <thead>
+            <tr>
+              <th>Role &amp; Size</th>
+              <th>Font Family</th>
+              <th>Weight</th>
+              <th>Rendered Visual Specimen</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><span class="type-tag">32px &bull; Display</span></td>
+              <td>Playfair Display</td>
+              <td>700 Bold</td>
+              <td><span style="font-size: var(--type-32); font-weight: 700; line-height: 1.2;">Curated Typographic Excellence</span></td>
+            </tr>
+            <tr>
+              <td><span class="type-tag">24px &bull; Section</span></td>
+              <td>Playfair Display</td>
+              <td>700 Bold</td>
+              <td><span style="font-size: var(--type-24); font-weight: 700;">Predictable Grid Composition</span></td>
+            </tr>
+            <tr>
+              <td><span class="type-tag">20px &bull; Headline</span></td>
+              <td>Playfair Display</td>
+              <td>600 Semibold</td>
+              <td><span style="font-size: var(--type-20); font-weight: 600;">Editorial Clarity &amp; Form</span></td>
+            </tr>
+            <tr>
+              <td><span class="type-tag">16px &bull; Body Base</span></td>
+              <td>Playfair Display</td>
+              <td>400 Regular</td>
+              <td><span style="font-size: var(--type-16); font-weight: 400;">Primary reading text optimized for legible continuous flow.</span></td>
+            </tr>
+            <tr>
+              <td><span class="type-tag">14px &bull; Support</span></td>
+              <td>Playfair Display</td>
+              <td>500 Medium</td>
+              <td><span style="font-size: var(--type-14); font-weight: 500; color: var(--color-text-muted);">Action labels, secondary descriptions, and form control inputs.</span></td>
+            </tr>
+            <tr>
+              <td><span class="type-tag">12px &bull; Metadata</span></td>
+              <td>JetBrains Mono</td>
+              <td>500 Medium</td>
+              <td><span style="font-family: var(--font-mono); font-size: var(--type-12); color: var(--color-text-muted);">TOKEN_SPEC_V1 &bull; 4/8/12/16/24/32</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- Color Foundations Token Matrix -->
+  <section id="foundations" class="section-wrap">
+    <div class="container">
+      <div class="section-header-block">
+        <div class="section-label">Color Foundations</div>
+        <h2 class="section-title">The Official Style Token Palette</h2>
+        <p class="section-desc">
+          Strict foundation tokens from Refined DESIGN.md: Primary, Secondary, Success, Warning, Danger, Surface, and Text.
+        </p>
+      </div>
+
+      <div class="palette-grid">
+        <div class="palette-tile">
+          <div class="swatch-box" style="background-color: #3B82F6;"></div>
+          <span class="tile-name">Primary</span>
+          <span class="tile-hex">#3B82F6</span>
+        </div>
+
+        <div class="palette-tile">
+          <div class="swatch-box" style="background-color: #8B5CF6;"></div>
+          <span class="tile-name">Secondary</span>
+          <span class="tile-hex">#8B5CF6</span>
+        </div>
+
+        <div class="palette-tile">
+          <div class="swatch-box" style="background-color: #16A34A;"></div>
+          <span class="tile-name">Success</span>
+          <span class="tile-hex">#16A34A</span>
+        </div>
+
+        <div class="palette-tile">
+          <div class="swatch-box" style="background-color: #D97706;"></div>
+          <span class="tile-name">Warning</span>
+          <span class="tile-hex">#D97706</span>
+        </div>
+
+        <div class="palette-tile">
+          <div class="swatch-box" style="background-color: #DC2626;"></div>
+          <span class="tile-name">Danger</span>
+          <span class="tile-hex">#DC2626</span>
+        </div>
+
+        <div class="palette-tile">
+          <div class="swatch-box" style="background-color: #FFFFFF; border: 1px solid #E5E7EB;"></div>
+          <span class="tile-name">Surface</span>
+          <span class="tile-hex">#FFFFFF</span>
+        </div>
+
+        <div class="palette-tile">
+          <div class="swatch-box" style="background-color: #111827;"></div>
+          <span class="tile-name" style="color: #111827;">Text</span>
+          <span class="tile-hex">#111827</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Interactive Controls & Form Validation -->
+  <section id="controls" class="section-wrap" style="background-color: var(--color-surface-subtle); border-top: 1px solid var(--color-border);">
+    <div class="container">
+      <div class="section-header-block" style="text-align: center;">
+        <div class="section-label">Component Engineering</div>
+        <h2 class="section-title">Inputs &amp; Predictable Validation States</h2>
+        <p class="section-desc" style="margin: 0 auto;">
+          Inputs feature strong focus-visible states, explicit labels, and unambiguous status feedback using foundation tokens.
+        </p>
+      </div>
+
+      <div class="form-panel">
+        <form id="refined-form" onsubmit="event.preventDefault(); handleValidation();">
+          <div class="input-group">
+            <label class="input-label" for="studio-name">Studio or Organization Name</label>
+            <input 
+              type="text" 
+              id="studio-name" 
+              class="input-control" 
+              placeholder="e.g. Atelier V" 
+              value="Atelier V Architecture" 
+            />
+            <div class="input-msg msg-success">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+              <span>Verified studio identifier (#16A34A)</span>
+            </div>
+          </div>
+
+          <div class="input-group">
+            <label class="input-label" for="specimen-email">Work Email</label>
+            <input 
+              type="email" 
+              id="specimen-email" 
+              class="input-control error" 
+              value="curator@invalid-domain" 
+            />
+            <div class="input-msg msg-error">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+              <span>Please specify a valid corporate email format (#DC2626)</span>
+            </div>
+          </div>
+
+          <div class="input-group">
+            <label class="input-label" for="token-tier">Delivery Tier</label>
+            <select id="token-tier" class="input-control">
+              <option>Digital Type Specimen &bull; Standard</option>
+              <option>Full Design Token Suite &bull; Extended</option>
+              <option>Architectural Foundry License &bull; Complete</option>
+            </select>
+            <div class="input-msg msg-warning">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+              <span>Extended licenses require 24h verification review (#D97706)</span>
+            </div>
+          </div>
+
+          <div style="display: flex; gap: var(--space-12); margin-top: var(--space-24);">
+            <button type="submit" class="btn btn-primary" style="flex: 1;">
+              Submit Request (#3B82F6)
+            </button>
+            <button type="button" class="btn btn-secondary" onclick="resetFormState();">
+              Reset Form
+            </button>
+          </div>
+        </form>
+
+        <div style="margin-top: var(--space-24); padding-top: var(--space-16); border-top: 1px solid var(--color-border);">
+          <div class="input-label" style="font-size: var(--type-12); color: var(--color-text-muted);">
+            CSS ARCHITECTURE SNIPPET (JetBrains Mono)
+          </div>
+          <div class="code-box">
+/* Refined strict tokens */<br>
+--type-scale: 12px 14px 16px 20px 24px 32px;<br>
+--space-scale: 4px 8px 12px 16px 24px 32px;<br>
+--primary-cta: #3B82F6;<br>
+--serif-family: "Playfair Display", Georgia, serif;
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Site Footer -->
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <div class="brand-logo" style="font-size: var(--type-16);">
+        <span>Refined Design System</span>
+        <span class="brand-dot"></span>
+      </div>
+
+      <div class="footer-copy">
+        Adheres to Refined DESIGN.md specification &bull; Playfair Display & JetBrains Mono &bull; Surface #FFFFFF
+      </div>
+
+      <ul class="footer-links">
+        <li><a href="#studio">Guidelines</a></li>
+        <li><a href="#typography">Type Scale</a></li>
+        <li><a href="#foundations">Tokens</a></li>
+      </ul>
+    </div>
+  </footer>
+
+  <!-- Interactive Form Script -->
+  <script>
+    function handleValidation() {
+      const emailInput = document.getElementById('specimen-email');
+      const val = emailInput.value;
+      if (val.includes('@') && val.includes('.')) {
+        emailInput.classList.remove('error');
+        const msg = emailInput.parentElement.querySelector('.input-msg');
+        msg.className = 'input-msg msg-success';
+        msg.innerHTML = '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg><span>Email successfully validated!</span>';
+      } else {
+        emailInput.classList.add('error');
+        const msg = emailInput.parentElement.querySelector('.input-msg');
+        msg.className = 'input-msg msg-error';
+        msg.innerHTML = '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg><span>Please enter a valid corporate email (#DC2626)</span>';
+      }
+    }
+
+    function resetFormState() {
+      const emailInput = document.getElementById('specimen-email');
+      emailInput.value = "curator@studio-refined.com";
+      handleValidation();
+    }
+  </script>
+</body>
+</html>

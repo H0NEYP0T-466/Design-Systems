@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Supabase — Build in a weekend. Scale to millions.</title>
+  <meta name="description" content="Open-source Firebase alternative. Dark emerald theme, code-first, Circular typography, zero shadows, and border-defined depth.">
+
+  <!-- Fonts: Plus Jakarta Sans for geometric Circular feel, Source Code Pro for mono developer console labels -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500&family=Source+Code+Pro:wght@400;500;600&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      /* Supabase Brand & Neutral Palette from supabase/DESIGN.md */
+      --sb-green: #3ecf8e;
+      --sb-green-link: #00c573;
+      --sb-green-border: rgba(62, 207, 142, 0.3);
+
+      --sb-near-black: #0f0f0f;
+      --sb-dark: #171717;
+      --sb-dark-border: #242424;
+      --sb-border-dark: #2e2e2e;
+      --sb-mid-border: #363636;
+      --sb-border-light: #393939;
+      --sb-charcoal: #434343;
+      --sb-dark-gray: #4d4d4d;
+      --sb-mid-gray: #898989;
+      --sb-light-gray: #b4b4b4;
+      --sb-near-white: #efefef;
+      --sb-off-white: #fafafa;
+
+      /* Translucent Overlays */
+      --sb-glass-dark: rgba(41, 41, 41, 0.84);
+
+      /* Typography */
+      --font-circular: 'Plus Jakarta Sans', 'Circular', -apple-system, sans-serif;
+      --font-mono: 'Source Code Pro', monospace;
+
+      /* Radii */
+      --rad-sm: 6px;
+      --rad-card: 8px;
+      --rad-feature: 16px;
+      --rad-pill: 9999px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--sb-dark);
+      color: var(--sb-off-white);
+      font-family: var(--font-circular);
+      font-size: 16px;
+      font-weight: 400; /* Weight restraint: 400 default everywhere */
+      line-height: 1.50;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+      /* ZERO SHADOWS — DEPTH THROUGH BORDER CONTRAST */
+    }
+
+    /* Top Navigation */
+    header.sb-header {
+      background: rgba(23, 23, 23, 0.85);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--sb-border-dark);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+    .header-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 16px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .sb-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+      color: var(--sb-off-white);
+      font-size: 18px;
+      font-weight: 500;
+    }
+    .sb-icon {
+      width: 24px;
+      height: 24px;
+      fill: var(--sb-green);
+    }
+    .sb-nav-links {
+      display: flex;
+      gap: 28px;
+      list-style: none;
+    }
+    .sb-nav-links a {
+      color: var(--sb-light-gray);
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 500;
+      transition: color 150ms ease;
+    }
+    .sb-nav-links a:hover {
+      color: var(--sb-off-white);
+    }
+
+    /* Buttons */
+    .btn-sb-pill {
+      font-family: var(--font-circular);
+      font-size: 14px;
+      font-weight: 500;
+      line-height: 1.14;
+      padding: 8px 24px;
+      border-radius: var(--rad-pill);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      text-decoration: none;
+      transition: all 150ms ease;
+    }
+    .btn-sb-primary {
+      background: var(--sb-green);
+      color: var(--sb-near-black);
+      border: 1px solid var(--sb-green);
+      font-weight: 600;
+    }
+    .btn-sb-primary:hover {
+      background: #4ae39e;
+    }
+    .btn-sb-dark {
+      background: var(--sb-near-black);
+      color: var(--sb-off-white);
+      border: 1px solid var(--sb-border-dark);
+    }
+    .btn-sb-dark:hover {
+      border-color: var(--sb-off-white);
+    }
+    .btn-sb-ghost {
+      background: transparent;
+      color: var(--sb-off-white);
+      border: 1px solid transparent;
+      padding: 8px 16px;
+      border-radius: var(--rad-sm);
+      cursor: pointer;
+    }
+    .btn-sb-ghost:hover {
+      background: rgba(255, 255, 255, 0.05);
+    }
+
+    /* Monospace Technical Label */
+    .sb-code-label {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      font-weight: 400;
+      text-transform: uppercase;
+      letter-spacing: 1.2px;
+      color: var(--sb-mid-gray);
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .status-dot {
+      width: 6px;
+      height: 6px;
+      background: var(--sb-green);
+      border-radius: 50%;
+    }
+
+    /* Main Container */
+    .sb-wrap {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 96px 24px;
+    }
+
+    /* Hero Section */
+    .hero-box {
+      margin-bottom: 96px;
+    }
+    .hero-title {
+      font-size: clamp(44px, 7vw, 72px);
+      font-weight: 400;
+      line-height: 1.00; /* Zero leading signature */
+      letter-spacing: normal;
+      color: var(--sb-off-white);
+      max-width: 900px;
+      margin-bottom: 24px;
+    }
+    .hero-sub {
+      font-size: 18px;
+      font-weight: 400;
+      line-height: 1.56;
+      color: var(--sb-light-gray);
+      max-width: 640px;
+      margin-bottom: 32px;
+    }
+
+    /* Interactive SQL & Database Studio Console */
+    .studio-panel {
+      background: var(--sb-near-black);
+      border: 1px solid var(--sb-border-dark);
+      border-radius: var(--rad-feature);
+      overflow: hidden;
+      margin-top: 48px;
+    }
+    .studio-bar {
+      background: #131313;
+      padding: 12px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid var(--sb-dark-border);
+    }
+    .tab-pills {
+      display: flex;
+      gap: 8px;
+    }
+    .tab-pill {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      padding: 6px 14px;
+      border-radius: var(--rad-pill);
+      border: 1px solid var(--sb-border-dark);
+      background: transparent;
+      color: var(--sb-light-gray);
+      cursor: pointer;
+    }
+    .tab-pill.active {
+      border-color: var(--sb-green);
+      color: var(--sb-green);
+      background: rgba(62, 207, 142, 0.08);
+    }
+
+    .editor-body {
+      padding: 24px;
+    }
+    .sql-code {
+      font-family: var(--font-mono);
+      font-size: 14px;
+      line-height: 1.6;
+      background: #0d0d0d;
+      border: 1px solid var(--sb-dark-border);
+      border-radius: var(--rad-card);
+      padding: 20px;
+      margin-bottom: 20px;
+      color: #d4d4d4;
+    }
+    .kw { color: #569cd6; }
+    .fn { color: #dcdcaa; }
+    .str { color: #ce9178; }
+    .col { color: #9cdcfe; }
+
+    /* Data Table */
+    .data-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-family: var(--font-mono);
+      font-size: 13px;
+      margin-top: 16px;
+    }
+    .data-table th {
+      text-align: left;
+      padding: 10px 14px;
+      background: #111111;
+      border-bottom: 1px solid var(--sb-border-dark);
+      color: var(--sb-light-gray);
+      font-weight: 500;
+    }
+    .data-table td {
+      padding: 12px 14px;
+      border-bottom: 1px solid var(--sb-dark-border);
+      color: var(--sb-off-white);
+    }
+
+    /* Cards Grid */
+    .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 24px;
+      margin-top: 64px;
+    }
+    .sb-card {
+      background: var(--sb-dark);
+      border: 1px solid var(--sb-border-dark);
+      border-radius: var(--rad-feature);
+      padding: 32px;
+      transition: border-color 150ms ease;
+    }
+    .sb-card:hover {
+      border-color: var(--sb-green-border);
+    }
+    .card-title {
+      font-size: 24px;
+      font-weight: 400;
+      line-height: 1.33;
+      letter-spacing: -0.16px;
+      margin-bottom: 12px;
+      color: var(--sb-off-white);
+    }
+    .card-desc {
+      font-size: 14px;
+      color: var(--sb-mid-gray);
+      line-height: 1.5;
+      margin-bottom: 20px;
+    }
+    .sb-link {
+      color: var(--sb-green-link);
+      text-decoration: none;
+      font-size: 14px;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .sb-link:hover {
+      text-decoration: underline;
+    }
+
+    /* Footer */
+    footer.sb-footer {
+      border-top: 1px solid var(--sb-border-dark);
+      background: var(--sb-dark);
+      padding: 64px 24px;
+      margin-top: 96px;
+    }
+    .footer-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navigation -->
+  <header class="sb-header">
+    <div class="header-inner">
+      <a href="#" class="sb-logo">
+        <svg class="sb-icon" viewBox="0 0 24 24">
+          <path d="M12.0003 0L3.00027 15.6H12.0003L12.0003 24L21.0003 8.4H12.0003L12.0003 0Z" />
+        </svg>
+        <span>supabase</span>
+      </a>
+
+      <ul class="sb-nav-links">
+        <li><a href="#database">Database</a></li>
+        <li><a href="#auth">Auth</a></li>
+        <li><a href="#storage">Storage</a></li>
+        <li><a href="#edge">Edge Functions</a></li>
+        <li><a href="#pricing">Pricing</a></li>
+      </ul>
+
+      <div style="display:flex; gap:12px; align-items:center;">
+        <button class="btn-sb-ghost" onclick="openLogin()">Sign in</button>
+        <button class="btn-sb-pill btn-sb-primary" onclick="startProject()">Start your project</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="sb-wrap">
+    <!-- Hero Section -->
+    <section class="hero-box">
+      <div class="sb-code-label">
+        <span class="status-dot"></span> POSTGRES V16 READY // ENTERPRISE DATA PLATFORM
+      </div>
+      <h1 class="hero-title">Build in a weekend. Scale to millions.</h1>
+      <p class="hero-sub">
+        Supabase is an open source Firebase alternative. Start your project with a Postgres database, Authentication, instant APIs, Edge Functions, Realtime subscriptions, and Vector embeddings.
+      </p>
+      <div style="display:flex; gap:16px; flex-wrap:wrap;">
+        <button class="btn-sb-pill btn-sb-primary" onclick="startProject()">Start your project</button>
+        <button class="btn-sb-pill btn-sb-dark" onclick="copyConnString()">Copy Connect URI</button>
+      </div>
+
+      <!-- Interactive Database Console -->
+      <div class="studio-panel" id="database">
+        <div class="studio-bar">
+          <div class="tab-pills">
+            <button class="tab-pill active" onclick="switchTab(this, 'query')">SQL Editor</button>
+            <button class="tab-pill" onclick="switchTab(this, 'schema')">Table Schema</button>
+            <button class="tab-pill" onclick="switchTab(this, 'rls')">RLS Policies</button>
+          </div>
+          <div style="display:flex; gap:10px;">
+            <button class="btn-sb-pill btn-sb-primary" style="padding:4px 14px; font-size:12px;" onclick="runQuery()">RUN QUERY (⌘ + ↵)</button>
+          </div>
+        </div>
+
+        <div class="editor-body">
+          <div class="sql-code" id="sqlBlock">
+            <span class="kw">SELECT</span> <span class="col">id</span>, <span class="col">email</span>, <span class="col">created_at</span>, <span class="col">role</span><br>
+            <span class="kw">FROM</span> <span class="fn">auth.users</span><br>
+            <span class="kw">WHERE</span> <span class="col">confirmed_at</span> <span class="kw">IS NOT NULL</span><br>
+            <span class="kw">ORDER BY</span> <span class="col">created_at</span> <span class="kw">DESC</span> <span class="kw">LIMIT</span> <span class="str">5</span>;
+          </div>
+
+          <div style="font-family:var(--font-mono); font-size:12px; color:var(--sb-mid-gray); margin-bottom:8px;">
+            QUERY EXECUTION TIME: <span style="color:var(--sb-green);" id="queryTime">1.2ms</span> // 3 ROWS RETURNED
+          </div>
+
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>id (uuid)</th>
+                <th>email (text)</th>
+                <th>created_at (timestamptz)</th>
+                <th>role (varchar)</th>
+              </tr>
+            </thead>
+            <tbody id="tableBody">
+              <tr>
+                <td>f83e204c-129b-4a55</td>
+                <td>alex.dev@acme.io</td>
+                <td>2026-09-10 17:42:10 UTC</td>
+                <td><span style="color:var(--sb-green);">developer</span></td>
+              </tr>
+              <tr>
+                <td>992a014e-6701-4c12</td>
+                <td>sarah.lead@system.org</td>
+                <td>2026-09-10 16:15:33 UTC</td>
+                <td><span style="color:var(--sb-green);">admin</span></td>
+              </tr>
+              <tr>
+                <td>d441c098-90ef-4819</td>
+                <td>marcus.ml@compute.ai</td>
+                <td>2026-09-10 14:02:19 UTC</td>
+                <td><span style="color:var(--sb-green);">maintainer</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- Cards Section -->
+    <div class="sb-code-label">PRODUCT SUITE</div>
+    <h2 style="font-size:36px; font-weight:400; line-height:1.25; margin-bottom:12px;">Everything you need to launch</h2>
+    <p style="color:var(--sb-mid-gray); font-size:16px; max-width:600px;">Every product is standalone, composable, and production ready.</p>
+
+    <div class="cards-grid">
+      <!-- Card 1 -->
+      <div class="sb-card" id="auth">
+        <h3 class="card-title">Authentication</h3>
+        <p class="card-desc">User management with Row Level Security built-in. Social logins, MFA, phone auth, and server-side sessions.</p>
+        <a href="#" class="sb-link" onclick="alert('Docs: Authentication & RLS')">Explore Auth ➔</a>
+      </div>
+
+      <!-- Card 2 -->
+      <div class="sb-card" id="storage">
+        <h3 class="card-title">Storage</h3>
+        <p class="card-desc">Store, organize, and serve large files. Streaming audio, video, user avatars, and media CDN integration.</p>
+        <a href="#" class="sb-link" onclick="alert('Docs: Storage buckets')">Explore Storage ➔</a>
+      </div>
+
+      <!-- Card 3 -->
+      <div class="sb-card" id="edge">
+        <h3 class="card-title">Edge Functions</h3>
+        <p class="card-desc">Globally distributed TypeScript functions executed close to your users via Deno runtime with zero cold starts.</p>
+        <a href="#" class="sb-link" onclick="alert('Docs: Edge Functions deployment')">Explore Edge ➔</a>
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="sb-footer">
+    <div class="footer-inner">
+      <div style="display:flex; align-items:center; gap:8px;">
+        <span style="color:var(--sb-green); font-size:18px;">⚡</span>
+        <span style="font-weight:500;">Supabase Inc.</span>
+        <span style="color:var(--sb-mid-gray); font-size:13px; margin-left:12px;">Built to open-design/design-systems/supabase/DESIGN.md specifications</span>
+      </div>
+      <div style="font-family:var(--font-mono); font-size:12px; color:var(--sb-mid-gray);">
+        #171717 Canvas • Emerald #3ECF8E • Zero Shadows • Circular 1.00 Hero
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    function startProject() {
+      alert('Welcome to Supabase. New PostgreSQL 16 project provisioned in us-east-1.');
+    }
+
+    function copyConnString() {
+      navigator.clipboard.writeText('postgresql://postgres:[YOUR-PASSWORD]@db.xxxx.supabase.co:5432/postgres');
+      alert('Copied connection URI to clipboard:\npostgresql://postgres:***@db.xxxx.supabase.co:5432/postgres');
+    }
+
+    function runQuery() {
+      const qTime = document.getElementById('queryTime');
+      qTime.textContent = 'Executing...';
+      setTimeout(() => {
+        qTime.textContent = `${(Math.random() * 2 + 0.8).toFixed(1)}ms`;
+        alert('Query returned 3 rows successfully.');
+      }, 250);
+    }
+
+    function switchTab(el, type) {
+      document.querySelectorAll('.tab-pill').forEach(p => p.classList.remove('active'));
+      el.classList.add('active');
+      const sql = document.getElementById('sqlBlock');
+      if (type === 'query') {
+        sql.innerHTML = '<span class="kw">SELECT</span> <span class="col">id</span>, <span class="col">email</span>, <span class="col">created_at</span>, <span class="col">role</span><br><span class="kw">FROM</span> <span class="fn">auth.users</span><br><span class="kw">WHERE</span> <span class="col">confirmed_at</span> <span class="kw">IS NOT NULL</span><br><span class="kw">ORDER BY</span> <span class="col">created_at</span> <span class="kw">DESC</span> <span class="kw">LIMIT</span> <span class="str">5</span>;';
+      } else if (type === 'schema') {
+        sql.innerHTML = '<span class="kw">CREATE TABLE</span> <span class="fn">public.profiles</span> (<br>&nbsp;&nbsp;<span class="col">id</span> <span class="kw">uuid REFERENCES</span> <span class="fn">auth.users</span> <span class="kw">PRIMARY KEY</span>,<br>&nbsp;&nbsp;<span class="col">username</span> <span class="kw">text UNIQUE</span>,<br>&nbsp;&nbsp;<span class="col">updated_at</span> <span class="kw">timestamptz DEFAULT</span> <span class="fn">now</span>()<br>);';
+      } else if (type === 'rls') {
+        sql.innerHTML = '<span class="kw">ALTER TABLE</span> <span class="fn">profiles</span> <span class="kw">ENABLE ROW LEVEL SECURITY</span>;<br><span class="kw">CREATE POLICY</span> <span class="str">"Public profiles are viewable by everyone."</span><br>&nbsp;&nbsp;<span class="kw">ON</span> <span class="fn">profiles</span> <span class="kw">FOR SELECT USING</span> (<span class="kw">true</span>);';
+      }
+    }
+
+    function openLogin() {
+      alert('Supabase Auth Modal triggered.');
+    }
+  </script>
+</body>
+</html>

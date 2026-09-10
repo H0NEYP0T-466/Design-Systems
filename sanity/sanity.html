@@ -1,0 +1,852 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sanity — The Composable Content Cloud</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,400;0,500;0,600;1,400&family=Inter:wght@400;500;600&family=Space+Grotesk:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    /* ==========================================================================
+       SANITY DESIGN SYSTEM TOKENS & FOUNDATIONS
+       Strictly extracted from open-design/design-systems/sanity/DESIGN.md
+       ========================================================================== */
+    :root {
+      /* Primary Canvas & Brand */
+      --sanity-black: #0b0b0b;          /* Primary canvas & nocturnal command center */
+      --sanity-pure-black: #000000;     /* Deep overlays, maximum contrast */
+      --sanity-red: #f36458;            /* Sanity Red: Coral-red primary CTA */
+
+      /* Pure Achromatic Gray Scale (Strictly no warm/cool tinting) */
+      --sanity-gray-dark: #212121;      /* Elevated surface for cards, inputs */
+      --sanity-gray-medium: #353535;    /* Tertiary surface and visible borders */
+      --sanity-gray-subtle: #797979;    /* Tertiary text, metadata, timestamps */
+      --sanity-silver: #b9b9b9;         /* Secondary text, body copy on dark */
+      --sanity-light-gray: #ededed;     /* Inverted surface background */
+      --sanity-white: #ffffff;          /* Primary text on dark surfaces */
+
+      /* Accent & Interactive States */
+      --sanity-blue: #0052ef;           /* Electric Blue: Universal hover/active state */
+      --sanity-blue-light: #55beff;     /* Secondary blue variant */
+      --sanity-blue-dim: #afe3ff;       /* Dimmed blue accent */
+      --sanity-neon-green: #19d600;     /* Neon Green: Success & premium highlight */
+      --sanity-magenta: #f500ff;        /* Wide-gamut accent magenta */
+      --sanity-error: #dd0000;          /* Pure error red */
+      --sanity-focus-bg: #072227;       /* Input focus background shift */
+
+      /* Typography Families */
+      --font-display: "Space Grotesk", "Inter", -apple-system, sans-serif;
+      --font-body: "Inter", -apple-system, sans-serif;
+      --font-mono: "IBM Plex Mono", ui-monospace, monospace;
+
+      /* Utilitarian Border Radius Scale */
+      --radius-xs: 3px;                 /* Inputs, textareas */
+      --radius-sm: 5px;                 /* Ghost buttons, tags */
+      --radius-md: 6px;                 /* Standard cards, containers */
+      --radius-lg: 12px;                /* Large feature cards */
+      --radius-pill: 99999px;           /* Primary buttons, badges, nav pills */
+
+      /* Spacing Scale (8px Base Unit) */
+      --space-1: 1px;
+      --space-2: 2px;
+      --space-3: 4px;
+      --space-4: 6px;
+      --space-5: 8px;
+      --space-6: 12px;
+      --space-7: 16px;
+      --space-8: 24px;
+      --space-9: 32px;
+      --space-10: 48px;
+      --space-11: 64px;
+      --space-12: 96px;
+      --space-hero: 120px;
+    }
+
+    /* Universal Reset & Nocturnal Canvas */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      font-size: 16px;
+      scroll-behavior: smooth;
+      background-color: var(--sanity-black);
+      color: var(--sanity-white);
+    }
+
+    body {
+      font-family: var(--font-body);
+      background-color: var(--sanity-black);
+      color: var(--sanity-silver);
+      font-weight: 400;
+      line-height: 1.50;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      overflow-x: hidden;
+    }
+
+    /* ==========================================================================
+       TYPOGRAPHY HIERARCHY (Extreme Negative Tracking on Display, Section 3)
+       ========================================================================== */
+    .display-hero {
+      font-family: var(--font-display);
+      font-size: 96px;
+      font-weight: 400;
+      line-height: 1.00;
+      letter-spacing: -4.48px;
+      color: var(--sanity-white);
+    }
+
+    .hero-secondary {
+      font-family: var(--font-display);
+      font-size: 64px;
+      font-weight: 400;
+      line-height: 1.05;
+      letter-spacing: -2.88px;
+      color: var(--sanity-white);
+    }
+
+    .section-heading {
+      font-family: var(--font-display);
+      font-size: 48px;
+      font-weight: 400;
+      line-height: 1.08;
+      letter-spacing: -1.68px;
+      color: var(--sanity-white);
+      margin-bottom: var(--space-7);
+    }
+
+    .heading-large {
+      font-family: var(--font-display);
+      font-size: 38px;
+      font-weight: 400;
+      line-height: 1.10;
+      letter-spacing: -1.14px;
+      color: var(--sanity-white);
+      margin-bottom: var(--space-6);
+    }
+
+    .heading-medium {
+      font-family: var(--font-display);
+      font-size: 32px;
+      font-weight: 425;
+      line-height: 1.24;
+      letter-spacing: -0.32px;
+      color: var(--sanity-white);
+      margin-bottom: var(--space-6);
+    }
+
+    .heading-small {
+      font-family: var(--font-display);
+      font-size: 24px;
+      font-weight: 425;
+      line-height: 1.24;
+      letter-spacing: -0.24px;
+      color: var(--sanity-white);
+      margin-bottom: var(--space-5);
+    }
+
+    .body-large {
+      font-size: 18px;
+      font-weight: 400;
+      line-height: 1.50;
+      letter-spacing: -0.18px;
+      color: var(--sanity-silver);
+    }
+
+    .body-standard {
+      font-size: 16px;
+      font-weight: 400;
+      line-height: 1.50;
+      color: var(--sanity-silver);
+    }
+
+    .caption {
+      font-size: 13px;
+      font-weight: 400;
+      line-height: 1.40;
+      letter-spacing: -0.13px;
+      color: var(--sanity-gray-subtle);
+    }
+
+    .mono-label {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      font-weight: 600;
+      line-height: 1.20;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--sanity-gray-subtle);
+    }
+
+    .mono-code {
+      font-family: var(--font-mono);
+      font-size: 14px;
+      font-weight: 400;
+      line-height: 1.50;
+      color: var(--sanity-silver);
+    }
+
+    /* Container */
+    .sanity-container {
+      max-width: 1340px;
+      margin: 0 auto;
+      padding: 0 var(--space-9);
+    }
+
+    /* ==========================================================================
+       NAVIGATION BAR (Section 4)
+       #0b0b0b with backdrop blur, 1px border-bottom #212121
+       ========================================================================== */
+    .sanity-navbar {
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      background-color: rgba(11, 11, 11, 0.95);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--sanity-gray-dark);
+      padding: var(--space-7) 0;
+    }
+    .sanity-nav-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .sanity-brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+      color: var(--sanity-white);
+    }
+    .sanity-brand-logo {
+      width: 24px;
+      height: 24px;
+      background-color: var(--sanity-red);
+      border-radius: var(--radius-pill);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-display);
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--sanity-white);
+      user-select: none;
+    }
+    .sanity-brand-text {
+      font-family: var(--font-display);
+      font-size: 18px;
+      font-weight: 500;
+      letter-spacing: -0.5px;
+      color: var(--sanity-white);
+    }
+
+    .sanity-nav-links {
+      display: flex;
+      align-items: center;
+      gap: var(--space-8);
+      list-style: none;
+    }
+    .sanity-nav-links a {
+      font-size: 15px;
+      color: var(--sanity-silver);
+      text-decoration: none;
+      transition: color 150ms ease;
+    }
+    .sanity-nav-links a:hover {
+      color: var(--sanity-blue);
+    }
+
+    /* ==========================================================================
+       BUTTONS & CTAs (Section 4)
+       Pill-shaped 99999px radius, universal Electric Blue #0052ef hover!
+       ========================================================================== */
+    .sanity-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      font-family: var(--font-body);
+      font-size: 15px;
+      font-weight: 400;
+      line-height: 1.20;
+      text-decoration: none;
+      cursor: pointer;
+      border: none;
+      transition: background-color 150ms ease, color 150ms ease, border-color 150ms ease;
+      white-space: nowrap;
+    }
+
+    /* Primary CTA: Coral-red (#f36458), 99999px pill, white text. Hover: #0052ef */
+    .sanity-btn-primary {
+      background-color: var(--sanity-red);
+      color: var(--sanity-white);
+      padding: 10px 20px;
+      border-radius: var(--radius-pill);
+    }
+    .sanity-btn-primary:hover {
+      background-color: var(--sanity-blue);
+      color: var(--sanity-white);
+    }
+
+    /* Secondary CTA: Near-black (#0b0b0b) pill, silver text. Hover: #0052ef */
+    .sanity-btn-secondary {
+      background-color: var(--sanity-gray-dark);
+      color: var(--sanity-silver);
+      padding: 10px 18px;
+      border-radius: var(--radius-pill);
+      border: 1px solid var(--sanity-gray-medium);
+    }
+    .sanity-btn-secondary:hover {
+      background-color: var(--sanity-blue);
+      color: var(--sanity-white);
+      border-color: var(--sanity-blue);
+    }
+
+    /* Outlined Light Pill: White bg, #0b0b0b text. Hover: #0052ef */
+    .sanity-btn-outline {
+      background-color: var(--sanity-white);
+      color: var(--sanity-black);
+      padding: 10px 18px;
+      border-radius: var(--radius-pill);
+      border: 1px solid var(--sanity-black);
+    }
+    .sanity-btn-outline:hover {
+      background-color: var(--sanity-blue);
+      color: var(--sanity-white);
+    }
+
+    /* Ghost button: 5px radius */
+    .sanity-btn-ghost {
+      background-color: var(--sanity-gray-dark);
+      color: var(--sanity-silver);
+      padding: 6px 12px;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--sanity-gray-dark);
+      font-size: 13px;
+    }
+    .sanity-btn-ghost:hover {
+      background-color: var(--sanity-blue);
+      color: var(--sanity-white);
+      border-color: var(--sanity-blue);
+    }
+
+    /* ==========================================================================
+       HERO SECTION (Section 1 & 3)
+       Display hero 96px, tight tracking -4.48px, editorial authority
+       ========================================================================== */
+    .sanity-hero {
+      padding: var(--space-hero) 0 var(--space-11) 0;
+    }
+    .sanity-hero-eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 4px 12px;
+      background-color: var(--sanity-gray-dark);
+      border: 1px solid var(--sanity-gray-medium);
+      border-radius: var(--radius-pill);
+      margin-bottom: var(--space-7);
+    }
+    .sanity-hero-eyebrow .dot {
+      width: 6px;
+      height: 6px;
+      background-color: var(--sanity-neon-green);
+      border-radius: 50%;
+    }
+    .sanity-hero-desc {
+      font-size: 20px;
+      line-height: 1.5;
+      color: var(--sanity-silver);
+      max-width: 780px;
+      margin-top: var(--space-7);
+      margin-bottom: var(--space-9);
+    }
+
+    /* Studio Schema Code Window */
+    .sanity-schema-card {
+      background-color: var(--sanity-gray-dark);
+      border: 1px solid var(--sanity-gray-medium);
+      border-radius: var(--radius-md);
+      padding: var(--space-8);
+      margin-top: var(--space-10);
+    }
+    .sanity-schema-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid var(--sanity-gray-medium);
+      padding-bottom: var(--space-6);
+      margin-bottom: var(--space-6);
+    }
+    .sanity-schema-title {
+      font-family: var(--font-mono);
+      font-size: 13px;
+      color: var(--sanity-silver);
+    }
+    .sanity-schema-pill {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--sanity-neon-green);
+      background-color: rgba(25, 214, 0, 0.1);
+      padding: 2px 8px;
+      border-radius: var(--radius-pill);
+    }
+
+    /* ==========================================================================
+       COLORIMETRIC CARDS GRID (Section 4 & 6: Zero Drop Shadows)
+       ========================================================================== */
+    .sanity-section {
+      padding: var(--space-11) 0;
+    }
+    .sanity-cards-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: var(--space-8);
+      margin-top: var(--space-9);
+    }
+    .sanity-card {
+      background-color: var(--sanity-gray-dark);
+      border: 1px solid var(--sanity-gray-medium);
+      border-radius: var(--radius-md);
+      padding: var(--space-8);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: border-color 150ms ease;
+    }
+    .sanity-card:hover {
+      border-color: var(--sanity-blue);
+    }
+    .sanity-card-tag {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--sanity-gray-subtle);
+      text-transform: uppercase;
+      margin-bottom: var(--space-5);
+    }
+    .sanity-card-title {
+      font-family: var(--font-display);
+      font-size: 24px;
+      font-weight: 425;
+      line-height: 1.24;
+      letter-spacing: -0.24px;
+      color: var(--sanity-white);
+      margin-bottom: var(--space-5);
+    }
+    .sanity-card-body {
+      font-size: 15px;
+      color: var(--sanity-silver);
+      line-height: 1.5;
+      margin-bottom: var(--space-7);
+    }
+    .sanity-card-action {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--sanity-silver);
+      font-size: 14px;
+      text-decoration: none;
+      transition: color 150ms ease;
+    }
+    .sanity-card-action:hover {
+      color: var(--sanity-blue);
+    }
+
+    /* ==========================================================================
+       INVERTED LIGHT SECTION (Section 2 & 7: White/Light Gray Surface)
+       ========================================================================== */
+    .sanity-inverted-section {
+      background-color: var(--sanity-light-gray);
+      color: var(--sanity-gray-dark);
+      padding: var(--space-11) 0;
+      border-top: 1px solid #dcdcdc;
+      border-bottom: 1px solid #dcdcdc;
+    }
+    .sanity-inverted-section h2 {
+      color: var(--sanity-black);
+    }
+    .sanity-inverted-section p {
+      color: #4a4a4a;
+    }
+    .sanity-inverted-box {
+      background-color: var(--sanity-white);
+      border: 1px solid #d0d0d0;
+      border-radius: var(--radius-md);
+      padding: var(--space-8);
+      margin-top: var(--space-8);
+    }
+
+    /* ==========================================================================
+       FORM & INPUT SYSTEM (Section 4)
+       #0b0b0b bg, 1px solid #212121, 3px radius, focus: 2px solid #0052ef, bg #072227
+       ========================================================================== */
+    .sanity-form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--space-7);
+      margin-top: var(--space-7);
+    }
+    .sanity-input-wrap {
+      margin-bottom: var(--space-6);
+    }
+    .sanity-label {
+      display: block;
+      font-family: var(--font-mono);
+      font-size: 11px;
+      text-transform: uppercase;
+      color: var(--sanity-gray-subtle);
+      margin-bottom: var(--space-3);
+    }
+    .sanity-input {
+      width: 100%;
+      background-color: var(--sanity-black);
+      color: var(--sanity-silver);
+      border: 1px solid var(--sanity-gray-dark);
+      border-radius: var(--radius-xs);
+      padding: 10px 14px;
+      font-family: var(--font-body);
+      font-size: 15px;
+      outline: none;
+      transition: border-color 150ms ease, background-color 150ms ease;
+    }
+    .sanity-input:focus {
+      border-color: var(--sanity-blue);
+      outline: 2px solid var(--sanity-blue);
+      background-color: var(--sanity-focus-bg);
+      color: var(--sanity-white);
+    }
+    .sanity-input::placeholder {
+      color: var(--sanity-gray-subtle);
+    }
+
+    /* ==========================================================================
+       FOOTER (Section 4 & 9)
+       #0b0b0b background, multi-column link layout, IBM Plex Mono uppercase headers
+       ========================================================================== */
+    .sanity-footer {
+      background-color: var(--sanity-black);
+      border-top: 1px solid var(--sanity-gray-dark);
+      padding: var(--space-11) 0 var(--space-9) 0;
+    }
+    .sanity-footer-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: var(--space-9);
+      margin-bottom: var(--space-10);
+    }
+    .sanity-footer-col h4 {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+      color: var(--sanity-white);
+      margin-bottom: var(--space-6);
+      letter-spacing: 0.5px;
+    }
+    .sanity-footer-col ul {
+      list-style: none;
+    }
+    .sanity-footer-col li {
+      margin-bottom: 10px;
+    }
+    .sanity-footer-col a {
+      font-size: 14px;
+      color: var(--sanity-silver);
+      text-decoration: none;
+      transition: color 150ms ease;
+    }
+    .sanity-footer-col a:hover {
+      color: var(--sanity-blue);
+    }
+    .sanity-footer-bottom {
+      border-top: 1px solid var(--sanity-gray-dark);
+      padding-top: var(--space-7);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
+    /* Responsive Adjustments */
+    @media (max-width: 1024px) {
+      .display-hero {
+        font-size: 64px;
+        letter-spacing: -2.5px;
+      }
+      .sanity-cards-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      .sanity-footer-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+    @media (max-width: 768px) {
+      .display-hero {
+        font-size: 42px;
+        letter-spacing: -1.5px;
+      }
+      .sanity-nav-links {
+        display: none;
+      }
+      .sanity-cards-grid {
+        grid-template-columns: 1fr;
+      }
+      .sanity-footer-grid {
+        grid-template-columns: 1fr;
+      }
+      .sanity-form-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ==========================================================================
+       STICKY NAVIGATION BAR
+       ========================================================================== -->
+  <nav class="sanity-navbar">
+    <div class="sanity-container sanity-nav-inner">
+      <a href="#" class="sanity-brand">
+        <div class="sanity-brand-logo">S</div>
+        <span class="sanity-brand-text">SANITY</span>
+      </a>
+
+      <ul class="sanity-nav-links">
+        <li><a href="#platform">Platform</a></li>
+        <li><a href="#schema">Content Lake</a></li>
+        <li><a href="#groq">GROQ &amp; APIs</a></li>
+        <li><a href="#editorial">Studio</a></li>
+        <li><a href="#contact">Enterprise</a></li>
+      </ul>
+
+      <div style="display: flex; gap: 12px; align-items: center;">
+        <a href="#demo" class="sanity-btn sanity-btn-secondary" style="font-size: 13px;">Sign In</a>
+        <a href="#contact" class="sanity-btn sanity-btn-primary">Get Started</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ==========================================================================
+       HERO SECTION
+       ========================================================================== -->
+  <main class="sanity-container">
+    <section class="sanity-hero">
+      <div class="sanity-hero-eyebrow">
+        <span class="dot"></span>
+        <span class="mono-label" style="color: var(--sanity-silver);">SANITY CONTENT LAKE V3.8 &mdash; REAL-TIME MUTATIONS</span>
+      </div>
+
+      <h1 class="display-hero">Structured content.<br>Engineered scale.</h1>
+
+      <p class="sanity-hero-desc">
+        Treat content as structured data, not static HTML pages. Sanity unifies headless CMS, multi-region synchronization, and real-time multiplayer editing into an programmable API-first substrate.
+      </p>
+
+      <div style="display: flex; gap: 16px; align-items: center; flex-wrap: wrap;">
+        <a href="#contact" class="sanity-btn sanity-btn-primary" style="font-size: 16px; padding: 12px 24px;">Start Building Free &rarr;</a>
+        <a href="#groq" class="sanity-btn sanity-btn-secondary" style="font-size: 16px; padding: 12px 24px;">Explore GROQ Query Docs</a>
+      </div>
+
+      <!-- Studio Schema Code Showcase -->
+      <div class="sanity-schema-card" id="groq">
+        <div class="sanity-schema-header">
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <span style="width: 8px; height: 8px; border-radius: 50%; background-color: var(--sanity-gray-subtle);"></span>
+            <span class="sanity-schema-title">schemas/article.ts &mdash; Composable Schema Type</span>
+          </div>
+          <span class="sanity-schema-pill">P3 ACCENT GREEN // VERIFIED INVARIANT</span>
+        </div>
+        <div class="mono-code">
+          <span style="color: #6da2ff;">import</span> { defineType, defineField } <span style="color: #6da2ff;">from</span> <span style="color: var(--sanity-neon-green);">'sanity'</span><br><br>
+          <span style="color: #6da2ff;">export const</span> articleSchema = <span style="color: var(--sanity-red);">defineType</span>({<br>
+          &nbsp;&nbsp;name: <span style="color: var(--sanity-neon-green);">'article'</span>,<br>
+          &nbsp;&nbsp;title: <span style="color: var(--sanity-neon-green);">'Editorial Article'</span>,<br>
+          &nbsp;&nbsp;type: <span style="color: var(--sanity-neon-green);">'document'</span>,<br>
+          &nbsp;&nbsp;fields: [<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;<span style="color: var(--sanity-red);">defineField</span>({ name: <span style="color: var(--sanity-neon-green);">'headline'</span>, type: <span style="color: var(--sanity-neon-green);">'string'</span>, validation: Rule =&gt; Rule.required() }),<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;<span style="color: var(--sanity-red);">defineField</span>({ name: <span style="color: var(--sanity-neon-green);">'content'</span>, type: <span style="color: var(--sanity-neon-green);">'array'</span>, of: [{ type: <span style="color: var(--sanity-neon-green);">'block'</span> }] }),<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;<span style="color: var(--sanity-red);">defineField</span>({ name: <span style="color: var(--sanity-neon-green);">'distribution'</span>, type: <span style="color: var(--sanity-neon-green);">'reference'</span>, to: [{ type: <span style="color: var(--sanity-neon-green);">'channel'</span> }] })<br>
+          &nbsp;&nbsp;]<br>
+          })
+        </div>
+      </div>
+    </section>
+
+    <!-- ==========================================================================
+         FEATURES SECTION (Colorimetric Depth, Section 4 & 6)
+         ========================================================================== -->
+    <section class="sanity-section" id="platform">
+      <span class="mono-label">INFRASTRUCTURE PILLARS</span>
+      <h2 class="section-heading">Built for engineers, designed for editors</h2>
+      <p class="body-large" style="max-width: 820px;">
+        Zero visual clutter. Elevated #212121 panels mounted directly on the #0b0b0b canvas establish absolute focal contrast without reliance on floating drop shadows.
+      </p>
+
+      <div class="sanity-cards-grid">
+        <div class="sanity-card">
+          <div>
+            <div class="sanity-card-tag">CONTENT LAKE // REAL-TIME</div>
+            <h3 class="sanity-card-title">Document Graph Database</h3>
+            <p class="sanity-card-body">
+              A globally distributed, read-optimized document store that indexes rich relationships and yields sub-millisecond query evaluations worldwide.
+            </p>
+          </div>
+          <a href="#" class="sanity-card-action">Read Technical Whitepaper &rarr;</a>
+        </div>
+
+        <div class="sanity-card">
+          <div>
+            <div class="sanity-card-tag">GROQ ENGINE // ORTHOGONAL</div>
+            <h3 class="sanity-card-title">Graph-Relational Queries</h3>
+            <p class="sanity-card-body">
+              Retrieve exactly what you need in one round trip. Filter, project, join, and reshape complex JSON hierarchies using GROQ expressive grammar.
+            </p>
+          </div>
+          <a href="#" class="sanity-card-action">Explore Query Playground &rarr;</a>
+        </div>
+
+        <div class="sanity-card">
+          <div>
+            <div class="sanity-card-tag">SANITY STUDIO // EXTENSIBLE</div>
+            <h3 class="sanity-card-title">React-Based Open Workspace</h3>
+            <p class="sanity-card-body">
+              Customize input fields, add bespoke previews, run AI pipelines, and configure role-based access right inside your version-controlled repo.
+            </p>
+          </div>
+          <a href="#" class="sanity-card-action">View Studio Customization &rarr;</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ==========================================================================
+       INVERTED EDITORIAL SECTION (Section 2 & 7: Alternating Light Surface)
+       ========================================================================== -->
+  <section class="sanity-inverted-section" id="editorial">
+    <div class="sanity-container">
+      <span class="mono-label" style="color: #666666;">INVERTED CONTENT SHOWCASE</span>
+      <h2 class="section-heading">Editorial clarity meets rigorous structure</h2>
+      <p class="body-large" style="max-width: 800px;">
+        Demonstrating the system's ability to switch to inverted surfaces (#ededed / #ffffff) for long-form editorial reviews, marketing campaigns, and press releases.
+      </p>
+
+      <div class="sanity-inverted-box">
+        <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #e0e0e0; padding-bottom: 12px; margin-bottom: 16px;">
+          <span style="font-family: var(--font-mono); font-size: 12px; font-weight: 600; color: #333;">PRESS DISPATCH // GLOBAL ARCHITECTURE</span>
+          <span style="font-size: 12px; color: #666;">SEPTEMBER 2026</span>
+        </div>
+        <h3 style="font-family: var(--font-display); font-size: 28px; font-weight: 500; color: #0b0b0b; margin-bottom: 12px;">
+          How Nike, Figma, and Morningstar orchestrate omnichannel publishing on Sanity
+        </h3>
+        <p style="font-size: 16px; color: #333; line-height: 1.6; margin-bottom: 20px;">
+          By untangling copy from presentation templates, global design teams syndicate localized product copy, localized legal copy, and interactive assets across mobile apps, point-of-sale terminals, and dynamic web applications concurrently.
+        </p>
+        <a href="#" class="sanity-btn sanity-btn-primary" style="font-size: 14px;">Read Customer Story</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==========================================================================
+       CONTACT & INTERACTIVE FORM SECTION (Section 4)
+       3px radius inputs, 2px solid #0052ef focus ring, #072227 focus background
+       ========================================================================== -->
+  <section class="sanity-section" id="contact">
+    <div class="sanity-container">
+      <span class="mono-label">CONTACT ENGINEERING</span>
+      <h2 class="section-heading">Request an architecture consultation</h2>
+      <p class="body-standard" style="max-width: 720px;">
+        Inputs utilize the strict 3px border-radius, #0b0b0b background, and shift to cyan-tinted focus backgrounds (#072227) with electric blue (#0052ef) 2px focus rings.
+      </p>
+
+      <form onsubmit="event.preventDefault(); alert('Request sent to Sanity Engineering.');" style="max-width: 720px; margin-top: 32px;">
+        <div class="sanity-form-grid">
+          <div class="sanity-input-wrap">
+            <label class="sanity-label">FULL NAME</label>
+            <input type="text" class="sanity-input" placeholder="Grace Hopper" required>
+          </div>
+          <div class="sanity-input-wrap">
+            <label class="sanity-label">WORK EMAIL</label>
+            <input type="email" class="sanity-input" placeholder="grace@navy.mil" required>
+          </div>
+        </div>
+
+        <div class="sanity-input-wrap">
+          <label class="sanity-label">ESTIMATED MONTHLY MUTATIONS</label>
+          <input type="text" class="sanity-input" placeholder="e.g. 10,000,000 document mutations" required>
+        </div>
+
+        <div style="display: flex; gap: 16px; align-items: center; margin-top: 24px;">
+          <button type="submit" class="sanity-btn sanity-btn-primary" style="padding: 12px 28px;">Submit Architecture Request</button>
+          <button type="reset" class="sanity-btn sanity-btn-ghost">Clear Fields</button>
+        </div>
+      </form>
+    </div>
+  </section>
+
+  <!-- ==========================================================================
+       FOOTER (Section 4 & 9)
+       ========================================================================== -->
+  <footer class="sanity-footer">
+    <div class="sanity-container">
+      <div class="sanity-footer-grid">
+        <div class="sanity-footer-col">
+          <h4>Platform</h4>
+          <ul>
+            <li><a href="#">Content Lake</a></li>
+            <li><a href="#">Sanity Studio</a></li>
+            <li><a href="#">GROQ Engine</a></li>
+            <li><a href="#">Webhooks &amp; Events</a></li>
+            <li><a href="#">Enterprise SLA</a></li>
+          </ul>
+        </div>
+        <div class="sanity-footer-col">
+          <h4>Developers</h4>
+          <ul>
+            <li><a href="#">Documentation</a></li>
+            <li><a href="#">CLI Reference</a></li>
+            <li><a href="#">Next.js Toolkit</a></li>
+            <li><a href="#">GraphQL API</a></li>
+            <li><a href="#">GitHub Ecosystem</a></li>
+          </ul>
+        </div>
+        <div class="sanity-footer-col">
+          <h4>Solutions</h4>
+          <ul>
+            <li><a href="#">Omnichannel Publishing</a></li>
+            <li><a href="#">Headless E-commerce</a></li>
+            <li><a href="#">Localization</a></li>
+            <li><a href="#">Component Libraries</a></li>
+            <li><a href="#">Live Preview Systems</a></li>
+          </ul>
+        </div>
+        <div class="sanity-footer-col">
+          <h4>Company</h4>
+          <ul>
+            <li><a href="#">About Sanity Inc.</a></li>
+            <li><a href="#">Careers</a></li>
+            <li><a href="#">Security &amp; SOC2</a></li>
+            <li><a href="#">Privacy Policy</a></li>
+            <li><a href="#">Status Page</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="sanity-footer-bottom">
+        <span class="caption">&copy; 2026 Sanity, Inc. All rights reserved. Precision-engineered composable content.</span>
+        <div style="display: flex; gap: 16px;">
+          <a href="#" class="caption" style="color: var(--sanity-silver);">Privacy</a>
+          <a href="#" class="caption" style="color: var(--sanity-silver);">Terms</a>
+          <a href="#" class="caption" style="color: var(--sanity-silver);">GPC Compliance</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>

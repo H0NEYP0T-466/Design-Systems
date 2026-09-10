@@ -1,0 +1,939 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VoltAgent — AI Agent Engineering Platform</title>
+  <meta name="description" content="Authentic implementation of the VoltAgent design system: Abyss Black canvas (#050507), Emerald Signal Green (#00d992), Warm Charcoal border containment (#3d3a39), system-ui compressed typography, and terminal-native engineering aesthetic.">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    /* ─────────────────────────────────────────────────────────────
+       1. VOLTAGENT DESIGN SYSTEM FOUNDATIONS & TOKENS
+       ───────────────────────────────────────────────────────────── */
+    :root {
+      /* Primary Brand Energy */
+      --va-emerald: #00d992;          /* Emerald Signal Green: high-signal power indicator */
+      --va-mint: #2fd6a1;             /* VoltAgent Mint: CTA button text on dark */
+      --va-tailwind-emerald: #10b981; /* Ecosystem standard green */
+
+      /* Secondary Accents */
+      --va-purple: #818cf8;           /* Soft Purple: syntax & secondary categories */
+      --va-cobalt: #306cce;           /* Cobalt Primary */
+      --va-deep-cobalt: #2554a0;
+      --va-ring-blue: rgba(59, 130, 246, 0.5);
+
+      /* Surface & Canvas */
+      --va-canvas: #050507;           /* Abyss Black: landing page canvas */
+      --va-surface: #101010;          /* Carbon Surface: cards & button bg */
+      --va-border-charcoal: #3d3a39;  /* Warm Charcoal: signature containment border */
+
+      /* Text Hierarchy */
+      --va-text-snow: #f2f2f2;        /* Snow White: primary text on dark (not pure white) */
+      --va-text-pure: #ffffff;        /* Pure White: max emphasis */
+      --va-text-parchment: #b8b3b0;   /* Warm Parchment: secondary body text */
+      --va-text-slate: #8b949e;       /* Steel Slate: tertiary text & metadata */
+      --va-text-fog: #bdbdbd;         /* Fog Gray */
+      --va-text-mist: #dcdcdc;        /* Mist Gray */
+
+      /* Semantic */
+      --va-success: #008b00;
+      --va-warning: #ffba00;
+      --va-danger: #fb565b;
+      --va-info: #4cb3d4;
+      --va-border-dashed: rgba(79, 93, 117, 0.4);
+
+      /* Typography Stacks */
+      --font-system: system-ui, -apple-system, "Segoe UI", Roboto, Ubuntu, Cantarell, "Noto Sans", sans-serif;
+      --font-body: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
+      --font-mono: "SFMono-Regular", Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+
+      /* Radii */
+      --radius-4: 4px;   /* Nearly squared: inline elements, code spans */
+      --radius-6: 6px;   /* Subtly rounded: buttons, links */
+      --radius-6-4: 6.4px; /* Code block specific */
+      --radius-8: 8px;   /* Comfortably rounded: cards, feature containers */
+      --radius-pill: 9999px; /* Tags and badges */
+
+      /* Shadows & Glows */
+      --glow-emerald: drop-shadow(0 0 2px #00d992);
+      --shadow-ambient: 0px 0px 15px rgba(92, 88, 85, 0.2);
+      --shadow-dramatic: 0px 20px 60px rgba(0, 0, 0, 0.7), inset 0px 0px 0px 1px rgba(148, 163, 184, 0.1);
+    }
+
+    /* Reset & Deep Dark Canvas Setup */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      background-color: var(--va-canvas);
+    }
+
+    body {
+      background-color: var(--va-canvas); /* Abyss Black (#050507) */
+      color: var(--va-text-snow);         /* Snow White (#f2f2f2) */
+      font-family: var(--font-body);
+      font-size: 16px;
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+      font-feature-settings: "calt", "rlig";
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .va-container {
+      max-width: 1320px;
+      margin: 0 auto;
+      padding: 0 32px;
+    }
+
+    /* ─────────────────────────────────────────────────────────────
+       2. TOP COMMAND NAV
+       ───────────────────────────────────────────────────────────── */
+    .va-navbar {
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      background-color: rgba(5, 5, 7, 0.9);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--va-border-charcoal);
+      height: 72px;
+      display: flex;
+      align-items: center;
+    }
+
+    .va-nav-inner {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .va-brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-family: var(--font-system);
+      font-size: 20px;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+      color: var(--va-text-snow);
+    }
+
+    /* Pulsing Green Signal Glow on Bolt Logo */
+    .va-bolt-icon {
+      width: 24px;
+      height: 24px;
+      fill: var(--va-emerald);
+      filter: var(--glow-emerald);
+      animation: pulseGlow 3s infinite alternate ease-in-out;
+    }
+
+    @keyframes pulseGlow {
+      0% { filter: drop-shadow(0 0 2px #00d992); }
+      100% { filter: drop-shadow(0 0 8px #00d992); }
+    }
+
+    .va-nav-links {
+      display: flex;
+      align-items: center;
+      gap: 28px;
+      list-style: none;
+    }
+
+    .va-nav-link {
+      font-size: 14.45px;
+      font-weight: 500;
+      color: var(--va-text-snow);
+      transition: color 150ms ease;
+    }
+
+    .va-nav-link:hover {
+      color: var(--va-emerald);
+    }
+
+    .va-nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .va-github-badge {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background-color: var(--va-surface);
+      border: 1px solid var(--va-border-charcoal);
+      border-radius: var(--radius-6);
+      padding: 6px 12px;
+      font-size: 13px;
+      color: var(--va-text-snow);
+    }
+
+    /* ─────────────────────────────────────────────────────────────
+       3. BUTTON COMPONENTS
+       ───────────────────────────────────────────────────────────── */
+
+    /* Primary Green CTA: Carbon Surface (#101010) with Mint text */
+    .va-btn-primary {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      background-color: var(--va-surface);
+      color: var(--va-mint);
+      font-family: var(--font-body);
+      font-size: 16px;
+      font-weight: 600;
+      padding: 12px 20px;
+      border-radius: var(--radius-6);
+      border: 1px solid var(--va-mint);
+      outline: none;
+      cursor: pointer;
+      text-decoration: none;
+      transition: all 150ms ease;
+    }
+
+    .va-btn-primary:hover {
+      background-color: rgba(0, 217, 146, 0.1);
+      box-shadow: 0 0 12px rgba(0, 217, 146, 0.2);
+    }
+
+    /* Ghost / Outline: 1px Warm Charcoal border (#3d3a39) */
+    .va-btn-ghost {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      background-color: transparent;
+      color: var(--va-text-pure);
+      font-family: var(--font-body);
+      font-size: 16px;
+      font-weight: 500;
+      padding: 12px 20px;
+      border-radius: var(--radius-6);
+      border: 1px solid var(--va-border-charcoal);
+      cursor: pointer;
+      transition: all 150ms ease;
+    }
+
+    .va-btn-ghost:hover {
+      background-color: rgba(255, 255, 255, 0.05);
+      border-color: #555250;
+    }
+
+    /* ─────────────────────────────────────────────────────────────
+       4. HERO SECTION (SYSTEM-UI 60PX, LINE-HEIGHT 1.00)
+       ───────────────────────────────────────────────────────────── */
+    .va-hero {
+      padding: 96px 0 80px;
+      text-align: center;
+      position: relative;
+    }
+
+    .va-tag-overline {
+      font-family: var(--font-system);
+      font-size: 14px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 2.52px; /* Widest tracking */
+      color: var(--va-emerald);
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 24px;
+      background: rgba(0, 217, 146, 0.08);
+      border: 1px solid rgba(0, 217, 146, 0.25);
+      padding: 6px 16px;
+      border-radius: var(--radius-pill);
+    }
+
+    /* Display / Hero: 60px system-ui, line-height 1.00 tight, -0.65px */
+    .va-hero-title {
+      font-family: var(--font-system);
+      font-size: 60px;
+      font-weight: 400;
+      line-height: 1.00;
+      letter-spacing: -0.65px;
+      color: var(--va-text-snow);
+      max-width: 980px;
+      margin: 0 auto 24px;
+    }
+
+    .va-hero-title .va-highlight {
+      color: var(--va-emerald);
+      filter: drop-shadow(0 0 10px rgba(0, 217, 146, 0.4));
+    }
+
+    .va-hero-deck {
+      font-size: 18px;
+      line-height: 1.6;
+      color: var(--va-text-parchment);
+      max-width: 740px;
+      margin: 0 auto 40px;
+    }
+
+    /* npm Install Command Block (Hero Primary Content) */
+    .va-npm-install-block {
+      background-color: var(--va-surface);
+      border: 1px solid var(--va-border-charcoal);
+      border-radius: var(--radius-6-4);
+      display: inline-flex;
+      align-items: center;
+      gap: 16px;
+      padding: 12px 20px;
+      font-family: var(--font-mono);
+      font-size: 14px;
+      box-shadow: var(--shadow-ambient);
+      margin-bottom: 48px;
+    }
+
+    .va-npm-prompt { color: var(--va-emerald); font-weight: 700; }
+    .va-npm-code { color: var(--va-text-snow); }
+    .va-copy-btn {
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid var(--va-border-charcoal);
+      color: var(--va-text-slate);
+      border-radius: var(--radius-4);
+      padding: 4px 10px;
+      font-size: 12px;
+      cursor: pointer;
+      transition: all 150ms ease;
+    }
+    .va-copy-btn:hover { color: var(--va-text-snow); border-color: var(--va-emerald); }
+
+    /* ─────────────────────────────────────────────────────────────
+       5. INFINITE LOGO MARQUEE
+       ───────────────────────────────────────────────────────────── */
+    .va-marquee-wrap {
+      overflow: hidden;
+      white-space: nowrap;
+      position: relative;
+      padding: 32px 0;
+      border-top: 1px solid var(--va-border-charcoal);
+      border-bottom: 1px solid var(--va-border-charcoal);
+      margin-bottom: 96px;
+    }
+
+    .va-marquee-track {
+      display: inline-flex;
+      align-items: center;
+      gap: 64px;
+      animation: marqueeScroll 35s linear infinite;
+    }
+
+    @keyframes marqueeScroll {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
+    }
+
+    .va-marquee-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-family: var(--font-system);
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--va-text-slate);
+      letter-spacing: 0.5px;
+    }
+
+    /* ─────────────────────────────────────────────────────────────
+       6. FEATURE SECTION (CODE LEFT / TEXT RIGHT ASYMMETRIC)
+       ───────────────────────────────────────────────────────────── */
+    .va-section {
+      padding-bottom: 96px;
+    }
+
+    .va-section-header {
+      margin-bottom: 48px;
+    }
+
+    /* Section Heading: 36px system-ui, line-height 1.11, letter-spacing -0.9px */
+    .va-section-title {
+      font-family: var(--font-system);
+      font-size: 36px;
+      font-weight: 400;
+      line-height: 1.11;
+      letter-spacing: -0.9px;
+      color: var(--va-text-snow);
+      margin-bottom: 12px;
+    }
+
+    .va-section-desc {
+      font-size: 18px;
+      color: var(--va-text-parchment);
+      max-width: 720px;
+    }
+
+    .va-feature-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+      gap: 28px;
+    }
+
+    /* Contained Cards with Warm Charcoal (#3d3a39) or Emerald Accent */
+    .va-card {
+      background-color: var(--va-surface);
+      border: 1px solid var(--va-border-charcoal);
+      border-radius: var(--radius-8);
+      padding: 32px;
+      box-shadow: var(--shadow-ambient);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: all 200ms ease;
+    }
+
+    /* Accent Card: 2px solid #00d992 */
+    .va-card.highlighted {
+      border: 2px solid var(--va-emerald);
+      box-shadow: 0 0 20px rgba(0, 217, 146, 0.15);
+    }
+
+    .va-card:hover:not(.highlighted) {
+      border-color: #555250;
+      transform: translateY(-2px);
+    }
+
+    /* Sub-heading: 24px system-ui, weight 700, -0.6px */
+    .va-card-title {
+      font-family: var(--font-system);
+      font-size: 24px;
+      font-weight: 700;
+      line-height: 1.33;
+      letter-spacing: -0.6px;
+      color: var(--va-text-snow);
+      margin-bottom: 12px;
+    }
+
+    .va-card-body {
+      font-size: 16px;
+      line-height: 1.6;
+      color: var(--va-text-parchment);
+      margin-bottom: 24px;
+    }
+
+    /* Terminal Code Block (SFMono-Regular) */
+    .va-code-box {
+      background-color: #0c0c0e;
+      border: 1px solid var(--va-border-charcoal);
+      border-radius: var(--radius-6-4);
+      padding: 16px;
+      font-family: var(--font-mono);
+      font-size: 13px;
+      line-height: 1.45;
+      color: #cfd3dc;
+      overflow-x: auto;
+    }
+
+    .va-syntax-keyword { color: var(--va-emerald); font-weight: 600; }
+    .va-syntax-func { color: var(--va-purple); }
+    .va-syntax-str { color: #80d280; }
+    .va-syntax-comment { color: var(--va-text-slate); font-style: italic; }
+
+    /* ─────────────────────────────────────────────────────────────
+       7. AGENT FLOW DIAGRAMS & BLUEPRINT DASHED LINES
+       ───────────────────────────────────────────────────────────── */
+    .va-workflow-box {
+      background-color: var(--va-surface);
+      border: 1px dashed var(--va-border-dashed); /* Blueprint dashed variant */
+      border-radius: var(--radius-8);
+      padding: 40px;
+      margin-top: 36px;
+    }
+
+    .va-flow-nodes {
+      display: flex;
+      align-items: center;
+      justify-content: space-around;
+      flex-wrap: wrap;
+      gap: 24px;
+    }
+
+    .va-node {
+      background-color: #171717;
+      border: 1px solid var(--va-border-charcoal);
+      border-radius: var(--radius-6);
+      padding: 18px 24px;
+      text-align: center;
+      min-width: 160px;
+    }
+
+    .va-node.active-node {
+      border-color: var(--va-emerald);
+      box-shadow: 0 0 12px rgba(0, 217, 146, 0.2);
+    }
+
+    .va-connector-line {
+      height: 2px;
+      flex: 1;
+      background: linear-gradient(90deg, var(--va-border-charcoal), var(--va-emerald), var(--va-border-charcoal));
+      min-width: 40px;
+    }
+
+    /* ─────────────────────────────────────────────────────────────
+       8. DESIGN SYSTEM SPECIFICATION LAB
+       ───────────────────────────────────────────────────────────── */
+    .va-lab-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 28px;
+    }
+
+    .va-lab-card {
+      background-color: var(--va-surface);
+      border: 1px solid var(--va-border-charcoal);
+      border-radius: var(--radius-8);
+      padding: 28px;
+    }
+
+    .va-lab-heading {
+      font-family: var(--font-system);
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--va-emerald);
+      margin-bottom: 16px;
+      border-bottom: 1px solid var(--va-border-charcoal);
+      padding-bottom: 8px;
+    }
+
+    .va-token-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 8px 0;
+      font-size: 14px;
+      border-bottom: 1px dashed rgba(61, 58, 57, 0.6);
+    }
+
+    .va-token-item code {
+      font-family: var(--font-mono);
+      color: var(--va-text-slate);
+    }
+
+    .va-swatch {
+      width: 16px;
+      height: 16px;
+      border-radius: 3px;
+      display: inline-block;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    /* ─────────────────────────────────────────────────────────────
+       9. COMMAND TERMINAL FOOTER
+       ───────────────────────────────────────────────────────────── */
+    .va-footer {
+      border-top: 1px solid var(--va-border-charcoal);
+      padding: 64px 0 40px;
+      background-color: var(--va-canvas);
+    }
+
+    .va-footer-grid {
+      display: grid;
+      grid-template-columns: 2fr repeat(3, 1fr);
+      gap: 40px;
+      margin-bottom: 48px;
+    }
+
+    @media (max-width: 768px) {
+      .va-footer-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .va-footer-heading {
+      font-size: 13px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      color: var(--va-text-slate);
+      margin-bottom: 16px;
+    }
+
+    .va-footer-links {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .va-footer-links a {
+      font-size: 14px;
+      color: var(--va-text-fog);
+      transition: color 150ms ease;
+    }
+
+    .va-footer-links a:hover {
+      color: var(--va-emerald);
+    }
+
+    .va-footer-bottom {
+      border-top: 1px solid var(--va-border-charcoal);
+      padding-top: 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 13px;
+      color: var(--va-text-slate);
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- 1. TOP COMMAND BAR -->
+  <header class="va-navbar">
+    <div class="va-container va-nav-inner">
+      <a href="#hero" class="va-brand">
+        <!-- Bolt Icon with Pulsing Emerald Glow -->
+        <svg class="va-bolt-icon" viewBox="0 0 24 24">
+          <path d="M13 2L3 14H12L11 22L21 10H12L13 2Z"/>
+        </svg>
+        <span>VoltAgent</span>
+      </a>
+
+      <ul class="va-nav-links">
+        <li><a href="#orchestration" class="va-nav-link">Orchestration</a></li>
+        <li><a href="#workflows" class="va-nav-link">Workflows</a></li>
+        <li><a href="#cli" class="va-nav-link">CLI Terminal</a></li>
+        <li><a href="#spec" class="va-nav-link">Design Tokens</a></li>
+      </ul>
+
+      <div class="va-nav-actions">
+        <div class="va-github-badge">
+          <span>★ GitHub</span>
+          <span style="color: var(--va-emerald); font-weight: 700;">8.4k</span>
+        </div>
+        <a href="#cli" class="va-btn-primary" style="padding: 8px 16px; font-size: 14px;">Deploy Agent</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- 2. HERO SECTION (SYSTEM-UI 60PX, COMPRESSED LINE-HEIGHT 1.00) -->
+  <section class="va-hero" id="hero">
+    <div class="va-container">
+      <div class="va-tag-overline">
+        <span>⚡</span>
+        <span>AI Agent Engineering Platform</span>
+      </div>
+
+      <!-- Compressed 60px Hero Headline -->
+      <h1 class="va-hero-title">
+        The command terminal for <span class="va-highlight">autonomous AI agents</span>
+      </h1>
+
+      <p class="va-hero-deck">
+        Build, evaluate, and orchestrate production-grade multi-agent swarms with high-performance TypeScript primitives and deterministic tool telemetry.
+      </p>
+
+      <!-- npm Install Code Block (Hero Content) -->
+      <div>
+        <div class="va-npm-install-block">
+          <span class="va-npm-prompt">$</span>
+          <span class="va-npm-code" id="installCmd">npm create voltagent-app@latest</span>
+          <button class="va-copy-btn" onclick="copyInstallCommand()">Copy</button>
+        </div>
+      </div>
+
+      <div style="display: flex; gap: 16px; justify-content: center;">
+        <a href="#workflows" class="va-btn-primary">Explore Agent Flow</a>
+        <a href="#spec" class="va-btn-ghost">Inspect System Tokens</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3. INFINITE LOGO MARQUEE -->
+  <div class="va-marquee-wrap">
+    <div class="va-marquee-track">
+      <div class="va-marquee-item"><span>✦ DEEPSEEK CORE</span></div>
+      <div class="va-marquee-item"><span>✦ ANTHROPIC CLAUDE</span></div>
+      <div class="va-marquee-item"><span>✦ OPENAI COMPUTE</span></div>
+      <div class="va-marquee-item"><span>✦ OLLAMA RUNTIME</span></div>
+      <div class="va-marquee-item"><span>✦ MISTRAL ENGINE</span></div>
+      <div class="va-marquee-item"><span>✦ HUGGING FACE INFERENCE</span></div>
+      <!-- Repeat for seamless scroll -->
+      <div class="va-marquee-item"><span>✦ DEEPSEEK CORE</span></div>
+      <div class="va-marquee-item"><span>✦ ANTHROPIC CLAUDE</span></div>
+      <div class="va-marquee-item"><span>✦ OPENAI COMPUTE</span></div>
+      <div class="va-marquee-item"><span>✦ OLLAMA RUNTIME</span></div>
+      <div class="va-marquee-item"><span>✦ MISTRAL ENGINE</span></div>
+      <div class="va-marquee-item"><span>✦ HUGGING FACE INFERENCE</span></div>
+    </div>
+  </div>
+
+  <!-- 4. ORCHESTRATION FEATURES & CARDS -->
+  <section class="va-section" id="orchestration">
+    <div class="va-container">
+      <div class="va-section-header">
+        <h2 class="va-section-title">Built for engineering precision</h2>
+        <p class="va-section-desc">
+          Cards contained by Warm Charcoal (#3d3a39) borders and powered by Emerald Signal Green (#00d992) active accents.
+        </p>
+      </div>
+
+      <div class="va-feature-grid">
+        <!-- Card 1: Highlighted Active Card (2px solid #00d992) -->
+        <div class="va-card highlighted">
+          <div>
+            <div style="font-size: 13px; font-family: var(--font-mono); color: var(--va-emerald); margin-bottom: 8px;">
+              FEATURE 01 • ACTIVE ORCHESTRATION
+            </div>
+            <h3 class="va-card-title">Deterministic Tool Calls</h3>
+            <p class="va-card-body">
+              Type-safe JSON schema generation with runtime validation guards against hallucinated parameters across any LLM model.
+            </p>
+          </div>
+          <div class="va-code-box">
+            <span class="va-syntax-keyword">const</span> agent = <span class="va-syntax-keyword">new</span> <span class="va-syntax-func">VoltAgent</span>({<br>
+            &nbsp;&nbsp;model: <span class="va-syntax-str">'claude-3-7-sonnet'</span>,<br>
+            &nbsp;&nbsp;tools: [codeSandbox, sqlQuery],<br>
+            &nbsp;&nbsp;telemetry: <span class="va-syntax-keyword">true</span><br>
+            });
+          </div>
+        </div>
+
+        <!-- Card 2: Standard Warm Charcoal Containment (1px solid #3d3a39) -->
+        <div class="va-card">
+          <div>
+            <div style="font-size: 13px; font-family: var(--font-mono); color: var(--va-text-slate); margin-bottom: 8px;">
+              FEATURE 02 • RUNTIME MEMORY
+            </div>
+            <h3 class="va-card-title">Sub-millisecond Vector Memory</h3>
+            <p class="va-card-body">
+              Embedded vector stores with dual L1 cache and persistent SQLite backends ensure agent conversations survive pod restarts.
+            </p>
+          </div>
+          <div class="va-code-box">
+            <span class="va-syntax-keyword">await</span> agent.<span class="va-syntax-func">recall</span>({<br>
+            &nbsp;&nbsp;namespace: <span class="va-syntax-str">'user_prefs'</span>,<br>
+            &nbsp;&nbsp;similarityThreshold: <span class="va-syntax-keyword">0.89</span><br>
+            });
+          </div>
+        </div>
+
+        <!-- Card 3: Standard Card -->
+        <div class="va-card">
+          <div>
+            <div style="font-size: 13px; font-family: var(--font-mono); color: var(--va-text-slate); margin-bottom: 8px;">
+              FEATURE 03 • EVALUATION
+            </div>
+            <h3 class="va-card-title">Real-time Swarm Telemetry</h3>
+            <p class="va-card-body">
+              Inspect token consumption, reasoning traces, latency percentiles, and multi-agent handshake messages in real-time.
+            </p>
+          </div>
+          <div class="va-code-box">
+            <span class="va-syntax-comment">// Output stream telemetry</span><br>
+            agent.<span class="va-syntax-func">on</span>(<span class="va-syntax-str">'swarm:step'</span>, (event) =&gt; {<br>
+            &nbsp;&nbsp;console.<span class="va-syntax-func">log</span>(event.step_index, event.cost);<br>
+            });
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 5. AGENT WORKFLOW BLUEPRINT (DASHED BORDERS) -->
+  <section class="va-section" id="workflows">
+    <div class="va-container">
+      <div class="va-section-header">
+        <h2 class="va-section-title">Multi-Agent Coordination Topology</h2>
+        <p class="va-section-desc">Dashed blueprint containment lines with green signal flow.</p>
+      </div>
+
+      <div class="va-workflow-box">
+        <div class="va-flow-nodes">
+          <div class="va-node">
+            <div style="font-size: 12px; color: var(--va-text-slate); font-family: var(--font-mono);">LEADER</div>
+            <div style="font-weight: 700; color: var(--va-text-snow); margin-top: 4px;">Planner Agent</div>
+          </div>
+          <div class="va-connector-line"></div>
+          <div class="va-node active-node">
+            <div style="font-size: 12px; color: var(--va-emerald); font-family: var(--font-mono);">EXECUTOR</div>
+            <div style="font-weight: 700; color: var(--va-text-snow); margin-top: 4px;">Coder Agent</div>
+          </div>
+          <div class="va-connector-line"></div>
+          <div class="va-node">
+            <div style="font-size: 12px; color: var(--va-text-slate); font-family: var(--font-mono);">AUDITOR</div>
+            <div style="font-weight: 700; color: var(--va-text-snow); margin-top: 4px;">Verifier Agent</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 6. DESIGN SYSTEM SPECIFICATION LAB -->
+  <section class="va-section" id="spec" style="border-top: 1px solid var(--va-border-charcoal); padding-top: 80px;">
+    <div class="va-container">
+      <div class="va-section-header">
+        <h2 class="va-section-title">VoltAgent Token Matrix &amp; Rules</h2>
+        <p class="va-section-desc">Abyss Black (#050507), Emerald Signal Green (#00d992), and Warm Charcoal (#3d3a39).</p>
+      </div>
+
+      <div class="va-lab-grid">
+        <!-- Palette Tokens -->
+        <div class="va-lab-card">
+          <h3 class="va-lab-heading">Color Palette Roles</h3>
+          <div class="va-token-item">
+            <span>Abyss Black (Canvas)</span>
+            <code><span class="va-swatch" style="background:#050507;"></span> #050507</code>
+          </div>
+          <div class="va-token-item">
+            <span>Carbon Surface</span>
+            <code><span class="va-swatch" style="background:#101010;"></span> #101010</code>
+          </div>
+          <div class="va-token-item">
+            <span>Emerald Signal Green</span>
+            <code><span class="va-swatch" style="background:#00d992;"></span> #00d992</code>
+          </div>
+          <div class="va-token-item">
+            <span>VoltAgent Mint</span>
+            <code><span class="va-swatch" style="background:#2fd6a1;"></span> #2fd6a1</code>
+          </div>
+          <div class="va-token-item">
+            <span>Warm Charcoal Border</span>
+            <code><span class="va-swatch" style="background:#3d3a39;"></span> #3d3a39</code>
+          </div>
+          <div class="va-token-item">
+            <span>Snow White Text</span>
+            <code><span class="va-swatch" style="background:#f2f2f2;"></span> #f2f2f2</code>
+          </div>
+          <div class="va-token-item">
+            <span>Warm Parchment</span>
+            <code><span class="va-swatch" style="background:#b8b3b0;"></span> #b8b3b0</code>
+          </div>
+        </div>
+
+        <!-- Typography -->
+        <div class="va-lab-card">
+          <h3 class="va-lab-heading">Typography &amp; Compression</h3>
+          <div class="va-token-item">
+            <span>Display Hero</span>
+            <span>60px • 400 • 1.00 lh</span>
+          </div>
+          <div class="va-token-item">
+            <span>Section Heading</span>
+            <span>36px • 400 • 1.11 lh</span>
+          </div>
+          <div class="va-token-item">
+            <span>Sub-heading</span>
+            <span>24px • 700 • 1.33 lh</span>
+          </div>
+          <div class="va-token-item">
+            <span>Overline Tracking</span>
+            <span>2.52px uppercase</span>
+          </div>
+          <div class="va-token-item">
+            <span>Headings Font</span>
+            <span>system-ui (instant render)</span>
+          </div>
+          <div class="va-token-item">
+            <span>Body Font</span>
+            <span>Inter (calt, rlig enabled)</span>
+          </div>
+          <div class="va-token-item">
+            <span>Code Font</span>
+            <span>SFMono-Regular (13–14px)</span>
+          </div>
+        </div>
+
+        <!-- Component States -->
+        <div class="va-lab-card" id="cli">
+          <h3 class="va-lab-heading">Interactive Command State</h3>
+          <p style="font-size: 14px; color: var(--va-text-parchment); margin-bottom: 16px;">
+            Simulate an agent dispatch to verify the VoltAgent Mint outline and focus rings.
+          </p>
+          <div style="display: flex; flex-direction: column; gap: 12px;">
+            <input type="text" id="cliInput" value="voltagent run --swarm=production" style="background: #0c0c0e; border: 1px solid var(--va-border-charcoal); border-radius: var(--radius-6); padding: 10px 14px; font-family: var(--font-mono); font-size: 13px; color: var(--va-mint); outline: none;" onfocus="this.style.borderColor='var(--va-mint)'" onblur="this.style.borderColor='var(--va-border-charcoal)'">
+            <button class="va-btn-primary" onclick="alert('VoltAgent task dispatched into autonomous execution loop!')">
+              ⚡ Execute Swarm Task
+            </button>
+            <button class="va-btn-ghost" onclick="document.getElementById('cliInput').value=''">
+              Clear Buffer
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 7. FOOTER -->
+  <footer class="va-footer">
+    <div class="va-container">
+      <div class="va-footer-grid">
+        <div>
+          <div class="va-brand" style="margin-bottom: 16px;">
+            <svg class="va-bolt-icon" viewBox="0 0 24 24">
+              <path d="M13 2L3 14H12L11 22L21 10H12L13 2Z"/>
+            </svg>
+            <span>VoltAgent</span>
+          </div>
+          <p style="font-size: 14px; color: var(--va-text-slate); line-height: 1.6; max-width: 340px;">
+            High-performance AI agent engineering framework with typed telemetry, distributed memory, and deterministic tool execution.
+          </p>
+        </div>
+
+        <div>
+          <div class="va-footer-heading">Platform</div>
+          <ul class="va-footer-links">
+            <li><a href="#">Agent Swarms</a></li>
+            <li><a href="#">Vector Memory</a></li>
+            <li><a href="#">Telemetry Dashboard</a></li>
+            <li><a href="#">CLI Reference</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <div class="va-footer-heading">Design Tokens</div>
+          <ul class="va-footer-links">
+            <li><a href="#">Abyss Black (#050507)</a></li>
+            <li><a href="#">Emerald Green (#00d992)</a></li>
+            <li><a href="#">Warm Charcoal (#3d3a39)</a></li>
+            <li><a href="#">VoltAgent Mint (#2fd6a1)</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <div class="va-footer-heading">Community</div>
+          <ul class="va-footer-links">
+            <li><a href="#">GitHub Repository</a></li>
+            <li><a href="#">Discord Server</a></li>
+            <li><a href="#">Documentation</a></li>
+            <li><a href="#">Status Page</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="va-footer-bottom">
+        <div>© 2026 VoltAgent Framework. All rights reserved. Open-design specification.</div>
+        <div style="display: flex; gap: 24px;">
+          <span>system-ui + Inter + SFMono</span>
+          <span>Single-Accent Precision</span>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    function copyInstallCommand() {
+      const text = document.getElementById('installCmd').textContent;
+      navigator.clipboard.writeText(text).then(() => {
+        alert('Copied to clipboard: ' + text);
+      });
+    }
+  </script>
+</body>
+</html>

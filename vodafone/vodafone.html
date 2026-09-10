@@ -1,0 +1,850 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vodafone — Global Telecom Brand &amp; Design System</title>
+  <meta name="description" content="Vodafone corporate web design system featuring monumental uppercase display type, iconic Vodafone Red chapter bands, two-tier button system, and institutional data surfaces.">
+
+  <!-- Inter as the certified open substitute for Vodafone corporate face with tightened display tracking -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+  <style>
+    /* ==========================================================================
+       VODAFONE DESIGN SYSTEM TOKENS — Exactly sampled from vodafone/DESIGN.md
+       ========================================================================== */
+    :root {
+      /* Primary Brand Color */
+      --color-vodafone-red: #e60000;
+      --color-deep-red: #ac1811;
+
+      /* Neutrals & Surfaces */
+      --color-white: #ffffff;
+      --color-light-neutral: #f2f2f2;
+      --color-charcoal: #25282b;       /* Charcoal Headline & Institutional Surface */
+      --color-body-grey: #7e7e7e;      /* Secondary Body Grey */
+      --color-form-grey: #333333;      /* Form Text Grey */
+      --color-disabled-grey: #bebebe;
+      --color-signal-blue: #3860be;    /* Inline link color */
+
+      /* Translucent Overlays */
+      --translucent-white-10: rgba(255, 255, 255, 0.1);
+      --translucent-white-25: rgba(255, 255, 255, 0.25);
+      --translucent-white-80: rgba(255, 255, 255, 0.8);
+
+      /* Typography */
+      --font-family: 'Inter', 'Vodafone', "Helvetica Neue", Arial, sans-serif;
+
+      /* Spacing Scale (8px base) */
+      --space-2xs: 2px;
+      --space-xs: 4px;
+      --space-sm: 8px;
+      --space-md: 12px;
+      --space-base: 16px;
+      --space-lg: 20px;
+      --space-xl: 24px;
+      --space-2xl: 32px;  /* Universal constant */
+      --space-3xl: 38px;  /* Universal constant */
+      --space-section: 80px;
+
+      /* Radii (Deliberate two-tier system) */
+      --radius-hairline: 1px;
+      --radius-button-tight: 2px;  /* 2px rectangles for utility/form */
+      --radius-card: 6px;          /* 6px for cards and images */
+      --radius-asymmetric: 0px 6px 0px 0px; /* Signature speech-mark curve */
+      --radius-glass-pill: 24px;
+      --radius-badge-pill: 32px;
+      --radius-cta-pill: 60px;     /* 60px pills for editorial CTAs */
+      --radius-circle: 50%;
+    }
+
+    /* Reset & Base Setup */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--color-white);
+      color: var(--color-charcoal);
+      font-family: var(--font-family);
+      font-size: 16px;
+      line-height: 1.38;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      overflow-x: hidden;
+    }
+
+    /* Zero-shadow and zero-gradient rule adherence */
+    button, .card, .panel {
+      box-shadow: none !important;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 1240px;
+      margin-left: auto;
+      margin-right: auto;
+      padding-left: var(--space-2xl);
+      padding-right: var(--space-2xl);
+    }
+
+    /* Top Navigation Bar */
+    .top-nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background-color: var(--color-white);
+      border-bottom: 1px solid var(--color-light-neutral);
+      height: 64px;
+      display: flex;
+      align-items: center;
+    }
+
+    .nav-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+    }
+
+    .logo-link {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+    }
+
+    /* Vodafone 40x40 Speech-mark Logo */
+    .speechmark-logo {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background-color: var(--color-vodafone-red);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .speechmark-logo svg {
+      width: 22px;
+      height: 22px;
+      fill: var(--color-white);
+    }
+
+    .brand-wordmark {
+      font-size: 20px;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      color: var(--color-charcoal);
+      text-transform: lowercase;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: var(--space-2xl);
+      list-style: none;
+      align-items: center;
+    }
+
+    .nav-links a {
+      color: var(--color-charcoal);
+      text-decoration: none;
+      font-size: 16px;
+      font-weight: 500;
+      transition: color 150ms ease;
+    }
+
+    .nav-links a:hover {
+      color: var(--color-vodafone-red);
+    }
+
+    /* Two-Tier Button System */
+
+    /* 1. Primary Red Rectangle (utility / form CTA: 2px radius) */
+    .btn-red-rect {
+      background-color: var(--color-vodafone-red);
+      color: var(--color-white);
+      font-family: var(--font-family);
+      font-size: 14.4px;
+      font-weight: 700;
+      letter-spacing: 0.144px;
+      padding: 12px 16px;
+      border: 1px solid var(--color-vodafone-red);
+      border-radius: var(--radius-button-tight);
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      transition: opacity 150ms ease;
+      white-space: nowrap;
+    }
+
+    .btn-red-rect:hover {
+      opacity: 0.9;
+    }
+
+    /* 2. Primary Red Pill (editorial content CTA: 60px radius) */
+    .btn-red-pill {
+      background-color: var(--color-vodafone-red);
+      color: var(--color-white);
+      font-family: var(--font-family);
+      font-size: 14.4px;
+      font-weight: 700;
+      letter-spacing: 0.144px;
+      padding: 16px 32px;
+      border: none;
+      border-radius: var(--radius-cta-pill);
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      transition: opacity 150ms ease;
+      white-space: nowrap;
+    }
+
+    .btn-red-pill:hover {
+      opacity: 0.9;
+    }
+
+    /* 3. Ghost White Rectangle (secondary utility: 2px radius) */
+    .btn-ghost-rect {
+      background-color: var(--color-white);
+      color: var(--color-form-grey);
+      font-family: var(--font-family);
+      font-size: 14.4px;
+      font-weight: 700;
+      padding: 12px 16px;
+      border: 1px solid var(--color-form-grey);
+      border-radius: var(--radius-button-tight);
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      transition: background-color 150ms ease;
+    }
+
+    .btn-ghost-rect:hover {
+      background-color: var(--color-light-neutral);
+    }
+
+    /* 4. Glass Pill (on dark imagery: 24px radius) */
+    .btn-glass-pill {
+      background-color: var(--translucent-white-10);
+      color: var(--color-white);
+      font-family: var(--font-family);
+      font-size: 14.4px;
+      font-weight: 700;
+      padding: 12px 24px;
+      border: 1px solid rgba(255, 255, 255, 0.4);
+      border-radius: var(--radius-glass-pill);
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      backdrop-filter: blur(4px);
+    }
+
+    .btn-glass-pill:hover {
+      background-color: rgba(255, 255, 255, 0.2);
+    }
+
+    /* Universal Page Rhythm: 1. Dark Atmospheric Hero */
+    .hero-banner {
+      background-color: var(--color-charcoal);
+      color: var(--color-white);
+      padding-top: 100px;
+      padding-bottom: 90px;
+      position: relative;
+    }
+
+    /* Monumental Uppercase Display (up to 144px, weight 800, tight negative tracking) */
+    .monumental-headline {
+      font-size: 96px; /* Scaled cleanly for responsive desktop */
+      font-weight: 800;
+      line-height: 0.88;
+      letter-spacing: -2px;
+      text-transform: uppercase;
+      margin-bottom: var(--space-2xl);
+    }
+
+    .hero-lead-text {
+      font-size: 20px;
+      font-weight: 400;
+      line-height: 1.45;
+      max-width: 680px;
+      color: rgba(255, 255, 255, 0.85);
+      margin-bottom: var(--space-2xl);
+    }
+
+    /* Universal Page Rhythm: 2. Vodafone Red Chapter Divider Band */
+    .vodafone-red-band {
+      width: 100%;
+      height: 64px;
+      background-color: var(--color-vodafone-red);
+      display: flex;
+      align-items: center;
+    }
+
+    /* Universal Page Rhythm: 3. White Editorial Canvas */
+    .editorial-section {
+      padding-top: var(--space-section);
+      padding-bottom: var(--space-section);
+      background-color: var(--color-white);
+    }
+
+    .section-eyebrow {
+      font-size: 14px;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      color: var(--color-vodafone-red);
+      margin-bottom: var(--space-sm);
+    }
+
+    .editorial-title {
+      font-size: 40px;
+      font-weight: 700;
+      line-height: 1.1;
+      margin-bottom: var(--space-2xl);
+      color: var(--color-charcoal);
+    }
+
+    /* Editorial News Cards (6px radius, no shadow) */
+    .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: var(--space-xl);
+      margin-bottom: var(--space-2xl);
+    }
+
+    .editorial-card {
+      background-color: var(--color-white);
+      border-radius: var(--radius-card);
+      overflow: hidden;
+      border: 1px solid var(--color-light-neutral);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .card-thumbnail-wrap {
+      width: 100%;
+      height: 200px;
+      background-color: #e2e8f0;
+      overflow: hidden;
+      border-radius: 6px 6px 0 0;
+    }
+
+    .card-thumbnail-wrap svg {
+      width: 100%;
+      height: 100%;
+    }
+
+    .card-body {
+      padding: var(--space-base);
+      display: flex;
+      flex-direction: column;
+      flex-grow: 1;
+    }
+
+    .card-meta-row {
+      display: flex;
+      align-items: center;
+      gap: var(--space-sm);
+      margin-bottom: var(--space-sm);
+    }
+
+    .card-date {
+      font-size: 14px;
+      color: var(--color-body-grey);
+    }
+
+    /* Outlined Red Pill Badge */
+    .tag-pill-outlined {
+      display: inline-flex;
+      border: 1px solid var(--color-vodafone-red);
+      border-radius: var(--radius-button-tight);
+      background: var(--translucent-white-80);
+      padding: 3px 8px;
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      color: var(--color-charcoal);
+    }
+
+    .card-heading {
+      font-size: 20px;
+      font-weight: 700;
+      line-height: 1.3;
+      margin-bottom: var(--space-md);
+      color: var(--color-charcoal);
+    }
+
+    .card-desc {
+      font-size: 15px;
+      color: var(--color-body-grey);
+      line-height: 1.5;
+      margin-bottom: var(--space-base);
+      flex-grow: 1;
+    }
+
+    .card-link {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--color-signal-blue);
+      text-decoration: underline;
+      cursor: pointer;
+    }
+
+    /* Asymmetric Corner Card */
+    .card-asymmetric {
+      border-radius: var(--radius-asymmetric);
+      border-top: 3px solid var(--color-vodafone-red);
+    }
+
+    /* Universal Page Rhythm: 4. Charcoal Institutional Data Panel (#25282b) */
+    .institutional-panel {
+      background-color: var(--color-charcoal);
+      color: var(--color-white);
+      padding-top: var(--space-section);
+      padding-bottom: var(--space-section);
+      position: relative;
+    }
+
+    /* Share Ticker Component */
+    .share-ticker-box {
+      border-bottom: 1px solid var(--translucent-white-25);
+      padding-bottom: var(--space-2xl);
+      margin-bottom: var(--space-2xl);
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+    }
+
+    .ticker-price {
+      font-size: 48px;
+      font-weight: 800;
+      letter-spacing: -1px;
+      line-height: 1.0;
+    }
+
+    .ticker-meta {
+      font-size: 14px;
+      color: var(--color-body-grey);
+    }
+
+    /* Global Impact Map with Rotated "IMPACT" Brand-mark */
+    .impact-map-container {
+      display: grid;
+      grid-template-columns: 80px 1fr;
+      gap: var(--space-2xl);
+      align-items: center;
+      margin-top: var(--space-2xl);
+      position: relative;
+    }
+
+    /* Signature Vertically Rotated "IMPACT" Wordmark in Vodafone Red */
+    .vertical-impact-label {
+      writing-mode: vertical-rl;
+      transform: rotate(180deg);
+      font-size: 70px;
+      font-weight: 800;
+      letter-spacing: 2px;
+      color: var(--color-vodafone-red);
+      user-select: none;
+      text-align: center;
+    }
+
+    .world-map-svg {
+      width: 100%;
+      height: 320px;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid var(--translucent-white-25);
+      border-radius: var(--radius-card);
+      padding: var(--space-xl);
+    }
+
+    /* Universal Page Rhythm: 5. Charcoal Footer (#25282b) */
+    .site-footer {
+      background-color: var(--color-charcoal);
+      border-top: 1px solid var(--translucent-white-25);
+      padding-top: 64px;
+      padding-bottom: 64px;
+      color: var(--color-white);
+    }
+
+    .footer-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: var(--space-2xl);
+      margin-bottom: var(--space-2xl);
+    }
+
+    .footer-col-title {
+      font-size: 16px;
+      font-weight: 800;
+      text-transform: uppercase;
+      margin-bottom: var(--space-base);
+    }
+
+    .footer-col-links {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-md);
+    }
+
+    .footer-col-links a {
+      color: rgba(255, 255, 255, 0.85);
+      text-decoration: none;
+      font-size: 14px;
+      transition: color 150ms ease;
+    }
+
+    .footer-col-links a:hover {
+      color: var(--color-vodafone-red);
+    }
+
+    .footer-bottom-row {
+      border-top: 1px solid var(--translucent-white-25);
+      padding-top: var(--space-2xl);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 12px;
+      color: var(--color-body-grey);
+    }
+
+    /* Modal / Form Test */
+    .vodafone-toast {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      background: var(--color-vodafone-red);
+      color: var(--color-white);
+      padding: 12px 24px;
+      font-weight: 700;
+      font-size: 14px;
+      border-radius: var(--radius-button-tight);
+      transform: translateY(100px);
+      opacity: 0;
+      transition: all 200ms ease;
+      z-index: 1000;
+    }
+
+    .vodafone-toast.show {
+      transform: translateY(0);
+      opacity: 1;
+    }
+
+    @media (max-width: 900px) {
+      .monumental-headline {
+        font-size: 56px;
+      }
+      .cards-grid, .footer-grid {
+        grid-template-columns: 1fr;
+      }
+      .impact-map-container {
+        grid-template-columns: 1fr;
+      }
+      .vertical-impact-label {
+        writing-mode: horizontal-tb;
+        transform: none;
+        font-size: 40px;
+        text-align: left;
+      }
+      .nav-links {
+        display: none;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Navigation Bar -->
+  <header class="top-nav">
+    <div class="container">
+      <div class="nav-inner">
+        <a href="#" class="logo-link">
+          <div class="speechmark-logo">
+            <svg viewBox="0 0 24 24">
+              <path d="M12 2C6.48 2 2 6.48 2 12c0 2.21.72 4.25 1.94 5.91L2 22l4.35-1.89C7.94 21.32 9.89 22 12 22c5.52 0 10-4.48 10-10S17.52 2 12 2zm-1 12H9v-2h2v2zm3 0h-2v-2h2v2zm-3-4H9V8h2v2zm3 0h-2V8h2v2z"/>
+            </svg>
+          </div>
+          <span class="brand-wordmark">vodafone</span>
+        </a>
+
+        <nav>
+          <ul class="nav-links">
+            <li><a href="#hero">Our Business</a></li>
+            <li><a href="#editorial">News &amp; Stories</a></li>
+            <li><a href="#investors">Investors</a></li>
+            <li><a href="#sustainability">Sustainable Business</a></li>
+          </ul>
+        </nav>
+
+        <div style="display: flex; gap: var(--space-md); align-items: center;">
+          <button class="btn-ghost-rect" onclick="showToast('Utility Action: Search Initiated')">
+            Search
+          </button>
+          <button class="btn-red-rect" onclick="showToast('Utility CTA: Cookies Accepted')">
+            Accept Cookies
+          </button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- 1. Dark Atmospheric Hero -->
+  <section class="hero-banner" id="hero">
+    <div class="container">
+      <div class="section-eyebrow" style="color: var(--color-vodafone-red);">
+        GLOBAL INFRASTRUCTURE &bull; EDITION 2026
+      </div>
+      <h1 class="monumental-headline">EVERYONE. CONNECTED.</h1>
+      <p class="hero-lead-text">
+        We build critical gigabit networks and digital platforms that empower 330 million citizens across Europe and Africa. Our single mission is connecting for a better future.
+      </p>
+
+      <div style="display: flex; gap: var(--space-base); align-items: center; flex-wrap: wrap;">
+        <!-- Two-tier Button 2: Primary Red Pill (Editorial CTA: 60px radius) -->
+        <button class="btn-red-pill" onclick="showToast('Editorial CTA Triggered (#e60000 60px Pill)')">
+          Explore Connecting People
+        </button>
+        <!-- Two-tier Button 4: Glass Pill (on dark hero imagery) -->
+        <button class="btn-glass-pill" onclick="showToast('Glass Pill Secondary Action')">
+          View Corporate Presentation
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- 2. Vodafone Red Full-Width Chapter Band (Signature #e60000) -->
+  <div class="vodafone-red-band">
+    <div class="container" style="display: flex; justify-content: space-between; align-items: center;">
+      <span style="color: #FFFFFF; font-weight: 800; font-size: 14px; letter-spacing: 1px; text-transform: uppercase;">
+        CHAPTER 01 // EDITORIAL CANVAS
+      </span>
+      <span style="color: #FFFFFF; font-weight: 700; font-size: 14px;">
+        VODAFONE RED BAND &bull; 64PX DESKTOP
+      </span>
+    </div>
+  </div>
+
+  <!-- 3. White Editorial Canvas (News, Cards, Asymmetric Corners) -->
+  <section class="editorial-section" id="editorial">
+    <div class="container">
+      <div class="section-eyebrow">LATEST NEWS</div>
+      <h2 class="editorial-title">Shaping Digital Societies with Purpose</h2>
+
+      <div class="cards-grid">
+        <!-- News Card 1 -->
+        <article class="editorial-card">
+          <div class="card-thumbnail-wrap">
+            <!-- Documentary Image Mockup -->
+            <svg viewBox="0 0 400 225">
+              <rect width="400" height="225" fill="#1e293b"/>
+              <circle cx="200" cy="112" r="60" fill="#38bdf8" opacity="0.4"/>
+              <path d="M50,180 Q200,120 350,180" stroke="#e60000" stroke-width="4" fill="none"/>
+            </svg>
+          </div>
+          <div class="card-body">
+            <div class="card-meta-row">
+              <span class="card-date">14 APR 2026</span>
+              <span class="tag-pill-outlined">EMPOWERING PEOPLE</span>
+            </div>
+            <h3 class="card-heading">Expanding Subsea Optical Fiber Backbone Across Three Continents</h3>
+            <p class="card-desc">
+              Subsea fiber consortium delivers high-throughput resilience linking European exchanges with emerging digital corridors.
+            </p>
+            <a class="card-link" onclick="showToast('Opening article dispatch')">Read Article &rarr;</a>
+          </div>
+        </article>
+
+        <!-- News Card 2 (Asymmetric Corner Card) -->
+        <article class="editorial-card card-asymmetric">
+          <div class="card-thumbnail-wrap">
+            <svg viewBox="0 0 400 225">
+              <rect width="400" height="225" fill="#0f172a"/>
+              <circle cx="280" cy="80" r="40" fill="#22c55e" opacity="0.3"/>
+              <rect x="60" y="140" width="280" height="40" fill="#334155"/>
+            </svg>
+          </div>
+          <div class="card-body">
+            <div class="card-meta-row">
+              <span class="card-date">02 MAY 2026</span>
+              <span class="tag-pill-outlined">SUSTAINABILITY</span>
+            </div>
+            <h3 class="card-heading">Zero-Carbon Base Stations Powered by Micro-Solar &amp; Hydrogen Storage</h3>
+            <p class="card-desc">
+              Pioneering off-grid rural base stations operating continuously on 100% renewable self-generated microgrid power.
+            </p>
+            <a class="card-link" onclick="showToast('Opening sustainability paper')">Read Article &rarr;</a>
+          </div>
+        </article>
+
+        <!-- News Card 3 -->
+        <article class="editorial-card">
+          <div class="card-thumbnail-wrap">
+            <svg viewBox="0 0 400 225">
+              <rect width="400" height="225" fill="#18181b"/>
+              <polygon points="120,60 280,60 200,180" fill="#e60000" opacity="0.6"/>
+            </svg>
+          </div>
+          <div class="card-body">
+            <div class="card-meta-row">
+              <span class="card-date">18 JUN 2026</span>
+              <span class="tag-pill-outlined">ENTERPRISE CLOUD</span>
+            </div>
+            <h3 class="card-heading">Quantum-Safe Encryption Deployment on Global Core Network</h3>
+            <p class="card-desc">
+              Post-quantum cryptography protocols active across live European inter-datacenter fiber links.
+            </p>
+            <a class="card-link" onclick="showToast('Opening security release')">Read Article &rarr;</a>
+          </div>
+        </article>
+      </div>
+
+      <!-- Action Row -->
+      <div style="display: flex; justify-content: center; margin-top: var(--space-xl);">
+        <button class="btn-red-pill" onclick="showToast('Loading additional news stories')">
+          View All Corporate Dispatches
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- 4. Charcoal Institutional Panel (#25282b): Share Ticker & Impact Map -->
+  <section class="institutional-panel" id="investors">
+    <div class="container">
+      <div class="section-eyebrow" style="color: var(--color-vodafone-red);">
+        INVESTOR RELATIONS // FINANCIAL METRICS
+      </div>
+
+      <!-- Share Ticker -->
+      <div class="share-ticker-box">
+        <div>
+          <div style="font-size: 14px; text-transform: uppercase; color: var(--color-body-grey); margin-bottom: 4px;">
+            VODAFONE GROUP PLC (LSE: VOD)
+          </div>
+          <div class="ticker-price">116.05 GBX <span style="font-size: 24px; color: #22c55e;">+1.45%</span></div>
+        </div>
+        <div class="ticker-meta">
+          15-MIN DELAYED &bull; 10 SEP 2026 16:35 BST &bull; VOLUME: 42.8M
+        </div>
+      </div>
+
+      <!-- Global Impact Map Section with Rotated "IMPACT" Brand-mark -->
+      <div id="sustainability">
+        <div style="display: flex; justify-content: space-between; align-items: baseline; margin-top: var(--space-2xl);">
+          <h2 style="font-size: 32px; font-weight: 700; color: #FFFFFF;">Global Geographic Footprint</h2>
+          <span style="font-size: 14px; color: var(--color-body-grey);">22 OPERATING MARKETS &bull; 48 PARTNER NETWORKS</span>
+        </div>
+
+        <div class="impact-map-container">
+          <!-- Vertically-rotated brand word "IMPACT" in Vodafone Red -->
+          <div class="vertical-impact-label">IMPACT</div>
+
+          <div class="world-map-svg">
+            <svg width="100%" height="100%" viewBox="0 0 900 280">
+              <!-- World Continents Simplified Silhouette -->
+              <path d="M150,80 Q200,60 250,110 Q280,180 220,240 Q160,200 130,140 Z" fill="#383d42"/>
+              <path d="M420,60 Q520,40 560,90 Q540,150 480,180 Q440,140 410,90 Z" fill="#383d42"/>
+              <path d="M450,150 Q520,150 510,240 Q460,260 440,210 Z" fill="#383d42"/>
+              <path d="M600,60 Q760,40 820,120 Q780,200 680,180 Q620,120 590,80 Z" fill="#383d42"/>
+              <!-- Operational Red Pins (#e60000) -->
+              <circle cx="460" cy="85" r="7" fill="#e60000"/>
+              <circle cx="475" cy="180" r="7" fill="#e60000"/>
+              <circle cx="490" cy="220" r="7" fill="#e60000"/>
+              <circle cx="210" cy="130" r="7" fill="#e60000"/>
+              <circle cx="710" cy="120" r="7" fill="#e60000"/>
+              <!-- Map Label -->
+              <text x="30" y="40" fill="#FFFFFF" font-size="14" font-weight="700">SUBSEA CABLE TERMINATION HUBS</text>
+            </svg>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 5. Universal Charcoal Footer (#25282b) -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div>
+          <div class="footer-col-title">Our Company</div>
+          <ul class="footer-col-links">
+            <li><a href="#">About Vodafone Group</a></li>
+            <li><a href="#">Leadership &amp; Governance</a></li>
+            <li><a href="#">Strategy &amp; Innovation</a></li>
+            <li><a href="#">Careers</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <div class="footer-col-title">Investors</div>
+          <ul class="footer-col-links">
+            <li><a href="#">Shareholder Information</a></li>
+            <li><a href="#">Financial Results &amp; Reports</a></li>
+            <li><a href="#">Regulatory News Service</a></li>
+            <li><a href="#">Analyst Consensus</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <div class="footer-col-title">Vodafone Sites</div>
+          <ul class="footer-col-links">
+            <li><a href="#">Vodafone Business</a></li>
+            <li><a href="#">Vodafone Foundation</a></li>
+            <li><a href="#">Global Procurement</a></li>
+            <li><a href="#">Partner Markets</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <div class="footer-col-title">Design System Tokens</div>
+          <ul class="footer-col-links" style="font-family: monospace; font-size: 13px;">
+            <li style="color: var(--color-vodafone-red);">Brand Red: #e60000</li>
+            <li>Charcoal: #25282b</li>
+            <li>Signal Blue: #3860be</li>
+            <li>Body Grey: #7e7e7e</li>
+            <li>Form Grey: #333333</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="footer-bottom-row">
+        <div style="display: flex; align-items: center; gap: 16px;">
+          <div class="speechmark-logo" style="width: 32px; height: 32px;">
+            <svg viewBox="0 0 24 24" style="width: 18px; height: 18px;"><path d="M12 2C6.48 2 2 6.48 2 12c0 2.21.72 4.25 1.94 5.91L2 22l4.35-1.89C7.94 21.32 9.89 22 12 22c5.52 0 10-4.48 10-10S17.52 2 12 2z"/></svg>
+          </div>
+          <span>&copy; Vodafone Group Plc 2026. All rights reserved.</span>
+        </div>
+        <div>SPEC: PRODUCTION VODAFONE DESIGN SYSTEM REV 2026.09</div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Toast Notification -->
+  <div class="vodafone-toast" id="vodafoneToast">Action completed</div>
+
+  <script>
+    function showToast(msg) {
+      const toast = document.getElementById('vodafoneToast');
+      toast.textContent = msg;
+      toast.classList.add('show');
+      setTimeout(() => {
+        toast.classList.remove('show');
+      }, 2500);
+    }
+  </script>
+</body>
+</html>

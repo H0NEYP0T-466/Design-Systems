@@ -1,0 +1,558 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Apple — Innovation in Pro Silicon and Titanium</title>
+  <meta name="description" content="Apple design system implementation: Absolute Black #000000 alternating with Pale Apple Gray #f5f5f7, Action Blue #0071e3, SF Pro typography metrics, and cinematic product showcase." />
+
+  <!-- Typography: Inter Tight for Display & Inter for Text -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    /* ─────────────────────────────────────────────────────────────────
+       APPLE DESIGN SYSTEM TOKENS
+       Source: open-design/design-systems/apple/DESIGN.md
+       ───────────────────────────────────────────────────────────────── */
+    :root {
+      --black: #000000;
+      --ink: #1d1d1f;
+      --gray-pale: #f5f5f7;
+      --white: #ffffff;
+      --graphite-a: #272729;
+      --graphite-b: #1d1d1f;
+
+      --blue-action: #0071e3;
+      --blue-action-hover: #0077ed;
+      --blue-link: #0066cc;
+      --blue-lum: #2997ff;
+
+      --neutral-secondary: #6e6e73;
+      --border-soft: #d2d2d7;
+      --border-mid: #86868b;
+
+      --font-display: "Inter Tight", -apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif;
+      --font-body: "Inter", -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif;
+
+      --radius-btn: 980px;
+      --radius-card: 20px;
+      --radius-tile: 28px;
+
+      --transition-base: 0.2s cubic-bezier(0.2, 0, 0, 1);
+    }
+
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      background-color: var(--black);
+      color: var(--ink);
+      font-family: var(--font-body);
+      font-size: 17px;
+      line-height: 1.47;
+      letter-spacing: -0.37px;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* 1. APPLE GLOBAL NAVIGATION (Quiet Thin Chrome) */
+    .apple-nav {
+      height: 48px;
+      background: rgba(22, 22, 23, 0.88);
+      backdrop-filter: saturate(180%) blur(20px);
+      -webkit-backdrop-filter: saturate(180%) blur(20px);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    }
+    .apple-nav-inner {
+      max-width: 1024px;
+      margin-inline: auto;
+      padding-inline: 22px;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .apple-logo-link {
+      color: rgba(255, 255, 255, 0.85);
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      transition: color var(--transition-base);
+    }
+    .apple-logo-link:hover {
+      color: #ffffff;
+    }
+    .nav-items {
+      display: flex;
+      align-items: center;
+      gap: 32px;
+      list-style: none;
+    }
+    @media (max-width: 768px) {
+      .nav-items { display: none; }
+    }
+    .nav-items a {
+      color: rgba(255, 255, 255, 0.8);
+      text-decoration: none;
+      font-size: 12px;
+      font-weight: 400;
+      letter-spacing: -0.1px;
+      transition: color var(--transition-base);
+    }
+    .nav-items a:hover {
+      color: #ffffff;
+    }
+
+    /* 2. CINEMATIC HERO CHAPTER (Absolute Black Canvas #000000) */
+    .hero-cinematic {
+      background-color: var(--black);
+      color: #ffffff;
+      padding-top: 72px;
+      padding-bottom: 96px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero-container {
+      max-width: 1024px;
+      margin-inline: auto;
+      padding-inline: 24px;
+    }
+    .hero-eyebrow {
+      font-size: 21px;
+      font-weight: 600;
+      color: #f5f5f7;
+      margin-bottom: 10px;
+      letter-spacing: -0.2px;
+    }
+    .hero-headline {
+      font-family: var(--font-display);
+      font-size: clamp(48px, 7vw, 84px);
+      font-weight: 700;
+      line-height: 1.05;
+      letter-spacing: -1.2px;
+      color: #ffffff;
+      margin-bottom: 16px;
+    }
+    .hero-subhead {
+      font-size: clamp(22px, 3.2vw, 28px);
+      font-weight: 500;
+      color: #a1a1a6;
+      margin-bottom: 32px;
+      letter-spacing: -0.2px;
+    }
+    .hero-actions {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      margin-bottom: 60px;
+    }
+
+    /* Apple Buttons */
+    .btn-apple-primary {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--blue-action);
+      color: #ffffff;
+      font-size: 14px;
+      font-weight: 500;
+      letter-spacing: -0.2px;
+      padding: 10px 22px;
+      border-radius: var(--radius-btn);
+      text-decoration: none;
+      transition: background var(--transition-base), transform var(--transition-base);
+    }
+    .btn-apple-primary:hover {
+      background: var(--blue-action-hover);
+    }
+    .btn-apple-ghost {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: transparent;
+      color: var(--blue-lum);
+      font-size: 14px;
+      font-weight: 500;
+      border: 1px solid var(--blue-lum);
+      padding: 9px 20px;
+      border-radius: var(--radius-btn);
+      text-decoration: none;
+      transition: all var(--transition-base);
+    }
+    .btn-apple-ghost:hover {
+      background: var(--blue-lum);
+      color: #000000;
+    }
+
+    /* Product Hardware Silhouette Simulation */
+    .hardware-showcase-card {
+      max-width: 860px;
+      margin: 0 auto;
+      height: 440px;
+      border-radius: var(--radius-tile);
+      background: radial-gradient(circle at center, #1c1c1e 0%, #000000 85%);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+    .titanium-ring {
+      width: 220px;
+      height: 220px;
+      border-radius: 50%;
+      border: 6px solid #8e8d89;
+      box-shadow: 0 0 60px rgba(255, 255, 255, 0.08), inset 0 0 30px rgba(0, 0, 0, 0.8);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(145deg, #2b2b2d, #141415);
+    }
+    .titanium-core-label {
+      font-family: var(--font-display);
+      font-size: 24px;
+      font-weight: 700;
+      color: #e5e5ea;
+      letter-spacing: -0.5px;
+    }
+    .hardware-footnote {
+      position: absolute;
+      bottom: 24px;
+      font-size: 13px;
+      color: #86868b;
+      letter-spacing: -0.1px;
+    }
+
+    /* 3. LIGHT CHAPTER (Pale Apple Gray Canvas #f5f5f7) */
+    .chapter-light {
+      background-color: var(--gray-pale);
+      color: var(--ink);
+      padding-block: 96px;
+      border-top: 1px solid rgba(255, 255, 255, 0.06);
+    }
+    .section-headline-light {
+      font-family: var(--font-display);
+      font-size: clamp(38px, 5vw, 56px);
+      font-weight: 700;
+      line-height: 1.07;
+      letter-spacing: -0.5px;
+      text-align: center;
+      color: var(--ink);
+      margin-bottom: 12px;
+    }
+    .section-sub-light {
+      font-size: 21px;
+      color: var(--neutral-secondary);
+      text-align: center;
+      max-width: 600px;
+      margin: 0 auto 56px;
+      letter-spacing: -0.2px;
+    }
+
+    /* 2-Column Bento Feature Cards */
+    .bento-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      max-width: 1080px;
+      margin: 0 auto;
+    }
+    @media (max-width: 860px) {
+      .bento-grid { grid-template-columns: 1fr; }
+    }
+    .bento-tile {
+      background: var(--white);
+      border-radius: var(--radius-tile);
+      padding: 48px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      min-height: 380px;
+    }
+    .tile-eyebrow {
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--neutral-secondary);
+      margin-bottom: 12px;
+    }
+    .tile-title {
+      font-family: var(--font-display);
+      font-size: 32px;
+      font-weight: 700;
+      letter-spacing: -0.4px;
+      color: var(--ink);
+      margin-bottom: 14px;
+    }
+    .tile-body {
+      font-size: 16px;
+      color: var(--neutral-secondary);
+      line-height: 1.5;
+    }
+
+    /* Interactive Color Swatch Bar */
+    .swatches-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-top: 28px;
+    }
+    .swatch-circle {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      cursor: pointer;
+      border: 2px solid transparent;
+      transition: transform var(--transition-base);
+    }
+    .swatch-circle:hover {
+      transform: scale(1.15);
+    }
+    .swatch-circle.active {
+      box-shadow: 0 0 0 2px var(--blue-action);
+    }
+    .swatch-natural { background: #8e8d89; }
+    .swatch-desert { background: #c5a98d; }
+    .swatch-white { background: #e3e4e5; border-color: #d2d2d7; }
+    .swatch-black { background: #3b3a39; }
+
+    /* 4. APPLE FOOTER (Dense Typography & Legal Disclaimers) */
+    .apple-footer {
+      background: var(--gray-pale);
+      color: var(--neutral-secondary);
+      font-size: 12px;
+      line-height: 1.4;
+      padding-block: 40px 32px;
+      border-top: 1px solid var(--border-soft);
+    }
+    .footer-disclaimers {
+      border-bottom: 1px solid var(--border-soft);
+      padding-bottom: 24px;
+      margin-bottom: 24px;
+    }
+    .footer-disclaimers ol {
+      padding-left: 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .footer-directory {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 20px;
+      padding-bottom: 28px;
+      border-bottom: 1px solid var(--border-soft);
+    }
+    @media (max-width: 800px) {
+      .footer-directory { grid-template-columns: repeat(2, 1fr); }
+    }
+    .footer-col-title {
+      font-weight: 700;
+      color: var(--ink);
+      margin-bottom: 12px;
+    }
+    .footer-directory ul {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .footer-directory a {
+      color: var(--neutral-secondary);
+      text-decoration: none;
+      transition: color var(--transition-base);
+    }
+    .footer-directory a:hover {
+      color: var(--ink);
+    }
+    .footer-legal-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-top: 18px;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- 1. GLOBAL NAVIGATION -->
+  <nav class="apple-nav">
+    <div class="apple-nav-inner">
+      <a href="#hero" class="apple-logo-link" aria-label="Apple Home">
+        <svg width="15" height="18" viewBox="0 0 170 170" fill="currentColor">
+          <path d="M150.37 130.25c-2.45 5.66-5.35 10.87-8.71 15.66-4.58 6.53-8.33 11.05-11.22 13.56-4.48 4.12-9.28 6.23-14.42 6.35-3.69 0-8.14-1.05-13.32-3.18-5.19-2.12-9.97-3.17-14.34-3.17-4.58 0-9.49 1.05-14.75 3.17-5.26 2.13-9.5 3.24-12.74 3.35-4.35.13-9.16-1.9-14.42-6.08-3.7-3.04-7.7-7.88-12.01-14.52-6.3-9.79-11.2-20.91-14.7-33.37-3.5-12.46-5.25-24.32-5.25-35.58 0-14.48 3.5-26.69 10.5-36.63 7-9.94 15.86-14.99 26.58-15.15 4.56 0 9.87 1.25 15.93 3.75 6.06 2.5 10.23 3.75 12.51 3.75 2.17 0 6.6-1.3 13.29-3.9 6.69-2.6 12.21-3.79 16.56-3.56 12.5.64 22.38 5.17 29.64 13.59-10.97 6.63-16.33 15.74-16.08 27.33.25 9.02 3.65 16.8 10.2 23.34 6.55 6.54 14.55 10.3 24 11.29-2.17 6.74-4.89 13.53-8.16 20.37zM119.22 31.84c0-7.39 2.65-14.28 7.95-20.67 5.3-6.39 11.96-10.42 19.98-12.09.22 1.3.33 2.5.33 3.6 0 7.39-2.77 14.48-8.31 21.27-5.54 6.79-12.18 10.79-19.95 12-0.22-1.3-0.33-2.5-0.33-4.11z"/>
+        </svg>
+      </a>
+
+      <ul class="nav-items">
+        <li><a href="#">Store</a></li>
+        <li><a href="#">Mac</a></li>
+        <li><a href="#">iPad</a></li>
+        <li><a href="#">iPhone</a></li>
+        <li><a href="#">Watch</a></li>
+        <li><a href="#">AirPods</a></li>
+        <li><a href="#">TV &amp; Home</a></li>
+        <li><a href="#">Entertainment</a></li>
+        <li><a href="#">Support</a></li>
+      </ul>
+
+      <div style="display: flex; gap: 14px; align-items: center;">
+        <a href="00_Index.md" style="color: rgba(255,255,255,0.8); font-size: 12px; text-decoration: none;">Index</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- 2. CINEMATIC BLACK HERO CHAPTER -->
+  <header id="hero" class="hero-cinematic">
+    <div class="hero-container">
+      <div class="hero-eyebrow">iPhone 17 Pro</div>
+      <h1 class="hero-headline">All Pro. All Titanium.</h1>
+      <p class="hero-subhead">Engineered for extreme performance with the A19 Pro silicon architecture.</p>
+
+      <div class="hero-actions">
+        <a href="#store" class="btn-apple-primary">Buy</a>
+        <a href="#features" class="btn-apple-ghost">Learn more &gt;</a>
+      </div>
+
+      <!-- Hardware Silhouette Mockup -->
+      <div class="hardware-showcase-card">
+        <div class="titanium-ring">
+          <span class="titanium-core-label">A19 PRO</span>
+        </div>
+        <div class="hardware-footnote">
+          Forged in Grade 5 Titanium · Available in 4 Precision Finishes
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- 3. PALE GRAY MERCHANDISING CHAPTER -->
+  <section id="features" class="chapter-light">
+    <div class="hero-container">
+      <h2 class="section-headline-light">Pro Design Language in Focus.</h2>
+      <p class="section-sub-light">Precision white space, SF Pro hierarchy, and material-driven interface clarity.</p>
+
+      <!-- 2-Column Bento Grid -->
+      <div class="bento-grid">
+        <!-- Tile 1 -->
+        <article class="bento-tile">
+          <div>
+            <div class="tile-eyebrow">Grade 5 Titanium</div>
+            <h3 class="tile-title">Machined with sub-micron precision.</h3>
+            <p class="tile-body">
+              The lighter, stronger aerospace-grade titanium frame features a refined brushed texture and contoured edges for the most comfortable feel ever in hand.
+            </p>
+          </div>
+          <div class="swatches-row">
+            <span class="swatch-circle swatch-natural active" title="Natural Titanium"></span>
+            <span class="swatch-circle swatch-desert" title="Desert Titanium"></span>
+            <span class="swatch-circle swatch-white" title="White Titanium"></span>
+            <span class="swatch-circle swatch-black" title="Black Titanium"></span>
+          </div>
+        </article>
+
+        <!-- Tile 2 -->
+        <article class="bento-tile">
+          <div>
+            <div class="tile-eyebrow">Pro Silicon Architecture</div>
+            <h3 class="tile-title">Next-generation hardware neural engine.</h3>
+            <p class="tile-body">
+              Ray tracing performance accelerates by up to 2x with dedicated machine learning cores, powering real-time local agentic processing at sub-millisecond intervals.
+            </p>
+          </div>
+          <div style="margin-top: 24px;">
+            <a href="#store" style="color: var(--blue-link); font-weight: 600; text-decoration: none; font-size: 15px;">
+              Explore the silicon benchmarks &gt;
+            </a>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- 4. APPLE DENSE COLOPHON FOOTER -->
+  <footer class="apple-footer">
+    <div class="hero-container">
+      <div class="footer-disclaimers">
+        <ol>
+          <li>Trade-in values will vary based on the condition, year, and configuration of your eligible trade-in device. Not all devices are eligible for credit.</li>
+          <li>Battery life claim refers to larger models. All battery claims depend on network configuration and many other factors; actual results will vary.</li>
+        </ol>
+      </div>
+
+      <div class="footer-directory">
+        <div>
+          <div class="footer-col-title">Shop and Learn</div>
+          <ul>
+            <li><a href="#">Store</a></li>
+            <li><a href="#">Mac</a></li>
+            <li><a href="#">iPad</a></li>
+            <li><a href="#">iPhone</a></li>
+            <li><a href="#">Watch</a></li>
+          </ul>
+        </div>
+        <div>
+          <div class="footer-col-title">Account</div>
+          <ul>
+            <li><a href="#">Manage Your Apple ID</a></li>
+            <li><a href="#">Apple Store Account</a></li>
+            <li><a href="#">iCloud.com</a></li>
+          </ul>
+        </div>
+        <div>
+          <div class="footer-col-title">Entertainment</div>
+          <ul>
+            <li><a href="#">Apple TV+</a></li>
+            <li><a href="#">Apple Music</a></li>
+            <li><a href="#">Apple Arcade</a></li>
+          </ul>
+        </div>
+        <div>
+          <div class="footer-col-title">Apple Store</div>
+          <ul>
+            <li><a href="#">Find a Store</a></li>
+            <li><a href="#">Genius Bar</a></li>
+            <li><a href="#">Today at Apple</a></li>
+          </ul>
+        </div>
+        <div>
+          <div class="footer-col-title">About Apple</div>
+          <ul>
+            <li><a href="#">Newsroom</a></li>
+            <li><a href="#">Apple Leadership</a></li>
+            <li><a href="#">Career Opportunities</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="footer-legal-bar">
+        <div>
+          Copyright &copy; 2026 Apple Inc. All rights reserved.
+        </div>
+        <div>
+          <a href="00_Index.md" style="color: var(--blue-link); text-decoration: none;">← Master Design Index</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>

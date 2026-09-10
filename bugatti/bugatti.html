@@ -1,0 +1,1155 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>BUGATTI — Pour L'Éternité | Official Design System Website</title>
+  <meta name="description" content="Bugatti.com authentic design system implementation. Pure cinema-black canvas, monumental Bugatti Display architecture, monochrome austerity, and precision telemetry monospace." />
+
+  <!-- Fonts: Big Shoulders Display + Space Mono + Inter as authentic fallbacks for Bugatti proprietary trio -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@400&family=Inter:wght@400&family=Space+Mono:wght@400&display=swap" rel="stylesheet">
+
+  <style>
+    /* ─────────────────────────────────────────────────────────────────
+       BUGATTI OFFICIAL DESIGN TOKENS (from DESIGN.md)
+       Pure cinema-black canvas, Showroom white text, Silver Mist gray.
+       Zero accent colors. Zero drop shadows. Zero decorative gradients.
+       Radii: 0px, 6px, 9999px. Spacing: 4, 6, 12, 36, 48, 64px.
+       Display scale: up to 288px ALL CAPS. All font weights: 400.
+       ───────────────────────────────────────────────────────────────── */
+    :root {
+      /* Primary Surfaces & Canvas */
+      --canvas: #000000;
+      --surface: #000000;
+      --text-primary: #ffffff;
+      --text-tertiary: #999999;
+      --border-primary: #ffffff;
+      --border-subtle: #999999;
+
+      /* Typography Families */
+      --font-display: "Bugatti Display", "Big Shoulders Display", ui-sans-serif, system-ui, sans-serif;
+      --font-mono: "Bugatti Monospace", "Space Mono", ui-monospace, monospace;
+      --font-body: "Bugatti Text Regular", "Inter", ui-sans-serif, sans-serif;
+
+      /* Spacing Scale (Tokens: 4, 6, 12, 36, 48, 64px) */
+      --space-4: 4px;
+      --space-6: 6px;
+      --space-12: 12px;
+      --space-36: 36px;
+      --space-48: 48px;
+      --space-64: 64px;
+
+      /* Border Radius (Tokens: 0, 6px, 9999px ONLY) */
+      --radius-none: 0px;
+      --radius-utility: 6px;
+      --radius-pill: 9999px;
+
+      /* Max Container Width (Breakpoints up to 1720px) */
+      --container-max: 1720px;
+
+      /* Transition */
+      --ease-bugatti: 250ms cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      background-color: var(--canvas);
+      color: var(--text-primary);
+      font-size: 16px;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    body {
+      background: var(--canvas);
+      color: var(--text-primary);
+      font-family: var(--font-body);
+      font-weight: 400;
+      line-height: 1.50;
+      overflow-x: hidden;
+    }
+
+    /* All weights in Bugatti are regular (400) - hierarchy is scale, not weight */
+    h1, h2, h3, h4, h5, p, span, a, button, input {
+      font-weight: 400 !important;
+    }
+
+    /* ─── NAVIGATION BAR (Fixed Pure Black Strip) ─── */
+    .bugatti-nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 64px;
+      background: var(--canvas);
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 48px;
+      border-bottom: 1px solid rgba(153, 153, 153, 0.15);
+    }
+
+    @media (max-width: 768px) {
+      .bugatti-nav {
+        padding: 0 24px;
+      }
+    }
+
+    .nav-link {
+      font-family: var(--font-mono);
+      font-size: 14px;
+      line-height: 1.43;
+      letter-spacing: 1.4px;
+      text-transform: uppercase;
+      color: var(--text-primary);
+      text-decoration: none;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 12px 0;
+      transition: opacity var(--ease-bugatti);
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .nav-link:hover {
+      opacity: 0.75;
+    }
+
+    .nav-brand {
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+      color: var(--text-primary);
+    }
+
+    .bugatti-wordmark {
+      height: 20px;
+      width: auto;
+      letter-spacing: 6px;
+      font-family: var(--font-display);
+      font-size: 22px;
+      text-transform: uppercase;
+      display: flex;
+      align-items: center;
+    }
+
+    .eb-emblem {
+      width: 32px;
+      height: 20px;
+    }
+
+    /* ─── BUTTONS (Primary Pill & Secondary Rounded) ─── */
+    .btn-pill {
+      background: transparent;
+      color: var(--text-primary);
+      font-family: var(--font-mono);
+      font-size: 14px;
+      line-height: 1.43;
+      letter-spacing: 1.4px;
+      text-transform: uppercase;
+      border: 1px solid var(--border-primary);
+      border-radius: var(--radius-pill);
+      padding: 12px 24px;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      transition: background-color var(--ease-bugatti), color var(--ease-bugatti), opacity var(--ease-bugatti);
+      white-space: nowrap;
+    }
+
+    .btn-pill:hover {
+      background-color: var(--text-primary);
+      color: var(--canvas);
+    }
+
+    .btn-pill:active {
+      opacity: 0.7;
+    }
+
+    .btn-pill:focus-visible {
+      outline: none;
+      box-shadow: 0 0 0 1px #ffffff, 0 0 0 2px #000000;
+    }
+
+    .btn-secondary {
+      background: transparent;
+      color: var(--text-primary);
+      font-family: var(--font-mono);
+      font-size: 12px;
+      line-height: 1.33;
+      letter-spacing: 1.2px;
+      text-transform: uppercase;
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-utility);
+      padding: 6px 12px;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: border-color var(--ease-bugatti), opacity var(--ease-bugatti);
+    }
+
+    .btn-secondary:hover {
+      border-color: var(--border-primary);
+    }
+
+    .btn-secondary:active {
+      opacity: 0.7;
+    }
+
+    .btn-ghost {
+      background: transparent;
+      color: var(--text-primary);
+      font-family: var(--font-mono);
+      font-size: 12px;
+      line-height: 1.33;
+      border: none;
+      cursor: pointer;
+      text-decoration: none;
+      padding: 0;
+      transition: opacity var(--ease-bugatti);
+    }
+
+    .btn-ghost:hover {
+      opacity: 0.7;
+    }
+
+    /* ─── CINEMA HERO CHAPTERS ─── */
+    .cinema-chapter {
+      position: relative;
+      width: 100%;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: var(--space-64) 48px;
+      background-color: var(--canvas);
+      overflow: hidden;
+    }
+
+    @media (max-width: 768px) {
+      .cinema-chapter {
+        padding: var(--space-48) 24px;
+        min-height: 90vh;
+      }
+    }
+
+    .media-backdrop {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 1;
+      overflow: hidden;
+    }
+
+    .media-backdrop img,
+    .media-backdrop svg {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      filter: brightness(0.85);
+    }
+
+    /* Permitted text legibility vignette: rgba(0,0,0,0.4) bottom-up */
+    .media-vignette {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(to top, rgba(0, 0, 0, 0.85) 0%, rgba(0, 0, 0, 0.4) 40%, rgba(0, 0, 0, 0.15) 75%, rgba(0,0,0,0.5) 100%);
+      z-index: 2;
+    }
+
+    .chapter-content {
+      position: relative;
+      z-index: 3;
+      max-width: var(--container-max);
+      width: 100%;
+      margin: 0 auto;
+    }
+
+    /* ─── MONUMENTAL DISPLAY TYPE (Architectural 288px) ─── */
+    .eyebrow-mono {
+      font-family: var(--font-mono);
+      font-size: 14px;
+      line-height: 1.43;
+      letter-spacing: 1.4px;
+      text-transform: uppercase;
+      color: var(--text-tertiary);
+      margin-bottom: var(--space-12);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .eyebrow-mono::before {
+      content: "";
+      display: inline-block;
+      width: 24px;
+      height: 1px;
+      background: var(--text-tertiary);
+    }
+
+    .display-monumental {
+      font-family: var(--font-display);
+      font-size: clamp(56px, 16vw, 240px);
+      line-height: 1.00;
+      text-transform: uppercase;
+      color: var(--text-primary);
+      letter-spacing: -0.01em;
+      margin-bottom: var(--space-36);
+      word-break: break-word;
+      user-select: none;
+    }
+
+    @media (min-width: 1536px) {
+      .display-monumental {
+        font-size: 288px;
+        line-height: 0.95;
+      }
+    }
+
+    .display-feature {
+      font-family: var(--font-display);
+      font-size: clamp(32px, 5vw, 60px);
+      line-height: 1.00;
+      letter-spacing: 1.4px;
+      text-transform: uppercase;
+      color: var(--text-primary);
+      margin-bottom: var(--space-12);
+    }
+
+    .section-heading {
+      font-family: var(--font-display);
+      font-size: 36px;
+      line-height: 1.11;
+      text-transform: uppercase;
+      color: var(--text-primary);
+      margin-bottom: var(--space-12);
+    }
+
+    .mono-headline {
+      font-family: var(--font-mono);
+      font-size: clamp(24px, 3.5vw, 60px);
+      line-height: 1.00;
+      text-transform: uppercase;
+      color: var(--text-primary);
+      letter-spacing: 1.4px;
+      margin-bottom: var(--space-12);
+    }
+
+    .lead-body {
+      font-family: var(--font-body);
+      font-size: 20px;
+      line-height: 1.40;
+      color: var(--text-primary);
+      max-width: 680px;
+      margin-bottom: var(--space-36);
+    }
+
+    .body-regular {
+      font-family: var(--font-body);
+      font-size: 16px;
+      line-height: 1.50;
+      color: var(--text-primary);
+      max-width: 600px;
+      margin-bottom: var(--space-24);
+    }
+
+    .caption-mono {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      line-height: 1.33;
+      letter-spacing: 1.2px;
+      text-transform: uppercase;
+      color: var(--text-tertiary);
+    }
+
+    /* ─── TELEMETRY HUD STRIP (Monospace Precision) ─── */
+    .telemetry-strip {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 36px;
+      border-top: 1px solid rgba(153, 153, 153, 0.25);
+      padding-top: var(--space-36);
+      margin-top: var(--space-36);
+      margin-bottom: var(--space-48);
+    }
+
+    .telemetry-item {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .telemetry-label {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      line-height: 1.33;
+      letter-spacing: 1.2px;
+      text-transform: uppercase;
+      color: var(--text-tertiary);
+    }
+
+    .telemetry-value {
+      font-family: var(--font-mono);
+      font-size: 24px;
+      line-height: 1.2;
+      color: var(--text-primary);
+      letter-spacing: 1.4px;
+    }
+
+    /* ─── INTERACTION ROW ─── */
+    .action-row {
+      display: flex;
+      align-items: center;
+      gap: var(--space-36);
+      flex-wrap: wrap;
+    }
+
+    /* ─── ATELIER SUR MESURE SECTION ─── */
+    .section-atelier {
+      padding: var(--space-64) 48px;
+      background-color: var(--canvas);
+      max-width: var(--container-max);
+      margin: 0 auto;
+    }
+
+    @media (max-width: 768px) {
+      .section-atelier {
+        padding: var(--space-48) 24px;
+      }
+    }
+
+    .atelier-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--space-48);
+      align-items: center;
+      margin-top: var(--space-48);
+    }
+
+    @media (max-width: 1024px) {
+      .atelier-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .atelier-viewer {
+      position: relative;
+      width: 100%;
+      height: 440px;
+      background: #050505;
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-utility);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: var(--space-24);
+    }
+
+    .car-canvas-stage {
+      width: 100%;
+      height: 300px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 400ms ease;
+    }
+
+    .finish-selector {
+      display: flex;
+      gap: 16px;
+      margin-top: var(--space-24);
+      z-index: 5;
+    }
+
+    .finish-swatch {
+      width: 28px;
+      height: 28px;
+      border-radius: var(--radius-utility);
+      border: 1px solid var(--border-subtle);
+      cursor: pointer;
+      background: transparent;
+      padding: 2px;
+      transition: border-color var(--ease-bugatti), transform var(--ease-bugatti);
+    }
+
+    .finish-swatch.active,
+    .finish-swatch:hover {
+      border-color: var(--border-primary);
+      transform: scale(1.1);
+    }
+
+    .swatch-fill {
+      width: 100%;
+      height: 100%;
+      border-radius: 4px;
+    }
+
+    /* ─── UTILITY DIALOG FRAME (Tokens: 1px solid #999999, 6px radius) ─── */
+    .utility-dialog {
+      background: var(--canvas);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-utility);
+      padding: var(--space-36);
+      max-width: 580px;
+      margin: var(--space-64) auto;
+    }
+
+    .dialog-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: var(--space-12);
+    }
+
+    /* ─── SYSTEM SPEC DRAWER (For Verification & Proof) ─── */
+    .spec-drawer {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      z-index: 1000;
+    }
+
+    .spec-panel {
+      display: none;
+      position: fixed;
+      bottom: 80px;
+      right: 24px;
+      width: 360px;
+      background: var(--canvas);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-utility);
+      padding: var(--space-24);
+      z-index: 1001;
+      font-family: var(--font-mono);
+      font-size: 12px;
+      line-height: 1.5;
+    }
+
+    .spec-panel.open {
+      display: block;
+    }
+
+    /* ─── FULLSCREEN NAVIGATION MODAL ─── */
+    .nav-modal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: var(--canvas);
+      z-index: 2000;
+      padding: var(--space-64) 48px;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .nav-modal.active {
+      display: flex;
+    }
+
+    .modal-menu-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      margin-top: var(--space-48);
+    }
+
+    .modal-menu-item a {
+      font-family: var(--font-display);
+      font-size: clamp(36px, 6vw, 72px);
+      line-height: 1.0;
+      text-transform: uppercase;
+      color: var(--text-primary);
+      text-decoration: none;
+      transition: opacity var(--ease-bugatti);
+    }
+
+    .modal-menu-item a:hover {
+      opacity: 0.6;
+    }
+
+    /* ─── FOOTER (Pure Black, Monospace Grid) ─── */
+    .bugatti-footer {
+      border-top: 1px solid rgba(153, 153, 153, 0.2);
+      background: var(--canvas);
+      padding: var(--space-64) 48px;
+    }
+
+    .footer-container {
+      max-width: var(--container-max);
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-48);
+    }
+
+    .footer-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      flex-wrap: wrap;
+      gap: var(--space-36);
+    }
+
+    .footer-meta {
+      display: flex;
+      gap: var(--space-36);
+      flex-wrap: wrap;
+    }
+
+    .footer-bottom {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 16px;
+      border-top: 1px solid rgba(153, 153, 153, 0.15);
+      padding-top: var(--space-24);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- FIXED TOP NAVIGATION -->
+  <header class="bugatti-nav">
+    <button class="nav-link" id="menuToggle" aria-label="Open Navigation Menu">
+      <svg width="18" height="12" viewBox="0 0 18 12" fill="none" stroke="#ffffff" stroke-width="1.5">
+        <line y1="1" x2="18" y2="1" />
+        <line y1="6" x2="18" y2="6" />
+        <line y1="11" x2="18" y2="11" />
+      </svg>
+      <span>MENU</span>
+    </button>
+
+    <a href="#" class="nav-brand" aria-label="BUGATTI Homepage">
+      <!-- Bugatti EB Monogram + Wordmark -->
+      <svg class="eb-emblem" viewBox="0 0 40 24" fill="#ffffff">
+        <path d="M12 4C7.58 4 4 7.58 4 12C4 16.42 7.58 20 12 20H20V4H12ZM12 17.5C8.96 17.5 6.5 15.04 6.5 12C6.5 8.96 8.96 6.5 12 6.5H17.5V17.5H12Z" />
+        <path d="M22 4V20H28C32.42 20 36 16.42 36 12C36 7.58 32.42 4 28 4H22ZM24.5 6.5H28C31.04 6.5 33.5 8.96 33.5 12C33.5 15.04 31.04 17.5 28 17.5H24.5V6.5Z" />
+      </svg>
+      <span class="bugatti-wordmark">BUGATTI</span>
+    </a>
+
+    <a href="#atelier" class="nav-link">STORE</a>
+  </header>
+
+  <!-- FULLSCREEN MENU OVERLAY -->
+  <div class="nav-modal" id="navModal">
+    <div style="display: flex; justify-content: space-between; align-items: center;">
+      <span class="caption-mono">MOLSHEIM ATELIER NAVIGATION</span>
+      <button class="nav-link" id="menuClose" aria-label="Close Navigation Menu">CLOSE ✕</button>
+    </div>
+    <ul class="modal-menu-list">
+      <li class="modal-menu-item"><a href="#tourbillon" onclick="closeNav()">01 TOURBILLON</a></li>
+      <li class="modal-menu-item"><a href="#chiron" onclick="closeNav()">02 CHIRON PUR SPORT</a></li>
+      <li class="modal-menu-item"><a href="#bolide" onclick="closeNav()">03 BOLIDE</a></li>
+      <li class="modal-menu-item"><a href="#mistral" onclick="closeNav()">04 W16 MISTRAL</a></li>
+      <li class="modal-menu-item"><a href="#atelier" onclick="closeNav()">05 SUR MESURE</a></li>
+      <li class="modal-menu-item"><a href="#heritage" onclick="closeNav()">06 HERITAGE 1909</a></li>
+    </ul>
+    <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid #999999; padding-top: 24px;">
+      <span class="caption-mono">ETTORE BUGATTI ARCHIVE</span>
+      <span class="caption-mono">ALSACE, FRANCE</span>
+    </div>
+  </div>
+
+  <main>
+    <!-- CHAPTER 1: BUGATTI TOURBILLON (MONUMENTAL 288PX SCALE) -->
+    <section class="cinema-chapter" id="tourbillon">
+      <div class="media-backdrop">
+        <!-- Authentic Architectural Hypercar Visual Vector Stage -->
+        <svg viewBox="0 0 1920 1080" preserveAspectRatio="xMidYMid slice">
+          <defs>
+            <radialGradient id="v16glow" cx="50%" cy="55%" r="60%">
+              <stop offset="0%" stop-color="#181818" />
+              <stop offset="70%" stop-color="#050505" />
+              <stop offset="100%" stop-color="#000000" />
+            </radialGradient>
+            <linearGradient id="bodySilver" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" stop-color="#111111" />
+              <stop offset="35%" stop-color="#3a3a3a" />
+              <stop offset="50%" stop-color="#888888" />
+              <stop offset="65%" stop-color="#2a2a2a" />
+              <stop offset="100%" stop-color="#0a0a0a" />
+            </linearGradient>
+            <linearGradient id="horseshoeChrome" x1="0%" y1="0%" x2="0%" y2="100%">
+              <stop offset="0%" stop-color="#ffffff" />
+              <stop offset="100%" stop-color="#444444" />
+            </linearGradient>
+          </defs>
+          <rect width="1920" height="1080" fill="url(#v16glow)" />
+
+          <!-- Perspective Grid lines reflecting wind tunnel telemetry -->
+          <g stroke="#222222" stroke-width="0.8" opacity="0.6">
+            <line x1="0" y1="840" x2="1920" y2="840" />
+            <line x1="0" y1="890" x2="1920" y2="890" />
+            <line x1="0" y1="950" x2="1920" y2="950" />
+            <line x1="960" y1="520" x2="120" y2="1080" />
+            <line x1="960" y1="520" x2="520" y2="1080" />
+            <line x1="960" y1="520" x2="1400" y2="1080" />
+            <line x1="960" y1="520" x2="1800" y2="1080" />
+          </g>
+
+          <!-- Bugatti Tourbillon Sculptural Silhouette Front-Quarter -->
+          <g transform="translate(480, 240)">
+            <!-- Aerodynamic body shell -->
+            <path d="M 120 420 C 220 300, 360 210, 480 190 C 580 170, 720 180, 840 240 C 920 280, 1020 350, 1080 430 C 1040 460, 960 480, 840 480 C 720 480, 240 480, 120 420 Z" fill="url(#bodySilver)" />
+            <!-- Cockpit Canopy & Aerodynamic Dorsal Spine -->
+            <path d="M 380 220 C 440 140, 520 110, 600 110 C 680 110, 760 140, 810 220 Z" fill="#000000" stroke="#555555" stroke-width="1.5" />
+            <line x1="600" y1="110" x2="600" y2="380" stroke="#ffffff" stroke-width="1.5" opacity="0.7" />
+            <!-- Iconic Horseshoe Grille Centerpiece -->
+            <path d="M 550 480 C 550 400, 570 340, 600 340 C 630 340, 650 400, 650 480 Z" fill="#000000" stroke="url(#horseshoeChrome)" stroke-width="3" />
+            <!-- Red EB Enamel Medallion (Ettore Bugatti authentic Macaron mark) -->
+            <ellipse cx="600" cy="360" rx="14" ry="9" fill="#000000" stroke="#ffffff" stroke-width="1" />
+            <text x="600" y="363" font-family="'Space Mono', monospace" font-size="8" fill="#ffffff" text-anchor="middle">EB</text>
+            <!-- Headlight Blades -->
+            <line x1="300" y1="380" x2="420" y2="360" stroke="#ffffff" stroke-width="4" stroke-linecap="round" />
+            <line x1="900" y1="380" x2="780" y2="360" stroke="#ffffff" stroke-width="4" stroke-linecap="round" />
+            <!-- Diffuser Tunnel Ground Effect -->
+            <path d="M 220 480 L 320 440 L 440 470 L 530 470" stroke="#444444" stroke-width="2" fill="none" />
+            <path d="M 980 480 L 880 440 L 760 470 L 670 470" stroke="#444444" stroke-width="2" fill="none" />
+          </g>
+        </svg>
+      </div>
+      <div class="media-vignette"></div>
+
+      <div class="chapter-content">
+        <div class="eyebrow-mono">POUR L'ÉTERNITÉ — THE NEW ERA</div>
+        <h1 class="display-monumental">TOURBILLON</h1>
+
+        <p class="lead-body">
+          An entirely bespoke mechanical marvel engineered around an 8.3-litre naturally aspirated V16 engine coupled with three electric motors. 1,800 hp crafted without compromise.
+        </p>
+
+        <!-- Precision Monospace Telemetry Strip -->
+        <div class="telemetry-strip">
+          <div class="telemetry-item">
+            <span class="telemetry-label">POWERTRAIN</span>
+            <span class="telemetry-value">8.3L V16 HYBRID</span>
+          </div>
+          <div class="telemetry-item">
+            <span class="telemetry-label">COMBINED OUTPUT</span>
+            <span class="telemetry-value">1,800 HP</span>
+          </div>
+          <div class="telemetry-item">
+            <span class="telemetry-label">0 — 100 KM/H</span>
+            <span class="telemetry-value">2.0 SECONDS</span>
+          </div>
+          <div class="telemetry-item">
+            <span class="telemetry-label">MAXIMUM VELOCITY</span>
+            <span class="telemetry-value">445 KM/H</span>
+          </div>
+          <div class="telemetry-item">
+            <span class="telemetry-label">PRODUCTION RUN</span>
+            <span class="telemetry-value">250 UNITS</span>
+          </div>
+        </div>
+
+        <div class="action-row">
+          <a href="#atelier" class="btn-pill">DISCOVER TOURBILLON</a>
+          <button class="btn-secondary" onclick="simulateTelemetryAudio()" id="telemetryAudioBtn">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+              <path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+            </svg>
+            <span>V16 SOUND TELEMETRY</span>
+          </button>
+          <span class="caption-mono">MOLSHEIM ATELIER CHASSIS NO. 001</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- CHAPTER 2: CHIRON PUR SPORT (PURE LATERAL AGILITY) -->
+    <section class="cinema-chapter" id="chiron">
+      <div class="media-backdrop">
+        <svg viewBox="0 0 1920 1080" preserveAspectRatio="xMidYMid slice">
+          <rect width="1920" height="1080" fill="#040404" />
+          <circle cx="960" cy="540" r="420" stroke="#1c1c1c" stroke-width="1" fill="none" />
+          <circle cx="960" cy="540" r="280" stroke="#141414" stroke-width="1" fill="none" />
+          <!-- Aerodynamic Downforce Graphic Vector -->
+          <g transform="translate(300, 260)" stroke="#333333" stroke-width="1">
+            <path d="M 100 400 Q 600 180 1300 420" fill="none" />
+            <path d="M 180 430 Q 600 230 1220 440" fill="none" />
+            <!-- 1.90m Fixed Carbon Wing -->
+            <line x1="260" y1="260" x2="1060" y2="260" stroke="#ffffff" stroke-width="4" />
+            <text x="660" y="240" font-family="'Space Mono', monospace" font-size="12" fill="#999999" text-anchor="middle" letter-spacing="4">1.90 METRE CARBON FIBRE AIRFOIL</text>
+          </g>
+        </svg>
+      </div>
+      <div class="media-vignette"></div>
+
+      <div class="chapter-content">
+        <div class="eyebrow-mono">APEX AERODYNAMICS</div>
+        <h2 class="display-feature">CHIRON PUR SPORT</h2>
+
+        <p class="body-regular">
+          Calibrated for corners. Featuring 15% shorter gear ratios, 65% stiffer front springs, negative camber adjustments, and magnesium lightweight wheels shedding unsprung weight.
+        </p>
+
+        <div class="telemetry-strip">
+          <div class="telemetry-item">
+            <span class="telemetry-label">ENGINE</span>
+            <span class="telemetry-value">8.0L QUAD-TURBO W16</span>
+          </div>
+          <div class="telemetry-item">
+            <span class="telemetry-label">OUTPUT</span>
+            <span class="telemetry-value">1,500 HP / 1,600 NM</span>
+          </div>
+          <div class="telemetry-item">
+            <span class="telemetry-label">LATERAL ACCELERATION</span>
+            <span class="telemetry-value">1.6 G</span>
+          </div>
+          <div class="telemetry-item">
+            <span class="telemetry-label">DOWNFORCE AT 350 KM/H</span>
+            <span class="telemetry-value">500 KG</span>
+          </div>
+        </div>
+
+        <div class="action-row">
+          <a href="#atelier" class="btn-pill">EXPLORE AERODYNAMICS</a>
+          <span class="caption-mono">LIMITED TO 60 HANDCRAFTED VEHICLES</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- CHAPTER 3: BOLIDE (TRACK ONLY EXPERIMENTAL) -->
+    <section class="cinema-chapter" id="bolide">
+      <div class="media-backdrop">
+        <svg viewBox="0 0 1920 1080" preserveAspectRatio="xMidYMid slice">
+          <rect width="1920" height="1080" fill="#020202" />
+          <g stroke="#1a1a1a" stroke-width="1.2">
+            <!-- X-Wing Matrix Signature Tail lights -->
+            <line x1="400" y1="200" x2="1520" y2="880" stroke="#ffffff" stroke-width="2" opacity="0.4" />
+            <line x1="1520" y1="200" x2="400" y2="880" stroke="#ffffff" stroke-width="2" opacity="0.4" />
+            <!-- Monocoque FIA Safety Cell -->
+            <rect x="760" y="380" width="400" height="320" rx="0" fill="none" stroke="#2a2a2a" />
+          </g>
+        </svg>
+      </div>
+      <div class="media-vignette"></div>
+
+      <div class="chapter-content">
+        <div class="eyebrow-mono">EXTREME PERFORMANCE DERIVATIVE</div>
+        <h2 class="display-feature">BUGATTI BOLIDE</h2>
+
+        <p class="body-regular">
+          What if Bugatti developed an uncompromising, track-only hyper sports car around the iconic W16? The answer is Bolide: 0.67 kg per horsepower weight-to-power ratio.
+        </p>
+
+        <div class="telemetry-strip">
+          <div class="telemetry-item">
+            <span class="telemetry-label">POWER TO WEIGHT</span>
+            <span class="telemetry-value">0.67 KG / HP</span>
+          </div>
+          <div class="telemetry-item">
+            <span class="telemetry-label">CURB WEIGHT</span>
+            <span class="telemetry-value">1,450 KG</span>
+          </div>
+          <div class="telemetry-item">
+            <span class="telemetry-label">LE MANS SIMULATED LAP</span>
+            <span class="telemetry-value">3:07.1 MIN</span>
+          </div>
+        </div>
+
+        <div class="action-row">
+          <a href="#atelier" class="btn-pill">EXPERIENCE BOLIDE</a>
+          <span class="caption-mono">40 CHASSIS WORLDWIDE — SOLD OUT</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- CHAPTER 4: SUR MESURE (ATELIER BESPOKE HAUTE COUTURE) -->
+    <section class="section-atelier" id="atelier">
+      <div class="eyebrow-mono">BUGATTI SUR MESURE</div>
+      <h2 class="mono-headline">BESPOKE ATELIER</h2>
+      <p class="lead-body">
+        Ettore Bugatti once proclaimed: "Nothing is too beautiful, nothing is too expensive." In the Molsheim Atelier, every hypercar is an individual commission shaped by haute couture craftsmanship and carbon tailoring.
+      </p>
+
+      <div class="atelier-grid">
+        <!-- Interactive Atelier Studio Stage -->
+        <div class="atelier-viewer">
+          <div class="caption-mono" style="width: 100%; display: flex; justify-content: space-between;">
+            <span>SUR MESURE DIGITAL SPECIFICATION</span>
+            <span id="currentFinishLabel">NOCTURNE BLACK LACQUER</span>
+          </div>
+
+          <div class="car-canvas-stage" id="carStage">
+            <!-- Vector Car Profile dynamically recolored -->
+            <svg viewBox="0 0 600 240" width="100%" height="220" id="carSvg">
+              <!-- Shadow Ground Plane -->
+              <ellipse cx="300" cy="210" rx="260" ry="12" fill="#000000" opacity="0.8" />
+              <!-- Chassis Body Silhouette -->
+              <path id="chassisPaint" d="M 60 170 C 90 140, 140 120, 200 110 C 260 70, 360 65, 430 95 C 490 115, 530 140, 550 170 C 520 185, 480 185, 450 185 C 430 160, 400 160, 380 185 L 180 185 C 160 160, 130 160, 110 185 Z" fill="#0a0a0a" stroke="#ffffff" stroke-width="1.2" />
+              <!-- Cockpit Glass -->
+              <path d="M 230 105 C 270 75, 350 72, 400 95 Z" fill="#000000" stroke="#666666" stroke-width="1" />
+              <!-- C-Line Bugatti Signature Line -->
+              <path id="signatureCLine" d="M 410 100 C 350 75, 250 85, 230 130 C 210 170, 250 185, 340 185" fill="none" stroke="#ffffff" stroke-width="3" />
+              <!-- Wheels -->
+              <circle cx="145" cy="180" r="28" fill="#000000" stroke="#888888" stroke-width="3" />
+              <circle cx="145" cy="180" r="16" fill="#111111" stroke="#ffffff" stroke-width="1" />
+              <circle cx="415" cy="180" r="28" fill="#000000" stroke="#888888" stroke-width="3" />
+              <circle cx="415" cy="180" r="16" fill="#111111" stroke="#ffffff" stroke-width="1" />
+            </svg>
+          </div>
+
+          <!-- Colorway swatches: strictly within Bugatti monochrome and historical racing finishes -->
+          <div class="finish-selector">
+            <button class="finish-swatch active" onclick="setFinish('nocturne', 'NOCTURNE BLACK LACQUER', '#0d0d0d', '#ffffff')" title="Nocturne Black">
+              <div class="swatch-fill" style="background: #0d0d0d; border: 1px solid #333;"></div>
+            </button>
+            <button class="finish-swatch" onclick="setFinish('carbon', 'EXPOSED VISIBLE WEAVE CARBON', '#181a1d', '#999999')" title="Visible Carbon">
+              <div class="swatch-fill" style="background: repeating-linear-gradient(45deg, #111, #111 2px, #222 2px, #222 4px);"></div>
+            </button>
+            <button class="finish-swatch" onclick="setFinish('argent', 'ARGENT SILVER METALLIC', '#777777', '#ffffff')" title="Argent Silver">
+              <div class="swatch-fill" style="background: #777777;"></div>
+            </button>
+            <button class="finish-swatch" onclick="setFinish('blanc', 'PURE PUR BLANC COUTURE', '#eeeeee', '#000000')" title="Pur Blanc">
+              <div class="swatch-fill" style="background: #ffffff;"></div>
+            </button>
+          </div>
+        </div>
+
+        <!-- Spec Detail Column -->
+        <div>
+          <span class="caption-mono">COMMISSION PROCESS</span>
+          <h3 class="section-heading" style="margin-top: 8px;">TAILORED IN MOLSHEIM</h3>
+          <p class="body-regular">
+            A bespoke Bugatti requires over nine months of artisan dialogue. From hand-laid book-matched carbon weaves to custom embroidery inspired by the Type 57 SC Atlantic, every surface is created individually.
+          </p>
+
+          <div style="display: flex; flex-direction: column; gap: 16px; margin: 24px 0;">
+            <div style="border-bottom: 1px solid rgba(153,153,153,0.2); padding-bottom: 12px; display: flex; justify-content: space-between;">
+              <span class="caption-mono">INTERIOR ARCHITECTURE</span>
+              <span style="font-family: var(--font-mono); font-size: 14px;">TITANIUM & HOROLOGY GAUGES</span>
+            </div>
+            <div style="border-bottom: 1px solid rgba(153,153,153,0.2); padding-bottom: 12px; display: flex; justify-content: space-between;">
+              <span class="caption-mono">CENTRE CONSOLE</span>
+              <span style="font-family: var(--font-mono); font-size: 14px;">MACHINED CRYSTAL GLASS</span>
+            </div>
+            <div style="border-bottom: 1px solid rgba(153,153,153,0.2); padding-bottom: 12px; display: flex; justify-content: space-between;">
+              <span class="caption-mono">AUTHENTICATION</span>
+              <span style="font-family: var(--font-mono); font-size: 14px;">SOLID SILVER MACARON</span>
+            </div>
+          </div>
+
+          <button class="btn-pill" onclick="openInquiryModal()">INQUIRE FOR COMMISSION</button>
+        </div>
+      </div>
+
+      <!-- UTILITY DIALOG FRAME ACCORDING TO DESIGN.MD (1px solid #999999, 6px radius, #000000 interior) -->
+      <div class="utility-dialog" id="inquiryFrame">
+        <div class="dialog-header">
+          <span class="caption-mono">BUGATTI ATELIER INQUIRY DOSSIER</span>
+          <button class="btn-ghost" onclick="document.getElementById('inquiryFrame').style.display='none'">✕</button>
+        </div>
+        <p class="body-regular" style="font-size: 14px; margin-bottom: 16px;">
+          Direct communication with the Molsheim private client liaison. Discretion assured.
+        </p>
+        <form onsubmit="handleInquiry(event)" style="display: flex; flex-direction: column; gap: 12px;">
+          <input type="text" placeholder="CLIENT NAME" required style="background: #000000; border: 1px solid #999999; border-radius: 6px; padding: 10px 14px; color: #ffffff; font-family: var(--font-mono); font-size: 12px; outline: none;" />
+          <input type="email" placeholder="OFFICIAL CORRESPONDENCE EMAIL" required style="background: #000000; border: 1px solid #999999; border-radius: 6px; padding: 10px 14px; color: #ffffff; font-family: var(--font-mono); font-size: 12px; outline: none;" />
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 8px;">
+            <button type="submit" class="btn-secondary">SUBMIT DOSSIER</button>
+            <span class="caption-mono" id="formNotice">MOLSHEIM SECURE CHANNEL</span>
+          </div>
+        </form>
+      </div>
+    </section>
+
+    <!-- CHAPTER 5: HERITAGE (1909 TO ETERNITY) -->
+    <section class="cinema-chapter" id="heritage" style="min-height: 80vh;">
+      <div class="media-backdrop">
+        <svg viewBox="0 0 1920 1080" preserveAspectRatio="xMidYMid slice">
+          <rect width="1920" height="1080" fill="#000000" />
+          <line x1="960" y1="0" x2="960" y2="1080" stroke="#161616" stroke-width="1" />
+          <text x="960" y="580" font-family="'Big Shoulders Display', sans-serif" font-size="280" fill="#080808" text-anchor="middle" letter-spacing="40">1909</text>
+        </svg>
+      </div>
+      <div class="media-vignette"></div>
+
+      <div class="chapter-content">
+        <div class="eyebrow-mono">ETTORE & JEAN BUGATTI</div>
+        <h2 class="display-feature">PUR SANG SINCE 1909</h2>
+        <p class="lead-body">
+          From the legendary Type 35 dominating the Targa Florio to the sculpted elegance of the Type 57 SC Atlantic, the pursuit of mechanical perfection remains unaltered.
+        </p>
+
+        <div class="action-row">
+          <a href="#tourbillon" class="btn-pill">EXPLORE ARCHIVE</a>
+          <span class="caption-mono">MOLSHEIM, CHÂTEAU SAINT JEAN</span>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- OFFICIAL BUGATTI FOOTER -->
+  <footer class="bugatti-footer">
+    <div class="footer-container">
+      <div class="footer-top">
+        <div>
+          <span class="bugatti-wordmark" style="font-size: 26px; letter-spacing: 8px;">BUGATTI</span>
+          <p class="caption-mono" style="margin-top: 8px;">AUTOMOBILES S.A.S. — CHÂTEAU SAINT JEAN, 67120 MOLSHEIM, FRANCE</p>
+        </div>
+        <div class="footer-meta">
+          <a href="#tourbillon" class="nav-link">MODELS</a>
+          <a href="#atelier" class="nav-link">SUR MESURE</a>
+          <a href="#heritage" class="nav-link">HERITAGE</a>
+          <a href="#atelier" class="nav-link">CAREERS</a>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <span class="caption-mono">© 2026 BUGATTI AUTOMOBILES S.A.S. ALL RIGHTS RESERVED.</span>
+        <div style="display: flex; gap: 24px;">
+          <a href="#" class="btn-ghost">PRIVACY POLICY</a>
+          <a href="#" class="btn-ghost">LEGAL NOTICE</a>
+          <a href="#" class="btn-ghost">COOKIE SETTINGS</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- FLOATING SPECIFICATION VERIFICATION DRAWER -->
+  <div class="spec-drawer">
+    <button class="btn-secondary" onclick="toggleSpecPanel()" id="specToggleBtn">
+      <span>DESIGN.MD AUDIT</span>
+    </button>
+  </div>
+
+  <div class="spec-panel" id="specPanel">
+    <div style="display: flex; justify-content: space-between; margin-bottom: 12px; border-bottom: 1px solid #999; padding-bottom: 6px;">
+      <span style="color: #fff;">BUGATTI DESIGN TOKENS</span>
+      <button class="btn-ghost" onclick="toggleSpecPanel()">✕</button>
+    </div>
+    <div style="display: flex; flex-direction: column; gap: 8px; color: #999;">
+      <div>• Canvas: <span style="color: #fff;">#000000 (Pure Black)</span></div>
+      <div>• Text: <span style="color: #fff;">#ffffff / #999999</span></div>
+      <div>• Display: <span style="color: #fff;">288px Bugatti Display</span></div>
+      <div>• UI Font: <span style="color: #fff;">Bugatti Monospace 14/12px</span></div>
+      <div>• Accents: <span style="color: #fff;">0 (Strict Monochromy)</span></div>
+      <div>• Radii: <span style="color: #fff;">0px, 6px, 9999px pill</span></div>
+      <div>• Shadows: <span style="color: #fff;">0 (Zero drop shadows)</span></div>
+      <div>• Leading: <span style="color: #fff;">1.00 - 1.11 (Tight Display)</span></div>
+      <div>• Weight: <span style="color: #fff;">400 Only (No Bold)</span></div>
+    </div>
+  </div>
+
+  <!-- SCRIPTING: NAVIGATION & TELEMETRY AUDIO SYNTHESIZER -->
+  <script>
+    // Navigation Modal Toggle
+    const menuToggle = document.getElementById('menuToggle');
+    const menuClose = document.getElementById('menuClose');
+    const navModal = document.getElementById('navModal');
+
+    menuToggle.addEventListener('click', () => {
+      navModal.classList.add('active');
+      document.body.style.overflow = 'hidden';
+    });
+
+    menuClose.addEventListener('click', closeNav);
+
+    function closeNav() {
+      navModal.classList.remove('active');
+      document.body.style.overflow = 'auto';
+    }
+
+    // Spec Drawer Toggle
+    function toggleSpecPanel() {
+      document.getElementById('specPanel').classList.toggle('open');
+    }
+
+    // Atelier Finish Selector
+    function setFinish(key, label, colorHex, cLineHex) {
+      document.getElementById('currentFinishLabel').textContent = label;
+      const paint = document.getElementById('chassisPaint');
+      const cline = document.getElementById('signatureCLine');
+
+      paint.setAttribute('fill', colorHex);
+      cline.setAttribute('stroke', cLineHex);
+
+      document.querySelectorAll('.finish-swatch').forEach(el => el.classList.remove('active'));
+      event.currentTarget.classList.add('active');
+    }
+
+    // Modal Inquiry Frame
+    function openInquiryModal() {
+      const frame = document.getElementById('inquiryFrame');
+      frame.style.display = 'block';
+      frame.scrollIntoView({ behavior: 'smooth' });
+    }
+
+    function handleInquiry(e) {
+      e.preventDefault();
+      const notice = document.getElementById('formNotice');
+      notice.textContent = "DOSSIER TRANSMITTED TO MOLSHEIM";
+      notice.style.color = "#ffffff";
+    }
+
+    // V16 Engine Audio Telemetry Synthesizer (Web Audio API)
+    let audioCtx = null;
+    let isPlaying = false;
+    function simulateTelemetryAudio() {
+      if (!audioCtx) {
+        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      }
+
+      if (isPlaying) return;
+      isPlaying = true;
+      const btn = document.getElementById('telemetryAudioBtn');
+      btn.style.borderColor = '#ffffff';
+
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+
+      osc.type = 'sawtooth';
+      // Simulate low idle rumble of 8.3L V16 ascending to 9,000 RPM
+      const now = audioCtx.currentTime;
+      osc.frequency.setValueAtTime(55, now);
+      osc.frequency.exponentialRampToValueAtTime(320, now + 1.8);
+      osc.frequency.exponentialRampToValueAtTime(95, now + 3.0);
+
+      gain.gain.setValueAtTime(0.01, now);
+      gain.gain.linearRampToValueAtTime(0.12, now + 0.5);
+      gain.gain.exponentialRampToValueAtTime(0.001, now + 3.2);
+
+      osc.connect(gain);
+      gain.connect(audioCtx.destination);
+
+      osc.start(now);
+      osc.stop(now + 3.2);
+
+      setTimeout(() => {
+        isPlaying = false;
+        btn.style.borderColor = '#999999';
+      }, 3300);
+    }
+  </script>
+</body>
+</html>

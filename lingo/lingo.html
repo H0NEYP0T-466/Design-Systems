@@ -1,0 +1,759 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lingo — Playful, Tactile &amp; Approachable Design System</title>
+  
+  <!-- Typography: Nunito (Primary & Display) and JetBrains Mono (Code) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;700&family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+
+  <style>
+    /* Lingo Design Tokens (from DESIGN.md & tokens.css) */
+    :root {
+      /* Brand Foundations */
+      --primary: #58CC02;           /* Cheerful lime green */
+      --primary-bevel: #58a700;     /* 3D bottom bevel */
+      --primary-hover: #61e002;
+      
+      --secondary: #CE82FF;         /* Playful lilac */
+      --secondary-bevel: #a855f7;
+      --secondary-hover: #d896ff;
+      
+      /* Semantic Tokens */
+      --success: #58CC02;
+      --warning: #FFC800;           /* Golden star / lingot */
+      --warning-bevel: #e6b400;
+      --danger: #FF4B4B;            /* Heart red */
+      --danger-bevel: #ea2b2b;
+      
+      /* Canvas & Neutral */
+      --bg: #fbf9ff;
+      --surface: #FFFFFF;
+      --surface-subtle: #f7f5fd;
+      --border: #e5e5e5;
+      --border-dark: #cecece;
+      --text: #3C3C3C;
+      --text-muted: #777777;
+      
+      /* Typography */
+      --font-display: 'Nunito', system-ui, -apple-system, sans-serif;
+      --font-body: 'Nunito', system-ui, -apple-system, sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+      
+      /* Tactile Radii */
+      --radius-sm: 12px;
+      --radius-md: 16px;
+      --radius-lg: 24px;
+      --radius-pill: 9999px;
+      
+      /* Tactile 3D Shadows */
+      --shadow-3d-primary: 0 4px 0 var(--primary-bevel);
+      --shadow-3d-secondary: 0 4px 0 var(--secondary-bevel);
+      --shadow-3d-neutral: 0 4px 0 #e5e5e5;
+      --shadow-card: 0 4px 0 #e5e5e5;
+    }
+
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--bg);
+      color: var(--text);
+      font-family: var(--font-body);
+      font-size: 16px;
+      line-height: 1.5;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* Top HUD & Brand Navigation */
+    .lingo-header {
+      background: #FFFFFF;
+      border-bottom: 2px solid var(--border);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      padding: 0 2rem;
+    }
+
+    .header-inner {
+      max-width: 1160px;
+      margin: 0 auto;
+      height: 72px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1.5rem;
+    }
+
+    .brand-mark {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+      color: var(--primary);
+    }
+
+    .mascot-icon {
+      width: 44px;
+      height: 44px;
+      background: var(--primary);
+      border-radius: 14px;
+      box-shadow: var(--shadow-3d-primary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      color: #FFFFFF;
+      font-weight: 900;
+    }
+
+    .brand-title {
+      font-family: var(--font-display);
+      font-size: 28px;
+      font-weight: 900;
+      letter-spacing: -0.02em;
+      color: var(--primary);
+    }
+
+    /* Gamified Counters HUD */
+    .hud-counters {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+    }
+
+    .hud-badge {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: 800;
+      font-size: 15px;
+      cursor: pointer;
+      user-select: none;
+      transition: transform 150ms ease;
+    }
+
+    .hud-badge:hover {
+      transform: scale(1.05);
+    }
+
+    .streak-badge {
+      color: #ff9600;
+    }
+
+    .gems-badge {
+      color: var(--secondary);
+    }
+
+    .hearts-badge {
+      color: var(--danger);
+    }
+
+    /* Tactile 3D Buttons */
+    .btn-tactile {
+      font-family: var(--font-body);
+      font-size: 15px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      padding: 12px 24px;
+      border-radius: var(--radius-md);
+      border: none;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      text-decoration: none;
+      user-select: none;
+      position: relative;
+      transition: all 120ms ease;
+    }
+
+    .btn-tactile:active {
+      transform: translateY(4px);
+      box-shadow: none !important;
+    }
+
+    .btn-primary {
+      background: var(--primary);
+      color: #FFFFFF;
+      box-shadow: var(--shadow-3d-primary);
+    }
+
+    .btn-primary:hover {
+      background: var(--primary-hover);
+    }
+
+    .btn-secondary {
+      background: var(--secondary);
+      color: #FFFFFF;
+      box-shadow: var(--shadow-3d-secondary);
+    }
+
+    .btn-secondary:hover {
+      background: var(--secondary-hover);
+    }
+
+    .btn-outline {
+      background: #FFFFFF;
+      color: var(--text);
+      border: 2px solid var(--border);
+      box-shadow: var(--shadow-3d-neutral);
+    }
+
+    .btn-outline:hover {
+      background: #f7f7f7;
+    }
+
+    /* Main Container */
+    .main-layout {
+      max-width: 1160px;
+      margin: 0 auto;
+      padding: 2.5rem 2rem 5rem 2rem;
+      width: 100%;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 3.5rem;
+    }
+
+    /* Hero Banner */
+    .hero-banner {
+      background: #FFFFFF;
+      border: 2px solid var(--border);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-card);
+      padding: 3rem;
+      display: grid;
+      grid-template-columns: 1fr auto;
+      align-items: center;
+      gap: 3rem;
+    }
+
+    @media (max-width: 850px) {
+      .hero-banner {
+        grid-template-columns: 1fr;
+        padding: 2rem;
+      }
+    }
+
+    .hero-title {
+      font-family: var(--font-display);
+      font-size: clamp(2rem, 4vw, 2.75rem);
+      font-weight: 900;
+      line-height: 1.15;
+      color: var(--text);
+      margin-bottom: 1rem;
+    }
+
+    .hero-title span {
+      color: var(--primary);
+    }
+
+    .hero-desc {
+      font-size: 1.15rem;
+      color: var(--text-muted);
+      font-weight: 600;
+      line-height: 1.6;
+      margin-bottom: 2rem;
+    }
+
+    /* Interactive Challenge / Lesson Box */
+    .challenge-card {
+      background: #FFFFFF;
+      border: 2px solid var(--border);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-card);
+      padding: 2.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
+      position: relative;
+    }
+
+    .challenge-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .challenge-prompt {
+      font-size: 1.35rem;
+      font-weight: 800;
+      color: var(--text);
+    }
+
+    /* Word / Token Tiles */
+    .options-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1.25rem;
+    }
+
+    .option-tile {
+      background: #FFFFFF;
+      border: 2px solid var(--border);
+      border-radius: var(--radius-md);
+      box-shadow: var(--shadow-3d-neutral);
+      padding: 1.5rem;
+      cursor: pointer;
+      user-select: none;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      gap: 8px;
+      transition: all 120ms ease;
+    }
+
+    .option-tile:hover {
+      background: #faf9ff;
+      border-color: #ce82ff;
+    }
+
+    .option-tile:active {
+      transform: translateY(4px);
+      box-shadow: none;
+    }
+
+    .option-tile.selected {
+      border-color: var(--primary);
+      background: #f2fde8;
+      box-shadow: 0 4px 0 var(--primary-bevel);
+    }
+
+    .option-icon {
+      font-size: 32px;
+      margin-bottom: 4px;
+    }
+
+    .option-title {
+      font-weight: 800;
+      font-size: 1.1rem;
+      color: var(--text);
+    }
+
+    .option-sub {
+      font-size: 13px;
+      color: var(--text-muted);
+      font-weight: 600;
+    }
+
+    /* Check Bar / Result Drawer */
+    .result-bar {
+      border-top: 2px solid var(--border);
+      padding-top: 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+    }
+
+    .result-feedback {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-weight: 800;
+      font-size: 1.1rem;
+    }
+
+    .result-icon-circle {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      color: #FFFFFF;
+    }
+
+    /* Gamified Bento Features */
+    .bento-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+    }
+
+    @media (max-width: 800px) {
+      .bento-row {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .bento-card {
+      background: #FFFFFF;
+      border: 2px solid var(--border);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-card);
+      padding: 2rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+    }
+
+    .bento-card-title {
+      font-size: 1.3rem;
+      font-weight: 800;
+      color: var(--text);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    /* Design Tokens Showcase */
+    .token-audit-panel {
+      background: #FFFFFF;
+      border: 2px solid var(--border);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-card);
+      padding: 2.5rem;
+    }
+
+    .token-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 1.5rem;
+      margin-top: 1.5rem;
+    }
+
+    .token-card {
+      border: 2px solid var(--border);
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      box-shadow: var(--shadow-3d-neutral);
+    }
+
+    .token-color {
+      height: 60px;
+      display: flex;
+      align-items: flex-end;
+      padding: 8px 12px;
+      font-family: var(--font-mono);
+      font-size: 12px;
+      font-weight: 700;
+      color: #FFFFFF;
+    }
+
+    .token-info {
+      padding: 10px 14px;
+      background: #FFFFFF;
+    }
+
+    .token-name {
+      font-family: var(--font-mono);
+      font-weight: 800;
+      font-size: 12px;
+      color: var(--primary);
+    }
+
+    .token-desc {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+
+    /* Footer */
+    .lingo-footer {
+      background: #FFFFFF;
+      border-top: 2px solid var(--border);
+      padding: 2.5rem 2rem;
+      font-weight: 700;
+      font-size: 14px;
+      color: var(--text-muted);
+    }
+
+    .footer-inner {
+      max-width: 1160px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Navigation & Gamified HUD -->
+  <header class="lingo-header">
+    <div class="header-inner">
+      <a href="#" class="brand-mark">
+        <div class="mascot-icon">L</div>
+        <span class="brand-title">lingo</span>
+      </a>
+
+      <!-- Gamified HUD -->
+      <div class="hud-counters">
+        <div class="hud-badge streak-badge" title="14-Day Streak">
+          <span>🔥</span>
+          <span>14</span>
+        </div>
+        <div class="hud-badge gems-badge" title="480 Lingot Gems">
+          <span>💎</span>
+          <span>480</span>
+        </div>
+        <div class="hud-badge hearts-badge" id="heartCounter" title="5 Hearts Left">
+          <span>❤️</span>
+          <span id="heartsNum">5</span>
+        </div>
+      </div>
+
+      <div>
+        <button class="btn-tactile btn-primary" onclick="alert('Super Lingo activated!')">Upgrade</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main View -->
+  <main class="main-layout">
+
+    <!-- Hero Banner -->
+    <section class="hero-banner">
+      <div>
+        <h1 class="hero-title">
+          Learn design systems the <span>playful</span> way!
+        </h1>
+        <p class="hero-desc">
+          Lingo combines tactile 3D beveled surfaces, bright primary lime green (<code>#58CC02</code>), playful lilac accents (<code>#CE82FF</code>), and friendly Nunito typography for an inviting, accessible experience.
+        </p>
+        <div style="display: flex; gap: 14px; flex-wrap: wrap;">
+          <a href="#challenge" class="btn-tactile btn-primary">Start Daily Challenge</a>
+          <a href="#tokens" class="btn-tactile btn-outline">Explore Tokens</a>
+        </div>
+      </div>
+      <div style="font-size: 96px; line-height: 1; user-select: none;">
+        🦉
+      </div>
+    </section>
+
+    <!-- Interactive Challenge Box -->
+    <section class="challenge-card" id="challenge">
+      <div class="challenge-header">
+        <span style="font-weight: 800; color: var(--secondary); text-transform: uppercase; font-size: 13px; letter-spacing: 0.05em;">DAILY DESIGN CHALLENGE</span>
+        <span style="font-family: var(--font-mono); font-size: 12px; color: var(--text-muted); font-weight: 700;">LEVEL 3 // COMPONENT FOUNDATIONS</span>
+      </div>
+
+      <div class="challenge-prompt">
+        Which visual token defines Lingo's signature tactile button style?
+      </div>
+
+      <div class="options-grid">
+        <div class="option-tile" onclick="selectOption(this, false)">
+          <div class="option-icon">☁️</div>
+          <div class="option-title">Subtle Blur</div>
+          <div class="option-sub">backdrop-filter: blur(20px)</div>
+        </div>
+
+        <div class="option-tile" onclick="selectOption(this, true)">
+          <div class="option-icon">🟩</div>
+          <div class="option-title">3D Bevel Box Shadow</div>
+          <div class="option-sub">0 4px 0 #58a700 bevel</div>
+        </div>
+
+        <div class="option-tile" onclick="selectOption(this, false)">
+          <div class="option-icon">⚡</div>
+          <div class="option-title">Hairline Border</div>
+          <div class="option-sub">1px solid #d0d7de</div>
+        </div>
+      </div>
+
+      <!-- Result Feedback Bar -->
+      <div class="result-bar" id="resultBar">
+        <div class="result-feedback" id="resultFeedback">
+          <span style="color: var(--text-muted); font-weight: 700;">Select an answer above and click Check!</span>
+        </div>
+        <button class="btn-tactile btn-primary" id="checkBtn" onclick="checkAnswer()">Check Answer</button>
+      </div>
+    </section>
+
+    <!-- Bento Features Row -->
+    <div class="bento-row">
+      <!-- Card 1: Daily Streak Quest -->
+      <div class="bento-card">
+        <div class="bento-card-title">
+          <span>🔥</span>
+          <span>Streak Milestones</span>
+        </div>
+        <p style="font-size: 15px; color: var(--text-muted); font-weight: 600;">
+          Maintain your continuous practice to unlock custom mascot avatars and premium color palettes.
+        </p>
+        <div style="background: var(--surface-subtle); padding: 1rem; border-radius: var(--radius-md); border: 2px solid var(--border);">
+          <div style="display: flex; justify-content: space-between; font-weight: 800; font-size: 13px; margin-bottom: 6px;">
+            <span>Current Goal: 20 Days</span>
+            <span style="color: var(--primary);">14 / 20</span>
+          </div>
+          <div style="height: 12px; background: #e5e5e5; border-radius: 6px; overflow: hidden;">
+            <div style="width: 70%; height: 100%; background: var(--primary);"></div>
+          </div>
+        </div>
+        <button class="btn-tactile btn-secondary" onclick="alert('Streak freeze activated!')">Protect Streak</button>
+      </div>
+
+      <!-- Card 2: Creative Design Tokens -->
+      <div class="bento-card">
+        <div class="bento-card-title">
+          <span>💎</span>
+          <span>Lingot Rewards Vault</span>
+        </div>
+        <p style="font-size: 15px; color: var(--text-muted); font-weight: 600;">
+          Exchange your earned gems for open-source asset kits, vector stickers, and sound effects.
+        </p>
+        <div style="display: flex; gap: 12px; align-items: center;">
+          <div style="font-size: 36px;">🎁</div>
+          <div>
+            <div style="font-weight: 800; color: var(--text);">Icon Pack Vol. 2</div>
+            <div style="font-size: 13px; color: var(--secondary); font-weight: 700;">Cost: 150 Gems</div>
+          </div>
+        </div>
+        <button class="btn-tactile btn-outline" onclick="redeemPack()">Claim Reward</button>
+      </div>
+    </div>
+
+    <!-- Design Tokens Foundations Audit -->
+    <section class="token-audit-panel" id="tokens">
+      <h2 style="font-family: var(--font-display); font-size: 1.6rem; font-weight: 900; color: var(--text);">
+        Lingo Design System Tokens
+      </h2>
+      <p style="font-size: 14px; color: var(--text-muted); font-weight: 600; margin-top: 4px;">
+        Tokens extracted and verified from open-design/design-systems/lingo/DESIGN.md
+      </p>
+
+      <div class="token-grid">
+        <!-- Token 1: Primary -->
+        <div class="token-card">
+          <div class="token-color" style="background-color: #58CC02;">
+            #58CC02
+          </div>
+          <div class="token-info">
+            <div class="token-name">--primary</div>
+            <div class="token-desc">Vibrant Lime Green</div>
+          </div>
+        </div>
+
+        <!-- Token 2: Secondary -->
+        <div class="token-card">
+          <div class="token-color" style="background-color: #CE82FF;">
+            #CE82FF
+          </div>
+          <div class="token-info">
+            <div class="token-name">--secondary</div>
+            <div class="token-desc">Playful Lilac</div>
+          </div>
+        </div>
+
+        <!-- Token 3: Warning -->
+        <div class="token-card">
+          <div class="token-color" style="background-color: #FFC800;">
+            #FFC800
+          </div>
+          <div class="token-info">
+            <div class="token-name">--warning</div>
+            <div class="token-desc">Lingot Golden Star</div>
+          </div>
+        </div>
+
+        <!-- Token 4: Danger -->
+        <div class="token-card">
+          <div class="token-color" style="background-color: #FF4B4B;">
+            #FF4B4B
+          </div>
+          <div class="token-info">
+            <div class="token-name">--danger</div>
+            <div class="token-desc">Heart Lives Red</div>
+          </div>
+        </div>
+
+        <!-- Token 5: Typography -->
+        <div class="token-card">
+          <div class="token-color" style="background-color: #3C3C3C; font-family: 'Nunito'; font-size: 16px; align-items: center; justify-content: center; font-weight: 900;">
+            NUNITO 800
+          </div>
+          <div class="token-info">
+            <div class="token-name">--font-body</div>
+            <div class="token-desc">Rounded Friendly Sans</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="lingo-footer">
+    <div class="footer-inner">
+      <div>&copy; 2026 Lingo Design System · Built for Open Design Systems.</div>
+      <div style="display: flex; gap: 1rem;">
+        <a href="#challenge" style="color: var(--primary); text-decoration: none;">Challenge</a>
+        <a href="#tokens" style="color: var(--secondary); text-decoration: none;">Tokens</a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    let selectedTile = null;
+    let isAnswerCorrect = false;
+
+    function selectOption(tile, isCorrect) {
+      document.querySelectorAll('.option-tile').forEach(t => t.classList.remove('selected'));
+      tile.classList.add('selected');
+      selectedTile = tile;
+      isAnswerCorrect = isCorrect;
+    }
+
+    function checkAnswer() {
+      if (!selectedTile) {
+        alert('Please select an option first!');
+        return;
+      }
+
+      const feedback = document.getElementById('resultFeedback');
+      const checkBtn = document.getElementById('checkBtn');
+
+      if (isAnswerCorrect) {
+        feedback.innerHTML = `
+          <div class="result-icon-circle" style="background: var(--primary);">✓</div>
+          <div>
+            <div style="color: var(--primary); font-size: 1.2rem;">Amazing job!</div>
+            <div style="font-size: 13px; color: var(--text-muted);">Tactile 3D bottom bevels define Lingo's signature buttons.</div>
+          </div>
+        `;
+        checkBtn.textContent = 'Continue (+15 XP)';
+        checkBtn.onclick = () => {
+          alert('Challenge completed! +15 XP added to your daily progress.');
+          location.reload();
+        };
+      } else {
+        feedback.innerHTML = `
+          <div class="result-icon-circle" style="background: var(--danger);">✕</div>
+          <div>
+            <div style="color: var(--danger); font-size: 1.2rem;">Not quite!</div>
+            <div style="font-size: 13px; color: var(--text-muted);">Look for the tactile 3D box-shadow bevel.</div>
+          </div>
+        `;
+        let hearts = parseInt(document.getElementById('heartsNum').textContent);
+        if (hearts > 1) {
+          hearts--;
+          document.getElementById('heartsNum').textContent = hearts;
+        }
+      }
+    }
+
+    function redeemPack() {
+      alert('150 Gems deducted. Icon Pack Vol. 2 added to your design inventory!');
+    }
+  </script>
+</body>
+</html>

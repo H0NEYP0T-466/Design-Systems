@@ -1,0 +1,875 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Warm Editorial — Long-Form Publication & Design System</title>
+  <meta name="description" content="Authentic implementation of the Warm Editorial design system: warm off-white paper canvas (#FAF7F2), near-black foreground (#1C1A17), terracotta accent (#C0512F), forest tags (#2F5B4F), GT Sectra display serif, underline-only inputs, and unhurried magazine pacing.">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+  <style>
+    /* ─────────────────────────────────────────────────────────────
+       1. WARM EDITORIAL TOKENS & SYSTEM FOUNDATIONS
+       ───────────────────────────────────────────────────────────── */
+    :root {
+      /* Palette Tokens: Strictly calibrated */
+      --we-bg: #FAF7F2;               /* Warm off-white paper canvas */
+      --we-fg: #1C1A17;               /* Near-black, slightly warm */
+      --we-terracotta: #C0512F;       /* Primary accent: CTAs, links, 1 hero element max */
+      --we-forest: #2F5B4F;           /* Secondary accent: section dividers, tags */
+      --we-muted: #8A817A;            /* Timestamps, metadata */
+      --we-surface: #FFFFFF;          /* Elevated cards only (never whole page) */
+
+      /* Derived Alpha Values */
+      --we-border-forest-subtle: rgba(47, 91, 79, 0.08); /* 1px forest-at-8% border */
+      --we-link-underline: rgba(192, 81, 47, 0.4);      /* 1px terracotta-at-40% */
+      --we-link-hover-bg: rgba(192, 81, 47, 0.08);      /* terracotta-at-8% background */
+      --we-shadow-raised: 0 2px 16px rgba(28, 26, 23, 0.06); /* Foreground at 6% opacity */
+
+      /* Typography Families */
+      --font-display: "GT Sectra", "Newsreader", "Lora", "Times New Roman", serif;
+      --font-body: "Söhne", "Inter", -apple-system, system-ui, sans-serif;
+      --font-mono: "JetBrains Mono", ui-monospace, monospace;
+
+      /* Typographic Scale: 12 · 14 · 16 · 20 · 28 · 40 · 56 · 80 */
+      --scale-12: 12px;
+      --scale-14: 14px;
+      --scale-16: 16px;
+      --scale-20: 20px;
+      --scale-28: 28px;
+      --scale-40: 40px;
+      --scale-56: 56px;
+      --scale-80: 80px;
+
+      /* Line Heights */
+      --lh-display: 1.2;
+      --lh-body: 1.6;
+
+      /* Radii: Strictly between 8px and 24px */
+      --radius-btn: 12px;
+      --radius-card: 16px;
+    }
+
+    /* Reset & Unhurried Paper Canvas */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      background-color: var(--we-bg);
+    }
+
+    body {
+      background-color: var(--we-bg);
+      color: var(--we-fg);
+      font-family: var(--font-body);
+      font-size: var(--scale-16);
+      line-height: var(--lh-body);
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+
+    /* Editorial Container: 12-column grid, 1200px max-width, 24px gutters */
+    .editorial-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    /* Links: terracotta, 1px terracotta-at-40% underline, swap for 8% bg on hover */
+    a.we-link {
+      color: var(--we-terracotta);
+      text-decoration: underline;
+      text-decoration-color: var(--we-link-underline);
+      text-underline-offset: 4px;
+      transition: background-color 150ms ease;
+    }
+
+    a.we-link:hover {
+      text-decoration: none;
+      background-color: var(--we-link-hover-bg);
+      border-radius: 2px;
+    }
+
+    /* ─────────────────────────────────────────────────────────────
+       2. RESTRAINED EDITORIAL HEADER
+       ───────────────────────────────────────────────────────────── */
+    .we-masthead {
+      border-bottom: 1px solid var(--we-border-forest-subtle);
+      padding: 32px 0;
+      background-color: var(--we-bg);
+    }
+
+    .we-masthead-inner {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+    }
+
+    .we-publication-title {
+      font-family: var(--font-display);
+      font-size: var(--scale-28);
+      font-weight: 600;
+      color: var(--we-fg);
+      letter-spacing: -0.5px;
+      text-decoration: none;
+    }
+
+    .we-nav-list {
+      display: flex;
+      align-items: center;
+      gap: 32px;
+      list-style: none;
+    }
+
+    .we-nav-item a {
+      font-size: var(--scale-14);
+      color: var(--we-fg);
+      text-decoration: none;
+      transition: color 150ms ease;
+    }
+
+    .we-nav-item a:hover {
+      color: var(--we-terracotta);
+    }
+
+    .we-nav-meta {
+      font-family: var(--font-mono);
+      font-size: var(--scale-12);
+      color: var(--we-muted);
+    }
+
+    /* ─────────────────────────────────────────────────────────────
+       3. EDITORIAL HERO (72VH MINIMUM, TOP-BIASED, UNHURRIED)
+       ───────────────────────────────────────────────────────────── */
+    .we-hero {
+      min-height: 72vh;
+      max-height: 120vh;
+      padding-top: 80px; /* Top-biased, never centered vertically */
+      padding-bottom: 80px;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      border-bottom: 1px solid var(--we-border-forest-subtle);
+    }
+
+    .we-hero-kicker {
+      font-family: var(--font-body);
+      font-size: var(--scale-14);
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--we-muted);
+      margin-bottom: 24px;
+    }
+
+    /* Display Hero: 80px / 56px, Title Case, -0.02em letter-spacing */
+    .we-hero-headline {
+      font-family: var(--font-display);
+      font-size: var(--scale-80);
+      font-weight: 500;
+      line-height: var(--lh-display);
+      letter-spacing: -0.02em;
+      color: var(--we-fg);
+      max-width: 960px;
+      margin-bottom: 32px;
+    }
+
+    @media (max-width: 900px) {
+      .we-hero-headline {
+        font-size: var(--scale-56);
+      }
+      .we-hero {
+        min-height: 60vh;
+        padding-top: 48px;
+        padding-bottom: 48px;
+      }
+    }
+
+    .we-hero-deck {
+      font-size: var(--scale-20);
+      line-height: var(--lh-body);
+      color: var(--we-fg);
+      max-width: 680px;
+      margin-bottom: 48px;
+    }
+
+    .we-btn-row {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+
+    /* Buttons: Flat fill, 12px radius, 14px padding-block, 20px padding-inline */
+    .we-btn-primary {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background-color: var(--we-terracotta); /* Terracotta fill */
+      color: var(--we-bg);                    /* Off-white label */
+      font-family: var(--font-body);
+      font-size: var(--scale-14);
+      font-weight: 600;
+      padding: 14px 20px;
+      border-radius: var(--radius-btn);       /* 12px radius */
+      border: none;
+      cursor: pointer;
+      text-decoration: none;
+      transition: opacity 150ms ease;
+    }
+
+    .we-btn-primary:hover {
+      opacity: 0.9;
+    }
+
+    .we-btn-secondary {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background-color: transparent;
+      color: var(--we-fg);
+      font-family: var(--font-body);
+      font-size: var(--scale-14);
+      font-weight: 600;
+      padding: 14px 20px;
+      border-radius: var(--radius-btn);
+      border: 1px solid var(--we-fg);         /* 1px foreground outline */
+      cursor: pointer;
+      text-decoration: none;
+      transition: background-color 150ms ease;
+    }
+
+    .we-btn-secondary:hover {
+      background-color: rgba(28, 26, 23, 0.04);
+    }
+
+    /* ─────────────────────────────────────────────────────────────
+       4. LONG-FORM ESSAY SECTION & STATS
+       ───────────────────────────────────────────────────────────── */
+    .we-section {
+      padding: 80px 0;
+      border-bottom: 1px solid var(--we-border-forest-subtle);
+    }
+
+    @media (max-width: 900px) {
+      .we-section { padding: 48px 0; }
+    }
+
+    .we-split-editorial {
+      display: grid;
+      grid-template-columns: 4fr 8fr;
+      gap: 48px;
+    }
+
+    @media (max-width: 768px) {
+      .we-split-editorial {
+        grid-template-columns: 1fr;
+        gap: 24px;
+      }
+    }
+
+    .we-section-h2 {
+      font-family: var(--font-display);
+      font-size: var(--scale-40);
+      font-weight: 500;
+      line-height: var(--lh-display);
+      letter-spacing: -0.02em;
+      color: var(--we-fg);
+      margin-bottom: 16px;
+    }
+
+    .we-tag-forest {
+      display: inline-block;
+      font-family: var(--font-body);
+      font-size: var(--scale-12);
+      font-weight: 600;
+      color: var(--we-forest);
+      background-color: rgba(47, 91, 79, 0.08);
+      padding: 4px 10px;
+      border-radius: 8px;
+      margin-bottom: 16px;
+    }
+
+    .we-body-prose {
+      font-size: var(--scale-16);
+      line-height: var(--lh-body);
+      color: var(--we-fg);
+    }
+
+    .we-body-prose p {
+      margin-bottom: 24px;
+    }
+
+    .we-pull-quote {
+      font-family: var(--font-display);
+      font-size: var(--scale-28);
+      font-style: italic;
+      line-height: 1.35;
+      color: var(--we-terracotta); /* 1 accent moment */
+      margin: 40px 0;
+      padding-left: 24px;
+      border-left: 2px solid var(--we-terracotta);
+    }
+
+    /* Serif Numbers for Meaningful Stats */
+    .we-stats-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 32px;
+      margin-top: 48px;
+      padding-top: 40px;
+      border-top: 1px solid var(--we-border-forest-subtle);
+    }
+
+    .we-stat-number {
+      font-family: var(--font-display); /* Serif for numbers */
+      font-size: var(--scale-56);
+      font-weight: 500;
+      line-height: 1;
+      color: var(--we-fg);
+      margin-bottom: 8px;
+    }
+
+    .we-stat-label {
+      font-size: var(--scale-14);
+      color: var(--we-muted);
+    }
+
+    /* ─────────────────────────────────────────────────────────────
+       5. CONTENT CARDS (OFF-WHITE, 16PX RADIUS, FOREST 8% BORDER)
+       ───────────────────────────────────────────────────────────── */
+    .we-card-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 32px;
+      margin-top: 40px;
+    }
+
+    .we-card {
+      background-color: var(--we-bg);
+      border: 1px solid var(--we-border-forest-subtle); /* 1px forest-at-8% */
+      border-radius: var(--radius-card);               /* 16px radius */
+      padding: 32px;                                  /* 24-32px padding */
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: box-shadow 200ms ease, transform 200ms ease;
+    }
+
+    /* Hover: Raised (1) elevation only */
+    .we-card:hover {
+      box-shadow: var(--we-shadow-raised);            /* y+2px, blur 16, fg-at-6% */
+      transform: translateY(-2px);
+    }
+
+    .we-card-meta {
+      font-family: var(--font-mono);
+      font-size: var(--scale-12);
+      color: var(--we-muted);
+      margin-bottom: 12px;
+    }
+
+    .we-card-title {
+      font-family: var(--font-display);
+      font-size: var(--scale-28);
+      font-weight: 500;
+      line-height: 1.25;
+      color: var(--we-fg);
+      margin-bottom: 16px;
+    }
+
+    .we-card-body {
+      font-size: var(--scale-14);
+      color: var(--we-fg);
+      line-height: 1.6;
+      margin-bottom: 24px;
+    }
+
+    /* ─────────────────────────────────────────────────────────────
+       6. UNDERLINE-ONLY INPUTS & SUBSCRIPTION MODULE
+       ───────────────────────────────────────────────────────────── */
+    .we-subscribe-box {
+      max-width: 640px;
+      margin: 0 auto;
+      text-align: center;
+    }
+
+    .we-form-underline {
+      display: flex;
+      flex-direction: column;
+      gap: 32px;
+      margin-top: 36px;
+      text-align: left;
+    }
+
+    .we-input-wrap {
+      position: relative;
+    }
+
+    .we-input-label {
+      font-size: var(--scale-12);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--we-muted);
+      margin-bottom: 8px;
+      display: block;
+    }
+
+    /* Input: Underline only, no box, muted baseline, terracotta focus */
+    .we-input-field {
+      width: 100%;
+      background: transparent;
+      border: none;
+      border-bottom: 1px solid var(--we-muted); /* 1px muted baseline */
+      padding: 16px 0;                          /* 16px vertical padding */
+      font-family: var(--font-body);
+      font-size: var(--scale-16);
+      color: var(--we-fg);
+      outline: none;
+      transition: border-color 200ms ease;
+    }
+
+    .we-input-field:focus {
+      border-bottom-color: var(--we-terracotta); /* Terracotta focus baseline */
+    }
+
+    /* ─────────────────────────────────────────────────────────────
+       7. DESIGN SYSTEM SPECIFICATION MATRIX
+       ───────────────────────────────────────────────────────────── */
+    .we-spec-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 32px;
+      margin-top: 40px;
+    }
+
+    .we-spec-panel {
+      border: 1px solid var(--we-border-forest-subtle);
+      border-radius: var(--radius-card);
+      padding: 28px;
+      background-color: #ffffff; /* Elevated surface card */
+    }
+
+    .we-spec-title {
+      font-family: var(--font-display);
+      font-size: var(--scale-20);
+      font-weight: 600;
+      margin-bottom: 16px;
+      border-bottom: 1px solid var(--we-border-forest-subtle);
+      padding-bottom: 8px;
+    }
+
+    .we-spec-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 8px 0;
+      font-size: var(--scale-14);
+      border-bottom: 1px dashed rgba(47, 91, 79, 0.1);
+    }
+
+    .we-spec-row code {
+      font-family: var(--font-mono);
+      color: var(--we-muted);
+    }
+
+    .we-swatch {
+      width: 16px;
+      height: 16px;
+      border-radius: 4px;
+      display: inline-block;
+      border: 1px solid rgba(0, 0, 0, 0.1);
+    }
+
+    /* ─────────────────────────────────────────────────────────────
+       8. MAGAZINE FOOTER
+       ───────────────────────────────────────────────────────────── */
+    .we-footer {
+      padding: 80px 0 48px;
+      background-color: var(--we-bg);
+    }
+
+    .we-footer-grid {
+      display: grid;
+      grid-template-columns: 2fr repeat(3, 1fr);
+      gap: 40px;
+      margin-bottom: 64px;
+    }
+
+    @media (max-width: 768px) {
+      .we-footer-grid {
+        grid-template-columns: 1fr;
+        gap: 32px;
+      }
+    }
+
+    .we-footer-title {
+      font-family: var(--font-display);
+      font-size: var(--scale-16);
+      font-weight: 600;
+      margin-bottom: 16px;
+    }
+
+    .we-footer-links {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .we-footer-links a {
+      font-size: var(--scale-14);
+      color: var(--we-muted);
+      text-decoration: none;
+      transition: color 150ms ease;
+    }
+
+    .we-footer-links a:hover {
+      color: var(--we-fg);
+    }
+
+    .we-footer-bottom {
+      border-top: 1px solid var(--we-border-forest-subtle);
+      padding-top: 32px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: var(--scale-12);
+      color: var(--we-muted);
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- 1. EDITORIAL MASTHEAD -->
+  <header class="we-masthead">
+    <div class="editorial-container we-masthead-inner">
+      <a href="#hero" class="we-publication-title">The Unhurried Review</a>
+      
+      <ul class="we-nav-list">
+        <li class="we-nav-item"><a href="#essays">Essays</a></li>
+        <li class="we-nav-item"><a href="#columns">Columns</a></li>
+        <li class="we-nav-item"><a href="#subscribe">Dispatch</a></li>
+        <li class="we-nav-item"><a href="#spec">Design Spec</a></li>
+      </ul>
+
+      <div class="we-nav-meta">
+        Issue Nº 42 • Autumn
+      </div>
+    </div>
+  </header>
+
+  <!-- 2. TOP-BIASED EDITORIAL HERO (72VH MINIMUM) -->
+  <section class="we-hero" id="hero">
+    <div class="editorial-container">
+      <div class="we-hero-kicker">Cultural Criticism &amp; Typographic Notes</div>
+      
+      <!-- Headline in GT Sectra Serif: 80px, Title Case, -0.02em tracking -->
+      <h1 class="we-hero-headline">
+        The Architecture of Deep Attention in an Age of Perpetual Velocity
+      </h1>
+
+      <p class="we-hero-deck">
+        A long-form inquiry into why our reading environments demand restrained chrome, warm paper canvases, and the quiet dignity of classical book typography.
+      </p>
+
+      <div class="we-btn-row">
+        <!-- 1 Terracotta CTA per page -->
+        <a href="#essays" class="we-btn-primary">Read the Lead Essay</a>
+        <a href="#spec" class="we-btn-secondary">Examine the Tokens</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3. LONG-FORM PROSE & ESSAY SECTION -->
+  <section class="we-section" id="essays">
+    <div class="editorial-container">
+      <div class="we-split-editorial">
+        <div>
+          <span class="we-tag-forest">Editorial Thesis</span>
+          <h2 class="we-section-h2">On Unhurried Pacing</h2>
+          <div style="font-family: var(--font-mono); font-size: var(--scale-12); color: var(--we-muted); margin-top: 12px;">
+            By Julian Vance<br>
+            September 10, 2026<br>
+            12 Min Read
+          </div>
+        </div>
+
+        <div class="we-body-prose">
+          <p>
+            When a page refuses to scream, the reader begins to listen. The contemporary web is burdened with frantic motion: floating banners, neon gradients, and buttons that demand instantaneous surrender. In contrast, the editorial tradition treats the surface as an invitation to contemplation.
+          </p>
+
+          <div class="we-pull-quote">
+            "Restraint is not the absence of color; it is the courage to let one terracotta thought echo through a room of quiet paper."
+          </div>
+
+          <p>
+            By relying on <a href="#spec" class="we-link">warm off-white paper (#FAF7F2)</a> and near-black ink (<code style="font-family: var(--font-mono); font-size: var(--scale-14);">#1C1A17</code>), contrast remains legible without inducing ophthalmic fatigue. The rhythm of the sentence is mirrored in the generous 80px section spacing.
+          </p>
+        </div>
+      </div>
+
+      <!-- Serif Numbers for Meaningful Stats -->
+      <div class="we-stats-grid">
+        <div>
+          <div class="we-stat-number">1200</div>
+          <div class="we-stat-label">Maximum container width in pixels</div>
+        </div>
+        <div>
+          <div class="we-stat-number">72%</div>
+          <div class="we-stat-label">Minimum hero viewport height</div>
+        </div>
+        <div>
+          <div class="we-stat-number">1.60</div>
+          <div class="we-stat-label">Generous body reading line-height</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 4. EDITORIAL CARDS (OFF-WHITE, 16PX RADIUS, FOREST 8% BORDER) -->
+  <section class="we-section" id="columns">
+    <div class="editorial-container">
+      <span class="we-tag-forest">Selected Dispatches</span>
+      <h2 class="we-section-h2">Recent Columns &amp; Dialogues</h2>
+      <p style="color: var(--we-muted); font-size: var(--scale-16); max-width: 600px;">
+        Contained in off-white paper cards with 1px forest-at-8% borders and raised hover elevation.
+      </p>
+
+      <div class="we-card-grid">
+        <!-- Card 1 -->
+        <article class="we-card">
+          <div>
+            <div class="we-card-meta">ESSAY • 01</div>
+            <h3 class="we-card-title">The Geometry of the Margin</h3>
+            <p class="we-card-body">
+              Why the 24px gutter and 12-column grid create an unshakeable sense of spatial calm for long-form reading.
+            </p>
+          </div>
+          <div>
+            <a href="#hero" class="we-link">Continue reading →</a>
+          </div>
+        </article>
+
+        <!-- Card 2 -->
+        <article class="we-card">
+          <div>
+            <div class="we-card-meta">CRITIQUE • 02</div>
+            <h3 class="we-card-title">Against Pure Black and White</h3>
+            <p class="we-card-body">
+              How harsh #000000 and #FFFFFF flatten nuance, and why off-white paper (#FAF7F2) restores print warmth.
+            </p>
+          </div>
+          <div>
+            <a href="#hero" class="we-link">Continue reading →</a>
+          </div>
+        </article>
+
+        <!-- Card 3 -->
+        <article class="we-card">
+          <div>
+            <div class="we-card-meta">INTERVIEW • 03</div>
+            <h3 class="we-card-title">The Discipline of One Accent</h3>
+            <p class="we-card-body">
+              A conversation with master typographers on the singular power of terracotta (#C0512F) when used with surgical restraint.
+            </p>
+          </div>
+          <div>
+            <a href="#hero" class="we-link">Continue reading →</a>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- 5. UNDERLINE-ONLY INPUT FORM -->
+  <section class="we-section" id="subscribe">
+    <div class="editorial-container">
+      <div class="we-subscribe-box">
+        <span class="we-tag-forest">Weekly Postal Dispatch</span>
+        <h2 class="we-section-h2" style="text-align: center;">Delivered into Your Quiet Hours</h2>
+        <p style="color: var(--we-muted); line-height: 1.6;">
+          Receive one reflective essay every Sunday morning. No promotions, no social widgets, no haste.
+        </p>
+
+        <form class="we-form-underline" onsubmit="event.preventDefault(); alert('Subscribed to The Unhurried Review dispatch.');">
+          <div class="we-input-wrap">
+            <label class="we-input-label" for="readerName">Reader's Name</label>
+            <input type="text" id="readerName" class="we-input-field" placeholder="Arthur Quiller-Couch" required>
+          </div>
+
+          <div class="we-input-wrap">
+            <label class="we-input-label" for="readerEmail">Postal Electronic Address</label>
+            <input type="email" id="readerEmail" class="we-input-field" placeholder="arthur@oxford.ac.uk" required>
+          </div>
+
+          <div style="display: flex; gap: 16px; margin-top: 16px;">
+            <button type="submit" class="we-btn-primary" style="flex: 1;">Request Dispatch</button>
+            <button type="reset" class="we-btn-secondary">Clear</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- 6. DESIGN SYSTEM SPECIFICATION MATRIX -->
+  <section class="we-section" id="spec">
+    <div class="editorial-container">
+      <span class="we-tag-forest">Design Foundations</span>
+      <h2 class="we-section-h2">Warm Editorial Token Matrix</h2>
+      <p style="color: var(--we-muted); margin-bottom: 16px;">
+        Complete adherence to DESIGN.md palette, GT Sectra serif scales, and flat/raised depth.
+      </p>
+
+      <div class="we-spec-grid">
+        <!-- Palette -->
+        <div class="we-spec-panel">
+          <h3 class="we-spec-title">Color Palette</h3>
+          <div class="we-spec-row">
+            <span>Background (#FAF7F2)</span>
+            <code><span class="we-swatch" style="background:#FAF7F2;"></span> Off-white Paper</code>
+          </div>
+          <div class="we-spec-row">
+            <span>Foreground (#1C1A17)</span>
+            <code><span class="we-swatch" style="background:#1C1A17;"></span> Near-black</code>
+          </div>
+          <div class="we-spec-row">
+            <span>Terracotta (#C0512F)</span>
+            <code><span class="we-swatch" style="background:#C0512F;"></span> Primary Accent</code>
+          </div>
+          <div class="we-spec-row">
+            <span>Forest (#2F5B4F)</span>
+            <code><span class="we-swatch" style="background:#2F5B4F;"></span> Secondary Accent</code>
+          </div>
+          <div class="we-spec-row">
+            <span>Muted (#8A817A)</span>
+            <code><span class="we-swatch" style="background:#8A817A;"></span> Timestamps</code>
+          </div>
+          <div class="we-spec-row">
+            <span>Surface (#FFFFFF)</span>
+            <code><span class="we-swatch" style="background:#FFFFFF;"></span> Elevated Card Only</code>
+          </div>
+        </div>
+
+        <!-- Typography -->
+        <div class="we-spec-panel">
+          <h3 class="we-spec-title">Typography Rules</h3>
+          <div class="we-spec-row">
+            <span>Display Headings</span>
+            <span>GT Sectra / Newsreader Serif</span>
+          </div>
+          <div class="we-spec-row">
+            <span>Body Text</span>
+            <span>Söhne / Inter Sans</span>
+          </div>
+          <div class="we-spec-row">
+            <span>Code Stack</span>
+            <span>JetBrains Mono</span>
+          </div>
+          <div class="we-spec-row">
+            <span>Scale (px)</span>
+            <span>12 · 14 · 16 · 20 · 28 · 40 · 56 · 80</span>
+          </div>
+          <div class="we-spec-row">
+            <span>Tracking (&gt;40px)</span>
+            <span>-0.02em tight</span>
+          </div>
+          <div class="we-spec-row">
+            <span>Line Heights</span>
+            <span>1.2 display / 1.6 body</span>
+          </div>
+        </div>
+
+        <!-- Components & Anti-patterns -->
+        <div class="we-spec-panel">
+          <h3 class="we-spec-title">Rules &amp; Constraints</h3>
+          <div class="we-spec-row">
+            <span>Buttons Radius</span>
+            <span>Strictly 12px</span>
+          </div>
+          <div class="we-spec-row">
+            <span>Cards Radius</span>
+            <span>Strictly 16px</span>
+          </div>
+          <div class="we-spec-row">
+            <span>Elevation Levels</span>
+            <span>Flat (0) / Raised (1)</span>
+          </div>
+          <div class="we-spec-row">
+            <span>Inputs Style</span>
+            <span>Underline only (no box)</span>
+          </div>
+          <div class="we-spec-row">
+            <span>No Pure Black/White</span>
+            <span>Verified 100% compliant</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 7. FOOTER -->
+  <footer class="we-footer">
+    <div class="editorial-container">
+      <div class="we-footer-grid">
+        <div>
+          <div style="font-family: var(--font-display); font-size: var(--scale-20); font-weight: 600; margin-bottom: 12px;">
+            The Unhurried Review
+          </div>
+          <p style="font-size: var(--scale-14); color: var(--we-muted); line-height: 1.6; max-width: 340px;">
+            A serif-led publication practicing editorial restraint, warm paper contrast, and unhurried typography.
+          </p>
+        </div>
+
+        <div>
+          <h4 class="we-footer-title">Sections</h4>
+          <ul class="we-footer-links">
+            <li><a href="#essays">Lead Essays</a></li>
+            <li><a href="#columns">Dispatches</a></li>
+            <li><a href="#subscribe">Weekly Postal</a></li>
+            <li><a href="#spec">Design Spec</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h4 class="we-footer-title">Tokens</h4>
+          <ul class="we-footer-links">
+            <li><a href="#spec">Paper (#FAF7F2)</a></li>
+            <li><a href="#spec">Terracotta (#C0512F)</a></li>
+            <li><a href="#spec">Forest (#2F5B4F)</a></li>
+            <li><a href="#spec">Ink (#1C1A17)</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h4 class="we-footer-title">Colophon</h4>
+          <ul class="we-footer-links">
+            <li><a href="#">GT Sectra</a></li>
+            <li><a href="#">Söhne Sans</a></li>
+            <li><a href="#">12-Column Grid</a></li>
+            <li><a href="#">Underline Inputs</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="we-footer-bottom">
+        <div>© 2026 Warm Editorial Design System. Set in GT Sectra and Söhne on warm paper.</div>
+        <div style="display: flex; gap: 24px;">
+          <span>Zero Gradients</span>
+          <span>Single Accent Restraint</span>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>

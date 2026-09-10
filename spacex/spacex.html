@@ -1,0 +1,707 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SpaceX — Cinematic Aerospace Design System</title>
+  <meta name="description" content="SpaceX design system featuring full-viewport cinematic scenes, pure black canvas, spectral white typography, universal uppercase with positive letter spacing, and ghost buttons.">
+
+  <!-- D-DIN / DIN style geometric industrial fonts: Barlow Condensed / DIN 1451 / Arial fallback -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+
+  <style>
+    /* ==========================================================================
+       SPACEX DESIGN SYSTEM TOKENS — Exactly matching spacex/DESIGN.md
+       ========================================================================== */
+    :root {
+      /* Colors */
+      --color-black: #000000;
+      --color-spectral-white: #f0f0fa; /* Slight blue-violet starlight tint */
+      --white-100: #FFFFFF;
+
+      /* Interactive Ghost Tokens */
+      --ghost-bg: rgba(240, 240, 250, 0.1);
+      --ghost-border: rgba(240, 240, 250, 0.35);
+      --ghost-hover-bg: rgba(240, 240, 250, 0.25);
+      --overlay-dark: rgba(0, 0, 0, 0.5);
+
+      /* Typography Families */
+      --font-display: 'Barlow Condensed', 'D-DIN', 'DIN Next LT Pro', -apple-system, sans-serif;
+      --font-body: 'Barlow Condensed', 'D-DIN', Arial, Verdana, sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+
+      /* Tracking & Spacing */
+      --letter-spacing-hero: 0.96px;
+      --letter-spacing-nav: 1.17px;
+      --letter-spacing-micro: 1px;
+
+      /* Spacing Scale */
+      --space-3: 3px;
+      --space-5: 5px;
+      --space-8: 8px;
+      --space-12: 12px;
+      --space-15: 15px;
+      --space-18: 18px;
+      --space-20: 20px;
+      --space-24: 24px;
+      --space-30: 30px;
+      --space-48: 48px;
+      --space-64: 64px;
+
+      /* Border Radii (Ghost button is the ONLY rounded element in the system) */
+      --radius-sharp: 4px;
+      --radius-ghost: 32px;
+    }
+
+    /* Reset & Clean Defaults */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      background-color: var(--color-black);
+      color: var(--color-spectral-white);
+      font-family: var(--font-body);
+      font-size: 16px;
+      line-height: 1.5;
+      text-transform: uppercase; /* Universal uppercase rule from DESIGN.md */
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      overflow-x: hidden;
+    }
+
+    /* Transparent Overlay Navigation */
+    .spacex-nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      height: 70px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 var(--space-48);
+      background: linear-gradient(180deg, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0) 100%);
+      transition: background 250ms ease;
+    }
+
+    .nav-brand {
+      display: flex;
+      align-items: center;
+      text-decoration: none;
+      color: var(--color-spectral-white);
+    }
+
+    /* SpaceX 147x19 Wordmark SVG */
+    .spacex-logo {
+      width: 147px;
+      height: 19px;
+      fill: var(--color-spectral-white);
+    }
+
+    .nav-links {
+      display: flex;
+      gap: var(--space-30);
+      list-style: none;
+      align-items: center;
+    }
+
+    .nav-link {
+      color: var(--color-spectral-white);
+      text-decoration: none;
+      font-family: var(--font-display);
+      font-size: 13px;
+      font-weight: 700;
+      line-height: 0.94;
+      letter-spacing: var(--letter-spacing-nav); /* 1.17px rule */
+      position: relative;
+      transition: color 150ms ease;
+    }
+
+    .nav-link::after {
+      content: "";
+      position: absolute;
+      bottom: -6px;
+      left: 0;
+      width: 0%;
+      height: 1px;
+      background: var(--color-spectral-white);
+      transition: width 200ms ease;
+    }
+
+    .nav-link:hover::after {
+      width: 100%;
+    }
+
+    .nav-link:hover {
+      color: var(--white-100);
+    }
+
+    /* Full-Viewport Cinematic Sections (Each section = 100vh Scene) */
+    .scene-section {
+      position: relative;
+      width: 100vw;
+      height: 100vh;
+      overflow: hidden;
+      display: flex;
+      align-items: flex-end;
+      padding: 0 var(--space-64) 100px var(--space-64);
+    }
+
+    /* Dark gradient overlay for text legibility */
+    .scene-backdrop {
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+      background-size: cover;
+      background-position: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .scene-overlay {
+      position: absolute;
+      inset: 0;
+      z-index: 2;
+      background: linear-gradient(
+        180deg,
+        rgba(0, 0, 0, 0.4) 0%,
+        rgba(0, 0, 0, 0.2) 50%,
+        rgba(0, 0, 0, 0.75) 100%
+      );
+    }
+
+    /* Content positioned directly on photography (Zero Cards rule) */
+    .scene-content {
+      position: relative;
+      z-index: 3;
+      max-width: 640px;
+    }
+
+    .scene-tag {
+      font-family: var(--font-display);
+      font-size: 13px;
+      font-weight: 700;
+      line-height: 0.94;
+      letter-spacing: var(--letter-spacing-nav);
+      margin-bottom: var(--space-12);
+      color: var(--color-spectral-white);
+      opacity: 0.85;
+    }
+
+    .scene-title {
+      font-family: var(--font-display);
+      font-size: 48px; /* 3.00rem hero */
+      font-weight: 700;
+      line-height: 1.0;
+      letter-spacing: var(--letter-spacing-hero); /* 0.96px rule */
+      margin-bottom: var(--space-18);
+      color: var(--color-spectral-white);
+      text-transform: uppercase;
+    }
+
+    .scene-description {
+      font-size: 16px;
+      font-weight: 400;
+      line-height: 1.6;
+      letter-spacing: 0.5px;
+      margin-bottom: var(--space-30);
+      color: var(--color-spectral-white);
+      opacity: 0.9;
+    }
+
+    /* Ghost Button — The Sole Interactive Element in the System */
+    .btn-ghost {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--ghost-bg);
+      color: var(--color-spectral-white);
+      border: 1px solid var(--ghost-border);
+      border-radius: var(--radius-ghost); /* 32px radius rule */
+      padding: 18px 36px;
+      font-family: var(--font-display);
+      font-size: 13px;
+      font-weight: 700;
+      line-height: 1.0;
+      letter-spacing: var(--letter-spacing-nav);
+      text-transform: uppercase;
+      text-decoration: none;
+      cursor: pointer;
+      user-select: none;
+      transition: background 200ms ease, border-color 200ms ease, color 200ms ease;
+    }
+
+    .btn-ghost:hover {
+      background: var(--ghost-hover-bg);
+      border-color: var(--color-spectral-white);
+      color: var(--white-100);
+    }
+
+    /* Technical Specimen Matrix Section */
+    .spec-matrix-section {
+      min-height: 100vh;
+      background-color: var(--color-black);
+      padding: 120px var(--space-64) 80px var(--space-64);
+      position: relative;
+      z-index: 10;
+    }
+
+    .spec-header {
+      border-bottom: 1px solid rgba(240, 240, 250, 0.2);
+      padding-bottom: var(--space-24);
+      margin-bottom: var(--space-48);
+    }
+
+    .spec-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: var(--space-48);
+      margin-bottom: var(--space-64);
+    }
+
+    .spec-col-title {
+      font-family: var(--font-display);
+      font-size: 18px;
+      font-weight: 700;
+      letter-spacing: var(--letter-spacing-hero);
+      margin-bottom: var(--space-18);
+      border-left: 2px solid var(--color-spectral-white);
+      padding-left: var(--space-12);
+    }
+
+    .spec-item {
+      margin-bottom: var(--space-18);
+      font-family: var(--font-display);
+    }
+
+    .spec-item-label {
+      font-size: 11px;
+      opacity: 0.6;
+      letter-spacing: var(--letter-spacing-micro);
+    }
+
+    .spec-item-val {
+      font-size: 15px;
+      font-weight: 700;
+      letter-spacing: var(--letter-spacing-hero);
+      margin-top: 2px;
+    }
+
+    /* Clean Footer */
+    .spacex-footer {
+      border-top: 1px solid rgba(240, 240, 250, 0.15);
+      padding: var(--space-48) var(--space-64);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 12px;
+      font-family: var(--font-display);
+      letter-spacing: var(--letter-spacing-micro);
+      color: var(--color-spectral-white);
+      opacity: 0.7;
+    }
+
+    .footer-links {
+      display: flex;
+      gap: var(--space-24);
+      list-style: none;
+    }
+
+    .footer-links a {
+      color: var(--color-spectral-white);
+      text-decoration: none;
+      transition: opacity 150ms ease;
+    }
+
+    .footer-links a:hover {
+      opacity: 1;
+      color: var(--white-100);
+    }
+
+    /* Modal / HUD Telemetry Dialog */
+    .hud-dialog-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.85);
+      backdrop-filter: blur(8px);
+      z-index: 200;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: var(--space-24);
+    }
+
+    .hud-dialog-overlay.active {
+      display: flex;
+    }
+
+    .hud-dialog {
+      background: var(--color-black);
+      border: 1px solid var(--ghost-border);
+      padding: var(--space-48);
+      max-width: 600px;
+      width: 100%;
+      position: relative;
+    }
+
+    .hud-close-btn {
+      position: absolute;
+      top: var(--space-20);
+      right: var(--space-24);
+      background: transparent;
+      border: none;
+      color: var(--color-spectral-white);
+      font-size: 20px;
+      cursor: pointer;
+    }
+
+    /* Responsive */
+    @media (max-width: 900px) {
+      .spacex-nav {
+        padding: 0 var(--space-24);
+      }
+      .nav-links {
+        display: none;
+      }
+      .scene-section {
+        padding: 0 var(--space-24) 60px var(--space-24);
+      }
+      .scene-title {
+        font-size: 34px;
+      }
+      .spec-matrix-section {
+        padding: 100px var(--space-24) 60px var(--space-24);
+      }
+      .spec-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: var(--space-24);
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navigation Bar -->
+  <header class="spacex-nav">
+    <a href="#" class="nav-brand">
+      <svg class="spacex-logo" viewBox="0 0 147 19">
+        <!-- Exact SpaceX Wordmark Path Geometry -->
+        <path d="M37.5 10.5c-1.8-4.5-5.2-6.5-9.8-6.5-6.5 0-11.2 4.7-11.2 11.2s4.7 11.2 11.2 11.2c4.6 0 8-2 9.8-6.5h-4.8c-1.2 2.4-3.2 3.5-5 3.5-4.2 0-7.2-3.3-7.2-8.2s3-8.2 7.2-8.2c1.8 0 3.8 1.1 5 3.5h4.8zM47.7 4.5h-4.2v21.4h4.2v-7.8h6.2c4.8 0 8.2-3.2 8.2-6.8 0-3.6-3.4-6.8-8.2-6.8h-6.2zm4.2 10.2v-6.8h2c2.4 0 4.2 1.4 4.2 3.4s-1.8 3.4-4.2 3.4h-2zm18.3-10.2l-6.8 21.4h4.4l1.6-5.2h7.8l1.6 5.2h4.4l-6.8-21.4h-6.2zm-0.2 13l2.8-9 2.8 9h-5.6zm19.6-13h-4.2v21.4h11.2v-3.6h-7v-5.4h6.5v-3.6h-6.5v-5.2h7v-3.6h-7zm27.4 0l-4.5 7-4.5-7h-4.8l7 10.5-7.4 10.9h4.8l4.9-7.5 4.9 7.5h4.8l-7.4-10.9 7-10.5h-4.8z"/>
+      </svg>
+    </a>
+
+    <nav>
+      <ul class="nav-links">
+        <li><a class="nav-link" href="#starship">Starship</a></li>
+        <li><a class="nav-link" href="#falcon9">Falcon 9</a></li>
+        <li><a class="nav-link" href="#dragon">Dragon</a></li>
+        <li><a class="nav-link" href="#starlink">Starlink</a></li>
+        <li><a class="nav-link" href="#mars">Mars</a></li>
+        <li><a class="nav-link" href="#spec">System Matrix</a></li>
+      </ul>
+    </nav>
+
+    <a href="#spec" class="btn-ghost" style="padding: 8px 20px; font-size: 11px;">
+      Mission Spec
+    </a>
+  </header>
+
+  <!-- Scene 1: Starship (100vh Full-Viewport Scene) -->
+  <section class="scene-section" id="starship">
+    <div class="scene-backdrop">
+      <!-- High-Resolution Starship Launch Graphic Scene -->
+      <svg width="100%" height="100%" viewBox="0 0 1920 1080" preserveAspectRatio="xMidYMid slice">
+        <defs>
+          <radialGradient id="plume1" cx="50%" cy="85%" r="70%">
+            <stop offset="0%" stop-color="#ffffff"/>
+            <stop offset="25%" stop-color="#ffedd5"/>
+            <stop offset="60%" stop-color="#fb923c"/>
+            <stop offset="90%" stop-color="#ea580c"/>
+            <stop offset="100%" stop-color="#000000"/>
+          </radialGradient>
+          <linearGradient id="skyGrad" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#000000"/>
+            <stop offset="70%" stop-color="#050814"/>
+            <stop offset="100%" stop-color="#0c1222"/>
+          </linearGradient>
+        </defs>
+        <rect width="1920" height="1080" fill="url(#skyGrad)"/>
+        <!-- Star Field -->
+        <circle cx="200" cy="180" r="1.5" fill="#f0f0fa" opacity="0.8"/>
+        <circle cx="450" cy="90" r="1" fill="#f0f0fa" opacity="0.6"/>
+        <circle cx="890" cy="240" r="1.5" fill="#f0f0fa" opacity="0.9"/>
+        <circle cx="1400" cy="120" r="2" fill="#f0f0fa" opacity="0.85"/>
+        <circle cx="1720" cy="300" r="1.2" fill="#f0f0fa" opacity="0.7"/>
+        <circle cx="1100" cy="70" r="1.8" fill="#f0f0fa" opacity="0.95"/>
+        <!-- Rocket Silhouette -->
+        <path d="M960,180 L972,320 L972,740 L948,740 L948,320 Z" fill="#222634"/>
+        <polygon points="960,150 972,210 948,210" fill="#f0f0fa"/>
+        <polygon points="948,680 920,740 948,740" fill="#1e2230"/>
+        <polygon points="972,680 1000,740 972,740" fill="#1e2230"/>
+        <!-- Rocket Raptor Engine Exhaust Flare -->
+        <ellipse cx="960" cy="850" rx="140" ry="240" fill="url(#plume1)" opacity="0.75"/>
+      </svg>
+    </div>
+    <div class="scene-overlay"></div>
+
+    <div class="scene-content">
+      <div class="scene-tag">Orbital Test Flight 5</div>
+      <h1 class="scene-title">Starship Flight Test</h1>
+      <p class="scene-description">
+        Starship is fully reusable and designed to carry both crew and cargo to Earth orbit, the Moon, Mars and beyond.
+      </p>
+      <button class="btn-ghost" onclick="openHudDialog('Starship Flight Test 5', 'Vehicle Height: 121m / Diameter: 9m / Payload: 150t to LEO / Raptor Engines: 33 Super Heavy + 6 Starship.')">
+        Learn More
+      </button>
+    </div>
+  </section>
+
+  <!-- Scene 2: Falcon 9 (100vh Full-Viewport Scene) -->
+  <section class="scene-section" id="falcon9">
+    <div class="scene-backdrop">
+      <svg width="100%" height="100%" viewBox="0 0 1920 1080" preserveAspectRatio="xMidYMid slice">
+        <rect width="1920" height="1080" fill="#000000"/>
+        <!-- Atmospheric re-entry plasma glow -->
+        <defs>
+          <linearGradient id="reentryGlow" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stop-color="#38bdf8" stop-opacity="0.2"/>
+            <stop offset="40%" stop-color="#0284c7" stop-opacity="0.1"/>
+            <stop offset="100%" stop-color="#000000" stop-opacity="0"/>
+          </linearGradient>
+        </defs>
+        <rect width="1920" height="1080" fill="url(#reentryGlow)"/>
+        <!-- Earth Curvature Horizon -->
+        <path d="M-200,1200 Q960,780 2120,1200 Z" fill="#0369a1" opacity="0.35"/>
+        <path d="M-200,1200 Q960,820 2120,1200 Z" fill="#082f49"/>
+        <!-- Falcon 9 Stage 1 Booster Core -->
+        <rect x="940" y="280" width="40" height="520" fill="#e2e8f0"/>
+        <polygon points="940,280 960,220 980,280" fill="#0f172a"/>
+        <!-- Grid Fins -->
+        <rect x="918" y="320" width="22" height="16" fill="#334155"/>
+        <rect x="980" y="320" width="22" height="16" fill="#334155"/>
+      </svg>
+    </div>
+    <div class="scene-overlay"></div>
+
+    <div class="scene-content">
+      <div class="scene-tag">Reliable Reusability</div>
+      <h2 class="scene-title">Falcon 9</h2>
+      <p class="scene-description">
+        Falcon 9 is the world's first orbital class reusable two-stage rocket capable of safely transporting humans and cargo into orbit.
+      </p>
+      <button class="btn-ghost" onclick="openHudDialog('Falcon 9 Booster Metrics', 'Total Launches: 380+ / Total Landings: 340+ / Total Reflights: 310+ / Merlin Engines: 9 First Stage.')">
+        View Missions
+      </button>
+    </div>
+  </section>
+
+  <!-- Scene 3: Dragon (100vh Full-Viewport Scene) -->
+  <section class="scene-section" id="dragon">
+    <div class="scene-backdrop">
+      <svg width="100%" height="100%" viewBox="0 0 1920 1080" preserveAspectRatio="xMidYMid slice">
+        <rect width="1920" height="1080" fill="#000000"/>
+        <!-- Moon in deep space -->
+        <circle cx="1380" cy="380" r="160" fill="#e2e8f0" opacity="0.85"/>
+        <circle cx="1320" cy="340" r="30" fill="#cbd5e1" opacity="0.4"/>
+        <circle cx="1420" cy="420" r="45" fill="#cbd5e1" opacity="0.5"/>
+        <!-- Spacecraft Hull Form -->
+        <path d="M960,340 C1040,340 1080,480 1080,620 L840,620 C840,480 880,340 960,340 Z" fill="#f8fafc"/>
+        <rect x="850" y="620" width="220" height="90" fill="#334155"/>
+      </svg>
+    </div>
+    <div class="scene-overlay"></div>
+
+    <div class="scene-content">
+      <div class="scene-tag">Commercial Crew Program</div>
+      <h2 class="scene-title">Dragon Spacecraft</h2>
+      <p class="scene-description">
+        The Dragon spacecraft is capable of carrying up to 7 passengers to and from Earth orbit, and is the only currently flying commercial spacecraft capable of returning significant cargo.
+      </p>
+      <button class="btn-ghost" onclick="openHudDialog('Dragon Spacecraft Telemetry', 'Passenger Capacity: 7 Astronauts / Trunk Volume: 37 m³ / Pressurized Cargo: 9.3 m³ / Draco Thrusters: 16.')">
+        Explore Dragon
+      </button>
+    </div>
+  </section>
+
+  <!-- Scene 4: Mars Multigenerational (100vh Scene) -->
+  <section class="scene-section" id="mars">
+    <div class="scene-backdrop">
+      <svg width="100%" height="100%" viewBox="0 0 1920 1080" preserveAspectRatio="xMidYMid slice">
+        <rect width="1920" height="1080" fill="#000000"/>
+        <!-- Mars Red Planet Atmosphere Gradient -->
+        <defs>
+          <radialGradient id="marsSphere" cx="45%" cy="50%" r="50%">
+            <stop offset="0%" stop-color="#ea580c"/>
+            <stop offset="60%" stop-color="#9a3412"/>
+            <stop offset="100%" stop-color="#000000"/>
+          </radialGradient>
+        </defs>
+        <circle cx="960" cy="540" r="360" fill="url(#marsSphere)"/>
+        <!-- Atmospheric Haze -->
+        <circle cx="960" cy="540" r="375" stroke="#f97316" stroke-width="6" fill="none" opacity="0.4"/>
+      </svg>
+    </div>
+    <div class="scene-overlay"></div>
+
+    <div class="scene-content">
+      <div class="scene-tag">The Horizon of Humanity</div>
+      <h2 class="scene-title">Making Life Multiplanetary</h2>
+      <p class="scene-description">
+        You want to wake up in the morning and think the future is going to be great - and that's what being a spacefaring civilization is all about.
+      </p>
+      <button class="btn-ghost" onclick="openHudDialog('Mars Architecture Spec', 'Interplanetary Transfer Window: Every 26 Months / Trajectory: Hohmann Transfer Orbit / Transit Duration: ~6 Months.')">
+        Mission Architecture
+      </button>
+    </div>
+  </section>
+
+  <!-- Technical Specimen Matrix Section -->
+  <section class="spec-matrix-section" id="spec">
+    <div class="spec-header">
+      <div class="scene-tag">AEROSPACE GEOMETRIC SPECIFICATION</div>
+      <h2 class="scene-title" style="font-size: 36px; margin-bottom: 8px;">Design System Foundations</h2>
+      <p style="font-size: 14px; opacity: 0.75; letter-spacing: 0.5px;">
+        Universal uppercase, positive tracking (0.96px–1.17px), spectral white (#f0f0fa), and radical zero-card minimalism.
+      </p>
+    </div>
+
+    <div class="spec-grid">
+      <!-- Column 1: Color Tokens -->
+      <div>
+        <div class="spec-col-title">Color Palette</div>
+        <div class="spec-item">
+          <div class="spec-item-label">SPACE BLACK</div>
+          <div class="spec-item-val">#000000 (0, 0, 0)</div>
+        </div>
+        <div class="spec-item">
+          <div class="spec-item-label">SPECTRAL WHITE (STARLIGHT TINT)</div>
+          <div class="spec-item-val">#f0f0fa (240, 240, 250)</div>
+        </div>
+        <div class="spec-item">
+          <div class="spec-item-label">GHOST BUTTON SURFACE</div>
+          <div class="spec-item-val">RGBA(240, 240, 250, 0.1)</div>
+        </div>
+        <div class="spec-item">
+          <div class="spec-item-label">GHOST BUTTON BORDER</div>
+          <div class="spec-item-val">RGBA(240, 240, 250, 0.35)</div>
+        </div>
+      </div>
+
+      <!-- Column 2: Typography Scale -->
+      <div>
+        <div class="spec-col-title">Typography Hierarchy</div>
+        <div class="spec-item">
+          <div class="spec-item-label">HERO DISPLAY (700 WEIGHT)</div>
+          <div class="spec-item-val">48PX // 0.96PX TRACKING</div>
+        </div>
+        <div class="spec-item">
+          <div class="spec-item-label">BODY TEXT (400 WEIGHT)</div>
+          <div class="spec-item-val">16PX // 1.50 LINE HEIGHT</div>
+        </div>
+        <div class="spec-item">
+          <div class="spec-item-label">NAVIGATION / BADGE BOLD</div>
+          <div class="spec-item-val">13PX // 1.17PX TRACKING</div>
+        </div>
+        <div class="spec-item">
+          <div class="spec-item-label">MICRO TELEMETRY</div>
+          <div class="spec-item-val">10PX // 1.00PX TRACKING</div>
+        </div>
+      </div>
+
+      <!-- Column 3: Component Rules -->
+      <div>
+        <div class="spec-col-title">Component System</div>
+        <div class="spec-item">
+          <div class="spec-item-label">PRIMARY INTERACTION</div>
+          <div class="spec-item-val">SINGLE GHOST BUTTON (32PX RADIUS)</div>
+        </div>
+        <div class="spec-item">
+          <div class="spec-item-label">CARDS &amp; CONTAINERS</div>
+          <div class="spec-item-val">NONE (RADICAL ZERO-CONTAINER)</div>
+        </div>
+        <div class="spec-item">
+          <div class="spec-item-label">DROP SHADOWS</div>
+          <div class="spec-item-val">ZERO (PHOTOGRAPHY IS DEPTH)</div>
+        </div>
+        <div class="spec-item">
+          <div class="spec-item-label">TEXT TRANSFORM</div>
+          <div class="spec-item-val">UNIVERSAL UPPERCASE ONLY</div>
+        </div>
+      </div>
+
+      <!-- Column 4: Mission Coordinates -->
+      <div>
+        <div class="spec-col-title">Launch Facilities</div>
+        <div class="spec-item">
+          <div class="spec-item-label">STARBASE, BOCA CHICA, TX</div>
+          <div class="spec-item-val">25.9972° N, 97.1561° W</div>
+        </div>
+        <div class="spec-item">
+          <div class="spec-item-label">LC-39A, CAPE CANAVERAL, FL</div>
+          <div class="spec-item-val">28.6083° N, 80.6042° W</div>
+        </div>
+        <div class="spec-item">
+          <div class="spec-item-label">SLC-4E, VANDENBERG SFB, CA</div>
+          <div class="spec-item-val">34.6322° N, 120.6108° W</div>
+        </div>
+        <div class="spec-item">
+          <div class="spec-item-label">ORBITAL TARGET</div>
+          <div class="spec-item-val">LOW EARTH ORBIT / LUNAR TLI</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Clean Footer -->
+  <footer class="spacex-footer">
+    <div>SpaceX &copy; 2026 // Design System Spec Rev 2026.09</div>
+    <ul class="footer-links">
+      <li><a href="#starship">Starship</a></li>
+      <li><a href="#falcon9">Falcon 9</a></li>
+      <li><a href="#dragon">Dragon</a></li>
+      <li><a href="#mars">Mars</a></li>
+      <li><a href="#spec">System Tokens</a></li>
+    </ul>
+  </footer>
+
+  <!-- Telemetry HUD Dialog -->
+  <div class="hud-dialog-overlay" id="hudDialog" onclick="closeHudDialog(event)">
+    <div class="hud-dialog">
+      <button class="hud-close-btn" onclick="document.getElementById('hudDialog').classList.remove('active')">&times;</button>
+      <div class="scene-tag" id="dialogTag">SPACEX TELEMETRY HUD</div>
+      <h3 class="scene-title" id="dialogTitle" style="font-size: 28px; margin-bottom: 12px;">Mission Briefing</h3>
+      <p id="dialogDesc" style="font-size: 15px; line-height: 1.6; opacity: 0.85; margin-bottom: 24px;">
+        Vehicle telemetry initialized.
+      </p>
+      <button class="btn-ghost" onclick="document.getElementById('hudDialog').classList.remove('active')">
+        Acknowledge
+      </button>
+    </div>
+  </div>
+
+  <script>
+    function openHudDialog(title, desc) {
+      document.getElementById('dialogTitle').textContent = title;
+      document.getElementById('dialogDesc').textContent = desc;
+      document.getElementById('hudDialog').classList.add('active');
+    }
+
+    function closeHudDialog(e) {
+      if (e.target === document.getElementById('hudDialog')) {
+        document.getElementById('hudDialog').classList.remove('active');
+      }
+    }
+  </script>
+</body>
+</html>

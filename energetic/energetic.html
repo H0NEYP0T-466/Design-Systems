@@ -1,0 +1,624 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Energetic — Bold &amp; Expressive Design System</title>
+  <meta name="description" content="Authentic Energetic design system website. Dynamic, vibrant style with thick borders, geometric shapes, high-contrast colors, and expressive typography conveying motion and vitality." />
+
+  <!-- Google Fonts: Limelight (Primary & Display) and JetBrains Mono (Code/Metrics) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;700&family=Limelight&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    /* ─────────────────────────────────────────────────────────────────────────
+     * ENERGETIC DESIGN SYSTEM TOKENS (DESIGN.md verbatim alignment)
+     * ───────────────────────────────────────────────────────────────────────── */
+    :root {
+      /* Colors from energetic/DESIGN.md */
+      --primary: #EA580B;         /* Primary: High-Voltage Orange */
+      --secondary: #F59E0B;       /* Secondary: Amber */
+      --success: #16A34A;         /* Success */
+      --warning: #D97706;         /* Warning */
+      --danger: #DC2626;          /* Danger */
+      --bg: #FFEDD5;              /* Background: Warm Peach Tint */
+      --surface: #FDBA74;         /* Surface: Saturated Orange */
+      --surface-white: #ffffff;   /* Pure White for high-contrast cards */
+      --text: #EA580C;            /* Text Token */
+      --text-dark: #1d1836;       /* High-contrast ink for legibility */
+      --neutral: #FDBA74;
+
+      /* Deep contrast dark border for thick-bordered energetic style */
+      --border-dark: #1d1836;
+      --border-thick: 3px solid var(--border-dark);
+
+      /* Typography Families */
+      --font-display: "Limelight", cursive, sans-serif;
+      --font-body: "Plus Jakarta Sans", "Limelight", system-ui, sans-serif;
+      --font-mono: "JetBrains Mono", ui-monospace, Menlo, monospace;
+
+      /* Type Scale (DESIGN.md §3: 12/14/16/20/24/32/48) */
+      --text-xs: 12px;
+      --text-sm: 14px;
+      --text-base: 16px;
+      --text-lg: 20px;
+      --text-xl: 24px;
+      --text-2xl: 32px;
+      --text-3xl: 48px;
+      --text-4xl: 64px;
+
+      --leading-tight: 1.06;
+      --leading-body: 1.52;
+
+      /* Spacing Scale (DESIGN.md §4: 4/8/12/16/24/32/48/64) */
+      --space-1: 4px;
+      --space-2: 8px;
+      --space-3: 12px;
+      --space-4: 16px;
+      --space-6: 24px;
+      --space-8: 32px;
+      --space-12: 48px;
+      --space-16: 64px;
+
+      /* Radii */
+      --radius-sm: 8px;
+      --radius-md: 14px;
+      --radius-lg: 20px;
+      --radius-pill: 9999px;
+
+      /* Hard Offset Neo-Brutalist Shadow */
+      --hard-shadow-sm: 3px 3px 0px var(--border-dark);
+      --hard-shadow-md: 5px 5px 0px var(--border-dark);
+      --hard-shadow-primary: 5px 5px 0px var(--primary);
+      --focus-ring: 0 0 0 4px rgba(234, 88, 11, 0.4);
+
+      /* Motion */
+      --motion-fast: 140ms;
+      --motion-base: 220ms;
+      --ease-standard: cubic-bezier(0.2, 0, 0, 1);
+    }
+
+    /* ─────────────────────────────────────────────────────────────────────────
+     * RESET & BASE STYLES
+     * ───────────────────────────────────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--bg);
+      color: var(--text-dark);
+      font-family: var(--font-body);
+      font-size: var(--text-base);
+      line-height: var(--leading-body);
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin-inline: auto;
+      padding-inline: var(--space-4);
+    }
+
+    /* Typography Hierarchy */
+    h1, h2, h3, h4 {
+      font-family: var(--font-display);
+      color: var(--text-dark);
+      line-height: var(--leading-tight);
+      text-transform: uppercase;
+      letter-spacing: 0.02em;
+    }
+    h1 { font-size: clamp(40px, 6vw, var(--text-4xl)); }
+    h2 { font-size: clamp(28px, 4vw, var(--text-3xl)); }
+    h3 { font-size: var(--text-2xl); }
+    h4 { font-size: var(--text-xl); }
+    p { margin-bottom: 0; }
+    .lead { font-size: var(--text-lg); color: #431407; line-height: 1.6; font-weight: 600; }
+    .mono { font-family: var(--font-mono); }
+
+    /* ─────────────────────────────────────────────────────────────────────────
+     * BUTTONS (Thick-Bordered High Energy Action)
+     * ───────────────────────────────────────────────────────────────────────── */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 14px 28px;
+      border-radius: var(--radius-sm);
+      font-family: var(--font-body);
+      font-size: var(--text-base);
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      text-decoration: none;
+      cursor: pointer;
+      border: var(--border-thick);
+      white-space: nowrap;
+      transition: all var(--motion-fast) var(--ease-standard);
+    }
+    .btn:focus-visible { outline: none; box-shadow: var(--focus-ring); }
+
+    /* Primary Button: #EA580B with hard offset shadow */
+    .btn-primary {
+      background: var(--primary);
+      color: #ffffff;
+      box-shadow: var(--hard-shadow-md);
+    }
+    .btn-primary:hover {
+      background: #c2410c;
+      transform: translate(-2px, -2px);
+      box-shadow: 7px 7px 0px var(--border-dark);
+    }
+    .btn-primary:active {
+      transform: translate(2px, 2px);
+      box-shadow: 2px 2px 0px var(--border-dark);
+    }
+
+    /* Secondary Button: #F59E0B */
+    .btn-secondary {
+      background: var(--secondary);
+      color: var(--text-dark);
+      box-shadow: var(--hard-shadow-md);
+    }
+    .btn-secondary:hover {
+      background: #d97706;
+      transform: translate(-2px, -2px);
+      box-shadow: 7px 7px 0px var(--border-dark);
+    }
+
+    /* Neutral Card Button */
+    .btn-white {
+      background: #ffffff;
+      color: var(--text-dark);
+      box-shadow: var(--hard-shadow-sm);
+    }
+    .btn-white:hover {
+      background: #fff7ed;
+      transform: translate(-1px, -1px);
+    }
+
+    /* Dynamic Angle Badges */
+    .badge-energetic {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 14px;
+      border-radius: var(--radius-sm);
+      border: 2px solid var(--border-dark);
+      font-family: var(--font-mono);
+      font-size: var(--text-xs);
+      font-weight: 700;
+      text-transform: uppercase;
+      box-shadow: 2px 2px 0px var(--border-dark);
+    }
+    .badge-orange { background: var(--primary); color: #ffffff; }
+    .badge-yellow { background: var(--secondary); color: var(--text-dark); }
+    .badge-green { background: var(--success); color: #ffffff; }
+
+    /* ─────────────────────────────────────────────────────────────────────────
+     * NAVIGATION
+     * ───────────────────────────────────────────────────────────────────────── */
+    .energetic-nav {
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      background: #ffffff;
+      border-bottom: var(--border-thick);
+      height: 76px;
+      display: flex;
+      align-items: center;
+    }
+    .nav-wrapper {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+    }
+    .brand-title {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+      font-family: var(--font-display);
+      font-size: 26px;
+      color: var(--text-dark);
+    }
+    .brand-badge-box {
+      width: 36px;
+      height: 36px;
+      background: var(--primary);
+      border: 2px solid var(--border-dark);
+      border-radius: 6px;
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 900;
+      box-shadow: 2px 2px 0px var(--border-dark);
+    }
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: var(--space-6);
+      list-style: none;
+    }
+    @media (max-width: 860px) { .nav-links { display: none; } }
+    .nav-link {
+      color: var(--text-dark);
+      text-decoration: none;
+      font-weight: 800;
+      font-size: var(--text-sm);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      transition: color var(--motion-fast) var(--ease-standard);
+    }
+    .nav-link:hover { color: var(--primary); }
+
+    /* ─────────────────────────────────────────────────────────────────────────
+     * HERO SECTION
+     * ───────────────────────────────────────────────────────────────────────── */
+    .energetic-hero {
+      padding-top: var(--space-12);
+      padding-bottom: var(--space-12);
+    }
+    .hero-box {
+      background: #ffffff;
+      border: var(--border-thick);
+      border-radius: var(--radius-lg);
+      padding: var(--space-12);
+      box-shadow: 8px 8px 0px var(--border-dark);
+      position: relative;
+      overflow: hidden;
+    }
+    @media (max-width: 768px) { .hero-box { padding: var(--space-6); } }
+
+    .hero-eyebrow {
+      display: inline-block;
+      transform: rotate(-1deg);
+      margin-bottom: var(--space-3);
+    }
+
+    /* ─────────────────────────────────────────────────────────────────────────
+     * KINETIC ENERGY TELEMETRY & PULSE GAUGES
+     * ───────────────────────────────────────────────────────────────────────── */
+    .section-telemetry {
+      padding-block: var(--space-12);
+    }
+    .telemetry-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: var(--space-6);
+      margin-top: var(--space-6);
+    }
+    @media (max-width: 960px) { .telemetry-grid { grid-template-columns: 1fr; } }
+    .gauge-card {
+      background: #ffffff;
+      border: var(--border-thick);
+      border-radius: var(--radius-md);
+      padding: var(--space-6);
+      box-shadow: var(--hard-shadow-md);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: all var(--motion-fast) var(--ease-standard);
+    }
+    .gauge-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 8px 8px 0px var(--primary);
+    }
+    .gauge-value {
+      font-size: 44px;
+      font-weight: 800;
+      font-family: var(--font-display);
+      color: var(--primary);
+      line-height: 1;
+      margin-block: var(--space-3);
+    }
+
+    /* Interactive Energy Pulse Bar */
+    .energy-bar-track {
+      height: 14px;
+      background: #ffedd5;
+      border: 2px solid var(--border-dark);
+      border-radius: var(--radius-pill);
+      overflow: hidden;
+      margin-top: var(--space-2);
+    }
+    .energy-bar-fill {
+      height: 100%;
+      background: var(--primary);
+      width: 78%;
+      transition: width 0.3s ease;
+    }
+
+    /* ─────────────────────────────────────────────────────────────────────────
+     * DESIGN SYSTEM SPECIFICATION (DESIGN.md)
+     * ───────────────────────────────────────────────────────────────────────── */
+    .section-spec {
+      padding-block: var(--space-12);
+    }
+    .spec-card {
+      background: #ffffff;
+      border: var(--border-thick);
+      border-radius: var(--radius-lg);
+      padding: var(--space-8);
+      box-shadow: var(--hard-shadow-md);
+    }
+    .swatch-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+      gap: var(--space-4);
+      margin-top: var(--space-6);
+    }
+    .swatch-card {
+      border: 2px solid var(--border-dark);
+      border-radius: var(--radius-sm);
+      overflow: hidden;
+      background: #ffffff;
+      box-shadow: 2px 2px 0px var(--border-dark);
+    }
+    .swatch-color { height: 60px; width: 100%; }
+    .swatch-meta { padding: 10px 12px; font-size: var(--text-xs); }
+    .swatch-name { font-weight: 800; color: var(--text-dark); }
+    .swatch-hex { font-family: var(--font-mono); color: #431407; }
+
+    /* ─────────────────────────────────────────────────────────────────────────
+     * FOOTER
+     * ───────────────────────────────────────────────────────────────────────── */
+    .energetic-footer {
+      background: #ffffff;
+      border-top: var(--border-thick);
+      padding-top: var(--space-12);
+      padding-bottom: var(--space-6);
+      font-size: var(--text-sm);
+    }
+    .footer-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: var(--space-4);
+      border-bottom: 2px solid var(--border-dark);
+      padding-bottom: var(--space-6);
+      margin-bottom: var(--space-4);
+    }
+    .footer-bottom {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: var(--space-4);
+      font-weight: 700;
+      font-size: var(--text-xs);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ─────────────────────────────────────────────────────────────────────────
+       NAVIGATION MASTHEAD
+       ───────────────────────────────────────────────────────────────────────── -->
+  <header class="energetic-nav" role="banner">
+    <div class="container nav-wrapper">
+      <a href="#hero" class="brand-title" aria-label="Energetic Home">
+        <div class="brand-badge-box">E</div>
+        <span>ENERGETIC</span>
+      </a>
+
+      <nav aria-label="Main Navigation">
+        <ul class="nav-links">
+          <li><a href="#telemetry" class="nav-link">Velocity Metrics</a></li>
+          <li><a href="#spec" class="nav-link">Design Tokens</a></li>
+        </ul>
+      </nav>
+
+      <div style="display: flex; align-items: center; gap: 12px;">
+        <button class="btn btn-white" style="padding: 8px 16px; font-size: 13px;" onclick="surgeEnergy()">
+          ⚡ Surge Energy
+        </button>
+        <a href="#telemetry" class="btn btn-primary" style="padding: 8px 20px; font-size: 13px;">
+          Deploy Speed
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- ─────────────────────────────────────────────────────────────────────────
+       HERO SECTION (Bold Neo-Brutalist Energy)
+       ───────────────────────────────────────────────────────────────────────── -->
+  <section class="energetic-hero" id="hero">
+    <div class="container">
+      <div class="hero-box">
+        <div class="hero-eyebrow">
+          <span class="badge-energetic badge-orange">✦ HIGH-VELOCITY DYNAMICS ✦</span>
+        </div>
+
+        <h1 style="margin-bottom: 16px;">
+          Unstoppable motion. Bold contrast.
+        </h1>
+        <p class="lead" style="max-width: 650px; margin-bottom: 28px;">
+          Dynamic, vibrant style with thick 3px solid borders, geometric shapes, and expressive Limelight typography conveying unstoppable kinetic velocity.
+        </p>
+
+        <div style="display: flex; gap: 16px; flex-wrap: wrap;">
+          <a href="#telemetry" class="btn btn-primary">
+            Activate Velocity Boost
+          </a>
+          <button class="btn btn-secondary" onclick="surgeEnergy()">
+            Instant Acceleration
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─────────────────────────────────────────────────────────────────────────
+       KINETIC ENERGY TELEMETRY
+       ───────────────────────────────────────────────────────────────────────── -->
+  <section class="section-telemetry" id="telemetry">
+    <div class="container">
+      <div style="display: flex; justify-content: space-between; align-items: flex-end; flex-wrap: wrap; gap: 16px;">
+        <div>
+          <h2>Kinetic Performance Gauges</h2>
+          <p class="lead" style="font-size: 15px; margin-top: 4px;">Real-time output and mechanical efficiency metrics.</p>
+        </div>
+        <span class="badge-energetic badge-green">OPTIMAL LOAD 99.8%</span>
+      </div>
+
+      <div class="telemetry-grid">
+        
+        <div class="gauge-card">
+          <div>
+            <span class="badge-energetic badge-orange">KINETIC OUTPUT</span>
+            <div class="gauge-value" id="outputVal">3,850 kW</div>
+            <p style="font-size: 14px; font-weight: 600; color: #431407;">Peak mechanical power transfer</p>
+          </div>
+          <div class="energy-bar-track">
+            <div class="energy-bar-fill" id="outputFill" style="width: 78%;"></div>
+          </div>
+        </div>
+
+        <div class="gauge-card">
+          <div>
+            <span class="badge-energetic badge-yellow">VELOCITY FLUX</span>
+            <div class="gauge-value" id="fluxVal" style="color: var(--secondary);">148.6 m/s</div>
+            <p style="font-size: 14px; font-weight: 600; color: #431407;">Terminal launch acceleration</p>
+          </div>
+          <div class="energy-bar-track">
+            <div class="energy-bar-fill" id="fluxFill" style="background: var(--secondary); width: 88%;"></div>
+          </div>
+        </div>
+
+        <div class="gauge-card">
+          <div>
+            <span class="badge-energetic badge-green">THERMAL RESILIENCE</span>
+            <div class="gauge-value" style="color: var(--success);">98.4%</div>
+            <p style="font-size: 14px; font-weight: 600; color: #431407;">Full continuous throttle stability</p>
+          </div>
+          <div class="energy-bar-track">
+            <div class="energy-bar-fill" style="background: var(--success); width: 94%;"></div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ─────────────────────────────────────────────────────────────────────────
+       DESIGN SYSTEM SPECIFICATION (DESIGN.md)
+       ───────────────────────────────────────────────────────────────────────── -->
+  <section class="section-spec" id="spec">
+    <div class="container">
+      <div class="spec-card">
+        <h2>Energetic Token Specification</h2>
+        <p class="lead" style="font-size: 15px; margin-top: 4px;">Tokens from energetic/DESIGN.md.</p>
+
+        <div class="swatch-grid">
+          <div class="swatch-card">
+            <div class="swatch-color" style="background: #EA580B;"></div>
+            <div class="swatch-meta">
+              <div class="swatch-name">Primary</div>
+              <div class="swatch-hex">#EA580B</div>
+            </div>
+          </div>
+
+          <div class="swatch-card">
+            <div class="swatch-color" style="background: #F59E0B;"></div>
+            <div class="swatch-meta">
+              <div class="swatch-name">Secondary</div>
+              <div class="swatch-hex">#F59E0B</div>
+            </div>
+          </div>
+
+          <div class="swatch-card">
+            <div class="swatch-color" style="background: #FFEDD5; border-bottom: 2px solid var(--border-dark);"></div>
+            <div class="swatch-meta">
+              <div class="swatch-name">Background</div>
+              <div class="swatch-hex">#FFEDD5</div>
+            </div>
+          </div>
+
+          <div class="swatch-card">
+            <div class="swatch-color" style="background: #FDBA74; border-bottom: 2px solid var(--border-dark);"></div>
+            <div class="swatch-meta">
+              <div class="swatch-name">Surface / Neutral</div>
+              <div class="swatch-hex">#FDBA74</div>
+            </div>
+          </div>
+
+          <div class="swatch-card">
+            <div class="swatch-color" style="background: #16A34A;"></div>
+            <div class="swatch-meta">
+              <div class="swatch-name">Success</div>
+              <div class="swatch-hex">#16A34A</div>
+            </div>
+          </div>
+
+          <div class="swatch-card">
+            <div class="swatch-color" style="background: #D97706;"></div>
+            <div class="swatch-meta">
+              <div class="swatch-name">Warning</div>
+              <div class="swatch-hex">#D97706</div>
+            </div>
+          </div>
+
+          <div class="swatch-card">
+            <div class="swatch-color" style="background: #DC2626;"></div>
+            <div class="swatch-meta">
+              <div class="swatch-name">Danger</div>
+              <div class="swatch-hex">#DC2626</div>
+            </div>
+          </div>
+        </div>
+
+        <div style="margin-top: 24px; padding-top: 20px; border-top: 2px solid var(--border-dark);">
+          <h4>Typography: Limelight &amp; JetBrains Mono</h4>
+          <p class="mono" style="font-size: 13px; color: #431407; margin-top: 6px;">
+            Scale: 12 · 14 · 16 · 20 · 24 · 32 · 48 px · Spacing: 4/8/12/16/24/32/48/64
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─────────────────────────────────────────────────────────────────────────
+       FOOTER
+       ───────────────────────────────────────────────────────────────────────── -->
+  <footer class="energetic-footer" role="contentinfo">
+    <div class="container">
+      <div class="footer-top">
+        <div class="brand-title">
+          <div class="brand-badge-box">E</div>
+          <span>ENERGETIC</span>
+        </div>
+        <div style="display: flex; gap: 24px;">
+          <a href="#telemetry" style="color: var(--text-dark); text-decoration: none; font-weight: 800;">Velocity</a>
+          <a href="#spec" style="color: var(--text-dark); text-decoration: none; font-weight: 800;">Tokens</a>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span>© 2026 Energetic Design System. Built strictly to DESIGN.md specification.</span>
+        <span>Primary #EA580B · Background #FFEDD5 · Limelight Typography</span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ─────────────────────────────────────────────────────────────────────────
+       INTERACTION SCRIPT
+       ───────────────────────────────────────────────────────────────────────── -->
+  <script>
+    function surgeEnergy() {
+      const output = document.getElementById('outputVal');
+      const fill = document.getElementById('outputFill');
+      output.textContent = "5,420 kW";
+      fill.style.width = "98%";
+      alert("⚡ MAXIMUM VELOCITY SURGE ENGAGED!");
+      setTimeout(() => {
+        output.textContent = "3,850 kW";
+        fill.style.width = "78%";
+      }, 3000);
+    }
+  </script>
+</body>
+</html>

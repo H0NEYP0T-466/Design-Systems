@@ -1,0 +1,1012 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vibrant — Bold &amp; Expressive Design System</title>
+  <meta name="description" content="Lively, colorful design system with bold playful typography, warm accents, dynamic visual energy, and strict token adherence.">
+
+  <!-- Typography as specified in vibrant/DESIGN.md: primary=Noto Sans, display=Fascinate, mono=Fira Code -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fascinate&family=Fira+Code:wght@400;500;600;700&family=Noto+Sans:ital,wght@0,300..900;1,300..900&display=swap" rel="stylesheet">
+
+  <style>
+    /* ==========================================================================
+       VIBRANT DESIGN SYSTEM TOKENS — Exactly matching vibrant/DESIGN.md
+       ========================================================================== */
+    :root {
+      /* Colors */
+      --primary: #7C61D4;      /* Signature rich violet */
+      --secondary: #EAAE87;    /* Warm playful peach */
+      --success: #16A34A;
+      --warning: #D97706;
+      --danger: #DC2626;
+      --surface: #FFFFFF;
+      --text: #2F281D;         /* Warm espresso dark text */
+      --neutral: #FFFFFF;
+
+      /* Additional tonal shades derived from foundations */
+      --primary-hover: #694ebf;
+      --primary-subtle: rgba(124, 97, 212, 0.1);
+      --secondary-subtle: rgba(234, 174, 135, 0.2);
+      --bg-cream: #FAF8F5;
+      --border-subtle: #F0EDE8;
+      --border-default: #E2DDD6;
+      --text-muted: #6B6255;
+      --text-subtle: #968B7D;
+
+      /* Typography Families */
+      --font-display: 'Fascinate', cursive, sans-serif;
+      --font-primary: 'Noto Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      --font-mono: 'Fira Code', monospace;
+
+      /* Typography Scale: 14 / 16 / 18 / 24 / 32 / 40 */
+      --text-14: 14px;
+      --text-16: 16px;
+      --text-18: 18px;
+      --text-24: 24px;
+      --text-32: 32px;
+      --text-40: 40px;
+
+      /* Spacing Scale: 2 / 4 / 8 / 12 / 16 / 24 / 32 / 48 */
+      --space-2: 2px;
+      --space-4: 4px;
+      --space-8: 8px;
+      --space-12: 12px;
+      --space-16: 16px;
+      --space-24: 24px;
+      --space-32: 32px;
+      --space-48: 48px;
+      --space-64: 64px;
+
+      /* Radii */
+      --radius-sm: 8px;
+      --radius-md: 14px;
+      --radius-lg: 20px;
+      --radius-pill: 9999px;
+
+      /* Transitions: 150-250ms with stable easing */
+      --transition-fast: 150ms cubic-bezier(0.16, 1, 0.3, 1);
+      --transition-normal: 240ms cubic-bezier(0.16, 1, 0.3, 1);
+
+      /* Shadows & Tactile Elev */
+      --shadow-playful: 0 4px 16px rgba(124, 97, 212, 0.08), 0 1px 3px rgba(47, 40, 29, 0.04);
+      --shadow-hover: 0 12px 28px rgba(124, 97, 212, 0.15);
+    }
+
+    /* Reset & Base Setup */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--bg-cream);
+      color: var(--text);
+      font-family: var(--font-primary);
+      font-size: var(--text-16);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      overflow-x: hidden;
+    }
+
+    /* Layout Containers */
+    .container {
+      width: 100%;
+      max-width: 1140px;
+      margin-left: auto;
+      margin-right: auto;
+      padding-left: var(--space-24);
+      padding-right: var(--space-24);
+    }
+
+    /* Typography */
+    h1, h2, h3, h4, .font-display {
+      font-family: var(--font-display);
+      color: var(--text);
+      letter-spacing: 0.01em;
+    }
+
+    h1 {
+      font-size: var(--text-40);
+      line-height: 1.2;
+    }
+
+    h2 {
+      font-size: var(--text-32);
+      line-height: 1.25;
+      margin-bottom: var(--space-16);
+      color: var(--primary);
+    }
+
+    h3 {
+      font-size: var(--text-24);
+      line-height: 1.3;
+      margin-bottom: var(--space-12);
+    }
+
+    h4 {
+      font-size: var(--text-18);
+      line-height: 1.4;
+      margin-bottom: var(--space-8);
+    }
+
+    p {
+      color: var(--text);
+      font-size: var(--text-16);
+      line-height: 1.65;
+    }
+
+    .mono-meta {
+      font-family: var(--font-mono);
+      font-size: var(--text-14);
+      color: var(--text-muted);
+    }
+
+    /* Site Navigation */
+    .site-nav {
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(10px);
+      border-bottom: 2px solid var(--border-subtle);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      padding-top: var(--space-16);
+      padding-bottom: var(--space-16);
+    }
+
+    .nav-inner {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .brand-wrap {
+      display: flex;
+      align-items: center;
+      gap: var(--space-12);
+      text-decoration: none;
+    }
+
+    .brand-badge {
+      width: 36px;
+      height: 36px;
+      background: var(--primary);
+      color: #FFFFFF;
+      border-radius: var(--radius-md);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-display);
+      font-size: 20px;
+    }
+
+    .brand-title {
+      font-family: var(--font-display);
+      font-size: 26px;
+      color: var(--primary);
+    }
+
+    .nav-links {
+      display: flex;
+      gap: var(--space-24);
+      list-style: none;
+      align-items: center;
+    }
+
+    .nav-links a {
+      color: var(--text);
+      text-decoration: none;
+      font-weight: 600;
+      font-size: var(--text-14);
+      transition: color var(--transition-fast);
+    }
+
+    .nav-links a:hover {
+      color: var(--primary);
+    }
+
+    /* Buttons: Favor Primary (#7C61D4) for CTA emphasis */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--space-8);
+      font-family: var(--font-primary);
+      font-size: var(--text-14);
+      font-weight: 700;
+      padding: 10px var(--space-24);
+      border-radius: var(--radius-pill);
+      cursor: pointer;
+      text-decoration: none;
+      transition: background-color var(--transition-fast), transform var(--transition-fast), box-shadow var(--transition-fast), border-color var(--transition-fast);
+      border: 2px solid transparent;
+      user-select: none;
+      white-space: nowrap;
+    }
+
+    .btn:active {
+      transform: scale(0.98);
+    }
+
+    .btn:focus-visible {
+      outline: 3px solid var(--primary);
+      outline-offset: 2px;
+    }
+
+    /* Primary CTA: #7C61D4 */
+    .btn-primary {
+      background-color: var(--primary);
+      color: #FFFFFF;
+      border-color: var(--primary);
+      box-shadow: 0 4px 12px rgba(124, 97, 212, 0.25);
+    }
+
+    .btn-primary:hover {
+      background-color: var(--primary-hover);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 16px rgba(124, 97, 212, 0.35);
+    }
+
+    /* Secondary Warm Peach: #EAAE87 */
+    .btn-secondary-warm {
+      background-color: var(--secondary);
+      color: var(--text);
+      border-color: var(--secondary);
+      box-shadow: 0 4px 12px rgba(234, 174, 135, 0.3);
+    }
+
+    .btn-secondary-warm:hover {
+      background-color: #e29f74;
+      transform: translateY(-2px);
+    }
+
+    /* Neutral Surface Button: #FFFFFF */
+    .btn-neutral {
+      background-color: var(--surface);
+      color: var(--text);
+      border-color: var(--border-default);
+    }
+
+    .btn-neutral:hover {
+      border-color: var(--primary);
+      color: var(--primary);
+    }
+
+    /* Semantic Buttons */
+    .btn-success { background: var(--success); color: #FFF; border-color: var(--success); }
+    .btn-warning { background: var(--warning); color: #FFF; border-color: var(--warning); }
+    .btn-danger { background: var(--danger); color: #FFF; border-color: var(--danger); }
+
+    .btn:disabled {
+      opacity: 0.45;
+      cursor: not-allowed;
+      pointer-events: none;
+    }
+
+    /* Hero Section */
+    .hero-section {
+      padding-top: var(--space-64);
+      padding-bottom: var(--space-64);
+      position: relative;
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1.15fr 0.85fr;
+      gap: var(--space-48);
+      align-items: center;
+    }
+
+    .hero-kicker {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-8);
+      background: var(--secondary-subtle);
+      color: #9c5c30;
+      padding: 6px var(--space-16);
+      border-radius: var(--radius-pill);
+      font-size: var(--text-14);
+      font-weight: 700;
+      margin-bottom: var(--space-16);
+    }
+
+    .hero-title {
+      font-size: var(--text-40);
+      line-height: 1.2;
+      margin-bottom: var(--space-16);
+      color: var(--text);
+    }
+
+    .hero-title span {
+      color: var(--primary);
+    }
+
+    .hero-lead {
+      font-size: var(--text-18);
+      color: var(--text);
+      line-height: 1.6;
+      margin-bottom: var(--space-32);
+      max-width: 520px;
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-16);
+      margin-bottom: var(--space-32);
+    }
+
+    /* Playful Hero Card */
+    .hero-card {
+      background: var(--surface);
+      border: 3px solid var(--primary);
+      border-radius: var(--radius-lg);
+      padding: var(--space-32);
+      box-shadow: 8px 8px 0px var(--secondary);
+      position: relative;
+    }
+
+    .card-badge-top {
+      position: absolute;
+      top: -14px;
+      right: 24px;
+      background: var(--secondary);
+      color: var(--text);
+      font-family: var(--font-display);
+      font-size: 14px;
+      padding: 4px 12px;
+      border-radius: var(--radius-pill);
+      border: 2px solid var(--primary);
+    }
+
+    /* Sections */
+    .section {
+      padding-top: var(--space-64);
+      padding-bottom: var(--space-64);
+      border-top: 2px dashed var(--border-default);
+    }
+
+    .section-intro {
+      max-width: 640px;
+      margin-bottom: var(--space-48);
+    }
+
+    .section-intro p {
+      font-size: var(--text-18);
+      color: var(--text-muted);
+    }
+
+    /* Color Tokens Palette Grid */
+    .tokens-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: var(--space-16);
+      margin-bottom: var(--space-32);
+    }
+
+    .token-card {
+      background: var(--surface);
+      border: 2px solid var(--border-default);
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      box-shadow: var(--shadow-playful);
+      transition: transform var(--transition-fast), border-color var(--transition-fast), box-shadow var(--transition-fast);
+      cursor: pointer;
+    }
+
+    .token-card:hover {
+      transform: translateY(-4px);
+      border-color: var(--primary);
+      box-shadow: 0 8px 0px var(--secondary);
+    }
+
+    .token-swatch {
+      height: 90px;
+      width: 100%;
+      padding: var(--space-12);
+      display: flex;
+      align-items: flex-end;
+      border-bottom: 2px solid var(--border-subtle);
+    }
+
+    .token-info {
+      padding: var(--space-16);
+      font-family: var(--font-mono);
+    }
+
+    .token-title {
+      font-size: var(--text-14);
+      font-weight: 700;
+      color: var(--text);
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 4px;
+    }
+
+    .token-hex {
+      font-size: var(--text-12);
+      color: var(--text-subtle);
+    }
+
+    .token-role {
+      font-family: var(--font-primary);
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-top: 6px;
+    }
+
+    /* Typography Hierarchy Table */
+    .type-matrix-box {
+      background: var(--surface);
+      border: 2px solid var(--primary);
+      border-radius: var(--radius-lg);
+      padding: var(--space-32);
+      margin-bottom: var(--space-48);
+      box-shadow: 6px 6px 0px var(--secondary);
+    }
+
+    .type-row {
+      display: grid;
+      grid-template-columns: 160px 1fr;
+      align-items: baseline;
+      padding: var(--space-12) 0;
+      border-bottom: 1px dashed var(--border-default);
+    }
+
+    .type-row:last-child {
+      border-bottom: none;
+    }
+
+    /* Component Lab & Form */
+    .lab-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--space-32);
+    }
+
+    .lab-box {
+      background: var(--surface);
+      border: 2px solid var(--border-default);
+      border-radius: var(--radius-lg);
+      padding: var(--space-32);
+      box-shadow: var(--shadow-playful);
+    }
+
+    /* Inputs */
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-8);
+      margin-bottom: var(--space-16);
+    }
+
+    .form-label {
+      font-size: var(--text-14);
+      font-weight: 700;
+      color: var(--text);
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .vibrant-input {
+      width: 100%;
+      font-family: var(--font-primary);
+      font-size: var(--text-14);
+      padding: 12px 16px;
+      background: var(--bg-cream);
+      border: 2px solid var(--border-default);
+      border-radius: var(--radius-sm);
+      color: var(--text);
+      transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+    }
+
+    .vibrant-input:focus {
+      outline: 3px solid var(--primary);
+      outline-offset: 1px;
+      border-color: var(--primary);
+      background: var(--surface);
+    }
+
+    .input-error {
+      border-color: var(--danger) !important;
+    }
+
+    .input-error:focus {
+      outline-color: var(--danger) !important;
+    }
+
+    /* Footer */
+    .site-footer {
+      border-top: 3px solid var(--primary);
+      background: var(--surface);
+      padding-top: var(--space-48);
+      padding-bottom: var(--space-48);
+    }
+
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1fr;
+      gap: var(--space-32);
+      margin-bottom: var(--space-32);
+    }
+
+    .footer-bottom {
+      border-top: 1px dashed var(--border-default);
+      padding-top: var(--space-24);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-family: var(--font-mono);
+      font-size: var(--text-12);
+      color: var(--text-subtle);
+    }
+
+    /* Toast */
+    .vibrant-toast {
+      position: fixed;
+      bottom: var(--space-24);
+      right: var(--space-24);
+      background: var(--primary);
+      color: #FFFFFF;
+      padding: 12px 24px;
+      border-radius: var(--radius-pill);
+      font-weight: 700;
+      box-shadow: 0 10px 25px rgba(124, 97, 212, 0.3);
+      transform: translateY(100px);
+      opacity: 0;
+      transition: transform var(--transition-normal), opacity var(--transition-normal);
+      z-index: 1000;
+    }
+
+    .vibrant-toast.show {
+      transform: translateY(0);
+      opacity: 1;
+    }
+
+    @media (max-width: 900px) {
+      .hero-grid, .lab-grid, .footer-grid {
+        grid-template-columns: 1fr;
+        gap: var(--space-32);
+      }
+      .nav-links {
+        display: none;
+      }
+      .type-row {
+        grid-template-columns: 1fr;
+        gap: var(--space-4);
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navigation Bar -->
+  <header class="site-nav">
+    <div class="container">
+      <div class="nav-inner">
+        <a href="#" class="brand-wrap">
+          <div class="brand-badge">V</div>
+          <span class="brand-title">Vibrant</span>
+        </a>
+
+        <nav>
+          <ul class="nav-links">
+            <li><a href="#tokens">Palette</a></li>
+            <li><a href="#typography">Typography</a></li>
+            <li><a href="#components">Components</a></li>
+            <li><a href="#lab">Interactive Lab</a></li>
+          </ul>
+        </nav>
+
+        <div style="display: flex; gap: var(--space-12);">
+          <button class="btn btn-secondary-warm" onclick="showToast('Secondary Warm Token (#EAAE87)')">
+            Warm Accent
+          </button>
+          <button class="btn btn-primary" onclick="showToast('Primary Action (#7C61D4)')">
+            Get Creative
+          </button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="hero-section">
+    <div class="container">
+      <div class="hero-grid">
+        <div>
+          <div class="hero-kicker">Bold &bull; Expressive &bull; Playful</div>
+          <h1 class="hero-title">Lively, colorful design with <span>bold playful typography</span> and dynamic visual energy.</h1>
+          <p class="hero-lead">
+            Adhering strictly to the Vibrant design system foundations: Primary (#7C61D4), Secondary (#EAAE87), rich white cards (#FFFFFF), and legible espresso body text (#2F281D).
+          </p>
+
+          <div class="hero-actions">
+            <button class="btn btn-primary" onclick="showToast('Primary CTA: #7C61D4')">
+              Start Creating
+            </button>
+            <button class="btn btn-secondary-warm" onclick="showToast('Warm Accent: #EAAE87')">
+              Explore Palette
+            </button>
+            <button class="btn btn-neutral" onclick="document.getElementById('components').scrollIntoView({behavior: 'smooth'})">
+              Component Kit
+            </button>
+          </div>
+
+          <div style="display: flex; gap: var(--space-24); font-family: var(--font-mono); font-size: var(--text-14); color: var(--text-subtle);">
+            <span>TYPE: FASCINATE + NOTO SANS</span>
+            <span>GRID: 2/4/8/12/16/24/32/48</span>
+          </div>
+        </div>
+
+        <!-- Playful Hero Card -->
+        <div class="hero-card">
+          <div class="card-badge-top">VIBRANT SPEC</div>
+          <h3 style="font-family: var(--font-display); color: var(--primary); font-size: 26px;">Creative Dynamics</h3>
+          <p style="font-size: var(--text-14); color: var(--text); margin-bottom: var(--space-16);">
+            Keep outputs recognizable to this style family while preserving usability and readability. Headings carry the style personality; body text optimizes scanability.
+          </p>
+
+          <div style="background: var(--bg-cream); border-radius: var(--radius-sm); padding: var(--space-16); border: 2px solid var(--border-default); margin-bottom: var(--space-16);">
+            <div style="display: flex; justify-content: space-between; font-family: var(--font-mono); font-size: 13px; font-weight: 700;">
+              <span>PRIMARY TOKEN</span>
+              <span style="color: var(--primary);">#7C61D4</span>
+            </div>
+            <div style="display: flex; justify-content: space-between; font-family: var(--font-mono); font-size: 13px; font-weight: 700; margin-top: 6px;">
+              <span>SECONDARY TOKEN</span>
+              <span style="color: #9c5c30;">#EAAE87</span>
+            </div>
+          </div>
+
+          <div style="display: flex; justify-content: space-between; align-items: center;">
+            <span class="mono-meta">150-250ms stable transitions</span>
+            <button class="btn btn-primary" style="padding: 6px 16px; font-size: 13px;" onclick="showToast('Sample card clicked')">
+              Lively Pop
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Color Foundations Section -->
+  <section class="section" id="tokens">
+    <div class="container">
+      <div class="section-intro">
+        <h2>1. Color Foundations</h2>
+        <p>Lively and colorful stance with primary violet (#7C61D4), warm peach secondary (#EAAE87), and clean white surfaces.</p>
+      </div>
+
+      <div class="tokens-grid">
+        <!-- Primary -->
+        <div class="token-card" onclick="copyToken('#7C61D4', 'Primary')">
+          <div class="token-swatch" style="background-color: #7C61D4; color: #FFFFFF;">
+            <span class="mono-meta" style="color: #FFFFFF;">#7C61D4</span>
+          </div>
+          <div class="token-info">
+            <div class="token-title">Primary <span>CTA</span></div>
+            <div class="token-hex">--primary: #7C61D4</div>
+            <div class="token-role">Vibrant violet for primary CTA emphasis and focal branding.</div>
+          </div>
+        </div>
+
+        <!-- Secondary -->
+        <div class="token-card" onclick="copyToken('#EAAE87', 'Secondary')">
+          <div class="token-swatch" style="background-color: #EAAE87; color: #2F281D;">
+            <span class="mono-meta" style="color: #2F281D;">#EAAE87</span>
+          </div>
+          <div class="token-info">
+            <div class="token-title">Secondary <span>Warm</span></div>
+            <div class="token-hex">--secondary: #EAAE87</div>
+            <div class="token-role">Warm peach accent providing lively playful contrast.</div>
+          </div>
+        </div>
+
+        <!-- Success -->
+        <div class="token-card" onclick="copyToken('#16A34A', 'Success')">
+          <div class="token-swatch" style="background-color: #16A34A; color: #FFFFFF;">
+            <span class="mono-meta" style="color: #FFFFFF;">#16A34A</span>
+          </div>
+          <div class="token-info">
+            <div class="token-title">Success <span>State</span></div>
+            <div class="token-hex">--success: #16A34A</div>
+            <div class="token-role">Crisp green for validation passes and positive actions.</div>
+          </div>
+        </div>
+
+        <!-- Warning -->
+        <div class="token-card" onclick="copyToken('#D97706', 'Warning')">
+          <div class="token-swatch" style="background-color: #D97706; color: #FFFFFF;">
+            <span class="mono-meta" style="color: #FFFFFF;">#D97706</span>
+          </div>
+          <div class="token-info">
+            <div class="token-title">Warning <span>State</span></div>
+            <div class="token-hex">--warning: #D97706</div>
+            <div class="token-role">Amber for alerts, confirmations, and caution prompts.</div>
+          </div>
+        </div>
+
+        <!-- Danger -->
+        <div class="token-card" onclick="copyToken('#DC2626', 'Danger')">
+          <div class="token-swatch" style="background-color: #DC2626; color: #FFFFFF;">
+            <span class="mono-meta" style="color: #FFFFFF;">#DC2626</span>
+          </div>
+          <div class="token-info">
+            <div class="token-title">Danger <span>State</span></div>
+            <div class="token-hex">--danger: #DC2626</div>
+            <div class="token-role">Red for critical errors and destructive operations.</div>
+          </div>
+        </div>
+
+        <!-- Surface -->
+        <div class="token-card" onclick="copyToken('#FFFFFF', 'Surface')">
+          <div class="token-swatch" style="background-color: #FFFFFF; color: #2F281D; border: 1px solid var(--border-default);">
+            <span class="mono-meta">#FFFFFF</span>
+          </div>
+          <div class="token-info">
+            <div class="token-title">Surface <span>Canvas</span></div>
+            <div class="token-hex">--surface: #FFFFFF</div>
+            <div class="token-role">Crisp white for cards, panels, and large canvas sheets.</div>
+          </div>
+        </div>
+
+        <!-- Text -->
+        <div class="token-card" onclick="copyToken('#2F281D', 'Text')">
+          <div class="token-swatch" style="background-color: #2F281D; color: #FFFFFF;">
+            <span class="mono-meta" style="color: #FFFFFF;">#2F281D</span>
+          </div>
+          <div class="token-info">
+            <div class="token-title">Text <span>Body</span></div>
+            <div class="token-hex">--text: #2F281D</div>
+            <div class="token-role">Warm dark espresso for high readability and scanability.</div>
+          </div>
+        </div>
+
+        <!-- Neutral -->
+        <div class="token-card" onclick="copyToken('#FFFFFF', 'Neutral')">
+          <div class="token-swatch" style="background-color: #FFFFFF; color: #2F281D; border: 1px solid var(--border-default);">
+            <span class="mono-meta">#FFFFFF</span>
+          </div>
+          <div class="token-info">
+            <div class="token-title">Neutral <span>Ground</span></div>
+            <div class="token-hex">--neutral: #FFFFFF</div>
+            <div class="token-role">Derived from surface token for official compatibility.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Typography Scale Section -->
+  <section class="section" id="typography">
+    <div class="container">
+      <div class="section-intro">
+        <h2>2. Typography Hierarchy</h2>
+        <p>Built with <strong>primary=Noto Sans</strong>, <strong>display=Fascinate</strong>, and <strong>mono=Fira Code</strong> across the 14/16/18/24/32/40 scale.</p>
+      </div>
+
+      <div class="type-matrix-box">
+        <div class="type-row">
+          <div class="mono-meta">40px / Fascinate</div>
+          <div style="font-family: var(--font-display); font-size: var(--text-40); color: var(--primary);">
+            Lively Bold Playful Typography
+          </div>
+        </div>
+
+        <div class="type-row">
+          <div class="mono-meta">32px / Fascinate</div>
+          <div style="font-family: var(--font-display); font-size: var(--text-32);">
+            Dynamic Visual Energy &amp; Warm Accents
+          </div>
+        </div>
+
+        <div class="type-row">
+          <div class="mono-meta">24px / Noto Sans 700</div>
+          <div style="font-family: var(--font-primary); font-size: var(--text-24); font-weight: 700;">
+            Hierarchical Clarity: Headline &rarr; Support &rarr; Action
+          </div>
+        </div>
+
+        <div class="type-row">
+          <div class="mono-meta">18px / Noto Sans 600</div>
+          <div style="font-family: var(--font-primary); font-size: var(--text-18); font-weight: 600;">
+            Body text optimizes scanability, readability, and contrast against white surfaces.
+          </div>
+        </div>
+
+        <div class="type-row">
+          <div class="mono-meta">16px / Noto Sans 400</div>
+          <div style="font-family: var(--font-primary); font-size: var(--text-16);">
+            Keep microcopy action-oriented and avoid generic filler language. Primary body text set in #2F281D.
+          </div>
+        </div>
+
+        <div class="type-row">
+          <div class="mono-meta">14px / Fira Code 500</div>
+          <div style="font-family: var(--font-mono); font-size: var(--text-14); color: var(--primary);">
+            const vibrantTheme = { primary: "#7C61D4", secondary: "#EAAE87" };
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Interactive Component Lab & Forms -->
+  <section class="section" id="components">
+    <div class="container">
+      <div class="section-intro">
+        <h2>3. Component Specification &amp; Forms</h2>
+        <p>Buttons with explicit tactile states, accessible form inputs with clear focus-visible outlines, and error handling.</p>
+      </div>
+
+      <div class="lab-grid">
+        <!-- Button Suite -->
+        <div class="lab-box">
+          <h3 style="margin-bottom: var(--space-16);">Action Buttons</h3>
+          <p style="font-size: var(--text-14); color: var(--text-muted); margin-bottom: var(--space-24);">
+            Primary actions strictly utilize <strong>#7C61D4</strong>. Secondary actions utilize warm peach (#EAAE87) or neutral.
+          </p>
+
+          <div style="display: flex; flex-wrap: wrap; gap: var(--space-12); margin-bottom: var(--space-24);">
+            <button class="btn btn-primary" onclick="showToast('Primary Action: #7C61D4')">
+              Primary Action
+            </button>
+            <button class="btn btn-secondary-warm" onclick="showToast('Warm Peach: #EAAE87')">
+              Warm Accent
+            </button>
+            <button class="btn btn-neutral" onclick="showToast('Neutral Surface Action')">
+              Neutral Surface
+            </button>
+            <button class="btn btn-success" onclick="showToast('Success State: #16A34A')">
+              Success
+            </button>
+            <button class="btn btn-warning" onclick="showToast('Warning State: #D97706')">
+              Warning
+            </button>
+            <button class="btn btn-danger" onclick="showToast('Danger State: #DC2626')">
+              Danger
+            </button>
+            <button class="btn btn-primary" disabled>
+              Disabled
+            </button>
+          </div>
+
+          <div class="mono-meta">
+            TRANSITIONS: 150–250MS &bull; OUTLINE: 3PX #7C61D4
+          </div>
+        </div>
+
+        <!-- Form Suite -->
+        <div class="lab-box">
+          <h3 style="margin-bottom: var(--space-16);">Interactive Creative Request</h3>
+          <p style="font-size: var(--text-14); color: var(--text-muted); margin-bottom: var(--space-16);">
+            Strong focus-visible states, explicit error messaging with Danger token (#DC2626), and predictable validations.
+          </p>
+
+          <form id="vibrantForm" onsubmit="handleFormSubmit(event)">
+            <div class="form-group">
+              <label class="form-label" for="studioName">
+                Creative Project Title
+                <span class="mono-meta">REQUIRED</span>
+              </label>
+              <input type="text" id="studioName" class="vibrant-input" placeholder="e.g. Neo-Pop Motion Suite" required>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="studioEmail">
+                Creator Email Address
+                <span class="mono-meta">REQUIRED</span>
+              </label>
+              <input type="email" id="studioEmail" class="vibrant-input" placeholder="creator@vibrant.art" required>
+            </div>
+
+            <div style="display: flex; gap: var(--space-12); align-items: center; margin-top: var(--space-24);">
+              <button type="submit" class="btn btn-primary">
+                Dispatch Creative
+              </button>
+              <button type="button" class="btn btn-neutral" onclick="simulateFormError()">
+                Simulate Error
+              </button>
+              <span id="formFeedback" class="mono-meta"></span>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div>
+          <div style="font-family: var(--font-display); font-size: 22px; color: var(--primary); margin-bottom: var(--space-8);">
+            Vibrant Design System
+          </div>
+          <p style="font-size: var(--text-14); color: var(--text-muted); max-width: 320px;">
+            Bold &amp; Expressive design system with playful typography, warm accents, and dynamic visual energy.
+          </p>
+        </div>
+
+        <div>
+          <div style="font-size: var(--text-14); font-weight: 700; margin-bottom: var(--space-12);">PALETTE</div>
+          <ul style="list-style: none; font-family: var(--font-mono); font-size: 13px; line-height: 1.8; color: var(--text-muted);">
+            <li>Primary: #7C61D4</li>
+            <li>Secondary: #EAAE87</li>
+            <li>Success: #16A34A</li>
+            <li>Warning: #D97706</li>
+            <li>Danger: #DC2626</li>
+            <li>Surface: #FFFFFF</li>
+            <li>Text: #2F281D</li>
+          </ul>
+        </div>
+
+        <div>
+          <div style="font-size: var(--text-14); font-weight: 700; margin-bottom: var(--space-12);">TYPOGRAPHY</div>
+          <ul style="list-style: none; font-size: 13px; line-height: 1.8; color: var(--text-muted);">
+            <li>Display: Fascinate</li>
+            <li>Primary: Noto Sans</li>
+            <li>Mono: Fira Code</li>
+            <li>Scale: 14/16/18/24/32/40</li>
+          </ul>
+        </div>
+
+        <div>
+          <div style="font-size: var(--text-14); font-weight: 700; margin-bottom: var(--space-12);">SPACING</div>
+          <p style="font-size: 13px; color: var(--text-muted); line-height: 1.6;">
+            2 / 4 / 8 / 12 / 16 / 24 / 32 / 48px baseline rhythm with zero off-palette colors.
+          </p>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <div>&copy; 2026 Vibrant Design System. All rights reserved.</div>
+        <div>SPECIFICATION: REV 2026.09</div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Toast -->
+  <div class="vibrant-toast" id="vibrantToast">Token copied to clipboard!</div>
+
+  <script>
+    function copyToken(hex, name) {
+      navigator.clipboard.writeText(hex).then(() => {
+        showToast(`${name} token (${hex}) copied!`);
+      }).catch(() => {
+        showToast(`${name}: ${hex}`);
+      });
+    }
+
+    function showToast(msg) {
+      const toast = document.getElementById('vibrantToast');
+      toast.textContent = msg;
+      toast.classList.add('show');
+      setTimeout(() => {
+        toast.classList.remove('show');
+      }, 2500);
+    }
+
+    function handleFormSubmit(e) {
+      e.preventDefault();
+      const feedback = document.getElementById('formFeedback');
+      feedback.style.color = 'var(--success)';
+      feedback.textContent = '✓ Creative project submitted successfully!';
+      showToast('Project registered in creative studio!');
+    }
+
+    function simulateFormError() {
+      const email = document.getElementById('studioEmail');
+      const feedback = document.getElementById('formFeedback');
+      email.classList.add('input-error');
+      feedback.style.color = 'var(--danger)';
+      feedback.textContent = '⚠ Error: Verified creator email is required';
+      showToast('Danger token (#DC2626) simulated');
+    }
+  </script>
+</body>
+</html>

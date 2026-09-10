@@ -1,0 +1,573 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>APEX CLUSTER — Cloud Infrastructure Console | Official Dashboard System</title>
+  <meta name="description" content="Authentic implementation of Dashboard design system: dark-themed cloud-platform aesthetic, modular glass panels, IBM Plex Sans, Primary #0C5CAB, Surface #09090B, and 8pt baseline grid." />
+
+  <!-- Google Fonts: IBM Plex Sans + IBM Plex Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    /* ─────────────────────────────────────────────────────────────────
+       DASHBOARD OFFICIAL DESIGN TOKENS (from DESIGN.md)
+       Visual Style: Dark-themed cloud-platform aesthetic
+       Tokens:
+         Primary: #0C5CAB (Cloud Blue)
+         Secondary: #0A4A8A (Deep Cobalt)
+         Success: #10B981 (Emerald)
+         Warning: #F59E0B (Amber)
+         Danger: #EF4444 (Crimson)
+         Surface: #09090B (Onyx Canvas)
+         Text: #FAFAFA (Crisp White)
+         Neutral: #09090B
+       Typography: IBM Plex Sans
+       Scale: 12 / 14 / 16 / 20 / 24 / 32
+       Spacing: 8pt baseline grid (8, 16, 24, 32, 40, 48, 64, 80)
+       ───────────────────────────────────────────────────────────────── */
+    :root {
+      --color-primary: #0C5CAB;
+      --color-primary-hover: #1070cc;
+      --color-secondary: #0A4A8A;
+      --color-success: #10B981;
+      --color-warning: #F59E0B;
+      --color-danger: #EF4444;
+      --color-surface: #09090B;
+      --color-surface-panel: #131316;
+      --color-surface-glass: rgba(19, 19, 22, 0.75);
+      --color-text: #FAFAFA;
+      --color-text-muted: #A1A1AA;
+      --color-neutral: #09090B;
+      --color-border: #27272A;
+      --color-border-subtle: rgba(255, 255, 255, 0.08);
+
+      /* Typography Families */
+      --font-display: "IBM Plex Sans", -apple-system, sans-serif;
+      --font-primary: "IBM Plex Sans", -apple-system, sans-serif;
+      --font-mono: "IBM Plex Mono", monospace;
+
+      /* Official Scale: 12 / 14 / 16 / 20 / 24 / 32 */
+      --text-12: 12px;
+      --text-14: 14px;
+      --text-16: 16px;
+      --text-20: 20px;
+      --text-24: 24px;
+      --text-32: 32px;
+
+      /* 8pt Baseline Spacing Grid */
+      --space-8: 8px;
+      --space-16: 16px;
+      --space-24: 24px;
+      --space-32: 32px;
+      --space-40: 40px;
+      --space-48: 48px;
+      --space-64: 64px;
+      --space-80: 80px;
+
+      /* Radii */
+      --radius-sm: 6px;
+      --radius-md: 10px;
+      --radius-lg: 16px;
+      --radius-pill: 9999px;
+
+      /* Glass Panels & Shadows */
+      --shadow-glass: 0 8px 32px 0 rgba(0, 0, 0, 0.36);
+      --transition-base: 180ms cubic-bezier(0.16, 1, 0.3, 1);
+      --container-max: 1280px;
+    }
+
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      background: var(--color-surface);
+      color: var(--color-text);
+      font-size: 16px;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    body {
+      background: var(--color-surface);
+      color: var(--color-text);
+      font-family: var(--font-primary);
+      font-size: var(--text-14);
+      line-height: 1.5;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* Subtle Cloud Platform Gradient Background */
+    body::before {
+      content: "";
+      position: fixed;
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 1000px;
+      height: 400px;
+      background: radial-gradient(circle, rgba(12, 92, 171, 0.18) 0%, rgba(9, 9, 11, 0) 70%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* ─── TYPOGRAPHY ─── */
+    h1, h2, h3, h4 {
+      font-family: var(--font-display);
+      color: var(--color-text);
+      font-weight: 600;
+      line-height: 1.25;
+    }
+
+    h1 {
+      font-size: clamp(28px, 4vw, var(--text-32));
+      letter-spacing: -0.02em;
+    }
+
+    h2 {
+      font-size: var(--text-24);
+      letter-spacing: -0.015em;
+    }
+
+    h3 {
+      font-size: var(--text-20);
+    }
+
+    h4 {
+      font-size: var(--text-16);
+    }
+
+    p {
+      color: var(--color-text-muted);
+      font-size: var(--text-14);
+      line-height: 1.6;
+    }
+
+    /* ─── BUTTONS ─── */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--space-8);
+      font-family: var(--font-primary);
+      font-size: var(--text-14);
+      font-weight: 500;
+      padding: 8px 16px;
+      border-radius: var(--radius-sm);
+      text-decoration: none;
+      cursor: pointer;
+      border: 1px solid transparent;
+      transition: all var(--transition-base);
+      outline: none;
+      white-space: nowrap;
+    }
+
+    .btn-primary {
+      background-color: var(--color-primary);
+      color: #ffffff;
+      border-color: rgba(255, 255, 255, 0.15);
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+    }
+
+    .btn-primary:hover {
+      background-color: var(--color-primary-hover);
+    }
+
+    .btn-secondary {
+      background-color: var(--color-surface-panel);
+      color: var(--color-text);
+      border-color: var(--color-border);
+    }
+
+    .btn-secondary:hover {
+      background-color: #1a1a1f;
+      border-color: #3f3f46;
+    }
+
+    /* ─── MODULAR GLASS PANELS ─── */
+    .panel {
+      background: var(--color-surface-glass);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid var(--color-border-subtle);
+      border-radius: var(--radius-md);
+      padding: var(--space-24);
+      box-shadow: var(--shadow-glass);
+      position: relative;
+    }
+
+    /* ─── TOP NAVBAR (Cloud Console Style) ─── */
+    .console-nav {
+      position: sticky;
+      top: 0;
+      width: 100%;
+      background: rgba(9, 9, 11, 0.85);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--color-border);
+      z-index: 1000;
+    }
+
+    .nav-inner {
+      max-width: var(--container-max);
+      margin: 0 auto;
+      padding: var(--space-12) var(--space-24);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .brand-cluster {
+      display: flex;
+      align-items: center;
+      gap: var(--space-12);
+      text-decoration: none;
+      color: var(--color-text);
+      font-weight: 600;
+      font-size: var(--text-16);
+    }
+
+    .cluster-logo {
+      width: 24px;
+      height: 24px;
+      background: var(--color-primary);
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .env-badge {
+      font-family: var(--font-mono);
+      font-size: var(--text-12);
+      padding: 2px 8px;
+      border-radius: var(--radius-pill);
+      background: rgba(16, 185, 129, 0.15);
+      color: var(--color-success);
+      border: 1px solid rgba(16, 185, 129, 0.3);
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    /* ─── DASHBOARD CONTAINER ─── */
+    .dashboard-container {
+      max-width: var(--container-max);
+      margin: 0 auto;
+      padding: var(--space-32) var(--space-24) var(--space-64);
+      position: relative;
+      z-index: 1;
+    }
+
+    /* ─── METRICS SUMMARY GRID ─── */
+    .metrics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: var(--space-16);
+      margin: var(--space-24) 0;
+    }
+
+    .metric-card {
+      background: var(--color-surface-panel);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-md);
+      padding: var(--space-16);
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-8);
+    }
+
+    .metric-title {
+      font-size: var(--text-12);
+      color: var(--color-text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .metric-value {
+      font-family: var(--font-mono);
+      font-size: var(--text-24);
+      font-weight: 600;
+      color: var(--color-text);
+    }
+
+    .metric-trend {
+      font-family: var(--font-mono);
+      font-size: var(--text-12);
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    /* ─── MAIN DASHBOARD MODULES ─── */
+    .modules-layout {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: var(--space-24);
+      margin-top: var(--space-24);
+    }
+
+    @media (max-width: 960px) {
+      .modules-layout {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* Table Module */
+    .deploy-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: var(--text-14);
+      margin-top: var(--space-16);
+    }
+
+    .deploy-table th {
+      text-align: left;
+      padding: 10px 12px;
+      font-size: var(--text-12);
+      color: var(--color-text-muted);
+      border-bottom: 1px solid var(--color-border);
+      font-weight: 500;
+    }
+
+    .deploy-table td {
+      padding: 12px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      color: var(--color-text);
+    }
+
+    .deploy-table tr:hover {
+      background: rgba(255, 255, 255, 0.02);
+    }
+
+    /* ─── TELEMETRY LOGS TERMINAL ─── */
+    .terminal-box {
+      background: #000000;
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-sm);
+      padding: var(--space-16);
+      font-family: var(--font-mono);
+      font-size: var(--text-12);
+      color: #D4D4D8;
+      max-height: 260px;
+      overflow-y: auto;
+      line-height: 1.7;
+    }
+
+    .log-time {
+      color: var(--color-text-muted);
+      margin-right: 8px;
+    }
+
+    /* ─── FLOATING AUDIT MODAL ─── */
+    .audit-trigger {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      z-index: 1000;
+    }
+
+    .audit-modal {
+      display: none;
+      position: fixed;
+      bottom: 80px;
+      right: 24px;
+      width: 360px;
+      background: #18181B;
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-md);
+      box-shadow: var(--shadow-glass);
+      padding: var(--space-24);
+      z-index: 1001;
+      font-size: var(--text-12);
+    }
+
+    .audit-modal.open {
+      display: block;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- CLOUD CONSOLE TOP NAVIGATION -->
+  <header class="console-nav">
+    <div class="nav-inner">
+      <div style="display: flex; align-items: center; gap: var(--space-24);">
+        <a href="#" class="brand-cluster">
+          <div class="cluster-logo">▲</div>
+          <span>Apex Console</span>
+        </a>
+        <span class="env-badge">● us-east-prod</span>
+      </div>
+
+      <div style="display: flex; gap: var(--space-12); align-items: center;">
+        <button class="btn btn-secondary" onclick="toggleAuditor()">Token Spec</button>
+        <button class="btn btn-primary" onclick="simulateDeploy()">Deploy New Pod</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="dashboard-container">
+    <!-- DASHBOARD HEADER -->
+    <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: var(--space-16);">
+      <div>
+        <h1>Edge Cluster Telemetry</h1>
+        <p>Real-time orchestrator monitoring across 48 multi-region Kubernetes nodes.</p>
+      </div>
+      <div>
+        <span style="font-family: var(--font-mono); font-size: var(--text-12); color: var(--color-text-muted);">Last Polled: 2026-09-09 21:27:00 UTC</span>
+      </div>
+    </div>
+
+    <!-- METRICS OVERVIEW (8pt Baseline Grid) -->
+    <div class="metrics-grid">
+      <div class="metric-card">
+        <span class="metric-title">GLOBAL REQUEST THROUGHPUT</span>
+        <span class="metric-value">4.82 M/s</span>
+        <span class="metric-trend" style="color: var(--color-success);">↑ +12.4% vs last hour</span>
+      </div>
+
+      <div class="metric-card">
+        <span class="metric-title">P99 API LATENCY</span>
+        <span class="metric-value" id="p99Val">18.4 ms</span>
+        <span class="metric-trend" style="color: var(--color-success);">● Optimal (&lt; 25ms)</span>
+      </div>
+
+      <div class="metric-card">
+        <span class="metric-title">ACTIVE CLUSTER PODS</span>
+        <span class="metric-value" id="podsVal">148 / 150</span>
+        <span class="metric-trend" style="color: var(--color-primary);">98.6% Capacity</span>
+      </div>
+
+      <div class="metric-card">
+        <span class="metric-title">HTTP ERROR RATE</span>
+        <span class="metric-value">0.002%</span>
+        <span class="metric-trend" style="color: var(--color-success);">● 0 critical incidents</span>
+      </div>
+    </div>
+
+    <!-- MODULAR GLASS PANELS LAYOUT -->
+    <div class="modules-layout">
+      <!-- Left Panel: Deployments Table -->
+      <div class="panel">
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+          <h2>Production Deployments</h2>
+          <span style="font-family: var(--font-mono); font-size: var(--text-12); color: var(--color-text-muted);">Branch: main</span>
+        </div>
+
+        <table class="deploy-table">
+          <thead>
+            <tr>
+              <th>SERVICE</th>
+              <th>COMMIT SHA</th>
+              <th>STATUS</th>
+              <th>CPU LOAD</th>
+              <th>MEM</th>
+            </tr>
+          </thead>
+          <tbody id="deployTbody">
+            <tr>
+              <td><strong>api-gateway-auth</strong></td>
+              <td><span style="font-family: var(--font-mono); font-size: var(--text-12);">a4f89d2</span></td>
+              <td><span class="env-badge" style="background: rgba(16, 185, 129, 0.15); color: #10B981;">● Healthy</span></td>
+              <td><span style="font-family: var(--font-mono);">14%</span></td>
+              <td><span style="font-family: var(--font-mono);">2.1 GB</span></td>
+            </tr>
+            <tr>
+              <td><strong>payment-ledger-v3</strong></td>
+              <td><span style="font-family: var(--font-mono); font-size: var(--text-12);">7c90e1b</span></td>
+              <td><span class="env-badge" style="background: rgba(16, 185, 129, 0.15); color: #10B981;">● Healthy</span></td>
+              <td><span style="font-family: var(--font-mono);">28%</span></td>
+              <td><span style="font-family: var(--font-mono);">4.8 GB</span></td>
+            </tr>
+            <tr>
+              <td><strong>realtime-websocket</strong></td>
+              <td><span style="font-family: var(--font-mono); font-size: var(--text-12);">e33b5a1</span></td>
+              <td><span class="env-badge" style="background: rgba(245, 158, 11, 0.15); color: #F59E0B;">▲ Rebalancing</span></td>
+              <td><span style="font-family: var(--font-mono);">62%</span></td>
+              <td><span style="font-family: var(--font-mono);">6.2 GB</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Right Panel: Live Event Logs Terminal -->
+      <div class="panel">
+        <h2>Live Cluster Logs</h2>
+        <p style="font-size: var(--text-12); margin-bottom: var(--space-16);">Stream from k8s-node-us-east-4a</p>
+
+        <div class="terminal-box" id="terminalLogs">
+          <div><span class="log-time">[21:26:40]</span> info: ingress route mapped to upstream</div>
+          <div><span class="log-time">[21:26:44]</span> <span style="color: var(--color-success);">success:</span> TLS cert handshake verified</div>
+          <div><span class="log-time">[21:26:49]</span> info: healthcheck /ping 200 OK (1.2ms)</div>
+          <div><span class="log-time">[21:26:55]</span> info: garbage collection freed 420MB</div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- FLOATING AUDIT DRAWER -->
+  <div class="audit-trigger">
+    <button class="btn btn-primary" onclick="toggleAuditor()">
+      <span>Audit Tokens</span>
+    </button>
+  </div>
+
+  <div class="audit-modal" id="auditModal">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; border-bottom: 1px solid var(--color-border); padding-bottom: 6px;">
+      <span style="font-family: var(--font-display); font-weight: 600; color: var(--color-text);">DASHBOARD SPEC</span>
+      <button onclick="toggleAuditor()" style="background: none; border: none; cursor: pointer; color: var(--color-text);">✕</button>
+    </div>
+    <div style="display: flex; flex-direction: column; gap: 8px; font-family: var(--font-mono); font-size: var(--text-12);">
+      <div>• Primary: <span style="color: #0C5CAB; font-weight: 600;">#0C5CAB</span></div>
+      <div>• Secondary: <span style="color: #0A4A8A; font-weight: 600;">#0A4A8A</span></div>
+      <div>• Surface: <span style="font-weight: 600;">#09090B</span></div>
+      <div>• Text: <span style="color: #FAFAFA; font-weight: 600;">#FAFAFA</span></div>
+      <div>• Success: <span style="color: #10B981; font-weight: 600;">#10B981</span></div>
+      <div>• Warning: <span style="color: #F59E0B; font-weight: 600;">#F59E0B</span></div>
+      <div>• Danger: <span style="color: #EF4444; font-weight: 600;">#EF4444</span></div>
+      <div>• Fonts: IBM Plex Sans</div>
+      <div>• Scale: 12 / 14 / 16 / 20 / 24 / 32</div>
+      <div>• Spacing: 8pt baseline grid</div>
+    </div>
+  </div>
+
+  <!-- SCRIPTING -->
+  <script>
+    function toggleAuditor() {
+      document.getElementById('auditModal').classList.toggle('open');
+    }
+
+    let podCount = 148;
+    function simulateDeploy() {
+      podCount++;
+      document.getElementById('podsVal').textContent = `${podCount} / 150`;
+
+      const tbody = document.getElementById('deployTbody');
+      const tr = document.createElement('tr');
+      tr.innerHTML = `
+        <td><strong>microservice-edge-${podCount}</strong></td>
+        <td><span style="font-family: var(--font-mono); font-size: 12px;">f912c0a</span></td>
+        <td><span class="env-badge" style="background: rgba(12, 92, 171, 0.2); color: #0C5CAB;">● Initializing</span></td>
+        <td><span style="font-family: var(--font-mono);">8%</span></td>
+        <td><span style="font-family: var(--font-mono);">1.0 GB</span></td>
+      `;
+      tbody.prepend(tr);
+
+      const term = document.getElementById('terminalLogs');
+      const log = document.createElement('div');
+      log.innerHTML = `<span class="log-time">[${new Date().toISOString().substring(11, 19)}]</span> <span style="color: #0C5CAB;">deploy:</span> spinning up pod-${podCount}`;
+      term.appendChild(log);
+      term.scrollTop = term.scrollHeight;
+    }
+  </script>
+</body>
+</html>

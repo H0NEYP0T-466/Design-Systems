@@ -1,0 +1,1498 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Perspective — Spatial Depth &amp; Isometric Design System</title>
+  <meta name="description" content="Spatial depth design system with isometric views, vanishing points, layered 3D realism, high-contrast surfaces, and strict token adherence.">
+
+  <!-- Typography as specified in perspective/DESIGN.md: primary=Poppins, display=Oswald, mono=JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Oswald:wght@400;500;600;700&family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+  <style>
+    /* ==========================================================================
+       DESIGN SYSTEM TOKENS — Exactly matching perspective/DESIGN.md
+       ========================================================================== */
+    :root {
+      /* Colors */
+      --primary: #00BD7D;
+      --secondary: #00BD7D;
+      --success: #16A34A;
+      --warning: #D97706;
+      --danger: #DC2626;
+      --surface: #FFFFFF;
+      --text: #111827;
+      --neutral: #FFFFFF;
+
+      /* Spatial Depth & Tonal Foundations */
+      --bg-base: #F8FAFC;
+      --bg-depth: #F1F5F9;
+      --border-subtle: #E2E8F0;
+      --border-strong: #111827;
+      --border-accent: #00BD7D;
+      --text-muted: #4B5563;
+      --text-subtle: #64748B;
+      --primary-hover: #00A66E;
+      --primary-subtle: rgba(0, 189, 125, 0.12);
+
+      /* Typography Families */
+      --font-primary: 'Poppins', -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      --font-display: 'Oswald', -apple-system, BlinkMacSystemFont, sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+
+      /* Typography Scale: 12 / 14 / 16 / 20 / 24 / 32 */
+      --text-12: 12px;
+      --text-14: 14px;
+      --text-16: 16px;
+      --text-20: 20px;
+      --text-24: 24px;
+      --text-32: 32px;
+
+      /* Spacing Scale: 4 / 8 / 12 / 16 / 24 / 32 */
+      --space-4: 4px;
+      --space-8: 8px;
+      --space-12: 12px;
+      --space-16: 16px;
+      --space-24: 24px;
+      --space-32: 32px;
+      --space-48: 48px;
+      --space-64: 64px;
+
+      /* Radii */
+      --radius-sm: 4px;
+      --radius-md: 8px;
+      --radius-lg: 14px;
+
+      /* Motion: 150-250ms with stable easing */
+      --transition-fast: 150ms cubic-bezier(0.16, 1, 0.3, 1);
+      --transition-normal: 240ms cubic-bezier(0.16, 1, 0.3, 1);
+
+      /* Spatial Realism Shadows (High Contrast Depth) */
+      --shadow-isometric: -12px 14px 28px -6px rgba(17, 24, 39, 0.14), -4px 6px 10px -2px rgba(17, 24, 39, 0.08);
+      --shadow-layer: 0 20px 35px -10px rgba(17, 24, 39, 0.18), 0 1px 3px rgba(17, 24, 39, 0.05);
+      --shadow-hover: -16px 20px 36px -4px rgba(17, 24, 39, 0.2);
+    }
+
+    /* Reset & Base Setup */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--bg-base);
+      color: var(--text);
+      font-family: var(--font-primary);
+      font-size: var(--text-16);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    /* Vanishing Point Horizon Grid Lines */
+    .perspective-grid-bg {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+      opacity: 0.45;
+      background-image: 
+        linear-gradient(to right, rgba(0, 189, 125, 0.06) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(17, 24, 39, 0.04) 1px, transparent 1px);
+      background-size: 32px 32px;
+    }
+
+    /* Layout Containers */
+    .container {
+      width: 100%;
+      max-width: 1180px;
+      margin-left: auto;
+      margin-right: auto;
+      padding-left: var(--space-24);
+      padding-right: var(--space-24);
+      position: relative;
+      z-index: 1;
+    }
+
+    /* Typography Utilities */
+    h1, h2, h3, h4, .font-display {
+      font-family: var(--font-display);
+      color: var(--text);
+      letter-spacing: 0.02em;
+      text-transform: uppercase;
+      font-weight: 700;
+    }
+
+    h1 {
+      font-size: var(--text-32);
+      line-height: 1.15;
+    }
+
+    h2 {
+      font-size: var(--text-24);
+      line-height: 1.25;
+      border-bottom: 2px solid var(--primary);
+      padding-bottom: var(--space-8);
+      margin-bottom: var(--space-24);
+      display: flex;
+      align-items: center;
+      gap: var(--space-12);
+    }
+
+    h2::before {
+      content: "";
+      display: inline-block;
+      width: 8px;
+      height: 18px;
+      background-color: var(--primary);
+      transform: skewX(-15deg);
+    }
+
+    h3 {
+      font-size: var(--text-20);
+      line-height: 1.3;
+      margin-bottom: var(--space-12);
+    }
+
+    h4 {
+      font-size: var(--text-16);
+      line-height: 1.4;
+      margin-bottom: var(--space-8);
+    }
+
+    p {
+      color: var(--text);
+      font-size: var(--text-16);
+      line-height: 1.6;
+    }
+
+    .telemetry-mono {
+      font-family: var(--font-mono);
+      font-size: var(--text-12);
+      color: var(--text-subtle);
+      letter-spacing: 0.04em;
+    }
+
+    /* Header / Spatial Navigation */
+    .site-header {
+      background-color: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(8px);
+      border-bottom: 1px solid var(--border-subtle);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      padding-top: var(--space-12);
+      padding-bottom: var(--space-12);
+    }
+
+    .header-content {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .brand-block {
+      display: flex;
+      align-items: center;
+      gap: var(--space-12);
+      text-decoration: none;
+    }
+
+    .isometric-cube-icon {
+      width: 28px;
+      height: 28px;
+      position: relative;
+      transform: rotate(-15deg);
+    }
+
+    .brand-title {
+      font-family: var(--font-display);
+      font-size: var(--text-24);
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      color: var(--text);
+    }
+
+    .brand-tag {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      background: var(--primary-subtle);
+      color: #047857;
+      padding: 2px 6px;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--primary);
+      font-weight: 600;
+    }
+
+    .nav-menu {
+      display: flex;
+      gap: var(--space-24);
+      list-style: none;
+      align-items: center;
+    }
+
+    .nav-menu a {
+      color: var(--text);
+      text-decoration: none;
+      font-size: var(--text-14);
+      font-weight: 500;
+      transition: color var(--transition-fast);
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .nav-menu a:hover {
+      color: var(--primary);
+    }
+
+    /* Buttons — Favor Primary (#00BD7D) for CTA emphasis */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--space-8);
+      font-family: var(--font-primary);
+      font-size: var(--text-14);
+      font-weight: 600;
+      padding: 10px var(--space-24);
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      text-decoration: none;
+      transition: background-color var(--transition-fast), color var(--transition-fast), transform var(--transition-fast), box-shadow var(--transition-fast), border-color var(--transition-fast);
+      border: 1px solid transparent;
+      user-select: none;
+      white-space: nowrap;
+    }
+
+    .btn:active {
+      transform: translateY(2px);
+    }
+
+    .btn:focus-visible {
+      outline: 2px solid var(--primary);
+      outline-offset: 2px;
+    }
+
+    /* Primary CTA button: #00BD7D */
+    .btn-primary {
+      background-color: var(--primary);
+      color: #FFFFFF;
+      border-color: var(--primary);
+      box-shadow: 0 4px 12px rgba(0, 189, 125, 0.25);
+    }
+
+    .btn-primary:hover {
+      background-color: var(--primary-hover);
+      border-color: var(--primary-hover);
+      transform: translateY(-1px);
+      box-shadow: 0 6px 16px rgba(0, 189, 125, 0.35);
+    }
+
+    /* Secondary Neutral: #FFFFFF surface */
+    .btn-secondary {
+      background-color: var(--surface);
+      color: var(--text);
+      border-color: var(--border-subtle);
+      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    }
+
+    .btn-secondary:hover {
+      border-color: var(--primary);
+      color: var(--primary);
+      transform: translateY(-1px);
+    }
+
+    /* Success CTA */
+    .btn-success {
+      background-color: var(--success);
+      color: #FFFFFF;
+      border-color: var(--success);
+    }
+    .btn-success:hover { background-color: #15803D; }
+
+    /* Warning CTA */
+    .btn-warning {
+      background-color: var(--warning);
+      color: #FFFFFF;
+      border-color: var(--warning);
+    }
+    .btn-warning:hover { background-color: #B45309; }
+
+    /* Danger CTA */
+    .btn-danger {
+      background-color: var(--danger);
+      color: #FFFFFF;
+      border-color: var(--danger);
+    }
+    .btn-danger:hover { background-color: #B91C1C; }
+
+    .btn:disabled {
+      opacity: 0.45;
+      cursor: not-allowed;
+      pointer-events: none;
+    }
+
+    /* Hero Section with Interactive 3D Perspective Stage */
+    .hero-section {
+      padding-top: var(--space-48);
+      padding-bottom: var(--space-64);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--space-48);
+      align-items: center;
+    }
+
+    .hero-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-8);
+      font-family: var(--font-mono);
+      font-size: var(--text-12);
+      color: #047857;
+      background: var(--primary-subtle);
+      padding: 4px var(--space-12);
+      border-radius: var(--radius-sm);
+      margin-bottom: var(--space-16);
+      font-weight: 600;
+    }
+
+    .hero-tag::before {
+      content: "▶";
+      font-size: 8px;
+      color: var(--primary);
+    }
+
+    .hero-title {
+      font-size: var(--text-32);
+      line-height: 1.15;
+      margin-bottom: var(--space-16);
+      color: var(--text);
+    }
+
+    .hero-title span {
+      color: var(--primary);
+    }
+
+    .hero-lead {
+      font-size: var(--text-16);
+      color: var(--text);
+      line-height: 1.6;
+      margin-bottom: var(--space-24);
+      max-width: 520px;
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-16);
+      margin-bottom: var(--space-32);
+    }
+
+    .telemetry-strip {
+      display: flex;
+      gap: var(--space-24);
+      border-top: 1px solid var(--border-subtle);
+      padding-top: var(--space-16);
+      font-family: var(--font-mono);
+      font-size: var(--text-12);
+      color: var(--text-subtle);
+    }
+
+    /* 3D Perspective Viewport / Stage Container */
+    .stage-wrapper {
+      perspective: 1200px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      position: relative;
+    }
+
+    .stage-viewport {
+      width: 100%;
+      height: 380px;
+      position: relative;
+      transform-style: preserve-3d;
+      transition: transform 300ms cubic-bezier(0.16, 1, 0.3, 1);
+      cursor: grab;
+    }
+
+    .stage-viewport:active {
+      cursor: grabbing;
+    }
+
+    /* 3D Isometric Layer Cards */
+    .spatial-layer {
+      position: absolute;
+      inset: 20px;
+      background: var(--surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      box-shadow: var(--shadow-layer);
+      padding: var(--space-24);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: transform 300ms ease, opacity 300ms ease;
+      transform-style: preserve-3d;
+      backface-visibility: hidden;
+    }
+
+    /* Layer 1: Ground Mesh */
+    .layer-ground {
+      transform: translateZ(0px) rotateX(45deg) rotateZ(-30deg);
+      background: rgba(255, 255, 255, 0.96);
+      border: 2px solid var(--border-subtle);
+    }
+
+    /* Layer 2: Elevation Analytics */
+    .layer-analytics {
+      transform: translateZ(60px) rotateX(45deg) rotateZ(-30deg);
+      background: rgba(255, 255, 255, 0.98);
+      border: 2px solid var(--primary);
+      box-shadow: var(--shadow-isometric);
+    }
+
+    /* Layer 3: Floating Telemetry HUD */
+    .layer-hud {
+      transform: translateZ(120px) rotateX(45deg) rotateZ(-30deg);
+      background: rgba(255, 255, 255, 0.94);
+      border: 1px solid var(--text);
+    }
+
+    /* Exploded View Mode */
+    .stage-viewport.view-exploded .layer-ground {
+      transform: translateZ(-40px) rotateX(55deg) rotateZ(-35deg);
+    }
+    .stage-viewport.view-exploded .layer-analytics {
+      transform: translateZ(90px) rotateX(55deg) rotateZ(-35deg);
+    }
+    .stage-viewport.view-exploded .layer-hud {
+      transform: translateZ(200px) rotateX(55deg) rotateZ(-35deg);
+    }
+
+    /* Flat Orthographic Mode */
+    .stage-viewport.view-orthographic .layer-ground {
+      transform: translateZ(0px) rotateX(0deg) rotateZ(0deg);
+      display: none;
+    }
+    .stage-viewport.view-orthographic .layer-hud {
+      display: none;
+    }
+    .stage-viewport.view-orthographic .layer-analytics {
+      transform: translateZ(0px) rotateX(0deg) rotateZ(0deg);
+      inset: 0;
+    }
+
+    /* Stage Controls Bar */
+    .stage-controls {
+      display: flex;
+      gap: var(--space-8);
+      margin-top: var(--space-24);
+      background: var(--surface);
+      padding: 6px;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border-subtle);
+      box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+    }
+
+    .stage-btn {
+      background: transparent;
+      border: none;
+      padding: 6px var(--space-12);
+      font-family: var(--font-mono);
+      font-size: var(--text-12);
+      font-weight: 600;
+      color: var(--text);
+      cursor: pointer;
+      border-radius: var(--radius-sm);
+      transition: background-color var(--transition-fast), color var(--transition-fast);
+    }
+
+    .stage-btn.active, .stage-btn:hover {
+      background-color: var(--primary);
+      color: #FFFFFF;
+    }
+
+    /* Sections */
+    .section {
+      padding-top: var(--space-48);
+      padding-bottom: var(--space-48);
+      border-bottom: 1px solid var(--border-subtle);
+    }
+
+    .section-intro {
+      max-width: 680px;
+      margin-bottom: var(--space-32);
+    }
+
+    .section-intro p {
+      font-size: var(--text-16);
+      color: var(--text-muted);
+    }
+
+    /* Tokens Palette Swatches Grid */
+    .tokens-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: var(--space-16);
+      margin-bottom: var(--space-32);
+    }
+
+    .token-card {
+      background: var(--surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-sm);
+      overflow: hidden;
+      box-shadow: 0 2px 4px rgba(17, 24, 39, 0.04);
+      transition: transform var(--transition-fast), border-color var(--transition-fast), box-shadow var(--transition-fast);
+      cursor: pointer;
+    }
+
+    .token-card:hover {
+      transform: translateY(-3px);
+      border-color: var(--primary);
+      box-shadow: 0 8px 16px rgba(0, 189, 125, 0.12);
+    }
+
+    .token-swatch {
+      height: 85px;
+      width: 100%;
+      padding: var(--space-8) var(--space-12);
+      display: flex;
+      align-items: flex-end;
+      border-bottom: 1px solid var(--border-subtle);
+    }
+
+    .token-details {
+      padding: var(--space-12);
+      font-family: var(--font-mono);
+    }
+
+    .token-name {
+      font-size: var(--text-14);
+      font-weight: 700;
+      color: var(--text);
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: var(--space-4);
+    }
+
+    .token-hex {
+      font-size: var(--text-12);
+      color: var(--text-subtle);
+    }
+
+    .token-role {
+      font-family: var(--font-primary);
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-top: var(--space-4);
+    }
+
+    /* Typography Hierarchy Table */
+    .type-scale-matrix {
+      background: var(--surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-sm);
+      padding: var(--space-32);
+      margin-bottom: var(--space-32);
+      box-shadow: 0 2px 4px rgba(0,0,0,0.03);
+    }
+
+    .type-scale-row {
+      display: grid;
+      grid-template-columns: 160px 1fr;
+      align-items: baseline;
+      padding-top: var(--space-12);
+      padding-bottom: var(--space-12);
+      border-bottom: 1px dashed var(--border-subtle);
+    }
+
+    .type-scale-row:last-child {
+      border-bottom: none;
+    }
+
+    .type-spec-meta {
+      font-family: var(--font-mono);
+      font-size: var(--text-12);
+      color: var(--text-subtle);
+    }
+
+    /* Spatial Perspective Principles Grid */
+    .spatial-features-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: var(--space-24);
+      margin-bottom: var(--space-32);
+    }
+
+    .feature-card {
+      background: var(--surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-sm);
+      padding: var(--space-24);
+      box-shadow: 0 2px 6px rgba(17, 24, 39, 0.05);
+      position: relative;
+      transition: transform var(--transition-fast), border-color var(--transition-fast);
+    }
+
+    .feature-card:hover {
+      transform: translateY(-4px);
+      border-color: var(--primary);
+    }
+
+    .feature-icon-box {
+      width: 40px;
+      height: 40px;
+      background: var(--primary-subtle);
+      border: 1px solid var(--primary);
+      border-radius: var(--radius-sm);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #047857;
+      margin-bottom: var(--space-16);
+      font-weight: 700;
+      font-family: var(--font-display);
+    }
+
+    /* Component Specification Suite */
+    .component-lab-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--space-32);
+      margin-bottom: var(--space-32);
+    }
+
+    .lab-box {
+      background: var(--surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-sm);
+      padding: var(--space-24);
+      box-shadow: 0 2px 4px rgba(0,0,0,0.04);
+    }
+
+    /* Spatial Inputs & Forms */
+    .input-field-group {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-8);
+      margin-bottom: var(--space-16);
+    }
+
+    .input-label {
+      font-size: var(--text-14);
+      font-weight: 600;
+      color: var(--text);
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .perspective-input {
+      width: 100%;
+      font-family: var(--font-mono);
+      font-size: var(--text-14);
+      padding: 10px var(--space-12);
+      background: var(--surface);
+      border: 1px solid var(--border-strong);
+      border-radius: var(--radius-sm);
+      color: var(--text);
+      transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+    }
+
+    .perspective-input:focus {
+      outline: 2px solid var(--primary);
+      outline-offset: 1px;
+      border-color: var(--primary);
+    }
+
+    .input-has-error {
+      border-color: var(--danger) !important;
+    }
+
+    .input-has-error:focus {
+      outline-color: var(--danger) !important;
+    }
+
+    /* High-contrast Telemetry Node Grid */
+    .telemetry-node-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: var(--text-14);
+      background: var(--surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-sm);
+      overflow: hidden;
+    }
+
+    .telemetry-node-table th {
+      background: var(--bg-depth);
+      padding: var(--space-12) var(--space-16);
+      text-align: left;
+      font-family: var(--font-display);
+      letter-spacing: 0.05em;
+      border-bottom: 1px solid var(--border-subtle);
+      font-size: var(--text-12);
+    }
+
+    .telemetry-node-table td {
+      padding: var(--space-12) var(--space-16);
+      border-bottom: 1px solid var(--border-subtle);
+      font-family: var(--font-mono);
+      font-size: var(--text-12);
+    }
+
+    .telemetry-node-table tr:hover td {
+      background-color: var(--bg-base);
+    }
+
+    .status-dot {
+      display: inline-block;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background-color: var(--primary);
+      box-shadow: 0 0 6px var(--primary);
+      margin-right: 6px;
+    }
+
+    /* Live Depth Slider Control */
+    .slider-row {
+      display: flex;
+      align-items: center;
+      gap: var(--space-16);
+      margin-top: var(--space-16);
+    }
+
+    .depth-slider {
+      flex: 1;
+      accent-color: var(--primary);
+      cursor: pointer;
+    }
+
+    /* Colophon / Footer */
+    .site-footer {
+      background: var(--surface);
+      border-top: 2px solid var(--primary);
+      padding-top: var(--space-48);
+      padding-bottom: var(--space-48);
+      position: relative;
+      z-index: 1;
+    }
+
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 1.8fr 1fr 1fr 1.2fr;
+      gap: var(--space-32);
+      margin-bottom: var(--space-32);
+    }
+
+    .footer-bottom {
+      border-top: 1px solid var(--border-subtle);
+      padding-top: var(--space-24);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-family: var(--font-mono);
+      font-size: var(--text-12);
+      color: var(--text-subtle);
+    }
+
+    /* Toast Notification */
+    .toast-box {
+      position: fixed;
+      bottom: var(--space-24);
+      right: var(--space-24);
+      background: var(--text);
+      color: #FFFFFF;
+      border-left: 4px solid var(--primary);
+      padding: var(--space-12) var(--space-24);
+      border-radius: var(--radius-sm);
+      font-family: var(--font-mono);
+      font-size: var(--text-14);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+      transform: translateY(100px);
+      opacity: 0;
+      transition: transform var(--transition-normal), opacity var(--transition-normal);
+      z-index: 2000;
+    }
+
+    .toast-box.active {
+      transform: translateY(0);
+      opacity: 1;
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 960px) {
+      .hero-grid, .component-lab-grid, .spatial-features-grid, .footer-grid {
+        grid-template-columns: 1fr;
+        gap: var(--space-32);
+      }
+      .nav-menu {
+        display: none;
+      }
+      .type-scale-row {
+        grid-template-columns: 1fr;
+        gap: var(--space-4);
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Vanishing Point Horizon Grid Lines Overlay -->
+  <div class="perspective-grid-bg"></div>
+
+  <!-- Header / Spatial Navigation -->
+  <header class="site-header">
+    <div class="container">
+      <div class="header-content">
+        <a href="#" class="brand-block">
+          <svg class="isometric-cube-icon" viewBox="0 0 32 32">
+            <!-- Isometric Cube Faces -->
+            <polygon points="16,2 30,10 16,18 2,10" fill="#00BD7D" />
+            <polygon points="2,10 16,18 16,30 2,22" fill="#111827" />
+            <polygon points="30,10 30,22 16,30 16,18" fill="#16A34A" />
+          </svg>
+          <span class="brand-title">Perspective</span>
+          <span class="brand-tag">3D // SPATIAL</span>
+        </a>
+
+        <nav>
+          <ul class="nav-menu">
+            <li><a href="#stage">Spatial Stage</a></li>
+            <li><a href="#tokens">Tokens</a></li>
+            <li><a href="#typography">Type Scale</a></li>
+            <li><a href="#components">Components</a></li>
+            <li><a href="#telemetry">Telemetry Fleet</a></li>
+          </ul>
+        </nav>
+
+        <div style="display: flex; gap: var(--space-8);">
+          <button class="btn btn-secondary" onclick="showToast('Camera locked to isometric 30° orthographic')">
+            Align Matrix
+          </button>
+          <button class="btn btn-primary" onclick="showToast('Primary Action: #00BD7D Activated')">
+            Deploy Layer
+          </button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero Section with Interactive 3D Perspective Stage -->
+  <section class="hero-section" id="stage">
+    <div class="container">
+      <div class="hero-grid">
+        <!-- Hero Text Content -->
+        <div>
+          <div class="hero-tag">Spatial Depth &bull; Isometric Realism</div>
+          <h1 class="hero-title">Spatial Depth Design with <span>Isometric Realism</span> &amp; Vanishing Points.</h1>
+          <p class="hero-lead">
+            Built authentically to the Perspective Design System specification. High-contrast surfaces (#FFFFFF), 
+            primary CTA emphasis in signature green (#00BD7D), and sharp typography in Poppins, Oswald, and JetBrains Mono.
+          </p>
+          <div class="hero-actions">
+            <button class="btn btn-primary" onclick="setStageView('exploded')">
+              Explode Spatial View
+            </button>
+            <button class="btn btn-secondary" onclick="setStageView('isometric')">
+              Reset Isometric
+            </button>
+            <button class="btn btn-secondary" onclick="setStageView('orthographic')">
+              Orthographic 2D
+            </button>
+          </div>
+          <div class="telemetry-strip">
+            <span>AXIS: X: 45° | Z: -30°</span>
+            <span>SCALE: 12/14/16/20/24/32</span>
+            <span>DEPTH: 1200PX PERSPECTIVE</span>
+          </div>
+        </div>
+
+        <!-- 3D Spatial Stage Viewport -->
+        <div class="stage-wrapper">
+          <div class="stage-viewport" id="spatialViewport">
+            <!-- Layer 1: Base Grid Layer -->
+            <div class="spatial-layer layer-ground">
+              <div style="display: flex; justify-content: space-between; border-bottom: 1px solid var(--border-subtle); padding-bottom: 8px;">
+                <span class="telemetry-mono">LAYER 01 // GROUND DATUM</span>
+                <span class="telemetry-mono">[Z: 000μ]</span>
+              </div>
+              <div style="height: 120px; border: 1px dashed var(--border-subtle); display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; padding: 8px;">
+                <div style="background: var(--bg-depth); border-radius: 2px;"></div>
+                <div style="background: var(--bg-depth); border-radius: 2px;"></div>
+                <div style="background: var(--bg-depth); border-radius: 2px;"></div>
+                <div style="background: var(--bg-depth); border-radius: 2px;"></div>
+              </div>
+              <div class="telemetry-mono">DATUM: HORIZONTAL REFERENCE PLANE</div>
+            </div>
+
+            <!-- Layer 2: Elevation Analytics Plane -->
+            <div class="spatial-layer layer-analytics">
+              <div style="display: flex; justify-content: space-between; border-bottom: 2px solid var(--primary); padding-bottom: 8px;">
+                <span style="font-family: var(--font-display); font-weight: 700; color: var(--primary);">
+                  LAYER 02 // TOPOLOGY ANALYTICS
+                </span>
+                <span class="telemetry-mono">[Z: +060μ]</span>
+              </div>
+              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 12px 0;">
+                <div style="background: var(--bg-base); padding: 10px; border-radius: 4px; border: 1px solid var(--border-subtle);">
+                  <div class="telemetry-mono">SPATIAL VELOCITY</div>
+                  <div style="font-family: var(--font-display); font-size: 24px; font-weight: 700; color: var(--text);">942.8 m/s</div>
+                </div>
+                <div style="background: var(--bg-base); padding: 10px; border-radius: 4px; border: 1px solid var(--border-subtle);">
+                  <div class="telemetry-mono">VANISHING FOCAL</div>
+                  <div style="font-family: var(--font-display); font-size: 24px; font-weight: 700; color: var(--primary);">1,200 px</div>
+                </div>
+              </div>
+              <div style="display: flex; justify-content: space-between; align-items: center;">
+                <span style="font-size: 12px; font-weight: 600;">ACTIVE DEPTH COUPLING</span>
+                <span class="status-dot"></span>
+              </div>
+            </div>
+
+            <!-- Layer 3: Floating Telemetry HUD -->
+            <div class="spatial-layer layer-hud">
+              <div style="display: flex; justify-content: space-between; align-items: center;">
+                <span class="telemetry-mono" style="color: var(--text);">LAYER 03 // VECTOR HUD</span>
+                <span class="telemetry-mono" style="color: var(--primary);">[Z: +120μ]</span>
+              </div>
+              <div style="display: flex; justify-content: space-around; align-items: center; padding: 12px 0;">
+                <span class="telemetry-mono">COORD: [34.05, -118.25, 48.00]</span>
+                <span class="telemetry-mono">STATUS: OPTIMAL</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Interactive Viewport Controls -->
+          <div class="stage-controls">
+            <button class="stage-btn active" id="btnIso" onclick="setStageView('isometric')">Isometric 30°</button>
+            <button class="stage-btn" id="btnExploded" onclick="setStageView('exploded')">Exploded Planes</button>
+            <button class="stage-btn" id="btnOrtho" onclick="setStageView('orthographic')">Orthographic 2D</button>
+          </div>
+
+          <!-- Perspective Focal Depth Slider -->
+          <div class="slider-row" style="width: 100%; max-width: 380px;">
+            <span class="telemetry-mono">Focal:</span>
+            <input type="range" class="depth-slider" id="focalSlider" min="600" max="2400" value="1200" oninput="updateFocalDepth(this.value)">
+            <span class="telemetry-mono" id="focalVal">1200px</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Color Foundations Section -->
+  <section class="section" id="tokens">
+    <div class="container">
+      <div class="section-intro">
+        <h2>1. Exact Color Foundations</h2>
+        <p>
+          Derived strictly from the Perspective foundation tokens. Primary CTA actions strictly emphasize <strong>#00BD7D</strong>.
+        </p>
+      </div>
+
+      <div class="tokens-grid">
+        <!-- Primary -->
+        <div class="token-card" onclick="copyToken('#00BD7D', 'Primary')">
+          <div class="token-swatch" style="background-color: #00BD7D; color: #FFFFFF;">
+            <span class="telemetry-mono" style="color: #FFFFFF;">#00BD7D</span>
+          </div>
+          <div class="token-details">
+            <div class="token-name">Primary <span>CTA</span></div>
+            <div class="token-hex">--primary: #00BD7D</div>
+            <div class="token-role">Vibrant emerald signal favored for CTAs, vector nodes, and focal indicators.</div>
+          </div>
+        </div>
+
+        <!-- Secondary -->
+        <div class="token-card" onclick="copyToken('#00BD7D', 'Secondary')">
+          <div class="token-swatch" style="background-color: #00BD7D; color: #FFFFFF;">
+            <span class="telemetry-mono" style="color: #FFFFFF;">#00BD7D</span>
+          </div>
+          <div class="token-details">
+            <div class="token-name">Secondary <span>Foundation</span></div>
+            <div class="token-hex">--secondary: #00BD7D</div>
+            <div class="token-role">Paired with primary token for high-contrast interactive geometry.</div>
+          </div>
+        </div>
+
+        <!-- Success -->
+        <div class="token-card" onclick="copyToken('#16A34A', 'Success')">
+          <div class="token-swatch" style="background-color: #16A34A; color: #FFFFFF;">
+            <span class="telemetry-mono" style="color: #FFFFFF;">#16A34A</span>
+          </div>
+          <div class="token-details">
+            <div class="token-name">Success <span>State</span></div>
+            <div class="token-hex">--success: #16A34A</div>
+            <div class="token-role">Spatial alignment verified and synchronized coordinates.</div>
+          </div>
+        </div>
+
+        <!-- Warning -->
+        <div class="token-card" onclick="copyToken('#D97706', 'Warning')">
+          <div class="token-swatch" style="background-color: #D97706; color: #FFFFFF;">
+            <span class="telemetry-mono" style="color: #FFFFFF;">#D97706</span>
+          </div>
+          <div class="token-details">
+            <div class="token-name">Warning <span>State</span></div>
+            <div class="token-hex">--warning: #D97706</div>
+            <div class="token-role">Perspective distortion alert &amp; focal plane threshold warning.</div>
+          </div>
+        </div>
+
+        <!-- Danger -->
+        <div class="token-card" onclick="copyToken('#DC2626', 'Danger')">
+          <div class="token-swatch" style="background-color: #DC2626; color: #FFFFFF;">
+            <span class="telemetry-mono" style="color: #FFFFFF;">#DC2626</span>
+          </div>
+          <div class="token-details">
+            <div class="token-name">Danger <span>State</span></div>
+            <div class="token-hex">--danger: #DC2626</div>
+            <div class="token-role">Critical occlusion collision &amp; coordinate parameter failure.</div>
+          </div>
+        </div>
+
+        <!-- Surface -->
+        <div class="token-card" onclick="copyToken('#FFFFFF', 'Surface')">
+          <div class="token-swatch" style="background-color: #FFFFFF; color: #111827; border: 1px solid var(--border-subtle);">
+            <span class="telemetry-mono">#FFFFFF</span>
+          </div>
+          <div class="token-details">
+            <div class="token-name">Surface <span>Canvas</span></div>
+            <div class="token-hex">--surface: #FFFFFF</div>
+            <div class="token-role">Pristine white cards, spatial sheets, and projection surfaces.</div>
+          </div>
+        </div>
+
+        <!-- Text -->
+        <div class="token-card" onclick="copyToken('#111827', 'Text')">
+          <div class="token-swatch" style="background-color: #111827; color: #FFFFFF;">
+            <span class="telemetry-mono" style="color: #FFFFFF;">#111827</span>
+          </div>
+          <div class="token-details">
+            <div class="token-name">Text <span>Body</span></div>
+            <div class="token-hex">--text: #111827</div>
+            <div class="token-role">Deep graphite black for maximum legibility and scanability.</div>
+          </div>
+        </div>
+
+        <!-- Neutral -->
+        <div class="token-card" onclick="copyToken('#FFFFFF', 'Neutral')">
+          <div class="token-swatch" style="background-color: #FFFFFF; color: #111827; border: 1px solid var(--border-subtle);">
+            <span class="telemetry-mono">#FFFFFF</span>
+          </div>
+          <div class="token-details">
+            <div class="token-name">Neutral <span>Ground</span></div>
+            <div class="token-hex">--neutral: #FFFFFF</div>
+            <div class="token-role">Derived from surface token for official format compatibility.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Typography Hierarchy Section -->
+  <section class="section" id="typography">
+    <div class="container">
+      <div class="section-intro">
+        <h2>2. Typography Hierarchy &amp; Scale Matrix</h2>
+        <p>
+          Calibrated with <strong>primary=Poppins</strong>, <strong>display=Oswald</strong>, and <strong>mono=JetBrains Mono</strong> across the strict 12/14/16/20/24/32 scale.
+        </p>
+      </div>
+
+      <div class="type-scale-matrix">
+        <div class="type-scale-row">
+          <div class="type-spec-meta">
+            <strong>32px</strong> / Oswald<br>
+            Weight: 700 (Display)
+          </div>
+          <div style="font-family: var(--font-display); font-size: var(--text-32); font-weight: 700; line-height: 1.15;">
+            VANISHING POINT PERSPECTIVE &amp; SPATIAL REALISM
+          </div>
+        </div>
+
+        <div class="type-scale-row">
+          <div class="type-spec-meta">
+            <strong>24px</strong> / Oswald<br>
+            Weight: 600 (Heading 2)
+          </div>
+          <div style="font-family: var(--font-display); font-size: var(--text-24); font-weight: 600;">
+            ISOMETRIC PROJECTION &amp; THREE-DIMENSIONAL COORDINATES
+          </div>
+        </div>
+
+        <div class="type-scale-row">
+          <div class="type-spec-meta">
+            <strong>20px</strong> / Oswald<br>
+            Weight: 500 (Heading 3)
+          </div>
+          <div style="font-family: var(--font-display); font-size: var(--text-20); font-weight: 500;">
+            LAYERED SPATIAL PLANES AND HIGH-CONTRAST DEPTH
+          </div>
+        </div>
+
+        <div class="type-scale-row">
+          <div class="type-spec-meta">
+            <strong>16px</strong> / Poppins<br>
+            Weight: 500 (Lead / Body)
+          </div>
+          <div style="font-family: var(--font-primary); font-size: var(--text-16); font-weight: 500;">
+            Body copy maintains optimal contrast and scanability on #FFFFFF card surfaces using #111827 text token.
+          </div>
+        </div>
+
+        <div class="type-scale-row">
+          <div class="type-spec-meta">
+            <strong>14px</strong> / Poppins<br>
+            Weight: 400 (Secondary UI)
+          </div>
+          <div style="font-family: var(--font-primary); font-size: var(--text-14); color: var(--text-muted);">
+            Clear labels, interactive controls, and predictable error messaging ensure accessible interaction across screens.
+          </div>
+        </div>
+
+        <div class="type-scale-row">
+          <div class="type-spec-meta">
+            <strong>12px</strong> / JetBrains Mono<br>
+            Weight: 400 (Telemetry Mono)
+          </div>
+          <div style="font-family: var(--font-mono); font-size: var(--text-12); color: var(--text-subtle);">
+            TELEMETRY: [VEC3_X: +142.880, VEC3_Y: -088.140, VEC3_Z: +640.000] // MATRIX_PROJECTION_SUCCESS
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Spatial Perspective Principles -->
+  <section class="section">
+    <div class="container">
+      <div class="section-intro">
+        <h2>3. Spatial Depth &amp; Isometric Metaphor</h2>
+        <p>Three foundational pillars that guide visual attention through high-contrast structural realism.</p>
+      </div>
+
+      <div class="spatial-features-grid">
+        <div class="feature-card">
+          <div class="feature-icon-box">30°</div>
+          <h3 style="font-family: var(--font-display);">Isometric Viewports</h3>
+          <p style="font-size: var(--text-14); color: var(--text-muted); margin-bottom: var(--space-16);">
+            30-degree orthographic projection eliminates perspective distortion while maintaining architectural precision and dimensional clarity.
+          </p>
+          <div class="telemetry-mono">SCALE RATIO: 1:1:1 EXACT</div>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon-box">VP</div>
+          <h3 style="font-family: var(--font-display);">Vanishing Points</h3>
+          <p style="font-size: var(--text-14); color: var(--text-muted); margin-bottom: var(--space-16);">
+            Carefully positioned convergence lines guide user focus directly toward key conversion targets and primary #00BD7D actions.
+          </p>
+          <div class="telemetry-mono">CONVERGENCE: CENTER HORIZON</div>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon-box">Z+</div>
+          <h3 style="font-family: var(--font-display);">Layered Depth Planes</h3>
+          <p style="font-size: var(--text-14); color: var(--text-muted); margin-bottom: var(--space-16);">
+            Explicit z-axis separation with precision shadows communicates hierarchical relationship without visual clutter or noise.
+          </p>
+          <div class="telemetry-mono">ELEVATION: 0μ &rarr; 60μ &rarr; 120μ</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Interactive Component Lab & Forms -->
+  <section class="section" id="components">
+    <div class="container">
+      <div class="section-intro">
+        <h2>4. Interactive Component Specification</h2>
+        <p>High-contrast action buttons, explicit state transitions (150–250ms), and 3D coordinate inputs.</p>
+      </div>
+
+      <div class="component-lab-grid">
+        <!-- Button Suite -->
+        <div class="lab-box">
+          <h3 style="font-family: var(--font-display); margin-bottom: var(--space-16);">Action Button Spectrum</h3>
+          <p style="font-size: var(--text-14); color: var(--text-muted); margin-bottom: var(--space-24);">
+            Primary actions strictly utilize <strong>#00BD7D</strong>. Secondary actions remain neutral surfaces.
+          </p>
+
+          <div style="display: flex; flex-wrap: wrap; gap: var(--space-12); margin-bottom: var(--space-24);">
+            <button class="btn btn-primary" onclick="showToast('Primary CTA triggered: #00BD7D')">
+              Primary Action
+            </button>
+            <button class="btn btn-secondary" onclick="showToast('Neutral secondary triggered')">
+              Neutral Surface
+            </button>
+            <button class="btn btn-success" onclick="showToast('Success CTA: #16A34A')">
+              Verify Vector
+            </button>
+            <button class="btn btn-warning" onclick="showToast('Warning CTA: #D97706')">
+              Recalibrate
+            </button>
+            <button class="btn btn-danger" onclick="showToast('Danger CTA: #DC2626')">
+              Purge Coordinates
+            </button>
+            <button class="btn btn-primary" disabled>
+              Disabled State
+            </button>
+          </div>
+
+          <div class="telemetry-mono">
+            TRANSITIONS: 150ms FAST &bull; 240ms NORMAL &bull; FOCUS: 2px OUTLINE
+          </div>
+        </div>
+
+        <!-- 3D Node Configuration Form -->
+        <div class="lab-box">
+          <h3 style="font-family: var(--font-display); margin-bottom: var(--space-16);">Spatial Node Form</h3>
+          <p style="font-size: var(--text-14); color: var(--text-muted); margin-bottom: var(--space-16);">
+            Strong focus-visible states, input error feedback using Danger token (#DC2626), and predictable vector validation.
+          </p>
+
+          <form id="spatialForm" onsubmit="handleSpatialSubmit(event)">
+            <div class="input-field-group">
+              <label class="input-label" for="nodeIdentifier">
+                Spatial Node Name
+                <span class="telemetry-mono">REQUIRED</span>
+              </label>
+              <input type="text" id="nodeIdentifier" class="perspective-input" placeholder="e.g. Apex-Vector-01" required>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: var(--space-12);">
+              <div class="input-field-group">
+                <label class="input-label" for="coordX">Axis X (deg)</label>
+                <input type="number" id="coordX" class="perspective-input" value="45" required>
+              </div>
+              <div class="input-field-group">
+                <label class="input-label" for="coordY">Axis Y (px)</label>
+                <input type="number" id="coordY" class="perspective-input" value="0" required>
+              </div>
+              <div class="input-field-group">
+                <label class="input-label" for="coordZ">Axis Z (deg)</label>
+                <input type="number" id="coordZ" class="perspective-input" value="-30" required>
+              </div>
+            </div>
+
+            <div style="display: flex; gap: var(--space-12); align-items: center; margin-top: var(--space-16);">
+              <button type="submit" class="btn btn-primary">
+                Update Spatial Stage
+              </button>
+              <button type="button" class="btn btn-secondary" onclick="simulateNodeError()">
+                Simulate Error
+              </button>
+              <span id="nodeFormFeedback" class="telemetry-mono"></span>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Telemetry Fleet Table -->
+  <section class="section" id="telemetry">
+    <div class="container">
+      <div class="section-intro">
+        <h2>5. Spatial Architecture Fleet Telemetry</h2>
+        <p>Live isometric telemetry across synchronized spatial compute instances.</p>
+      </div>
+
+      <table class="telemetry-node-table">
+        <thead>
+          <tr>
+            <th>SPATIAL NODE ID</th>
+            <th>PROJECTION MODE</th>
+            <th>COORDINATES (X, Y, Z)</th>
+            <th>ELEVATION DEPTH</th>
+            <th>STATUS</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>NODE-ALPHA-01</td>
+            <td>Isometric 30° Standard</td>
+            <td>[+45.0°, 000px, -30.0°]</td>
+            <td>120 μm</td>
+            <td><span class="status-dot"></span> SYNCHRONIZED</td>
+          </tr>
+          <tr>
+            <td>NODE-BETA-02</td>
+            <td>Exploded Multi-Plane</td>
+            <td>[+55.0°, +24px, -35.0°]</td>
+            <td>200 μm</td>
+            <td><span class="status-dot"></span> SYNCHRONIZED</td>
+          </tr>
+          <tr>
+            <td>NODE-GAMMA-03</td>
+            <td>Vanishing Horizon Focus</td>
+            <td>[00.0°, +60px, 00.0°]</td>
+            <td>60 μm</td>
+            <td><span class="status-dot"></span> SYNCHRONIZED</td>
+          </tr>
+          <tr>
+            <td>NODE-DELTA-04</td>
+            <td>Orthographic Top-Down</td>
+            <td>[00.0°, 000px, 00.0°]</td>
+            <td>0 μm (Datum)</td>
+            <td><span class="status-dot"></span> SYNCHRONIZED</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- Colophon / Footer -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div>
+          <div style="font-family: var(--font-display); font-size: var(--text-20); font-weight: 700; margin-bottom: var(--space-8);">
+            Perspective Design System
+          </div>
+          <p style="font-size: var(--text-14); color: var(--text-muted); max-width: 320px; margin-bottom: var(--space-16);">
+            Spatial depth design with isometric views, vanishing points, and layered elements that guide attention through 3D-like realism.
+          </p>
+          <div class="telemetry-mono">FOUNDATION SPECIFICATION // REV 2026.09</div>
+        </div>
+
+        <div>
+          <div style="font-family: var(--font-display); font-size: var(--text-14); font-weight: 700; margin-bottom: var(--space-12);">TOKEN PALETTE</div>
+          <ul style="list-style: none; font-family: var(--font-mono); font-size: 12px; line-height: 1.8; color: var(--text-muted);">
+            <li>Primary: #00BD7D</li>
+            <li>Secondary: #00BD7D</li>
+            <li>Success: #16A34A</li>
+            <li>Warning: #D97706</li>
+            <li>Danger: #DC2626</li>
+            <li>Surface: #FFFFFF</li>
+            <li>Text: #111827</li>
+          </ul>
+        </div>
+
+        <div>
+          <div style="font-family: var(--font-display); font-size: var(--text-14); font-weight: 700; margin-bottom: var(--space-12);">TYPOGRAPHY</div>
+          <ul style="list-style: none; font-size: 13px; line-height: 1.8; color: var(--text-muted);">
+            <li>Primary: Poppins</li>
+            <li>Display: Oswald</li>
+            <li>Mono: JetBrains Mono</li>
+            <li>Scale: 12/14/16/20/24/32</li>
+            <li>Weights: 100–900</li>
+          </ul>
+        </div>
+
+        <div>
+          <div style="font-family: var(--font-display); font-size: var(--text-14); font-weight: 700; margin-bottom: var(--space-12);">AXIS MATRIX</div>
+          <p style="font-size: 13px; color: var(--text-muted); line-height: 1.6; margin-bottom: var(--space-12);">
+            Strict adherence to DESIGN.md anti-patterns: zero off-palette colors, clear vertical rhythm, and preserved hierarchy.
+          </p>
+          <div class="telemetry-mono">[X: ISOMETRIC | Y: DEPTH | Z: ELEVATION]</div>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <div>&copy; 2026 Perspective Design System. All spatial rights reserved.</div>
+        <div style="display: flex; gap: var(--space-16);">
+          <span>FOCAL: 1200px</span>
+          <span>GRID: 4/8/12/16/24/32</span>
+          <span>SYSTEM: OKLCH COMPATIBLE</span>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Toast Box -->
+  <div class="toast-box" id="toastBox">Token copied to clipboard!</div>
+
+  <!-- Interactive JavaScript -->
+  <script>
+    // Stage View Modes
+    const viewport = document.getElementById('spatialViewport');
+
+    function setStageView(mode) {
+      viewport.className = 'stage-viewport';
+      document.querySelectorAll('.stage-btn').forEach(btn => btn.classList.remove('active'));
+
+      if (mode === 'exploded') {
+        viewport.classList.add('view-exploded');
+        document.getElementById('btnExploded').classList.add('active');
+        showToast('Spatial Stage: Exploded Plane Inspection Mode');
+      } else if (mode === 'orthographic') {
+        viewport.classList.add('view-orthographic');
+        document.getElementById('btnOrtho').classList.add('active');
+        showToast('Spatial Stage: 2D Orthographic Projection Mode');
+      } else {
+        document.getElementById('btnIso').classList.add('active');
+        showToast('Spatial Stage: Default 30° Isometric View');
+      }
+    }
+
+    // Focal Depth Slider
+    function updateFocalDepth(val) {
+      document.querySelector('.stage-wrapper').style.perspective = `${val}px`;
+      document.getElementById('focalVal').textContent = `${val}px`;
+    }
+
+    // Copy Token
+    function copyToken(hex, name) {
+      navigator.clipboard.writeText(hex).then(() => {
+        showToast(`${name} token (${hex}) copied!`);
+      }).catch(() => {
+        showToast(`${name}: ${hex}`);
+      });
+    }
+
+    // Toast Notice
+    function showToast(msg) {
+      const toast = document.getElementById('toastBox');
+      toast.textContent = msg;
+      toast.classList.add('active');
+      setTimeout(() => {
+        toast.classList.remove('active');
+      }, 2500);
+    }
+
+    // Form Submissions
+    function handleSpatialSubmit(e) {
+      e.preventDefault();
+      const x = document.getElementById('coordX').value;
+      const z = document.getElementById('coordZ').value;
+      viewport.className = 'stage-viewport';
+      document.querySelectorAll('.stage-btn').forEach(btn => btn.classList.remove('active'));
+      
+      // Apply custom 3D rotation
+      document.querySelector('.layer-ground').style.transform = `translateZ(0px) rotateX(${x}deg) rotateZ(${z}deg)`;
+      document.querySelector('.layer-analytics').style.transform = `translateZ(60px) rotateX(${x}deg) rotateZ(${z}deg)`;
+      document.querySelector('.layer-hud').style.transform = `translateZ(120px) rotateX(${x}deg) rotateZ(${z}deg)`;
+
+      const feedback = document.getElementById('nodeFormFeedback');
+      feedback.style.color = 'var(--primary)';
+      feedback.textContent = `✓ Stage updated to [X: ${x}°, Z: ${z}°]`;
+      showToast('Spatial coordinates applied to 3D Stage!');
+    }
+
+    function simulateNodeError() {
+      const input = document.getElementById('nodeIdentifier');
+      const feedback = document.getElementById('nodeFormFeedback');
+      input.classList.add('input-has-error');
+      feedback.style.color = 'var(--danger)';
+      feedback.textContent = '⚠ Error: Vector collision on Axis Z';
+      showToast('Error state simulated with Danger token (#DC2626)');
+    }
+  </script>
+</body>
+</html>

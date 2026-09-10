@@ -1,0 +1,851 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Levels — Real-Time Metabolic Health & Biomarkers</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    /* -------------------------------------------------------------
+       LEVELS DESIGN SYSTEM TOKENS & FOUNDATIONS
+       ------------------------------------------------------------- */
+    :root {
+      /* Official Color Tokens from DESIGN.md */
+      --color-primary: #27272A;      /* Token from style foundations - CTA emphasis */
+      --color-secondary: #8B5CF6;    /* Token from style foundations */
+      --color-success: #16A34A;      /* Token from style foundations */
+      --color-warning: #D97706;      /* Token from style foundations */
+      --color-danger: #DC2626;       /* Token from style foundations */
+      --color-surface: #FFFFFF;      /* Token from style foundations */
+      --color-text: #111827;         /* Token from style foundations */
+      --color-neutral: #FFFFFF;      /* Derived from surface token */
+
+      /* Neutral Tint Supports */
+      --color-surface-dim: #F9FAFB;
+      --color-border-subtle: #E5E7EB;
+      --color-border-strong: #D1D5DB;
+      --color-text-muted: #6B7280;
+
+      /* Typography Families */
+      --font-display: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      --font-primary: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      --font-mono: "JetBrains Mono", monospace;
+
+      /* Typography Scale: 12/14/16/20/24/32 */
+      --type-12: 12px;
+      --type-14: 14px;
+      --type-16: 16px;
+      --type-20: 20px;
+      --type-24: 24px;
+      --type-32: 32px;
+
+      /* Spacing Scale: 4/8/12/16/24/32 */
+      --space-4: 4px;
+      --space-8: 8px;
+      --space-12: 12px;
+      --space-16: 16px;
+      --space-24: 24px;
+      --space-32: 32px;
+
+      /* Radii */
+      --radius-sm: 6px;
+      --radius-md: 10px;
+      --radius-lg: 16px;
+      --radius-pill: 9999px;
+
+      /* Motion: 150-250ms stable easing */
+      --transition-standard: all 200ms cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    /* Reset & Clean White Canvas */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--color-surface);
+      color: var(--color-text);
+      font-family: var(--font-primary);
+      font-size: var(--type-16);
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    .container {
+      max-width: 1140px;
+      margin: 0 auto;
+      padding: 0 var(--space-24);
+    }
+
+    /* -------------------------------------------------------------
+       TYPOGRAPHY (SCALE: 12/14/16/20/24/32)
+       ------------------------------------------------------------- */
+    h1, .heading-32 {
+      font-family: var(--font-display);
+      font-size: var(--type-32);
+      font-weight: 700;
+      line-height: 1.20;
+      letter-spacing: -0.5px;
+      color: var(--color-text);
+    }
+
+    h2, .heading-24 {
+      font-family: var(--font-display);
+      font-size: var(--type-24);
+      font-weight: 600;
+      line-height: 1.25;
+      letter-spacing: -0.3px;
+      color: var(--color-text);
+    }
+
+    h3, .heading-20 {
+      font-family: var(--font-display);
+      font-size: var(--type-20);
+      font-weight: 600;
+      line-height: 1.30;
+      color: var(--color-text);
+    }
+
+    .body-16 {
+      font-family: var(--font-primary);
+      font-size: var(--type-16);
+      font-weight: 400;
+      line-height: 1.50;
+      color: var(--color-text);
+    }
+
+    .caption-14 {
+      font-family: var(--font-primary);
+      font-size: var(--type-14);
+      font-weight: 400;
+      line-height: 1.45;
+      color: var(--color-text-muted);
+    }
+
+    .micro-12 {
+      font-family: var(--font-mono);
+      font-size: var(--type-12);
+      font-weight: 500;
+      line-height: 1.30;
+      letter-spacing: -0.2px;
+    }
+
+    /* -------------------------------------------------------------
+       BUTTONS: CONVERSION-FOCUSED & CLEAN
+       ------------------------------------------------------------- */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-primary);
+      font-size: var(--type-16);
+      font-weight: 600;
+      border-radius: var(--radius-md);
+      padding: var(--space-12) var(--space-20);
+      cursor: pointer;
+      text-decoration: none;
+      transition: var(--transition-standard);
+      border: 1px solid transparent;
+      user-select: none;
+    }
+
+    /* Primary action uses #27272A (Charcoal Slate) */
+    .btn-primary {
+      background-color: var(--color-primary);
+      color: #FFFFFF;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    }
+    .btn-primary:hover {
+      background-color: #18181B;
+      transform: translateY(-1px);
+      box-shadow: 0 4px 10px rgba(39, 39, 42, 0.2);
+    }
+    .btn-primary:active {
+      transform: translateY(0);
+    }
+    .btn-primary:focus-visible {
+      outline: 2px solid var(--color-primary);
+      outline-offset: 2px;
+    }
+
+    /* Secondary actions stay neutral */
+    .btn-secondary {
+      background-color: var(--color-surface);
+      color: var(--color-text);
+      border: 1px solid var(--color-border-subtle);
+    }
+    .btn-secondary:hover {
+      background-color: var(--color-surface-dim);
+      border-color: var(--color-border-strong);
+    }
+    .btn-secondary:focus-visible {
+      outline: 2px solid var(--color-text);
+      outline-offset: 2px;
+    }
+
+    /* -------------------------------------------------------------
+       CARDS & CONTENT BLOCKS
+       ------------------------------------------------------------- */
+    .card {
+      background-color: var(--color-surface);
+      border: 1px solid var(--color-border-subtle);
+      border-radius: var(--radius-lg);
+      padding: var(--space-24);
+      transition: var(--transition-standard);
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+    }
+    .card:hover {
+      border-color: var(--color-border-strong);
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.06);
+    }
+
+    .badge-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-4);
+      padding: var(--space-4) var(--space-8);
+      border-radius: var(--radius-pill);
+      font-size: var(--type-12);
+      font-weight: 600;
+    }
+    .badge-gray {
+      background: #F4F4F5;
+      color: var(--color-primary);
+      border: 1px solid #E4E4E7;
+    }
+    .badge-success {
+      background: #DCFCE7;
+      color: var(--color-success);
+    }
+    .badge-violet {
+      background: #EDE9FE;
+      color: var(--color-secondary);
+    }
+
+    /* -------------------------------------------------------------
+       NAVIGATION BAR
+       ------------------------------------------------------------- */
+    .site-nav {
+      border-bottom: 1px solid var(--color-border-subtle);
+      background: #FFFFFF;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .nav-inner {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      height: 68px;
+    }
+    .brand-link {
+      display: flex;
+      align-items: center;
+      gap: var(--space-8);
+      text-decoration: none;
+      color: var(--color-text);
+    }
+    .brand-dot {
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      background: var(--color-primary);
+    }
+    .brand-name {
+      font-weight: 800;
+      font-size: var(--type-20);
+      letter-spacing: -0.5px;
+    }
+
+    .nav-menu {
+      display: flex;
+      align-items: center;
+      gap: var(--space-24);
+      list-style: none;
+    }
+    .nav-menu-item {
+      font-size: var(--type-14);
+      font-weight: 500;
+      color: var(--color-text-muted);
+      text-decoration: none;
+      transition: var(--transition-standard);
+    }
+    .nav-menu-item:hover {
+      color: var(--color-text);
+    }
+
+    /* -------------------------------------------------------------
+       HERO & CGM GLUCOSE SIMULATOR
+       ------------------------------------------------------------- */
+    .hero-section {
+      padding: var(--space-32) 0;
+      background: linear-gradient(180deg, #FAFAFA 0%, var(--color-surface) 100%);
+      border-bottom: 1px solid var(--color-border-subtle);
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1fr 1.05fr;
+      gap: var(--space-32);
+      align-items: center;
+    }
+
+    /* Interactive CGM Glucose Curve Simulator */
+    .simulator-card {
+      background: #FFFFFF;
+      border: 1px solid var(--color-border-subtle);
+      border-radius: var(--radius-lg);
+      padding: var(--space-24);
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.05);
+    }
+
+    .sim-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-bottom: var(--space-12);
+      border-bottom: 1px solid var(--color-border-subtle);
+      margin-bottom: var(--space-16);
+    }
+
+    .glucose-canvas {
+      width: 100%;
+      height: 200px;
+      background: #FFFFFF;
+      border-radius: var(--radius-sm);
+      display: block;
+      border: 1px solid var(--color-border-subtle);
+    }
+
+    .meal-selector-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: var(--space-8);
+      margin-top: var(--space-16);
+    }
+
+    .meal-btn {
+      background: var(--color-surface-dim);
+      border: 1px solid var(--color-border-subtle);
+      border-radius: var(--radius-sm);
+      padding: var(--space-8) var(--space-12);
+      font-size: var(--type-12);
+      font-weight: 500;
+      text-align: left;
+      cursor: pointer;
+      transition: var(--transition-standard);
+      color: var(--color-text);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .meal-btn:hover {
+      background: #F3F4F6;
+      border-color: var(--color-border-strong);
+    }
+    .meal-btn.active {
+      background: var(--color-primary);
+      color: #FFFFFF;
+      border-color: var(--color-primary);
+    }
+
+    /* -------------------------------------------------------------
+       SECTION: ARCHITECTURE & SPACING (4/8/12/16/24/32)
+       ------------------------------------------------------------- */
+    .section-spacing {
+      padding: 56px 0;
+    }
+
+    .grid-3-col {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: var(--space-24);
+      margin-top: var(--space-32);
+    }
+
+    /* -------------------------------------------------------------
+       SECTION: OFFICIAL DESIGN TOKENS & FOUNDATIONS
+       ------------------------------------------------------------- */
+    .token-sandbox-box {
+      background: var(--color-surface-dim);
+      border: 1px solid var(--color-border-subtle);
+      border-radius: var(--radius-lg);
+      padding: var(--space-32);
+      margin-top: var(--space-24);
+    }
+
+    .token-row-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(135px, 1fr));
+      gap: var(--space-16);
+      margin-top: var(--space-24);
+    }
+
+    .swatch-item {
+      background: var(--color-surface);
+      border: 1px solid var(--color-border-subtle);
+      border-radius: var(--radius-md);
+      padding: var(--space-12);
+    }
+    .swatch-fill {
+      height: 38px;
+      border-radius: var(--radius-sm);
+      margin-bottom: var(--space-8);
+      border: 1px solid rgba(0, 0, 0, 0.06);
+    }
+
+    /* -------------------------------------------------------------
+       SECTION: MEMBERSHIP CONVERSION TIERS
+       ------------------------------------------------------------- */
+    .tiers-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: var(--space-24);
+      margin-top: var(--space-32);
+    }
+
+    /* -------------------------------------------------------------
+       FOOTER
+       ------------------------------------------------------------- */
+    .site-footer {
+      border-top: 1px solid var(--color-border-subtle);
+      padding: var(--space-32) 0;
+      background: var(--color-surface);
+      margin-top: var(--space-32);
+    }
+    .footer-inner {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: var(--space-16);
+    }
+
+    /* Responsive */
+    @media (max-width: 900px) {
+      .hero-grid, .grid-3-col, .tiers-grid {
+        grid-template-columns: 1fr;
+      }
+      .nav-menu {
+        display: none;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAVIGATION -->
+  <header class="site-nav">
+    <div class="container nav-inner">
+      <a href="#" class="brand-link">
+        <div class="brand-dot"></div>
+        <span class="brand-name">levels</span>
+      </a>
+
+      <ul class="nav-menu">
+        <li><a href="#simulator" class="nav-menu-item">Continuous Glucose</a></li>
+        <li><a href="#biomarkers" class="nav-menu-item">Biomarkers</a></li>
+        <li><a href="#tokens" class="nav-menu-item">Design System</a></li>
+        <li><a href="#pricing" class="nav-menu-item">Membership</a></li>
+      </ul>
+
+      <div style="display: flex; gap: var(--space-12); align-items: center;">
+        <button class="btn btn-secondary" style="padding: var(--space-8) var(--space-16); font-size: var(--type-14);">Log In</button>
+        <button class="btn btn-primary" style="padding: var(--space-8) var(--space-20); font-size: var(--type-14);">Unlock Health</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- HERO SECTION WITH CGM SIMULATOR -->
+  <section class="hero-section">
+    <div class="container hero-grid">
+      <div>
+        <div style="margin-bottom: var(--space-16);">
+          <span class="badge-chip badge-gray">Metabolic Intelligence Platform</span>
+        </div>
+
+        <h1 class="heading-32">See how food affects your health in real time.</h1>
+
+        <p class="body-16" style="margin-top: var(--space-16); color: var(--color-text-muted); max-width: 480px;">
+          Levels pairs continuous glucose monitors (CGMs) with automated meal scoring to help you optimize sleep, energy, and metabolic longevity.
+        </p>
+
+        <div style="display: flex; gap: var(--space-12); margin-top: var(--space-24); align-items: center; flex-wrap: wrap;">
+          <button class="btn btn-primary" onclick="simulateMeal('steak')">Test Steady Response</button>
+          <button class="btn btn-secondary" onclick="simulateMeal('boba')">Test Glucose Spike</button>
+        </div>
+
+        <div style="margin-top: var(--space-24); display: flex; gap: var(--space-16); font-family: var(--font-mono); font-size: var(--type-12); color: var(--color-text-muted);">
+          <span>PRIMARY: #27272A</span>
+          <span>SECONDARY: #8B5CF6</span>
+          <span>SCALE: 12/14/16/20/24/32</span>
+        </div>
+      </div>
+
+      <!-- INTERACTIVE CGM REAL-TIME GLUCOSE SIMULATOR -->
+      <div class="simulator-card" id="simulator">
+        <div class="sim-header">
+          <div>
+            <span class="micro-12" style="color: var(--color-text-muted);">CURRENT GLUCOSE</span>
+            <div style="display: flex; align-items: baseline; gap: var(--space-8);">
+              <span id="glucoseValueDisplay" style="font-size: var(--type-32); font-weight: 700; color: var(--color-text);">92</span>
+              <span class="caption-14" style="font-weight: 500;">mg/dL</span>
+              <span class="badge-chip badge-success" id="glucoseStatusBadge">Optimal Range</span>
+            </div>
+          </div>
+          <div style="text-align: right;">
+            <span class="micro-12" style="color: var(--color-text-muted);">SCORE</span>
+            <div id="mealScoreDisplay" style="font-size: var(--type-24); font-weight: 700; color: var(--color-success);">9.4/10</div>
+          </div>
+        </div>
+
+        <!-- CGM Canvas Graph -->
+        <canvas id="cgmCanvas" class="glucose-canvas" width="500" height="200"></canvas>
+
+        <!-- Meal Selector Grid -->
+        <div class="meal-selector-grid">
+          <button class="meal-btn" id="mealOats" onclick="simulateMeal('oats')">
+            <span>🥣 Oatmeal &amp; Berries</span>
+            <span class="micro-12">+18 mg/dL</span>
+          </button>
+          <button class="meal-btn active" id="mealSteak" onclick="simulateMeal('steak')">
+            <span>🥩 Steak &amp; Avocado</span>
+            <span class="micro-12">+4 mg/dL</span>
+          </button>
+          <button class="meal-btn" id="mealBoba" onclick="simulateMeal('boba')">
+            <span>🧋 Boba Milk Tea</span>
+            <span class="micro-12">+68 mg/dL</span>
+          </button>
+          <button class="meal-btn" id="mealWalk" onclick="simulateMeal('walk')">
+            <span>🚶 15-min Post Walk</span>
+            <span class="micro-12">-22 mg/dL</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION: METABOLIC ARCHITECTURE (GRID: 4/8/12/16/24/32) -->
+  <section class="section-spacing" id="biomarkers">
+    <div class="container">
+      <div style="text-align: center; max-width: 620px; margin: 0 auto;">
+        <span class="badge-chip badge-violet">Clarity &amp; Speed</span>
+        <h2 class="heading-24" style="margin-top: var(--space-8);">Frictionless metabolic insights</h2>
+        <p class="caption-14" style="margin-top: var(--space-8);">
+          Built with predictable 4/8/12/16/24/32 spacing and high-contrast typography on pure white surfaces.
+        </p>
+      </div>
+
+      <div class="grid-3-col">
+        <!-- Feature 1 -->
+        <div class="card">
+          <div style="width: 36px; height: 36px; border-radius: var(--radius-sm); background: #F4F4F5; display: flex; align-items: center; justify-content: center; font-weight: 700; color: var(--color-primary); margin-bottom: var(--space-16);">
+            01
+          </div>
+          <h3 class="heading-20">Real-Time CGM Sync</h3>
+          <p class="caption-14" style="margin-top: var(--space-8);">
+            Continuous biosensors stream intercellular glucose levels via Bluetooth directly to your phone every 60 seconds without fingerpricks.
+          </p>
+        </div>
+
+        <!-- Feature 2 -->
+        <div class="card">
+          <div style="width: 36px; height: 36px; border-radius: var(--radius-sm); background: #EDE9FE; display: flex; align-items: center; justify-content: center; font-weight: 700; color: var(--color-secondary); margin-bottom: var(--space-16);">
+            02
+          </div>
+          <h3 class="heading-20">Automated Meal Scoring</h3>
+          <p class="caption-14" style="margin-top: var(--space-8);">
+            Instant 1-10 metabolic scores grade how your body digests carbohydrates, proteins, and fats with personalized recovery metrics.
+          </p>
+        </div>
+
+        <!-- Feature 3 -->
+        <div class="card">
+          <div style="width: 36px; height: 36px; border-radius: var(--radius-sm); background: #DCFCE7; display: flex; align-items: center; justify-content: center; font-weight: 700; color: var(--color-success); margin-bottom: var(--space-16);">
+            03
+          </div>
+          <h3 class="heading-20">Lab-Grade Biomarkers</h3>
+          <p class="caption-14" style="margin-top: var(--space-8);">
+            At-home phlebotomy testing for ApoB, Fasting Insulin, hs-CRP, and HbA1c seamlessly benchmarked alongside continuous daily trends.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION: DESIGN SYSTEM TOKENS & FOUNDATION -->
+  <section class="section-spacing" id="tokens" style="padding-top: 0;">
+    <div class="container">
+      <div class="token-sandbox-box">
+        <div style="display: flex; justify-content: space-between; align-items: flex-end; flex-wrap: wrap; gap: var(--space-16);">
+          <div>
+            <span class="badge-chip badge-gray">Tokens Specification</span>
+            <h2 class="heading-24" style="margin-top: var(--space-8);">Official Color Foundations</h2>
+            <p class="caption-14" style="margin-top: var(--space-4);">Strictly derived from <code>levels/DESIGN.md</code></p>
+          </div>
+          <span class="micro-12" style="background: #FFF; padding: var(--space-4) var(--space-12); border-radius: var(--radius-sm); border: 1px solid var(--color-border-subtle);">
+            Category: Layout &amp; Structure
+          </span>
+        </div>
+
+        <div class="token-row-grid">
+          <!-- Primary -->
+          <div class="swatch-item">
+            <div class="swatch-fill" style="background-color: #27272A;"></div>
+            <div style="font-weight: 600; font-size: 13px;">Primary</div>
+            <div class="micro-12" style="color: var(--color-text-muted);">#27272A</div>
+          </div>
+          <!-- Secondary -->
+          <div class="swatch-item">
+            <div class="swatch-fill" style="background-color: #8B5CF6;"></div>
+            <div style="font-weight: 600; font-size: 13px;">Secondary</div>
+            <div class="micro-12" style="color: var(--color-text-muted);">#8B5CF6</div>
+          </div>
+          <!-- Success -->
+          <div class="swatch-item">
+            <div class="swatch-fill" style="background-color: #16A34A;"></div>
+            <div style="font-weight: 600; font-size: 13px;">Success</div>
+            <div class="micro-12" style="color: var(--color-text-muted);">#16A34A</div>
+          </div>
+          <!-- Warning -->
+          <div class="swatch-item">
+            <div class="swatch-fill" style="background-color: #D97706;"></div>
+            <div style="font-weight: 600; font-size: 13px;">Warning</div>
+            <div class="micro-12" style="color: var(--color-text-muted);">#D97706</div>
+          </div>
+          <!-- Danger -->
+          <div class="swatch-item">
+            <div class="swatch-fill" style="background-color: #DC2626;"></div>
+            <div style="font-weight: 600; font-size: 13px;">Danger</div>
+            <div class="micro-12" style="color: var(--color-text-muted);">#DC2626</div>
+          </div>
+          <!-- Surface -->
+          <div class="swatch-item">
+            <div class="swatch-fill" style="background-color: #FFFFFF; border: 1px solid #D1D5DB;"></div>
+            <div style="font-weight: 600; font-size: 13px;">Surface</div>
+            <div class="micro-12" style="color: var(--color-text-muted);">#FFFFFF</div>
+          </div>
+          <!-- Text -->
+          <div class="swatch-item">
+            <div class="swatch-fill" style="background-color: #111827;"></div>
+            <div style="font-weight: 600; font-size: 13px;">Text</div>
+            <div class="micro-12" style="color: var(--color-text-muted);">#111827</div>
+          </div>
+        </div>
+
+        <!-- Typography Scale Showcase -->
+        <div style="margin-top: var(--space-24); background: #FFF; padding: var(--space-20); border-radius: var(--radius-md); border: 1px solid var(--color-border-subtle);">
+          <span class="micro-12" style="color: var(--color-text-muted); display: block; margin-bottom: var(--space-12);">TYPOGRAPHY SCALE: 12 / 14 / 16 / 20 / 24 / 32</span>
+          <div style="font-size: 32px; font-weight: 700;">32px — Display Headline</div>
+          <div style="font-size: 24px; font-weight: 600; margin-top: 4px;">24px — Section Title</div>
+          <div style="font-size: 20px; font-weight: 600; margin-top: 4px;">20px — Subheading Block</div>
+          <div style="font-size: 16px; margin-top: 4px;">16px — Standard body copy on #111827</div>
+          <div style="font-size: 14px; color: var(--color-text-muted); margin-top: 4px;">14px — Auxiliary supportive captions</div>
+          <div class="micro-12" style="color: var(--color-secondary); margin-top: 4px;">12px — JetBrains Mono micro code &amp; telemetry</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION: MEMBERSHIP TIERS -->
+  <section class="section-spacing" id="pricing" style="padding-top: 0;">
+    <div class="container">
+      <div style="text-align: center; max-width: 580px; margin: 0 auto;">
+        <span class="badge-chip badge-gray">Transparent Membership</span>
+        <h2 class="heading-24" style="margin-top: var(--space-8);">Invest in your metabolic health</h2>
+        <p class="caption-14" style="margin-top: var(--space-8);">Physician-approved continuous monitoring with cancel-anytime flexibility.</p>
+      </div>
+
+      <div class="tiers-grid">
+        <!-- Tier 1 -->
+        <div class="card" style="display: flex; flex-direction: column; justify-content: space-between;">
+          <div>
+            <span class="micro-12" style="color: var(--color-text-muted);">ANNUAL MEMBERSHIP</span>
+            <h3 class="heading-20" style="margin-top: var(--space-8);">Software Only</h3>
+            <div style="font-size: var(--type-32); font-weight: 700; margin: var(--space-16) 0 var(--space-4);">$199</div>
+            <div class="caption-14">per year (BYO sensor compatible)</div>
+            <ul style="margin: var(--space-20) 0; padding-left: 18px; font-size: var(--type-14); color: var(--color-text); display: flex; flex-direction: column; gap: var(--space-8);">
+              <li>Continuous meal grading</li>
+              <li>Glucose spike predictions</li>
+              <li>Apple Health &amp; Whoop integration</li>
+            </ul>
+          </div>
+          <button class="btn btn-secondary" style="width: 100%;">Choose Annual</button>
+        </div>
+
+        <!-- Tier 2 (Highlighted) -->
+        <div class="card" style="border-color: var(--color-primary); box-shadow: 0 8px 30px rgba(39, 39, 42, 0.12); display: flex; flex-direction: column; justify-content: space-between;">
+          <div>
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+              <span class="micro-12" style="color: var(--color-primary); font-weight: 700;">MOST POPULAR</span>
+              <span class="badge-chip badge-gray">All-In-One</span>
+            </div>
+            <h3 class="heading-20" style="margin-top: var(--space-8);">Levels Sensor Kit</h3>
+            <div style="font-size: var(--type-32); font-weight: 700; margin: var(--space-16) 0 var(--space-4);">$199 + $99</div>
+            <div class="caption-14">Software + 2 continuous sensors / mo</div>
+            <ul style="margin: var(--space-20) 0; padding-left: 18px; font-size: var(--type-14); color: var(--color-text); display: flex; flex-direction: column; gap: var(--space-8);">
+              <li>All Software features</li>
+              <li>2x Dexcom or FreeStyle sensors monthly</li>
+              <li>Online medical prescription review</li>
+              <li>1-on-1 metabolic coaching check-ins</li>
+            </ul>
+          </div>
+          <button class="btn btn-primary" style="width: 100%;">Get Started</button>
+        </div>
+
+        <!-- Tier 3 -->
+        <div class="card" style="display: flex; flex-direction: column; justify-content: space-between;">
+          <div>
+            <span class="micro-12" style="color: var(--color-text-muted);">COMPLETE DIAGNOSTICS</span>
+            <h3 class="heading-20" style="margin-top: var(--space-8);">Biomarker Comprehensive</h3>
+            <div style="font-size: var(--type-32); font-weight: 700; margin: var(--space-16) 0 var(--space-4);">$399</div>
+            <div class="caption-14">Quarterly full phlebotomy labs</div>
+            <ul style="margin: var(--space-20) 0; padding-left: 18px; font-size: var(--type-14); color: var(--color-text); display: flex; flex-direction: column; gap: var(--space-8);">
+              <li>At-home mobile nurse blood draw</li>
+              <li>Full 12-marker metabolic panel</li>
+              <li>ApoB &amp; Fasting Insulin verification</li>
+              <li>Dedicated physician consultation</li>
+            </ul>
+          </div>
+          <button class="btn btn-secondary" style="width: 100%;">Explore Labs</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <div style="display: flex; align-items: center; gap: var(--space-8);">
+        <div class="brand-dot" style="width: 10px; height: 10px;"></div>
+        <span style="font-weight: 700; font-size: var(--type-14);">levels</span>
+        <span class="caption-14" style="margin-left: var(--space-8);">
+          © Levels Health Inc. Modern, clean conversion architecture.
+        </span>
+      </div>
+
+      <div style="display: flex; gap: var(--space-16); align-items: center;">
+        <span class="micro-12" style="color: var(--color-primary);">PRIMARY: #27272A</span>
+        <span class="micro-12" style="color: var(--color-secondary);">SECONDARY: #8B5CF6</span>
+        <span class="micro-12" style="color: var(--color-text-muted);">TEXT: #111827</span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- REAL-TIME CGM CANVAS SIMULATOR SCRIPT -->
+  <script>
+    const canvas = document.getElementById('cgmCanvas');
+    const ctx = canvas.getContext('2d');
+
+    const mealCurves = {
+      steak: { baseline: 90, peak: 94, duration: 40, score: '9.4/10', scoreColor: '#16A34A', status: 'Optimal Range', statusClass: 'badge-success' },
+      oats:  { baseline: 90, peak: 108, duration: 60, score: '7.8/10', scoreColor: '#D97706', status: 'Moderate Elevation', statusClass: 'badge-gray' },
+      boba:  { baseline: 90, peak: 158, duration: 90, score: '3.2/10', scoreColor: '#DC2626', status: 'Severe Glucose Spike', statusClass: 'badge-chip' },
+      walk:  { baseline: 90, peak: 82, duration: 40, score: '9.9/10', scoreColor: '#16A34A', status: 'Enhanced Clearance', statusClass: 'badge-success' }
+    };
+
+    let currentMeal = 'steak';
+    let animProgress = 1;
+
+    function renderCGM() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      const w = canvas.width;
+      const h = canvas.height;
+
+      // Target Optimal Zone (70-110 mg/dL)
+      const y110 = h - ((110 - 60) / 110) * h;
+      const y70  = h - ((70 - 60) / 110) * h;
+
+      ctx.fillStyle = 'rgba(22, 163, 74, 0.05)';
+      ctx.fillRect(0, y110, w, y70 - y110);
+
+      // Grid lines
+      ctx.strokeStyle = '#F3F4F6';
+      ctx.lineWidth = 1;
+      [70, 90, 110, 140].forEach(val => {
+        const y = h - ((val - 60) / 110) * h;
+        ctx.beginPath();
+        ctx.moveTo(0, y);
+        ctx.lineTo(w, y);
+        ctx.stroke();
+
+        ctx.fillStyle = '#9CA3AF';
+        ctx.font = '10px JetBrains Mono';
+        ctx.fillText(val + '', 8, y - 4);
+      });
+
+      // Draw Curve
+      const conf = mealCurves[currentMeal];
+      ctx.beginPath();
+      ctx.lineWidth = 2.5;
+      ctx.strokeStyle = currentMeal === 'boba' ? '#DC2626' : (currentMeal === 'oats' ? '#D97706' : '#27272A');
+
+      const points = 50;
+      let lastY = 0;
+      for (let i = 0; i < points; i++) {
+        const x = (i / (points - 1)) * w;
+        const progress = i / points;
+        
+        let val = conf.baseline;
+        if (progress > 0.2 && progress < 0.8) {
+          const bell = Math.sin((progress - 0.2) / 0.6 * Math.PI);
+          val = conf.baseline + (conf.peak - conf.baseline) * bell * animProgress;
+        }
+
+        const y = h - ((val - 60) / 110) * h;
+        if (i === 0) ctx.moveTo(x, y);
+        else ctx.lineTo(x, y);
+
+        if (i === points - 1) lastY = y;
+      }
+      ctx.stroke();
+
+      // Pulsing current dot
+      ctx.beginPath();
+      ctx.arc(w - 10, lastY, 4, 0, Math.PI * 2);
+      ctx.fillStyle = ctx.strokeStyle;
+      ctx.fill();
+    }
+
+    function simulateMeal(mealKey) {
+      currentMeal = mealKey;
+      document.querySelectorAll('.meal-btn').forEach(btn => btn.classList.remove('active'));
+
+      if (mealKey === 'steak') document.getElementById('mealSteak').classList.add('active');
+      if (mealKey === 'oats')  document.getElementById('mealOats').classList.add('active');
+      if (mealKey === 'boba')  document.getElementById('mealBoba').classList.add('active');
+      if (mealKey === 'walk')  document.getElementById('mealWalk').classList.add('active');
+
+      const data = mealCurves[mealKey];
+      document.getElementById('glucoseValueDisplay').textContent = data.peak;
+      document.getElementById('mealScoreDisplay').textContent = data.score;
+      document.getElementById('mealScoreDisplay').style.color = data.scoreColor;
+
+      const statusBadge = document.getElementById('glucoseStatusBadge');
+      statusBadge.textContent = data.status;
+      statusBadge.className = `badge-chip ${data.statusClass}`;
+      if (mealKey === 'boba') {
+        statusBadge.style.background = '#FEE2E2';
+        statusBadge.style.color = '#DC2626';
+      }
+
+      // Animate transition
+      animProgress = 0;
+      function step() {
+        animProgress += 0.08;
+        renderCGM();
+        if (animProgress < 1) requestAnimationFrame(step);
+        else animProgress = 1;
+      }
+      step();
+    }
+
+    renderCGM();
+  </script>
+</body>
+</html>

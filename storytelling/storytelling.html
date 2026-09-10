@@ -1,0 +1,1479 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Storytelling — Narrative-Driven Creative Design System</title>
+  <!-- Google Fonts: Abril Fatface (Display), Inter (Primary Body), JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Abril+Fatface&family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    /* ==========================================================================
+       STORYTELLING DESIGN SYSTEM TOKENS & FOUNDATIONS
+       Category: Creative & Artistic | Visual Style: Playful Narrative
+       ========================================================================== */
+    :root {
+      /* Official Color Tokens from DESIGN.md */
+      --color-primary: #3B82F6;        /* Primary CTA & Interactive Signal */
+      --color-primary-hover: #2563EB;
+      --color-primary-active: #1D4ED8;
+      --color-primary-subtle: rgba(59, 130, 246, 0.1);
+      --color-primary-ring: rgba(59, 130, 246, 0.3);
+
+      --color-secondary: #8B5CF6;      /* Vibrant Story Accent & Magic Highlights */
+      --color-secondary-hover: #7C3AED;
+      --color-secondary-subtle: rgba(139, 92, 246, 0.1);
+
+      --color-success: #16A34A;        /* Story Achievement / Quest Complete */
+      --color-success-subtle: rgba(22, 163, 74, 0.1);
+
+      --color-warning: #D97706;        /* Story Conflict / Caution Warning */
+      --color-warning-subtle: rgba(217, 119, 6, 0.1);
+
+      --color-danger: #DC2626;         /* Story Danger / Error */
+      --color-danger-subtle: rgba(220, 38, 38, 0.1);
+
+      --color-surface: #FFFFFF;        /* Large backgrounds & cards */
+      --color-surface-playful: #F8FAFC;/* Soft whimsical canvas */
+      --color-surface-card: #FFFFFF;
+      --color-neutral: #FFFFFF;        /* Official neutral token */
+
+      --color-text: #111827;           /* High contrast body text for legibility */
+      --color-text-secondary: #4B5563; /* Narrative narrator text */
+      --color-text-muted: #6B7280;     /* Metadata & chapter tags */
+      --color-text-inverted: #FFFFFF;
+
+      --color-border: #E5E7EB;         /* Subtle boundary rules */
+      --color-border-hover: #CBD5E1;
+
+      /* Official Typography Families */
+      --font-display: 'Abril Fatface', Georgia, serif;
+      --font-primary: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      --font-mono: 'JetBrains Mono', SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+
+      /* Desktop-First Expressive Scale: 12 / 14 / 16 / 20 / 28 / 42 / 58 */
+      --type-scale-12: 12px;
+      --type-scale-14: 14px;
+      --type-scale-16: 16px;
+      --type-scale-20: 20px;
+      --type-scale-28: 28px;
+      --type-scale-42: 42px;
+      --type-scale-58: 58px;
+
+      /* Official Spacing Scale: 4 / 8 / 12 / 16 / 24 / 32 */
+      --space-4: 4px;
+      --space-8: 8px;
+      --space-12: 12px;
+      --space-16: 16px;
+      --space-24: 24px;
+      --space-32: 32px;
+      --space-48: 48px;
+      --space-64: 64px;
+
+      /* Playful Radii */
+      --radius-sm: 8px;
+      --radius-md: 14px;
+      --radius-lg: 20px;
+      --radius-full: 9999px;
+
+      /* Elevation: Whimsical Soft Shadows */
+      --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.04);
+      --shadow-md: 0 8px 24px -4px rgba(59, 130, 246, 0.08), 0 4px 8px -2px rgba(0, 0, 0, 0.04);
+      --shadow-lg: 0 20px 40px -8px rgba(139, 92, 246, 0.12);
+
+      /* Motion & Transitions: 150–250ms with stable easing */
+      --trans-fast: 160ms cubic-bezier(0.16, 1, 0.3, 1);
+      --trans-normal: 220ms cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    /* Baseline Reset */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      background-color: var(--color-surface);
+      color: var(--color-text);
+      font-family: var(--font-primary);
+      font-size: var(--type-scale-16);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    body {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      background-color: var(--color-surface);
+    }
+
+    /* Narrative Typography Hierarchy */
+    h1, .story-h1 {
+      font-family: var(--font-display);
+      font-size: clamp(36px, 5vw, var(--type-scale-58));
+      font-weight: 400;
+      line-height: 1.1;
+      color: var(--color-text);
+      letter-spacing: 0.01em;
+    }
+
+    h2, .story-h2 {
+      font-family: var(--font-display);
+      font-size: var(--type-scale-42);
+      font-weight: 400;
+      line-height: 1.2;
+      color: var(--color-text);
+    }
+
+    h3, .story-h3 {
+      font-family: var(--font-display);
+      font-size: var(--type-scale-28);
+      font-weight: 400;
+      line-height: 1.25;
+      color: var(--color-text);
+    }
+
+    h4, .story-h4 {
+      font-family: var(--font-primary);
+      font-size: var(--type-scale-20);
+      font-weight: 700;
+      line-height: 1.35;
+      color: var(--color-text);
+    }
+
+    p, .story-lead {
+      font-size: var(--type-scale-16);
+      color: var(--color-text);
+      line-height: 1.65;
+    }
+
+    .story-caption {
+      font-size: var(--type-scale-14);
+      color: var(--color-text-secondary);
+      line-height: 1.5;
+    }
+
+    .mono-meta {
+      font-family: var(--font-mono);
+      font-size: var(--type-scale-12);
+    }
+
+    .container {
+      width: 100%;
+      max-width: 1160px;
+      margin-inline: auto;
+      padding-inline: var(--space-24);
+    }
+
+    /* Narrative Header Bar */
+    .story-nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(255, 255, 255, 0.92);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--color-border);
+    }
+
+    .nav-inner {
+      height: 64px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--space-16);
+    }
+
+    .brand-link {
+      display: flex;
+      align-items: center;
+      gap: var(--space-12);
+      text-decoration: none;
+      color: var(--color-text);
+    }
+
+    .brand-icon {
+      width: 32px;
+      height: 32px;
+      border-radius: var(--radius-sm);
+      background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #FFFFFF;
+      font-family: var(--font-display);
+      font-size: 20px;
+      box-shadow: 0 4px 10px rgba(59, 130, 246, 0.3);
+    }
+
+    .brand-text {
+      font-family: var(--font-display);
+      font-size: 22px;
+      letter-spacing: 0.02em;
+    }
+
+    .brand-pill {
+      font-family: var(--font-mono);
+      font-size: var(--type-scale-12);
+      font-weight: 600;
+      padding: 2px var(--space-8);
+      border-radius: var(--radius-full);
+      background: var(--color-secondary-subtle);
+      color: var(--color-secondary);
+      border: 1px solid rgba(139, 92, 246, 0.2);
+    }
+
+    .nav-chapters {
+      display: flex;
+      align-items: center;
+      gap: var(--space-24);
+      list-style: none;
+    }
+
+    .nav-chapter-link {
+      text-decoration: none;
+      font-size: var(--type-scale-14);
+      font-weight: 600;
+      color: var(--color-text-secondary);
+      transition: color var(--trans-fast);
+    }
+
+    .nav-chapter-link:hover {
+      color: var(--color-primary);
+    }
+
+    /* Buttons: Primary #3B82F6, Secondary Neutral */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--space-8);
+      height: 44px;
+      padding: 0 var(--space-20);
+      border-radius: var(--radius-md);
+      font-family: var(--font-primary);
+      font-size: var(--type-scale-14);
+      font-weight: 700;
+      line-height: 1;
+      text-decoration: none;
+      cursor: pointer;
+      border: 1px solid transparent;
+      transition: all var(--trans-fast);
+      user-select: none;
+      white-space: nowrap;
+    }
+
+    .btn:active:not(:disabled) {
+      transform: translateY(1px) scale(0.99);
+    }
+
+    .btn:focus-visible {
+      outline: none;
+      box-shadow: 0 0 0 3px var(--color-primary-ring);
+    }
+
+    /* Primary action uses #3B82F6 */
+    .btn-primary {
+      background-color: var(--color-primary);
+      color: #FFFFFF;
+      box-shadow: 0 4px 14px rgba(59, 130, 246, 0.35);
+    }
+
+    .btn-primary:hover:not(:disabled) {
+      background-color: var(--color-primary-hover);
+      box-shadow: 0 6px 20px rgba(59, 130, 246, 0.45);
+      transform: translateY(-2px);
+    }
+
+    .btn-secondary {
+      background-color: var(--color-surface);
+      color: var(--color-text);
+      border-color: var(--color-border);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .btn-secondary:hover:not(:disabled) {
+      border-color: var(--color-primary);
+      color: var(--color-primary);
+      background-color: var(--color-primary-subtle);
+    }
+
+    .btn-magic {
+      background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
+      color: #FFFFFF;
+      box-shadow: 0 4px 14px rgba(139, 92, 246, 0.35);
+    }
+
+    .btn-magic:hover:not(:disabled) {
+      box-shadow: 0 6px 22px rgba(139, 92, 246, 0.5);
+      transform: translateY(-2px);
+    }
+
+    .btn-sm {
+      height: 32px;
+      padding: 0 var(--space-12);
+      font-size: var(--type-scale-12);
+      border-radius: var(--radius-sm);
+    }
+
+    .btn-lg {
+      height: 52px;
+      padding: 0 var(--space-32);
+      font-size: var(--type-scale-16);
+      border-radius: var(--radius-lg);
+    }
+
+    .btn:disabled {
+      opacity: 0.45;
+      cursor: not-allowed;
+      pointer-events: none;
+    }
+
+    /* Hero Section: The Narrative Prologue */
+    .hero-narrative {
+      padding-top: var(--space-64);
+      padding-bottom: var(--space-64);
+      background: radial-gradient(circle at 80% 20%, rgba(139, 92, 246, 0.08) 0%, transparent 60%),
+                  radial-gradient(circle at 20% 80%, rgba(59, 130, 246, 0.08) 0%, transparent 60%);
+      border-bottom: 1px solid var(--color-border);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-8);
+      font-family: var(--font-mono);
+      font-size: var(--type-scale-12);
+      font-weight: 700;
+      color: var(--color-secondary);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      padding: var(--space-4) var(--space-12);
+      border-radius: var(--radius-full);
+      background: var(--color-secondary-subtle);
+      border: 1px solid rgba(139, 92, 246, 0.2);
+      margin-bottom: var(--space-16);
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1.2fr 0.8fr;
+      gap: var(--space-48);
+      align-items: center;
+    }
+
+    @media (max-width: 900px) {
+      .hero-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .hero-content h1 {
+      margin-bottom: var(--space-16);
+    }
+
+    .hero-content p {
+      font-size: var(--type-scale-20);
+      color: var(--color-text-secondary);
+      margin-bottom: var(--space-32);
+      line-height: 1.55;
+    }
+
+    .hero-cta-box {
+      display: flex;
+      gap: var(--space-16);
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    /* Interactive Story Milestone Card */
+    .story-parchment {
+      background: var(--color-surface);
+      border: 2px solid var(--color-border);
+      border-radius: var(--radius-lg);
+      padding: var(--space-24);
+      box-shadow: var(--shadow-lg);
+      position: relative;
+    }
+
+    .story-parchment::before {
+      content: 'CHAPTER 01';
+      position: absolute;
+      top: -12px;
+      right: var(--space-24);
+      background: var(--color-primary);
+      color: #FFFFFF;
+      font-family: var(--font-mono);
+      font-size: var(--type-scale-12);
+      font-weight: 700;
+      padding: 2px var(--space-12);
+      border-radius: var(--radius-full);
+    }
+
+    .quest-timeline {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-16);
+      margin-top: var(--space-16);
+    }
+
+    .quest-step {
+      display: flex;
+      gap: var(--space-12);
+      align-items: flex-start;
+      padding: var(--space-12);
+      border-radius: var(--radius-md);
+      background: var(--color-surface-playful);
+      border: 1px solid var(--color-border);
+      transition: all var(--trans-fast);
+      cursor: pointer;
+    }
+
+    .quest-step:hover {
+      border-color: var(--color-secondary);
+      transform: translateX(4px);
+      background: var(--color-surface);
+    }
+
+    .quest-step.active {
+      border-color: var(--color-primary);
+      background: rgba(59, 130, 246, 0.05);
+    }
+
+    .step-icon {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: var(--color-primary);
+      color: #FFFFFF;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 13px;
+      flex-shrink: 0;
+    }
+
+    /* Section Structure */
+    section {
+      padding-block: var(--space-64);
+      border-bottom: 1px solid var(--color-border);
+    }
+
+    .chapter-heading {
+      margin-bottom: var(--space-32);
+      max-width: 680px;
+    }
+
+    .chapter-eyebrow {
+      font-family: var(--font-mono);
+      font-size: var(--type-scale-12);
+      font-weight: 700;
+      color: var(--color-primary);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      margin-bottom: var(--space-8);
+      display: block;
+    }
+
+    /* 1. PALETTE & TOKEN SPECIMEN */
+    .color-swatch-rack {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+      gap: var(--space-16);
+    }
+
+    .story-swatch {
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      cursor: pointer;
+      transition: all var(--trans-fast);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .story-swatch:hover {
+      border-color: var(--color-secondary);
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-md);
+    }
+
+    .swatch-lake {
+      height: 76px;
+      padding: var(--space-8);
+      display: flex;
+      align-items: flex-end;
+      font-family: var(--font-display);
+      font-size: var(--type-scale-16);
+      letter-spacing: 0.02em;
+    }
+
+    .swatch-legend {
+      padding: var(--space-12);
+      background: var(--color-surface);
+      border-top: 1px solid var(--color-border);
+    }
+
+    .swatch-role-title {
+      font-size: var(--type-scale-14);
+      font-weight: 700;
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .swatch-hexcode {
+      font-family: var(--font-mono);
+      font-size: var(--type-scale-12);
+      color: var(--color-text-muted);
+      margin-top: 2px;
+    }
+
+    /* 2. TYPOGRAPHY (EXPRESSIVE SCALE: 12/14/16/20/28/42/58) */
+    .type-theater {
+      display: flex;
+      flex-direction: column;
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      background: var(--color-surface);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .theater-row {
+      display: grid;
+      grid-template-columns: 140px 130px 1fr;
+      padding: var(--space-16);
+      border-bottom: 1px solid var(--color-border);
+      align-items: center;
+      gap: var(--space-16);
+    }
+
+    .theater-row:last-child {
+      border-bottom: none;
+    }
+
+    .theater-row:hover {
+      background: var(--color-surface-playful);
+    }
+
+    @media (max-width: 768px) {
+      .theater-row {
+        grid-template-columns: 1fr;
+        gap: var(--space-8);
+      }
+    }
+
+    /* Spacing Visualizer */
+    .spacing-grid-playful {
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      gap: var(--space-12);
+      margin-top: var(--space-24);
+    }
+
+    @media (max-width: 768px) {
+      .spacing-grid-playful {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+
+    .spacing-brick {
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-md);
+      padding: var(--space-16);
+      text-align: center;
+      background: var(--color-surface);
+    }
+
+    .spacing-fill {
+      height: 20px;
+      background: linear-gradient(90deg, var(--color-primary), var(--color-secondary));
+      margin: var(--space-8) auto;
+      border-radius: var(--radius-sm);
+    }
+
+    /* 3. INTERACTIVE STORY LAB & CHOICE SYSTEM */
+    .quest-console-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--space-24);
+    }
+
+    @media (max-width: 860px) {
+      .quest-console-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .quest-panel {
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-lg);
+      padding: var(--space-24);
+      background: var(--color-surface);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .story-input {
+      width: 100%;
+      height: 44px;
+      padding: 0 var(--space-16);
+      font-family: var(--font-primary);
+      font-size: var(--type-scale-16);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-md);
+      color: var(--color-text);
+      background: var(--color-surface);
+      transition: all var(--trans-fast);
+      margin-top: var(--space-6);
+    }
+
+    /* Inputs: Strong focus-visible states emphasizing Primary #3B82F6 */
+    .story-input:focus-visible, .story-input:focus {
+      outline: none;
+      border-color: var(--color-primary);
+      box-shadow: 0 0 0 3px var(--color-primary-ring);
+    }
+
+    .story-input.error {
+      border-color: var(--color-danger);
+    }
+
+    .story-input.error:focus-visible {
+      box-shadow: 0 0 0 3px var(--color-danger-subtle);
+    }
+
+    .error-tagline {
+      font-size: var(--type-scale-12);
+      color: var(--color-danger);
+      font-family: var(--font-mono);
+      margin-top: var(--space-4);
+      display: flex;
+      align-items: center;
+      gap: var(--space-4);
+    }
+
+    /* 4. REAL-WORLD STORYTELLING APPLICATION: THE ODYSSEY CHRONICLES */
+    .story-cards-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: var(--space-24);
+    }
+
+    @media (max-width: 860px) {
+      .story-cards-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .character-card {
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-lg);
+      padding: var(--space-24);
+      background: var(--color-surface);
+      box-shadow: var(--shadow-sm);
+      display: flex;
+      flex-direction: column;
+      transition: all var(--trans-fast);
+      position: relative;
+    }
+
+    .character-card:hover {
+      border-color: var(--color-secondary);
+      box-shadow: var(--shadow-md);
+      transform: translateY(-3px);
+    }
+
+    .card-badge {
+      display: inline-block;
+      font-family: var(--font-mono);
+      font-size: var(--type-scale-12);
+      font-weight: 700;
+      padding: 2px var(--space-8);
+      border-radius: var(--radius-full);
+      margin-bottom: var(--space-12);
+      width: fit-content;
+    }
+
+    .badge-primary-tint {
+      background: var(--color-primary-subtle);
+      color: var(--color-primary);
+    }
+
+    .badge-secondary-tint {
+      background: var(--color-secondary-subtle);
+      color: var(--color-secondary);
+    }
+
+    .badge-success-tint {
+      background: var(--color-success-subtle);
+      color: var(--color-success);
+    }
+
+    /* 5. PRINCIPLES & ANTI-PATTERNS MATRIX */
+    .principles-duo {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--space-24);
+    }
+
+    @media (max-width: 768px) {
+      .principles-duo {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .principle-box {
+      border: 2px solid;
+      border-radius: var(--radius-lg);
+      padding: var(--space-24);
+      background: var(--color-surface);
+    }
+
+    .principle-box.do {
+      border-color: var(--color-success);
+      box-shadow: 0 4px 12px rgba(22, 163, 74, 0.08);
+    }
+
+    .principle-box.dont {
+      border-color: var(--color-danger);
+      box-shadow: 0 4px 12px rgba(220, 38, 38, 0.08);
+    }
+
+    .principle-title {
+      font-family: var(--font-display);
+      font-size: var(--type-scale-20);
+      margin-bottom: var(--space-16);
+      display: flex;
+      align-items: center;
+      gap: var(--space-8);
+    }
+
+    .principle-box.do .principle-title { color: var(--color-success); }
+    .principle-box.dont .principle-title { color: var(--color-danger); }
+
+    .bullet-guide {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-12);
+    }
+
+    .bullet-guide li {
+      font-size: var(--type-scale-14);
+      line-height: 1.55;
+      display: flex;
+      align-items: flex-start;
+      gap: var(--space-8);
+      color: var(--color-text);
+    }
+
+    /* Footer */
+    .story-footer {
+      background: var(--color-surface-playful);
+      border-top: 1px solid var(--color-border);
+      padding-block: var(--space-48);
+      margin-top: auto;
+    }
+
+    .footer-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: var(--space-24);
+    }
+
+    .color-chip-row {
+      display: flex;
+      gap: var(--space-8);
+      align-items: center;
+    }
+
+    .color-round-chip {
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      border: 1px solid rgba(0, 0, 0, 0.1);
+    }
+
+    /* Toast */
+    .story-toast-tray {
+      position: fixed;
+      bottom: var(--space-24);
+      right: var(--space-24);
+      z-index: 200;
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-8);
+      pointer-events: none;
+    }
+
+    .story-toast {
+      background: var(--color-text);
+      color: #FFFFFF;
+      padding: var(--space-12) var(--space-16);
+      border-radius: var(--radius-md);
+      font-size: var(--type-scale-14);
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: var(--space-12);
+      box-shadow: var(--shadow-lg);
+      transform: translateY(20px);
+      opacity: 0;
+      transition: all 200ms cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .story-toast.show {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Story Nav -->
+  <header class="story-nav">
+    <div class="container nav-inner">
+      <a href="#" class="brand-link">
+        <div class="brand-icon">&sect;</div>
+        <span class="brand-text">Chronicles</span>
+        <span class="brand-pill">Storytelling DS</span>
+      </a>
+
+      <nav aria-label="Story Chapters">
+        <ul class="nav-chapters">
+          <li><a href="#prologue" class="nav-chapter-link">Prologue</a></li>
+          <li><a href="#palette" class="nav-chapter-link">Colors</a></li>
+          <li><a href="#typography" class="nav-chapter-link">Typography</a></li>
+          <li><a href="#quest-lab" class="nav-chapter-link">Story Controls</a></li>
+          <li><a href="#characters" class="nav-chapter-link">The Odyssey</a></li>
+          <li><a href="#principles" class="nav-chapter-link">Anti-Patterns</a></li>
+        </ul>
+      </nav>
+
+      <div style="display: flex; gap: var(--space-8); align-items: center;">
+        <button class="btn btn-secondary btn-sm" onclick="exportStoryTokens()">Export Tokens</button>
+        <a href="#quest-lab" class="btn btn-primary btn-sm">Begin Quest</a>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <!-- PROLOGUE HERO SECTION -->
+    <section id="prologue" class="hero-narrative">
+      <div class="container hero-grid">
+        <div class="hero-content">
+          <div class="hero-badge">
+            <span>&#10022;</span> Visual Style: Playful & Emotional Journey
+          </div>
+          <h1>Every Interface Tells an Unforgettable Story.</h1>
+          <p>
+            Narrative-driven design orchestrating visuals, expressive Abril Fatface headlines, Primary <code>#3B82F6</code> interaction signals, and secondary <code>#8B5CF6</code> wonder to guide users through engaging journeys.
+          </p>
+          <div class="hero-cta-box">
+            <a href="#characters" class="btn btn-primary btn-lg">Embark on the Journey</a>
+            <a href="#palette" class="btn btn-secondary btn-lg">Inspect Palette Tokens</a>
+          </div>
+        </div>
+
+        <!-- Interactive Story Milestone Card -->
+        <div class="story-parchment">
+          <h3 class="story-h3" style="margin-bottom: var(--space-8);">The Hero's Interactive Path</h3>
+          <p class="story-caption">Select your decision path to see how narrative state influences interface feedback.</p>
+
+          <div class="quest-timeline">
+            <div class="quest-step active" onclick="chooseStoryPath(this, 'The Call to Adventure: Accepting the journey')">
+              <div class="step-icon">1</div>
+              <div>
+                <strong style="font-size: var(--type-scale-14); display: block;">The Call to Adventure</strong>
+                <span class="story-caption">Accept the invitation and discover unknown horizons.</span>
+              </div>
+            </div>
+
+            <div class="quest-step" onclick="chooseStoryPath(this, 'The Threshold Guardian: Overcoming primary challenge')">
+              <div class="step-icon" style="background: var(--color-secondary);">2</div>
+              <div>
+                <strong style="font-size: var(--type-scale-14); display: block;">The Threshold Trial</strong>
+                <span class="story-caption">Interact with challenging system states and focus rules.</span>
+              </div>
+            </div>
+
+            <div class="quest-step" onclick="chooseStoryPath(this, 'The Ultimate Boon: System mastery unlocked')">
+              <div class="step-icon" style="background: var(--color-success);">3</div>
+              <div>
+                <strong style="font-size: var(--type-scale-14); display: block;">The Transformation</strong>
+                <span class="story-caption">Achieve full compliance with 100% accessible tokens.</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 1: PALETTE & FOUNDATIONS -->
+    <section id="palette">
+      <div class="container">
+        <div class="chapter-heading">
+          <span class="chapter-eyebrow">Chapter 01 // Foundation Colors</span>
+          <h2 class="story-h2">The Emotional Color Spectrum</h2>
+          <p class="story-lead">
+            Official colors from <code>DESIGN.md</code>: Primary <code>#3B82F6</code> drives CTA actions, Secondary <code>#8B5CF6</code> adds magical charm, and Surface <code>#FFFFFF</code> guarantees readable clarity.
+          </p>
+        </div>
+
+        <div class="color-swatch-rack">
+          <!-- Primary -->
+          <div class="story-swatch" onclick="copyStoryHex('#3B82F6', 'Primary')">
+            <div class="swatch-lake" style="background: #3B82F6; color: #FFFFFF;">
+              PRIMARY
+            </div>
+            <div class="swatch-legend">
+              <div class="swatch-role-title">
+                <span>Primary</span>
+                <span class="mono-meta">#3B82F6</span>
+              </div>
+              <div class="story-caption">CTA emphasis & journey trigger</div>
+            </div>
+          </div>
+
+          <!-- Secondary -->
+          <div class="story-swatch" onclick="copyStoryHex('#8B5CF6', 'Secondary')">
+            <div class="swatch-lake" style="background: #8B5CF6; color: #FFFFFF;">
+              SECONDARY
+            </div>
+            <div class="swatch-legend">
+              <div class="swatch-role-title">
+                <span>Secondary</span>
+                <span class="mono-meta">#8B5CF6</span>
+              </div>
+              <div class="story-caption">Playful narrative accent</div>
+            </div>
+          </div>
+
+          <!-- Surface -->
+          <div class="story-swatch" onclick="copyStoryHex('#FFFFFF', 'Surface')">
+            <div class="swatch-lake" style="background: #FFFFFF; color: #111827; border-bottom: 1px solid #E5E7EB;">
+              SURFACE
+            </div>
+            <div class="swatch-legend">
+              <div class="swatch-role-title">
+                <span>Surface</span>
+                <span class="mono-meta">#FFFFFF</span>
+              </div>
+              <div class="story-caption">Large story canvas & cards</div>
+            </div>
+          </div>
+
+          <!-- Text -->
+          <div class="story-swatch" onclick="copyStoryHex('#111827', 'Text')">
+            <div class="swatch-lake" style="background: #111827; color: #FFFFFF;">
+              TEXT
+            </div>
+            <div class="swatch-legend">
+              <div class="swatch-role-title">
+                <span>Text</span>
+                <span class="mono-meta">#111827</span>
+              </div>
+              <div class="story-caption">Body copy on Surface for legibility</div>
+            </div>
+          </div>
+
+          <!-- Success -->
+          <div class="story-swatch" onclick="copyStoryHex('#16A34A', 'Success')">
+            <div class="swatch-lake" style="background: #16A34A; color: #FFFFFF;">
+              SUCCESS
+            </div>
+            <div class="swatch-legend">
+              <div class="swatch-role-title">
+                <span>Success</span>
+                <span class="mono-meta">#16A34A</span>
+              </div>
+              <div class="story-caption">Milestone reached / Victory</div>
+            </div>
+          </div>
+
+          <!-- Warning -->
+          <div class="story-swatch" onclick="copyStoryHex('#D97706', 'Warning')">
+            <div class="swatch-lake" style="background: #D97706; color: #FFFFFF;">
+              WARNING
+            </div>
+            <div class="swatch-legend">
+              <div class="swatch-role-title">
+                <span>Warning</span>
+                <span class="mono-meta">#D97706</span>
+              </div>
+              <div class="story-caption">Impending trial / Hazard alert</div>
+            </div>
+          </div>
+
+          <!-- Danger -->
+          <div class="story-swatch" onclick="copyStoryHex('#DC2626', 'Danger')">
+            <div class="swatch-lake" style="background: #DC2626; color: #FFFFFF;">
+              DANGER
+            </div>
+            <div class="swatch-legend">
+              <div class="swatch-role-title">
+                <span>Danger</span>
+                <span class="mono-meta">#DC2626</span>
+              </div>
+              <div class="story-caption">Peril state / Form validation error</div>
+            </div>
+          </div>
+
+          <!-- Neutral -->
+          <div class="story-swatch" onclick="copyStoryHex('#FFFFFF', 'Neutral')">
+            <div class="swatch-lake" style="background: #FFFFFF; color: #111827; border-bottom: 1px solid #E5E7EB;">
+              NEUTRAL
+            </div>
+            <div class="swatch-legend">
+              <div class="swatch-role-title">
+                <span>Neutral</span>
+                <span class="mono-meta">#FFFFFF</span>
+              </div>
+              <div class="story-caption">Derived surface token</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 2: TYPOGRAPHY (EXPRESSIVE DESKTOP-FIRST SCALE) -->
+    <section id="typography">
+      <div class="container">
+        <div class="chapter-heading">
+          <span class="chapter-eyebrow">Chapter 02 // Typographic Voice</span>
+          <h2 class="story-h2">The Expressive Type Theater</h2>
+          <p class="story-lead">
+            Headlines sing in dramatic <code>Abril Fatface</code>; body narrative reads effortlessly in <code>Inter</code>; metadata and timestamps hum in <code>JetBrains Mono</code>.
+          </p>
+        </div>
+
+        <div class="type-theater">
+          <div class="theater-row" style="background: var(--color-surface-playful); font-weight: 700;">
+            <span class="mono-meta">SCALE TOKEN</span>
+            <span class="mono-meta">SIZE / LINE</span>
+            <span>EXPRESSIVE SPECIMEN</span>
+          </div>
+
+          <div class="theater-row">
+            <span class="mono-meta">--type-scale-58</span>
+            <span class="mono-meta">58px / 1.10</span>
+            <div class="story-h1" contenteditable="true" spellcheck="false">Once Upon a Future</div>
+          </div>
+
+          <div class="theater-row">
+            <span class="mono-meta">--type-scale-42</span>
+            <span class="mono-meta">42px / 1.20</span>
+            <div class="story-h2" contenteditable="true" spellcheck="false">The Voyage Through Wonder</div>
+          </div>
+
+          <div class="theater-row">
+            <span class="mono-meta">--type-scale-28</span>
+            <span class="mono-meta">28px / 1.25</span>
+            <div class="story-h3" contenteditable="true" spellcheck="false">Encounters Along the Digital Trail</div>
+          </div>
+
+          <div class="theater-row">
+            <span class="mono-meta">--type-scale-20</span>
+            <span class="mono-meta">20px / 1.35</span>
+            <div class="story-h4" contenteditable="true" spellcheck="false">Fast, deterministic transitions running within 150ms to 250ms</div>
+          </div>
+
+          <div class="theater-row">
+            <span class="mono-meta">--type-scale-16</span>
+            <span class="mono-meta">16px / 1.65</span>
+            <div class="story-lead" contenteditable="true" spellcheck="false">Inter body text ensures sustained readability across long narrative scrolls, balancing the dramatic display presence of Abril Fatface.</div>
+          </div>
+
+          <div class="theater-row">
+            <span class="mono-meta">--type-scale-14</span>
+            <span class="mono-meta">14px / 1.50</span>
+            <div class="story-caption" contenteditable="true" spellcheck="false">Narrator footnotes, character bios, form helper instructions, and contextual dialogues.</div>
+          </div>
+
+          <div class="theater-row">
+            <span class="mono-meta">--type-scale-12</span>
+            <span class="mono-meta">12px / 1.40</span>
+            <div class="mono-meta" contenteditable="true" spellcheck="false">CHAPTER: ACT_IV &bull; MILESTONE: QUEST_UNLOCKED &bull; STATUS: OPTIMAL</div>
+          </div>
+        </div>
+
+        <!-- SPACING SCALE 4/8/12/16/24/32 -->
+        <div style="margin-top: var(--space-48);">
+          <div class="chapter-heading" style="margin-bottom: var(--space-16);">
+            <span class="chapter-eyebrow">Grid Architecture</span>
+            <h3 class="story-h3">Narrative Spacing Rhythm: 4 / 8 / 12 / 16 / 24 / 32</h3>
+            <p class="story-caption">Keep vertical rhythm consistent across sections and components. Align columns to a predictable grid.</p>
+          </div>
+
+          <div class="spacing-grid-playful">
+            <div class="spacing-brick">
+              <div class="mono-meta" style="font-weight: 700;">4px</div>
+              <div class="spacing-fill" style="width: 4px;"></div>
+              <span class="mono-meta">--space-4</span>
+            </div>
+            <div class="spacing-brick">
+              <div class="mono-meta" style="font-weight: 700;">8px</div>
+              <div class="spacing-fill" style="width: 8px;"></div>
+              <span class="mono-meta">--space-8</span>
+            </div>
+            <div class="spacing-brick">
+              <div class="mono-meta" style="font-weight: 700;">12px</div>
+              <div class="spacing-fill" style="width: 12px;"></div>
+              <span class="mono-meta">--space-12</span>
+            </div>
+            <div class="spacing-brick">
+              <div class="mono-meta" style="font-weight: 700;">16px</div>
+              <div class="spacing-fill" style="width: 16px;"></div>
+              <span class="mono-meta">--space-16</span>
+            </div>
+            <div class="spacing-brick">
+              <div class="mono-meta" style="font-weight: 700;">24px</div>
+              <div class="spacing-fill" style="width: 24px;"></div>
+              <span class="mono-meta">--space-24</span>
+            </div>
+            <div class="spacing-brick">
+              <div class="mono-meta" style="font-weight: 700;">32px</div>
+              <div class="spacing-fill" style="width: 32px;"></div>
+              <span class="mono-meta">--space-32</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 3: INTERACTIVE STORY CONTROLS & FORMS -->
+    <section id="quest-lab">
+      <div class="container">
+        <div class="chapter-heading">
+          <span class="chapter-eyebrow">Chapter 03 // Interactive Components</span>
+          <h2 class="story-h2">Action Triggers & Form Spells</h2>
+          <p class="story-lead">
+            Buttons: primary action uses <code>#3B82F6</code>; secondary actions stay neutral. Inputs: strong focus-visible states with clear validation.
+          </p>
+        </div>
+
+        <div class="quest-console-grid">
+          <!-- Button Realm -->
+          <div class="quest-panel">
+            <h3 class="story-h3" style="margin-bottom: var(--space-8);">Story Button Suite</h3>
+            <p class="story-caption" style="margin-bottom: var(--space-20);">
+              Primary action uses #3B82F6 with prominent hover elevation; secondary actions stay clean.
+            </p>
+
+            <div style="display: flex; flex-direction: column; gap: var(--space-16);">
+              <div style="display: flex; gap: var(--space-12); flex-wrap: wrap;">
+                <button class="btn btn-primary" onclick="triggerStoryToast('Primary Quest #3B82F6 initiated')">Primary Journey</button>
+                <button class="btn btn-secondary" onclick="triggerStoryToast('Secondary neutral path chosen')">Secondary Neutral</button>
+                <button class="btn btn-magic" onclick="triggerStoryToast('Magic spell #8B5CF6 cast!')">Magical Flourish</button>
+              </div>
+
+              <div style="display: flex; gap: var(--space-12); flex-wrap: wrap;">
+                <button class="btn btn-primary btn-sm">Pocket (32px)</button>
+                <button class="btn btn-primary">Standard (44px)</button>
+                <button class="btn btn-primary btn-lg">Monumental (52px)</button>
+              </div>
+
+              <div style="display: flex; gap: var(--space-12); flex-wrap: wrap; padding-top: var(--space-16); border-top: 1px solid var(--color-border);">
+                <button class="btn btn-primary" disabled>Disabled Primary</button>
+                <button class="btn btn-secondary" disabled>Disabled Neutral</button>
+                <button class="btn btn-primary" id="btn-story-loader" onclick="toggleStoryLoader(this)">
+                  <span>Toggle Loading</span>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Narrative Form Input -->
+          <div class="quest-panel">
+            <h3 class="story-h3" style="margin-bottom: var(--space-8);">Character Inscription</h3>
+            <p class="story-caption" style="margin-bottom: var(--space-20);">
+              Strong focus-visible state glowing with #3B82F6, clear labels, and predictable error messaging.
+            </p>
+
+            <form onsubmit="event.preventDefault(); validateStoryInput();">
+              <div style="margin-bottom: var(--space-16);">
+                <label for="char-name" style="font-weight: 700; font-size: var(--type-scale-14); display: block;">
+                  Adventurer Name
+                </label>
+                <input id="char-name" class="story-input" type="text" value="Aria the Wayfinder">
+              </div>
+
+              <div style="margin-bottom: var(--space-16);">
+                <label for="quest-glyph" style="font-weight: 700; font-size: var(--type-scale-14); display: block;">
+                  Secret Rune Key (Must begin with STORY-)
+                </label>
+                <input id="quest-glyph" class="story-input error" type="text" value="KEY-FORBIDDEN-9">
+                <div class="error-tagline">
+                  <span>&#9888;</span>
+                  <span>Validation Error: Key must begin with STORY-</span>
+                </div>
+              </div>
+
+              <div style="display: flex; justify-content: flex-end; gap: var(--space-12);">
+                <button type="button" class="btn btn-secondary" onclick="document.getElementById('quest-glyph').classList.toggle('error');">Toggle Error</button>
+                <button type="submit" class="btn btn-primary">Attune Glyph</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 4: REAL-WORLD NARRATIVE ODYSSEY APPLICATION -->
+    <section id="characters" style="background: var(--color-surface-playful);">
+      <div class="container">
+        <div class="chapter-heading">
+          <span class="chapter-eyebrow">Chapter 04 // Authentic Product Application</span>
+          <h2 class="story-h2">The Odyssey Anthology</h2>
+          <p class="story-lead">
+            A real-world creative storytelling platform guiding readers through character archetypes, narrative arcs, and interactive quest branches.
+          </p>
+        </div>
+
+        <div class="story-cards-grid">
+          <!-- Card 1 -->
+          <div class="character-card">
+            <span class="card-badge badge-primary-tint">THE CATALYST // ACT I</span>
+            <h3 class="story-h3" style="margin-bottom: var(--space-8);">The Spark in the Citadel</h3>
+            <p class="story-caption" style="margin-bottom: var(--space-16); flex: 1;">
+              When the ancient signal tower re-awakens on Primary #3B82F6 frequency, an apprentice archivist deciphers the lost coordinates of the First Age.
+            </p>
+            <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--color-border); padding-top: var(--space-12);">
+              <span class="mono-meta" style="color: var(--color-primary); font-weight: 700;">8 MIN READ</span>
+              <button class="btn btn-primary btn-sm" onclick="triggerStoryToast('Opening Chapter: The Spark in the Citadel')">Begin Chapter</button>
+            </div>
+          </div>
+
+          <!-- Card 2 -->
+          <div class="character-card">
+            <span class="card-badge badge-secondary-tint">THE HORIZON // ACT II</span>
+            <h3 class="story-h3" style="margin-bottom: var(--space-8);">The Violet Archipelago</h3>
+            <p class="story-caption" style="margin-bottom: var(--space-16); flex: 1;">
+              Navigating uncharted crystalline reefs where Secondary #8B5CF6 currents warp the fabric of space and unveil buried star-forges.
+            </p>
+            <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--color-border); padding-top: var(--space-12);">
+              <span class="mono-meta" style="color: var(--color-secondary); font-weight: 700;">14 MIN READ</span>
+              <button class="btn btn-magic btn-sm" onclick="triggerStoryToast('Opening Chapter: The Violet Archipelago')">Begin Chapter</button>
+            </div>
+          </div>
+
+          <!-- Card 3 -->
+          <div class="character-card">
+            <span class="card-badge badge-success-tint">THE TRIUMPH // ACT III</span>
+            <h3 class="story-h3" style="margin-bottom: var(--space-8);">Return with the Elixir</h3>
+            <p class="story-caption" style="margin-bottom: var(--space-16); flex: 1;">
+              Bringing verifiable knowledge back to the guild, establishing an enduring design system rooted in empathy, elegance, and narrative truth.
+            </p>
+            <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--color-border); padding-top: var(--space-12);">
+              <span class="mono-meta" style="color: var(--color-success); font-weight: 700;">10 MIN READ</span>
+              <button class="btn btn-secondary btn-sm" onclick="triggerStoryToast('Opening Chapter: Return with the Elixir')">Begin Chapter</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 5: PRINCIPLES & ANTI-PATTERNS -->
+    <section id="principles">
+      <div class="container">
+        <div class="chapter-heading">
+          <span class="chapter-eyebrow">Chapter 05 // Specification Directives</span>
+          <h2 class="story-h2">Narrative Principles & Anti-Patterns</h2>
+          <p class="story-lead">
+            Directly derived from Section 9 of the official <code>DESIGN.md</code> specification for Storytelling.
+          </p>
+        </div>
+
+        <div class="principles-duo">
+          <!-- Do's -->
+          <div class="principle-box do">
+            <div class="principle-title">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+              <span>Design System Directives (Do)</span>
+            </div>
+            <ul class="bullet-guide">
+              <li>
+                <strong>Favor Primary #3B82F6:</strong>
+                <span>Command narrative action with confident blue CTA emphasis.</span>
+              </li>
+              <li>
+                <strong>Playful Display Typography:</strong>
+                <span>Let Abril Fatface headlines infuse warmth, delight, and literary weight.</span>
+              </li>
+              <li>
+                <strong>Legible Inter Body Copy:</strong>
+                <span>Optimize scannability and contrast on Surface #FFFFFF with deep Text #111827.</span>
+              </li>
+              <li>
+                <strong>Expressive Desktop-First Scale:</strong>
+                <span>Preserve clear vertical rhythm across 12 / 14 / 16 / 20 / 28 / 42 / 58px.</span>
+              </li>
+              <li>
+                <strong>Stable 150–250ms Interactions:</strong>
+                <span>Ensure hover, focus-visible, and active feedback occur smoothly with stable easing.</span>
+              </li>
+            </ul>
+          </div>
+
+          <!-- Don'ts -->
+          <div class="principle-box dont">
+            <div class="principle-title">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+              <span>Strict Anti-Patterns (Do Not)</span>
+            </div>
+            <ul class="bullet-guide">
+              <li>
+                <strong>No Off-Palette Drifting:</strong>
+                <span>Do not introduce random teals, pinks, or olives when #3B82F6 and #8B5CF6 fulfill the hierarchy.</span>
+              </li>
+              <li>
+                <strong>No Flattened Type Hierarchy:</strong>
+                <span>Never equalize font sizes between story headlines, subtext, and captions.</span>
+              </li>
+              <li>
+                <strong>No Decorative Gimmicks that Harm Readability:</strong>
+                <span>Avoid low-contrast background textures or unreadable glowing text.</span>
+              </li>
+              <li>
+                <strong>No Metaphor Mixing:</strong>
+                <span>Do not drop sterile enterprise spreadsheets into playful narrative storytelling.</span>
+              </li>
+              <li>
+                <strong>No Missing Focus States:</strong>
+                <span>Interactive elements must always exhibit explicit focus-visible rings.</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Storytelling Colophon Footer -->
+  <footer class="story-footer">
+    <div class="container footer-row">
+      <div>
+        <div style="font-family: var(--font-display); font-size: 20px; color: var(--color-text); margin-bottom: var(--space-4);">
+          Chronicles &mdash; Storytelling Design System
+        </div>
+        <div class="mono-meta" style="color: var(--color-text-muted);">
+          Category: Creative & Artistic &bull; Tokens: Primary <code>#3B82F6</code> &bull; Secondary <code>#8B5CF6</code> &bull; Surface <code>#FFFFFF</code> &bull; Text <code>#111827</code>
+        </div>
+      </div>
+
+      <div class="color-chip-row">
+        <span class="color-round-chip" style="background: #3B82F6;" title="Primary #3B82F6"></span>
+        <span class="color-round-chip" style="background: #8B5CF6;" title="Secondary #8B5CF6"></span>
+        <span class="color-round-chip" style="background: #16A34A;" title="Success #16A34A"></span>
+        <span class="color-round-chip" style="background: #D97706;" title="Warning #D97706"></span>
+        <span class="color-round-chip" style="background: #DC2626;" title="Danger #DC2626"></span>
+        <span class="color-round-chip" style="background: #111827;" title="Text #111827"></span>
+        <span class="color-round-chip" style="background: #FFFFFF;" title="Surface #FFFFFF"></span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Toast Notification Tray -->
+  <div class="story-toast-tray" id="story-toast-tray"></div>
+
+  <!-- Interactive JavaScript Engine -->
+  <script>
+    function triggerStoryToast(msg) {
+      const tray = document.getElementById('story-toast-tray');
+      const toast = document.createElement('div');
+      toast.className = 'story-toast';
+      toast.innerHTML = `<span>&#10022;</span> <span>${msg}</span>`;
+      tray.appendChild(toast);
+
+      requestAnimationFrame(() => toast.classList.add('show'));
+
+      setTimeout(() => {
+        toast.classList.remove('show');
+        setTimeout(() => toast.remove(), 250);
+      }, 2600);
+    }
+
+    function copyStoryHex(hex, name) {
+      navigator.clipboard.writeText(hex).then(() => {
+        triggerStoryToast(`Token ${name} (${hex}) copied to clipboard`);
+      }).catch(() => {
+        triggerStoryToast(`Token ${name}: ${hex}`);
+      });
+    }
+
+    function exportStoryTokens() {
+      const spec = {
+        name: "Storytelling Design System",
+        category: "Creative & Artistic",
+        primary: "#3B82F6",
+        secondary: "#8B5CF6",
+        success: "#16A34A",
+        warning: "#D97706",
+        danger: "#DC2626",
+        surface: "#FFFFFF",
+        text: "#111827",
+        neutral: "#FFFFFF",
+        typography: {
+          display: "Abril Fatface",
+          primary: "Inter",
+          mono: "JetBrains Mono",
+          scale: [12, 14, 16, 20, 28, 42, 58]
+        },
+        spacing: [4, 8, 12, 16, 24, 32]
+      };
+      navigator.clipboard.writeText(JSON.stringify(spec, null, 2)).then(() => {
+        triggerStoryToast("Storytelling tokens JSON exported to clipboard");
+      });
+    }
+
+    function chooseStoryPath(element, description) {
+      const steps = element.parentElement.querySelectorAll('.quest-step');
+      steps.forEach(s => s.classList.remove('active'));
+      element.classList.add('active');
+      triggerStoryToast(description);
+    }
+
+    function toggleStoryLoader(btn) {
+      if (btn.dataset.loading === "true") {
+        btn.dataset.loading = "false";
+        btn.innerHTML = `<span>Toggle Loading</span>`;
+        btn.disabled = false;
+        triggerStoryToast("Button state restored");
+      } else {
+        btn.dataset.loading = "true";
+        btn.innerHTML = `<span>Attuning...</span>`;
+        btn.disabled = true;
+        setTimeout(() => {
+          if (btn.dataset.loading === "true") {
+            toggleStoryLoader(btn);
+          }
+        }, 2000);
+      }
+    }
+
+    function validateStoryInput() {
+      const input = document.getElementById('quest-glyph');
+      if (input.value.startsWith('STORY-')) {
+        input.classList.remove('error');
+        const err = input.parentElement.querySelector('.error-tagline');
+        if (err) err.style.display = 'none';
+        triggerStoryToast("Glyph successfully attuned! Pathway open.");
+      } else {
+        input.classList.add('error');
+        const err = input.parentElement.querySelector('.error-tagline');
+        if (err) err.style.display = 'flex';
+        triggerStoryToast("Validation error: Glyph must begin with STORY-");
+      }
+    }
+  </script>
+</body>
+</html>

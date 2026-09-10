@@ -1,0 +1,914 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Contemporary — Modern &amp; Minimal Design System</title>
+  <meta name="description" content="Authentic Contemporary design system website. Current-era minimalist design with bento grids, bold #C800DF and #E60076 accents, Jost typography, and dark mode support." />
+
+  <!-- Google Fonts: Jost (Primary & Display) and Overpass Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Jost:ital,wght@0,100..900;1,100..900&family=Overpass+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    /* ─────────────────────────────────────────────────────────────────────────
+     * CONTEMPORARY DESIGN SYSTEM TOKENS (DESIGN.md verbatim alignment)
+     * ───────────────────────────────────────────────────────────────────────── */
+    :root {
+      /* Colors from contemporary/DESIGN.md */
+      --primary: #C800DF;         /* Primary: vivid magenta/fuchsia for CTA emphasis */
+      --secondary: #E60076;       /* Secondary: electric rose/pink accent */
+      --success: #16A34A;         /* Success */
+      --warning: #D97706;         /* Warning */
+      --danger: #DC2626;          /* Danger */
+      --surface: #FFFFFF;         /* Surface for cards and panels */
+      --text: #111827;            /* Text for body and high legibility */
+      --neutral: #FFFFFF;
+
+      /* Additional harmonious surface & neutral tiers */
+      --bg: #f8faff;              /* Contemporary light canvas */
+      --surface-subtle: #f1f4fb;
+      --surface-elevated: #ffffff;
+      --fg-muted: #4b5563;
+      --fg-faint: #9ca3af;
+      --border: #e5e7eb;
+      --border-strong: #d1d5db;
+
+      /* Typography: Jost (Primary & Display), Overpass Mono */
+      --font-display: "Jost", system-ui, -apple-system, sans-serif;
+      --font-body: "Jost", system-ui, -apple-system, sans-serif;
+      --font-mono: "Overpass Mono", ui-monospace, Menlo, monospace;
+
+      /* Type scale: desktop-first expressive scale */
+      --text-xs: 12px;
+      --text-sm: 14px;
+      --text-base: 16px;
+      --text-lg: 18px;
+      --text-xl: 24px;
+      --text-2xl: 36px;
+      --text-3xl: 54px;
+      --text-4xl: 76px;
+
+      --leading-tight: 1.06;
+      --leading-body: 1.52;
+      --tracking-display: -0.025em;
+
+      /* Spacing Scale (Comfortable density mode) */
+      --space-1: 4px;
+      --space-2: 8px;
+      --space-3: 12px;
+      --space-4: 16px;
+      --space-5: 20px;
+      --space-6: 24px;
+      --space-8: 32px;
+      --space-10: 40px;
+      --space-12: 48px;
+      --space-16: 64px;
+      --space-24: 96px;
+
+      /* Radii */
+      --radius-sm: 10px;
+      --radius-md: 16px;
+      --radius-lg: 24px;
+      --radius-xl: 32px;
+      --radius-pill: 9999px;
+
+      /* Elevation */
+      --shadow-sm: 0 1px 3px rgba(0,0,0,0.05);
+      --shadow-md: 0 4px 20px rgba(0,0,0,0.06);
+      --shadow-lg: 0 20px 52px rgba(17, 24, 39, 0.08);
+      --shadow-primary: 0 8px 28px rgba(200, 0, 223, 0.28);
+
+      /* Focus Ring */
+      --focus-ring: 0 0 0 3px rgba(200, 0, 223, 0.35);
+
+      /* Transitions */
+      --motion-fast: 160ms;
+      --motion-base: 240ms;
+      --ease-standard: cubic-bezier(0.2, 0, 0, 1);
+    }
+
+    /* Dark Mode Support (DESIGN.md §1: dark mode support) */
+    [data-theme="dark"] {
+      --bg: #090c14;
+      --surface: #111726;
+      --surface-subtle: #172033;
+      --surface-elevated: #1a243b;
+      --text: #f9fafb;
+      --fg-muted: #9ca3af;
+      --fg-faint: #6b7280;
+      --border: #1f293d;
+      --border-strong: #374151;
+      --shadow-md: 0 4px 20px rgba(0,0,0,0.4);
+      --shadow-lg: 0 20px 52px rgba(0,0,0,0.5);
+    }
+
+    /* ─────────────────────────────────────────────────────────────────────────
+     * RESET & BASE STYLES
+     * ───────────────────────────────────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--font-body);
+      font-size: var(--text-base);
+      line-height: var(--leading-body);
+      -webkit-font-smoothing: antialiased;
+      transition: background-color var(--motion-base) var(--ease-standard), color var(--motion-base) var(--ease-standard);
+      overflow-x: hidden;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin-inline: auto;
+      padding-inline: var(--space-6);
+    }
+
+    /* Typography Hierarchy */
+    h1, h2, h3, h4 {
+      font-family: var(--font-display);
+      color: var(--text);
+      letter-spacing: var(--tracking-display);
+      line-height: var(--leading-tight);
+    }
+    h1 { font-size: clamp(42px, 6vw, var(--text-4xl)); font-weight: 800; }
+    h2 { font-size: clamp(28px, 4vw, var(--text-3xl)); font-weight: 700; }
+    h3 { font-size: var(--text-2xl); font-weight: 600; }
+    h4 { font-size: var(--text-xl); font-weight: 600; }
+    p { margin-bottom: 0; }
+    .lead { font-size: var(--text-lg); color: var(--fg-muted); line-height: 1.6; }
+    .mono { font-family: var(--font-mono); }
+
+    /* ─────────────────────────────────────────────────────────────────────────
+     * BUTTONS & CONTROLS (DESIGN.md §6: Primary uses #C800DF)
+     * ───────────────────────────────────────────────────────────────────────── */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--space-2);
+      padding: 12px 24px;
+      border-radius: var(--radius-sm);
+      font-family: var(--font-body);
+      font-size: var(--text-base);
+      font-weight: 600;
+      text-decoration: none;
+      cursor: pointer;
+      border: 1px solid transparent;
+      transition: all var(--motion-fast) var(--ease-standard);
+      white-space: nowrap;
+    }
+    .btn:focus-visible {
+      outline: none;
+      box-shadow: var(--focus-ring);
+    }
+
+    /* Primary Button (Bold #C800DF) */
+    .btn-primary {
+      background: var(--primary);
+      color: #ffffff;
+      box-shadow: var(--shadow-primary);
+    }
+    .btn-primary:hover {
+      background: #b000c4;
+      transform: translateY(-2px);
+      box-shadow: 0 10px 32px rgba(200, 0, 223, 0.38);
+    }
+    .btn-primary:active { transform: translateY(0); }
+
+    /* Secondary Button (#E60076) */
+    .btn-secondary {
+      background: var(--secondary);
+      color: #ffffff;
+      box-shadow: 0 8px 24px rgba(230, 0, 118, 0.25);
+    }
+    .btn-secondary:hover {
+      background: #cc0068;
+      transform: translateY(-2px);
+      box-shadow: 0 10px 30px rgba(230, 0, 118, 0.35);
+    }
+
+    /* Neutral Outline Button */
+    .btn-neutral {
+      background: var(--surface);
+      color: var(--text);
+      border-color: var(--border);
+      box-shadow: var(--shadow-sm);
+    }
+    .btn-neutral:hover {
+      border-color: var(--primary);
+      color: var(--primary);
+      transform: translateY(-1px);
+    }
+
+    /* ─────────────────────────────────────────────────────────────────────────
+     * NAVIGATION
+     * ───────────────────────────────────────────────────────────────────────── */
+    .contemporary-nav {
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      background: rgba(255, 255, 255, 0.85);
+      backdrop-filter: blur(14px);
+      border-bottom: 1px solid var(--border);
+      height: 72px;
+      display: flex;
+      align-items: center;
+      transition: background var(--motion-base) var(--ease-standard), border-color var(--motion-base) var(--ease-standard);
+    }
+    [data-theme="dark"] .contemporary-nav {
+      background: rgba(9, 12, 20, 0.85);
+    }
+    .nav-wrapper {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+    }
+    .brand-mark {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+      font-size: 22px;
+      font-weight: 800;
+      color: var(--text);
+      letter-spacing: -0.03em;
+    }
+    .brand-pill {
+      width: 30px;
+      height: 30px;
+      border-radius: 8px;
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #ffffff;
+      font-weight: 900;
+      font-size: 16px;
+    }
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: var(--space-6);
+      list-style: none;
+    }
+    @media (max-width: 860px) { .nav-links { display: none; } }
+    .nav-link {
+      color: var(--fg-muted);
+      text-decoration: none;
+      font-weight: 500;
+      font-size: var(--text-sm);
+      transition: color var(--motion-fast) var(--ease-standard);
+    }
+    .nav-link:hover { color: var(--primary); }
+
+    /* Theme Toggle Switch */
+    .theme-toggle-btn {
+      background: var(--surface-subtle);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-pill);
+      padding: 6px 12px;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: all var(--motion-fast) var(--ease-standard);
+    }
+    .theme-toggle-btn:hover {
+      border-color: var(--primary);
+    }
+
+    /* ─────────────────────────────────────────────────────────────────────────
+     * HERO SECTION
+     * ───────────────────────────────────────────────────────────────────────── */
+    .contemporary-hero {
+      padding-top: var(--space-16);
+      padding-bottom: var(--space-16);
+      text-align: center;
+    }
+    .hero-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 14px;
+      border-radius: var(--radius-pill);
+      background: rgba(200, 0, 223, 0.1);
+      color: var(--primary);
+      font-size: var(--text-xs);
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: var(--space-4);
+    }
+    .hero-title {
+      max-width: 900px;
+      margin-inline: auto;
+      margin-bottom: var(--space-4);
+    }
+    .hero-title .accent-text {
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .hero-lead {
+      max-width: 640px;
+      margin-inline: auto;
+      margin-bottom: var(--space-8);
+    }
+    .hero-actions {
+      display: flex;
+      justify-content: center;
+      gap: var(--space-4);
+      flex-wrap: wrap;
+    }
+
+    /* ─────────────────────────────────────────────────────────────────────────
+     * BENTO GRID SECTION (DESIGN.md §1: bento grids, modern, bold, playful)
+     * ───────────────────────────────────────────────────────────────────────── */
+    .section-bento {
+      padding-block: var(--space-16);
+    }
+    .bento-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      grid-auto-rows: minmax(260px, auto);
+      gap: var(--space-6);
+      margin-top: var(--space-8);
+    }
+    @media (max-width: 992px) {
+      .bento-grid { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 640px) {
+      .bento-grid { grid-template-columns: 1fr; }
+    }
+
+    .bento-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: var(--space-8);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      position: relative;
+      overflow: hidden;
+      box-shadow: var(--shadow-md);
+      transition: all var(--motion-base) var(--ease-standard);
+    }
+    .bento-card:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-lg);
+      border-color: var(--primary);
+    }
+    .bento-card.span-2 {
+      grid-column: span 2;
+    }
+    @media (max-width: 640px) {
+      .bento-card.span-2 { grid-column: span 1; }
+    }
+    .bento-card.highlight {
+      background: linear-gradient(135deg, rgba(200, 0, 223, 0.04) 0%, rgba(230, 0, 118, 0.04) 100%);
+      border-color: rgba(200, 0, 223, 0.3);
+    }
+
+    .bento-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: var(--space-4);
+    }
+    .bento-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: var(--radius-sm);
+      background: rgba(200, 0, 223, 0.12);
+      color: var(--primary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+    }
+    .bento-title {
+      font-size: var(--text-xl);
+      font-weight: 700;
+      margin-bottom: var(--space-2);
+    }
+    .bento-desc {
+      font-size: var(--text-sm);
+      color: var(--fg-muted);
+      line-height: 1.5;
+    }
+
+    /* Live Interactive Bento Widgets */
+    .bento-metric-large {
+      font-size: 48px;
+      font-weight: 800;
+      font-family: var(--font-display);
+      color: var(--primary);
+      line-height: 1;
+      margin-block: var(--space-3);
+    }
+    .bento-metric-sub {
+      font-size: var(--text-xs);
+      color: var(--success);
+      font-weight: 600;
+      font-family: var(--font-mono);
+    }
+
+    .bento-progress-track {
+      height: 8px;
+      background: var(--surface-subtle);
+      border-radius: var(--radius-pill);
+      overflow: hidden;
+      margin-top: var(--space-3);
+    }
+    .bento-progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--primary), var(--secondary));
+      width: 84%;
+      border-radius: var(--radius-pill);
+    }
+
+    /* ─────────────────────────────────────────────────────────────────────────
+     * INTERACTIVE COMPONENT PLAYGROUND (Buttons, Inputs, Badges)
+     * ───────────────────────────────────────────────────────────────────────── */
+    .section-components {
+      padding-block: var(--space-16);
+      background: var(--surface-subtle);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+    .components-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--space-8);
+      margin-top: var(--space-8);
+    }
+    @media (max-width: 900px) {
+      .components-grid { grid-template-columns: 1fr; }
+    }
+    .component-box {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: var(--space-8);
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-6);
+      box-shadow: var(--shadow-sm);
+    }
+    .field-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .field-group label {
+      font-size: var(--text-sm);
+      font-weight: 600;
+      color: var(--text);
+    }
+    .field-input {
+      padding: 12px 16px;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border);
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--font-body);
+      font-size: var(--text-base);
+      outline: none;
+      transition: all var(--motion-fast) var(--ease-standard);
+    }
+    .field-input:focus {
+      border-color: var(--primary);
+      box-shadow: var(--focus-ring);
+    }
+
+    /* Badges */
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 10px;
+      border-radius: var(--radius-pill);
+      font-size: var(--text-xs);
+      font-weight: 700;
+      font-family: var(--font-mono);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .badge-primary { background: rgba(200, 0, 223, 0.12); color: var(--primary); }
+    .badge-secondary { background: rgba(230, 0, 118, 0.12); color: var(--secondary); }
+    .badge-success { background: rgba(22, 163, 74, 0.12); color: var(--success); }
+    .badge-warning { background: rgba(217, 119, 6, 0.12); color: var(--warning); }
+    .badge-danger { background: rgba(220, 38, 38, 0.12); color: var(--danger); }
+
+    /* ─────────────────────────────────────────────────────────────────────────
+     * DESIGN SYSTEM TOKEN SPECIFICATION & SWATCHES
+     * ───────────────────────────────────────────────────────────────────────── */
+    .section-tokens {
+      padding-block: var(--space-16);
+    }
+    .token-display-box {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: var(--space-8);
+      box-shadow: var(--shadow-sm);
+    }
+    .swatch-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+      gap: var(--space-4);
+      margin-top: var(--space-6);
+    }
+    .swatch-card {
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      overflow: hidden;
+      background: var(--surface);
+    }
+    .swatch-color { height: 64px; width: 100%; }
+    .swatch-info { padding: 10px 12px; font-size: var(--text-xs); }
+    .swatch-title { font-weight: 700; color: var(--text); font-size: 13px; }
+    .swatch-value { font-family: var(--font-mono); color: var(--fg-muted); }
+
+    /* ─────────────────────────────────────────────────────────────────────────
+     * FOOTER
+     * ───────────────────────────────────────────────────────────────────────── */
+    .contemporary-footer {
+      background: var(--surface);
+      border-top: 1px solid var(--border);
+      padding-top: var(--space-12);
+      padding-bottom: var(--space-8);
+      font-size: var(--text-sm);
+    }
+    .footer-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: var(--space-4);
+      border-bottom: 1px solid var(--border);
+      padding-bottom: var(--space-8);
+      margin-bottom: var(--space-6);
+    }
+    .footer-bottom {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: var(--space-4);
+      color: var(--fg-muted);
+      font-size: var(--text-xs);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ─────────────────────────────────────────────────────────────────────────
+       STICKY NAVIGATION BAR
+       ───────────────────────────────────────────────────────────────────────── -->
+  <header class="contemporary-nav" role="banner">
+    <div class="container nav-wrapper">
+      <a href="#hero" class="brand-mark" aria-label="Contemporary Home">
+        <div class="brand-pill">C</div>
+        <span>Contemporary</span>
+      </a>
+
+      <nav aria-label="Main Navigation">
+        <ul class="nav-links">
+          <li><a href="#bento" class="nav-link">Bento Architecture</a></li>
+          <li><a href="#components" class="nav-link">Components</a></li>
+          <li><a href="#tokens" class="nav-link">Design Tokens</a></li>
+        </ul>
+      </nav>
+
+      <div style="display: flex; align-items: center; gap: 12px;">
+        <!-- Light / Dark Mode Toggle Button -->
+        <button class="theme-toggle-btn" onclick="toggleTheme()" aria-label="Toggle light and dark mode">
+          <span id="themeIcon">🌙</span>
+          <span id="themeLabel">Dark Mode</span>
+        </button>
+
+        <a href="#components" class="btn btn-primary" style="padding: 8px 18px; font-size: 14px;">
+          Explore Kit
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- ─────────────────────────────────────────────────────────────────────────
+       HERO SECTION
+       ───────────────────────────────────────────────────────────────────────── -->
+  <section class="contemporary-hero" id="hero">
+    <div class="container">
+      <div class="hero-tag">
+        Modern · Minimal · Bold · Playful
+      </div>
+      <h1 class="hero-title">
+        The minimalist aesthetic built for <span class="accent-text">modern software.</span>
+      </h1>
+      <p class="lead hero-lead">
+        High-performance accessible layouts engineered with bento grids, dark mode support, and bold #C800DF interaction signals.
+      </p>
+
+      <div class="hero-actions">
+        <a href="#bento" class="btn btn-primary">
+          Explore Bento Grid
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </a>
+        <a href="#tokens" class="btn btn-neutral">
+          View Token Spec
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─────────────────────────────────────────────────────────────────────────
+       BENTO GRID SHOWCASE
+       ───────────────────────────────────────────────────────────────────────── -->
+  <section class="section-bento" id="bento">
+    <div class="container">
+      <div style="text-align: center; max-width: 680px; margin-inline: auto;">
+        <h2>Engineered with Bento Precision</h2>
+        <p class="lead" style="margin-top: 8px;">
+          Asymmetric content cards with balanced rhythm and high-contrast typography.
+        </p>
+      </div>
+
+      <div class="bento-grid">
+        
+        <!-- Bento 1: Primary Feature (Span 2) -->
+        <div class="bento-card span-2 highlight">
+          <div class="bento-header">
+            <div>
+              <span class="badge badge-primary">Current Era Minimalist</span>
+              <h3 class="bento-title" style="margin-top: 8px;">Autonomous Reactive Workspaces</h3>
+              <p class="bento-desc">Full-spectrum design tokens unified under Jost typography and zero-latency layout structures.</p>
+            </div>
+            <div class="bento-icon">⚡</div>
+          </div>
+          <div>
+            <div style="display: flex; gap: 12px; margin-top: var(--space-4); flex-wrap: wrap;">
+              <button class="btn btn-primary" onclick="simulateBentoAction('Deployed cluster')">Deploy Fast</button>
+              <button class="btn btn-secondary" onclick="simulateBentoAction('Configured pipeline')">Secondary Action</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Bento 2: Telemetry Metric -->
+        <div class="bento-card">
+          <div class="bento-header">
+            <span class="badge badge-success">SLA Benchmark</span>
+            <div class="bento-icon" style="background: rgba(22, 163, 74, 0.12); color: var(--success);">✔</div>
+          </div>
+          <div>
+            <div class="bento-metric-large" id="slaMetric">99.98%</div>
+            <div class="bento-metric-sub">▲ +0.04% vs previous build</div>
+            <div class="bento-progress-track">
+              <div class="bento-progress-fill"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Bento 3: Dark Mode Resilience -->
+        <div class="bento-card">
+          <div class="bento-header">
+            <span class="badge badge-secondary">Theme Native</span>
+            <div class="bento-icon" style="background: rgba(230, 0, 118, 0.12); color: var(--secondary);">🌓</div>
+          </div>
+          <div>
+            <h4 class="bento-title">Dark Mode First</h4>
+            <p class="bento-desc">Seamlessly adapts between light paper canvas and deep slate dark mode with zero color clipping.</p>
+            <button class="btn btn-neutral" style="margin-top: 14px; width: 100%; font-size: 13px;" onclick="toggleTheme()">Toggle System Theme</button>
+          </div>
+        </div>
+
+        <!-- Bento 4: Accessible Component Density (Span 2) -->
+        <div class="bento-card span-2">
+          <div class="bento-header">
+            <div>
+              <span class="badge badge-warning">Accessible Density</span>
+              <h4 class="bento-title" style="margin-top: 8px;">High-Performance Keyboard Navigation</h4>
+              <p class="bento-desc">WCAG AAA compliant contrast with explicit focus-visible rings and tactile hover feedback.</p>
+            </div>
+            <div class="bento-icon" style="background: rgba(217, 119, 6, 0.12); color: var(--warning);">🎯</div>
+          </div>
+          <div style="display: flex; gap: var(--space-3); align-items: center; flex-wrap: wrap; margin-top: var(--space-4);">
+            <span class="badge badge-primary">#C800DF</span>
+            <span class="badge badge-secondary">#E60076</span>
+            <span class="badge badge-success">#16A34A</span>
+            <span class="badge badge-warning">#D97706</span>
+            <span class="badge badge-danger">#DC2626</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ─────────────────────────────────────────────────────────────────────────
+       COMPONENTS PLAYGROUND
+       ───────────────────────────────────────────────────────────────────────── -->
+  <section class="section-components" id="components">
+    <div class="container">
+      <div style="text-align: center; max-width: 640px; margin-inline: auto;">
+        <h2>Interactive Component Suite</h2>
+        <p class="lead" style="margin-top: 8px;">Form controls, buttons, and state indicators built to DESIGN.md rules.</p>
+      </div>
+
+      <div class="components-grid">
+        
+        <!-- Form Controls -->
+        <div class="component-box">
+          <h4 style="font-size: 20px;">Input Fields &amp; Validation</h4>
+          
+          <div class="field-group">
+            <label for="compEmail">Enterprise Email Address</label>
+            <input type="email" id="compEmail" class="field-input" placeholder="alex@contemporary.design" />
+          </div>
+
+          <div class="field-group">
+            <label for="compRole">Organization Role</label>
+            <input type="text" id="compRole" class="field-input" value="Principal Systems Architect" />
+          </div>
+
+          <div style="display: flex; gap: 12px; margin-top: 8px;">
+            <button class="btn btn-primary" onclick="validateDemoForm()">Save Preferences</button>
+            <button class="btn btn-neutral" onclick="resetDemoForm()">Reset</button>
+          </div>
+          <div id="formFeedback" style="font-size: 13px; font-weight: 600; color: var(--success); display: none;">✔ Configuration synced to local state.</div>
+        </div>
+
+        <!-- Button States & Badges -->
+        <div class="component-box">
+          <h4 style="font-size: 20px;">Button Hierarchy &amp; Semantic Badges</h4>
+          
+          <div style="display: flex; gap: 12px; flex-wrap: wrap; align-items: center;">
+            <button class="btn btn-primary">Primary (#C800DF)</button>
+            <button class="btn btn-secondary">Secondary (#E60076)</button>
+            <button class="btn btn-neutral">Neutral (#FFFFFF)</button>
+          </div>
+
+          <div style="border-top: 1px solid var(--border); padding-top: var(--space-4); display: flex; gap: 8px; flex-wrap: wrap;">
+            <span class="badge badge-primary">Primary Token</span>
+            <span class="badge badge-secondary">Secondary Token</span>
+            <span class="badge badge-success">Success #16A34A</span>
+            <span class="badge badge-warning">Warning #D97706</span>
+            <span class="badge badge-danger">Danger #DC2626</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ─────────────────────────────────────────────────────────────────────────
+       DESIGN SYSTEM TOKEN SPECIFICATION
+       ───────────────────────────────────────────────────────────────────────── -->
+  <section class="section-tokens" id="tokens">
+    <div class="container">
+      <div class="token-display-box">
+        <h3>Contemporary Tokens Specification</h3>
+        <p class="lead" style="font-size: 15px; margin-top: 6px;">Exact tokens verified from contemporary/DESIGN.md.</p>
+
+        <div class="swatch-grid">
+          <div class="swatch-card">
+            <div class="swatch-color" style="background: #C800DF;"></div>
+            <div class="swatch-info">
+              <div class="swatch-title">Primary</div>
+              <div class="swatch-value">#C800DF</div>
+            </div>
+          </div>
+
+          <div class="swatch-card">
+            <div class="swatch-color" style="background: #E60076;"></div>
+            <div class="swatch-info">
+              <div class="swatch-title">Secondary</div>
+              <div class="swatch-value">#E60076</div>
+            </div>
+          </div>
+
+          <div class="swatch-card">
+            <div class="swatch-color" style="background: #16A34A;"></div>
+            <div class="swatch-info">
+              <div class="swatch-title">Success</div>
+              <div class="swatch-value">#16A34A</div>
+            </div>
+          </div>
+
+          <div class="swatch-card">
+            <div class="swatch-color" style="background: #D97706;"></div>
+            <div class="swatch-info">
+              <div class="swatch-title">Warning</div>
+              <div class="swatch-value">#D97706</div>
+            </div>
+          </div>
+
+          <div class="swatch-card">
+            <div class="swatch-color" style="background: #DC2626;"></div>
+            <div class="swatch-info">
+              <div class="swatch-title">Danger</div>
+              <div class="swatch-value">#DC2626</div>
+            </div>
+          </div>
+
+          <div class="swatch-card">
+            <div class="swatch-color" style="background: #FFFFFF; border-bottom: 1px solid var(--border);"></div>
+            <div class="swatch-info">
+              <div class="swatch-title">Surface / Neutral</div>
+              <div class="swatch-value">#FFFFFF</div>
+            </div>
+          </div>
+
+          <div class="swatch-card">
+            <div class="swatch-color" style="background: #111827;"></div>
+            <div class="swatch-info">
+              <div class="swatch-title">Text Primary</div>
+              <div class="swatch-value">#111827</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Typography Breakdown -->
+        <div style="margin-top: var(--space-8); padding-top: var(--space-6); border-top: 1px solid var(--border);">
+          <h4>Typography Scale: Jost &amp; Overpass Mono</h4>
+          <div style="display: flex; flex-direction: column; gap: 10px; margin-top: var(--space-4);">
+            <div style="display: flex; justify-content: space-between; border-bottom: 1px solid var(--border); padding-bottom: 6px;">
+              <span style="font-weight: 800; font-size: 24px;">Display Hero (Jost 76px / 800)</span>
+              <span class="mono" style="color: var(--fg-muted);">--text-4xl</span>
+            </div>
+            <div style="display: flex; justify-content: space-between; border-bottom: 1px solid var(--border); padding-bottom: 6px;">
+              <span style="font-weight: 700; font-size: 20px;">Section Title (Jost 54px / 700)</span>
+              <span class="mono" style="color: var(--fg-muted);">--text-3xl</span>
+            </div>
+            <div style="display: flex; justify-content: space-between;">
+              <span style="font-weight: 400; font-size: 16px;">Standard Prose (Jost 16px / 400)</span>
+              <span class="mono" style="color: var(--fg-muted);">--text-base</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─────────────────────────────────────────────────────────────────────────
+       FOOTER
+       ───────────────────────────────────────────────────────────────────────── -->
+  <footer class="contemporary-footer" role="contentinfo">
+    <div class="container">
+      <div class="footer-row">
+        <div class="brand-mark">
+          <div class="brand-pill">C</div>
+          <span>Contemporary</span>
+        </div>
+        <div style="display: flex; gap: var(--space-6);">
+          <a href="#bento" class="nav-link">Bento Grids</a>
+          <a href="#components" class="nav-link">Components</a>
+          <a href="#tokens" class="nav-link">Design Tokens</a>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span>© 2026 Contemporary Design System. Built to DESIGN.md specification.</span>
+        <span>Primary #C800DF · Secondary #E60076 · Font Jost</span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ─────────────────────────────────────────────────────────────────────────
+       INTERACTION SCRIPT
+       ───────────────────────────────────────────────────────────────────────── -->
+  <script>
+    function toggleTheme() {
+      const html = document.documentElement;
+      const current = html.getAttribute('data-theme');
+      const next = current === 'dark' ? 'light' : 'dark';
+      html.setAttribute('data-theme', next);
+
+      document.getElementById('themeIcon').textContent = next === 'dark' ? '☀️' : '🌙';
+      document.getElementById('themeLabel').textContent = next === 'dark' ? 'Light Mode' : 'Dark Mode';
+    }
+
+    function simulateBentoAction(msg) {
+      alert(`${msg} successfully using Contemporary design action tokens!`);
+    }
+
+    function validateDemoForm() {
+      const feedback = document.getElementById('formFeedback');
+      feedback.style.display = 'block';
+      setTimeout(() => { feedback.style.display = 'none'; }, 3000);
+    }
+
+    function resetDemoForm() {
+      document.getElementById('compEmail').value = '';
+      document.getElementById('compRole').value = '';
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,637 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lovable — Build Full-Stack Software Fast</title>
+  <meta name="description" content="Authentic implementation of the Lovable design system with warm parchment canvas (#f7f4ed), charcoal typography (#1c1c1c), multi-layer inset shadows, and AI app generator.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      /* Warm Neutral Foundations */
+      --cream: #f7f4ed;
+      --charcoal: #1c1c1c;
+      --charcoal-83: rgba(28, 28, 28, 0.83);
+      --charcoal-82: rgba(28, 28, 28, 0.82);
+      --charcoal-40: rgba(28, 28, 28, 0.4);
+      --charcoal-04: rgba(28, 28, 28, 0.04);
+      --charcoal-03: rgba(28, 28, 28, 0.03);
+      
+      --off-white: #fcfbf8;
+      --muted-gray: #5f5f5d;
+      --light-cream: #eceae4;
+      --ring-blue: rgba(59, 130, 246, 0.5);
+
+      /* Lovable Signature Inset Shadow */
+      --btn-inset-shadow: rgba(255, 255, 255, 0.2) 0px 0.5px 0px 0px inset, rgba(0, 0, 0, 0.2) 0px 0px 0px 0.5px inset, rgba(0, 0, 0, 0.05) 0px 1px 2px 0px;
+      --focus-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;
+
+      /* Typography */
+      --font-humanist: 'Plus Jakarta Sans', ui-sans-serif, system-ui, sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--cream);
+      color: var(--charcoal);
+      font-family: var(--font-humanist);
+      font-size: 16px;
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+
+    .container {
+      max-width: 1160px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    /* 1. NAVIGATION */
+    .lovable-nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(247, 244, 237, 0.88);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      border-bottom: 1px solid var(--light-cream);
+    }
+
+    .nav-inner {
+      height: 64px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .nav-brand {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      text-decoration: none;
+      color: var(--charcoal);
+      font-size: 20px;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+    }
+
+    .heart-symbol {
+      width: 28px;
+      height: 28px;
+      background: var(--charcoal);
+      color: var(--off-white);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 28px;
+      list-style: none;
+    }
+
+    .nav-links a {
+      color: var(--charcoal-83);
+      text-decoration: none;
+      font-size: 15px;
+      font-weight: 500;
+      transition: color 0.15s;
+    }
+
+    .nav-links a:hover {
+      color: var(--charcoal);
+      text-decoration: underline;
+    }
+
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    /* Buttons */
+    .btn-dark {
+      background-color: var(--charcoal);
+      color: var(--off-white);
+      border: none;
+      border-radius: 6px;
+      padding: 8px 18px;
+      font-family: var(--font-humanist);
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      box-shadow: var(--btn-inset-shadow);
+      transition: opacity 0.15s, transform 0.1s;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .btn-dark:hover {
+      opacity: 0.9;
+    }
+
+    .btn-dark:active {
+      opacity: 0.8;
+      transform: scale(0.99);
+    }
+
+    .btn-ghost {
+      background: transparent;
+      color: var(--charcoal);
+      border: 1px solid var(--charcoal-40);
+      border-radius: 6px;
+      padding: 8px 16px;
+      font-family: var(--font-humanist);
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background 0.15s;
+      text-decoration: none;
+    }
+
+    .btn-ghost:hover {
+      background: var(--charcoal-04);
+    }
+
+    .btn-pill {
+      background: var(--cream);
+      color: var(--charcoal);
+      border: 1px solid var(--light-cream);
+      border-radius: 9999px;
+      padding: 6px 14px;
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      box-shadow: var(--btn-inset-shadow);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.15s;
+    }
+
+    .btn-pill:hover {
+      background: #FFFFFF;
+      border-color: var(--charcoal-40);
+    }
+
+    /* 2. HERO SECTION */
+    .hero-section {
+      padding: 88px 0 64px 0;
+      text-align: center;
+    }
+
+    .hero-eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--charcoal-04);
+      border: 1px solid var(--light-cream);
+      padding: 4px 14px;
+      border-radius: 9999px;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--charcoal-83);
+      margin-bottom: 24px;
+    }
+
+    .hero-title {
+      font-size: 58px;
+      font-weight: 600;
+      line-height: 1.08;
+      letter-spacing: -1.5px;
+      color: var(--charcoal);
+      max-width: 860px;
+      margin: 0 auto 20px auto;
+    }
+
+    .hero-subtitle {
+      font-size: 19px;
+      color: var(--muted-gray);
+      max-width: 620px;
+      margin: 0 auto 40px auto;
+      line-height: 1.5;
+    }
+
+    /* 3. AI PROMPT INPUT CONTAINER */
+    .prompt-card {
+      background: #FFFFFF;
+      border: 1px solid var(--light-cream);
+      border-radius: 16px;
+      padding: 16px 20px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.03);
+      max-width: 760px;
+      margin: 0 auto 32px auto;
+      text-align: left;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+
+    .prompt-card:focus-within {
+      border-color: var(--charcoal-40);
+      box-shadow: var(--focus-shadow);
+    }
+
+    .prompt-textarea {
+      width: 100%;
+      height: 72px;
+      background: transparent;
+      border: none;
+      outline: none;
+      font-family: var(--font-humanist);
+      font-size: 16px;
+      color: var(--charcoal);
+      resize: none;
+      line-height: 1.4;
+    }
+
+    .prompt-textarea::placeholder {
+      color: var(--muted-gray);
+    }
+
+    .prompt-toolbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-top: 1px solid var(--light-cream);
+      padding-top: 12px;
+      margin-top: 8px;
+    }
+
+    .toolbar-left {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .suggestion-chips {
+      display: flex;
+      gap: 8px;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-bottom: 48px;
+    }
+
+    /* 4. LIVE SIMULATOR CANVAS */
+    .preview-canvas-box {
+      background: #FFFFFF;
+      border: 1px solid var(--light-cream);
+      border-radius: 16px;
+      padding: 32px;
+      box-shadow: 0 8px 30px rgba(0,0,0,0.04);
+      margin-top: 24px;
+      text-align: left;
+    }
+
+    .canvas-nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid var(--light-cream);
+      padding-bottom: 16px;
+      margin-bottom: 24px;
+    }
+
+    .window-dots {
+      display: flex;
+      gap: 6px;
+    }
+
+    .window-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--light-cream);
+    }
+
+    .generated-view-grid {
+      display: grid;
+      grid-template-columns: 240px 1fr;
+      gap: 24px;
+    }
+
+    .view-sidebar {
+      border-right: 1px solid var(--light-cream);
+      padding-right: 20px;
+    }
+
+    .view-menu-item {
+      padding: 8px 12px;
+      border-radius: 6px;
+      font-size: 14px;
+      color: var(--charcoal-83);
+      cursor: pointer;
+      margin-bottom: 4px;
+    }
+
+    .view-menu-item.active {
+      background: var(--cream);
+      color: var(--charcoal);
+      font-weight: 600;
+    }
+
+    .view-main-stage {
+      padding: 12px;
+    }
+
+    /* 5. METRICS & TEMPLATES */
+    .metrics-section {
+      padding: 80px 0;
+      border-top: 1px solid var(--light-cream);
+      border-bottom: 1px solid var(--light-cream);
+      background: var(--charcoal-03);
+    }
+
+    .metrics-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 32px;
+      text-align: center;
+    }
+
+    .metric-number {
+      font-size: 48px;
+      font-weight: 600;
+      color: var(--charcoal);
+      letter-spacing: -1.2px;
+      line-height: 1;
+      margin-bottom: 8px;
+    }
+
+    .metric-sub {
+      font-size: 15px;
+      color: var(--muted-gray);
+    }
+
+    /* 6. TEMPLATES GALLERY */
+    .templates-section {
+      padding: 88px 0;
+    }
+
+    .section-title {
+      font-size: 36px;
+      font-weight: 600;
+      letter-spacing: -0.9px;
+      margin-bottom: 12px;
+    }
+
+    .section-desc {
+      font-size: 17px;
+      color: var(--muted-gray);
+      margin-bottom: 40px;
+    }
+
+    .templates-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+
+    .template-card {
+      background: var(--cream);
+      border: 1px solid var(--light-cream);
+      border-radius: 12px;
+      padding: 24px;
+      transition: border-color 0.2s, transform 0.2s;
+      cursor: pointer;
+    }
+
+    .template-card:hover {
+      border-color: var(--charcoal-40);
+      transform: translateY(-2px);
+    }
+
+    .template-preview-frame {
+      height: 140px;
+      background: #FFFFFF;
+      border: 1px solid var(--light-cream);
+      border-radius: 8px;
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 32px;
+    }
+
+    .template-card h4 {
+      font-size: 18px;
+      font-weight: 600;
+      margin-bottom: 6px;
+      color: var(--charcoal);
+    }
+
+    .template-card p {
+      font-size: 14px;
+      color: var(--muted-gray);
+      line-height: 1.45;
+    }
+
+    /* 7. FOOTER */
+    .lovable-footer {
+      border-top: 1px solid var(--light-cream);
+      padding: 64px 0 32px 0;
+      background: var(--cream);
+      font-size: 14px;
+      color: var(--muted-gray);
+    }
+
+    .footer-flex {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navigation -->
+  <nav class="lovable-nav">
+    <div class="container nav-inner">
+      <a href="#" class="nav-brand">
+        <div class="heart-symbol">❤️</div>
+        <span>Lovable</span>
+      </a>
+
+      <ul class="nav-links">
+        <li><a href="#templates">Showcase</a></li>
+        <li><a href="#studio">Builder</a></li>
+        <li><a href="#">Docs</a></li>
+        <li><a href="#">Enterprise</a></li>
+        <li><a href="#">Pricing</a></li>
+      </ul>
+
+      <div class="nav-actions">
+        <a href="#" class="btn-ghost">Log In</a>
+        <a href="#" class="btn-dark">Start Building</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <header class="hero-section">
+    <div class="container">
+      <div class="hero-eyebrow">
+        <span>✨</span>
+        <span>Introducing Lovable 2.0 with Full-Stack Database Sync</span>
+      </div>
+
+      <h1 class="hero-title">Build full-stack software as fast as you can think.</h1>
+      
+      <p class="hero-subtitle">
+        Describe your application in plain language. Lovable writes production-ready TypeScript, designs intuitive UIs, and integrates databases automatically.
+      </p>
+
+      <!-- AI Prompt Bar -->
+      <div class="prompt-card" id="studio">
+        <textarea class="prompt-textarea" id="promptText" placeholder="Describe the web application you want to build...">Build a sleek SaaS dashboard for monitoring AI model latencies, token consumption, and GPU utilization across clusters.</textarea>
+        
+        <div class="prompt-toolbar">
+          <div class="toolbar-left">
+            <button class="btn-pill" onclick="toggleVoice()">🎙️ Voice</button>
+            <button class="btn-pill">📂 Attach Figma</button>
+            <button class="btn-pill">⚙️ Supabase DB</button>
+          </div>
+          <button class="btn-dark" onclick="simulateBuild()">Build Application ⚡</button>
+        </div>
+      </div>
+
+      <div class="suggestion-chips">
+        <button class="btn-pill" onclick="setPrompt('Build an Airbnb clone for luxury desert retreats')">🏡 Desert Retreat Booking</button>
+        <button class="btn-pill" onclick="setPrompt('Build a real-time collaborative Kanban board with team chat')">📋 Realtime Kanban Board</button>
+        <button class="btn-pill" onclick="setPrompt('Build an invoice generator with Stripe Connect billing')">💳 Stripe Invoice Generator</button>
+      </div>
+
+      <!-- Live Simulator Canvas -->
+      <div class="preview-canvas-box">
+        <div class="canvas-nav">
+          <div class="window-dots">
+            <div class="window-dot"></div>
+            <div class="window-dot"></div>
+            <div class="window-dot"></div>
+          </div>
+          <div style="font-size: 13px; font-weight: 500; color: var(--muted-gray);" id="statusIndicator">
+            Preview: Active Web App • Generated in 1.4s
+          </div>
+          <button class="btn-dark" style="padding: 4px 10px; font-size: 12px;" onclick="alert('Exported Next.js bundle!')">Export Code</button>
+        </div>
+
+        <div class="generated-view-grid">
+          <div class="view-sidebar">
+            <div class="view-menu-item active">📊 Metrics Overview</div>
+            <div class="view-menu-item">⚡ GPU Nodes</div>
+            <div class="view-menu-item">🔑 API Keys</div>
+            <div class="view-menu-item">⚙️ Settings</div>
+          </div>
+
+          <div class="view-main-stage" id="stageContent">
+            <h3 style="font-size: 20px; font-weight: 600; margin-bottom: 8px;">GPU Cluster Telemetry</h3>
+            <p style="font-size: 14px; color: var(--muted-gray); margin-bottom: 20px;">8 Active A100 SXM4 Instances Across us-east-1</p>
+            
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+              <div style="background: var(--cream); border: 1px solid var(--light-cream); border-radius: 8px; padding: 16px;">
+                <div style="font-size: 12px; color: var(--muted-gray);">Avg Inference Latency</div>
+                <div style="font-size: 28px; font-weight: 600; color: var(--charcoal); margin-top: 4px;">18.4 ms</div>
+              </div>
+              <div style="background: var(--cream); border: 1px solid var(--light-cream); border-radius: 8px; padding: 16px;">
+                <div style="font-size: 12px; color: var(--muted-gray);">Daily Token Ingestion</div>
+                <div style="font-size: 28px; font-weight: 600; color: var(--charcoal); margin-top: 4px;">42.8M</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Metrics Section -->
+  <section class="metrics-section">
+    <div class="container metrics-grid">
+      <div>
+        <div class="metric-number">10M+</div>
+        <div class="metric-sub">Lines of TypeScript generated daily</div>
+      </div>
+      <div>
+        <div class="metric-number">99.4%</div>
+        <div class="metric-sub">Clean compile rate on first prompt</div>
+      </div>
+      <div>
+        <div class="metric-number">45k+</div>
+        <div class="metric-sub">Production apps shipped to Vercel</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Templates Gallery -->
+  <section class="container templates-section" id="templates">
+    <h2 class="section-title">Explore Production Templates</h2>
+    <p class="section-desc">Jumpstart your software development with full-stack templates tailored to modern design systems.</p>
+
+    <div class="templates-grid">
+      <div class="template-card" onclick="setPrompt('Build a clean multi-tenant SaaS workspace')">
+        <div class="template-preview-frame">🏢</div>
+        <h4>SaaS Workspace</h4>
+        <p>Complete authentication, organization switcher, and role-based permissions.</p>
+      </div>
+
+      <div class="template-card" onclick="setPrompt('Build an e-commerce platform with inventory tracking')">
+        <div class="template-preview-frame">🛍️</div>
+        <h4>Commerce Storefront</h4>
+        <p>Dynamic product catalog, shopping bag drawer, and one-click checkout.</p>
+      </div>
+
+      <div class="template-card" onclick="setPrompt('Build a developer API documentation portal')">
+        <div class="template-preview-frame">📖</div>
+        <h4>API Documentation</h4>
+        <p>Interactive code snippets, OpenAPI spec renderer, and instant endpoint testing.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="lovable-footer">
+    <div class="container footer-flex">
+      <div style="display: flex; align-items: center; gap: 8px;">
+        <div class="heart-symbol" style="width: 22px; height: 22px; font-size: 11px;">❤️</div>
+        <span style="font-weight: 600; color: var(--charcoal);">Lovable, Inc.</span>
+      </div>
+      <div>
+        Built adhering to <code>open-design/design-systems/lovable/DESIGN.md</code>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    function setPrompt(text) {
+      document.getElementById('promptText').value = text;
+      document.getElementById('studio').scrollIntoView({ behavior: 'smooth' });
+    }
+
+    function simulateBuild() {
+      const status = document.getElementById('statusIndicator');
+      status.textContent = 'Analyzing intent... generating React components...';
+      status.style.color = '#3b82f6';
+
+      setTimeout(() => {
+        status.textContent = 'Preview: Live Web App • Updated successfully';
+        status.style.color = 'var(--charcoal)';
+      }, 800);
+    }
+
+    function toggleVoice() {
+      alert('Voice recording simulation active — listening for app instructions...');
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,902 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Material Design System — Layered Surfaces & Motion</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Inter:wght@300;400;500;600;700&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      /* Official Material Tokens per DESIGN.md */
+      --md-primary: #6442D6;     /* Primary accent & CTA */
+      --md-secondary: #C8B3FD;   /* Soft lavender tonal secondary */
+      --md-success: #16A34A;     /* Positive status */
+      --md-warning: #D97706;     /* Warning status */
+      --md-danger: #DC2626;      /* Danger status */
+      --md-surface: #FFFFFF;     /* Pure surface & card background */
+      --md-text: #111827;        /* High-contrast dark body text */
+      --md-neutral: #FFFFFF;     /* Neutral surface */
+
+      --md-surface-variant: #F4F0FF; /* Tonal container tint */
+      --md-outline: #E5E7EB;         /* Subtle border */
+      --md-muted: #6B7280;
+
+      /* Typography Families */
+      --font-primary: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      --font-display: 'Roboto', sans-serif;
+      --font-mono: 'Fira Code', monospace;
+
+      /* Typography Scale per DESIGN.md: 12 / 14 / 16 / 20 / 24 / 32 */
+      --type-12: 12px;
+      --type-14: 14px;
+      --type-16: 16px;
+      --type-20: 20px;
+      --type-24: 24px;
+      --type-32: 32px;
+
+      /* Spacing Scale per DESIGN.md: 4 / 8 / 12 / 16 / 24 / 32 */
+      --sp-4: 4px;
+      --sp-8: 8px;
+      --sp-12: 12px;
+      --sp-16: 16px;
+      --sp-24: 24px;
+      --sp-32: 32px;
+
+      /* Material Elevation Shadows */
+      --elevation-1: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+      --elevation-2: 0 3px 6px rgba(0,0,0,0.15), 0 2px 4px rgba(0,0,0,0.12);
+      --elevation-3: 0 10px 20px rgba(0,0,0,0.15), 0 3px 6px rgba(0,0,0,0.10);
+      --elevation-4: 0 14px 28px rgba(0,0,0,0.20), 0 10px 10px rgba(0,0,0,0.12);
+
+      /* Radii */
+      --radius-sm: 8px;
+      --radius-md: 12px;
+      --radius-lg: 16px;
+      --radius-full: 9999px;
+
+      /* Transition timing: 150-250ms stable */
+      --trans-speed: 200ms cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    /* Reset & Base */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      font-size: 16px;
+      background-color: #FAFAFA;
+      color: var(--md-text);
+      font-family: var(--font-primary);
+      -webkit-font-smoothing: antialiased;
+      scroll-behavior: smooth;
+    }
+
+    body {
+      line-height: 1.5;
+      overflow-x: hidden;
+    }
+
+    /* Display Typography using Roboto */
+    .display-large {
+      font-family: var(--font-display);
+      font-size: var(--type-32);
+      font-weight: 700;
+      line-height: 1.2;
+      letter-spacing: -0.5px;
+      color: var(--md-text);
+    }
+
+    .display-medium {
+      font-family: var(--font-display);
+      font-size: var(--type-24);
+      font-weight: 500;
+      line-height: 1.25;
+      color: var(--md-text);
+    }
+
+    .title-medium {
+      font-size: var(--type-20);
+      font-weight: 600;
+      line-height: 1.3;
+      color: var(--md-text);
+    }
+
+    .body-medium {
+      font-size: var(--type-16);
+      font-weight: 400;
+      line-height: 1.5;
+      color: var(--md-text);
+    }
+
+    .body-small {
+      font-size: var(--type-14);
+      font-weight: 400;
+      line-height: 1.45;
+      color: var(--md-muted);
+    }
+
+    .label-small {
+      font-size: var(--type-12);
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+    }
+
+    /* Container */
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 var(--sp-24);
+    }
+
+    /* Material Top App Bar */
+    header.md-app-bar {
+      background-color: var(--md-surface);
+      box-shadow: var(--elevation-1);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .app-bar-inner {
+      height: 64px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .brand-mark {
+      display: flex;
+      align-items: center;
+      gap: var(--sp-12);
+      text-decoration: none;
+      color: var(--md-text);
+      font-family: var(--font-display);
+      font-size: var(--type-20);
+      font-weight: 700;
+    }
+
+    .brand-logo-icon {
+      width: 36px;
+      height: 36px;
+      background: var(--md-primary);
+      border-radius: var(--radius-sm);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #FFF;
+      box-shadow: 0 4px 10px rgba(100, 66, 214, 0.3);
+    }
+
+    .nav-tabs {
+      display: flex;
+      gap: var(--sp-8);
+      list-style: none;
+      height: 64px;
+    }
+
+    .nav-tab-item a {
+      display: flex;
+      align-items: center;
+      height: 64px;
+      padding: 0 var(--sp-16);
+      text-decoration: none;
+      color: var(--md-muted);
+      font-size: var(--type-14);
+      font-weight: 500;
+      border-bottom: 3px solid transparent;
+      transition: color var(--trans-speed), border-bottom-color var(--trans-speed);
+    }
+
+    .nav-tab-item a:hover {
+      color: var(--md-primary);
+    }
+
+    .nav-tab-item a.active {
+      color: var(--md-primary);
+      border-bottom-color: var(--md-primary);
+    }
+
+    /* Material Buttons */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--sp-8);
+      padding: 10px 20px;
+      border-radius: var(--radius-full);
+      font-size: var(--type-14);
+      font-weight: 600;
+      cursor: pointer;
+      text-decoration: none;
+      border: 1px solid transparent;
+      position: relative;
+      overflow: hidden;
+      transition: box-shadow var(--trans-speed), background-color var(--trans-speed), transform var(--trans-speed);
+    }
+
+    .btn:focus-visible {
+      outline: 2px solid var(--md-primary);
+      outline-offset: 2px;
+    }
+
+    .btn-filled-primary {
+      background-color: var(--md-primary);
+      color: #FFFFFF;
+      box-shadow: var(--elevation-1);
+    }
+
+    .btn-filled-primary:hover {
+      box-shadow: var(--elevation-2);
+      background-color: #5533c9;
+      transform: translateY(-1px);
+    }
+
+    .btn-tonal {
+      background-color: var(--md-surface-variant);
+      color: var(--md-primary);
+    }
+
+    .btn-tonal:hover {
+      background-color: var(--md-secondary);
+      color: #241459;
+    }
+
+    .btn-outlined {
+      background-color: transparent;
+      color: var(--md-primary);
+      border-color: var(--md-primary);
+    }
+
+    .btn-outlined:hover {
+      background-color: rgba(100, 66, 214, 0.06);
+    }
+
+    /* Floating Action Button (FAB) */
+    .md-fab {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      width: 56px;
+      height: 56px;
+      border-radius: 16px;
+      background: var(--md-primary);
+      color: #FFF;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: var(--elevation-3);
+      cursor: pointer;
+      border: none;
+      z-index: 999;
+      transition: transform var(--trans-speed), box-shadow var(--trans-speed);
+    }
+
+    .md-fab:hover {
+      transform: scale(1.06);
+      box-shadow: var(--elevation-4);
+    }
+
+    /* Hero Section */
+    .hero-section {
+      background-color: var(--md-surface);
+      padding: var(--sp-32) 0 (calc(var(--sp-32) * 2));
+      border-bottom: 1px solid var(--md-outline);
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1.2fr 1fr;
+      gap: var(--sp-32);
+      align-items: center;
+      margin-top: var(--sp-24);
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--sp-8);
+      background: var(--md-surface-variant);
+      color: var(--md-primary);
+      padding: var(--sp-4) var(--sp-12);
+      border-radius: var(--radius-full);
+      font-size: var(--type-12);
+      font-weight: 700;
+      margin-bottom: var(--sp-16);
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: var(--sp-16);
+      margin-top: var(--sp-24);
+    }
+
+    /* Material Layered Cards Stage */
+    .hero-stage-card {
+      background: var(--md-surface);
+      border-radius: var(--radius-lg);
+      padding: var(--sp-24);
+      box-shadow: var(--elevation-2);
+      position: relative;
+    }
+
+    .stage-nested-card {
+      background: var(--md-surface-variant);
+      border-radius: var(--radius-md);
+      padding: var(--sp-16);
+      margin-top: var(--sp-16);
+      border-left: 4px solid var(--md-primary);
+    }
+
+    /* Swatches & Tokens Section */
+    .tokens-section {
+      padding: var(--sp-32) 0;
+    }
+
+    .swatches-grid {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: var(--sp-12);
+      margin-top: var(--sp-16);
+    }
+
+    .swatch-card {
+      background: var(--md-surface);
+      border-radius: var(--radius-sm);
+      padding: var(--sp-8);
+      box-shadow: var(--elevation-1);
+      text-align: center;
+    }
+
+    .swatch-box {
+      height: 48px;
+      border-radius: 6px;
+      margin-bottom: var(--sp-8);
+      border: 1px solid rgba(0,0,0,0.06);
+    }
+
+    .swatch-name {
+      font-size: var(--type-12);
+      font-weight: 600;
+    }
+
+    .swatch-hex {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--md-muted);
+    }
+
+    /* Component Laboratory */
+    .lab-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--sp-24);
+      margin-top: var(--sp-24);
+    }
+
+    .lab-card {
+      background: var(--md-surface);
+      border-radius: var(--radius-md);
+      padding: var(--sp-24);
+      box-shadow: var(--elevation-1);
+    }
+
+    /* Outlined Text Field with Floating Label */
+    .md-text-field {
+      position: relative;
+      margin-bottom: var(--sp-20);
+    }
+
+    .md-input {
+      width: 100%;
+      height: 52px;
+      padding: 16px 14px 4px;
+      font-family: var(--font-primary);
+      font-size: var(--type-14);
+      background: transparent;
+      border: 1px solid var(--md-outline);
+      border-radius: var(--radius-sm);
+      color: var(--md-text);
+      outline: none;
+      transition: border-color var(--trans-speed), box-shadow var(--trans-speed);
+    }
+
+    .md-label {
+      position: absolute;
+      left: 14px;
+      top: 16px;
+      font-size: var(--type-14);
+      color: var(--md-muted);
+      pointer-events: none;
+      transition: all var(--trans-speed);
+    }
+
+    .md-input:focus ~ .md-label,
+    .md-input:not(:placeholder-shown) ~ .md-label {
+      top: 6px;
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--md-primary);
+    }
+
+    .md-input:focus {
+      border-color: var(--md-primary);
+      border-width: 2px;
+    }
+
+    .md-input.error {
+      border-color: var(--md-danger);
+    }
+
+    .md-input.error ~ .md-label {
+      color: var(--md-danger);
+    }
+
+    /* Badges */
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      padding: 2px 8px;
+      border-radius: var(--radius-full);
+      font-size: var(--type-12);
+      font-weight: 600;
+    }
+
+    .badge-primary { background: var(--md-surface-variant); color: var(--md-primary); }
+    .badge-success { background: #DCFCE7; color: var(--md-success); }
+    .badge-warning { background: #FEF3C7; color: var(--md-warning); }
+    .badge-danger { background: #FEE2E2; color: var(--md-danger); }
+
+    /* Material Elevation Showcase */
+    .elevations-row {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: var(--sp-16);
+      margin-top: var(--sp-24);
+    }
+
+    .elevation-box {
+      background: var(--md-surface);
+      border-radius: var(--radius-md);
+      padding: var(--sp-20);
+      text-align: center;
+      transition: transform var(--trans-speed);
+    }
+
+    .elevation-box:hover {
+      transform: translateY(-2px);
+    }
+
+    /* Footer */
+    footer.md-footer {
+      background: var(--md-surface);
+      border-top: 1px solid var(--md-outline);
+      padding: var(--sp-32) 0;
+      margin-top: var(--sp-32);
+    }
+
+    .footer-inner {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: var(--type-14);
+      color: var(--md-muted);
+    }
+
+    /* Token Drawer */
+    .token-audit-toggle {
+      position: fixed;
+      bottom: 24px;
+      left: 24px;
+      z-index: 999;
+      background: var(--md-text);
+      color: #FFF;
+      padding: 8px 16px;
+      border-radius: var(--radius-full);
+      font-size: var(--type-12);
+      font-family: var(--font-mono);
+      cursor: pointer;
+      border: 1px solid var(--md-text);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      box-shadow: var(--elevation-2);
+    }
+
+    .token-audit-toggle:hover {
+      background: var(--md-primary);
+      border-color: var(--md-primary);
+    }
+
+    .token-drawer {
+      position: fixed;
+      top: 0;
+      left: -440px;
+      width: 400px;
+      height: 100vh;
+      background: var(--md-surface);
+      box-shadow: var(--elevation-4);
+      z-index: 2000;
+      padding: var(--sp-24);
+      overflow-y: auto;
+      transition: left var(--trans-speed);
+    }
+
+    .token-drawer.open {
+      left: 0;
+    }
+
+    .token-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 8px 0;
+      border-bottom: 1px solid var(--md-outline);
+      font-size: var(--type-12);
+    }
+
+    /* Toast */
+    .toast-box {
+      position: fixed;
+      top: 24px;
+      right: 24px;
+      background: var(--md-text);
+      color: #FFF;
+      padding: 12px 18px;
+      border-radius: var(--radius-sm);
+      border-left: 4px solid var(--md-primary);
+      font-size: var(--type-14);
+      z-index: 3000;
+      opacity: 0;
+      transform: translateY(-10px);
+      transition: all 0.2s ease;
+      pointer-events: none;
+    }
+
+    .toast-box.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Responsive */
+    @media (max-width: 960px) {
+      .hero-grid { grid-template-columns: 1fr; }
+      .elevations-row { grid-template-columns: repeat(2, 1fr); }
+      .lab-grid { grid-template-columns: 1fr; }
+      .swatches-grid { grid-template-columns: repeat(4, 1fr); }
+    }
+
+    @media (max-width: 600px) {
+      .nav-tabs { display: none; }
+      .elevations-row { grid-template-columns: 1fr; }
+      .swatches-grid { grid-template-columns: repeat(2, 1fr); }
+      .hero-actions { flex-direction: column; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top App Bar -->
+  <header class="md-app-bar">
+    <div class="container app-bar-inner">
+      <a href="#" class="brand-mark">
+        <div class="brand-logo-icon">M</div>
+        <span>Material System</span>
+      </a>
+
+      <ul class="nav-tabs">
+        <li class="nav-tab-item"><a href="#foundations" class="active">Foundations</a></li>
+        <li class="nav-tab-item"><a href="#elevation">Elevation</a></li>
+        <li class="nav-tab-item"><a href="#laboratory">Components</a></li>
+        <li class="nav-tab-item"><a href="#motion">Motion</a></li>
+      </ul>
+
+      <div>
+        <button class="btn btn-filled-primary" onclick="triggerToast('Material Component Suite Initialized')">Get Started</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero Section: Layered Surfaces & Motion -->
+  <section class="hero-section">
+    <div class="container hero-grid">
+      <div>
+        <div class="hero-badge">
+          <span>●</span>
+          <span>MATERIAL DESIGN ARCHITECTURE</span>
+        </div>
+        <h1 class="display-large">Layered surfaces, dynamic theming &amp; built-in motion.</h1>
+        <p class="body-medium" style="margin-top: var(--sp-16); color: var(--md-muted); max-width: 520px;">
+          Built with intentional elevation layers, high-contrast violet tokens, and mathematical typography scales for responsive cross-platform experiences.
+        </p>
+
+        <div class="hero-actions">
+          <button class="btn btn-filled-primary" onclick="triggerToast('Primary CTA Triggered (#6442D6)')">Explore Components</button>
+          <button class="btn btn-tonal" onclick="tokenDrawer.classList.toggle('open')">Inspect Tokens</button>
+        </div>
+      </div>
+
+      <!-- Layered Surface Stage -->
+      <div class="hero-stage-card">
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+          <span class="label-small" style="color: var(--md-primary);">ELEVATION 2 · AMBIENT LIGHT</span>
+          <span class="badge badge-success">Online</span>
+        </div>
+        <h3 class="display-medium" style="margin-top: var(--sp-12);">Dynamic Surface Nesting</h3>
+        <p class="body-small" style="margin-top: var(--sp-8);">
+          Surfaces cast realistic ambient and key-light shadows that scale dynamically based on elevation z-index.
+        </p>
+
+        <div class="stage-nested-card">
+          <div style="font-weight: 600; font-size: 13px; color: var(--md-primary);">Tonal Container (#C8B3FD Tint)</div>
+          <div style="font-size: 12px; color: var(--md-muted); margin-top: 2px;">
+            Components nest naturally within tonal surfaces without visual clutter.
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Foundations Section: Color Tokens Swatches -->
+  <section class="tokens-section" id="foundations">
+    <div class="container">
+      <div style="display: flex; justify-content: space-between; align-items: flex-end; border-bottom: 1px solid var(--md-outline); padding-bottom: var(--sp-12);">
+        <div>
+          <span class="label-small" style="color: var(--md-primary);">FOUNDATION TOKENS</span>
+          <h2 class="display-medium" style="margin-top: 4px;">Material Color Palette</h2>
+        </div>
+        <span class="body-small">Official Foundations</span>
+      </div>
+
+      <!-- 7 Color Swatches -->
+      <div class="swatches-grid">
+        <div class="swatch-card">
+          <div class="swatch-box" style="background: #6442D6;"></div>
+          <div class="swatch-name">Primary</div>
+          <div class="swatch-hex">#6442D6</div>
+        </div>
+
+        <div class="swatch-card">
+          <div class="swatch-box" style="background: #C8B3FD;"></div>
+          <div class="swatch-name">Secondary</div>
+          <div class="swatch-hex">#C8B3FD</div>
+        </div>
+
+        <div class="swatch-card">
+          <div class="swatch-box" style="background: #16A34A;"></div>
+          <div class="swatch-name">Success</div>
+          <div class="swatch-hex">#16A34A</div>
+        </div>
+
+        <div class="swatch-card">
+          <div class="swatch-box" style="background: #D97706;"></div>
+          <div class="swatch-name">Warning</div>
+          <div class="swatch-hex">#D97706</div>
+        </div>
+
+        <div class="swatch-card">
+          <div class="swatch-box" style="background: #DC2626;"></div>
+          <div class="swatch-name">Danger</div>
+          <div class="swatch-hex">#DC2626</div>
+        </div>
+
+        <div class="swatch-card">
+          <div class="swatch-box" style="background: #FFFFFF;"></div>
+          <div class="swatch-name">Surface</div>
+          <div class="swatch-hex">#FFFFFF</div>
+        </div>
+
+        <div class="swatch-card">
+          <div class="swatch-box" style="background: #111827;"></div>
+          <div class="swatch-name" style="color: #111827;">Text</div>
+          <div class="swatch-hex">#111827</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Elevation Layers Showcase -->
+  <section class="tokens-section" id="elevation" style="background: #F4F0FF; padding: var(--sp-32) 0;">
+    <div class="container">
+      <div style="text-align: center; max-width: 640px; margin: 0 auto var(--sp-24);">
+        <span class="label-small" style="color: var(--md-primary);">PHYSICAL DEPTH</span>
+        <h2 class="display-medium" style="margin-top: 4px;">Material Elevation Scale</h2>
+        <p class="body-small" style="margin-top: 8px;">
+          Surfaces express hierarchy through z-axis elevation, shifting from flat resting states to interactive hover peaks.
+        </p>
+      </div>
+
+      <div class="elevations-row">
+        <div class="elevation-box" style="box-shadow: var(--elevation-1);">
+          <div class="label-small" style="color: var(--md-primary);">LEVEL 1</div>
+          <div style="font-weight: 700; margin: 8px 0;">Resting Card</div>
+          <div class="body-small">1px ambient shadow</div>
+        </div>
+
+        <div class="elevation-box" style="box-shadow: var(--elevation-2);">
+          <div class="label-small" style="color: var(--md-primary);">LEVEL 2</div>
+          <div style="font-weight: 700; margin: 8px 0;">Hover / Focus</div>
+          <div class="body-small">3px ambient depth</div>
+        </div>
+
+        <div class="elevation-box" style="box-shadow: var(--elevation-3);">
+          <div class="label-small" style="color: var(--md-primary);">LEVEL 3</div>
+          <div style="font-weight: 700; margin: 8px 0;">Floating FAB</div>
+          <div class="body-small">10px diffused shadow</div>
+        </div>
+
+        <div class="elevation-box" style="box-shadow: var(--elevation-4);">
+          <div class="label-small" style="color: var(--md-primary);">LEVEL 4</div>
+          <div style="font-weight: 700; margin: 8px 0;">Modal Dialog</div>
+          <div class="body-small">14px maximum depth</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Interactive Component Laboratory -->
+  <section class="tokens-section" id="laboratory">
+    <div class="container">
+      <div style="display: flex; justify-content: space-between; align-items: flex-end; border-bottom: 1px solid var(--md-outline); padding-bottom: var(--sp-12);">
+        <div>
+          <span class="label-small" style="color: var(--md-primary);">INTERACTION LAB</span>
+          <h2 class="display-medium" style="margin-top: 4px;">Controls, Inputs &amp; Feedback</h2>
+        </div>
+        <span class="body-small">150–250ms Transitions</span>
+      </div>
+
+      <div class="lab-grid">
+        <!-- Interactive Buttons & Badges -->
+        <div class="lab-card">
+          <h3 class="title-medium" style="margin-bottom: var(--sp-8);">Button Varieties</h3>
+          <p class="body-small" style="margin-bottom: var(--sp-16);">
+            Consistent interaction signals emphasizing Primary (#6442D6) and Secondary (#C8B3FD).
+          </p>
+
+          <div style="display: flex; flex-wrap: wrap; gap: var(--sp-12); margin-bottom: var(--sp-24);">
+            <button class="btn btn-filled-primary" onclick="triggerToast('Filled Primary Action')">Filled Primary</button>
+            <button class="btn btn-tonal" onclick="triggerToast('Tonal Secondary Action')">Tonal Secondary</button>
+            <button class="btn btn-outlined" onclick="triggerToast('Outlined Action')">Outlined</button>
+          </div>
+
+          <div style="padding-top: var(--sp-16); border-top: 1px solid var(--md-outline);">
+            <div class="label-small" style="margin-bottom: var(--sp-8); color: var(--md-muted);">Semantic Status Badges</div>
+            <div style="display: flex; gap: var(--sp-8); flex-wrap: wrap;">
+              <span class="badge badge-primary">Primary #6442D6</span>
+              <span class="badge badge-success">Success #16A34A</span>
+              <span class="badge badge-warning">Warning #D97706</span>
+              <span class="badge badge-danger">Danger #DC2626</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Floating Label Input Form -->
+        <div class="lab-card">
+          <h3 class="title-medium" style="margin-bottom: var(--sp-8);">Floating Label Form</h3>
+          <p class="body-small" style="margin-bottom: var(--sp-16);">
+            Material input states with smooth 150ms floating transitions and high-contrast validation.
+          </p>
+
+          <form onsubmit="event.preventDefault(); handleMaterialForm();">
+            <div class="md-text-field">
+              <input type="text" class="md-input" id="userNameInput" placeholder=" " required>
+              <label class="md-label" for="userNameInput">Full Legal Name</label>
+            </div>
+
+            <div class="md-text-field">
+              <input type="email" class="md-input" id="userEmailInput" placeholder=" " required>
+              <label class="md-label" for="userEmailInput">Corporate Email</label>
+            </div>
+
+            <div style="display: flex; justify-content: flex-end; gap: var(--sp-8);">
+              <button type="reset" class="btn btn-outlined">Clear</button>
+              <button type="submit" class="btn btn-filled-primary">Save Profile</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Floating Action Button (FAB) -->
+  <button class="md-fab" id="fabBtn" title="Create New Material Asset" onclick="triggerToast('Floating Action Button Clicked!')">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+      <line x1="12" y1="5" x2="12" y2="19"></line>
+      <line x1="5" y1="12" x2="19" y2="12"></line>
+    </svg>
+  </button>
+
+  <!-- Footer -->
+  <footer class="md-footer">
+    <div class="container footer-inner">
+      <div>
+        <strong>Material Design System</strong> — Layered surfaces &amp; responsive patterns.
+      </div>
+      <div style="display: flex; gap: var(--sp-16); font-family: var(--font-mono); font-size: 12px;">
+        <span>PRIMARY: #6442D6</span>
+        <span>SECONDARY: #C8B3FD</span>
+        <span>SURFACE: #FFFFFF</span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Token Auditor Drawer -->
+  <button class="token-audit-toggle" id="tokenDrawerBtn" aria-label="Open Token Auditor">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <circle cx="12" cy="12" r="10"></circle>
+      <line x1="12" y1="16" x2="12" y2="12"></line>
+      <line x1="12" y1="8" x2="12.01" y2="8"></line>
+    </svg>
+    MATERIAL TOKENS
+  </button>
+
+  <div class="token-drawer" id="tokenDrawer">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--sp-20); padding-bottom: var(--sp-8); border-bottom: 1px solid var(--md-outline);">
+      <h3 class="title-medium" style="font-size: 16px;">MATERIAL TOKEN AUDIT</h3>
+      <button id="closeDrawerBtn" style="background: none; border: none; font-size: 20px; cursor: pointer;">&times;</button>
+    </div>
+
+    <div style="margin-bottom: var(--sp-20);">
+      <span class="label-small" style="color: var(--md-muted);">COLOR PALETTE</span>
+      <div class="token-row"><span>Primary</span><code style="color: #6442D6; font-weight: 700;">#6442D6</code></div>
+      <div class="token-row"><span>Secondary</span><code style="color: #6442D6; font-weight: 700;">#C8B3FD</code></div>
+      <div class="token-row"><span>Success</span><code style="color: #16A34A; font-weight: 700;">#16A34A</code></div>
+      <div class="token-row"><span>Warning</span><code style="color: #D97706; font-weight: 700;">#D97706</code></div>
+      <div class="token-row"><span>Danger</span><code style="color: #DC2626; font-weight: 700;">#DC2626</code></div>
+      <div class="token-row"><span>Surface</span><code>#FFFFFF</code></div>
+      <div class="token-row"><span>Text</span><code>#111827</code></div>
+    </div>
+
+    <div style="margin-bottom: var(--sp-20);">
+      <span class="label-small" style="color: var(--md-muted);">TYPOGRAPHY SCALE</span>
+      <div class="token-row"><span>Scale</span><code>12 / 14 / 16 / 20 / 24 / 32</code></div>
+      <div class="token-row"><span>Display Family</span><code>Roboto</code></div>
+      <div class="token-row"><span>Primary Family</span><code>Inter</code></div>
+      <div class="token-row"><span>Mono Family</span><code>Fira Code</code></div>
+    </div>
+
+    <div>
+      <span class="label-small" style="color: var(--md-muted);">SPACING &amp; MOTION</span>
+      <div class="token-row"><span>Spacing Steps</span><code>4 / 8 / 12 / 16 / 24 / 32</code></div>
+      <div class="token-row"><span>Transitions</span><code>150–250ms stable easing</code></div>
+    </div>
+  </div>
+
+  <!-- Toast -->
+  <div class="toast-box" id="toastBox">Action completed.</div>
+
+  <script>
+    // Toast
+    const toast = document.getElementById('toastBox');
+    function triggerToast(text) {
+      toast.textContent = text;
+      toast.classList.add('show');
+      setTimeout(() => {
+        toast.classList.remove('show');
+      }, 2500);
+    }
+
+    // Form
+    function handleMaterialForm() {
+      const name = document.getElementById('userNameInput').value;
+      triggerToast('Material profile updated for: ' + name);
+      document.getElementById('userNameInput').value = '';
+      document.getElementById('userEmailInput').value = '';
+    }
+
+    // Drawer
+    const tokenDrawer = document.getElementById('tokenDrawer');
+    document.getElementById('tokenDrawerBtn').addEventListener('click', () => {
+      tokenDrawer.classList.toggle('open');
+    });
+    document.getElementById('closeDrawerBtn').addEventListener('click', () => {
+      tokenDrawer.classList.remove('open');
+    });
+  </script>
+</body>
+</html>

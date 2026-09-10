@@ -1,0 +1,1026 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gradient Design System — Radiant Color Transitions & Surfaces</title>
+  
+  <!-- Typography: Space Grotesk (Display), Montserrat (Primary Body), JetBrains Mono (Code) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Montserrat:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    /* Gradient Design Tokens (from DESIGN.md & tokens.css) */
+    :root {
+      /* Brand Foundations */
+      --primary: #990FFA;           /* Electric violet */
+      --primary-hover: #8304db;
+      --secondary: #E60076;         /* Magenta flame */
+      --secondary-hover: #cc0069;
+      --accent: #7c3aed;
+      --accent-warm: #f59e0b;
+      
+      /* Semantic Tokens */
+      --success: #16A34A;
+      --warning: #D97706;
+      --danger: #DC2626;
+      
+      /* Surfaces & Canvas */
+      --bg: #f7f3ff;
+      --surface: #ffffff;
+      --surface-warm: #efe7ff;
+      --surface-soft: #faf7ff;
+      --border: #ddd2f2;
+      --border-soft: #eee6fb;
+      
+      /* Typography & Text */
+      --text: #111827;
+      --text-heading: #191225;
+      --text-muted: #746985;
+      --font-display: 'Space Grotesk', system-ui, sans-serif;
+      --font-body: 'Montserrat', system-ui, sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+      
+      /* Signature Multi-stop Gradients */
+      --grad-primary: linear-gradient(135deg, #990FFA 0%, #E60076 100%);
+      --grad-sunset: linear-gradient(135deg, #E60076 0%, #f59e0b 100%);
+      --grad-aurora: linear-gradient(135deg, #990FFA 0%, #7c3aed 50%, #10b981 100%);
+      --grad-cosmic: linear-gradient(135deg, #191225 0%, #990FFA 50%, #E60076 100%);
+      --grad-surface: linear-gradient(180deg, rgba(247, 243, 255, 0.8) 0%, #ffffff 100%);
+      
+      /* Radii & Elevation */
+      --radius-sm: 12px;
+      --radius-md: 20px;
+      --radius-lg: 32px;
+      --radius-pill: 9999px;
+      --elev-flat: none;
+      --elev-raised: 0 24px 72px rgba(124, 58, 237, 0.20);
+      --glow-primary: 0 12px 32px rgba(153, 15, 250, 0.35);
+      --glow-secondary: 0 12px 32px rgba(230, 0, 118, 0.35);
+      
+      /* Dynamic Lab Values */
+      --active-grad: linear-gradient(135deg, #990FFA 0%, #E60076 100%);
+      --active-angle: 135deg;
+    }
+
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--bg);
+      color: var(--text);
+      font-family: var(--font-body);
+      font-size: 15px;
+      line-height: 1.55;
+      min-height: 100vh;
+      overflow-x: hidden;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+    }
+
+    /* Ambient Radiant Aura Glows */
+    .radiant-backdrop {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      pointer-events: none;
+      z-index: 0;
+      overflow: hidden;
+    }
+
+    .aura-glow {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(100px);
+      opacity: 0.35;
+    }
+
+    .aura-1 {
+      width: 600px;
+      height: 600px;
+      background: radial-gradient(circle, #990FFA 0%, rgba(153, 15, 250, 0) 70%);
+      top: -150px;
+      left: -100px;
+    }
+
+    .aura-2 {
+      width: 650px;
+      height: 650px;
+      background: radial-gradient(circle, #E60076 0%, rgba(230, 0, 118, 0) 70%);
+      top: 15%;
+      right: -150px;
+    }
+
+    /* Global Header */
+    .gradient-header {
+      background: rgba(255, 255, 255, 0.85);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      padding: 0 2rem;
+    }
+
+    .header-inner {
+      max-width: 1240px;
+      margin: 0 auto;
+      height: 72px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1.5rem;
+    }
+
+    .brand-group {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+      color: var(--text);
+    }
+
+    .brand-icon {
+      width: 42px;
+      height: 42px;
+      border-radius: var(--radius-sm);
+      background: var(--grad-primary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #ffffff;
+      box-shadow: var(--glow-primary);
+      font-size: 20px;
+      font-weight: 700;
+      font-family: var(--font-display);
+    }
+
+    .brand-name {
+      font-family: var(--font-display);
+      font-size: 1.35rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+    }
+
+    .brand-name span {
+      background: var(--grad-primary);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+      list-style: none;
+    }
+
+    .nav-link {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 600;
+      padding: 6px 12px;
+      border-radius: var(--radius-pill);
+      transition: all 180ms ease;
+    }
+
+    .nav-link:hover, .nav-link.active {
+      color: var(--primary);
+      background: var(--surface-warm);
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    /* Buttons */
+    .btn {
+      font-family: var(--font-body);
+      font-size: 14px;
+      font-weight: 700;
+      padding: 10px 24px;
+      border-radius: var(--radius-pill);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      text-decoration: none;
+      transition: all 220ms cubic-bezier(0.22, 1, 0.36, 1);
+      border: none;
+      outline: none;
+      user-select: none;
+    }
+
+    .btn-gradient {
+      background: var(--grad-primary);
+      color: #ffffff;
+      box-shadow: var(--glow-primary);
+    }
+
+    .btn-gradient:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 16px 36px rgba(153, 15, 250, 0.45);
+    }
+
+    .btn-outline-gradient {
+      background: #ffffff;
+      color: var(--primary);
+      border: 2px solid var(--border);
+      position: relative;
+    }
+
+    .btn-outline-gradient:hover {
+      border-color: var(--primary);
+      transform: translateY(-2px);
+      color: var(--secondary);
+    }
+
+    .btn-sm {
+      padding: 6px 14px;
+      font-size: 12px;
+    }
+
+    /* Main Content */
+    .main-container {
+      max-width: 1240px;
+      margin: 0 auto;
+      padding: 3rem 2rem 5rem 2rem;
+      width: 100%;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 4rem;
+      position: relative;
+      z-index: 10;
+    }
+
+    /* Hero Banner */
+    .hero-section {
+      text-align: center;
+      padding: 3.5rem 1.5rem;
+      position: relative;
+    }
+
+    .gradient-pill-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: #ffffff;
+      border: 1px solid var(--border);
+      padding: 6px 20px;
+      border-radius: var(--radius-pill);
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--primary);
+      box-shadow: 0 4px 16px rgba(153, 15, 250, 0.1);
+      margin-bottom: 1.5rem;
+    }
+
+    .hero-title {
+      font-family: var(--font-display);
+      font-size: clamp(2.75rem, 5.5vw, 4.5rem);
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      line-height: 1.08;
+      margin-bottom: 1.5rem;
+      color: var(--text-heading);
+    }
+
+    .hero-title .grad-text {
+      background: var(--grad-primary);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      display: inline-block;
+    }
+
+    .hero-desc {
+      font-size: 1.15rem;
+      color: var(--text-muted);
+      max-width: 720px;
+      margin: 0 auto 2.5rem auto;
+      line-height: 1.65;
+    }
+
+    .hero-cta-row {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    /* Section Header */
+    .section-head {
+      margin-bottom: 1.75rem;
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+    }
+
+    .section-title {
+      font-family: var(--font-display);
+      font-size: 1.75rem;
+      font-weight: 700;
+      color: var(--text-heading);
+      letter-spacing: -0.02em;
+    }
+
+    /* Real-Time Gradient Lab / Mesh Customizer */
+    .lab-card {
+      background: #ffffff;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 2.5rem;
+      box-shadow: var(--elev-raised);
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2.5rem;
+      align-items: center;
+    }
+
+    @media (max-width: 900px) {
+      .lab-card {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .lab-preview-box {
+      width: 100%;
+      height: 360px;
+      border-radius: var(--radius-md);
+      background: var(--active-grad);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 2rem;
+      color: #ffffff;
+      box-shadow: 0 20px 50px rgba(153, 15, 250, 0.28);
+      position: relative;
+      overflow: hidden;
+      transition: background 300ms ease;
+    }
+
+    .lab-preview-box::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at 80% 20%, rgba(255, 255, 255, 0.25), transparent 60%);
+      pointer-events: none;
+    }
+
+    .preview-badge {
+      align-self: flex-start;
+      background: rgba(255, 255, 255, 0.25);
+      backdrop-filter: blur(10px);
+      padding: 5px 14px;
+      border-radius: var(--radius-pill);
+      font-size: 12px;
+      font-weight: 700;
+      font-family: var(--font-mono);
+    }
+
+    .preview-heading {
+      font-family: var(--font-display);
+      font-size: 2rem;
+      font-weight: 700;
+      line-height: 1.2;
+    }
+
+    .lab-controls {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    .control-label {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--text-heading);
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      margin-bottom: 8px;
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .preset-chips {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .preset-btn {
+      padding: 8px 16px;
+      border-radius: var(--radius-pill);
+      border: 2px solid var(--border);
+      background: #ffffff;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 180ms ease;
+    }
+
+    .preset-btn.active, .preset-btn:hover {
+      border-color: var(--primary);
+      background: var(--surface-warm);
+      color: var(--primary);
+    }
+
+    .color-swatch-dot {
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+    }
+
+    .angle-slider-container {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .angle-slider {
+      appearance: none;
+      flex: 1;
+      height: 8px;
+      border-radius: 4px;
+      background: var(--surface-warm);
+      outline: none;
+    }
+
+    .angle-slider::-webkit-slider-thumb {
+      appearance: none;
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      background: var(--primary);
+      cursor: pointer;
+      box-shadow: 0 2px 8px rgba(153, 15, 250, 0.4);
+    }
+
+    .css-output-box {
+      background: #191225;
+      color: #efe7ff;
+      border-radius: var(--radius-sm);
+      padding: 1rem 1.25rem;
+      font-family: var(--font-mono);
+      font-size: 12px;
+      position: relative;
+      word-break: break-all;
+    }
+
+    .copy-output-btn {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background: rgba(255, 255, 255, 0.15);
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      color: #ffffff;
+      padding: 3px 8px;
+      border-radius: 4px;
+      font-size: 11px;
+      cursor: pointer;
+    }
+
+    .copy-output-btn:hover {
+      background: rgba(255, 255, 255, 0.3);
+    }
+
+    /* Bento Grid: Gradient Components */
+    .gradient-bento {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2rem;
+    }
+
+    @media (max-width: 1024px) {
+      .gradient-bento {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .bento-card {
+      background: #ffffff;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 2rem;
+      box-shadow: 0 10px 30px rgba(124, 58, 237, 0.06);
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      overflow: hidden;
+      transition: transform 220ms ease, box-shadow 220ms ease;
+    }
+
+    .bento-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 18px 45px rgba(124, 58, 237, 0.14);
+    }
+
+    .bento-card-highlight {
+      border: 2px solid transparent;
+      background-image: linear-gradient(#ffffff, #ffffff), var(--grad-primary);
+      background-origin: border-box;
+      background-clip: padding-box, border-box;
+    }
+
+    .bento-icon-wrapper {
+      width: 52px;
+      height: 52px;
+      border-radius: var(--radius-sm);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #ffffff;
+      font-size: 22px;
+      margin-bottom: 1.5rem;
+    }
+
+    .bento-title {
+      font-family: var(--font-display);
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: var(--text-heading);
+      margin-bottom: 0.75rem;
+    }
+
+    .bento-text {
+      font-size: 14px;
+      color: var(--text-muted);
+      line-height: 1.6;
+      margin-bottom: 1.5rem;
+      flex: 1;
+    }
+
+    .pricing-tag {
+      font-family: var(--font-display);
+      font-size: 2.2rem;
+      font-weight: 700;
+      color: var(--primary);
+      margin-bottom: 1rem;
+    }
+
+    /* Design Token System Showcase */
+    .token-showcase-panel {
+      background: #ffffff;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 2.5rem;
+      box-shadow: 0 10px 30px rgba(124, 58, 237, 0.05);
+    }
+
+    .token-card-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1.5rem;
+      margin-top: 1.5rem;
+    }
+
+    .token-swatch-card {
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      overflow: hidden;
+      background: #ffffff;
+    }
+
+    .swatch-header {
+      height: 64px;
+      padding: 8px 12px;
+      display: flex;
+      align-items: flex-end;
+      font-family: var(--font-mono);
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .swatch-meta {
+      padding: 10px 14px;
+      background: var(--surface-soft);
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .swatch-token-name {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--primary);
+    }
+
+    .swatch-token-desc {
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    /* Global Footer */
+    .gradient-footer {
+      background: #191225;
+      color: #efe7ff;
+      padding: 3rem 2rem;
+      margin-top: 4rem;
+    }
+
+    .footer-inner {
+      max-width: 1240px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 2rem;
+    }
+
+    .footer-nav {
+      display: flex;
+      gap: 1.5rem;
+      list-style: none;
+    }
+
+    .footer-nav a {
+      color: #efe7ff;
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 500;
+    }
+
+    .footer-nav a:hover {
+      color: var(--secondary);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Ambient Radiant Backdrops -->
+  <div class="radiant-backdrop">
+    <div class="aura-glow aura-1"></div>
+    <div class="aura-glow aura-2"></div>
+  </div>
+
+  <!-- Global Navigation Header -->
+  <header class="gradient-header">
+    <div class="header-inner">
+      <a href="#" class="brand-group">
+        <div class="brand-icon">G</div>
+        <div class="brand-name">GRADIENT <span>CORE</span></div>
+      </a>
+
+      <nav>
+        <ul class="nav-links">
+          <li><a href="#hero" class="nav-link active">Home</a></li>
+          <li><a href="#lab" class="nav-link">Gradient Lab</a></li>
+          <li><a href="#components" class="nav-link">Bento Grid</a></li>
+          <li><a href="#tokens" class="nav-link">Design Tokens</a></li>
+        </ul>
+      </nav>
+
+      <div class="header-actions">
+        <button class="btn btn-outline-gradient btn-sm" onclick="triggerRandomGradient()">Randomize</button>
+        <button class="btn btn-gradient btn-sm" onclick="alert('Gradient action activated!')">Get Started</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main View Container -->
+  <main class="main-container">
+
+    <!-- Hero Banner -->
+    <section class="hero-section" id="hero">
+      <div class="gradient-pill-badge">
+        <span>✨</span>
+        <span>Morphism &amp; Effects Design System</span>
+      </div>
+
+      <h1 class="hero-title">
+        Smooth Transitions &amp;<br>
+        <span class="grad-text">Radiant Visual Depth</span>
+      </h1>
+
+      <p class="hero-desc">
+        Engineered with electric violet (<code>#990FFA</code>) and magenta flame (<code>#E60076</code>) multi-stop color transitions. Grounded with Space Grotesk display typography and Montserrat scanability.
+      </p>
+
+      <div class="hero-cta-row">
+        <a href="#lab" class="btn btn-gradient">Launch Interactive Lab</a>
+        <a href="#components" class="btn btn-outline-gradient">Explore Components</a>
+      </div>
+    </section>
+
+    <!-- Real-Time Interactive Gradient Lab -->
+    <section id="lab">
+      <div class="section-head">
+        <div>
+          <h2 class="section-title">Interactive Gradient Lab</h2>
+          <p style="font-size: 14px; color: var(--text-muted); margin-top: 4px;">Adjust color stops, presets, and angle in real time to generate production CSS.</p>
+        </div>
+      </div>
+
+      <div class="lab-card">
+        <!-- Live Preview Canvas -->
+        <div class="lab-preview-box" id="labPreview">
+          <span class="preview-badge" id="previewBadge">linear-gradient(135deg, #990FFA, #E60076)</span>
+          <div>
+            <div style="font-family: var(--font-mono); font-size: 11px; opacity: 0.85; text-transform: uppercase;">Realtime Surface Rendering</div>
+            <h3 class="preview-heading" id="previewHeading">Ultraviolet Sunset</h3>
+          </div>
+        </div>
+
+        <!-- Controls -->
+        <div class="lab-controls">
+          <div>
+            <div class="control-label">
+              <span>Color Harmonies</span>
+            </div>
+            <div class="preset-chips">
+              <button class="preset-btn active" onclick="applyPreset('ultraviolet', this)">
+                <span class="color-swatch-dot" style="background: linear-gradient(135deg, #990FFA, #E60076);"></span>
+                <span>Ultraviolet (#990FFA → #E60076)</span>
+              </button>
+              <button class="preset-btn" onclick="applyPreset('aurora', this)">
+                <span class="color-swatch-dot" style="background: linear-gradient(135deg, #990FFA, #10b981);"></span>
+                <span>Aurora (#990FFA → #10b981)</span>
+              </button>
+              <button class="preset-btn" onclick="applyPreset('sunset', this)">
+                <span class="color-swatch-dot" style="background: linear-gradient(135deg, #E60076, #f59e0b);"></span>
+                <span>Flame (#E60076 → #f59e0b)</span>
+              </button>
+            </div>
+          </div>
+
+          <div>
+            <div class="control-label">
+              <span>Rotation Angle</span>
+              <span id="angleValue" style="font-family: var(--font-mono); color: var(--primary);">135°</span>
+            </div>
+            <div class="angle-slider-container">
+              <input type="range" class="angle-slider" min="0" max="360" value="135" id="angleSlider" oninput="updateAngle(this.value)">
+            </div>
+          </div>
+
+          <div>
+            <div class="control-label">
+              <span>Generated CSS Property</span>
+            </div>
+            <div class="css-output-box">
+              <button class="copy-output-btn" onclick="copyCSS()">Copy CSS</button>
+              <code id="cssOutput">background: linear-gradient(135deg, #990FFA 0%, #E60076 100%);</code>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Bento Grid Showcase -->
+    <section id="components">
+      <div class="section-head">
+        <div>
+          <h2 class="section-title">Radiant Component Patterns</h2>
+          <p style="font-size: 14px; color: var(--text-muted); margin-top: 4px;">Gradient-rich cards with multi-color borders, glowing auras, and elevated hover states.</p>
+        </div>
+      </div>
+
+      <div class="gradient-bento">
+        <!-- Card 1 -->
+        <div class="bento-card bento-card-highlight">
+          <div class="bento-icon-wrapper" style="background: var(--grad-primary);">
+            ✦
+          </div>
+          <h3 class="bento-title">Generative Color Fields</h3>
+          <p class="bento-text">
+            Multi-stop vector fills calibrated to maintain dark text scanability (<code>#111827</code>) without eye strain.
+          </p>
+          <button class="btn btn-gradient" onclick="alert('Generative fields loaded!')">Generate Assets</button>
+        </div>
+
+        <!-- Card 2 -->
+        <div class="bento-card">
+          <div class="bento-icon-wrapper" style="background: var(--grad-sunset);">
+            ★
+          </div>
+          <h3 class="bento-title">Pro Tier Subscription</h3>
+          <div class="pricing-tag">$29<span style="font-size: 14px; color: var(--text-muted); font-weight: 500;"> / month</span></div>
+          <p class="bento-text">
+            Full access to real-time radiant token pipelines, unlimited color exports, and high-frequency CSS mesh sync.
+          </p>
+          <button class="btn btn-outline-gradient" onclick="alert('Subscription selected!')">Upgrade Plan</button>
+        </div>
+
+        <!-- Card 3 -->
+        <div class="bento-card">
+          <div class="bento-icon-wrapper" style="background: var(--grad-aurora);">
+            ◆
+          </div>
+          <h3 class="bento-title">Telemetry &amp; Waveforms</h3>
+          <p class="bento-text">
+            Live dynamic SVG audio spectra styled with gradient linear strokes and smooth cubic easing transitions.
+          </p>
+          <div style="height: 36px; display: flex; align-items: flex-end; gap: 4px; margin-bottom: 1.5rem;">
+            <div style="flex: 1; height: 35%; background: var(--grad-primary); border-radius: 2px;"></div>
+            <div style="flex: 1; height: 85%; background: var(--grad-primary); border-radius: 2px;"></div>
+            <div style="flex: 1; height: 60%; background: var(--grad-primary); border-radius: 2px;"></div>
+            <div style="flex: 1; height: 100%; background: var(--grad-primary); border-radius: 2px;"></div>
+            <div style="flex: 1; height: 75%; background: var(--grad-primary); border-radius: 2px;"></div>
+            <div style="flex: 1; height: 45%; background: var(--grad-primary); border-radius: 2px;"></div>
+          </div>
+          <button class="btn btn-outline-gradient" onclick="alert('Waveform telemetry synchronized!')">Inspect Graph</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Tokens Audit Panel -->
+    <section id="tokens" class="token-showcase-panel">
+      <div class="section-head" style="margin-bottom: 0.5rem;">
+        <div>
+          <h2 class="section-title">Design Tokens &amp; Foundation Audit</h2>
+          <p style="font-size: 14px; color: var(--text-muted); margin-top: 4px;">Strict compliance against open-design token declarations.</p>
+        </div>
+      </div>
+
+      <div class="token-card-grid">
+        <!-- Token 1: Primary -->
+        <div class="token-swatch-card">
+          <div class="swatch-header" style="background-color: #990FFA; color: #ffffff;">
+            #990FFA
+          </div>
+          <div class="swatch-meta">
+            <span class="swatch-token-name">--primary</span>
+            <span class="swatch-token-desc">Electric Violet (Primary Accent)</span>
+          </div>
+        </div>
+
+        <!-- Token 2: Secondary -->
+        <div class="token-swatch-card">
+          <div class="swatch-header" style="background-color: #E60076; color: #ffffff;">
+            #E60076
+          </div>
+          <div class="swatch-meta">
+            <span class="swatch-token-name">--secondary</span>
+            <span class="swatch-token-desc">Magenta Flame (Secondary Accent)</span>
+          </div>
+        </div>
+
+        <!-- Token 3: Canvas Mist -->
+        <div class="token-swatch-card">
+          <div class="swatch-header" style="background-color: #f7f3ff; color: #191225; border-bottom: 1px solid var(--border);">
+            #f7f3ff
+          </div>
+          <div class="swatch-meta">
+            <span class="swatch-token-name">--bg</span>
+            <span class="swatch-token-desc">Soft Lavender Page Mist</span>
+          </div>
+        </div>
+
+        <!-- Token 4: Text Ink -->
+        <div class="token-swatch-card">
+          <div class="swatch-header" style="background-color: #111827; color: #ffffff;">
+            #111827
+          </div>
+          <div class="swatch-meta">
+            <span class="swatch-token-name">--text</span>
+            <span class="swatch-token-desc">High Contrast Body Ink</span>
+          </div>
+        </div>
+
+        <!-- Token 5: Display Typography -->
+        <div class="token-swatch-card">
+          <div class="swatch-header" style="background: var(--grad-primary); color: #ffffff; font-family: 'Space Grotesk'; font-size: 16px; align-items: center; justify-content: center;">
+            SPACE GROTESK
+          </div>
+          <div class="swatch-meta">
+            <span class="swatch-token-name">--font-display</span>
+            <span class="swatch-token-desc">Geometric Expressive Display</span>
+          </div>
+        </div>
+
+        <!-- Token 6: Primary Typography -->
+        <div class="token-swatch-card">
+          <div class="swatch-header" style="background: var(--surface-warm); color: var(--primary); font-family: 'Montserrat'; font-size: 15px; font-weight: 700; align-items: center; justify-content: center;">
+            MONTSERRAT
+          </div>
+          <div class="swatch-meta">
+            <span class="swatch-token-name">--font-body</span>
+            <span class="swatch-token-desc">8pt Baseline Grid Body Type</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Global Footer -->
+  <footer class="gradient-footer">
+    <div class="footer-inner">
+      <div>
+        <div style="font-family: var(--font-display); font-size: 1.25rem; font-weight: 700; margin-bottom: 4px;">GRADIENT DESIGN SYSTEM</div>
+        <p style="font-size: 13px; color: #a69bb8;">Standardized under open-design specifications. 100% token fidelity.</p>
+      </div>
+      <ul class="footer-nav">
+        <li><a href="#hero">Home</a></li>
+        <li><a href="#lab">Interactive Lab</a></li>
+        <li><a href="#components">Components</a></li>
+        <li><a href="#tokens">Tokens</a></li>
+      </ul>
+    </div>
+  </footer>
+
+  <!-- Script for Interactive Lab -->
+  <script>
+    let activePreset = 'ultraviolet';
+    let currentAngle = 135;
+
+    const presets = {
+      'ultraviolet': {
+        name: 'Ultraviolet Sunset',
+        colors: '#990FFA 0%, #E60076 100%',
+        stops: ['#990FFA', '#E60076']
+      },
+      'aurora': {
+        name: 'Neon Aurora',
+        colors: '#990FFA 0%, #7c3aed 50%, #10b981 100%',
+        stops: ['#990FFA', '#7c3aed', '#10b981']
+      },
+      'sunset': {
+        name: 'Flame Horizon',
+        colors: '#E60076 0%, #f59e0b 100%',
+        stops: ['#E60076', '#f59e0b']
+      }
+    };
+
+    function updateGradient() {
+      const p = presets[activePreset];
+      const grad = `linear-gradient(${currentAngle}deg, ${p.colors})`;
+      
+      const preview = document.getElementById('labPreview');
+      preview.style.background = grad;
+
+      const badge = document.getElementById('previewBadge');
+      badge.textContent = `linear-gradient(${currentAngle}deg, ${p.stops.join(', ')})`;
+
+      const heading = document.getElementById('previewHeading');
+      heading.textContent = p.name;
+
+      const cssOutput = document.getElementById('cssOutput');
+      cssOutput.textContent = `background: ${grad};`;
+    }
+
+    function applyPreset(presetKey, btn) {
+      activePreset = presetKey;
+      document.querySelectorAll('.preset-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      updateGradient();
+    }
+
+    function updateAngle(val) {
+      currentAngle = val;
+      document.getElementById('angleValue').textContent = val + '°';
+      updateGradient();
+    }
+
+    function triggerRandomGradient() {
+      const keys = Object.keys(presets);
+      const randomKey = keys[Math.floor(Math.random() * keys.length)];
+      const randomAngle = Math.floor(Math.random() * 360);
+      
+      activePreset = randomKey;
+      currentAngle = randomAngle;
+      
+      document.getElementById('angleSlider').value = randomAngle;
+      document.getElementById('angleValue').textContent = randomAngle + '°';
+      
+      const buttons = document.querySelectorAll('.preset-btn');
+      buttons.forEach(b => {
+        if (b.textContent.toLowerCase().includes(randomKey)) {
+          b.classList.add('active');
+        } else {
+          b.classList.remove('active');
+        }
+      });
+
+      updateGradient();
+    }
+
+    function copyCSS() {
+      const code = document.getElementById('cssOutput').innerText;
+      navigator.clipboard.writeText(code).then(() => {
+        alert('Gradient CSS copied to clipboard!');
+      });
+    }
+
+    // Initialize
+    updateGradient();
+  </script>
+</body>
+</html>

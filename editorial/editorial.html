@@ -1,0 +1,571 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>THE CHRONICLE — Journal of Design & Architecture | Official Editorial System</title>
+  <meta name="description" content="Authentic implementation of the Editorial design system: refined Gelasio serif typography, Ubuntu Mono code, Primary #111111, Secondary #F1F1F1, Text #111827, Surface #FFFFFF, and 8pt baseline grid." />
+
+  <!-- Google Fonts: Gelasio (display & primary serif), Ubuntu Mono (mono) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Gelasio:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Ubuntu+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+
+  <style>
+    /* ─────────────────────────────────────────────────────────────────
+       EDITORIAL OFFICIAL DESIGN TOKENS (from DESIGN.md)
+       Visual Style: Modern, editorial, literary magazine
+       Tokens:
+         Primary: #111111 (Ink Black)
+         Secondary: #F1F1F1 (Parchment Gray)
+         Success: #16A34A
+         Warning: #D97706
+         Danger: #DC2626
+         Surface: #FFFFFF
+         Text: #111827 (Deep Charcoal)
+         Neutral: #FFFFFF
+       Typography: display=Gelasio, primary=Gelasio, mono=Ubuntu Mono
+       Type Scale: 14 / 16 / 18 / 24 / 32 / 40
+       Spacing: 8pt baseline grid (8, 16, 24, 32, 40, 48, 64, 80)
+       Motion: 150-250ms stable transitions
+       ───────────────────────────────────────────────────────────────── */
+    :root {
+      --color-primary: #111111;
+      --color-secondary: #F1F1F1;
+      --color-success: #16A34A;
+      --color-warning: #D97706;
+      --color-danger: #DC2626;
+      --color-surface: #FFFFFF;
+      --color-text: #111827;
+      --color-text-muted: #4B5563;
+      --color-neutral: #FFFFFF;
+      --color-border: #E5E7EB;
+
+      /* Typography Families */
+      --font-display: "Gelasio", Georgia, serif;
+      --font-primary: "Gelasio", Georgia, serif;
+      --font-mono: "Ubuntu Mono", monospace;
+
+      /* Official Type Scale: 14 / 16 / 18 / 24 / 32 / 40 */
+      --text-14: 14px;
+      --text-16: 16px;
+      --text-18: 18px;
+      --text-24: 24px;
+      --text-32: 32px;
+      --text-40: 40px;
+
+      /* 8pt Baseline Spacing Grid */
+      --space-8: 8px;
+      --space-16: 16px;
+      --space-24: 24px;
+      --space-32: 32px;
+      --space-40: 40px;
+      --space-48: 48px;
+      --space-64: 64px;
+      --space-80: 80px;
+
+      /* Subtle Radii (Clean & Sharp) */
+      --radius-sm: 4px;
+      --radius-md: 8px;
+      --radius-pill: 9999px;
+
+      --transition-base: 200ms cubic-bezier(0.16, 1, 0.3, 1);
+      --container-max: 1180px;
+    }
+
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      background: var(--color-surface);
+      color: var(--color-text);
+      font-size: 16px;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    body {
+      background: var(--color-surface);
+      color: var(--color-text);
+      font-family: var(--font-primary);
+      font-size: var(--text-16);
+      line-height: 1.7;
+      overflow-x: hidden;
+    }
+
+    /* ─── TYPOGRAPHY HIERARCHY ─── */
+    h1, h2, h3, h4, .editorial-heading {
+      font-family: var(--font-display);
+      color: var(--color-primary);
+      font-weight: 700;
+      line-height: 1.2;
+    }
+
+    h1 {
+      font-size: clamp(32px, 5vw, var(--text-40));
+      letter-spacing: -0.015em;
+    }
+
+    h2 {
+      font-size: var(--text-32);
+      letter-spacing: -0.01em;
+    }
+
+    h3 {
+      font-size: var(--text-24);
+    }
+
+    h4 {
+      font-size: var(--text-18);
+    }
+
+    p {
+      color: var(--color-text);
+      font-size: var(--text-16);
+      line-height: 1.75;
+    }
+
+    .meta-label {
+      font-family: var(--font-mono);
+      font-size: var(--text-14);
+      color: var(--color-text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    /* ─── BUTTONS ─── */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--space-8);
+      font-family: var(--font-primary);
+      font-size: var(--text-14);
+      font-weight: 600;
+      padding: 10px 20px;
+      border-radius: var(--radius-sm);
+      text-decoration: none;
+      cursor: pointer;
+      border: 1px solid transparent;
+      transition: all var(--transition-base);
+      outline: none;
+    }
+
+    .btn-primary {
+      background: var(--color-primary);
+      color: #ffffff;
+    }
+
+    .btn-primary:hover {
+      background: #262626;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    }
+
+    .btn-secondary {
+      background: var(--color-secondary);
+      color: var(--color-text);
+      border-color: #e0e0e0;
+    }
+
+    .btn-secondary:hover {
+      background: #e7e7e7;
+    }
+
+    /* ─── STICKY EDITORIAL NAV ─── */
+    .editorial-nav {
+      position: sticky;
+      top: 0;
+      background: rgba(255, 255, 255, 0.98);
+      backdrop-filter: blur(8px);
+      border-bottom: 2px solid var(--color-primary);
+      z-index: 1000;
+    }
+
+    .nav-inner {
+      max-width: var(--container-max);
+      margin: 0 auto;
+      padding: var(--space-16) var(--space-24);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .brand-title {
+      font-family: var(--font-display);
+      font-size: var(--text-24);
+      font-weight: 700;
+      color: var(--color-primary);
+      text-decoration: none;
+      letter-spacing: -0.02em;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: var(--space-32);
+      list-style: none;
+    }
+
+    @media (max-width: 768px) {
+      .nav-links {
+        display: none;
+      }
+    }
+
+    .nav-link {
+      font-family: var(--font-primary);
+      font-size: var(--text-14);
+      font-weight: 500;
+      color: var(--color-text);
+      text-decoration: none;
+      transition: opacity var(--transition-base);
+    }
+
+    .nav-link:hover {
+      opacity: 0.65;
+    }
+
+    /* ─── MAGAZINE CONTAINER ─── */
+    .container {
+      max-width: var(--container-max);
+      margin: 0 auto;
+      padding: 0 var(--space-24);
+    }
+
+    /* ─── LEAD STORY / COVER SECTION ─── */
+    .cover-section {
+      padding: var(--space-64) 0 var(--space-48);
+      border-bottom: 1px solid var(--color-border);
+    }
+
+    .cover-grid {
+      display: grid;
+      grid-template-columns: 1.4fr 0.9fr;
+      gap: var(--space-48);
+      align-items: center;
+    }
+
+    @media (max-width: 900px) {
+      .cover-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .drop-cap::first-letter {
+      font-size: 48px;
+      float: left;
+      line-height: 0.85;
+      padding-right: 12px;
+      padding-top: 4px;
+      font-family: var(--font-display);
+      font-weight: 700;
+      color: var(--color-primary);
+    }
+
+    /* Pull Quote */
+    .pull-quote {
+      font-family: var(--font-display);
+      font-style: italic;
+      font-size: var(--text-24);
+      line-height: 1.4;
+      border-left: 3px solid var(--color-primary);
+      padding-left: var(--space-24);
+      margin: var(--space-32) 0;
+      color: var(--color-primary);
+    }
+
+    /* ─── EDITORIAL GRID (3 COLUMNS) ─── */
+    .magazine-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: var(--space-32);
+      padding: var(--space-64) 0;
+      border-bottom: 1px solid var(--color-border);
+    }
+
+    @media (max-width: 860px) {
+      .magazine-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .article-card {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      border-top: 1px solid var(--color-primary);
+      padding-top: var(--space-16);
+    }
+
+    .article-meta {
+      font-family: var(--font-mono);
+      font-size: var(--text-14);
+      color: var(--color-text-muted);
+      margin-bottom: var(--space-8);
+      display: flex;
+      justify-content: space-between;
+    }
+
+    /* ─── SUBSCRIPTION FORM ─── */
+    .newsletter-section {
+      background: var(--color-secondary);
+      border-radius: var(--radius-md);
+      padding: var(--space-48);
+      margin: var(--space-64) 0;
+      text-align: center;
+    }
+
+    .newsletter-form {
+      display: flex;
+      gap: var(--space-8);
+      max-width: 480px;
+      margin: var(--space-24) auto 0;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .news-input {
+      flex: 1;
+      min-width: 240px;
+      background: #ffffff;
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-sm);
+      padding: 10px 16px;
+      font-family: var(--font-primary);
+      font-size: var(--text-14);
+      outline: none;
+    }
+
+    .news-input:focus {
+      border-color: var(--color-primary);
+    }
+
+    /* ─── FOOTER ─── */
+    .editorial-footer {
+      border-top: 1px solid var(--color-border);
+      padding: var(--space-48) 0;
+    }
+
+    .footer-inner {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: var(--space-24);
+      font-size: var(--text-14);
+      color: var(--color-text-muted);
+    }
+
+    /* ─── FLOATING AUDIT DRAWER ─── */
+    .audit-trigger {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      z-index: 1000;
+    }
+
+    .audit-modal {
+      display: none;
+      position: fixed;
+      bottom: 80px;
+      right: 24px;
+      width: 360px;
+      background: #ffffff;
+      border: 1px solid var(--color-primary);
+      border-radius: var(--radius-sm);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+      padding: var(--space-24);
+      z-index: 1001;
+      font-size: var(--text-14);
+    }
+
+    .audit-modal.open {
+      display: block;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- STICKY TOP NAVIGATION -->
+  <header class="editorial-nav">
+    <div class="nav-inner">
+      <a href="#" class="brand-title">THE CHRONICLE</a>
+
+      <ul class="nav-links">
+        <li><a href="#cover" class="nav-link">Cover Story</a></li>
+        <li><a href="#essays" class="nav-link">Essays</a></li>
+        <li><a href="#dispatch" class="nav-link">Dispatch</a></li>
+      </ul>
+
+      <div style="display: flex; gap: var(--space-8); align-items: center;">
+        <button class="btn btn-secondary" onclick="toggleAuditor()">Spec</button>
+        <a href="#subscribe" class="btn btn-primary">Subscribe</a>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    <!-- COVER STORY -->
+    <section class="cover-section" id="cover">
+      <div class="meta-label" style="margin-bottom: var(--space-8);">VOL. IV — NO. 12 • CULTURAL ESSAY</div>
+      <div class="cover-grid">
+        <div>
+          <h1 style="margin-bottom: var(--space-16);">The Architecture of Quietude in the Hyper-Connected Era</h1>
+          <p class="drop-cap">
+            Silence is no longer merely an absence of noise; in contemporary industrial design and typography, it has become the ultimate luxury commodity. As interfaces crowd our viewports with algorithmic urgency, the discipline of editorial negative space offers a sanctuary for the discerning intellect.
+          </p>
+
+          <div class="pull-quote">
+            "When every surface demands attention, the most profound gesture an author can make is deliberate restraint."
+          </div>
+
+          <p>
+            From the tactile grain of Scandinavian print to digital serif reading surfaces, we examine how deliberate pacing shapes human cognition.
+          </p>
+
+          <div style="margin-top: var(--space-24);">
+            <a href="#subscribe" class="btn btn-primary">Read Complete Essay (12 Min)</a>
+          </div>
+        </div>
+
+        <!-- Editorial Frame Plate -->
+        <div style="background: var(--color-secondary); padding: var(--space-24); border-radius: var(--radius-sm); border: 1px solid #e0e0e0;">
+          <div style="font-family: var(--font-mono); font-size: var(--text-14); margin-bottom: var(--space-12); color: var(--color-primary);">TABLE OF DISPATCHES</div>
+          <div style="display: flex; flex-direction: column; gap: var(--space-16);">
+            <div>
+              <span class="meta-label">01. URBANISM</span>
+              <h4 style="margin-top: 4px;">Brutalist Revival in Alpine Habitats</h4>
+            </div>
+            <div>
+              <span class="meta-label">02. TYPOGRAPHY</span>
+              <h4 style="margin-top: 4px;">Serif Geometry from Bodoni to Gelasio</h4>
+            </div>
+            <div>
+              <span class="meta-label">03. HOROLOGY</span>
+              <h4 style="margin-top: 4px;">Mechanical Complications in Silicon Valley</h4>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 3-COLUMN MAGAZINE ESSAYS -->
+    <section class="magazine-grid" id="essays">
+      <article class="article-card">
+        <div>
+          <div class="article-meta">
+            <span>ISSUE 42</span>
+            <span>8 MIN READ</span>
+          </div>
+          <h3>Monastic Minimalist Spaces</h3>
+          <p style="font-size: var(--text-14); margin-top: var(--space-8);">
+            Why modern architects in Kyoto are returning to untreated hinoki cypress and natural shadow play.
+          </p>
+        </div>
+        <div style="margin-top: var(--space-16);">
+          <a href="#" class="meta-label" style="text-decoration: underline;">Read Dispatch →</a>
+        </div>
+      </article>
+
+      <article class="article-card">
+        <div>
+          <div class="article-meta">
+            <span>DISPATCH</span>
+            <span>5 MIN READ</span>
+          </div>
+          <h3>The Tactile Grain of Parchment</h3>
+          <p style="font-size: var(--text-14); margin-top: var(--space-8);">
+            How printmaking presses preserve the irreplaceable physical weight of journalistic prose.
+          </p>
+        </div>
+        <div style="margin-top: var(--space-16);">
+          <a href="#" class="meta-label" style="text-decoration: underline;">Read Dispatch →</a>
+        </div>
+      </article>
+
+      <article class="article-card">
+        <div>
+          <div class="article-meta">
+            <span>CRITIQUE</span>
+            <span>11 MIN READ</span>
+          </div>
+          <h3>The Death of Sensory Overload</h3>
+          <p style="font-size: var(--text-14); margin-top: var(--space-8);">
+            A philosophical examination of algorithmic clutter and the resurgence of long-form typography.
+          </p>
+        </div>
+        <div style="margin-top: var(--space-16);">
+          <a href="#" class="meta-label" style="text-decoration: underline;">Read Dispatch →</a>
+        </div>
+      </article>
+    </section>
+
+    <!-- NEWSLETTER / SUBSCRIPTION -->
+    <section class="newsletter-section" id="subscribe">
+      <h2>The Weekly Dispatch</h2>
+      <p style="max-width: 500px; margin: var(--space-8) auto 0;">
+        Delivered every Sunday morning. Essays on design, typography, and architectural culture.
+      </p>
+
+      <form class="newsletter-form" onsubmit="handleSub(event)">
+        <input type="email" class="news-input" placeholder="reader@institution.edu" required />
+        <button type="submit" class="btn btn-primary">Join Gazette</button>
+      </form>
+      <span id="subStatus" style="font-family: var(--font-mono); font-size: var(--text-14); color: var(--color-success); margin-top: var(--space-12); display: block;"></span>
+    </section>
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="editorial-footer">
+    <div class="container footer-inner">
+      <span>© 2026 THE CHRONICLE PUBLISHING GROUP. EDITED IN PARIS & LONDON.</span>
+      <div style="display: flex; gap: var(--space-24); font-family: var(--font-mono); font-size: var(--text-14);">
+        <a href="#" style="color: inherit; text-decoration: none;">ARCHIVE</a>
+        <a href="#" style="color: inherit; text-decoration: none;">MASTHEAD</a>
+        <a href="#" style="color: inherit; text-decoration: none;">ETHICS</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- FLOATING AUDIT MODAL -->
+  <div class="audit-trigger">
+    <button class="btn btn-primary" onclick="toggleAuditor()">
+      <span>Audit Tokens</span>
+    </button>
+  </div>
+
+  <div class="audit-modal" id="auditModal">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; border-bottom: 1px solid var(--color-border); padding-bottom: 6px;">
+      <span style="font-family: var(--font-display); font-weight: 700;">EDITORIAL TOKENS</span>
+      <button onclick="toggleAuditor()" style="background: none; border: none; cursor: pointer;">✕</button>
+    </div>
+    <div style="display: flex; flex-direction: column; gap: 6px; font-family: var(--font-mono); font-size: var(--text-14);">
+      <div>• Primary: <span style="color: #111111; font-weight: 700;">#111111</span></div>
+      <div>• Secondary: <span style="background: #f1f1f1; padding: 1px 4px;">#F1F1F1</span></div>
+      <div>• Surface: #FFFFFF</div>
+      <div>• Text: <span style="color: #111827; font-weight: 700;">#111827</span></div>
+      <div>• Success: #16A34A</div>
+      <div>• Warning: #D97706</div>
+      <div>• Danger: #DC2626</div>
+      <div>• Fonts: Gelasio + Ubuntu Mono</div>
+      <div>• Scale: 14 / 16 / 18 / 24 / 32 / 40</div>
+      <div>• Spacing: 8pt baseline grid</div>
+    </div>
+  </div>
+
+  <!-- SCRIPT -->
+  <script>
+    function toggleAuditor() {
+      document.getElementById('auditModal').classList.toggle('open');
+    }
+
+    function handleSub(e) {
+      e.preventDefault();
+      document.getElementById('subStatus').textContent = "✓ Inscribed into the Sunday Dispatch.";
+    }
+  </script>
+</body>
+</html>
